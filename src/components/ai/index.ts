@@ -37,10 +37,12 @@
  *    complete." Runs announce their own status changes, not each step.
  *
  * And one about trust: uncertainty is coarse and in words (`Confidence`
- * has three levels, never "87.3%"), every claim can be traced to a numbered
- * source in one click (`Citation`, `SourceList`), and a call that writes to
- * the world waits for a person, with Approve and Deny given equal weight
- * (`ToolCall` with `approval`).
+ * has three levels, never "87.3%"), every claim can be checked where it is
+ * made — the marker previews its numbered source on hover, focus or tap
+ * (`Citation`, `SourceList`, `citationRenderer`) — and anything that writes
+ * to the world waits for a person, with every choice given equal weight
+ * (`ToolCall` with `approval`, `ChangeReview`). A failed run says where it
+ * stopped and keeps what arrived (`RunError`, `PartialOutput`).
  */
 export * from './agent-run'
 export * from './change-review'
