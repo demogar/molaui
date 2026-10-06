@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Filter } from 'lucide-react'
 
 import { Button } from '../button'
+import { Checkbox } from '../checkbox'
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from './popover'
 
 const meta = {
@@ -25,20 +26,19 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-const checkbox = 'size-4 accent-ink'
-
 export const ColumnFilter: Story = {
   render: () => (
     <Popover defaultOpen>
       <PopoverTrigger render={<Button variant="secondary" size="sm" icon={<Filter />}>Status</Button>} />
       <PopoverContent title="Filter by status" description="Runs matching any checked status are shown.">
-        <fieldset className="m-0 grid gap-2 border-0 p-0 text-sm">
+        {/* The popover's title already names the group, so the legend is for
+            screen readers only. The system Checkbox, not a native one: a
+            browser checkbox here was the only rounded, blue-ticked control
+            in the library. */}
+        <fieldset className="m-0 flex flex-col gap-3 border-0 p-0">
           <legend className="sr-only">Status</legend>
           {['Running', 'Succeeded', 'Failed', 'Cancelled'].map((s, i) => (
-            <label key={s} className="flex items-center gap-2.5">
-              <input type="checkbox" defaultChecked={i < 3} className={checkbox} />
-              {s}
-            </label>
+            <Checkbox key={s} label={s} defaultChecked={i < 3} />
           ))}
         </fieldset>
         <div className="mt-4 flex justify-end gap-2">

@@ -8,6 +8,7 @@ import * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { Button, IconButton } from '../button'
+import { fieldControlClasses, fieldControlSizes } from '../field/field-control'
 
 /**
  * A modal is a panel cut out of the page and laid on top of it, so it is the
@@ -286,11 +287,14 @@ export function AlertDialog({
                   autoComplete="off"
                   spellCheck={false}
                   disabled={pending}
+                  // The shared field classes, so it hovers, focuses and states
+                  // `pending` like every other input. The band follows the
+                  // dialog's tone: rojo only when the seam above is rojo.
                   className={cn(
-                    'literal h-(--control-h) w-full rounded-none border-0 bg-cloth-pale px-3 text-ink',
-                    'shadow-cut band-rojo [--cut-reveal:3px]',
-                    'transition-[box-shadow] duration-(--motion-cut) ease-cut',
-                    'hover:cut-band focus:shadow-[var(--focus-ring)] focus:outline-none',
+                    fieldControlClasses,
+                    fieldControlSizes.md,
+                    'literal',
+                    tone === 'danger' ? 'band-rojo' : 'band-oro',
                   )}
                 />
               </form>

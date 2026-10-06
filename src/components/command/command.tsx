@@ -216,7 +216,8 @@ export function CommandPalette({
                   renderEmpty(query)
                 ) : (
                   <>
-                    Nothing matches <span className="font-semibold text-ink">“{query}”</span>.
+                    {/* The same words as Combobox's empty filter, with the query. */}
+                    No matches for <span className="font-semibold text-ink">“{query}”</span>.
                   </>
                 )}
               </div>

@@ -68,7 +68,7 @@ describe('CommandPalette', () => {
     expect(screen.getAllByRole('option')).toHaveLength(1)
     await userEvent.type(input, 'zzz')
     expect(screen.queryAllByRole('option')).toHaveLength(0)
-    expect(screen.getByText(/Nothing matches/)).toBeInTheDocument()
+    expect(screen.getByText(/No matches for/)).toBeInTheDocument()
   })
 })
 

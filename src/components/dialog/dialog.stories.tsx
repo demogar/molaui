@@ -3,6 +3,7 @@ import { Trash2 } from 'lucide-react'
 import { fn } from 'storybook/test'
 
 import { Button } from '../button'
+import { Field, Input } from '../field'
 import { AlertDialog, Dialog, DialogClose, DialogContent, DialogTrigger } from './dialog'
 
 const meta = {
@@ -41,13 +42,7 @@ export const Default: Story = {
           </>
         }
       >
-        <label className="block">
-          <span className="mb-2 block rotulo text-ink-2">Name</span>
-          <input
-            defaultValue="Help panel for new workspaces — v2"
-            className="h-(--control-h) w-full rounded-none border-0 bg-cloth-pale px-3 text-ink shadow-cut focus:shadow-[var(--focus-ring)] focus:outline-none"
-          />
-        </label>
+        <Field label="Name">{(control) => <Input {...control} defaultValue="Help panel for new workspaces — v2" />}</Field>
       </DialogContent>
     </Dialog>
   ),
