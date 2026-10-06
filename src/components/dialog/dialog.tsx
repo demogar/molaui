@@ -72,7 +72,7 @@ export interface DialogContentProps
   /** The dialog's accessible name. Required: an unnamed modal is announced as "dialog" and nothing else. */
   title: React.ReactNode
   description?: React.ReactNode
-  /** Action row, right-aligned under the body. Usually a `ghost` cancel and one primary. */
+  /** Action row under the body: right-aligned, or stacked full width with the last action on top when the row is under 24rem. Usually a `ghost` cancel and one primary. */
   footer?: React.ReactNode
   /** The layer revealed in the top seam. */
   band?: Band

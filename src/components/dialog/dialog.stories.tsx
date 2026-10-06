@@ -18,7 +18,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A panel cut out of the page and laid on top of it. The top seam is the full **relleno** — the layer colour slit with ink — which is how a mola marks where one layer ends; it says “you are inside something” without a title bar or a tint. The backdrop recedes toward the page’s own cloth rather than toward grey. Focus trap, scroll lock, Escape and the inert page come from Base UI; the corner close is always present, because a touch screen-reader user has no Escape key.',
+          'A panel cut out of the page and laid on top of it. The top seam is the full **relleno** — the layer colour slit with ink — which is how a mola marks where one layer ends; it says “you are inside something” without a title bar or a tint. The backdrop recedes toward the page’s own cloth rather than toward grey. Focus trap, scroll lock, Escape and the inert page come from Base UI; the corner close is always present, because a touch screen-reader user has no Escape key. The action row stacks full width, the confirm on top, when it is narrower than 24rem — so a small alert dialog never strands its confirm on a second line.',
       },
     },
   },
