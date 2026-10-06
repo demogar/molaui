@@ -38,6 +38,12 @@ design is cut through the upper layers, and every cut edge is turned under and h
 reveal the colour beneath. The technique is passed down from generation to generation, and a
 single panel can take months to make.
 
+![Mola panels sewn by Guna women: layered red, orange, black and purple cloth, cut to reveal bright bands of colour in the shapes of birds, animals and geometric figures](docs/images/molas-guna-photo-maria-molino.jpg)
+
+<sub>Molas sewn by Guna women. Photograph by
+[Maria Molino](https://unsplash.com/@mams_) on
+[Unsplash](https://unsplash.com/photos/intricate-colorful-mola-textiles-with-traditional-designs-Y3V4qtRO5-Y).</sub>
+
 A mola is more than decoration. In the early twentieth century Panama's government tried to stop
 Guna women wearing their traditional dress. Making and wearing molas became an act of resistance,
 and the Guna Revolution of 1925 won the Guna autonomy over their land and their culture. Today
@@ -56,7 +62,9 @@ plainly belonging to the same family.
 What that respect means in practice:
 
 - **We borrow the method, not the motifs.** Mola UI takes the grammar of the technique: stacked
-  layers, hard cut edges, the revealed band. It reproduces no Guna designs, symbols or patterns.
+  layers, hard cut edges, the revealed band. It reproduces no Guna designs, symbols or patterns in
+  its interface. The photograph above is there only to show where the name comes from, credited
+  to the women who make molas and to the photographer.
 - **We claim no rights over the mola.** It belongs to the Guna people.
 - **We name the source** wherever the name appears.
 - **If you want a mola, buy one from Guna artisans**, so the craft supports the people who keep it

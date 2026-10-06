@@ -42,6 +42,8 @@ gh api -X PATCH repos/demogar/molaui/pulls/<n> -f title="feat: …"
   docs or screenshots. Demo data is the fictional Cayuco platform.
 - Reproduce Guna mola designs, symbols or patterns, or use the mola as decoration. Mola UI
   borrows the method (layers, cut edges, revealed bands), not the motifs. The README section
-  "The name, and why we use it with care" explains why.
+  "The name, and why we use it with care" explains why. The one credited documentary photograph
+  (`docs/images/molas-guna-photo-maria-molino.jpg`) explains the name. Never use it as a
+  background, texture or decoration.
 - Add hex outside `src/styles/tokens.css`, a `border` on an interactive edge, a
   radius, or `opacity-*` on a disabled control.
