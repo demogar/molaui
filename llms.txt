@@ -1,0 +1,144 @@
+# Mola UI
+
+> A design system cut like a mola: flat layers, hard keylines, revealed bands. React components for dense internal tools and AI-native interfaces. Published as `@demogar/mola-ui`: React 19, Base UI for behaviour, Tailwind v4 for styling, design tokens as CSS custom properties.
+
+Install and set up:
+
+```bash
+npm install @demogar/mola-ui @base-ui/react @fontsource-variable/archivo @fontsource-variable/alegreya @fontsource-variable/martian-mono
+```
+
+```tsx
+import '@fontsource-variable/archivo/wdth.css'
+import '@fontsource-variable/alegreya/wght.css'
+import '@fontsource-variable/martian-mono/wdth.css'
+import '@demogar/mola-ui/styles.css'
+import { Button } from '@demogar/mola-ui'
+```
+
+Theme and density are attributes, not props: `<html data-theme="dark" data-density="compact">`. Already on Tailwind v4? Import `@demogar/mola-ui/tailwind.css` into your own build instead of `styles.css`. For right-to-left, set `dir="rtl"` on `<html>` and wrap the app in `DirectionProvider`.
+
+## Rules
+
+- Interactive edges use `shadow-cut` (or `shadow-floating` on overlays), never `border`. `border-keyline` is for decorative dividers only. A box-shadow edge can grow a revealed band on hover without moving its neighbours, and the named utilities keep an outline in forced-colours mode.
+- Radius is zero. `rounded-full` only for something that is genuinely a dot. The system is cut cloth: nothing in it is rounded.
+- State is never colour alone: glyph, word and colour, in that order of importance. It has to survive colour blindness, a greyscale screenshot and forced colours.
+- Disabled is stated, not faded. No `opacity-*` on a disabled control. Opacity fades the keyline and the label to about 2:1, a failure axe does not report because disabled controls are exempt.
+- Colours come from tokens. No hex, rgb or arbitrary colour values outside `tokens.css`. Every token pairing has a measured contrast ratio in both themes; a colour outside the token file was never measured.
+- Theme and density are attributes (`data-theme`, `data-density`) on `<html>` or a subtree, not props or React context. Dialogs and menus portal to `<body>` and must inherit them. No component takes a density prop.
+- Lay out with logical properties: `ps-`/`pe-`, `ms-`/`me-`, `inset-s-`/`inset-e-`, `text-start`/`text-end`. `dir="rtl"` then mirrors the layout with no second set of classes.
+- Typefaces have roles: Archivo (`font-ui`) for the interface, Alegreya (`font-text`) for prose from a person or a model, Martian Mono (`literal`) only for machine literals. A reader can tell from the letterforms whether the product, a person or the machine is speaking.
+- Labels are sentence case; buttons start with a verb and name the object (“Cancel run”, not “OK”). A button that names its consequence can be chosen without reading the surrounding text.
+- Unknown duration is the relleno working state, never a spinner; elapsed time counts up instead of a progress bar inventing a percentage. Model work has no knowable total, and a bar that stalls at 90% is a lie.
+- Anything that writes to the world waits for a person, with the choices given equal weight (`ToolCall` approval, `ChangeReview`). An agent’s action is only as safe as the decision in front of it.
+- Use the components for behaviour. Do not re-implement focus trapping, roving focus or typeahead; the components are built on Base UI. A maintained primitive gets keyboard and screen-reader behaviour right in more cases than a local copy.
+
+## Docs
+
+- [Choosing a component](https://demogar.github.io/molaui/?path=/docs/mola-ui-choosing-a-component--overview): which component for which job, and what to use instead
+- [Getting started](https://demogar.github.io/molaui/?path=/docs/mola-ui-getting-started--overview): install, theme, density, right-to-left, Tailwind
+- [Principles](https://demogar.github.io/molaui/?path=/docs/mola-ui-principles--overview): the six rules every component obeys
+- [AI interface principles](https://demogar.github.io/molaui/?path=/docs/ai-principles--overview): streaming, latency, approval, uncertainty, failure
+- [Versioning](https://demogar.github.io/molaui/?path=/docs/mola-ui-versioning--overview): what counts as breaking, deprecation, codemods
+- [Component manifest](https://github.com/demogar/molaui/blob/main/docs/ai/components.json): every export, prop, variant and story as JSON
+- [Full text](https://demogar.github.io/molaui/llms-full.txt): this file with every component's guidance and props inline
+
+## Actions
+
+- [Button](https://demogar.github.io/molaui/?path=/docs/components-actions-button--overview): A cut-shape button for an action on this page, with IconButton for an action shown as an icon alone.
+
+## Data display
+
+- [Avatar](https://demogar.github.io/molaui/?path=/docs/components-data-display-avatar--overview): A person or an agent as a square tile, with initials or a glyph on a colour picked from the name.
+- [Code](https://demogar.github.io/molaui/?path=/docs/components-data-display-code--overview): Machine text: Code for an inline literal, CodeBlock for a labelled block with copy and wrap.
+- [Description list](https://demogar.github.io/molaui/?path=/docs/components-data-display-description-list--overview): Term and value pairs: the properties of a run, a document or an evaluation.
+- [Stat](https://demogar.github.io/molaui/?path=/docs/components-data-display-stat--overview): A KPI tile: a label, a figure, a change with its direction and sentiment, and an optional sparkline.
+- [Table](https://demogar.github.io/molaui/?path=/docs/components-data-display-table--overview): Table primitives for rows of records, and DataTable for columns as data with sorting, selection, column visibility and pages.
+- [Timeline](https://demogar.github.io/molaui/?path=/docs/components-data-display-timeline--overview): Timeline for events already written down, on a spine; StepList for ordered steps a person follows.
+
+## Feedback
+
+- [Badge](https://demogar.github.io/molaui/?path=/docs/components-feedback-badge--overview): A small status mark in one of the system’s tones; StatusDot for a square dot beside a label; RecommendationBadge for an editorial scale.
+- [Callout](https://demogar.github.io/molaui/?path=/docs/components-feedback-callout--overview): A message that belongs to a region of the page, with a tone, an optional title and actions.
+- [Empty state](https://demogar.github.io/molaui/?path=/docs/components-feedback-empty-state--overview): What a panel shows when it has nothing to show, in four variants: empty, no results, error and no permission.
+- [Placeholder](https://demogar.github.io/molaui/?path=/docs/components-feedback-placeholder--overview): A slot for something that does not exist yet, such as a chart with no data, announced as one image.
+- [Progress](https://demogar.github.io/molaui/?path=/docs/components-feedback-progress--overview): Progress for work moving toward done, which may be indeterminate; Meter for a reading inside a known range, with thresholds.
+- [Skeleton](https://demogar.github.io/molaui/?path=/docs/components-feedback-skeleton--overview): Bones in the shape of content that has not arrived, with SkeletonGroup to mark the region busy and say once what is loading.
+- [Toast](https://demogar.github.io/molaui/?path=/docs/components-feedback-toast--overview): A floating notice for something that happened elsewhere or just now; a running toast turns into its result in place.
+
+## Forms
+
+- [Checkbox](https://demogar.github.io/molaui/?path=/docs/components-forms-checkbox--overview): A square that turns a choice on or off, applied when the form is saved; CheckboxGroup for any number of choices from a set.
+- [Chip](https://demogar.github.io/molaui/?path=/docs/components-forms-chip--overview): A filter chip with a real checkbox or radio inside, filled with ink when on, with an optional count.
+- [Combobox](https://demogar.github.io/molaui/?path=/docs/components-forms-combobox--overview): A select you can type into: Combobox always ends on an option from the list; Autocomplete takes free text with suggestions.
+- [Date picker](https://demogar.github.io/molaui/?path=/docs/components-forms-date-picker--overview): DatePicker for one date, typed or picked from a calendar; DateRangePicker for a period, with presets and two typed ends.
+- [Field](https://demogar.github.io/molaui/?path=/docs/components-forms-field--overview): A label, a control and a hint or error wired together; the page also covers Input, Textarea, SearchInput and Label.
+- [File upload](https://demogar.github.io/molaui/?path=/docs/components-forms-file-upload--overview): A dropzone with a real Browse button, and a list of the files put there with their status and progress.
+- [Number input](https://demogar.github.io/molaui/?path=/docs/components-forms-number-input--overview): A number you can type and step, formatted for a locale, with bounds, a unit and steppers inside the field.
+- [Radio](https://demogar.github.io/molaui/?path=/docs/components-forms-radio--overview): One choice from a small set, all visible, in a named RadioGroup; square, and told from a checkbox by its mark.
+- [Segmented control](https://demogar.github.io/molaui/?path=/docs/components-forms-segmented-control--overview): One choice from a few views or settings, all visible and switched instantly, cut from one piece.
+- [Select](https://demogar.github.io/molaui/?path=/docs/components-forms-select--overview): A choice from a list in a popup, with an optional second line per option and labelled groups.
+- [Slider](https://demogar.github.io/molaui/?path=/docs/components-forms-slider--overview): A value or a range on a continuous scale, with the value always printed in tabular figures.
+- [Switch](https://demogar.github.io/molaui/?path=/docs/components-forms-switch--overview): A setting that takes effect the moment it is switched; on is verde, the colour of live.
+
+## Layout
+
+- [App shell](https://demogar.github.io/molaui/?path=/docs/components-layout-app-shell--overview): The frame a tool lives in: a top bar, a sidebar that collapses to a rail or becomes a sheet, and one scrolling main region.
+- [Container](https://demogar.github.io/molaui/?path=/docs/components-layout-container--overview): The page column, in prose, page, wide and full widths; Section and SectionHeader set the rhythm down the page.
+- [Divider](https://demogar.github.io/molaui/?path=/docs/components-layout-divider--overview): Three dividers in rising weight and rarity: a keyline, a relleno seam and the sawtooth diente.
+- [Grid](https://demogar.github.io/molaui/?path=/docs/components-layout-grid--overview): Column patterns that reflow; auto fits as many columns of at least minItem as there is room for.
+- [Page header](https://demogar.github.io/molaui/?path=/docs/components-layout-page-header--overview): The top of a page inside the shell: a breadcrumb, the title, a description, actions, a row of facts and optional tabs.
+- [Panel](https://demogar.github.io/molaui/?path=/docs/components-layout-panel--overview): A cut surface: a region of one ground bounded by an edge, where the tone decides the ink.
+- [Stack](https://demogar.github.io/molaui/?path=/docs/components-layout-stack--overview): Stack for a column with one gap, Inline for a row that wraps, and RowBetween for one thing at each end.
+- [Toolbar](https://demogar.github.io/molaui/?path=/docs/components-layout-toolbar--overview): A row of related controls with one tab stop and arrow-key movement, with toggles, a field and an overflow menu.
+
+## Navigation
+
+- [Accordion](https://demogar.github.io/molaui/?path=/docs/components-navigation-accordion--overview): Sections of one document that open one or several at a time; Collapsible for a single disclosure.
+- [Breadcrumb](https://demogar.github.io/molaui/?path=/docs/components-navigation-breadcrumb--overview): Where a page sits, as links back up the path, with the current page as plain text.
+- [Pagination](https://demogar.github.io/molaui/?path=/docs/components-navigation-pagination--overview): Moving through a long ordered result, as numbered pages or as a compact range with two arrows.
+- [Tabs](https://demogar.github.io/molaui/?path=/docs/components-navigation-tabs--overview): Switching between views of one thing: underline for views, panel for tabs that are containers.
+
+## Overlays
+
+- [Command palette](https://demogar.github.io/molaui/?path=/docs/components-overlays-command-palette--overview): The keyboard’s front door: a searchable list of commands and destinations, opened with ⌘K or Ctrl+K.
+- [Dialog](https://demogar.github.io/molaui/?path=/docs/components-overlays-dialog--overview): Dialog for a short modal task; AlertDialog to confirm an action that destroys something.
+- [Drawer](https://demogar.github.io/molaui/?path=/docs/components-overlays-drawer--overview): A panel that slides in from an edge: details beside a list, filters, or quick actions in a bottom sheet.
+- [Menu](https://demogar.github.io/molaui/?path=/docs/components-overlays-menu--overview): Actions on a thing that do not each deserve a button, with checkbox and radio items, submenus and shortcuts.
+- [Popover](https://demogar.github.io/molaui/?path=/docs/components-overlays-popover--overview): A non-modal panel anchored to the control that opened it.
+- [Tooltip](https://demogar.github.io/molaui/?path=/docs/components-overlays-tooltip--overview): A short label on hover or focus, with an optional keyboard shortcut.
+
+## Typography
+
+- [Display](https://demogar.github.io/molaui/?path=/docs/components-typography-display--overview): Archivo Bold set wide, for the one title that is the point of a screen.
+- [Heading](https://demogar.github.io/molaui/?path=/docs/components-typography-heading--overview): Four heading levels for wayfinding in a tool, with size to separate the look from the outline.
+- [Kbd](https://demogar.github.io/molaui/?path=/docs/components-typography-kbd--overview): A key as a cut shape, with KbdChord for keys pressed together.
+- [Lead](https://demogar.github.io/molaui/?path=/docs/components-typography-lead--overview): The paragraph under a page title that says what the screen is for, in the reading voice.
+- [Meta](https://demogar.github.io/molaui/?path=/docs/components-typography-meta--overview): Small facts compared down a column, such as duration, cost, count and time, in tabular figures.
+- [Prose](https://demogar.github.io/molaui/?path=/docs/components-typography-prose--overview): The reading voice for long-form markup, such as a document, a run summary or a model’s answer.
+- [Pullquote](https://demogar.github.io/molaui/?path=/docs/components-typography-pullquote--overview): A voice interrupting the prose: a quotation in the reading face, under a relleno band, with its source.
+- [Rotulo](https://demogar.github.io/molaui/?path=/docs/components-typography-rotulo--overview): The label register, cut short by a band, set under the block it belongs to.
+- [Text](https://demogar.github.io/molaui/?path=/docs/components-typography-text--overview): Running interface text in the system voice, in three inks: ink, ink-2 and muted.
+
+## AI interface
+
+- [Agent run](https://demogar.github.io/molaui/?path=/docs/ai-agent-run--overview): A long-running agent run as a timeline: its status and live clock, each step on one spine, and the reason it stopped.
+- [Change review](https://demogar.github.io/molaui/?path=/docs/ai-change-review--overview): A change an agent proposes, shown as the reviewer reads it, with Approve, Request changes and Reject under it.
+- [Confidence](https://demogar.github.io/molaui/?path=/docs/ai-confidence--overview): How sure the system is, in three levels and in words, with UncertaintyNote for a specific claim to check.
+- [Message](https://demogar.github.io/molaui/?path=/docs/ai-message--overview): One turn of a conversation, laid out as a ledger: who spoke, when, with which model, and what they said or did.
+- [Prompt input](https://demogar.github.io/molaui/?path=/docs/ai-prompt-input--overview): The composer: a field that grows, attachments, a toolbar, and a send button that becomes Stop while a response generates.
+- [Reasoning](https://demogar.github.io/molaui/?path=/docs/ai-reasoning--overview): The model’s thinking behind a disclosure, summarised as “Thought for 12.4s” and set a step quieter than the answer.
+- [Run error](https://demogar.github.io/molaui/?path=/docs/ai-run-error--overview): Why a run stopped: the step, a plain sentence, the error verbatim, and the ways back in order of cost.
+- [Run status](https://demogar.github.io/molaui/?path=/docs/ai-run-status--overview): The one status vocabulary for a run, a step and a tool call: a glyph, a word and a colour, with an elapsed clock.
+- [Sources](https://demogar.github.io/molaui/?path=/docs/ai-sources--overview): Inline citation markers and the numbered list of sources they point to, with a preview card on hover, focus or first tap.
+- [Streaming text](https://demogar.github.io/molaui/?path=/docs/ai-streaming-text--overview): A model’s answer arriving a token at a time, in the reading voice, without layout shift, and announced once when it ends.
+- [Token usage](https://demogar.github.io/molaui/?path=/docs/ai-token-usage--overview): What a run consumed: input, cached and output tokens, cost, and how full the context window is.
+- [Tool call](https://demogar.github.io/molaui/?path=/docs/ai-tool-call--overview): One tool invocation: the tool’s literal name, its arguments, the result or error, and an approval when a person must decide.
+
+## Patterns
+
+- [Agent console](https://demogar.github.io/molaui/?path=/docs/ai-agent-console--overview)
+- [Form example](https://demogar.github.io/molaui/?path=/docs/components-forms-form-example--overview)
+- [Filtered table](https://demogar.github.io/molaui/?path=/docs/patterns-filtered-table--overview)
+- [List and detail](https://demogar.github.io/molaui/?path=/docs/patterns-list-and-detail--overview)
+- [Settings page](https://demogar.github.io/molaui/?path=/docs/patterns-settings-page--overview)

@@ -3,7 +3,13 @@ import remarkGfm from 'remark-gfm'
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(ts|tsx)'],
-  staticDirs: ['../public'],
+  // llms.txt and llms-full.txt live at the repository root, where agents
+  // reading the source look for them, and are served at the site root too.
+  staticDirs: [
+    '../public',
+    { from: '../llms.txt', to: '/llms.txt' },
+    { from: '../llms-full.txt', to: '/llms-full.txt' },
+  ],
   addons: [
     {
       name: '@storybook/addon-docs',
