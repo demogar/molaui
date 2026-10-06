@@ -26,6 +26,7 @@ export * from './components/segmented'
 export * from './components/slider'
 export * from './components/combobox'
 export * from './components/number-input'
+export * from './components/date-picker'
 
 // Feedback
 export * from './components/badge'
