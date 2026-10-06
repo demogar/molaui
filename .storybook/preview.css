@@ -11,3 +11,43 @@
 :root:not([data-theme]) {
   color-scheme: light;
 }
+
+/* Storybook highlights code blocks with Prism's light palette, and two of its
+ * colours (tag attributes and class names) measure just under 4.5:1 on the
+ * docs ground, which the browser audit of the docs pages caught. They take the
+ * system's text-safe status inks instead; the extra `.sbdocs` outranks the
+ * highlighter's own generated class. */
+.sbdocs .docblock-source .token.attr-name {
+  color: var(--color-ink-danger);
+}
+.sbdocs .docblock-source .token.class-name {
+  color: var(--color-ink-info);
+}
+.sbdocs .docblock-source .token.property {
+  color: var(--color-ink-danger);
+}
+.sbdocs .docblock-source .token.dom {
+  color: var(--color-ink-success);
+}
+
+/* At phone width Storybook lets MDX tables and long inline commands run off
+ * the side of the page (the audit measured up to 294px). Breaking words in
+ * the cells was tried first: `overflow-wrap: anywhere` set the prose one
+ * letter per line, and `break-word` still left four columns of code wider
+ * than a phone. So on a phone a table scrolls inside its own box, which
+ * Chromium makes keyboard-focusable, and inline commands wrap. The 40px docs
+ * gutter gives way to the system's 16px one. */
+.sbdocs-content :is(p, li) > code {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 600px) {
+  .sbdocs.sbdocs-wrapper {
+    padding-inline: 16px;
+  }
+  .sbdocs-content table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+}
