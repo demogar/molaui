@@ -174,8 +174,8 @@ export function TableHead({
           <Glyph
             aria-hidden
             className={cn(
-              'size-3 shrink-0 transition-opacity duration-(--motion-cut)',
-              sort === 'none' ? 'opacity-40 group-hover/sort:opacity-100' : 'text-ink',
+              'size-3 shrink-0 transition-colors duration-(--motion-cut)',
+              sort === 'none' ? 'text-ink-muted group-hover/sort:text-ink' : 'text-ink',
             )}
           />
         </button>

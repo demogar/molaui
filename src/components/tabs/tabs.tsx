@@ -88,10 +88,12 @@ export function TabsTab({ className, count, icon, children, ...props }: TabsTabP
       data-slot="tabs-tab"
       className={cn(
         'group/tab relative inline-flex h-(--control-h) shrink-0 items-center gap-2 whitespace-nowrap px-(--control-px) outline-none select-none',
-        'font-ui text-sm font-semibold text-ink-muted',
+        'font-ui text-sm font-semibold text-ink-2',
         'transition-[color,background-color,box-shadow] duration-(--motion-cut) ease-cut',
         'hover:text-ink data-active:text-ink',
-        'data-disabled:pointer-events-none data-disabled:text-ink-muted/60',
+        // Disabled steps down to the floor of the text ramp, as in Segmented and
+        // Menu; it was a 60% fade of that floor, which drops below 3:1.
+        'data-disabled:pointer-events-none data-disabled:text-ink-muted',
         '[&_svg]:size-4 [&_svg]:shrink-0',
         // The focus ring sits inside the tab so the list's overflow clip does
         // not shave it off at either end of a scrolling row.

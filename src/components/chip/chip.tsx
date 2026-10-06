@@ -24,7 +24,7 @@ import { cn } from '../../lib/cn'
  */
 export const chipVariants = cva(
   [
-    'relative inline-flex items-center gap-1.5 cursor-pointer select-none',
+    'group/chip relative inline-flex items-center gap-1.5 cursor-pointer select-none',
     'rounded-none shadow-cut band-oro [--cut-reveal:3px]',
     'font-ui text-sm text-ink-2 bg-cloth-pale',
     'transition-[background-color,box-shadow,color] duration-(--motion-cut) ease-cut',
@@ -72,7 +72,11 @@ export function Chip({ className, size, type = 'checkbox', count, children, ...p
         // the chip is announced as "Failed12".
         <>
           {' '}
-          <span className="ms-0.5 text-xs tabular opacity-75">{count.toLocaleString('en-US')}</span>
+          {/* Muted by token, not by opacity: a 75% fade of the label was never
+              measured against either ground. */}
+          <span className="ms-0.5 text-xs tabular text-ink-muted group-has-checked/chip:text-on-ink-muted">
+            {count.toLocaleString('en-US')}
+          </span>
         </>
       ) : null}
     </label>
