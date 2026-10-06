@@ -59,7 +59,7 @@ export interface PromptInputProps
  * disabled textarea would also have dropped the draft out of the tab order.
  *
  * ── the estimate is labelled as one ──
- * "~120 tokens" with a tilde, from a characters-÷-4 heuristic. It is there so
+ * "~120 tok" with a tilde, from a characters-÷-4 heuristic. It is there so
  * an operator notices they pasted a whole log file, not to bill anyone; a
  * precise-looking number from a heuristic would be false precision.
  */
