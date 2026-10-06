@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-Mola UI is a React 19 design system (Base UI for behaviour, Tailwind v4 for styling) published as the `mola-ui` package, with an AI interface layer in `src/components/ai/` and a Storybook that is both the documentation site and the test corpus. Design decisions are recorded in `docs/adr/` — read the relevant ADR before changing color roles, themes, density or typography.
+Mola UI is a React 19 design system (Base UI for behaviour, Tailwind v4 for styling) published as the `@demogar/mola-ui` package, with an AI interface layer in `src/components/ai/` and a Storybook that is both the documentation site and the test corpus. Design decisions are recorded in `docs/adr/` — read the relevant ADR before changing color roles, themes, density or typography.
 
 The system was ported from the Mola styles of the `mustdopanama` project (read-only origin; do not modify it from here). Demo data uses a fictional platform called **Cayuco** — never put a real company's name, branding or product names into stories, fixtures or docs.
 
@@ -43,7 +43,7 @@ Browser scripts (need a running Storybook, use Playwright):
 - `src/styles/tokens.css` — the **only** file allowed to contain hex (a test in `src/tokens/contract.test.ts` walks the tree and enforces it). Every color is a `light-dark()` pair; theme is selected by `[data-theme]` setting `color-scheme`, density by `[data-density]` re-scaling `--control-h`, `--row-h`, `--control-px` and the type scale.
 - `src/styles/theme.css` — Tailwind v4 bridge. Literal scale values go in `@theme` (several names sit in Tailwind's reserved namespaces, so `var()` self-references would break); colors go in `@theme inline` as `var()` refs so `light-dark()` resolves on the using element.
 - `src/styles/cloth.css` — the mola-specific `@utility`s: `cut`/`cut-band` (keyline edges via `box-shadow`), `relleno`, `diente`, `rotulo`, `band-*`.
-- `src/styles/mola.css` imports tokens → theme → cloth → base (shipped as `mola-ui/tailwind.css` for consumers running their own Tailwind). `src/styles/index.css` adds Tailwind itself with `source(none)` and explicit `@source` that excludes stories/tests/mdx, so the shipped CSS contains only classes components use — a class that exists only in a story won't be in the library CSS.
+- `src/styles/mola.css` imports tokens → theme → cloth → base (shipped as `@demogar/mola-ui/tailwind.css` for consumers running their own Tailwind). `src/styles/index.css` adds Tailwind itself with `source(none)` and explicit `@source` that excludes stories/tests/mdx, so the shipped CSS contains only classes components use — a class that exists only in a story won't be in the library CSS.
 
 Theme and density are document/element **attributes, not React context** (portaled dialogs must inherit them). Components take no density props.
 
@@ -93,4 +93,4 @@ Storybook docs pages (introduction, principles, foundations, changelog) are MDX 
 
 @AGENTS.md
 
-`main` is protected by `.github/rulesets/main.json` (squash-merge only; required checks `Gates` from `ci.yml` and `Conventional PR title` from `pr-title.yml`). `ci.yml` also publishes Storybook to GitHub Pages on pushes to `main`. release-please (`release-please.yml`) owns `package.json`'s version and `CHANGELOG.md`; the Storybook changelog page (`src/docs/changelog.mdx`) renders `CHANGELOG.md` via `?raw`, so there is no second copy to update. If you rename the `Gates` job, update the ruleset too.
+`main` is protected by `.github/rulesets/main.json` (squash-merge only; required checks `Gates` from `ci.yml` and `Conventional PR title` from `pr-title.yml`). `ci.yml` also publishes Storybook to GitHub Pages on pushes to `main`. release-please (`release-please.yml`) owns `package.json`'s version and `CHANGELOG.md`, and when a release is cut its `publish` job tests, builds and publishes `@demogar/mola-ui` to npm (with provenance, via the `NPM_TOKEN` secret) and to GitHub Packages; the Storybook changelog page (`src/docs/changelog.mdx`) renders `CHANGELOG.md` via `?raw`, so there is no second copy to update. If you rename the `Gates` job, update the ruleset too.

@@ -126,6 +126,10 @@ Releases are automated with [release-please](https://github.com/googleapis/relea
 1. Every merge to `main` updates an open **release PR** (`chore(main): release x.y.z`) that bumps
    the version in `package.json` and writes `CHANGELOG.md` from the commit history.
 2. Merging that PR tags `vx.y.z` and publishes a GitHub Release.
+3. The same workflow then tests and builds the tagged commit and publishes
+   [`@demogar/mola-ui`](https://www.npmjs.com/package/@demogar/mola-ui) to npm, with provenance,
+   and to GitHub Packages. The npm step needs the `NPM_TOKEN` repository secret and is skipped
+   without it.
 
 Never edit the version or `CHANGELOG.md` by hand. The Storybook changelog page renders
 `CHANGELOG.md` directly.

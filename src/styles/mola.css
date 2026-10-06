@@ -5,7 +5,7 @@
  * in THEIR build:
  *
  *   @import 'tailwindcss';
- *   @import 'mola-ui/tailwind.css';
+ *   @import '@demogar/mola-ui/tailwind.css';
  *   @source '../node_modules/mola-ui/dist';
  */
 @import './tokens.css';

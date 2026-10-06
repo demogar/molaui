@@ -91,7 +91,7 @@ down in [`docs/adr/`](docs/adr/).
 ## Quick start
 
 ```bash
-npm install mola-ui @base-ui/react \
+npm install @demogar/mola-ui @base-ui/react \
   @fontsource-variable/archivo @fontsource-variable/alegreya @fontsource-variable/martian-mono
 ```
 
@@ -99,9 +99,9 @@ npm install mola-ui @base-ui/react \
 import '@fontsource-variable/archivo/wdth.css'
 import '@fontsource-variable/alegreya/wght.css'
 import '@fontsource-variable/martian-mono/wdth.css'
-import 'mola-ui/styles.css'
+import '@demogar/mola-ui/styles.css'
 
-import { ToolCall } from 'mola-ui'
+import { ToolCall } from '@demogar/mola-ui'
 
 <main data-theme="dark" data-density="compact">
   <ToolCall
@@ -117,8 +117,8 @@ import { ToolCall } from 'mola-ui'
 </main>
 ```
 
-Already on Tailwind v4? Import `mola-ui/tailwind.css` into your own build instead. Not on React?
-`mola-ui/tokens.css` is plain custom properties — both themes and all densities work anywhere.
+Already on Tailwind v4? Import `@demogar/mola-ui/tailwind.css` into your own build instead. Not on React?
+`@demogar/mola-ui/tokens.css` is plain custom properties — both themes and all densities work anywhere.
 Designing in Figma? Load [`tokens/mola.tokens.json`](tokens/mola.tokens.json) with Tokens Studio.
 
 ## How quality is held
