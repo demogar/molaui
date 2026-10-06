@@ -30,6 +30,8 @@ jobs:
             chore
             revert
           requireScope: false
-          subjectPattern: ^(?![A-Z]).+$
+          # Lowercase subjects, except Dependabot's "Bump ...": it always
+          # capitalises and has no setting to change that.
+          subjectPattern: ^(?:Bump |(?![A-Z])).+$
           subjectPatternError: |
             The subject "{subject}" must start with a lowercase letter.
