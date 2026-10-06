@@ -1,0 +1,48 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Mola UI/References" />
+
+# References
+
+Mola UI's identity, tokens and components are its own. The way it is **built, run and
+presented** draws on published work, and this page credits that work. Each idea links to the
+place in the repository where it applies, so the claim can be checked.
+
+## *Design That Scales* — Dan Mall
+
+Dan Mall, *Design That Scales: Creating a Sustainable Design System Practice* (Rosenfeld Media,
+2023). The book argues that a design system is a connected product grown out of real product
+work, not a parts catalogue designed in the abstract. These are the practices Mola UI takes from
+it:
+
+| From the book | In Mola UI |
+| --- | --- |
+| **Extract from a product; don't invent in a vacuum** (ch. 5, "Pilots"). A system grows by building something real and then extracting and abstracting what it needed. | Mola began as the design system of a live editorial site and was carried into product software, keeping the identity and re-arguing the metrics. See [ADR 0001](https://github.com/demogar/molaui/blob/main/docs/adr/0001-from-editorial-to-product.md). |
+| **A design system is installed, not copied** (ch. 3, "Component Libraries vs. Design Systems"). Copied code loses its link to the source; an installed dependency keeps it. | Mola UI ships as a versioned package with one ES module per source file, so a product imports it rather than forking it. |
+| **Design tokens are the single source of truth** (ch. 3). | `src/styles/tokens.css` is the only file allowed to contain a hex colour, and a test enforces it. The Figma token file is generated from it, never edited, and CI fails if the two drift (`npm run tokens:check`). |
+| **A design system is a product, never finished** (ch. 2). Products have versions, a changelog and a roadmap; projects just end. | Releases are cut by release-please from Conventional Commits, with a generated [changelog](?path=/docs/mola-ui-changelog--overview) and semantic versions. |
+| **Make it public** (ch. 3). Public documentation and open code build visibility and accountability. | MIT-licensed source, this public reference site, open issues, and a written [contribution guide](https://github.com/demogar/molaui/blob/main/CONTRIBUTING.md). |
+| **Lay out the system like a store: show what it makes first** (ch. 10). A reference site that leads with parts is "just a bin of heads". | The README and the [Introduction](?path=/docs/mola-ui-introduction--overview) open with screens built from the system: the Cayuco runs view and a working agent console. Components come after. |
+| **Canon and the expanded universe** (ch. 6). Not every component belongs in the system; some stay local to the product that needs them. | The contribution guide says what enters the system and what should stay in your product. |
+| **Three times is a pattern** (ch. 5). A component is added once at least three use cases need it. | The bar for a new component in the contribution guide. |
+| **All, most, some, few** (ch. 5, "Extracting and Abstracting"). When reconciling variants, keep what all of them share, recommend what most share, discuss what some share, and defer what only a few have. | How competing variants of a component are reconciled before one is added. |
+
+The book's examples and wording aren't reproduced here; read it for the full argument.
+
+## On the mola
+
+The account of the mola in the [Introduction](?path=/docs/mola-ui-introduction--overview) and the README draws on these sources:
+
+- Cleveland Museum of Art, [“Fashioning Identity: Mola Textiles of Panamá”](https://www.clevelandart.org/articles/fashioning-identity-mola-textiles-panama).
+- Smithsonian Magazine, [“The Colorful History Behind Panama's Mola”](https://www.smithsonianmag.com/travel/the-colorful-history-behind-panamas-mola-180980536/).
+- Atlas Obscura, [on the mola and the 1925 Guna Revolution](https://www.atlasobscura.com/articles/guna-mola-textile-revolution-history).
+- Republic of Panama, [Law 20 of 26 June 2000](https://www.wipo.int/wipolex/en/text/589528), the special intellectual property regime for the collective rights of Indigenous peoples (WIPO Lex).
+
+## Standards
+
+| Standard | Used for |
+| --- | --- |
+| [WCAG 2.2](https://www.w3.org/TR/WCAG22/), level AA | The contrast contract test and the axe checks every story runs. See [Accessibility](?path=/docs/foundations-accessibility--overview). |
+| [W3C Design Tokens Format](https://www.designtokens.org/tr/drafts/format/) (Community Group draft) | The format of `tokens/mola.tokens.json`, loaded into Figma through Tokens Studio. |
+| [Conventional Commits](https://www.conventionalcommits.org/) | Pull request titles, from which versions and the changelog are generated. |
+| [Contributor Covenant 2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct/) | The [code of conduct](https://github.com/demogar/molaui/blob/main/CODE_OF_CONDUCT.md). |

@@ -1,9 +1,30 @@
 import { Meta } from '@storybook/addon-docs/blocks'
+import consoleShot from '../../docs/screenshots/agent-console.png'
+import molasPhoto from '../../docs/images/molas-guna-photo-maria-molino.jpg'
+import appShellShot from '../../docs/screenshots/app-shell-light.png'
 import { Hero } from './blocks/hero'
 
 <Meta title="Mola UI/Introduction" />
 
 <Hero />
+
+## See it working
+
+Before the parts, what they make. Both screens below are built only from Mola UI components,
+with fictional data from *Cayuco*, a demo operations platform.
+
+<div className="sb-unstyled not-prose grid gap-6 sm:grid-cols-2">
+  <a href="?path=/story/components-layout-app-shell--cayuco" className="block shadow-cut">
+    <img src={appShellShot} alt="The Cayuco runs view: application shell, KPI tiles and a dense table of agent runs" className="block w-full" />
+  </a>
+  <a href="?path=/story/ai-agent-console--console" className="block shadow-cut">
+    <img src={consoleShot} alt="The agent console after a run: a cited answer, confidence in words, and the run timeline with token usage" className="block w-full" />
+  </a>
+</div>
+
+**[The runs view](?path=/story/components-layout-app-shell--cayuco)** puts the application shell,
+stats and a dense table of agent runs into one screen. **[The agent console](?path=/story/ai-agent-console--console)**
+is live: ask a question, and a simulated agent plans, calls two tools and streams a cited answer.
 
 ## What this is
 
@@ -21,9 +42,44 @@ products**: admin tools, operator consoles, knowledge bases, agent run monitors.
 
 ## Where the name comes from
 
-A **mola** is the reverse-appliqué textile of the Guna people of Guna Yala, Panama. Layers of
-cotton are stacked and the top layers are cut away, so what remains is bounded by a hard outline
-and a revealed band of the colour beneath. Nothing in a mola is blended, tinted or soft.
+A **mola** is the hand-sewn textile of the Guna people of Panama. The word names both the panels
+and the blouse that Guna women make and wear. Layers of cotton are basted together, a design is
+cut through the upper layers, and every edge is turned under and hemmed by hand to reveal the
+colour beneath. Nothing in a mola is blended, tinted or soft. The technique is passed down from
+generation to generation, and a single panel can take months.
+
+<figure className="sb-unstyled not-prose my-8">
+  <img src={molasPhoto} alt="Mola panels sewn by Guna women: layered red, orange, black and purple cloth, cut to reveal bright bands of colour in the shapes of birds, animals and geometric figures" className="block w-full shadow-cut" />
+  <figcaption className="mt-2 font-text text-sm text-ink-muted">
+    Molas sewn by Guna women. Photograph by 
+    <a href="https://unsplash.com/@mams_" className="underline">Maria Molino</a> on 
+    <a href="https://unsplash.com/photos/intricate-colorful-mola-textiles-with-traditional-designs-Y3V4qtRO5-Y" className="underline">Unsplash</a>.
+  </figcaption>
+</figure>
+
+A mola is more than decoration. When Panama's government tried to stop Guna women wearing their
+traditional dress, making and wearing molas became an act of resistance, and the Guna Revolution
+of 1925 won the Guna autonomy over their land and culture. The mola is protected today under
+Panama's Law 20 of 2000 as collective intellectual property of the Guna people.
+
+### Why this name, and how we hold it
+
+Mola UI is not made by Guna people and does not speak for them. It carries the name out of
+respect: to its author, the mola is one of the most authentic expressions of Panamanian culture,
+a craft to be honoured rather than borrowed lightly. The name also fits what this project tries to be.
+A mola carries a people's identity into everyday life. Each one is made by hand and is unique,
+yet every one belongs to the same tradition, because it comes from a shared method. A design
+system does a humbler version of the same thing: it carries an identity and the knowledge of how
+to make things well into every product, so each screen is its own while plainly belonging to the
+same family.
+
+In practice: Mola UI borrows the **method, not the motifs**. Its interface reproduces no Guna
+designs, symbols or patterns. The photograph above is here only to show where the name comes from,
+credited to the women who make molas and to the photographer. The project claims no rights over
+the mola, and names its source wherever the name appears. If
+you want a mola, buy one from Guna artisans.
+
+### What the method gives the interface
 
 That method became the system's grammar:
 

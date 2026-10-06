@@ -11,6 +11,21 @@ branch to a release.
   first so the design can be agreed before you write code. The decisions so far are in
   [`docs/adr/`](docs/adr/); a change that reverses one needs a new ADR.
 
+## What belongs in the system
+
+Mola UI is the canon: the components, tokens and patterns that every product built on it should
+share. Not everything belongs here. A component that only one screen needs should live in that
+product, the "expanded universe", until it proves itself. These rules come from Dan Mall's
+*Design That Scales* (chapters 5 and 6):
+
+- **Three times is a pattern.** Propose a new component when at least three distinct use cases
+  need it, and name them in the issue. One or two is a local component.
+- **Extract, don't invent.** Bring the version that already works in a real screen, with the states
+  that screen needed, rather than a component designed for every case anyone might imagine.
+- **Reconcile variants with all, most, some, few.** When several versions of a component exist,
+  every trait they *all* share is mandatory; what *most* share is the default; what only *some*
+  share is settled in the issue before code; what only a *few* have waits.
+
 ## Setup
 
 ```bash
