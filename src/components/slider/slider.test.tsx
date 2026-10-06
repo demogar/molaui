@@ -1,3 +1,4 @@
+import { DirectionProvider } from '@base-ui/react/direction-provider'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
@@ -17,6 +18,18 @@ describe('Slider', () => {
     render(<Slider label="Rollout" defaultValue={20} min={0} max={100} step={5} onValueChange={onValueChange} />)
     screen.getByRole('slider').focus()
     await userEvent.keyboard('{ArrowRight}')
+    expect(onValueChange).toHaveBeenCalledWith(25, expect.anything())
+  })
+
+  it('reverses the arrow keys right-to-left, where the track fills from the right', async () => {
+    const onValueChange = vi.fn()
+    render(
+      <DirectionProvider direction="rtl">
+        <Slider label="Rollout" defaultValue={20} min={0} max={100} step={5} onValueChange={onValueChange} />
+      </DirectionProvider>,
+    )
+    screen.getByRole('slider').focus()
+    await userEvent.keyboard('{ArrowLeft}')
     expect(onValueChange).toHaveBeenCalledWith(25, expect.anything())
   })
 

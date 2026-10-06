@@ -3,6 +3,12 @@ import './styles/index.css'
 export { cn } from './lib/cn'
 export { contrast, mixOklab, parseHex, toHex } from './tokens/color'
 
+// Right-to-left. `dir` on <html> mirrors the layout, but Base UI reads keyboard
+// direction (slider and tab arrows, which side a submenu opens) from React
+// context. Re-exported so the provider is the same instance as the one the
+// components read, rather than a second copy of Base UI's context.
+export { DirectionProvider, useDirection, type TextDirection } from '@base-ui/react/direction-provider'
+
 // Typography & layout
 export * from './components/typography'
 export * from './components/layout'
