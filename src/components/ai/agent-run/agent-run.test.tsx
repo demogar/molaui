@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
+import { ToolCall } from '../tool-call'
 import { AgentRun, type AgentStep } from './agent-run'
 
 const steps: AgentStep[] = [
@@ -11,6 +12,24 @@ const steps: AgentStep[] = [
 ]
 
 describe('AgentRun', () => {
+  it('raises a failed step once: the run panel alerts, the tool call keeps the error as a record', () => {
+    const error = 'PermissionDenied: role lacks SELECT'
+    const failed: AgentStep[] = [
+      steps[0]!,
+      {
+        id: 'b',
+        kind: 'tool',
+        title: 'Query',
+        status: 'failed',
+        detail: <ToolCall name="query_warehouse" status="failed" error={error} onRetry={vi.fn()} />,
+      },
+    ]
+    render(<AgentRun name="Agent" runId="run_1" status="failed" steps={failed} failure={{ stepId: 'b', error }} />)
+    expect(screen.getAllByRole('alert')).toHaveLength(1)
+    expect(screen.queryByRole('button', { name: 'Retry call' })).not.toBeInTheDocument()
+    expect(screen.getAllByText(error)).toHaveLength(2)
+  })
+
   it('lists steps in order, as an ordered list', () => {
     render(<AgentRun name="Agent" runId="run_1" status="running" steps={steps} />)
     const list = screen.getByRole('list', { name: 'Steps of Agent' })

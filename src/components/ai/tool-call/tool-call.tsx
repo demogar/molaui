@@ -5,6 +5,7 @@ import * as React from 'react'
 import { cn } from '../../../lib/cn'
 import { Button } from '../../button'
 import { CodeBlock } from '../../code'
+import { FailureReportedContext } from '../run-error/failure-reported'
 import { RunStatus, type RunStatusValue } from '../run-status'
 
 export interface ToolCallApproval {
@@ -89,6 +90,9 @@ export function ToolCall({
   // Always controlled: a live call goes from running to failed, and passing
   // `open` only once forced switched Base UI from uncontrolled to controlled.
   const [openState, setOpenState] = React.useState(defaultOpen)
+  // Inside an AgentRun step whose RunError already raised the alarm, the
+  // error is this call's record, not a second alert.
+  const reported = React.useContext(FailureReportedContext)
 
   return (
     <div
@@ -131,9 +135,10 @@ export function ToolCall({
           <Collapsible.Panel className="border-t border-keyline">
             <div className="flex flex-col gap-3 p-3">
               {waiting ? <ApprovalBlock approval={approval} /> : null}
-              {failed ? <ErrorBlock status={status} error={error} onRetry={onRetry} /> : null}
+              {failed && !reported ? <ErrorBlock status={status} error={error} onRetry={onRetry} /> : null}
               {args !== undefined ? <Payload label="arguments" value={args} /> : null}
               {result !== undefined ? <Payload label="result" value={result} /> : null}
+              {failed && reported && error ? <Payload label="error" value={error} /> : null}
             </div>
           </Collapsible.Panel>
         ) : null}

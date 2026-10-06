@@ -260,7 +260,10 @@ function SplitCell({ line, side, hidden }: { line?: DiffLine; side: 'old' | 'new
       aria-hidden={hidden || line === undefined ? true : undefined}
       className={cn(
         'grid grid-cols-[3.5em_1.75em_minmax(0,1fr)] pe-3',
-        line ? WASH[line.kind] : 'bg-cloth-shade',
+        // Nothing on this side: the system's empty texture on the rows' own
+        // ground. A cloth-shade fill read as a hole in the dark theme, where
+        // shade is darker than every row around it.
+        line ? WASH[line.kind] : 'relleno-field',
         side === 'new' && 'border-s border-keyline',
       )}
     >

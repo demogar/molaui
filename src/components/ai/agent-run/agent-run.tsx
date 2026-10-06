@@ -15,6 +15,7 @@ import {
   type RunStatusValue,
 } from '../run-status'
 import { RunError, type RunErrorProps } from '../run-error'
+import { FailureReportedContext } from '../run-error/failure-reported'
 import { TokenUsage, type TokenUsageProps } from '../token-usage'
 
 export type AgentStepKind = 'reasoning' | 'tool' | 'message' | 'handoff' | 'approval'
@@ -210,7 +211,9 @@ export function AgentRun({
 
       <ol aria-label={`Steps of ${name}`} className="m-0 list-none p-4 pb-2">
         {steps.map((step, i) => (
-          <StepRow key={step.id} step={step} last={i === steps.length - 1} nextStarted={steps[i + 1]?.status !== 'queued'} />
+          <FailureReportedContext.Provider key={step.id} value={shown !== undefined && i === failedIndex}>
+            <StepRow step={step} last={i === steps.length - 1} nextStarted={steps[i + 1]?.status !== 'queued'} />
+          </FailureReportedContext.Provider>
         ))}
       </ol>
 
