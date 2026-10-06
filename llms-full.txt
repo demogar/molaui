@@ -289,7 +289,7 @@ Tiles cut from one panel rather than four floating cards: one ink keyline around
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `columns` | `2 \| 3 \| 4 \| 5` | `4` | Columns at the widest breakpoint. Tiles wrap down to two, then one. |
+| `columns` | `2 \| 3 \| 4 \| 5` | `4` | Columns when there is room for them. Tiles wrap down to two, then one. |
 
 Types: `StatDelta`, `StatGroupProps`, `StatProps`
 
@@ -492,6 +492,8 @@ When not to:
 - Don’t: Let a coloured dot alone carry a state.
 - Do: Use soft badges down a column.
 - Don’t: Fill a column with solid badges; fifty solid statuses read as a quilt.
+- Do: Map a stopped or cancelled state to neutral; a person chose it.
+- Don’t: Show a cancellation in gold; warn is for work that is degraded or waiting on someone.
 
 Content:
 - One or two words in sentence case, with no punctuation: “Succeeded”, “Needs review”.

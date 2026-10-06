@@ -3024,7 +3024,7 @@
               "type": "2 | 3 | 4 | 5",
               "required": false,
               "default": "4",
-              "description": "Columns at the widest breakpoint. Tiles wrap down to two, then one."
+              "description": "Columns when there is room for them. Tiles wrap down to two, then one."
             }
           ]
         },
@@ -3777,6 +3777,10 @@
           {
             "do": "Use soft badges down a column.",
             "dont": "Fill a column with solid badges; fifty solid statuses read as a quilt."
+          },
+          {
+            "do": "Map a stopped or cancelled state to neutral; a person chose it.",
+            "dont": "Show a cancellation in gold; warn is for work that is degraded or waiting on someone."
           }
         ],
         "content": [
@@ -5538,7 +5542,7 @@
       "category": "Forms",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-forms-date-picker--overview",
       "summary": "DatePicker for one date, typed or picked from a calendar; DateRangePicker for a period, with presets and two typed ends.",
-      "description": "The WAI-ARIA APG **date picker dialog**: a text input you can type into, and a button that opens a calendar grid in a popover. Base UI has no calendar, so the grid owns its keyboard model and keeps to the APG one exactly — arrows by day and week (mirrored in right-to-left), PageUp/PageDown by month, Shift for a year, Home/End to the edges of the week, Enter or Space to choose, Escape to close with focus back on the button.\n\nMonth and weekday names, digits, the typed order and the first day of the week all come from `Intl` for the `locale` you pass; nothing defaults to `en-US` behind your back. Typed dates commit on blur or Enter, and a refusal is a sentence that says why — try `31/02/2027`, or a day before the minimum. The range picker types too, with a start and an end input inside its popup that share the same parsing and sentences. Values are plain `Date`s at local midnight and submit as `yyyy-mm-dd`; there is no date library, because calendar days need none.",
+      "description": "The WAI-ARIA APG **date picker dialog**: a text input you can type into, and a button that opens a calendar grid in a non-modal dialog (Base UI’s Popover, whose popup is `role=\"dialog\"`). Base UI has no calendar, so the grid owns its keyboard model and keeps to the APG one exactly — arrows by day and week (mirrored in right-to-left), PageUp/PageDown by month, Shift for a year, Home/End to the edges of the week, Enter or Space to choose, Escape to close with focus back on the button.\n\nMonth and weekday names, digits, the typed order and the first day of the week all come from `Intl` for the `locale` you pass; nothing defaults to `en-US` behind your back. Typed dates commit on blur or Enter, and a refusal is a sentence that says why — try `31/02/2027`, or a day before the minimum. The range picker types too, with a start and an end input inside its popup that share the same parsing and sentences. Values are plain `Date`s at local midnight and submit as `yyyy-mm-dd`; there is no date library, because calendar days need none.",
       "usage": {
         "use": [
           "One date, such as when to run an evaluation, with DatePicker.",
@@ -5930,7 +5934,7 @@
           "name": "DatePickerProps",
           "kind": "type",
           "source": "src/components/date-picker/date-picker.tsx",
-          "description": "A date you can type or pick — the APG \"date picker dialog\" pattern: a text input, a button beside it that opens a calendar in a dialog, and focus returned to that button when the dialog closes."
+          "description": "A date you can type or pick — the APG \"date picker dialog\" pattern: a text input, a button beside it that opens a calendar in a dialog, and focus returned to that button when the dialog closes. The dialog is non-modal: Base UI's Popover, whose popup has `role=\"dialog\"`, so the page behind it is not made inert for a date."
         },
         {
           "name": "formatDateRange",
