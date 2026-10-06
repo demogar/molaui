@@ -1,0 +1,202 @@
+/* src/styles/theme.css
+ *
+ * The Tailwind v4 bridge. Two directives, for two different reasons:
+ *
+ *   @theme        LITERAL scale values. Several of this system's names sit in
+ *                 Tailwind's reserved namespaces (--text-*, --font-*,
+ *                 --radius-*, --leading-*), so `@theme inline { --text-base:
+ *                 var(--text-base) }` would be a self-reference resolving to
+ *                 nothing. Declaring the literal here is correct AND emits the
+ *                 variable onto :root — which is what lets tokens.css re-scale
+ *                 it per density.
+ *
+ *   @theme inline COLOURS, as var() references to tokens.css. `inline` makes
+ *                 a utility write `var(--rojo)` rather than `var(--color-rojo)`,
+ *                 so `light-dark()` resolves on the element that uses it.
+ */
+
+@theme {
+  /* ── voices ───────────────────────────────────────────────────────
+   * Archivo is the system voice: navigation, labels, figures, buttons,
+   * headings. It has a real `wdth` axis, so the label register is genuinely
+   * expanded rather than a normal-width face pulled apart with tracking.
+   *
+   * Alegreya is the reading voice, for prose someone — a person, or a model —
+   * is saying to the reader. Designed by Juan Pablo del Peral for long-form
+   * literature: a Latin American text face for a system born in Panama.
+   *
+   * Martian Mono is for MACHINE LITERALS only: code, JSON, ids, hashes, tool
+   * arguments. Never a label, never a number in a table — tabular figures in
+   * Archivo do that job. Small tracked mono captions are the costume this
+   * system was built to shed; see docs/adr/0003-monospace-for-literals.md. */
+  --font-display: 'Archivo Variable', 'Archivo', system-ui, 'Helvetica Neue', sans-serif;
+  --font-ui: 'Archivo Variable', 'Archivo', system-ui, 'Helvetica Neue', sans-serif;
+  --font-text: 'Alegreya Variable', 'Alegreya', 'Iowan Old Style', Georgia, serif;
+  --font-mono: 'Martian Mono Variable', 'Martian Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* ── type scale ───────────────────────────────────────────────────
+   * The comfortable (product) scale. tokens.css re-declares the small end per
+   * density; the display end is shared. */
+  --text-2xs: 11px; /* label caps, set expanded and tracked */
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-base: 14px;
+  --text-lg: 16px;
+  --text-xl: 20px;
+  --text-2xl: 26px;
+  --text-3xl: 36px;
+  --text-4xl: 52px;
+  --text-5xl: 76px;
+
+  --leading-body: 1.55;
+  --leading-snug: 1.25;
+  --leading-tight: 1.04;
+
+  --tracking-display: -0.02em;
+  --tracking-label: 0.14em;
+
+  /* Archivo's width axis, exercised at all three registers. Running text at
+   * the drawn width; display wide (118 of 62–125), because a heading here is
+   * a shape cut to fill its panel; labels at 116, because at 11px width is
+   * what makes caps read as lettering rather than as a tracked caption. Mono
+   * is narrowed — machine text is scanned in columns, and at full width a JSON
+   * payload wraps twice as often. */
+  --wdth-body: 100;
+  --wdth-display: 118;
+  --wdth-label: 116;
+  --wdth-mono: 87.5;
+
+  /* ── shape ────────────────────────────────────────────────────────
+   * Zero, everywhere, no exceptions. A mola is cut with a blade. These names
+   * survive only so `rounded-md` gets the system's answer instead of
+   * Tailwind's default. `rounded-full` is deliberately left alone: a status
+   * dot is a dot. */
+  --radius: 0px;
+  --radius-xs: 0px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+
+
+  /* ── motion ───────────────────────────────────────────────────────
+   * Cloth settling under a hand. No overshoot anywhere in this system. */
+  --ease-cut: cubic-bezier(0.2, 0, 0, 1);
+
+  --animate-mola-pulse: mola-pulse 1.6s var(--ease-cut) infinite;
+  --animate-mola-caret: mola-caret 1.05s steps(1) infinite;
+  --animate-mola-shuttle: mola-shuttle 1.2s linear infinite;
+  --animate-mola-in: mola-in var(--motion-base) var(--ease-cut) both;
+
+  @keyframes mola-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.55;
+    }
+  }
+  @keyframes mola-caret {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+  /* The relleno slits sliding past: the "working" texture. */
+  @keyframes mola-shuttle {
+    from {
+      background-position-x: 0;
+    }
+    to {
+      background-position-x: 18px;
+    }
+  }
+  @keyframes mola-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* ── layout ───────────────────────────────────────────────────────
+   * --container-* is what `max-w-*` resolves against: `max-w-page`,
+   * `max-w-prose`. The prose measure is ~70 characters of Alegreya and does
+   * not change with viewport. */
+  --container-page: 1180px;
+  --container-wide: 1440px;
+  --container-prose: 38rem;
+
+  /* The one non-default breakpoint: where the application shell's sidebar
+   * becomes a sheet. Consumed as `nav:`. */
+  --breakpoint-nav: 920px;
+}
+
+@theme inline {
+  /* ── depth ────────────────────────────────────────────────────────
+   * `shadow-cut` is not depth: it is the keyline, the hard edge where the
+   * blade went through. `shadow-raised` is depth, and the only blur. Both are
+   * inline so they resolve on the element — a subtree that redefines --ink
+   * (the `on-layer` utility does) gets its own keyline, not :root's. */
+  --shadow-cut: var(--cut);
+  --shadow-raised: var(--elevation-raised);
+  /* What every floating surface wears: its keyline AND its elevation. In the
+   * dark theme the blur is nearly invisible on a near-black ground, so the
+   * keyline is what actually separates a menu from the page. */
+  --shadow-floating: var(--cut), var(--elevation-raised);
+
+  /* ── cloth and ink ────────────────────────────────────────────────── */
+  --color-cloth: var(--cloth);
+  --color-cloth-pale: var(--cloth-pale);
+  --color-cloth-shade: var(--cloth-shade);
+  --color-cloth-deep: var(--cloth-deep);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-on-tint: var(--ink-on-tint);
+  --color-keyline: var(--keyline);
+  --color-keyline-soft: var(--keyline-soft);
+
+  /* ── the four layers ──────────────────────────────────────────────── */
+  --color-rojo: var(--rojo);
+  --color-rojo-deep: var(--rojo-deep);
+  --color-rojo-soft: var(--rojo-soft);
+  --color-rojo-rule: var(--rojo-rule);
+  --color-rojo-on-shade: var(--rojo-on-shade);
+  --color-anil: var(--anil);
+  --color-anil-soft: var(--anil-soft);
+  --color-verde: var(--verde);
+  --color-verde-soft: var(--verde-soft);
+  --color-oro: var(--oro);
+  --color-oro-soft: var(--oro-soft);
+  --color-on-layer: var(--on-layer);
+  --color-on-oro: var(--on-oro);
+
+  /* ── status ───────────────────────────────────────────────────────── */
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+  --color-warn: var(--warn);
+  --color-info: var(--info);
+  --color-ink-danger: var(--ink-danger);
+  --color-ink-success: var(--ink-success);
+  --color-ink-warn: var(--ink-warn);
+  --color-ink-info: var(--ink-info);
+
+  /* ── inverse panel, and over arbitrary pixels ─────────────────────── */
+  --color-on-ink: var(--on-ink);
+  --color-on-ink-muted: var(--on-ink-muted);
+  --color-keyline-on-ink: var(--keyline-on-ink);
+  --color-scrim: var(--scrim);
+  --color-on-scrim: var(--on-scrim);
+  --color-on-scrim-muted: var(--on-scrim-muted);
+  --color-backdrop: var(--backdrop);
+}

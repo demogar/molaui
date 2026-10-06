@@ -1,0 +1,47 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Mola UI/Principles" />
+
+# Principles
+
+Six rules. Each one exists because breaking it produced a real, specific failure — in the
+editorial system this grew out of, or in the tools it is built for.
+
+## 1. Colour owns regions, never the reading column
+
+A layer colour may fill a panel, a status mark, a selected state. It never tints body copy. A
+system with four saturated layers survives only if they stay in their fields; the moment red is
+an accent sprinkled on text, it stops meaning anything.
+
+## 2. Every interactive edge is ink
+
+Anything a pointer can touch is bounded by `--ink` at 1.5px — a hard keyline that clears 3:1 on
+every ground. `--keyline` exists for decorative dividers and measures ~1.5:1 *on purpose*, so it
+can never be mistaken for a control edge. Edges are `box-shadow`, not `border`, so hover can grow
+a revealed band outward without moving a single neighbour.
+
+## 3. Nothing is rounded; only real elevation is blurred
+
+Zero radius everywhere. One blurred shadow in the whole system, `shadow-raised`, for things that
+genuinely float — menus, dialogs, toasts. Everything else is flat cloth.
+
+## 4. State is never colour alone
+
+Every status has a glyph, a word and a colour, in that order of importance. A failed run is a
+crossed square **and** the word *Failed* **and** red — so it survives colour blindness, a
+greyscale screenshot pasted into a ticket, and the `on-layer` panels where no status hue clears
+4.5:1.
+
+## 5. Three voices, three jobs
+
+- **Archivo** — the system: labels, controls, figures, headings. Its width axis makes labels read
+  as lettering rather than tracked-out captions.
+- **Alegreya** — the reader: prose someone is *saying* to you, including a model's answer.
+- **Martian Mono** — the machine: code, JSON, ids, tool arguments. Never labels; never table
+  numbers, which are Archivo with tabular figures.
+
+## 6. Every number in the docs is measured
+
+Contrast ratios are computed from `tokens.css` — OKLab mixes included — by the same resolver the
+test suite uses, and the build fails if a pairing drops below its bar. Nothing on these pages is
+an estimate.

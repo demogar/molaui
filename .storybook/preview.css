@@ -1,0 +1,13 @@
+/* Storybook's stylesheet: the library's system, plus every class the stories
+ * and docs use. The library build (src/styles/index.css) deliberately excludes
+ * these sources, so a class that only appears in a story never ships. */
+@import 'tailwindcss' source('../src');
+@import '../src/styles/mola.css';
+
+/* An MDX page with no stories never runs the theme decorator, so the iframe
+ * would follow the operating system and paint a dark ground under Storybook's
+ * light documentation chrome. Storybook only: the library itself honours the
+ * OS preference by default. */
+:root:not([data-theme]) {
+  color-scheme: light;
+}

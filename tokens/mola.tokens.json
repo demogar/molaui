@@ -1,0 +1,551 @@
+{
+  "$description": "Mola UI design tokens, generated from src/styles/tokens.css by scripts/export-tokens.ts. Do not edit by hand.",
+  "color": {
+    "light": {
+      "cloth": {
+        "$type": "color",
+        "$value": "#edeee8"
+      },
+      "cloth-pale": {
+        "$type": "color",
+        "$value": "#f6f7f2"
+      },
+      "cloth-shade": {
+        "$type": "color",
+        "$value": "#e4e7dc"
+      },
+      "cloth-deep": {
+        "$type": "color",
+        "$value": "#d7dbcb"
+      },
+      "ink": {
+        "$type": "color",
+        "$value": "#14161a"
+      },
+      "ink-2": {
+        "$type": "color",
+        "$value": "#3d4147"
+      },
+      "ink-muted": {
+        "$type": "color",
+        "$value": "#5e636a"
+      },
+      "keyline": {
+        "$type": "color",
+        "$value": "#c6cabc"
+      },
+      "keyline-soft": {
+        "$type": "color",
+        "$value": "#dcdfd3"
+      },
+      "rojo": {
+        "$type": "color",
+        "$value": "#c0272d"
+      },
+      "rojo-deep": {
+        "$type": "color",
+        "$value": "#9e1e24"
+      },
+      "anil": {
+        "$type": "color",
+        "$value": "#1b4b8f"
+      },
+      "verde": {
+        "$type": "color",
+        "$value": "#0b6b4b"
+      },
+      "oro": {
+        "$type": "color",
+        "$value": "#edb01f"
+      },
+      "on-layer": {
+        "$type": "color",
+        "$value": "#f6f7f2"
+      },
+      "on-oro": {
+        "$type": "color",
+        "$value": "#14161a"
+      },
+      "danger": {
+        "$type": "color",
+        "$value": "#9e1e24"
+      },
+      "success": {
+        "$type": "color",
+        "$value": "#0b6b4b"
+      },
+      "warn": {
+        "$type": "color",
+        "$value": "#8a6410"
+      },
+      "info": {
+        "$type": "color",
+        "$value": "#1b4b8f"
+      },
+      "ink-danger": {
+        "$type": "color",
+        "$value": "#9e1e24"
+      },
+      "ink-success": {
+        "$type": "color",
+        "$value": "#0b6b4b"
+      },
+      "ink-warn": {
+        "$type": "color",
+        "$value": "#8a6410"
+      },
+      "ink-info": {
+        "$type": "color",
+        "$value": "#1b4b8f"
+      },
+      "rojo-soft": {
+        "$type": "color",
+        "$value": "#f3e0d9"
+      },
+      "anil-soft": {
+        "$type": "color",
+        "$value": "#dae2e7"
+      },
+      "verde-soft": {
+        "$type": "color",
+        "$value": "#dce6dc"
+      },
+      "oro-soft": {
+        "$type": "color",
+        "$value": "#f5ead0"
+      },
+      "ink-soft": {
+        "$type": "color",
+        "$value": "#e4e5e1"
+      },
+      "ink-on-tint": {
+        "$type": "color",
+        "$value": "#3d4147"
+      },
+      "rojo-on-shade": {
+        "$type": "color",
+        "$value": "#9e1e24"
+      },
+      "on-ink": {
+        "$type": "color",
+        "$value": "#f6f7f2"
+      },
+      "on-ink-muted": {
+        "$type": "color",
+        "$value": "#afb1af"
+      },
+      "on-scrim": {
+        "$type": "color",
+        "$value": "#f6f7f2"
+      },
+      "band": {
+        "$type": "color",
+        "$value": "#edb01f"
+      }
+    },
+    "dark": {
+      "cloth": {
+        "$type": "color",
+        "$value": "#16181c"
+      },
+      "cloth-pale": {
+        "$type": "color",
+        "$value": "#1e2126"
+      },
+      "cloth-shade": {
+        "$type": "color",
+        "$value": "#111316"
+      },
+      "cloth-deep": {
+        "$type": "color",
+        "$value": "#2a2e34"
+      },
+      "ink": {
+        "$type": "color",
+        "$value": "#eceee6"
+      },
+      "ink-2": {
+        "$type": "color",
+        "$value": "#c4c8bd"
+      },
+      "ink-muted": {
+        "$type": "color",
+        "$value": "#9a9f97"
+      },
+      "keyline": {
+        "$type": "color",
+        "$value": "#3a3f46"
+      },
+      "keyline-soft": {
+        "$type": "color",
+        "$value": "#2a2d33"
+      },
+      "rojo": {
+        "$type": "color",
+        "$value": "#f2685c"
+      },
+      "rojo-deep": {
+        "$type": "color",
+        "$value": "#ff8a7e"
+      },
+      "anil": {
+        "$type": "color",
+        "$value": "#86a8ee"
+      },
+      "verde": {
+        "$type": "color",
+        "$value": "#4cc493"
+      },
+      "oro": {
+        "$type": "color",
+        "$value": "#f0bc3a"
+      },
+      "on-layer": {
+        "$type": "color",
+        "$value": "#1e2126"
+      },
+      "on-oro": {
+        "$type": "color",
+        "$value": "#1e2126"
+      },
+      "danger": {
+        "$type": "color",
+        "$value": "#ff8a7e"
+      },
+      "success": {
+        "$type": "color",
+        "$value": "#4cc493"
+      },
+      "warn": {
+        "$type": "color",
+        "$value": "#e0b45a"
+      },
+      "info": {
+        "$type": "color",
+        "$value": "#86a8ee"
+      },
+      "ink-danger": {
+        "$type": "color",
+        "$value": "#ff8a7e"
+      },
+      "ink-success": {
+        "$type": "color",
+        "$value": "#4cc493"
+      },
+      "ink-warn": {
+        "$type": "color",
+        "$value": "#e0b45a"
+      },
+      "ink-info": {
+        "$type": "color",
+        "$value": "#86a8ee"
+      },
+      "rojo-soft": {
+        "$type": "color",
+        "$value": "#352a2d"
+      },
+      "anil-soft": {
+        "$type": "color",
+        "$value": "#292f3b"
+      },
+      "verde-soft": {
+        "$type": "color",
+        "$value": "#253232"
+      },
+      "oro-soft": {
+        "$type": "color",
+        "$value": "#302f2c"
+      },
+      "ink-soft": {
+        "$type": "color",
+        "$value": "#2a2d31"
+      },
+      "ink-on-tint": {
+        "$type": "color",
+        "$value": "#c4c8bd"
+      },
+      "rojo-on-shade": {
+        "$type": "color",
+        "$value": "#ff8a7e"
+      },
+      "on-ink": {
+        "$type": "color",
+        "$value": "#1e2126"
+      },
+      "on-ink-muted": {
+        "$type": "color",
+        "$value": "#515456"
+      },
+      "on-scrim": {
+        "$type": "color",
+        "$value": "#f6f7f2"
+      },
+      "band": {
+        "$type": "color",
+        "$value": "#f0bc3a"
+      }
+    }
+  },
+  "font": {
+    "display": {
+      "$type": "fontFamily",
+      "$value": "'Archivo Variable', 'Archivo', system-ui, 'Helvetica Neue', sans-serif"
+    },
+    "ui": {
+      "$type": "fontFamily",
+      "$value": "'Archivo Variable', 'Archivo', system-ui, 'Helvetica Neue', sans-serif"
+    },
+    "text": {
+      "$type": "fontFamily",
+      "$value": "'Alegreya Variable', 'Alegreya', 'Iowan Old Style', Georgia, serif"
+    },
+    "mono": {
+      "$type": "fontFamily",
+      "$value": "'Martian Mono Variable', 'Martian Mono', ui-monospace, 'SF Mono', Menlo, monospace"
+    }
+  },
+  "text": {
+    "2xs": {
+      "$type": "dimension",
+      "$value": "11px"
+    },
+    "xs": {
+      "$type": "dimension",
+      "$value": "12px"
+    },
+    "sm": {
+      "$type": "dimension",
+      "$value": "13px"
+    },
+    "base": {
+      "$type": "dimension",
+      "$value": "14px"
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": "16px"
+    },
+    "xl": {
+      "$type": "dimension",
+      "$value": "20px"
+    },
+    "2xl": {
+      "$type": "dimension",
+      "$value": "26px"
+    },
+    "3xl": {
+      "$type": "dimension",
+      "$value": "36px"
+    },
+    "4xl": {
+      "$type": "dimension",
+      "$value": "52px"
+    },
+    "5xl": {
+      "$type": "dimension",
+      "$value": "76px"
+    }
+  },
+  "leading": {
+    "body": {
+      "$type": "number",
+      "$value": "1.55"
+    },
+    "snug": {
+      "$type": "number",
+      "$value": "1.25"
+    },
+    "tight": {
+      "$type": "number",
+      "$value": "1.04"
+    }
+  },
+  "tracking": {
+    "display": {
+      "$type": "dimension",
+      "$value": "-0.02em"
+    },
+    "label": {
+      "$type": "dimension",
+      "$value": "0.14em"
+    }
+  },
+  "wdth": {
+    "body": {
+      "$type": "number",
+      "$value": "100"
+    },
+    "display": {
+      "$type": "number",
+      "$value": "118"
+    },
+    "label": {
+      "$type": "number",
+      "$value": "116"
+    },
+    "mono": {
+      "$type": "number",
+      "$value": "87.5"
+    }
+  },
+  "radius": {
+    "xs": {
+      "$type": "dimension",
+      "$value": "0px"
+    },
+    "sm": {
+      "$type": "dimension",
+      "$value": "0px"
+    },
+    "md": {
+      "$type": "dimension",
+      "$value": "0px"
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": "0px"
+    },
+    "xl": {
+      "$type": "dimension",
+      "$value": "0px"
+    },
+    "2xl": {
+      "$type": "dimension",
+      "$value": "0px"
+    }
+  },
+  "motion": {
+    "cut": {
+      "$type": "duration",
+      "$value": "120ms"
+    },
+    "base": {
+      "$type": "duration",
+      "$value": "220ms"
+    },
+    "slow": {
+      "$type": "duration",
+      "$value": "420ms"
+    },
+    "ease-cut": {
+      "$type": "cubicBezier",
+      "$value": "0.2, 0, 0, 1"
+    }
+  },
+  "density": {
+    "comfortable": {
+      "control-h": {
+        "$type": "dimension",
+        "$value": "36px"
+      },
+      "control-h-sm": {
+        "$type": "dimension",
+        "$value": "28px"
+      },
+      "control-h-lg": {
+        "$type": "dimension",
+        "$value": "44px"
+      },
+      "control-px": {
+        "$type": "dimension",
+        "$value": "14px"
+      },
+      "row-h": {
+        "$type": "dimension",
+        "$value": "40px"
+      }
+    },
+    "compact": {
+      "spacing": {
+        "$type": "dimension",
+        "$value": "0.21875rem"
+      },
+      "text-2xs": {
+        "$type": "dimension",
+        "$value": "11px"
+      },
+      "text-xs": {
+        "$type": "dimension",
+        "$value": "11.5px"
+      },
+      "text-sm": {
+        "$type": "dimension",
+        "$value": "12.5px"
+      },
+      "text-base": {
+        "$type": "dimension",
+        "$value": "13px"
+      },
+      "text-lg": {
+        "$type": "dimension",
+        "$value": "15px"
+      },
+      "text-xl": {
+        "$type": "dimension",
+        "$value": "18px"
+      },
+      "control-h": {
+        "$type": "dimension",
+        "$value": "28px"
+      },
+      "control-h-sm": {
+        "$type": "dimension",
+        "$value": "24px"
+      },
+      "control-h-lg": {
+        "$type": "dimension",
+        "$value": "36px"
+      },
+      "control-px": {
+        "$type": "dimension",
+        "$value": "10px"
+      },
+      "row-h": {
+        "$type": "dimension",
+        "$value": "30px"
+      }
+    },
+    "spacious": {
+      "text-xs": {
+        "$type": "dimension",
+        "$value": "13px"
+      },
+      "text-sm": {
+        "$type": "dimension",
+        "$value": "15px"
+      },
+      "text-base": {
+        "$type": "dimension",
+        "$value": "17px"
+      },
+      "text-lg": {
+        "$type": "dimension",
+        "$value": "20px"
+      },
+      "text-xl": {
+        "$type": "dimension",
+        "$value": "26px"
+      },
+      "control-h": {
+        "$type": "dimension",
+        "$value": "48px"
+      },
+      "control-h-sm": {
+        "$type": "dimension",
+        "$value": "36px"
+      },
+      "control-h-lg": {
+        "$type": "dimension",
+        "$value": "56px"
+      },
+      "control-px": {
+        "$type": "dimension",
+        "$value": "22px"
+      },
+      "row-h": {
+        "$type": "dimension",
+        "$value": "52px"
+      }
+    }
+  }
+}

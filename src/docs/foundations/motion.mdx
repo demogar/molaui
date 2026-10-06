@@ -1,0 +1,27 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Foundations/Motion" />
+
+# Motion
+
+Cloth settling under a hand: fast in, no float, **no overshoot anywhere**. One easing curve, three
+durations.
+
+| Token | Value | For |
+| --- | --- | --- |
+| `--motion-cut` | 120ms | hover, press, the band revealing |
+| `--motion-base` | 220ms | menus and popovers entering, tabs indicator |
+| `--motion-slow` | 420ms | dialogs, sheets, the sidebar |
+| `ease-cut` | `cubic-bezier(0.2, 0, 0, 1)` | everything |
+
+## Motion that carries meaning
+
+- **`mola-caret`** — the streaming caret. Stepped, not faded: it is a block of ink, on or off.
+- **`mola-shuttle`** — the working relleno. Indeterminate progress, a running step, a pending upload.
+- **`mola-pulse`** — a live status dot.
+
+## Reduced motion
+
+Under `prefers-reduced-motion: reduce` every animation collapses to one frame. The states are
+designed to survive that: a stilled working-relleno still reads as *in progress*, a stilled caret
+is still a caret, and streamed text still arrives — only the decoration stops.

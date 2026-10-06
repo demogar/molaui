@@ -1,0 +1,99 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { SwatchGrid, PairingTable } from '../blocks/swatches'
+
+<Meta title="Foundations/Color" />
+
+# Color
+
+Every swatch on this page is painted from the live CSS variable, split down the middle into the
+light and dark theme, and labelled with the value and ratio **computed from `tokens.css`** by the
+resolver the contract test uses. If a label disagreed with its paint, the build would already be
+red.
+
+## Cloth — the grounds
+
+Bleached cotton in the light theme; the dyed base layer in the dark one. `cloth-pale` is *raised*
+in both themes — lighter on light, lighter on dark — so "raised" means the same thing either way.
+
+<SwatchGrid
+  swatches={[
+    { token: '--cloth', role: 'The page.', on: '--ink' },
+    { token: '--cloth-pale', role: 'Raised: cards, inputs, menus, dialogs.', on: '--ink' },
+    { token: '--cloth-shade', role: 'One step down: table headers, wells, disabled fields.', on: '--ink' },
+    { token: '--cloth-deep', role: 'The deepest cloth before a layer takes over.', on: '--ink' },
+  ]}
+/>
+
+## Ink — the top layer
+
+The foreground, and every keyline. `--ink` keeps its *role* across themes, not its hue.
+
+<SwatchGrid
+  swatches={[
+    { token: '--ink', role: 'Body text, headings, every interactive edge.' },
+    { token: '--ink-2', role: 'Secondary text.' },
+    { token: '--ink-muted', role: 'Tertiary text, metadata. Floor of the ramp.' },
+    { token: '--keyline', role: 'Decorative dividers only. Under 3:1 on purpose.' },
+  ]}
+/>
+
+## The four layers
+
+Commercial cotton in the range a mola is actually cut from. Flat, saturated, never mixed with each
+other. In the dark theme they are lifted until they carry text on the dark ground.
+
+<SwatchGrid
+  swatches={[
+    { token: '--rojo', role: 'Danger, destructive actions, the brand mark.' },
+    { token: '--anil', role: 'Information, links in tools, selection.' },
+    { token: '--verde', role: 'Success, healthy, approved.' },
+    { token: '--oro', role: 'The revealed band. A field and a mark — never text on light cloth.' },
+  ]}
+/>
+
+## Washes
+
+A mola has no tints, so washes are reserved for a whole region that belongs to a layer without
+becoming it: a callout, a selected row, a running step. Mixed thin enough that **every step of the
+ink ramp stays legal on every wash**.
+
+<SwatchGrid
+  swatches={[
+    { token: '--rojo-soft', role: 'Danger callout, failed step.', on: '--ink-muted' },
+    { token: '--anil-soft', role: 'Info callout, selected row, uncertainty note.', on: '--ink-muted' },
+    { token: '--verde-soft', role: 'Success callout.', on: '--ink-muted' },
+    { token: '--oro-soft', role: 'Highlight, waiting-for-approval.', on: '--ink-muted' },
+    { token: '--ink-soft', role: 'Hover on ghost controls, inline code ground.', on: '--ink-muted' },
+  ]}
+/>
+
+## Pairings that ship
+
+Real text on real grounds, in both themes. 4.5 is the bar for text, 3 for a UI boundary.
+
+<PairingTable
+  pairs={[
+    ['--ink', '--cloth'],
+    ['--ink-muted', '--cloth-shade'],
+    ['--ink-muted', '--oro-soft'],
+    ['--rojo', '--cloth'],
+    ['--warn', '--cloth'],
+    ['--on-layer', '--rojo'],
+    ['--on-layer', '--anil'],
+    ['--on-layer', '--verde'],
+    ['--on-oro', '--oro'],
+    ['--on-ink', '--ink'],
+    ['--on-ink-muted', '--ink'],
+  ]}
+/>
+
+## Two themes, one declaration
+
+```css
+--cloth: light-dark(#edeee8, #16181c);
+```
+
+Each token is written once with both values, and `color-scheme` picks one. That buys three things
+a duplicated `[data-theme=dark]` block does not: the OS preference is honoured with no script, any
+subtree can flip theme on its own, and a token cannot exist in one theme and be forgotten in the
+other.

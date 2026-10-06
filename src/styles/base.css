@@ -1,0 +1,91 @@
+/* src/styles/base.css
+ *
+ * What the browser ships by default and this system replaces. Scoped to
+ * `.mola` or `:root` is a choice for the consumer: the library's stylesheet
+ * applies it to the document, because selection colour, focus and scrollbars
+ * are document-wide — a design system that styles its buttons and leaves the
+ * default blue selection everywhere else has not been finished. */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scrollbar-color: var(--ink-muted) var(--cloth-shade);
+  }
+
+  body {
+    background-color: var(--cloth);
+    color: var(--ink);
+    font-family: var(--font-ui);
+    font-size: var(--text-base);
+    font-variation-settings: 'wdth' var(--wdth-body);
+    line-height: var(--leading-body);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Any subtree that re-themes itself also re-grounds itself, so a
+   * `data-theme="dark"` panel inside a light page is a real dark surface and
+   * not light-theme text floating on the page colour. */
+  [data-theme] {
+    background-color: var(--cloth);
+    color: var(--ink);
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background-color: var(--oro);
+    color: var(--on-oro);
+  }
+
+  :root {
+    accent-color: var(--rojo);
+    caret-color: var(--rojo);
+  }
+
+  ::marker {
+    color: var(--rojo);
+  }
+
+  a {
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: 1.5px;
+  }
+
+  /* A box-shadow ring follows the element's radius, which is zero — so the
+   * ring is square like everything else, and it never reflows a row. */
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  /* Windows High Contrast removes box-shadows, which would take every keyline
+   * and the focus ring with them. A transparent outline is repainted in the
+   * system colour there and is invisible everywhere else. */
+  @media (forced-colors: active) {
+    :focus-visible {
+      outline: 2px solid CanvasText;
+      outline-offset: 2px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

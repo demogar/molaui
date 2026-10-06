@@ -1,0 +1,55 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { Hero } from './blocks/hero'
+
+<Meta title="Mola UI/Introduction" />
+
+<Hero />
+
+## What this is
+
+Mola UI is a React component library and token system for **internal platforms and AI-native
+products**: admin tools, operator consoles, knowledge bases, agent run monitors. It ships:
+
+- **Tokens** — one CSS file, two themes declared once with `light-dark()`, three densities, every
+  contrast ratio measured and enforced by a test. Exported to W3C design-token JSON for Figma.
+- **60 documented components** (130 exported parts) — actions, forms, overlays, navigation, data display, and an application
+  shell — built on [Base UI](https://base-ui.com) primitives for behaviour and accessibility,
+  styled with Tailwind v4.
+- **An AI interface layer** — streaming text, message threads, a composer that turns into a stop
+  button, tool-call cards with human approval, long-running agent run timelines, reasoning
+  disclosure, citations, token budgets, and an honest way to show uncertainty.
+
+## Where the name comes from
+
+A **mola** is the reverse-appliqué textile of the Guna people of Guna Yala, Panama. Layers of
+cotton are stacked and the top layers are cut away, so what remains is bounded by a hard outline
+and a revealed band of the colour beneath. Nothing in a mola is blended, tinted or soft.
+
+That method became the system's grammar:
+
+| In the cloth | In the interface |
+| --- | --- |
+| The black top layer | `--ink`: the foreground, and every keyline |
+| The cut edge | `box-shadow` keylines, never `border` — so an edge can grow without reflowing |
+| The revealed band | `cut-band`: hover and selection reveal the layer beneath |
+| *Relleno* — filler slits | the divider, the empty state, and (moving) the "working" state |
+| *Diente* — the sawtooth seam | the edge where one ground is cut away from another |
+| No curve anywhere | zero radius, everywhere, no exceptions |
+
+It began as the design system for [Must Do Panama](https://www.mustdopanama.com), an editorial
+travel guide. Mola UI is that system **carried from an editorial site into product software**:
+the same identity, re-argued for information density, a dark theme for all-day use, and the
+states AI work actually produces.
+
+## Read next
+
+- **[Getting started](?path=/docs/mola-ui-getting-started--overview)** — install, import, theme and density.
+- **[Principles](?path=/docs/mola-ui-principles--overview)** — the six rules every component obeys.
+- **[AI interface layer](?path=/docs/ai-principles--overview)** — how latency, streaming,
+  uncertainty and failure surface.
+- **[Agent console](?path=/story/ai-agent-console--default)** — everything composed, and working.
+
+---
+
+*Designed and directed by Demóstenes García, and built with Claude Code as the daily working
+practice — every decision and every measured value is written down where it lives.*

@@ -1,0 +1,294 @@
+/* src/styles/cloth.css
+ *
+ * The four devices that make this system a mola rather than a palette swap.
+ * Everything here is a Tailwind v4 `@utility`, so it composes with the rest of
+ * the framework and can be overridden in the normal cascade.
+ *
+ *   cut / cut-band  the blade edge, and the band of colour revealed under it
+ *   relleno         the filler slit, used as a divider instead of a hairline
+ *   diente          the sawtooth seam where one ground is cut away from another
+ *   rotulo          the label register: Archivo at its expanded width
+ *
+ * `--band` is the revealed colour and is set per element by `band-*`, so one
+ * element can reveal gold and its neighbour red without a second component.
+ */
+
+/* ── the cut ──────────────────────────────────────────────────────── */
+
+@utility cut {
+  box-shadow: var(--cut);
+}
+
+/* A shape, the blade edge, the colour beneath it, and the blade edge again.
+ * Concentric, never offset: the layers of a mola are stacked, so the reveal
+ * goes all the way around a shape rather than falling to one side of it. */
+@utility cut-band {
+  box-shadow:
+    0 0 0 var(--cut-w) var(--ink),
+    0 0 0 calc(var(--cut-w) + var(--cut-reveal)) var(--band),
+    0 0 0 calc(var(--cut-w) * 2 + var(--cut-reveal)) var(--ink);
+}
+
+@utility band-oro {
+  --band: var(--oro);
+}
+@utility band-rojo {
+  --band: var(--rojo);
+}
+@utility band-anil {
+  --band: var(--anil);
+}
+@utility band-verde {
+  --band: var(--verde);
+}
+/* For a mark on a gold field, where every other band disappears. */
+@utility band-ink {
+  --band: var(--ink);
+}
+@utility band-cloth {
+  --band: var(--cloth-pale);
+}
+
+/* ── relleno ──────────────────────────────────────────────────────────
+ * In a finished mola the negative space is never left empty: it is packed
+ * with narrow parallel slits cut down to a lower layer. That is this system's
+ * divider and its texture, in place of the 1px hairline every editorial
+ * template uses.
+ *
+ * The layer colour is the GROUND and the ink is the slit, not the other way
+ * round. Inverted — thick bands of colour on black — the strip stops reading
+ * as cut cloth and starts reading as hazard tape, which is what the first
+ * build of this file did. Fine dark lines on a colour field is what relleno
+ * actually looks like, and it is also the only version that survives being
+ * put in a horizontal strip. */
+@utility relleno {
+  height: 11px;
+  background-color: var(--band);
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--ink) 0 2px,
+    transparent 2px 9px
+  );
+  box-shadow: 0 0 0 1.5px var(--ink);
+}
+
+/* The same cut used as a field rather than a seam: this is relleno doing its
+ * original job, filling an area that has nothing in it yet. Low contrast on
+ * purpose — it is a texture under content, not a pattern competing with it. */
+@utility relleno-field {
+  background-image: repeating-linear-gradient(
+    90deg,
+    color-mix(in oklab, var(--ink) 9%, transparent) 0 1.5px,
+    transparent 1.5px 9px
+  );
+}
+
+/* ── diente ───────────────────────────────────────────────────────────
+ * The sawtooth left where a top layer was cut back.
+ *
+ * The mask's `black` and `transparent` are alpha stops, not paint — they say
+ * which part of the element survives the cut. Nothing here is a palette colour,
+ * which is why they are keywords rather than tokens. Used only on major seams
+ * — where the page ground gives way to a filled panel — because in a real
+ * panel this edge is the expensive, slow part and there are only a few of them.
+ * Set `color` on the element to choose which ground the teeth are cut from. */
+@utility diente {
+  --diente: 16px;
+  height: calc(var(--diente) / 2);
+  background-color: currentColor;
+  -webkit-mask-image: conic-gradient(from 135deg at 50% 0, transparent 0 90deg, black 0);
+  mask-image: conic-gradient(from 135deg at 50% 0, transparent 0 90deg, black 0);
+  -webkit-mask-size: var(--diente) 100%;
+  mask-size: var(--diente) 100%;
+  -webkit-mask-repeat: repeat-x;
+  mask-repeat: repeat-x;
+}
+
+/* The same seam, teeth pointing up, for the top edge of a panel. */
+@utility diente-up {
+  --diente: 16px;
+  height: calc(var(--diente) / 2);
+  background-color: currentColor;
+  -webkit-mask-image: conic-gradient(from -45deg at 50% 100%, transparent 0 90deg, black 0);
+  mask-image: conic-gradient(from -45deg at 50% 100%, transparent 0 90deg, black 0);
+  -webkit-mask-size: var(--diente) 100%;
+  mask-size: var(--diente) 100%;
+  -webkit-mask-repeat: repeat-x;
+  mask-repeat: repeat-x;
+}
+
+/* ── rótulo ───────────────────────────────────────────────────────────
+ * The label register. Archivo pushed out along its width axis rather than a
+ * normal-width face pulled apart with letter-spacing, which is what makes it
+ * read as lettering cut to fill a panel instead of as a tracked-out caption. */
+@utility rotulo {
+  font-family: var(--font-ui);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  font-variation-settings: 'wdth' var(--wdth-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* ── display, cut ─────────────────────────────────────────────────────
+ * The mola applied to letterforms, and the sequence matters: shape, then the
+ * revealed layer, then the black top layer. The band is never the outermost
+ * edge — in a panel there is always cloth cut back over it.
+ *
+ * The first build of this used `-webkit-text-stroke` for the band, which put
+ * gold on the outside of every glyph. That was wrong twice over. It inverted
+ * the layer order, and because a stroke replaces the glyph's rendered edge,
+ * axe read the headline's foreground as #edb01f on #edeee8 — 1.66:1, a real
+ * failure of SC 1.4.3 at large-text 3:1, and an honest description of a
+ * silhouette the eye could barely find against the page.
+ *
+ * Two rings of text-shadow instead: gold at 4px, ink at 6px behind it. The
+ * glyph keeps its own ink fill, so the text colour axe measures is the colour
+ * the reader actually reads — 15.52:1 — the band sits between fill and
+ * outline where a mola puts it, and the letter is bounded by black.
+ *
+ * WHERE IT MAY BE USED: on a filled panel only — an ink, rojo, añil or verde
+ * ground — never on cloth. On a panel the band is a reveal between two layers
+ * the reader can already see. On the page ground it has nothing to be revealed
+ * from, and a bold sans wearing a gold-and-black outline on light paper stops
+ * reading as appliqué and starts reading as a comic-book sticker. That is a
+ * judgement about the render, not about contrast, and it is the reason this is
+ * a constraint rather than a preference.
+ *
+ * THE FILL MUST READ AGAINST THE BAND, not against the panel behind it. The
+ * band is what surrounds the glyph, so it is the colour the eye — and axe,
+ * which resolves a text-shadow ring as the effective background — measures
+ * against. With band-oro the fill is --ink (9.34:1); --cloth-pale on --oro is
+ * 1.80:1 and fails.
+ *
+ * One per page. This is the signature, not a text style. */
+@utility display-cut {
+  --cut-ring: 3px;
+  --cut-edge: 4.5px;
+  text-shadow:
+    0 calc(-1 * var(--cut-ring)) 0 var(--band),
+    var(--cut-ring) calc(-1 * var(--cut-ring)) 0 var(--band),
+    var(--cut-ring) 0 0 var(--band),
+    var(--cut-ring) var(--cut-ring) 0 var(--band),
+    0 var(--cut-ring) 0 var(--band),
+    calc(-1 * var(--cut-ring)) var(--cut-ring) 0 var(--band),
+    calc(-1 * var(--cut-ring)) 0 0 var(--band),
+    calc(-1 * var(--cut-ring)) calc(-1 * var(--cut-ring)) 0 var(--band),
+    0 calc(-1 * var(--cut-edge)) 0 var(--ink),
+    var(--cut-edge) calc(-1 * var(--cut-edge)) 0 var(--ink),
+    var(--cut-edge) 0 0 var(--ink),
+    var(--cut-edge) var(--cut-edge) 0 var(--ink),
+    0 var(--cut-edge) 0 var(--ink),
+    calc(-1 * var(--cut-edge)) var(--cut-edge) 0 var(--ink),
+    calc(-1 * var(--cut-edge)) 0 0 var(--ink),
+    calc(-1 * var(--cut-edge)) calc(-1 * var(--cut-edge)) 0 var(--ink);
+}
+
+/* ── on a layer panel ────────────────────────────────────────────────
+ * Everything a filled rojo / añil / verde panel needs in order to host
+ * components that were written for the cloth ground: the ink, and the status
+ * inks that cannot survive the move. See tokens.css for the measurements that
+ * force this. */
+@utility on-layer {
+  color: var(--on-layer);
+
+  /* The whole ink ramp collapses to one value here, and that is a measured
+   * result rather than a shortcut. A component carries its own `text-ink-2` or
+   * `text-ink-muted`, which beats an inherited `color` — so a panel has to
+   * redefine the ramp or every secondary line on it renders dark-on-dark, as
+   * `Lead` and `Rotulo` did the moment the explicit overrides came off.
+   *
+   * A tint of the foreground would be the craft-floor answer, but rojo rules
+   * it out: --on-layer at 82% over rojo measures 4.11:1, and at 78% it is
+   * 3.83:1. Full --on-layer is the only ink that clears 4.5:1 on all four
+   * grounds (16.82 / 5.46 / 7.96 / 6.06 on ink / rojo / añil / verde). So on a
+   * panel, hierarchy is size and weight, not lightness.
+   *
+   * Only text tokens are redefined. --ink itself is untouched, because it is
+   * the keyline material and a cut edge on a panel is still ink. */
+  --ink-2: var(--on-layer);
+  --ink-muted: var(--on-layer);
+  --ink-danger: var(--on-layer);
+  --ink-success: var(--on-layer);
+  --ink-warn: var(--on-layer);
+  --ink-info: var(--on-layer);
+
+  /* --on-ink-muted is a fixed grey sized for the ink ground, where it measures
+   * 8.39:1. It is not a tint of whatever ground it lands on, so on añil it
+   * falls to 3.97:1 — which is exactly how the featured band's fact terms
+   * broke the moment that band stopped always being ink. Any component written
+   * for a dark ground can now be dropped on a coloured one. */
+  --on-ink: var(--on-layer);
+  --on-ink-muted: var(--on-layer);
+}
+
+/* ── figures ──────────────────────────────────────────────────────────
+ * Ranks, costs, durations and dates are compared down a column, so they are
+ * set with tabular figures. This is the job the dropped monospace was doing. */
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── working ──────────────────────────────────────────────────────────
+ * The relleno texture, moving. This is the system's indeterminate state —
+ * the one thing a long-running agent step, an uploading file and a progress
+ * bar with no total have in common is that work is happening and its size is
+ * unknown. A spinner says "wait"; slits sliding past say "this is being cut",
+ * and it reads at 4px tall as well as across a whole panel.
+ *
+ * Stilled, not hidden, under reduced motion: the base layer's global rule
+ * collapses the animation to one frame and the texture remains as a static
+ * "in progress" mark, which is still true. */
+@utility relleno-working {
+  background-color: var(--band);
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--ink) 0 2px,
+    transparent 2px 9px
+  );
+  background-size: 18px 100%;
+  animation: var(--animate-mola-shuttle);
+}
+
+/* ── inverse panel ────────────────────────────────────────────────────
+ * The ink ground: dark in the light theme, bleached cotton in the dark one.
+ * The ramp is redefined, not just `color`, for the same reason `on-layer`
+ * redefines it — a child's own `text-ink-muted` beats an inherited colour. */
+@utility on-ink {
+  background-color: var(--ink);
+  color: var(--on-ink);
+  --ink-2: var(--on-ink);
+  --ink-muted: var(--on-ink-muted);
+  --keyline: var(--keyline-on-ink);
+}
+
+/* ── machine literals ─────────────────────────────────────────────────
+ * Martian Mono, narrowed, a step under the surrounding text. Ligatures off:
+ * in a tool argument `!=` is two characters and has to read as two. */
+@utility literal {
+  font-family: var(--font-mono);
+  font-variation-settings: 'wdth' var(--wdth-mono);
+  font-size: 0.9em;
+  font-variant-ligatures: none;
+  letter-spacing: 0;
+}
+
+/* ── display width ────────────────────────────────────────────────────
+ * The headline register's width axis, as a utility, so a component cannot
+ * set the display face at the body width by forgetting a long arbitrary
+ * class. */
+@utility wdth-display {
+  font-variation-settings: 'wdth' var(--wdth-display);
+}
+@utility wdth-label {
+  font-variation-settings: 'wdth' var(--wdth-label);
+}
+
+/* ── scroll surfaces ──────────────────────────────────────────────────
+ * Dense panels scroll inside themselves, and a browser-default scrollbar is
+ * the cheapest tell that a page was assembled rather than built. */
+@utility scroll-cloth {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink-muted) transparent;
+}

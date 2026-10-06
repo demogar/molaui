@@ -1,0 +1,51 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { Specimen } from '../blocks/specimen'
+
+<Meta title="Foundations/Density" />
+
+# Density
+
+The one axis an internal tool needs that an editorial site does not. One attribute re-scales
+control heights, row heights, the small end of the type scale and the spacing unit — together, so a
+dense table and its toolbar never disagree about what "small" means.
+
+| | `compact` | `comfortable` (default) | `spacious` |
+| --- | --- | --- | --- |
+| Control height | 28px | 36px | 48px |
+| Row height | 30px | 40px | 52px |
+| Body text | 13px | 14px | 17px |
+| Spacing unit | 3.5px | 4px | 4px |
+| Use it for | logs, run tables, traces | the product default | forms, onboarding, settings |
+
+`spacious` is the original editorial metric of the system this grew from, kept so its lineage is one
+attribute away.
+
+<Specimen label="The same markup, three attributes">
+  <div className="grid gap-6 lg:grid-cols-3">
+    {['compact', 'comfortable', 'spacious'].map((d) => (
+      <div key={d} data-density={d} className="bg-cloth-pale p-4 shadow-cut">
+        <p className="m-0 rotulo text-ink-muted">{d}</p>
+        <div className="mt-3 flex gap-2">
+          <span className="inline-flex h-(--control-h) items-center bg-ink px-(--control-px) text-xs font-semibold uppercase tracking-label wdth-label text-on-ink">Run</span>
+          <span className="inline-flex h-(--control-h) items-center bg-cloth-pale px-(--control-px) text-xs font-semibold uppercase tracking-label wdth-label shadow-cut">Filter</span>
+        </div>
+        <div className="mt-3 text-base">
+          {['run_8f2a', 'run_77c1', 'run_0b9e'].map((id) => (
+            <div key={id} className="flex h-(--row-h) items-center justify-between border-t border-keyline">
+              <span className="literal">{id}</span>
+              <span className="tabular text-ink-2">1,204 tok</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</Specimen>
+
+## How it works
+
+Tailwind v4 emits every utility as a variable reference — `font-size: var(--text-sm)`,
+`padding: calc(var(--spacing) * 3)`. Redefining those variables under `[data-density]` re-scales
+every utility in the subtree **without a single component knowing density exists**. No component
+takes a `density` prop, and none ever should: density is a property of the surface, not of the
+button.

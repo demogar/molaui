@@ -1,0 +1,14 @@
+/* src/styles/mola.css
+ *
+ * The system without Tailwind's own preflight/utilities import, for a consumer
+ * that already runs Tailwind v4 and wants Mola's tokens, theme and utilities
+ * in THEIR build:
+ *
+ *   @import 'tailwindcss';
+ *   @import 'mola-ui/tailwind.css';
+ *   @source '../node_modules/mola-ui/dist';
+ */
+@import './tokens.css';
+@import './theme.css';
+@import './cloth.css';
+@import './base.css';

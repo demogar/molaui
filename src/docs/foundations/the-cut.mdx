@@ -1,0 +1,78 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { Specimen } from '../blocks/specimen'
+
+<Meta title="Foundations/The cut" />
+
+# The cut
+
+The devices that make this a mola rather than a palette swap. Each is a Tailwind v4 `@utility`
+in `src/styles/cloth.css`, so it composes with everything else.
+
+## Keyline and revealed band
+
+`shadow-cut` is the blade edge. `cut-band` adds the revealed layer and a second edge —
+concentric, never offset: a mola's layers are stacked, so the reveal goes all the way around.
+`band-*` chooses the colour beneath, per element.
+
+<Specimen>
+  <div className="flex flex-wrap gap-8 p-2">
+    <div className="grid size-24 place-items-center bg-cloth-pale shadow-cut text-xs">cut</div>
+    <div className="grid size-24 place-items-center bg-cloth-pale cut-band band-oro text-xs">band-oro</div>
+    <div className="grid size-24 place-items-center bg-cloth-pale cut-band band-rojo text-xs">band-rojo</div>
+    <div className="grid size-24 place-items-center bg-cloth-pale cut-band band-anil text-xs">band-anil</div>
+    <div className="grid size-24 place-items-center bg-cloth-pale cut-band band-verde text-xs">band-verde</div>
+  </div>
+</Specimen>
+
+Edges are `box-shadow`, not `border`, because the signature hover *grows* the edge by several
+pixels. A border would reflow the row; a shadow does not move a single neighbour.
+
+## Relleno — the filler slit
+
+In a finished mola the negative space is packed with narrow slits cut to a lower layer. Here it is
+the divider (in place of a hairline), the empty-state texture, and — moving — the **working**
+state: work is happening and its size is unknown.
+
+<Specimen>
+  <div className="grid gap-6">
+    <div className="relleno band-oro" />
+    <div className="relleno band-rojo" />
+    <div className="h-20 bg-cloth-shade relleno-field shadow-cut" />
+    <div className="h-2 band-oro relleno-working shadow-cut" />
+  </div>
+</Specimen>
+
+The layer colour is the *ground* and ink is the *slit*. Inverted — thick colour bars on black — the
+strip reads as hazard tape. That was the first build of it.
+
+## Diente — the sawtooth seam
+
+Where a top layer is cut back. Used only on major seams, where the page ground gives way to a
+filled panel; in a real mola this edge is the slow, expensive part, and there are only a few.
+
+<Specimen ground="pale">
+  <div className="text-ink diente" />
+  <div className="on-ink p-6 text-sm">A filled panel, cut from the page above it.</div>
+</Specimen>
+
+## Display, cut
+
+The mola applied to letterforms: fill, then the revealed band, then the ink edge. **Only on a
+filled panel**, one per page. On light cloth a bold sans in a gold-and-black outline stops reading
+as appliqué and starts reading as a comic-book sticker.
+
+<Specimen ground="ink">
+  <p className="m-0 font-display text-5xl font-extrabold wdth-display tracking-display text-on-ink">
+    <span className="display-cut band-oro text-ink">Cayuco</span>
+  </p>
+</Specimen>
+
+## Focus
+
+A third band: two-tone, so it survives on any ground — a cloth gap, then ink. Square, because the
+radius is zero. In Windows High Contrast, where shadows are removed, a system-coloured outline
+takes over.
+
+<Specimen>
+  <button className="bg-cloth-pale px-4 py-2 shadow-[var(--focus-ring)]">Focused control</button>
+</Specimen>

@@ -1,0 +1,36 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Foundations/Accessibility" />
+
+# Accessibility
+
+Accessibility is enforced at four levels, so a regression fails a check rather than a person.
+
+## 1. The palette is a tested contract
+
+`src/tokens/contract.test.ts` resolves every token in **both themes** — `light-dark()`, `var()` and
+OKLab `color-mix()` — and asserts every promised pairing: the whole ink ramp on every ground and
+every wash at 4.5:1, every control edge at 3:1. A second test fails if a hex literal appears
+anywhere outside `tokens.css`, because a colour outside the token file was never measured.
+
+## 2. Every story is audited
+
+The Storybook a11y addon runs axe on every story with `test: 'error'`, and the unit suite renders
+components through Testing Library by role and accessible name.
+
+## 3. Behaviour comes from primitives
+
+Dialogs, menus, selects, tabs, toasts, sliders and switches are built on Base UI, so focus
+trapping, roving focus, typeahead and ARIA state come from a maintained primitive rather than
+being re-implemented per component.
+
+## 4. Rules the components follow
+
+- **State is never colour alone** — glyph, word, colour.
+- **Disabled is stated, not faded.** `opacity-50` would fade the keyline and drop the label near
+  2:1 — a failure axe never reports, because disabled controls are exempt.
+- **Icon-only controls require a label** (`IconButton` will not type-check without one).
+- **Focus is a square two-tone ring** that survives every ground, with a forced-colors fallback.
+- **Streaming announces completion, not tokens.** A live region that reads every token is
+  unusable; the thread is `aria-busy` while streaming and announces once when done.
+- **Touch targets** never fall below 24px, even in `compact`.

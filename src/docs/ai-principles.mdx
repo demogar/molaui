@@ -1,0 +1,64 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="AI/Principles" />
+
+# The AI interface layer
+
+A model is a collaborator with a strange set of properties: it is slow in a way nobody can
+predict, it answers in pieces, it acts on the world through tools, it is sometimes wrong while
+sounding certain, and it fails in ways a REST endpoint never does. Each of those has to surface in
+the interface **honestly** — not hidden behind a spinner, and not dressed up as precision the
+system does not have.
+
+These are the rules the components under **AI** follow.
+
+## 1. Who is speaking is visible in the typeface
+
+| Voice | Face | Used for |
+| --- | --- | --- |
+| The model, talking to you | **Alegreya** | assistant answers, reasoning summaries — prose that is *read* |
+| The machine, acting | **Martian Mono** | tool names, arguments, results, run ids — literals that are *inspected* |
+| The system | **Archivo** | status, controls, labels, figures |
+
+A transcript can be scanned for "what did it say" versus "what did it do" without reading a word.
+
+## 2. Latency is shown as time, never as a fake percentage
+
+An agent run has no knowable total, so there is no progress bar with a number on it. A running
+step shows **elapsed time that keeps counting** in tabular figures, and the system's indeterminate
+texture — *working relleno*, the filler slits sliding past — on the step itself. A percentage
+invented to make a wait feel shorter is a lie the operator learns to ignore.
+
+## 3. State is a glyph, a word and a colour
+
+Every run and step status — queued, running, streaming, waiting, succeeded, failed, cancelled,
+timed out — has a square mark drawn from the cloth vocabulary, a word, and a tone. A failed step
+survives a greyscale screenshot in a bug ticket.
+
+## 4. Streaming does not steal the page
+
+- Text grows in place with a block caret; the container never jumps.
+- The thread follows new output **only if you were already at the bottom**. Scroll up to read and
+  it stops following, and a "Jump to latest" control appears.
+- Screen readers hear **one announcement when the answer is done**, not a stream of tokens: the
+  region is `aria-busy` while streaming.
+- Under reduced motion the caret stops blinking; the text still arrives.
+
+## 5. The human stays in the loop where it matters
+
+A tool call that writes, spends or sends can require approval. The call renders its exact
+arguments as a literal, and the run visibly **waits** — a distinct status with its own gold mark —
+until a person approves or denies it. Stop is always one press away: while a response generates,
+the composer's send button *becomes* the stop button, in the same place.
+
+## 6. Failure is a first-class state
+
+A failed tool call shows the error **as the literal the tool returned**, what had already
+succeeded before it, and a retry scoped to the failure — not "Something went wrong". Timeouts and
+cancellations are distinct from failures, because the operator's next action differs.
+
+## 7. Uncertainty is stated in words, not decimals
+
+Models are poorly calibrated, so a confidence of "87.3%" is precision the system does not have.
+Confidence is three steps — **High, Medium, Low** — with a segmented mark *and* the word, and the
+specific thing the model is unsure about is written as a note to verify, on an añil wash.

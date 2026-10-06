@@ -1,0 +1,240 @@
+/* src/styles/tokens.css
+ *
+ * The Mola contract. This is the ONLY file in the library permitted to contain
+ * a hex literal: every other layer refers to these names. A unit test
+ * (`src/tokens/contract.test.ts`) parses this file and fails the build if a hex
+ * literal appears anywhere else, or if any pairing quoted below stops clearing
+ * the ratio it claims.
+ *
+ * The world: a mola is a Guna panel made by stacking cotton and cutting the top
+ * layers away, so what remains is bounded by a hard outline and a revealed band
+ * of the colour beneath. Nothing in a mola is blended, tinted or soft.
+ *
+ * Three rules the palette exists to enforce:
+ *
+ *   1. Colour owns REGIONS, never the reading column. A layer colour may fill
+ *      a panel, a status mark or a selected state; it never tints body copy.
+ *   2. Every interactive edge is a hard keyline in `--ink`. `--keyline` is for
+ *      decorative dividers only and measures ~1.5:1, which is why it may never
+ *      bound something a pointer can touch.
+ *   3. Nothing is rounded, and nothing is blurred except genuine elevation.
+ *
+ * ── two themes, one declaration ──────────────────────────────────────────
+ * Every colour is a `light-dark()` pair, so each token is written once and the
+ * theme is chosen by `color-scheme`, which the browser already inherits down
+ * the tree. That buys three things a duplicated `[data-theme=dark]` block does
+ * not: the system preference is honoured with no script, a subtree can flip
+ * theme on its own (`<div data-theme="dark">` inside a light page), and a
+ * token cannot exist in one theme and be forgotten in the other.
+ *
+ * In the dark theme the cloth is dyed rather than inverted: the ground is the
+ * near-black of a mola's base layer, the keyline becomes bleached cotton, and
+ * the four layers are lifted until they carry text on that ground. `--ink`
+ * keeps its ROLE — the foreground and the keyline — not its hue.
+ *
+ * Every ratio below was measured with `src/tokens/color.ts` (WCAG 2.x, and
+ * OKLab for every `color-mix`), not estimated. Light / dark.
+ */
+
+:root,
+[data-theme='light'] {
+  color-scheme: light dark;
+}
+[data-theme='light'] {
+  color-scheme: light;
+}
+[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+:root {
+  /* ── cloth: the grounds ───────────────────────────────────────────
+   * Bleached cotton, not paper: green-grey rather than the warm cream that
+   * every machine-made editorial template wears. In the dark theme, the dyed
+   * base layer. `--cloth-pale` is RAISED cloth in both themes — lighter on
+   * light, lighter on dark — so "raised" means the same thing either way. */
+  --cloth: light-dark(#edeee8, #16181c); /* the page */
+  --cloth-pale: light-dark(#f6f7f2, #1e2126); /* raised: cards, inputs, sheets */
+  --cloth-shade: light-dark(#e4e7dc, #111316); /* one step down from the page */
+  --cloth-deep: light-dark(#d7dbcb, #2a2e34); /* the deepest cloth before a layer takes over */
+
+  /* ── ink ──────────────────────────────────────────────────────────
+   * The top layer: body ink and every keyline.
+   *   --ink        on --cloth  15.52 / 15.18
+   *   --ink-2      on --cloth   8.80 / 10.45
+   *   --ink-muted  on --cloth   5.19 /  6.58   (floor: 4.83 on --cloth-shade, light) */
+  --ink: light-dark(#14161a, #eceee6);
+  --ink-2: light-dark(#3d4147, #c4c8bd);
+  --ink-muted: light-dark(#5e636a, #9a9f97);
+
+  /* ── keylines ─────────────────────────────────────────────────────
+   * Decorative only: 1.43 / 1.68 against the page. A divider between two
+   * blocks of text is not a UI component and does not owe 3:1. Anything a
+   * pointer can touch is bounded by --ink instead. */
+  --keyline: light-dark(#c6cabc, #3a3f46);
+  --keyline-soft: light-dark(#dcdfd3, #2a2d33);
+
+  /* ── the four layers ──────────────────────────────────────────────
+   * Commercial cotton in the range a mola is actually cut from. Saturated,
+   * flat, never mixed with each other. On --cloth:
+   *   --rojo   5.04 / 5.85   --anil  7.35 / 7.49   --verde  5.59 / 8.15
+   *   --oro    1.66 / 10.12 — gold is never text on light cloth. It is a field
+   *            colour and a mark there; on an ink panel it measures 9.34. */
+  --rojo: light-dark(#c0272d, #f2685c);
+  --rojo-deep: light-dark(#9e1e24, #ff8a7e); /* hover / pressed: one step further from the ground */
+  --anil: light-dark(#1b4b8f, #86a8ee);
+  --verde: light-dark(#0b6b4b, #4cc493);
+  --oro: light-dark(#edb01f, #f0bc3a);
+
+  /* Ink laid on a filled layer. Raised cloth rather than pure white, because
+   * white is a foreign material in this world:
+   *   on --rojo 5.46 / 5.31   on --anil 7.96 / 6.80   on --verde 6.06 / 7.40
+   * Gold always takes --ink-dark type: 9.34 light, 9.19 dark. */
+  --on-layer: var(--cloth-pale);
+  --on-oro: light-dark(#14161a, #1e2126);
+
+  /* ── status ───────────────────────────────────────────────────────
+   * Mapped onto the layers rather than invented, so an error is the same red
+   * the system already owns. --warn is gold darkened (light) until it can carry
+   * text on cloth: 4.60 / 9.18. Info is añil. */
+  --danger: var(--rojo-deep);
+  --success: var(--verde);
+  --warn: light-dark(#8a6410, #e0b45a);
+  --info: var(--anil);
+
+  /* Status INK, as distinct from status colour. On a filled layer panel no
+   * status hue survives — --danger reaches 1.08:1 on añil — so the `on-layer`
+   * utility collapses these to --on-layer and the state is carried by the
+   * mark and the words, never by the hue alone. */
+  --ink-danger: var(--danger);
+  --ink-success: var(--success);
+  --ink-warn: var(--warn);
+  --ink-info: var(--info);
+
+  /* ── washes ───────────────────────────────────────────────────────
+   * A mola has no tints, so these are used only where a whole region needs to
+   * belong to a layer without becoming it: a callout, a selected row, a
+   * running step. Mixed into raised cloth so the ground still carries the
+   * whole ink ramp — worst case is --ink-muted on --anil-soft, 4.61 / 4.96
+   * (dark's worst is --verde-soft, 4.91).
+   * Deepen a wash past these percentages and that stops being true. */
+  --rojo-soft: color-mix(in oklab, var(--rojo) 12%, var(--cloth-pale));
+  --anil-soft: color-mix(in oklab, var(--anil) 12%, var(--cloth-pale));
+  --verde-soft: color-mix(in oklab, var(--verde) 12%, var(--cloth-pale));
+  /* Gold is the brightest layer in the dark theme, so its wash is mixed
+   * thinner there: at 20% --ink-muted on it measured 4.00 and failed. */
+  --oro-soft: light-dark(
+    color-mix(in oklab, var(--oro) 20%, var(--cloth-pale)),
+    color-mix(in oklab, var(--oro) 10%, var(--cloth-pale))
+  );
+  --ink-soft: color-mix(in oklab, var(--ink) 7%, var(--cloth-pale));
+
+  /* A label on a wash: the wash eats the contrast --ink-muted was measured
+   * against, so tinted regions take one step darker ink. */
+  --ink-on-tint: var(--ink-2);
+  --rojo-on-shade: var(--rojo-deep);
+  /* The hairline under an inline link in prose — a rule, not a box edge. */
+  --rojo-rule: color-mix(in oklab, var(--rojo) 45%, transparent);
+
+  /* ── on an ink panel ──────────────────────────────────────────────
+   * A filled --ink region is the inverse panel: dark on light, light on dark.
+   * Only cloth and gold carry text there; the layer colours measure under
+   * 3:1 on --ink and are barred.
+   *   --on-ink 16.82 / 13.79   --on-ink-muted 8.36 / 6.56 */
+  --on-ink: var(--cloth-pale);
+  --on-ink-muted: color-mix(in oklab, var(--cloth-pale) 72%, var(--ink));
+  --keyline-on-ink: color-mix(in oklab, var(--cloth-pale) 22%, transparent);
+
+  /* ── over arbitrary pixels ────────────────────────────────────────
+   * A photograph, a chart, a video frame: the one ground this system cannot
+   * know. The scrim is sized for the worst case, a pure-white image. */
+  --scrim: color-mix(in oklab, #14161a 74%, transparent);
+  --on-scrim: #f6f7f2;
+  --on-scrim-muted: color-mix(in oklab, #f6f7f2 78%, transparent);
+  /* Behind a modal: the page recedes toward its own ground, not toward grey. */
+  --backdrop: color-mix(in oklab, var(--cloth) 82%, transparent);
+
+  /* ── the cut ──────────────────────────────────────────────────────
+   * The signature. A cut shape is bounded by ink, then a revealed band of the
+   * layer beneath, then ink again — concentric, never offset. An offset block
+   * shadow would be a different world's costume.
+   *
+   * --band is the revealed colour and is set per element by `band-*`.
+   * The composite ring lives in cloth.css as the `cut-band` utility, not here:
+   * a custom property substitutes its var()s where it is DECLARED, so a ring
+   * built on :root would bake in this file's --cut-reveal and silently ignore
+   * any element that narrowed it. */
+  --band: var(--oro);
+  --cut-w: 1.5px;
+  --cut-reveal: 5px;
+  --cut: 0 0 0 var(--cut-w) var(--ink);
+
+  /* Focus is a third band, two-tone so it survives on any ground: cloth gap,
+   * then ink. 15.52 / 15.18 on the page. */
+  --focus-ring:
+    0 0 0 var(--cut-w) var(--ink), 0 0 0 calc(var(--cut-w) + 2px) var(--cloth-pale),
+    0 0 0 calc(var(--cut-w) + 5px) var(--ink);
+
+  /* ── elevation ────────────────────────────────────────────────────
+   * The only blur in the system, and only for what genuinely floats: menus,
+   * popovers, dialogs, toasts. In the dark theme a shadow is invisible on a
+   * near-black ground, so floating surfaces also keep their keyline. */
+  --elevation-raised: 0 14px 34px -10px
+    light-dark(
+      color-mix(in oklab, #14161a 34%, transparent),
+      color-mix(in oklab, #0b0c0e 80%, transparent)
+    );
+
+  /* ── motion ───────────────────────────────────────────────────────
+   * Cloth settling under a hand: fast in, no float, no overshoot. */
+  --motion-cut: 120ms;
+  --motion-base: 220ms;
+  --motion-slow: 420ms;
+
+  /* ── density ──────────────────────────────────────────────────────
+   * The one axis an internal tool needs that an editorial site does not.
+   * Controls, rows and the spacing unit scale together, so a dense table and
+   * its toolbar never disagree about what "small" means. `comfortable` is the
+   * product default; `spacious` is the original editorial metric, kept so the
+   * lineage stays one attribute away. See src/docs/density.mdx. */
+  --control-h: 36px;
+  --control-h-sm: 28px;
+  --control-h-lg: 44px;
+  --control-px: 14px;
+  --row-h: 40px;
+}
+
+/* Density also moves the type scale and the spacing unit. Tailwind v4 emits
+ * every utility as `var(--text-sm)` / `calc(var(--spacing) * n)`, so
+ * redefining the variable here re-scales every `text-*`, `p-*` and `gap-*` in
+ * the subtree without a single component knowing density exists. The display
+ * end of the scale barely moves: a dense tool is dense in its rows, not in
+ * its page titles. Nothing drops below 11px. */
+[data-density='compact'] {
+  --spacing: 0.21875rem; /* 3.5px */
+  --text-2xs: 11px;
+  --text-xs: 11.5px;
+  --text-sm: 12.5px;
+  --text-base: 13px;
+  --text-lg: 15px;
+  --text-xl: 18px;
+  --control-h: 28px;
+  --control-h-sm: 24px;
+  --control-h-lg: 36px;
+  --control-px: 10px;
+  --row-h: 30px;
+}
+
+/* The editorial metric the system was born at: 17px reading copy. */
+[data-density='spacious'] {
+  --text-xs: 13px;
+  --text-sm: 15px;
+  --text-base: 17px;
+  --text-lg: 20px;
+  --text-xl: 26px;
+  --control-h: 48px;
+  --control-h-sm: 36px;
+  --control-h-lg: 56px;
+  --control-px: 22px;
+  --row-h: 52px;
+}

@@ -1,0 +1,16 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Foundations/Iconography" />
+
+# Iconography
+
+Icons are [Lucide](https://lucide.dev), at a 1.5–2px stroke that matches the 1.5px keyline, sized
+by the control they sit in (`size-3.5` small, `size-4` default). They are always decorative
+(`aria-hidden`) next to a label, and an icon-only control must carry a `label`.
+
+## Status marks are not icons
+
+Run and step status use **square marks drawn from the cloth vocabulary** — hollow for queued,
+working relleno for running, filled for done, crossed for failed — rather than the usual circles
+and spinners. They are part of the system, not borrowed from an icon set, and they keep their
+meaning in greyscale.

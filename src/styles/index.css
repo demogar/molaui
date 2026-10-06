@@ -1,0 +1,14 @@
+/* src/styles/index.css — the compiled stylesheet, `mola-ui/styles.css`.
+ *
+ * `source(none)` and an explicit @source list, so the shipped CSS contains
+ * exactly the utilities the components use. Stories, tests and docs are
+ * excluded: a class that only exists in a story is not part of the library,
+ * and shipping it would let a story pass on CSS no consumer receives. */
+@import 'tailwindcss' source(none);
+@import './mola.css';
+
+@source '../components';
+@source '../patterns';
+@source not '../**/*.stories.tsx';
+@source not '../**/*.test.tsx';
+@source not '../**/*.mdx';

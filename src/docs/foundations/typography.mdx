@@ -1,0 +1,76 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { Specimen, ScaleRow } from '../blocks/specimen'
+
+<Meta title="Foundations/Typography" />
+
+# Typography
+
+Three voices, and the split is the point: the **system** speaks in Archivo, a **person or a
+model** speaks to you in Alegreya, and the **machine's literals** are Martian Mono.
+
+<Specimen label="The three voices">
+  <div className="grid gap-6">
+    <div>
+      <p className="m-0 rotulo text-ink-muted">Archivo — the system</p>
+      <p className="mt-2 mb-0 font-display text-3xl font-bold tracking-display wdth-display">Run 4,812 failed at step 3</p>
+    </div>
+    <div>
+      <p className="m-0 rotulo text-ink-muted">Alegreya — the reader</p>
+      <p className="mt-2 mb-0 max-w-prose font-text text-lg leading-body">
+        The onboarding variant lifted day-7 retention by about two points, but the effect is
+        concentrated in players who finished the first puzzle in under a minute.
+      </p>
+    </div>
+    <div>
+      <p className="m-0 rotulo text-ink-muted">Martian Mono — the machine</p>
+      <p className="mt-2 mb-0 literal text-base">search_experiments(&#123; "status": "running", "limit": 20 &#125;)</p>
+    </div>
+  </div>
+</Specimen>
+
+## The width axis
+
+Archivo was chosen for its `wdth` axis, and it is used at three registers. Running text stays at
+the drawn width (100). Display goes wide (118): a heading here is a shape cut to fill its panel,
+and a bold grotesque set tight at normal width is the most common display register of the last
+five years. Labels sit at 116 — at 11px, width is what makes caps read as lettering rather than a
+tracked-out caption.
+
+<Specimen>
+  <div className="grid gap-3">
+    <p className="m-0 font-display text-2xl font-bold" style={{ fontVariationSettings: "'wdth' 100" }}>wdth 100 — Agent runs</p>
+    <p className="m-0 font-display text-2xl font-bold wdth-display">wdth 118 — Agent runs</p>
+    <p className="m-0 rotulo">wdth 116 — label register</p>
+  </div>
+</Specimen>
+
+## Scale
+
+The comfortable scale. The small end moves with density; the display end does not — a dense tool
+is dense in its rows, not its page titles.
+
+<Specimen ground="pale">
+  <ScaleRow token="text-2xs" sample="LABEL REGISTER — 11px" className="rotulo" />
+  <ScaleRow token="text-xs" sample="Metadata, captions, table footers" className="text-xs" />
+  <ScaleRow token="text-sm" sample="Table cells, secondary controls" className="text-sm" />
+  <ScaleRow token="text-base" sample="Body copy in the product" className="text-base" />
+  <ScaleRow token="text-lg" sample="Lead paragraphs, dialog titles" className="text-lg" />
+  <ScaleRow token="text-xl" sample="Section headings" className="text-xl font-semibold wdth-display" />
+  <ScaleRow token="text-2xl" sample="Page titles" className="text-2xl font-bold wdth-display tracking-display" />
+  <ScaleRow token="text-3xl" sample="Stat values" className="text-3xl font-bold wdth-display tracking-display" />
+  <ScaleRow token="text-4xl" sample="Display" className="text-4xl font-extrabold wdth-display tracking-display" />
+</Specimen>
+
+## Figures
+
+Numbers compared down a column — costs, tokens, durations, ranks — are set with
+`font-variant-numeric: tabular-nums` (the `tabular` utility) and right-aligned. That is the job a
+monospace usually does in a dashboard, minus the costume.
+
+<Specimen ground="pale">
+  <div className="grid w-64 gap-1 text-right text-base tabular">
+    <span>1,204,881</span>
+    <span>98,112</span>
+    <span>7,004</span>
+  </div>
+</Specimen>

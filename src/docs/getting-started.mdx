@@ -1,0 +1,113 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Mola UI/Getting started" />
+
+# Getting started
+
+## Install
+
+```bash
+npm install mola-ui @base-ui/react
+# the three faces, self-hosted
+npm install @fontsource-variable/archivo @fontsource-variable/alegreya @fontsource-variable/martian-mono
+```
+
+## Import the stylesheet and the faces once
+
+```tsx
+// app entry
+import '@fontsource-variable/archivo/wdth.css' // the width axis is load-bearing
+import '@fontsource-variable/alegreya/wght.css'
+import '@fontsource-variable/martian-mono/wdth.css'
+import 'mola-ui/styles.css'
+```
+
+`mola-ui/styles.css` is pre-compiled: it contains exactly the utilities the components use, and
+nothing from the stories. Archivo must be the **`wdth`** build — labels and headings are set on
+the width axis, and the static build falls back to a normal-width face.
+
+## Use a component
+
+```tsx
+import { Button, Field, Input } from 'mola-ui'
+
+export function RenameAgent() {
+  return (
+    <form className="grid gap-4">
+      <Field label="Agent name" required hint="Shown in the run log.">
+        {(control) => <Input {...control} name="name" />}
+      </Field>
+      <Button type="submit">Save</Button>
+    </form>
+  )
+}
+```
+
+## Theme
+
+Two themes, chosen by `color-scheme`. With no attribute the system follows the operating system;
+set `data-theme` to pin one. It works on **any subtree**, so a dark preview panel inside a light
+page is one attribute.
+
+```html
+<html data-theme="dark">
+<section data-theme="light">…</section>
+```
+
+## Density
+
+```html
+<main data-density="compact">   <!-- data-heavy tables, logs -->
+<main data-density="comfortable"> <!-- default -->
+<main data-density="spacious">  <!-- forms, onboarding: the original editorial metric -->
+```
+
+Density re-scales control heights, row heights, the small end of the type scale and the spacing
+unit together. No component takes a density prop.
+
+## Already on Tailwind v4?
+
+Import the un-compiled layers into your own build instead of shipping a second Tailwind:
+
+```css
+@import 'tailwindcss';
+@import 'mola-ui/tailwind.css';
+@source '../node_modules/mola-ui/dist';
+```
+
+Every token is then a utility in your app too: `bg-cloth-pale`, `text-ink-muted`, `shadow-cut`,
+`relleno`, `cut-band band-rojo`.
+
+## Not on React?
+
+The components are React, but the system is not. `mola-ui/tokens.css` is plain CSS custom
+properties with no build step, and the `cloth` utilities are plain CSS under Tailwind. A Vue or
+server-rendered app gets the full palette, both themes and the three densities with:
+
+```vue
+<script setup>
+import 'mola-ui/tokens.css'
+</script>
+
+<template>
+  <button class="mola-button" data-density="compact">Run agent</button>
+</template>
+
+<style scoped>
+.mola-button {
+  height: var(--control-h);
+  padding-inline: var(--control-px);
+  background: var(--ink);
+  color: var(--on-ink);
+  box-shadow: var(--cut);
+}
+</style>
+```
+
+## Figma
+
+`tokens/mola.tokens.json` is the same palette in the [W3C Design Tokens](https://www.designtokens.org/)
+format, both themes fully resolved — including every OKLab `color-mix()`. Load it with Tokens
+Studio to get Figma variables that match the browser to the hex. It is generated from
+`tokens.css` (`npm run tokens`) and CI fails if it is stale, so the design file cannot drift from
+the code.
