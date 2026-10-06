@@ -284,3 +284,49 @@ export const defaultRangePresets: DateRangePreset[] = [
     },
   },
 ]
+
+/* ── typed entry, shared by both pickers ────────────────────────────── */
+
+export interface DateRules {
+  locale: DateLocale
+  min?: Date | null
+  max?: Date | null
+  isDateDisabled?: (date: Date) => boolean
+}
+
+/** Why a real day cannot be chosen, as a sentence — or null when it can. */
+export function unavailableReason(date: Date, { locale, min, max, isDateDisabled }: DateRules): string | null {
+  if (min && compareDays(date, min) < 0) return `Choose ${formatLongDate(min, locale, false)} or later.`
+  if (max && compareDays(date, max) > 0) return `Choose ${formatLongDate(max, locale, false)} or earlier.`
+  if (isDateDisabled?.(date)) return `${formatLongDate(date, locale)} is not available. Choose another day.`
+  return null
+}
+
+export type TypedDateResult = { ok: true; date: Date | null } | { ok: false; message: string }
+
+/**
+ * Read what a person typed into a date input: an empty box is a cleared
+ * date, anything else must parse in the locale's order and be choosable.
+ *
+ * It lives here, not in either picker, so the single picker and both inputs
+ * of the range picker refuse a date with the same sentence. `subject` is
+ * what the format message tells the person to retype — "it" beside one
+ * input, "the start date" where two sit side by side and "it" would be
+ * ambiguous.
+ */
+export function readTypedDate(text: string, rules: DateRules, subject = 'it'): TypedDateResult {
+  const typed = text.trim()
+  if (!typed) return { ok: true, date: null }
+  const parsed = parseInputDate(typed, rules.locale)
+  if (!parsed.ok) {
+    return {
+      ok: false,
+      message:
+        parsed.reason === 'format'
+          ? `“${typed}” is not a date. Type ${subject} as ${getDatePattern(rules.locale).pattern}.`
+          : `${typed} does not exist in the calendar. Check the day and month.`,
+    }
+  }
+  const why = unavailableReason(parsed.date, rules)
+  return why ? { ok: false, message: why } : { ok: true, date: parsed.date }
+}

@@ -65,6 +65,13 @@ export interface CalendarProps {
   onSelect?: (date: Date) => void
   /** Where focus starts. Defaults to the selected day, else today. */
   defaultFocusedDate?: Date | null
+  /**
+   * Show this day's month and move the tab stop to it, without moving focus —
+   * for a date typed elsewhere that the grid should follow. Compared by
+   * identity, so a new `Date` for the same day shows it again after the
+   * person has paged away.
+   */
+  visibleDate?: Date | null
   /** Inject "now" for stable stories and tests. */
   today?: Date
   min?: Date | null
@@ -90,6 +97,7 @@ export function Calendar({
   selected,
   onSelect,
   defaultFocusedDate,
+  visibleDate,
   today: todayProp,
   min,
   max,
@@ -111,6 +119,16 @@ export function Calendar({
   const [focused, setFocused] = React.useState(() =>
     clampDay(startOfDay(defaultFocusedDate ?? selected?.start ?? today), min, max),
   )
+  // Followed during render rather than in an effect, so the grid never
+  // paints a frame of the old month after a typed date. Remounting with a new
+  // `key` would be simpler, but a blur that commits a typed date fires on
+  // pointer-down, and a remount would swap the day cell out from under the
+  // click that caused the blur.
+  const [shownVisible, setShownVisible] = React.useState(visibleDate)
+  if (visibleDate !== shownVisible) {
+    setShownVisible(visibleDate)
+    if (visibleDate) setFocused(clampDay(startOfDay(visibleDate), min, max))
+  }
   const gridRef = React.useRef<HTMLTableElement>(null)
   // Set by keyboard moves: after the render that shows the new day, focus it.
   // Pressing previous/next month changes the month without stealing focus

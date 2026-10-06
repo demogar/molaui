@@ -277,4 +277,124 @@ describe('DateRangePicker', () => {
     expect(await screen.findByRole('button', { name: 'Last 30 days' })).toBeDisabled()
     expect(screen.getByRole('button', { name: 'This month' })).toBeEnabled()
   })
+
+  describe('typed entry', () => {
+    async function openPicker(props: Partial<React.ComponentProps<typeof DateRangePicker>> = {}) {
+      const onValueChange = vi.fn()
+      render(
+        <DateRangePicker aria-label="Period" locale="en-GB" today={TODAY} onValueChange={onValueChange} {...props} />,
+      )
+      await userEvent.click(screen.getByRole('button', { name: 'Period' }))
+      await screen.findByRole('dialog')
+      return {
+        onValueChange,
+        start: screen.getByRole('textbox', { name: 'Start date' }),
+        end: screen.getByRole('textbox', { name: 'End date' }),
+      }
+    }
+
+    it('commits a typed start and end on Enter, moving the calendar to each', async () => {
+      const { onValueChange, start, end } = await openPicker()
+      expect(start).toHaveAttribute('placeholder', 'DD/MM/YYYY')
+      expect(start).toHaveAccessibleDescription('Format: DD/MM/YYYY')
+      await userEvent.type(start, '1.9.26{Enter}')
+      expect(start).toHaveValue('01/09/2026')
+      expect(screen.getByRole('grid', { name: 'September 2026' })).toBeInTheDocument()
+      expect(screen.getByRole('status')).toHaveTextContent('Start 1 September 2026. Choose the end date.')
+      expect(onValueChange).not.toHaveBeenCalled()
+      await userEvent.type(end, '12/10/2026{Enter}')
+      expect(onValueChange).toHaveBeenCalledWith({ start: day(1, 8), end: day(12) })
+      expect(screen.getByRole('grid', { name: 'October 2026' })).toBeInTheDocument()
+      expect(screen.getByRole('status')).toHaveTextContent(/, 42 days\./)
+      // Still open, so the range can be checked on the grid.
+      expect(screen.getByRole('dialog')).toBeInTheDocument()
+    })
+
+    it('completes a typed start with a pressed day', async () => {
+      const { onValueChange, start } = await openPicker()
+      await userEvent.type(start, '05/10/2026{Enter}')
+      await userEvent.click(screen.getByRole('gridcell', { name: /, 8 October 2026/ }))
+      expect(onValueChange).toHaveBeenCalledWith({ start: day(5), end: day(8) })
+      await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+    })
+
+    it('refuses an unreadable or unavailable date with a sentence and keeps the value', async () => {
+      const { onValueChange, start, end } = await openPicker({
+        defaultValue: { start: day(1), end: day(5) },
+        max: TODAY,
+      })
+      await userEvent.clear(start)
+      await userEvent.type(start, 'soon{Enter}')
+      expect(screen.getByRole('alert')).toHaveTextContent('“soon” is not a date. Type the start date as DD/MM/YYYY.')
+      expect(start).toHaveAttribute('aria-invalid', 'true')
+      expect(start).toHaveAccessibleDescription(/Format: DD\/MM\/YYYY “soon” is not a date/)
+      await userEvent.clear(end)
+      await userEvent.type(end, '20/10/2026{Enter}')
+      expect(screen.getAllByRole('alert')[1]).toHaveTextContent('Choose 6 October 2026 or earlier.')
+      expect(onValueChange).not.toHaveBeenCalled()
+      expect(screen.getByRole('status')).toHaveTextContent(/1\s*–\s*5 Oct 2026, 5 days\./)
+      // Fixing the start clears only its own error.
+      await userEvent.clear(start)
+      await userEvent.type(start, '02/10/2026{Enter}')
+      expect(start).not.toHaveAttribute('aria-invalid')
+      expect(screen.getAllByRole('alert')).toHaveLength(1)
+      expect(onValueChange).toHaveBeenCalledWith({ start: day(2), end: day(5) })
+    })
+
+    it('refuses an end before the start, naming the start', async () => {
+      const { onValueChange, end } = await openPicker({ defaultValue: { start: day(5), end: day(8) } })
+      await userEvent.clear(end)
+      await userEvent.type(end, '01/10/2026')
+      await userEvent.tab()
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        'The end date is before the start date, 5 October 2026. Choose that day or later.',
+      )
+      expect(end).toHaveAttribute('aria-invalid', 'true')
+      expect(onValueChange).not.toHaveBeenCalled()
+    })
+
+    it('reads typed dates in the locale’s order', async () => {
+      const { onValueChange, start, end } = await openPicker({ locale: 'de-DE' })
+      expect(start).toHaveAttribute('placeholder', 'DD.MM.YYYY')
+      expect(screen.getByText('Format: DD.MM.YYYY')).toBeInTheDocument()
+      await userEvent.type(start, '9.10.2026{Enter}')
+      await userEvent.type(end, '12/10/2026{Enter}')
+      expect(onValueChange).toHaveBeenCalledWith({ start: day(9), end: day(12) })
+      expect(end).toHaveValue('12.10.2026')
+    })
+
+    it('opens on the grid, with the inputs before it in Tab order', async () => {
+      const onValueChange = vi.fn()
+      render(<DateRangePicker aria-label="Period" locale="en-GB" today={TODAY} onValueChange={onValueChange} />)
+      const trigger = screen.getByRole('button', { name: 'Period' })
+      trigger.focus()
+      await userEvent.keyboard('{Enter}')
+      await screen.findByRole('dialog')
+      await waitFor(() => expect(focusedCell()).toHaveAccessibleName(/6 October 2026, today/))
+      await userEvent.tab({ shift: true })
+      expect(screen.getByRole('button', { name: /Next month/ })).toHaveFocus()
+      await userEvent.tab({ shift: true })
+      await userEvent.tab({ shift: true })
+      expect(screen.getByRole('textbox', { name: 'End date' })).toHaveFocus()
+      await userEvent.tab({ shift: true })
+      const start = screen.getByRole('textbox', { name: 'Start date' })
+      expect(start).toHaveFocus()
+      // Blur commits, as Enter does.
+      await userEvent.keyboard('28/09/2026')
+      await userEvent.tab()
+      expect(screen.getByRole('status')).toHaveTextContent('Start 28 September 2026. Choose the end date.')
+      // Escape discards what was typed but not committed, and the half-chosen range.
+      await userEvent.keyboard('30/09/2026{Escape}')
+      await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+      expect(trigger).toHaveFocus()
+      expect(onValueChange).not.toHaveBeenCalled()
+    })
+
+    it('can be turned off', async () => {
+      render(<DateRangePicker aria-label="Period" locale="en-GB" today={TODAY} typedEntry={false} />)
+      await userEvent.click(screen.getByRole('button', { name: 'Period' }))
+      await screen.findByRole('dialog')
+      expect(screen.queryByRole('textbox')).not.toBeInTheDocument()
+    })
+  })
 })

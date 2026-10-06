@@ -15,7 +15,7 @@ import {
   formatInputDate,
   formatLongDate,
   getDatePattern,
-  parseInputDate,
+  readTypedDate,
   startOfDay,
   toISODate,
 } from './date-utils'
@@ -145,37 +145,19 @@ export function DatePicker({
     onValueChange?.(next)
   }
 
-  function reason(date: Date): string | null {
-    if (min && compareDays(date, min) < 0) return `Choose ${formatLongDate(min, locale, false)} or later.`
-    if (max && compareDays(date, max) > 0) return `Choose ${formatLongDate(max, locale, false)} or earlier.`
-    if (isDateDisabled?.(date)) return `${formatLongDate(date, locale)} is not available. Choose another day.`
-    return null
-  }
-
   function commit() {
-    const typed = text.trim()
-    if (!typed) {
-      setError(null)
-      if (value) setValue(null)
-      return
-    }
-    const parsed = parseInputDate(typed, locale)
-    if (!parsed.ok) {
-      setError(
-        parsed.reason === 'format'
-          ? `“${typed}” is not a date. Type it as ${pattern}.`
-          : `${typed} does not exist in the calendar. Check the day and month.`,
-      )
-      return
-    }
-    const why = reason(parsed.date)
-    if (why) {
-      setError(why)
+    const result = readTypedDate(text, { locale, min, max, isDateDisabled })
+    if (!result.ok) {
+      setError(result.message)
       return
     }
     setError(null)
-    setText(formatInputDate(parsed.date, locale))
-    if (!value || compareDays(value, parsed.date) !== 0) setValue(parsed.date)
+    if (!result.date) {
+      if (value) setValue(null)
+      return
+    }
+    setText(formatInputDate(result.date, locale))
+    if (!value || compareDays(value, result.date) !== 0) setValue(result.date)
   }
 
   function choose(date: Date) {

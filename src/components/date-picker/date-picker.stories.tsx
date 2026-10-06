@@ -27,7 +27,7 @@ const meta = {
       description: {
         component:
           'The WAI-ARIA APG **date picker dialog**: a text input you can type into, and a button that opens a calendar grid in a popover. Base UI has no calendar, so the grid owns its keyboard model and keeps to the APG one exactly — arrows by day and week (mirrored in right-to-left), PageUp/PageDown by month, Shift for a year, Home/End to the edges of the week, Enter or Space to choose, Escape to close with focus back on the button.\n\n' +
-          'Month and weekday names, digits, the typed order and the first day of the week all come from `Intl` for the `locale` you pass; nothing defaults to `en-US` behind your back. Typed dates commit on blur or Enter, and a refusal is a sentence that says why — try `31/02/2027`, or a day before the minimum. Values are plain `Date`s at local midnight and submit as `yyyy-mm-dd`; there is no date library, because calendar days need none.',
+          'Month and weekday names, digits, the typed order and the first day of the week all come from `Intl` for the `locale` you pass; nothing defaults to `en-US` behind your back. Typed dates commit on blur or Enter, and a refusal is a sentence that says why — try `31/02/2027`, or a day before the minimum. The range picker types too, with a start and an end input inside its popup that share the same parsing and sentences. Values are plain `Date`s at local midnight and submit as `yyyy-mm-dd`; there is no date library, because calendar days need none.',
       },
     },
   },
@@ -140,7 +140,7 @@ export const RangeOpen: Story = {
       story: { inline: false, height: '480px' },
       description: {
         story:
-          'Presets beside the calendar, the active one checked. In the grid the two ends are ink fills with an oro edge on their outer side and the days between are a wash, so start, end and inside differ in shape, not only in tint. The status line states the period and its length, or what to choose next.',
+          'Presets beside the calendar, the active one checked. Above the grid, "Start date" and "End date" inputs take typed dates in the locale’s order (on by default; `typedEntry={false}` removes them). In the grid the two ends are ink fills with an oro edge on their outer side and the days between are a wash, so start, end and inside differ in shape, not only in tint. The status line states the period and its length, or what to choose next. Focus opens on the grid, as the APG dialog pattern and the single picker do; the inputs come before it in Tab order.',
       },
     },
   },
@@ -154,6 +154,36 @@ export const RangeOpen: Story = {
             today={TODAY}
             max={TODAY}
             defaultValue={{ start: new Date(2026, 8, 28), end: new Date(2026, 9, 2) }}
+            defaultOpen
+          />
+        )}
+      </Field>
+    </div>
+  ),
+}
+
+export const RangeTyped: Story = {
+  name: 'Range: typed, in the locale’s order',
+  parameters: {
+    docs: {
+      story: { inline: false, height: '480px' },
+      description: {
+        story:
+          'Typed entry in `de-DE`, which writes DD.MM.YYYY: the placeholder and the visible "Format" line are read from `Intl`, so they can never disagree with what is accepted. Two inputs, not one, because two dates in one box is a format nobody agrees on. They share the single picker’s parsing and sentences and commit on Enter or blur; a committed date moves the grid to its month. An end before the start, a day outside `min`/`max` or an unavailable day is refused with a sentence under the inputs, tied to the input by `aria-describedby`, and the value stays as it was — try typing `01.09.2026` as the end. One end typed alone waits for the other, like one pressed day; a complete range commits and the popup stays open so you can see it drawn. Presets are off here (`presets={[]}`).',
+      },
+    },
+  },
+  render: () => (
+    <div className="max-w-sm">
+      <Field label="Report period" hint="Germany: day, month, year.">
+        {(control) => (
+          <DateRangePicker
+            {...control}
+            locale="de-DE"
+            today={TODAY}
+            max={TODAY}
+            presets={[]}
+            defaultValue={{ start: new Date(2026, 8, 14), end: new Date(2026, 8, 25) }}
             defaultOpen
           />
         )}

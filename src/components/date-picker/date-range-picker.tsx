@@ -6,16 +6,22 @@ import * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { type FieldControlSize, fieldControlClasses, fieldControlSizes } from '../field/field-control'
+import { Input } from '../field/input'
+import { Label } from '../field/label'
 import { floatingSurface } from '../popover/surface'
 import { Calendar } from './calendar'
+import { DateError } from './date-picker'
 import {
   compareDays,
   type DateLocale,
   type DateRange,
   type DateRangePreset,
   defaultRangePresets,
+  formatInputDate,
   formatLongDate,
+  getDatePattern,
   isSameDay,
+  readTypedDate,
   startOfDay,
   toISODate,
 } from './date-utils'
@@ -36,9 +42,33 @@ import {
  * presses a polite status line says "Choose the end date", so the half-chosen
  * state is stated rather than inferred from a lone filled cell.
  *
+ * ── typed entry: two inputs inside the popup ──
+ * Typing is as first-class here as in `DatePicker`, for the same reasons: it
+ * is faster for someone who knows the dates, and a screen-reader user should
+ * not be forced through a grid. Two dates in ONE input is a format nobody
+ * agrees on ("1–6/10", "01/10/2026 - 06/10/2026"), so the popup carries two
+ * labelled inputs, "Start date" and "End date", above the calendar. They
+ * use the single picker's parsing and sentences (`readTypedDate`): the
+ * locale's order read from `Intl`, any separator, commit on Enter or blur,
+ * never per keystroke. A committed date moves the calendar to its month. An
+ * end before the start, or a start after the end, is refused with a
+ * sentence naming the other date, and the value is left alone. One end
+ * typed on its own is the same half-chosen state as one day pressed: the
+ * next press or typed date completes it. A complete range commits at once
+ * but leaves the popup open, so the person sees it drawn on the grid; the
+ * status line states it, and Escape or a press outside closes.
+ *
+ * ── focus opens on the grid ──
+ * The popup is opened from a button the person pressed to see a calendar,
+ * and the APG date picker dialog puts focus on the chosen day — as the
+ * single picker's popup does. So initial focus stays on the grid, and the
+ * inputs are before it in Tab order: presets, start, end, the month buttons,
+ * the grid. Shift+Tab from the grid reaches the end input in three steps.
+ * `typedEntry={false}` removes the inputs, for a filter where the presets
+ * and the grid are enough.
+ *
  * ── the trigger is a button, named by its Field ──
- * The value is not typeable here: two dates in one input is a format nobody
- * agrees on. The trigger is a button, labelled by `Field`'s label; its text
+ * The trigger is a button, labelled by `Field`'s label; its text
  * — the formatted period — is wired into its description so a screen reader
  * hears "Report period, button, 6 – 12 Oct 2026" rather than only the
  * label. The period is written with `Intl.DateTimeFormat#formatRange`, which
@@ -58,6 +88,12 @@ export interface DateRangePickerProps {
   max?: Date | null
   isDateDisabled?: (date: Date) => boolean
   today?: Date
+  /**
+   * Start and end inputs above the calendar. On by default: typing is the
+   * accessible path into a date, not an extra, and the single picker always
+   * has it. Turn it off only where presets and the grid cover every case.
+   */
+  typedEntry?: boolean
   /** Open the calendar on first render. */
   defaultOpen?: boolean
   /** Submitted as `<name>-start` and `<name>-end`, `yyyy-mm-dd`. */
@@ -97,6 +133,7 @@ export function DateRangePicker({
   max,
   isDateDisabled,
   today: todayProp,
+  typedEntry = true,
   defaultOpen = false,
   name,
   size = 'md',
@@ -111,51 +148,139 @@ export function DateRangePicker({
 }: DateRangePickerProps) {
   const uid = React.useId()
   const valueId = `${uid}-value`
+  const formatId = `${uid}-format`
   const isControlled = valueProp !== undefined
   const [inner, setInner] = React.useState<DateRange>(defaultValue)
   const value = isControlled ? valueProp : inner
   const [open, setOpen] = React.useState(defaultOpen)
+  // Read by the inputs' blur handler: closing with Escape returns focus to
+  // the trigger, and the blur that causes must not commit what was typed.
+  const openRef = React.useRef(open)
   // The half-chosen range lives only while the popup is open; closing it
-  // without a second press leaves the committed value untouched.
+  // without completing it leaves the committed value untouched.
   const [draft, setDraft] = React.useState<DateRange | null>(null)
+  // The day a typed date asked the calendar to show; see `visibleDate`.
+  const [visibleDate, setVisibleDate] = React.useState<Date | null>(null)
   const anchorRef = React.useRef<HTMLDivElement>(null)
   const activeCellRef = React.useRef<HTMLTableCellElement>(null)
   const today = startOfDay(todayProp ?? new Date())
+  const { pattern } = getDatePattern(locale)
 
-  function commit(next: DateRange) {
+  const shown = draft ?? value
+  const startInput = useTypedEnd(shown.start, locale, open)
+  const endInput = useTypedEnd(shown.end, locale, open)
+
+  function setOpenState(next: boolean) {
+    openRef.current = next
+    setOpen(next)
+    if (!next) {
+      setDraft(null)
+      startInput.setError(null)
+      endInput.setError(null)
+    }
+  }
+
+  /** Make `next` the value, keeping the popup as it is. */
+  function apply(next: DateRange) {
     if (!isControlled) setInner(next)
     onValueChange?.(next)
     setDraft(null)
-    setOpen(false)
+  }
+
+  function commit(next: DateRange) {
+    apply(next)
+    setOpenState(false)
   }
 
   function choose(date: Date) {
-    if (!draft?.start || draft.end) {
+    // A range with exactly one end — pressed or typed — is waiting for the other.
+    const pending = draft && (draft.start ? !draft.end : draft.end) ? (draft.start ?? draft.end) : null
+    if (!pending) {
       setDraft({ start: date, end: null })
       return
     }
-    const [start, end] = compareDays(date, draft.start) < 0 ? [date, draft.start] : [draft.start, date]
+    const [start, end] = compareDays(date, pending) < 0 ? [date, pending] : [pending, date]
     commit({ start, end })
+  }
+
+  function commitTyped(which: 'start' | 'end') {
+    const input = which === 'start' ? startInput : endInput
+    const current = shown[which]
+    const result = readTypedDate(input.text, { locale, min, max, isDateDisabled }, `the ${which} date`)
+    if (!result.ok) {
+      input.setError(result.message)
+      return
+    }
+    const date = result.date
+    const other = which === 'start' ? shown.end : shown.start
+    if (date && other) {
+      const otherWords = formatLongDate(other, locale, false)
+      if (which === 'start' && compareDays(date, other) > 0) {
+        input.setError(`The start date is after the end date, ${otherWords}. Choose that day or earlier.`)
+        return
+      }
+      if (which === 'end' && compareDays(date, other) < 0) {
+        input.setError(`The end date is before the start date, ${otherWords}. Choose that day or later.`)
+        return
+      }
+    }
+    input.setError(null)
+    if (date) input.setText(formatInputDate(date, locale))
+    if (date ? isSameDay(date, current) : !current) return
+    if (date) setVisibleDate(date)
+    const next = { ...shown, [which]: date }
+    if ((next.start && next.end) || (!next.start && !next.end)) apply(next)
+    else setDraft(next)
   }
 
   const inRange = (r: { start: Date; end: Date }) =>
     (!min || compareDays(r.start, min) >= 0) && (!max || compareDays(r.end, max) <= 0)
 
-  const shown = draft ?? value
   const label = formatDateRange(value, locale)
-  const status = draft?.start
-    ? `Start ${formatLongDate(draft.start, locale, false)}. Choose the end date.`
-    : value.start && value.end
-      ? `${formatDateRange(value, locale)}, ${dayCount(value)} ${dayCount(value) === 1 ? 'day' : 'days'}.`
-      : 'Choose the start date.'
+  const status =
+    shown.start && shown.end
+      ? `${formatDateRange(shown, locale)}, ${dayCount(shown)} ${dayCount(shown) === 1 ? 'day' : 'days'}.`
+      : shown.start
+        ? `Start ${formatLongDate(shown.start, locale, false)}. Choose the end date.`
+        : shown.end
+          ? `End ${formatLongDate(shown.end, locale, false)}. Choose the start date.`
+          : 'Choose the start date.'
+
+  function typedInput(which: 'start' | 'end', input: TypedEnd) {
+    const inputId = `${uid}-${which}`
+    const errorId = `${uid}-${which}-error`
+    return (
+      <div className="grid min-w-0 gap-2">
+        <Label htmlFor={inputId}>{which === 'start' ? 'Start date' : 'End date'}</Label>
+        <Input
+          id={inputId}
+          size="sm"
+          value={input.text}
+          placeholder={pattern}
+          autoComplete="off"
+          inputMode="numeric"
+          aria-describedby={[formatId, input.error ? errorId : undefined].filter(Boolean).join(' ')}
+          aria-invalid={input.error ? true : undefined}
+          className="tabular-nums"
+          onChange={(event) => input.setText(event.target.value)}
+          onBlur={() => {
+            if (openRef.current) commitTyped(which)
+          }}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              event.preventDefault()
+              commitTyped(which)
+            }
+          }}
+        />
+      </div>
+    )
+  }
 
   return (
     <PopoverPrimitive.Root
       open={open}
-      onOpenChange={(next) => {
-        setOpen(next)
-        if (!next) setDraft(null)
-      }}
+      onOpenChange={setOpenState}
     >
       <div ref={anchorRef} data-slot="date-range-picker" className={className}>
         <PopoverPrimitive.Trigger
@@ -173,7 +298,10 @@ export function DateRangePicker({
             'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
           )}
         >
-          <span id={valueId} className={cn('min-w-0 truncate tabular-nums', !label && 'text-ink-muted')}>
+          {/* `dir="auto"`: a formatted period is text in the locale's own
+              direction, and "14.–25. Sept. 2026" laid out right-to-left
+              comes apart into "Sept. 2026 .25–.14". */}
+          <span dir="auto" id={valueId} className={cn('min-w-0 truncate tabular-nums', !label && 'text-ink-muted')}>
             {label ?? placeholder}
           </span>
           <CalendarDays aria-hidden className="size-4 shrink-0 text-ink-muted" />
@@ -224,12 +352,26 @@ export function DateRangePicker({
                 })}
               </div>
             ) : null}
-            <div className="grid gap-2 p-3">
+            <div className="grid gap-3 p-3">
+              {typedEntry ? (
+                <div role="group" aria-label="Type the dates" className="grid max-w-[calc(var(--control-h)*7)] gap-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    {typedInput('start', startInput)}
+                    {typedInput('end', endInput)}
+                  </div>
+                  <span id={formatId} className="text-xs leading-snug text-ink-muted">
+                    Format: {pattern}
+                  </span>
+                  {startInput.error ? <DateError id={`${uid}-start-error`}>{startInput.error}</DateError> : null}
+                  {endInput.error ? <DateError id={`${uid}-end-error`}>{endInput.error}</DateError> : null}
+                </div>
+              ) : null}
               <Calendar
                 key={open ? 'open' : 'closed'}
                 selected={{ start: shown.start, end: shown.end ?? shown.start }}
                 onSelect={choose}
                 defaultFocusedDate={value.end ?? value.start}
+                visibleDate={visibleDate}
                 today={today}
                 min={min}
                 max={max}
@@ -239,7 +381,7 @@ export function DateRangePicker({
                 activeCellRef={activeCellRef}
                 renderHeading={(props) => <PopoverPrimitive.Title aria-live="polite" {...props} />}
               />
-              <p role="status" className="m-0 max-w-[calc(var(--control-h)*7)] text-xs text-ink-2">
+              <p role="status" dir="auto" className="m-0 max-w-[calc(var(--control-h)*7)] text-xs text-ink-2">
                 {status}
               </p>
             </div>
@@ -248,4 +390,32 @@ export function DateRangePicker({
       </PopoverPrimitive.Portal>
     </PopoverPrimitive.Root>
   )
+}
+
+interface TypedEnd {
+  text: string
+  setText: (text: string) => void
+  error: string | null
+  setError: (error: string | null) => void
+}
+
+/**
+ * The text and error of one typed end. A date that changes from outside —
+ * a pressed day, a preset, a controlled value, reopening the popup —
+ * replaces the text and clears that end's error, adjusted during render so
+ * the input never paints a frame of stale text. Each end keys on its own
+ * date, so fixing the start does not wipe a mistake still showing in the end.
+ */
+function useTypedEnd(date: Date | null, locale: DateLocale, open: boolean): TypedEnd {
+  const format = () => (date ? formatInputDate(date, locale) : '')
+  const [text, setText] = React.useState(format)
+  const [error, setError] = React.useState<string | null>(null)
+  const key = `${date ? toISODate(date) : ''}|${String(locale)}|${open}`
+  const [shownKey, setShownKey] = React.useState(key)
+  if (shownKey !== key) {
+    setShownKey(key)
+    setText(format())
+    setError(null)
+  }
+  return { text, setText, error, setError }
 }
