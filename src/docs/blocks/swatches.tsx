@@ -12,7 +12,22 @@ function resolved(name: string, theme: ThemeName) {
   }
 }
 
-function Ratio({ fg, bg, theme }: { fg: string; bg: string; theme: ThemeName }) {
+/**
+ * `verdict` styles the AA/AAA word. On a plain swatch caption it is muted, but
+ * inside a pairing cell it must keep the pairing's own ink: muted ink on a
+ * rojo ground measured 1.02:1, which the browser audit caught on this page.
+ */
+function Ratio({
+  fg,
+  bg,
+  theme,
+  verdict: verdictClass = 'text-ink-muted',
+}: {
+  fg: string
+  bg: string
+  theme: ThemeName
+  verdict?: string
+}) {
   const a = resolved(fg, theme)
   const b = resolved(bg, theme)
   if (!a || !b) return null
@@ -21,7 +36,7 @@ function Ratio({ fg, bg, theme }: { fg: string; bg: string; theme: ThemeName }) 
   return (
     <span className="tabular">
       {r.toFixed(2)}
-      <span className="ms-1.5 rotulo text-ink-muted">{verdict}</span>
+      <span className={`ms-1.5 rotulo ${verdictClass}`}>{verdict}</span>
     </span>
   )
 }
@@ -102,7 +117,7 @@ export function PairingTable({ pairs }: { pairs: [fg: string, bg: string][] }) {
                   >
                     <span className="font-semibold">Run succeeded</span>
                     <span className="text-xs">
-                      <Ratio fg={fg} bg={bg} theme={theme} />
+                      <Ratio fg={fg} bg={bg} theme={theme} verdict="" />
                     </span>
                   </div>
                 </td>

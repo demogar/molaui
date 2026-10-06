@@ -1,3 +1,5 @@
+'use client'
+
 import { cva } from 'class-variance-authority'
 import { Check, Copy, RotateCcw, ThumbsDown, ThumbsUp } from 'lucide-react'
 import * as React from 'react'

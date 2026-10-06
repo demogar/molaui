@@ -1,3 +1,5 @@
+'use client'
+
 import { PreviewCard } from '@base-ui/react/preview-card'
 import { ArrowUpRight } from 'lucide-react'
 import * as React from 'react'

@@ -8,32 +8,95 @@ on:
 permissions:
   contents: read
 
+# A new push to a pull request makes the run for the previous push moot.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+# Five independent jobs, run side by side. Each browser job builds its own
+# Storybook (about ten seconds) rather than waiting on Gates for an artifact,
+# so the slowest job sets the wall-clock time, not the sum of them.
 jobs:
   gates:
+    # The ruleset requires this name: rename it there too.
     name: Gates
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-      - run: npm ci
+      - uses: ./.github/actions/setup
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test
       - run: npm run tokens:check
       - run: npm run manifest:check
       - run: npm run build
+      - run: npm run api:check
+      - run: npm run size
       - run: npm run build-storybook -- --quiet
       - uses: actions/upload-pages-artifact@v5
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
           path: storybook-static
 
+  audit:
+    name: Browser audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+        with:
+          playwright: 'true'
+      - run: npm run build-storybook -- --quiet
+      - run: npm run audit
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: browser-audit
+          path: reports/audit
+          if-no-files-found: ignore
+
+  visual:
+    name: Visual regression
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+        with:
+          playwright: 'true'
+      - run: npm run build-storybook -- --quiet
+      - run: npm run visual
+      # The report holds expected, actual and diff for every failure. To
+      # accept an intended change, see "Visual baselines" in CONTRIBUTING.md.
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: visual-report
+          path: |
+            playwright-report
+            test-results/visual
+          if-no-files-found: ignore
+
+  consumers:
+    name: Consumer smoke tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+        with:
+          playwright: 'true'
+      # The fixtures install their own dependencies from the registry; their
+      # downloads share npm's cache with everything else.
+      - uses: actions/cache@v6
+        with:
+          path: ~/.npm
+          key: consumers-${{ runner.os }}-${{ hashFiles('test/consumers/*/package.json') }}
+          restore-keys: consumers-${{ runner.os }}-
+      - run: npm run build
+      - run: npm run consumers
+
   deploy:
     name: Publish Storybook
-    needs: gates
+    needs: [gates, audit, visual, consumers]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:

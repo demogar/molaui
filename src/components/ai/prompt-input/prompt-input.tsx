@@ -1,3 +1,5 @@
+'use client'
+
 import { ArrowUp, Square, WifiOff } from 'lucide-react'
 import * as React from 'react'
 

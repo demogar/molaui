@@ -1,0 +1,7 @@
+/* The documented setup for an app that already runs Tailwind v4: Mola's
+ * layers inside this build, and the library's compiled JS as a source so
+ * Tailwind generates the classes the components use. Without the @source line
+ * the page renders unstyled, which is exactly what the runner checks for. */
+@import 'tailwindcss';
+@import '@demogar/mola-ui/tailwind.css';
+@source '../node_modules/@demogar/mola-ui/dist';

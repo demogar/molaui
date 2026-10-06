@@ -1,3 +1,5 @@
+'use client'
+
 import { cva, type VariantProps } from 'class-variance-authority'
 import { CircleAlert, CircleCheck, Info, TriangleAlert, X } from 'lucide-react'
 import * as React from 'react'

@@ -1,0 +1,8 @@
+# The runner copies each fixture to a temp dir before installing, so these
+# only appear if someone installs a fixture in place by hand.
+node_modules/
+dist/
+.next/
+next-env.d.ts
+*.tgz
+package-lock.json
