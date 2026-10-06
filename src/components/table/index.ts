@@ -12,5 +12,13 @@ export {
   TableSkeletonRows,
 } from './table'
 export type { TableCellProps, TableCheckboxProps, TableHeadProps, TableProps, TableRowProps } from './table'
-export { DataTable } from './data-table'
-export type { DataTableColumn, DataTableProps, DataTableSort, SortValue } from './data-table'
+export { DataTable, DataTableColumnMenu } from './data-table'
+export type {
+  DataTableBulkContext,
+  DataTableColumn,
+  DataTableColumnMenuProps,
+  DataTableEmpty,
+  DataTableProps,
+  DataTableSort,
+  SortValue,
+} from './data-table'

@@ -4,7 +4,7 @@ import * as React from 'react'
 import { Badge, type BadgeTone } from '../badge'
 import { Button } from '../button'
 import { type AgentRun, formatDuration, formatRelative, makeAgentRuns, type RunStatus } from './agent-runs.fixture'
-import { DataTable, type DataTableColumn } from './data-table'
+import { DataTable, type DataTableColumn, type DataTableSort } from './data-table'
 import {
   Table,
   TableBody,
@@ -116,38 +116,32 @@ const columns: DataTableColumn<AgentRun>[] = [
 function AgentRunsDemo() {
   const [selection, setSelection] = React.useState<Set<string>>(new Set([runs[3]!.id, runs[5]!.id]))
   return (
-      <div className="flex flex-col gap-3">
-        <div className="flex min-h-(--control-h) items-center justify-between gap-4">
-          <p className="m-0 text-sm text-ink-2 tabular-nums" aria-live="polite">
-            {selection.size > 0 ? `${selection.size} of ${runs.length} runs selected` : `${runs.length} runs`}
-          </p>
-          {selection.size > 0 ? (
-            <div className="flex gap-2">
-              <Button size="sm" variant="secondary">
-                Re-run
-              </Button>
-              <Button size="sm" variant="danger">
-                Cancel runs
-              </Button>
-            </div>
-          ) : null}
-        </div>
-        <DataTable
-          label="Agent runs"
-          columns={columns}
-          rows={runs}
-          getRowId={(run) => run.id}
-          rowLabel={(run) => `Select ${run.id}`}
-          selectable
-          selection={selection}
-          onSelectionChange={setSelection}
-          defaultSort={{ key: 'startedAt', direction: 'descending' }}
-          stickyHeader
-          framed
-          frameClassName="max-h-[32rem]"
-          className="min-w-[56rem]"
-        />
-      </div>
+    <DataTable
+      label="Agent runs"
+      noun={{ one: 'run', other: 'runs' }}
+      columns={columns}
+      rows={runs}
+      getRowId={(run) => run.id}
+      rowLabel={(run) => `Select ${run.id}`}
+      selectable
+      selection={selection}
+      onSelectionChange={setSelection}
+      bulkActions={() => (
+        <>
+          <Button size="sm" variant="secondary">
+            Re-run
+          </Button>
+          <Button size="sm" variant="danger">
+            Cancel runs
+          </Button>
+        </>
+      )}
+      defaultSort={{ key: 'startedAt', direction: 'descending' }}
+      stickyHeader
+      framed
+      frameClassName="max-h-[32rem]"
+      className="min-w-[56rem]"
+    />
   )
 }
 
@@ -158,7 +152,7 @@ export const AgentRuns: Story = {
     docs: {
       description: {
         story:
-          'Sort cycles ascending → descending → off; the third state is the only way back to arrival order, which is often the meaningful one. Selection is gold — the layer this system marks a choice with, and its text-selection colour — washed so every ink still clears AA, with an ink bar on the leading edge so the state never rests on hue alone. Machine literals (run ids, model ids) are in Martian Mono; every figure is Archivo with tabular numerals.',
+          'Sort cycles ascending → descending → off; the third state is the only way back to arrival order, which is often the meaningful one. Selected rows put a bulk-action bar above the table, in the same gold wash and leading ink bar as the rows themselves; the bar has a fixed height, so trading the count for the actions never moves the table under the pointer. The count is announced once, from a single polite status inside the table, not from the visible bar. Selection is gold — the layer this system marks a choice with, and its text-selection colour — washed so every ink still clears AA, with an ink bar on the leading edge so the state never rests on hue alone. Machine literals (run ids, model ids) are in Martian Mono; every figure is Archivo with tabular numerals.',
       },
     },
   },
@@ -230,7 +224,7 @@ export const Empty: Story = {
       rows={[]}
       getRowId={(run) => run.id}
       framed
-      empty="No runs match these filters. Clear a filter, or widen the date range."
+      empty="Runs appear here as soon as an agent starts one."
     />
   ),
   parameters: {
@@ -277,4 +271,227 @@ export const SkeletonRows: Story = {
       </TableBody>
     </Table>
   ),
+}
+
+export const Paginated: Story = {
+  render: () => (
+    <DataTable
+      label="Agent runs"
+      noun={{ one: 'run', other: 'runs' }}
+      columns={columns}
+      rows={runs}
+      getRowId={(run) => run.id}
+      defaultSort={{ key: 'startedAt', direction: 'descending' }}
+      pageSize={10}
+      paginationVariant="pages"
+      columnMenu
+      defaultHiddenColumns={['model']}
+      framed
+      className="min-w-[48rem]"
+    />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Client-side: pass every row and a `pageSize`; the table sorts, then slices. A new sort goes back to page 1, because page 4 of “newest first” has nothing to do with page 4 of “most expensive”. **Columns** opens a menu of checkbox items that stays open while you choose several; the last visible column cannot be hidden, and a column marked `hideable: false` shows checked and disabled so the menu still says it exists.',
+      },
+    },
+  },
+}
+
+const PAGE_SIZE = 8
+const SERVER_TOTAL = 1284
+
+/** A pretend endpoint: sorts and slices 1,284 runs after a short delay. */
+const serverRuns = makeAgentRuns(SERVER_TOTAL, 11)
+function fetchRuns(page: number, sort: DataTableSort | null): Promise<AgentRun[]> {
+  const sorted = sort
+    ? [...serverRuns].sort((a, b) => {
+        const va = a[sort.key as keyof AgentRun] as number | string | Date
+        const vb = b[sort.key as keyof AgentRun] as number | string | Date
+        const d = va instanceof Date && vb instanceof Date ? va.getTime() - vb.getTime() : va < vb ? -1 : va > vb ? 1 : 0
+        return sort.direction === 'ascending' ? d : -d
+      })
+    : serverRuns
+  return new Promise((resolve) => setTimeout(() => resolve(sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)), 450))
+}
+
+function ServerSideDemo() {
+  const [page, setPage] = React.useState(1)
+  const [sort, setSort] = React.useState<DataTableSort | null>({ key: 'startedAt', direction: 'descending' })
+  const [data, setData] = React.useState<{ key: string; rows: AgentRun[] }>({ key: '', rows: [] })
+  const [selection, setSelection] = React.useState<Set<string>>(new Set())
+  // Loading is derived: the rows on screen were fetched for another page or
+  // order. A response for a page the reader has already left is dropped.
+  const key = `${page}|${sort?.key}|${sort?.direction}`
+  const loading = data.key !== key
+
+  React.useEffect(() => {
+    let live = true
+    void fetchRuns(page, sort).then((rows) => {
+      if (live) setData({ key, rows })
+    })
+    return () => {
+      live = false
+    }
+  }, [key, page, sort])
+
+  return (
+    <DataTable
+      label="All agent runs"
+      noun={{ one: 'run', other: 'runs' }}
+      manual
+      columns={columns}
+      rows={data.rows}
+      rowCount={SERVER_TOTAL}
+      getRowId={(run) => run.id}
+      rowLabel={(run) => `Select ${run.id}`}
+      loading={loading}
+      sort={sort}
+      onSortChange={setSort}
+      page={page}
+      onPageChange={setPage}
+      pageSize={PAGE_SIZE}
+      selectable
+      selection={selection}
+      onSelectionChange={setSelection}
+      bulkActions={({ clear }) => (
+        <Button size="sm" variant="secondary" onClick={clear}>
+          Export
+        </Button>
+      )}
+      framed
+      className="min-w-[56rem]"
+    />
+  )
+}
+
+export const ServerSide: Story = {
+  name: 'Server-side data',
+  render: () => <ServerSideDemo />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`manual` hands sorting and paging to the server: `rows` is one page, already sorted, and `rowCount` is the total. The table reports `onSortChange` and `onPageChange` and applies neither, so the header shows the sort the parent actually applied, not the one that was clicked. Selection is a set of ids and survives paging. Here a pretend endpoint answers after 450ms; the skeleton rows hold the page’s height while it does.',
+      },
+    },
+  },
+}
+
+export const NoResults: Story = {
+  render: () => (
+    <DataTable
+      label="Agent runs"
+      columns={columns}
+      rows={[]}
+      getRowId={(run) => run.id}
+      framed
+      empty={{
+        variant: 'no-results',
+        title: 'No runs match these filters',
+        description: 'Nothing failed on the Growth workspace in the last 24 hours.',
+        actions: (
+          <Button size="sm" variant="secondary">
+            Clear filters
+          </Button>
+        ),
+      }}
+    />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The empty row is `EmptyState`, without its own keyline because the table frame is already the edge. Pass it as data to pick the conversation: *no results* clears the filters; it never tells someone to create their first run.',
+      },
+    },
+  },
+}
+
+const ROW_COUNT = 10_000
+const OVERSCAN = 8
+const bigRuns = makeAgentRuns(ROW_COUNT, 3)
+
+/**
+ * Windowing with the primitives: only the rows in view (plus a margin) are in
+ * the DOM, between two spacer rows that keep the scrollbar honest. Rows are
+ * one height because density fixes `--row-h`, so the arithmetic is a division.
+ */
+function VirtualizedDemo() {
+  const frameRef = React.useRef<HTMLTableSectionElement>(null)
+  const [range, setRange] = React.useState({ start: 0, end: 40 })
+
+  React.useLayoutEffect(() => {
+    const frame = frameRef.current?.closest<HTMLElement>('[data-slot="table-frame"]')
+    if (!frame) return
+    const measure = () => {
+      const rowH = frame.querySelector('tbody tr[aria-rowindex]')?.getBoundingClientRect().height || 40
+      const start = Math.max(0, Math.floor(frame.scrollTop / rowH) - OVERSCAN)
+      const end = Math.min(ROW_COUNT, Math.ceil((frame.scrollTop + frame.clientHeight) / rowH) + OVERSCAN)
+      setRange((r) => (r.start === start && r.end === end ? r : { start, end }))
+    }
+    measure()
+    frame.addEventListener('scroll', measure, { passive: true })
+    const observer = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measure)
+    observer?.observe(frame)
+    return () => {
+      frame.removeEventListener('scroll', measure)
+      observer?.disconnect()
+    }
+  }, [])
+
+  const visible = bigRuns.slice(range.start, range.end)
+  return (
+    <Table
+      aria-label="Ten thousand agent runs"
+      aria-rowcount={ROW_COUNT + 1}
+      stickyHeader
+      framed
+      frameClassName="h-[28rem]"
+      className="min-w-[44rem]"
+    >
+      <colgroup>
+        <col style={{ width: '9.5rem' }} />
+        <col />
+        <col style={{ width: '8.5rem' }} />
+        <col style={{ width: '7rem' }} />
+      </colgroup>
+      <TableHeader ref={frameRef}>
+        <TableRow aria-rowindex={1}>
+          <TableHead>Run</TableHead>
+          <TableHead>Agent</TableHead>
+          <TableHead>Status</TableHead>
+          <TableHead numeric>Cost</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        <tr aria-hidden style={{ height: `calc(${range.start} * var(--row-h))` }} />
+        {visible.map((run, i) => (
+          <TableRow key={run.id} aria-rowindex={range.start + i + 2}>
+            <TableCell className="literal text-ink-2">{run.id}</TableCell>
+            <TableCell truncate>{run.agent}</TableCell>
+            <TableCell>
+              <RunStatusBadge status={run.status} />
+            </TableCell>
+            <TableCell numeric>{run.status === 'queued' ? '—' : currency.format(run.cost)}</TableCell>
+          </TableRow>
+        ))}
+        <tr aria-hidden style={{ height: `calc(${ROW_COUNT - range.end} * var(--row-h))` }} />
+      </TableBody>
+    </Table>
+  )
+}
+
+export const Virtualized: Story = {
+  render: () => <VirtualizedDemo />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Ten thousand rows, about sixty in the DOM. `DataTable` does not virtualize: most internal tables are paged, and a virtual list changes how find-in-page, printing and screen readers see the data, so it should be a decision per screen, not a default. The path is the primitives: render the rows in view between two spacer rows sized in `--row-h` (density fixes every row’s height, so the arithmetic is a division), and set `aria-rowcount` on the table and `aria-rowindex` on each row so assistive tech reports “row 4,211 of 10,001” instead of the 60 it can see. For rows of varying height, use `@tanstack/react-virtual` (`useVirtualizer` with the frame as its scroll element) in the same structure; it is not a dependency of this package, because the fixed-height case needs none.',
+      },
+    },
+  },
 }
