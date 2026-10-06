@@ -39,6 +39,10 @@ export default defineConfig({
     baseURL: `http://localhost:${port}`,
     deviceScaleFactor: 1,
     browserName: 'chromium',
+    // Stories format times and numbers; the runner's defaults are pinned so
+    // a run elsewhere renders the same strings.
+    locale: 'en-US',
+    timezoneId: 'UTC',
   },
   webServer: {
     command: `node scripts/serve-static.mjs storybook-static ${port}`,

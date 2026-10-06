@@ -47,7 +47,7 @@ jobs:
         with:
           playwright: 'true'
       - run: npm run build-storybook -- --quiet
-      - run: npm run audit:ci
+      - run: npm run audit
       - uses: actions/upload-artifact@v7
         if: always()
         with:
