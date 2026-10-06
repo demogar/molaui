@@ -120,9 +120,10 @@ security issues privately, as described in [SECURITY.md](SECURITY.md). Changes a
 
 ## Credits
 
-Designed and directed by Demóstenes García, and built with [Claude Code](https://claude.com/claude-code)
-as the daily working practice. The mola is the textile art of the Guna people; this project borrows
-its method, not its motifs. Typefaces: Archivo (Omnibus-Type), Alegreya (Juan Pablo del Peral, Huerta
+Designed, architected and directed by Demóstenes García. Built with
+[Claude Code](https://claude.com/claude-code).
+
+The mola is the textile art of the Guna people; this project borrows its method, not its motifs. Typefaces: Archivo (Omnibus-Type), Alegreya (Juan Pablo del Peral, Huerta
 Tipográfica), Martian Mono (Evil Martians) — all under the SIL Open Font License.
 
 [MIT licensed](LICENSE).
