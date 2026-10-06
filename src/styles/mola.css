@@ -6,7 +6,7 @@
  *
  *   @import 'tailwindcss';
  *   @import '@demogar/mola-ui/tailwind.css';
- *   @source '../node_modules/mola-ui/dist';
+ *   @source '../node_modules/@demogar/mola-ui/dist';
  */
 @import './tokens.css';
 @import './theme.css';

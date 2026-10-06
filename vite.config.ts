@@ -18,6 +18,14 @@ import pkg from './package.json' with { type: 'json' }
  *
  * Every dependency and peer is external: a design system that bundles its own
  * React, or its own copy of Base UI, ships two of them into the consumer.
+ *
+ * `'use client'` needs no plugin here. A bundler that merges modules into one
+ * chunk has to drop a module's directive (it would apply to the whole chunk),
+ * and the expected fix was a plugin that re-adds it per chunk. With
+ * `preserveModules` each chunk is exactly one source module, and rolldown
+ * keeps the directive at its top, so it is written in the source and nowhere
+ * else. src/test/use-client.test.ts decides which modules need it; the Next.js
+ * fixture in test/consumers proves it survives this build.
  */
 const external = [
   ...Object.keys(pkg.peerDependencies),

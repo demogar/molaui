@@ -1,3 +1,5 @@
+'use client'
+
 import { Collapsible } from '@base-ui/react/collapsible'
 import { Plus } from 'lucide-react'
 import * as React from 'react'

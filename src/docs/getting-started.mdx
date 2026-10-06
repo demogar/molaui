@@ -94,8 +94,35 @@ Import the un-compiled layers into your own build instead of shipping a second T
 @source '../node_modules/@demogar/mola-ui/dist';
 ```
 
+The `@source` path is relative to the CSS file that contains it, so the example is for a stylesheet
+one folder below the project root (`src/app.css`). It points Tailwind at the package's compiled
+JavaScript: without it Tailwind never sees the classes the components use, and they render unstyled.
+
 Every token is then a utility in your app too: `bg-cloth-pale`, `text-ink-muted`, `shadow-cut`,
 `relleno`, `cut-band band-rojo`.
+
+## React Server Components
+
+Components can be rendered from a server component (the Next.js App Router, for example). Every
+module that holds state or reads context is marked `'use client'`, so it arrives as a client
+component and the rest stays on the server. One limit is React's, not ours: a function cannot be
+passed from a server component to a client one. That covers event handlers such as `onClick`, and
+the props that take a function: `Field`'s children (the control is a render prop), `DataTable`'s
+`cell`, `Slider`'s `formatValue`. Put those in a file of your own that starts with `'use client'`:
+
+```tsx
+'use client'
+
+import { Field, Input } from '@demogar/mola-ui'
+
+export function AgentNameField() {
+  return (
+    <Field label="Agent name">
+      {(control) => <Input {...control} name="name" />}
+    </Field>
+  )
+}
+```
 
 ## Not on React?
 
