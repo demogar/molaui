@@ -121,7 +121,7 @@ describe('SettingsPage', () => {
     renderPage({ defaultDraft: { name: 'Support team' } })
     await user.click(screen.getByRole('link', { name: 'Overview' }))
     const dialog = await screen.findByRole('alertdialog')
-    await user.click(within(dialog).getByRole('button', { name: 'Discard' }))
+    await user.click(within(dialog).getByRole('button', { name: 'Discard changes' }))
     await waitFor(() => expect(window.location.hash).toBe('#overview'))
     expect(screen.getByRole('textbox', { name: /Workspace name/ })).toHaveValue('Support')
   })

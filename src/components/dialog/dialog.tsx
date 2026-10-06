@@ -123,6 +123,19 @@ export function DialogContent({
   )
 }
 
+/**
+ * The action row of a dialog or drawer. Under 24rem of width it stacks:
+ * full-width buttons, the confirm on top and the way out under it. It used
+ * to wrap instead, so a small alert dialog with two longer labels ("Keep
+ * editing", "Discard changes") left the confirm alone on a second line,
+ * ragged against the first. Measured on the row's own width, not the
+ * window, because a small dialog is narrow on every screen.
+ */
+export const actionRowClasses = [
+  'flex flex-col-reverse gap-2 [&>*]:w-full',
+  '@sm:flex-row @sm:flex-wrap @sm:items-center @sm:justify-end @sm:[&>*]:w-auto',
+] as const
+
 const titleClasses = 'm-0 font-display text-xl font-bold leading-snug tracking-display wdth-display'
 const descriptionClasses = 'mt-1.5 mb-0 text-sm text-ink-2'
 
@@ -152,7 +165,13 @@ function DialogFrame({
         {close ? <div className="-mt-1 -me-2">{close}</div> : null}
       </div>
       {children ? <div className="scroll-cloth min-h-0 flex-1 overflow-y-auto px-6 pt-4 pb-2 text-sm">{children}</div> : null}
-      {footer ? <div className="mt-6 flex flex-wrap items-center justify-end gap-2 px-6 pb-6">{footer}</div> : <div className="pb-6" />}
+      {footer ? (
+        <div className="@container mt-6 px-6 pb-6">
+          <div className={cn(actionRowClasses)}>{footer}</div>
+        </div>
+      ) : (
+        <div className="pb-6" />
+      )}
     </>
   )
 }

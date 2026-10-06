@@ -430,9 +430,7 @@ export function SettingsPage({
         onOpenChange={(open) => !open && setLeavingTo(null)}
         title="Discard unsaved changes?"
         description={`You have ${plural(changes, 'unsaved change', 'unsaved changes')} to the ${saved.name} settings. Leaving this page discards ${changes === 1 ? 'it' : 'them'}.`}
-        // "Discard changes" beside "Keep editing" wrapped onto two lines in
-        // the small alert dialog; the title already says what is discarded.
-        confirmLabel="Discard"
+        confirmLabel="Discard changes"
         cancelLabel="Keep editing"
         onConfirm={() => {
           const href = leavingTo
