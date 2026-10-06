@@ -29,6 +29,48 @@ const names = () =>
     .map((row) => within(row).getAllByRole('cell').at(-2)?.textContent)
 
 describe('Table primitives', () => {
+  it('puts the frame in the tab order only when the table overflows it', async () => {
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        observe() {}
+        disconnect() {}
+      },
+    )
+    // jsdom has no layout: a 900px table in a 390px frame.
+    const scroll = vi.spyOn(HTMLElement.prototype, 'scrollWidth', 'get').mockReturnValue(900)
+    const client = vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockReturnValue(390)
+    try {
+      render(
+        <Table aria-label="Runs">
+          <TableBody>
+            <TableRow>
+              <TableCell>run_1</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>,
+      )
+      await userEvent.tab()
+      expect(screen.getByRole('table', { name: 'Runs' }).parentElement).toHaveFocus()
+
+      scroll.mockReturnValue(390)
+      const { container } = render(
+        <Table aria-label="Fits">
+          <TableBody>
+            <TableRow>
+              <TableCell>run_2</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>,
+      )
+      expect(container.querySelector('[data-slot=table-frame]')).not.toHaveAttribute('tabindex')
+    } finally {
+      scroll.mockRestore()
+      client.mockRestore()
+      vi.unstubAllGlobals()
+    }
+  })
+
   it('renders header cells as column headers and numeric cells right-aligned', () => {
     render(
       <Table aria-label="t">

@@ -43,16 +43,24 @@ export function Table({
   frameClassName,
   ...props
 }: TableProps) {
+  const frameRef = React.useRef<HTMLDivElement>(null)
+  const overflows = useOverflows(frameRef)
   return (
     <TableContext.Provider value={{ stickyHeader }}>
       <div
+        ref={frameRef}
         data-slot="table-frame"
         // A scrolling region has to be reachable by keyboard, or its overflow is
         // unreachable to anyone without a wheel. Named by the table inside it.
-        tabIndex={stickyHeader ? 0 : undefined}
+        // It was focusable only with `stickyHeader`, but any table wider than
+        // its frame scrolls sideways — every wide table on a phone — so it
+        // is focusable whenever it actually overflows, and only then: a table
+        // that fits should not add a stop to the tab order.
+        tabIndex={stickyHeader || overflows ? 0 : undefined}
         className={cn(
           'relative w-full overflow-auto scroll-cloth',
           framed && 'bg-cloth-pale shadow-cut',
+          'focus-visible:shadow-[var(--focus-ring)]',
           frameClassName,
         )}
       >
@@ -64,6 +72,22 @@ export function Table({
       </div>
     </TableContext.Provider>
   )
+}
+
+function useOverflows(ref: React.RefObject<HTMLElement | null>) {
+  const [overflows, setOverflows] = React.useState(false)
+  React.useEffect(() => {
+    const el = ref.current
+    if (!el || typeof ResizeObserver === 'undefined') return
+    const measure = () => setOverflows(el.scrollWidth > el.clientWidth || el.scrollHeight > el.clientHeight)
+    const observer = new ResizeObserver(measure)
+    observer.observe(el)
+    // The table inside grows with its rows without the frame resizing.
+    if (el.firstElementChild) observer.observe(el.firstElementChild)
+    measure()
+    return () => observer.disconnect()
+  }, [ref])
+  return overflows
 }
 
 export function TableHeader({ className, ...props }: React.ComponentProps<'thead'>) {
