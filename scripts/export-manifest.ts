@@ -320,6 +320,21 @@ const showcases = stories.filter((s) => !entries.has(s.title)).map((s) => ({
   stories: s.stories.map((story) => ({ ...story, url: storyUrl(story.id) })),
 }))
 
+/**
+ * The figures the README and the introduction quote. A component is a docs
+ * page (Button and IconButton are one component); a part is an exported React
+ * component (Table, TableRow, TableCell…).
+ */
+const parts = (layer: Entry['layer']) =>
+  sorted.filter((e) => e.layer === layer).reduce((n, e) => n + e.exports.filter((x) => x.kind === 'component').length, 0)
+const counts = {
+  components: sorted.filter((e) => e.layer === 'components').length,
+  parts: parts('components'),
+  aiComponents: sorted.filter((e) => e.layer === 'ai').length,
+  aiParts: parts('ai'),
+  stories: stories.reduce((n, s) => n + s.stories.length, 0),
+}
+
 const colorUtilities = [...readFileSync(resolve(root, 'src/styles/theme.css'), 'utf8').matchAll(/--color-([a-z0-9-]+):/g)].map((m) => m[1]!)
 
 const install = `npm install ${pkg.name} @base-ui/react @fontsource-variable/archivo @fontsource-variable/alegreya @fontsource-variable/martian-mono`
@@ -331,12 +346,7 @@ const manifest = {
   storybook: SITE,
   install,
   rules: RULES,
-  counts: {
-    pages: sorted.length,
-    components: exportsInfo.filter((e) => e.kind === 'component').length,
-    runtimeExports: exportsInfo.filter((e) => e.kind !== 'type').length,
-    stories: stories.reduce((n, s) => n + s.stories.length, 0),
-  },
+  counts,
   tokens: {
     source: 'src/styles/tokens.css',
     dtcg: 'tokens/mola.tokens.json',
@@ -459,6 +469,24 @@ const outputs: [string, string][] = [
   ['llms-full.txt', full],
 ]
 
+/**
+ * The counts in prose drift every time a component is added ("Things that
+ * drift" in CLAUDE.md), so the claims are checked against the source here
+ * rather than remembered.
+ */
+const CLAIMS: [string, string[]][] = [
+  ['README.md', [`**${counts.components} components.**`, `${counts.parts} exported parts`, `all ${counts.stories} stories`]],
+  ['src/docs/introduction.mdx', [`**${counts.components} documented components** (${counts.parts} exported parts)`]],
+]
+const wrong = CLAIMS.flatMap(([file, phrases]) => {
+  const text = readFileSync(resolve(root, file), 'utf8')
+  return phrases.filter((phrase) => !text.includes(phrase)).map((phrase) => `${file} should say "${phrase}"`)
+})
+if (wrong.length) {
+  console.error(`Counts are out of date:\n  ${wrong.join('\n  ')}`)
+  process.exitCode = 1
+}
+
 if (process.argv.includes('--check')) {
   const stale = outputs.filter(([path, text]) => {
     try {
@@ -474,5 +502,5 @@ if (process.argv.includes('--check')) {
   console.log('Agent docs are up to date.')
 } else {
   for (const [path, text] of outputs) writeFileSync(resolve(root, path), text)
-  console.log(`Wrote ${outputs.map(([p]) => p).join(', ')}: ${sorted.length} pages, ${manifest.counts.components} components.`)
+  console.log(`Wrote ${outputs.map(([p]) => p).join(', ')}: ${counts.components} components (${counts.parts} parts), ${counts.aiComponents} AI components, ${counts.stories} stories.`)
 }

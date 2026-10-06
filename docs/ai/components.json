@@ -55,9 +55,10 @@
     }
   ],
   "counts": {
-    "pages": 65,
-    "components": 168,
-    "runtimeExports": 226,
+    "components": 53,
+    "parts": 144,
+    "aiComponents": 12,
+    "aiParts": 23,
     "stories": 274
   },
   "tokens": {

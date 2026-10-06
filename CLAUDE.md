@@ -19,6 +19,8 @@ npm run lint             # eslint
 npm run typecheck        # tsc --noEmit
 npm run tokens           # regenerate tokens/mola.tokens.json from tokens.css
 npm run tokens:check     # fail if tokens/mola.tokens.json is stale
+npm run manifest         # regenerate docs/ai/components.json, llms.txt, llms-full.txt
+npm run manifest:check   # fail if those are stale or the README/introduction counts are wrong
 npm run build            # library build to dist/
 npm run build-storybook  # static Storybook to storybook-static/
 npm run check            # all gates, same list CI runs
@@ -74,9 +76,16 @@ Storybook docs pages (introduction, principles, foundations, changelog) are MDX 
 - The no-hex test skips fenced code blocks in MDX, because docs quote `tokens.css`.
 - Exported names share one namespace via `src/index.ts`; check for collisions across folders (the AI parser's `InlineRun` exists because `Inline` is a layout component).
 
+### Usage guidance, patterns and agent docs
+- Every component has an autodocs page (`tags: ['autodocs']` in preview); `.storybook/docs-page.tsx` inserts a Usage section from `src/docs/usage/guidance.ts`, keyed by stories title. `src/docs/usage/usage.test.ts` fails if a component page has no entry; composed showcases and `Patterns/*` are exempt.
+- `src/patterns/<name>/` holds whole Cayuco screens: `<name>.tsx` (the screen), stories, tests. They are excluded from the JS build and type declarations, but `src/styles/index.css` scans their non-story files, so a copied pattern finds its classes in the shipped CSS. The logical-properties guard scans them too.
+- `scripts/export-manifest.ts` builds `docs/ai/components.json`, `llms.txt` and `llms-full.txt` from the TypeScript checker, react-docgen-typescript, the stories and the usage guidance. Rerun `npm run manifest` after changing props, doc comments, stories or guidance. The design rules it publishes live in `src/docs/usage/rules.ts`; `skills/mola-ui/SKILL.md` is hand-written and must agree with them.
+- `src/test/links.test.ts` resolves every `?path=/docs/…` and `?path=/story/…` link in the README, MDX, sources, skill and generated docs against the ids Storybook assigns. Renaming a story or a title means fixing its links.
+- Deprecations use `deprecate()` from `src/lib/deprecate.ts` plus `@deprecated` JSDoc; mechanical breaking changes get a tested codemod in `codemods/`. The policy is `src/docs/versioning.mdx`.
+
 ### Things that drift
-- The README and docs state counts (components, exported parts, stories). Update them when adding components.
-- `src/patterns/` is empty, but it's still referenced in `src/styles/index.css` `@source`, `vite.config.ts`, `tsconfig.build.json` and the Storybook `storySort` ('Patterns'). Composed demos currently live under AI/Agent console, Components/Layout/App shell and Components/Forms/Form example.
+- The README and introduction counts (components = non-AI docs pages, parts = exported React components, stories) are checked by `npm run manifest:check`; update the wording it names when it fails. Other prose claims are not checked.
+- Composed demos live under AI/Agent console, Components/Layout/App shell, Components/Forms/Form example and Patterns/*.
 
 ## Design rules (enforced in review)
 
