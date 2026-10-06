@@ -75,7 +75,9 @@ export function Stat({ label, value, unit, delta, trend, hint, className, ...pro
       <dt className="rotulo text-ink-muted">{label}</dt>
       <dd className="m-0 flex flex-col gap-2">
         <span className="flex items-end justify-between gap-4">
-          <span className="flex min-w-0 items-baseline gap-1.5">
+          {/* A figure and its unit are one literal: `dir="auto"` keeps "97.8 %"
+              and "0.4 pt" in order in a right-to-left page. */}
+          <span dir="auto" className="flex min-w-0 items-baseline gap-1.5">
             <span className="font-display text-2xl leading-none font-bold tracking-display tabular-nums wdth-display text-ink">
               {value}
             </span>
@@ -102,7 +104,9 @@ function StatDeltaLine({ delta }: { delta: StatDelta }) {
     <span className="flex items-center gap-1.5 text-xs">
       <span className={cn('inline-flex items-center gap-0.5 font-semibold tabular-nums', SENTIMENT_TONE[sentiment])}>
         <Glyph aria-hidden className="size-3.5" strokeWidth={2.5} />
-        <span aria-hidden>{delta.value}</span>
+        <span aria-hidden dir="auto">
+          {delta.value}
+        </span>
       </span>
       {delta.period ? (
         <span aria-hidden className="text-ink-muted">

@@ -82,7 +82,12 @@ export function AccordionTrigger({ className, meta, children, ...props }: Accord
     <AccordionPrimitive.Header className="m-0">
       <AccordionPrimitive.Trigger data-slot="accordion-trigger" className={cn(triggerClasses, className)} {...props}>
         <span className="min-w-0 flex-1">{children}</span>
-        {meta ? <span className="shrink-0 text-sm font-normal tabular-nums text-ink-muted">{meta}</span> : null}
+        {/* `dir="auto"`, as for every count: "2 fields" read "fields 2" in a right-to-left page. */}
+        {meta ? (
+          <span dir="auto" className="shrink-0 text-sm font-normal tabular-nums text-ink-muted">
+            {meta}
+          </span>
+        ) : null}
         <Plus aria-hidden className={markerClasses} />
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
