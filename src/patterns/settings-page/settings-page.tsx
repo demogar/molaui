@@ -249,18 +249,20 @@ export function SettingsPage({
                 hint="The workspace’s address in links and the API. Changing it breaks saved links."
               >
                 {(control) => (
-                  <Input
-                    {...control}
-                    value={draft.slug}
-                    onChange={(event) => set('slug', event.target.value)}
-                    // The wrapper is `literal`, so the prefix inherits the same face
-                    // and size; `ltr` keeps its slash at the end in an RTL page.
-                    leading={<span dir="ltr">workspaces/</span>}
-                    className="literal"
-                    autoComplete="off"
-                    spellCheck={false}
-                    dir="ltr"
-                  />
+                  // A path reads left to right in any page, prefix first, so the
+                  // whole control is LTR; the label and hint around it still follow the page.
+                  <div dir="ltr">
+                    <Input
+                      {...control}
+                      value={draft.slug}
+                      onChange={(event) => set('slug', event.target.value)}
+                      // The wrapper is `literal`, so the prefix inherits the same face and size.
+                      leading={<span>workspaces/</span>}
+                      className="literal"
+                      autoComplete="off"
+                      spellCheck={false}
+                    />
+                  </div>
                 )}
               </Field>
               <Field label="Description" optional hint="One or two sentences for people joining the workspace.">
