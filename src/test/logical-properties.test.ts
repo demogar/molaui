@@ -4,9 +4,9 @@ import { join, relative, resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 
 /**
- * Components are laid out in logical properties — `ps-`/`pe-`, `ms-`/`me-`,
- * `inset-s-`/`inset-e-`, `text-start`/`text-end`, `border-s` — so that
- * `dir="rtl"` mirrors them with no second set of classes. A physical left or
+ * Components and patterns are laid out in logical properties — `ps-`/`pe-`,
+ * `ms-`/`me-`, `inset-s-`/`inset-e-`, `text-start`/`text-end`, `border-s` —
+ * so that `dir="rtl"` mirrors them with no second set of classes. A physical left or
  * right class is correct in one direction and wrong in the other, and nothing
  * else catches it: jsdom does no layout, and axe has no opinion about which
  * side a margin is on.
@@ -57,9 +57,9 @@ function stripComments(source: string) {
 }
 
 describe('logical properties', () => {
-  it('components and styles use no physical left/right utilities or properties', () => {
+  it('components, patterns and styles use no physical left/right utilities or properties', () => {
     const offenders: string[] = []
-    for (const path of [...walk(join(root, 'components')), ...walk(join(root, 'styles'))]) {
+    for (const path of ['components', 'patterns', 'styles'].flatMap((dir) => walk(join(root, dir)))) {
       const rel = relative(root, path)
       const source = stripComments(readFileSync(path, 'utf8'))
       const patterns = rel.endsWith('.css') ? [PHYSICAL_CSS] : [PHYSICAL_CLASS, PHYSICAL_STYLE]

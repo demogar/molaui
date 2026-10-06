@@ -1,0 +1,160 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Mola UI/Choosing a component" />
+
+# Choosing a component
+
+Most wrong choices in an interface are between two components that look alike. Each table below
+starts from what you need to do and names the component for it, and the one it is usually
+confused with. Every component page carries the same guidance in its Usage section.
+
+For whole screens, see Patterns: [Settings page](?path=/docs/patterns-settings-page--overview), [List and detail](?path=/docs/patterns-list-and-detail--overview), [Filtered table](?path=/docs/patterns-filtered-table--overview).
+
+## Telling people something
+
+Pick by where the message belongs and how long it stays true: on a row, on a region, in a moment,
+or in the way of the next step.
+
+| If you need… | Use | Not |
+| --- | --- | --- |
+| The state of a row or an object, in a word | [Badge](?path=/docs/components-feedback-badge--overview) | Callout: a status is a mark, not a message |
+| A condition of a page or region that stays true until something changes | [Callout](?path=/docs/components-feedback-callout--overview) | Toast: it disappears while the condition still holds |
+| To report something that just happened, possibly elsewhere | [Toast](?path=/docs/components-feedback-toast--overview) | Callout: it is static, and nobody hears it appear |
+| Progress on long work the operator may leave | [Toast](?path=/docs/components-feedback-toast--overview), with `toast.running()` | a second toast for the result: update the same one |
+| A decision before the person can go on | [Dialog](?path=/docs/components-overlays-dialog--overview) | Toast: a toast cannot hold a decision |
+| Confirmation of an action that destroys something | [AlertDialog](?path=/docs/components-overlays-dialog--overview) | a Dialog with “OK”: name the object and the consequence |
+| A panel with nothing in it | [Empty state](?path=/docs/components-feedback-empty-state--overview) | Callout, or a blank panel with grey text |
+| Why a run stopped, and the way back | [Run error](?path=/docs/ai-run-error--overview) | Callout: it has no step, no literal and no retry |
+
+## Choosing a value
+
+Pick by how many values can be chosen, how many options there are, and whether the choice applies
+at once or on Save.
+
+| If you need… | Use | Not |
+| --- | --- | --- |
+| One setting, on or off, applied on Save | [Checkbox](?path=/docs/components-forms-checkbox--overview) | Switch: it says the change has already happened |
+| One setting, on or off, applied at once | [Switch](?path=/docs/components-forms-switch--overview) | Checkbox in a form that is saved later |
+| Any number of options from a short list | [Checkbox](?path=/docs/components-forms-checkbox--overview) group | Radio |
+| One of two to five options, compared side by side | [Radio](?path=/docs/components-forms-radio--overview) | Select: it hides the options people need to compare |
+| One of a few views, switched instantly | [Segmented control](?path=/docs/components-forms-segmented-control--overview) | Radio, Tabs |
+| One value from a list short enough to scan | [Select](?path=/docs/components-forms-select--overview) | Radio, once the options stop fitting |
+| One or more values from a list too long to scroll | [Combobox](?path=/docs/components-forms-combobox--overview) | Select |
+| Free text, with suggestions | [Autocomplete](?path=/docs/components-forms-combobox--overview) | Combobox: it throws away text that matches no option |
+| Filters above a list that apply as they are pressed | [Chip](?path=/docs/components-forms-chip--overview) | Checkbox, Badge |
+| A value where the range matters as much as the number | [Slider](?path=/docs/components-forms-slider--overview) | Number input |
+| An exact number, typed or stepped, with bounds and a unit | [Number input](?path=/docs/components-forms-number-input--overview) | Slider: nobody drags to 40,000 |
+| One date | [DatePicker](?path=/docs/components-forms-date-picker--overview) | DateRangePicker |
+| A period between two dates | [DateRangePicker](?path=/docs/components-forms-date-picker--overview) | two single date pickers |
+
+## Showing something on top
+
+Pick by whether the page stays usable, and by how much the overlay holds.
+
+| If you need… | Use | Not |
+| --- | --- | --- |
+| A label for an icon-only control, and its shortcut | [Tooltip](?path=/docs/components-overlays-tooltip--overview) | Popover: a label is not a place to move into |
+| A small panel anchored to a control, page still usable | [Popover](?path=/docs/components-overlays-popover--overview) | Dialog |
+| Actions on one object that do not each deserve a button | [Menu](?path=/docs/components-overlays-menu--overview) | Select: a menu acts, a select sets a value |
+| A short task or decision that holds all the attention | [Dialog](?path=/docs/components-overlays-dialog--overview) | Drawer |
+| Details or filters beside the work, or quick actions on a phone | [Drawer](?path=/docs/components-overlays-drawer--overview) | Dialog: it hides the list the details belong to |
+| Any command or page in the product, by name, from the keyboard | [Command palette](?path=/docs/components-overlays-command-palette--overview) | Menu, Combobox |
+
+## Waiting
+
+There is no spinner in Mola UI, by design. A spinner says only “wait”, and it looks the same at
+one second and at one minute. The system’s indeterminate mark is the **working relleno**, ink slits
+sliding past, set on the thing that is working: the foot of a button, a running toast, a progress
+track, a running step. Where the total is unknown, it is paired with elapsed time that keeps
+counting, never with an invented percentage.
+
+| If you need… | Use | Not |
+| --- | --- | --- |
+| A layout whose content is loading | [Skeleton](?path=/docs/components-feedback-skeleton--overview), inside `SkeletonGroup` | a spinner, or a “Loading…” line per item |
+| Work moving toward a known total | [Progress](?path=/docs/components-feedback-progress--overview) | Meter |
+| Work that has started but has no known size yet | [Progress](?path=/docs/components-feedback-progress--overview) with `value={null}` | a looping bar or a spinner |
+| A reading inside a range, such as a quota | [Meter](?path=/docs/components-feedback-progress--overview) | Progress: a quota is not work moving toward done |
+| A button whose action is in flight | [Button](?path=/docs/components-actions-button--overview) with `loading` | swapping the label for a spinner |
+| A slot whose content does not exist yet | [Placeholder](?path=/docs/components-feedback-placeholder--overview) | Skeleton: nothing is on its way |
+| The state of a model call, step or run, with its clock | [Run status](?path=/docs/ai-run-status--overview) | Progress: model work has no knowable total |
+| A model’s answer as it arrives | [Streaming text](?path=/docs/ai-streaming-text--overview) | a spinner until the whole answer is ready |
+
+## Showing data
+
+Pick by whether the reader compares records, reads one record, scans a figure or follows an order.
+
+| If you need… | Use | Not |
+| --- | --- | --- |
+| Many records with the same fields, compared row by row | [Table](?path=/docs/components-data-display-table--overview) | Description list |
+| Sorting, selection, bulk actions and pages | [DataTable](?path=/docs/components-data-display-table--overview) | the table primitives, wired by hand |
+| The properties of one record | [Description list](?path=/docs/components-data-display-description-list--overview) | a two-column Table |
+| A headline figure and how it moved | [Stat](?path=/docs/components-data-display-stat--overview) | Meter, unless there is a limit to measure against |
+| Events already written down, in order | [Timeline](?path=/docs/components-data-display-timeline--overview) | Table: the order is the content |
+| Steps a person follows | [StepList](?path=/docs/components-data-display-timeline--overview) | Timeline |
+| A live agent run, step by step | [Agent run](?path=/docs/ai-agent-run--overview) | Timeline: it is for events that have already happened |
+
+## Organising a page
+
+Pick by whether the reader needs everything at once, one view at a time, or sections they open.
+
+| If you need… | Use | Not |
+| --- | --- | --- |
+| Views of one object, one at a time | [Tabs](?path=/docs/components-navigation-tabs--overview) | Segmented control |
+| The same data displayed another way | [Segmented control](?path=/docs/components-forms-segmented-control--overview) | Tabs |
+| Sections someone opens on demand, one or several at once | [Accordion](?path=/docs/components-navigation-accordion--overview) | Tabs |
+| A region with its own ground and edge | [Panel](?path=/docs/components-layout-panel--overview) | Callout: a callout is a message |
+| A seam between parts of a page | [Divider](?path=/docs/components-layout-divider--overview) | relleno between every card |
+| Vertical rhythm and a title for each part of a page | [Section and SectionHeader](?path=/docs/components-layout-container--overview) | a Divider under every heading |
+
+## Text
+
+Pick by who is speaking: the system, a person or model, or the machine.
+
+| If you need… | Use | Not |
+| --- | --- | --- |
+| The one title that is the point of a screen | [Display](?path=/docs/components-typography-display--overview) | Heading |
+| Page, panel and group titles | [Heading](?path=/docs/components-typography-heading--overview) | Display, or a skipped level to look smaller |
+| Interface text: descriptions, hints, secondary lines | [Text](?path=/docs/components-typography-text--overview) | Prose |
+| Long-form text someone reads, including a model’s finished answer | [Prose](?path=/docs/components-typography-prose--overview) | Text |
+| The paragraph under a page title that says what the screen is for | [Lead](?path=/docs/components-typography-lead--overview) | Prose |
+| Figures compared down a column: time, cost, count | [Meta](?path=/docs/components-typography-meta--overview) | Code: figures are not machine literals |
+| What kind of block this is, set under it | [Rotulo](?path=/docs/components-typography-rotulo--overview) | an eyebrow above the heading |
+| An id, a flag or a field name inside a sentence | [Code](?path=/docs/components-data-display-code--overview) | Kbd |
+| A payload, a query or a log | [CodeBlock](?path=/docs/components-data-display-code--overview) | Code |
+| A keyboard shortcut | [Kbd](?path=/docs/components-typography-kbd--overview) | Code: a key is a physical object |
+
+## AI surfaces
+
+Pick by what the model is doing: talking, thinking, acting, asking, failing or citing.
+
+| If you need… | Use | Not |
+| --- | --- | --- |
+| One turn of a conversation | [Message](?path=/docs/ai-message--overview) | chat bubbles |
+| The answer’s text as it streams | [Streaming text](?path=/docs/ai-streaming-text--overview) | Prose, until the stream has ended |
+| The model’s thinking, as evidence | [Reasoning](?path=/docs/ai-reasoning--overview) | Message: reasoning is not the answer |
+| One tool call, and approval before it writes, spends or sends | [Tool call](?path=/docs/ai-tool-call--overview) | Change review |
+| A larger change to files or records, reviewed with a reason | [Change review](?path=/docs/ai-change-review--overview) | Tool call approval |
+| A run with its steps, clock and failure | [Agent run](?path=/docs/ai-agent-run--overview) | Timeline |
+| Why a run stopped, and how to resume | [Run error](?path=/docs/ai-run-error--overview) | Callout, Toast |
+| Where each claim came from | [Sources and Citation](?path=/docs/ai-sources--overview) | plain links |
+| How well an answer is supported | [Confidence](?path=/docs/ai-confidence--overview) | a percentage: no model is calibrated to a decimal |
+| Tokens, cost and how full the context is | [Token usage](?path=/docs/ai-token-usage--overview) | Stat |
+
+## Writing for the interface
+
+- **Sentence case everywhere**: buttons, titles, labels, tabs, menu items. “Delete run”, not
+  “Delete Run”. Buttons and labels that display in capitals are written in sentence case; the
+  style sets the capitals.
+- **Buttons start with a verb and name the object**: “Cancel run”, “Retry from step 4”,
+  “Show 42 runs”. Never “OK”, “Yes” or “Submit”.
+- **Name the object.** “Delete this run?”, not “Are you sure?”. A destructive confirm says what
+  is lost and for whom.
+- **Errors say what happened and what to do**: “The trace store returned 503. This panel will try
+  again in 30s.” Keep the system’s error verbatim beside the sentence, never instead of it.
+- **Numbers carry units and tabular figures**: “4m 12s”, “$0.0731”, “18,204 tokens”. Group the
+  digits and keep only the precision a reader uses.
+- **No “please”, no exclamation marks, no trailing periods on labels.** Full sentences end with a
+  full stop.
+- **State words match the status vocabulary**: Queued, Running, Streaming, Needs approval,
+  Succeeded, Failed, Cancelled, Timed out. Use the same word in the badge, the filter chip and
+  the header.

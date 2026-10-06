@@ -8,6 +8,7 @@ import { DirectionProvider } from '@base-ui/react/direction-provider'
 import type { Decorator, Preview } from '@storybook/react-vite'
 import { type ReactNode, useEffect } from 'react'
 
+import { DocsPage } from './docs-page'
 import { molaTheme } from './mola-theme'
 
 type Theme = 'light' | 'dark'
@@ -81,6 +82,9 @@ const withMolaContext: Decorator = (Story, context) => (
 )
 
 const preview: Preview = {
+  // Every component gets a docs page: its decisions, its usage guidance, its
+  // props and every story. The page template adds the Usage section.
+  tags: ['autodocs'],
   decorators: [withMolaContext],
   globalTypes: {
     theme: {
@@ -126,7 +130,7 @@ const preview: Preview = {
     layout: 'padded',
     backgrounds: { disable: true },
     controls: { expanded: true, sort: 'requiredFirst' },
-    docs: { theme: molaTheme, toc: { headingSelector: 'h2, h3' } },
+    docs: { theme: molaTheme, page: DocsPage, toc: { headingSelector: 'h2, h3' } },
     a11y: { test: 'error' },
     options: {
       storySort: {

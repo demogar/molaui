@@ -1,38 +1,31 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Ban, Download, ExternalLink, Play, RefreshCw, RotateCcw } from 'lucide-react'
 import * as React from 'react'
 
-import { CayucoSidebar, CayucoTopbar } from '../app-shell/_story-data/cayuco-chrome'
-import { AppShell } from '../app-shell/app-shell'
-import { PageHeader } from '../app-shell/page-header'
-import { Badge, type BadgeTone } from '../badge'
-import { Button } from '../button'
-import { Combobox } from '../combobox'
-import { DateRangePicker, type DateRange, type DateRangePreset } from '../date-picker'
-import { DescriptionList } from '../description-list'
-import { Drawer, DrawerContent } from '../drawer'
-import { Field, SearchInput } from '../field'
-import { Toolbar, ToolbarButton, ToolbarSeparator, ToolbarToggle, ToolbarToggleGroup } from '../toolbar'
-import { type AgentRun, FIXTURE_NOW, formatDuration, formatRelative, makeAgentRuns, type RunStatus } from './agent-runs.fixture'
-import { DataTable, type DataTableColumn } from './data-table'
+import { PageHeader } from '../../components/app-shell/page-header'
+import { Badge, type BadgeTone } from '../../components/badge'
+import { Button } from '../../components/button'
+import { Combobox } from '../../components/combobox'
+import { DateRangePicker, type DateRange, type DateRangePreset } from '../../components/date-picker'
+import { DescriptionList } from '../../components/description-list'
+import { Drawer, DrawerContent } from '../../components/drawer'
+import { Field, SearchInput } from '../../components/field'
+import { DataTable, type DataTableColumn } from '../../components/table'
+import {
+  type AgentRun,
+  FIXTURE_NOW,
+  formatDuration,
+  formatRelative,
+  makeAgentRuns,
+  type RunStatus,
+} from '../../components/table/agent-runs.fixture'
+import {
+  Toolbar,
+  ToolbarButton,
+  ToolbarSeparator,
+  ToolbarToggle,
+  ToolbarToggleGroup,
+} from '../../components/toolbar'
 
-const meta = {
-  title: 'Components/Data display/Filtered table',
-  component: DataTable,
-  parameters: {
-    layout: 'fullscreen',
-    docs: {
-      story: { inline: false, height: '900px' },
-      description: {
-        component:
-          'A whole Cayuco admin screen, composed from the system with nothing written for it: the app shell, a search field, an agent `Combobox`, a `DateRangePicker` with presets, a `Toolbar` of status toggles, and a `DataTable` with selection, a bulk-action bar, a Columns menu and pages. Choosing a run opens it in a `Drawer`.\n\n**Decisions.** The filters sit on one cut panel with the status toolbar, because they are one question asked of the data; the table’s own bar under it only ever describes the answer (how many runs, or what is selected). Every filter has a visible label — a placeholder is a hint and disappears as soon as someone types. The status toggles carry their counts, computed under the other filters, so “Failed 4” is what clicking it will show. A filter that matches nothing gives the *no results* empty state with **Clear filters**; it never says “create your first run”. Changing a filter clears the selection, and cancelling selected runs changes the data in place and clears it too, so the bar never offers an action on rows that are hidden or no longer qualify.',
-      },
-    },
-  },
-} satisfies Meta<typeof DataTable>
-
-export default meta
-type Story = StoryObj<typeof meta>
 
 /* ── data ──────────────────────────────────────────────────────────── */
 
@@ -85,9 +78,30 @@ function inRange(date: Date, range: DateRange) {
   return (!range.start || d >= range.start) && (!range.end || d <= range.end)
 }
 
-/* ── the screen ────────────────────────────────────────────────────── */
-
-function RunsScreen() {
+/**
+ * The runs admin screen: the page an operator opens when something is
+ * failing and they need to find it among a few hundred runs.
+ *
+ * It is composed from the system with nothing written for it — the page
+ * header, a search field, an agent `Combobox`, a `DateRangePicker` with
+ * presets, a `Toolbar` of status toggles, a `DataTable` and a `Drawer` — and
+ * it is kept as a pattern rather than a component because every product asks
+ * a different question of its own table. What is reusable is the shape:
+ *
+ * - The filters share one cut panel with the status toolbar, because they are
+ *   one question asked of the data. The table's own bar only ever describes
+ *   the answer (how many runs, or what is selected).
+ * - Every status toggle carries its count, computed under the OTHER filters,
+ *   so "Failed 4" is what pressing it will show.
+ * - A filter change re-asks the question: back to page 1, and the selection
+ *   is cleared, so a bulk action never lands on rows the filter now hides.
+ * - A run opens in a `Drawer`, not a new page, so the filtered list the
+ *   operator built is still there when they close it.
+ *
+ * Renders the page content only; the story puts it inside the Cayuco app
+ * shell, as a product would put it inside its own.
+ */
+export function RunsAdminScreen() {
   const [runs, setRuns] = React.useState<AgentRun[]>(ALL_RUNS)
   const [query, setQuery] = React.useState('')
   const [agent, setAgent] = React.useState<string | null>(null)
@@ -384,14 +398,4 @@ function RunsScreen() {
       </Drawer>
     </>
   )
-}
-
-export const Runs: Story = {
-  name: 'Runs admin screen',
-  args: { columns: [], rows: [], getRowId: () => '' },
-  render: () => (
-    <AppShell topbar={<CayucoTopbar />} sidebar={<CayucoSidebar />}>
-      <RunsScreen />
-    </AppShell>
-  ),
 }
