@@ -39,10 +39,10 @@ export const States: Story = {
   ),
 }
 
-const TOOLS = ['search_games', 'fetch_opening', 'run_engine', 'write_report'] as const
+const TOOLS = ['search_tickets', 'fetch_ticket', 'lookup_account', 'write_report'] as const
 
 function ParentDemo() {
-  const [value, setValue] = useState<string[]>(['search_games', 'fetch_opening'])
+  const [value, setValue] = useState<string[]>(['search_tickets', 'fetch_ticket'])
   return (
     <CheckboxGroup legend="Tools" value={value} onValueChange={setValue} allValues={[...TOOLS]}>
       <Checkbox parent label="All tools" />

@@ -5,20 +5,20 @@ import { Code, CodeBlock } from './code'
 const ARGS = `{
   "tool": "warehouse.query",
   "arguments": {
-    "sql": "SELECT band, COUNT(*) AS players, AVG(day7_return) AS d7 FROM puzzle_cohorts WHERE experiment_id = 'exp_rating_bands' GROUP BY band",
+    "sql": "SELECT plan, COUNT(*) AS tickets, AVG(first_reply_s) AS frt FROM tickets WHERE rollout_id = 'ro_help_panel' GROUP BY plan",
     "timeout_ms": 30000,
     "dry_run": false,
     "cache": null
   }
 }`
 
-const SQL = `SELECT band,
-       COUNT(*)            AS players,
-       AVG(day7_return)    AS d7
-FROM   puzzle_cohorts
-WHERE  experiment_id = 'exp_rating_bands'
-GROUP  BY band
-ORDER  BY band;`
+const SQL = `SELECT plan,
+       COUNT(*)            AS tickets,
+       AVG(first_reply_s)  AS frt
+FROM   tickets
+WHERE  rollout_id = 'ro_help_panel'
+GROUP  BY plan
+ORDER  BY plan;`
 
 const meta = {
   title: 'Components/Data display/Code',
@@ -59,7 +59,7 @@ export const ScrollsInside: Story = {
 }
 
 export const StreamingTruncated: Story = {
-  args: { code: '{\n  "query": "players who solved more than 20 puz', label: 'arguments · streaming' },
+  args: { code: '{\n  "query": "workspaces that opened more than 20 tick', label: 'arguments · streaming' },
   parameters: {
     docs: { description: { story: 'Mid-stream, the payload is not valid JSON yet. The tokenizer fails safe and shows exactly what has arrived.' } },
   },

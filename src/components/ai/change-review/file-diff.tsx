@@ -1,5 +1,5 @@
 import { Collapsible } from '@base-ui/react/collapsible'
-import { ChevronRight } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
@@ -181,16 +181,12 @@ function Hunk({ hunk, layout, defaultOpen, first }: { hunk: DiffHunk; layout: 'u
         className={cn(
           'group/hunk flex w-full min-h-(--control-h-sm) items-center gap-2 bg-cloth-shade px-3 py-1 text-start',
           'transition-colors duration-(--motion-cut) ease-cut hover:bg-ink-soft',
-          'focus-visible:shadow-[inset_0_0_0_2px_var(--ink)]',
+          'focus-visible:shadow-[var(--focus-ring-inset)]',
         )}
       >
-        <ChevronRight
+        <Plus
           aria-hidden
-          className={cn(
-            'size-3.5 shrink-0 text-ink-muted transition-transform duration-(--motion-cut) ease-cut',
-            // Mirrored in RTL, so opening turns it the other way to point down.
-            'rtl:-scale-x-100 group-data-[panel-open]/hunk:rotate-90 rtl:group-data-[panel-open]/hunk:-rotate-90',
-          )}
+          className="size-3.5 shrink-0 text-ink-muted transition-transform duration-(--motion-base) ease-cut group-data-[panel-open]/hunk:rotate-45"
         />
         <span dir="ltr" className="shrink-0 whitespace-nowrap literal text-xs text-ink-2">
           @@ -{hunk.oldStart},{oldCount} +{hunk.newStart},{newCount} @@
@@ -264,7 +260,10 @@ function SplitCell({ line, side, hidden }: { line?: DiffLine; side: 'old' | 'new
       aria-hidden={hidden || line === undefined ? true : undefined}
       className={cn(
         'grid grid-cols-[3.5em_1.75em_minmax(0,1fr)] pe-3',
-        line ? WASH[line.kind] : 'bg-cloth-shade',
+        // Nothing on this side: the system's empty texture on the rows' own
+        // ground. A cloth-shade fill read as a hole in the dark theme, where
+        // shade is darker than every row around it.
+        line ? WASH[line.kind] : 'relleno-field',
         side === 'new' && 'border-s border-keyline',
       )}
     >

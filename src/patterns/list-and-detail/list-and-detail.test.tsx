@@ -23,17 +23,17 @@ describe('AgentsScreen', () => {
     render(<AgentsScreen />)
     const list = screen.getByRole('region', { name: 'All agents' })
     expect(within(list).getByRole('button', { name: 'Support triage Failing cayuco-steady-3 Last run 2m ago' })).toBeInTheDocument()
-    expect(within(list).getByRole('button', { name: /^Cheat-report reviewer Paused / })).toBeInTheDocument()
-    expect(within(list).getByRole('button', { name: /^Experiment analyst Draft .* Never run$/ })).toBeInTheDocument()
+    expect(within(list).getByRole('button', { name: /^Abuse-report reviewer Paused / })).toBeInTheDocument()
+    expect(within(list).getByRole('button', { name: /^Feedback analyst Draft .* Never run$/ })).toBeInTheDocument()
   })
 
   it('opens an agent on click, moves the current mark and focuses its heading', async () => {
     const user = userEvent.setup()
     render(<AgentsScreen />)
-    await user.click(agentButton(/^Opening explainer/))
-    expect(agentButton(/^Opening explainer/)).toHaveAttribute('aria-current', 'true')
+    await user.click(agentButton(/^Docs answerer/))
+    expect(agentButton(/^Docs answerer/)).toHaveAttribute('aria-current', 'true')
     expect(agentButton(/^Support triage/)).not.toHaveAttribute('aria-current')
-    expect(screen.getByRole('heading', { level: 2, name: 'Opening explainer' })).toHaveFocus()
+    expect(screen.getByRole('heading', { level: 2, name: 'Docs answerer' })).toHaveFocus()
   })
 
   it('opens an agent from the keyboard: Tab to it, Enter opens', async () => {
@@ -41,20 +41,20 @@ describe('AgentsScreen', () => {
     render(<AgentsScreen />)
     agentButton(/^Support triage/).focus()
     await user.tab()
-    expect(agentButton(/^Opening explainer/)).toHaveFocus()
+    expect(agentButton(/^Docs answerer/)).toHaveFocus()
     await user.tab()
-    expect(agentButton(/^Puzzle tagger/)).toHaveFocus()
+    expect(agentButton(/^Invoice checker/)).toHaveFocus()
     await user.keyboard('{Enter}')
-    expect(screen.getByRole('heading', { level: 2, name: 'Puzzle tagger' })).toHaveFocus()
+    expect(screen.getByRole('heading', { level: 2, name: 'Invoice checker' })).toHaveFocus()
   })
 
   it('goes back to the list with focus on the agent it came from', async () => {
     const user = userEvent.setup()
     render(<AgentsScreen />)
-    await user.click(agentButton(/^Coach feedback/))
+    await user.click(agentButton(/^Refund reviewer/))
     await user.click(screen.getByRole('button', { name: 'Back to agents' }))
-    expect(agentButton(/^Coach feedback/)).toHaveFocus()
-    expect(agentButton(/^Coach feedback/)).toHaveAttribute('aria-current', 'true')
+    expect(agentButton(/^Refund reviewer/)).toHaveFocus()
+    expect(agentButton(/^Refund reviewer/)).toHaveAttribute('aria-current', 'true')
   })
 
   it('works the same right to left: Tab order follows the list, Enter opens, Back restores focus', async () => {
@@ -69,20 +69,20 @@ describe('AgentsScreen', () => {
     agentButton(/^Support triage/).focus()
     await user.tab()
     await user.keyboard('{Enter}')
-    expect(screen.getByRole('heading', { level: 2, name: 'Opening explainer' })).toHaveFocus()
+    expect(screen.getByRole('heading', { level: 2, name: 'Docs answerer' })).toHaveFocus()
     await user.click(screen.getByRole('button', { name: 'Back to agents' }))
-    expect(agentButton(/^Opening explainer/)).toHaveFocus()
+    expect(agentButton(/^Docs answerer/)).toHaveFocus()
   })
 
   it('a draft agent says it has not run and offers a test run', () => {
-    render(<AgentsScreen defaultSelectedId="agt_experiment-analyst" />)
+    render(<AgentsScreen defaultSelectedId="agt_feedback-analyst" />)
     expect(screen.getByRole('heading', { name: 'No runs yet' })).toBeInTheDocument()
     expect(screen.getAllByRole('button', { name: 'Start a test run' }).length).toBeGreaterThan(0)
   })
 
   it('with no agents, shows the empty state and the way to create the first', () => {
     render(<AgentsScreen agents={[]} />)
-    expect(screen.getByRole('heading', { name: 'No agents in Growth yet' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'No agents in Support yet' })).toBeInTheDocument()
     expect(screen.queryByRole('region', { name: 'All agents' })).not.toBeInTheDocument()
     expect(screen.getAllByRole('button', { name: 'Create agent' })).toHaveLength(2)
   })

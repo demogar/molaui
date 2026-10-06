@@ -91,7 +91,8 @@ export function Pagination({
     const to = pageSize ? Math.min(page * pageSize, total ?? page * pageSize) : page
     return (
       <nav aria-label={ariaLabel} data-slot="pagination" className={cn('flex items-center gap-3', className)} {...props}>
-        <p className="m-0 font-ui text-sm tabular-nums text-ink-2" aria-live="polite">
+        {/* `dir="auto"`, so "1–25 of 40" keeps its order in a right-to-left page. */}
+        <p dir="auto" className="m-0 font-ui text-sm tabular-nums text-ink-2" aria-live="polite">
           {pageSize && total !== undefined ? (
             <>
               <span className="font-semibold text-ink">

@@ -289,7 +289,7 @@ Tiles cut from one panel rather than four floating cards: one ink keyline around
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `columns` | `2 \| 3 \| 4 \| 5` | `4` | Columns at the widest breakpoint. Tiles wrap down to two, then one. |
+| `columns` | `2 \| 3 \| 4 \| 5` | `4` | Columns when there is room for them. Tiles wrap down to two, then one. |
 
 Types: `StatDelta`, `StatGroupProps`, `StatProps`
 
@@ -492,6 +492,8 @@ When not to:
 - Don’t: Let a coloured dot alone carry a state.
 - Do: Use soft badges down a column.
 - Don’t: Fill a column with solid badges; fifty solid statuses read as a quilt.
+- Do: Map a stopped or cancelled state to neutral; a person chose it.
+- Don’t: Show a cancellation in gold; warn is for work that is degraded or waiting on someone.
 
 Content:
 - One or two words in sentence case, with no punctuation: “Succeeded”, “Needs review”.
@@ -535,7 +537,7 @@ A status mark. Small, flat, cut — a scrap of the layer that says what state so
 
 #### `recommendationVariants` (function)
 
-The editorial recommendation scale from Must Do Panama, where this system was born — kept as lineage, and because "how strongly do we stand behind this" is a scale a growth or knowledge tool also has. Gold is the layer a mola reveals last and least, so gold is `essential`.
+The editorial recommendation scale of the editorial system this grew out of — kept as lineage, and because "how strongly do we stand behind this" is a scale a support or knowledge tool also has. Gold is the layer a mola reveals last and least, so gold is `essential`.
 
 Types: `BadgeProps`, `BadgeTone`, `RecommendationBadgeProps`, `RecommendationLevel`, `StatusDotProps`
 
@@ -650,7 +652,7 @@ When not to:
 - A person or agent without a photo; initials stand in. Use Avatar.
 
 Content:
-- label is the kind, “Chart” or “Preview”; name is the thing, “Retention by cohort”.
+- label is the kind, “Chart” or “Preview”; name is the thing, “Tickets by plan”.
 - alt says what is missing, “No data yet: run latency by agent”, because it is announced in place of the content.
 
 #### `Placeholder` (component)
@@ -660,8 +662,8 @@ The slot where something will go and has not yet: a photograph that has not been
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `alt` (required) | `string` |  | Announced in place of the missing content. |
-| `name` (required) | `string` |  | What it would show — "Panama Canal", "Retention by cohort". |
-| `label` | `string` | `Placeholder` | The kind of thing that goes here — "Photography", "Chart", "Preview". |
+| `name` (required) | `string` |  | What it would show — "Account logo", "Tickets by plan". |
+| `label` | `string` | `Placeholder` | The kind of thing that goes here — "Image", "Chart", "Preview". |
 | `tone` | `"default" \| "deep"` | `default` |  |
 
 Types: `PlaceholderProps`
@@ -2365,7 +2367,7 @@ The confirmation for an action that destroys something. Built on Base UI's Alert
 | `band` | `"rojo" \| "anil" \| "verde" \| "oro"` | `oro` | The layer revealed in the top seam. |
 | `className` | `string` |  |  |
 | `description` | `ReactNode` |  |  |
-| `footer` | `ReactNode` |  | Action row, right-aligned under the body. Usually a `ghost` cancel and one primary. |
+| `footer` | `ReactNode` |  | Action row under the body: right-aligned, or stacked full width with the last action on top when the row is under 24rem. Usually a `ghost` cancel and one primary. |
 | `hideClose` | `boolean` | `false` | Hide the corner close button. Only when the footer carries an explicit way out. |
 | `size` | `"sm" \| "lg" \| "md" \| null` |  |  |
 
@@ -2921,7 +2923,7 @@ When not to:
 
 - Do: Show elapsed time that keeps counting on the active step, with the working relleno under it.
 - Don’t: Add a percentage or a spinner to a run; it has no knowable total, and the system has no spinner by design.
-- Do: Title each step in words, “Break the result down by cohort”, and put the tool’s literal name in its detail.
+- Do: Title each step in words, “Break the result down by plan”, and put the tool’s literal name in its detail.
 - Don’t: Title a step with a raw tool name or “Step 4”; the spine already numbers the steps.
 
 Content:
@@ -2974,8 +2976,8 @@ When not to:
 - Don’t: Show the diff alone and leave the reviewer to guess why the agent made the change.
 
 Content:
-- Title the change by what it does, “Roll variant B out to beginners”, not by the files it touches.
-- Name a record by its type and key, so each field change has an owner: “Feature flag onboarding_puzzle_rush”.
+- Title the change by what it does, “Roll the help panel out to Starter”, not by the files it touches.
+- Name a record by its type and key, so each field change has an owner: “Feature flag help_panel_v2”.
 - A reason for a no says what is wrong and what would make it acceptable, because the agent acts on it.
 
 #### `ChangeCount` (component)
@@ -2994,7 +2996,7 @@ An agent proposes a change; a person reviews it and decides.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `agent` (required) | `string` |  | Who proposed it — "Cayuco research agent". |
-| `title` (required) | `ReactNode` |  | What the change does, in words — "Roll variant B out to beginners". |
+| `title` (required) | `ReactNode` |  | What the change does, in words — "Roll the help panel out to Starter". |
 | `children` | `ReactNode` |  | The change itself: `FileDiff`s, `FieldChanges`, or both. |
 | `decision` | `ChangeDecision \| null` |  | Controlled decision. `null` means undecided. |
 | `defaultDecision` | `ChangeDecision \| null` | `null` | Uncontrolled starting decision. |
@@ -3011,7 +3013,7 @@ A change to a record rather than a file: a feature flag, a customer's plan, a sc
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `changes` (required) | `readonly FieldChange[]` |  |  |
-| `title` (required) | `ReactNode` |  | What the record is — "Feature flag onboarding_puzzle_rush". |
+| `title` (required) | `ReactNode` |  | What the record is — "Feature flag help_panel_v2". |
 | `headingLevel` | `3 \| 4 \| 5` | `4` |  |
 
 #### `FileDiff` (component)
@@ -3061,7 +3063,7 @@ When not to:
 - Don’t: Put a generic disclaimer under every answer; people stop reading it by the second day.
 
 Content:
-- Write the basis as a short fact in lower case, since it follows the level: “sources disagree on the cohort size”.
+- Write the basis as a short fact in lower case, since it follows the level: “sources disagree on the segment size”.
 - Title an UncertaintyNote with the claim, “Unverified figure”, not with “Warning” or “Note”.
 
 #### `Confidence` (component)
@@ -3284,7 +3286,7 @@ What stopped a run, said plainly, with the way back next to it.
 | `onRetryFromStep` | `(() => void)` |  |  |
 | `retryAt` | `number \| Date` |  | When a retry is allowed (or will happen). Shows a countdown. |
 | `runId` | `string` |  | The run id, for the copied details. |
-| `step` | `string` |  | The step that stopped, in words — "Break the result down by cohort". |
+| `step` | `string` |  | The step that stopped, in words — "Break the result down by plan". |
 | `stepCount` | `number` |  |  |
 | `stepNumber` | `number` |  | The step's position, counted from 1. Shown as "step 4 of 5" and used to name *Retry from step 4*. |
 | `tool` | `string` |  | The tool that failed, exactly as the model called it. |
@@ -3524,7 +3526,7 @@ When not to:
 - Don’t: Rewrite payloads as prose; operators inspect them and paste them into tickets.
 
 Content:
-- The title says what the call is for, “Experiment results”; the name stays exactly as the model called it.
+- The title says what the call is for, “Rollout results”; the name stays exactly as the model called it.
 - Name approval buttons by the action: “Approve rollout” and “Deny”, not “Yes” and “No”.
 - Keep the approval reason to a sentence or two: what changes, for whom, and whether it can be undone.
 
@@ -3545,7 +3547,7 @@ One tool invocation: what the model asked a system to do, with what, and what ca
 | `onRetry` | `(() => void)` |  |  |
 | `result` | `unknown` |  | What came back. Objects as JSON; strings as text. |
 | `startedAt` | `number \| Date` |  |  |
-| `title` | `string` |  | What the call is for, in words — "Query experiment results". Optional; the name is always shown. |
+| `title` | `string` |  | What the call is for, in words — "Query rollout results". Optional; the name is always shown. |
 
 #### `ToolCallGroup` (component)
 

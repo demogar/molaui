@@ -10,7 +10,7 @@ import { AttachmentChip, PromptInput } from './prompt-input'
 const meta = {
   title: 'AI/Prompt input',
   component: PromptInput,
-  args: { label: 'Message Cayuco', onSubmit: fn(), onStop: fn(), placeholder: 'Ask about an experiment, a metric, a doc…' },
+  args: { label: 'Message Cayuco', onSubmit: fn(), onStop: fn(), placeholder: 'Ask about a rollout, a metric, a doc…' },
   argTypes: {
     status: { control: 'inline-radio', options: ['idle', 'generating', 'offline'] },
     submitOn: { control: 'inline-radio', options: ['enter', 'mod-enter'] },
@@ -47,7 +47,7 @@ export const Default: Story = {
 }
 
 function WithFiles(args: React.ComponentProps<typeof PromptInput>) {
-    const [files, setFiles] = React.useState(['exp-0412_assignments.csv', 'onboarding-v3-brief.md'])
+    const [files, setFiles] = React.useState(['ro-0412_assignments.csv', 'help-panel-v2-brief.md'])
     return (
       <PromptInput
         {...args}
@@ -72,7 +72,7 @@ export const WithAttachments: Story = {
 }
 
 export const Generating: Story = {
-  args: { status: 'generating', defaultValue: 'And for the imported-rating cohort?', toolbar: <ModelPicker /> },
+  args: { status: 'generating', defaultValue: 'And for Enterprise workspaces?', toolbar: <ModelPicker /> },
 }
 
 export const Offline: Story = {

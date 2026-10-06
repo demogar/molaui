@@ -77,7 +77,7 @@ export const WithIcons: Story = {
         Start run
       </Button>
       <Button {...args} variant="secondary" icon={<Plus />}>
-        New experiment
+        New rollout
       </Button>
       <Button {...args} variant="secondary" withArrow>
         Open trace

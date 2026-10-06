@@ -57,7 +57,7 @@ export const Comfortable: Story = {
   render: () => (
     <ChipGroup legend="Audience" className="max-w-md">
       <Chip size="comfortable" defaultChecked>
-        New players in their first week
+        New workspaces in their first week
       </Chip>
       <Chip size="comfortable">Returning after 30 days away</Chip>
     </ChipGroup>

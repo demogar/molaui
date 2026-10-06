@@ -175,7 +175,7 @@ export function CodeBlock({
           aria-labelledby={labelId}
           className={cn(
             'm-0 min-w-0 flex-1 p-3 literal text-xs leading-(--code-lh) text-ink',
-            'focus-visible:shadow-[inset_0_0_0_2px_var(--ink)]',
+            'focus-visible:shadow-[var(--focus-ring-inset)]',
             wrap ? 'break-words whitespace-pre-wrap' : 'whitespace-pre',
           )}
         >

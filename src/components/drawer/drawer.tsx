@@ -8,6 +8,7 @@ import * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { IconButton } from '../button'
+import { actionRowClasses } from '../dialog/dialog'
 
 /**
  * A panel that slides in from an edge of the page: the run details beside a
@@ -230,11 +231,11 @@ export function DrawerContent({
           {footer ? (
             <div
               className={cn(
-                'mt-auto flex shrink-0 flex-wrap items-center justify-end gap-2 border-t border-keyline px-6 pt-4',
+                '@container mt-auto shrink-0 border-t border-keyline px-6 pt-4',
                 bottom ? 'pb-[calc(1rem+env(safe-area-inset-bottom,0px))]' : 'pb-4',
               )}
             >
-              {footer}
+              <div className={cn(actionRowClasses)}>{footer}</div>
             </div>
           ) : null}
         </DrawerPrimitive.Popup>

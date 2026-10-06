@@ -33,15 +33,15 @@ function Tones() {
   const toast = useToast()
   return (
     <div className="flex flex-wrap gap-2">
-      <Button variant="secondary" onClick={() => toast.show({ title: 'Draft saved', description: 'Experiment “Streak nudge v3”.' })}>
+      <Button variant="secondary" onClick={() => toast.show({ title: 'Draft saved', description: 'Saved reply “Refund window v3”.' })}>
         Neutral
       </Button>
       <Button
         variant="secondary"
         onClick={() =>
           toast.success({
-            title: 'Experiment launched',
-            description: 'Rolling out to 5% of eligible players.',
+            title: 'Rollout started',
+            description: 'Showing the help panel to 5% of new workspaces.',
             action: { label: 'View', onClick: () => {} },
           })
         }
@@ -54,7 +54,7 @@ function Tones() {
       <Button
         variant="secondary"
         onClick={() =>
-          toast.error({ title: 'Deploy failed', description: 'Tool “search_games” timed out after 30s.', action: { label: 'Retry', onClick: () => {} } })
+          toast.error({ title: 'Deploy failed', description: 'Tool “search_tickets” timed out after 30s.', action: { label: 'Retry', onClick: () => {} } })
         }
       >
         Danger

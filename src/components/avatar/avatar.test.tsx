@@ -6,7 +6,7 @@ import { Avatar, AvatarGroup, avatarLayer, initials } from './avatar'
 describe('initials', () => {
   it.each([
     ['Ana Sofía Pérez', 'AP'],
-    ['  coach  ', 'CO'],
+    ['  docs  ', 'DO'],
     ['X', 'X'],
     ['', '?'],
   ])('%s → %s', (name, expected) => {

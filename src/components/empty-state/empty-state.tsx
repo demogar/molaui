@@ -17,7 +17,7 @@ import { cn } from '../../lib/cn'
  *
  * Four variants, because they are four different conversations with the
  * operator and conflating them is how an empty filter result ends up telling
- * someone to "create your first experiment":
+ * someone to "create your first saved reply":
  *
  *   empty          nothing exists yet — the action creates the first one
  *   no-results     things exist, the filter hides them — the action clears it

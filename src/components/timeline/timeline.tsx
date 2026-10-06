@@ -5,7 +5,7 @@ import { cn } from '../../lib/cn'
 
 /**
  * A vertical sequence drawn as a spine beside the events it connects: an
- * audit log, a deploy history, the stages of an experiment.
+ * audit log, a deploy history, the stages of a rollout.
  *
  * Always an `<ol>`. The order is the content, and a screen reader should say
  * "3 of 7" while a sighted reader follows the line.

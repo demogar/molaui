@@ -1,10 +1,11 @@
 import { Collapsible } from '@base-ui/react/collapsible'
-import { Check, ChevronRight, RotateCcw, ShieldAlert, Wrench, X } from 'lucide-react'
+import { Check, Plus, RotateCcw, ShieldAlert, Wrench, X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
 import { Button } from '../../button'
 import { CodeBlock } from '../../code'
+import { FailureReportedContext } from '../run-error/failure-reported'
 import { RunStatus, type RunStatusValue } from '../run-status'
 
 export interface ToolCallApproval {
@@ -19,7 +20,7 @@ export interface ToolCallApproval {
 export interface ToolCallProps extends Omit<React.ComponentProps<'div'>, 'children'> {
   /** The tool's identifier, exactly as the model called it. */
   name: string
-  /** What the call is for, in words — "Query experiment results". Optional; the name is always shown. */
+  /** What the call is for, in words — "Query rollout results". Optional; the name is always shown. */
   title?: string
   status: RunStatusValue
   startedAt?: number | Date
@@ -89,6 +90,9 @@ export function ToolCall({
   // Always controlled: a live call goes from running to failed, and passing
   // `open` only once forced switched Base UI from uncontrolled to controlled.
   const [openState, setOpenState] = React.useState(defaultOpen)
+  // Inside an AgentRun step whose RunError already raised the alarm, the
+  // error is this call's record, not a second alert.
+  const reported = React.useContext(FailureReportedContext)
 
   return (
     <div
@@ -104,15 +108,13 @@ export function ToolCall({
           className={cn(
             'group/trigger flex w-full min-h-(--control-h) items-center gap-2.5 px-3 py-2 text-start',
             'transition-colors duration-(--motion-cut) ease-cut enabled:hover:bg-ink-soft',
-            'focus-visible:shadow-[inset_0_0_0_2px_var(--ink)] disabled:cursor-default',
+            'focus-visible:shadow-[var(--focus-ring-inset)] disabled:cursor-default',
           )}
         >
-          <ChevronRight
+          <Plus
             aria-hidden
             className={cn(
-              'size-3.5 shrink-0 text-ink-muted transition-transform duration-(--motion-cut) ease-cut',
-              // Mirrored in RTL, so opening turns it the other way to point down.
-              'rtl:-scale-x-100 group-data-[panel-open]/trigger:rotate-90 rtl:group-data-[panel-open]/trigger:-rotate-90',
+              'size-3.5 shrink-0 text-ink-muted transition-transform duration-(--motion-base) ease-cut group-data-[panel-open]/trigger:rotate-45',
               (!hasBody || forcedOpen) && 'invisible',
             )}
           />
@@ -133,9 +135,10 @@ export function ToolCall({
           <Collapsible.Panel className="border-t border-keyline">
             <div className="flex flex-col gap-3 p-3">
               {waiting ? <ApprovalBlock approval={approval} /> : null}
-              {failed ? <ErrorBlock status={status} error={error} onRetry={onRetry} /> : null}
+              {failed && !reported ? <ErrorBlock status={status} error={error} onRetry={onRetry} /> : null}
               {args !== undefined ? <Payload label="arguments" value={args} /> : null}
               {result !== undefined ? <Payload label="result" value={result} /> : null}
+              {failed && reported && error ? <Payload label="error" value={error} wrap /> : null}
             </div>
           </Collapsible.Panel>
         ) : null}
@@ -144,7 +147,7 @@ export function ToolCall({
   )
 }
 
-function Payload({ label, value }: { label: string; value: unknown }) {
+function Payload({ label, value, wrap }: { label: string; value: unknown; wrap?: boolean }) {
   const isText = typeof value === 'string'
   return (
     <CodeBlock
@@ -152,6 +155,7 @@ function Payload({ label, value }: { label: string; value: unknown }) {
       language={isText ? 'text' : 'json'}
       code={isText ? value : JSON.stringify(value, null, 2)}
       maxHeight="16rem"
+      wrap={wrap}
     />
   )
 }

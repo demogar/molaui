@@ -76,12 +76,12 @@ export const WaitingForFirstToken: Story = {
 
 export const WithCode: Story = {
   args: {
-    text: 'Use the segment filter on the results query:\n\n```sql\nselect cohort, avg(d7_retained)\nfrom exp_0412_assignments\ngroup by cohort;\n```\n\nThen compare against `first_rated_game_s`.',
+    text: 'Use the segment filter on the results query:\n\n```sql\nselect plan, avg(tickets_7d)\nfrom ro_0412_assignments\ngroup by plan;\n```\n\nThen compare against `time_to_first_reply_s`.',
   },
 }
 
 export const Muted: Story = {
-  args: { tone: 'muted', text: 'The question has two parts: did retention improve, and is it safe to ship.' },
+  args: { tone: 'muted', text: 'The question has two parts: did tickets drop, and is it safe to roll out.' },
 }
 
 // Twelve tokens every 16 ms: 20,000 tokens in under half a minute, which is
@@ -106,7 +106,7 @@ function useFirehose(full: string, perTick = 12) {
 }
 
 const LONG = (() => {
-  const block = `${ANSWER}\n\n\`\`\`sql\nselect cohort, avg(d7_retained)\nfrom exp_0412_assignments\ngroup by cohort;\n\`\`\`\n\n`
+  const block = `${ANSWER}\n\n\`\`\`sql\nselect plan, avg(tickets_7d)\nfrom ro_0412_assignments\ngroup by plan;\n\`\`\`\n\n`
   let text = ''
   while (tokenize(text).length < 20_000) text += block
   return tokenize(text).slice(0, 20_000).join('')

@@ -1,5 +1,5 @@
 import { Collapsible } from '@base-ui/react/collapsible'
-import { Check, ChevronRight, Copy, RotateCcw, Square } from 'lucide-react'
+import { Check, Copy, Plus, RotateCcw, Square } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
@@ -15,6 +15,7 @@ import {
   type RunStatusValue,
 } from '../run-status'
 import { RunError, type RunErrorProps } from '../run-error'
+import { FailureReportedContext } from '../run-error/failure-reported'
 import { TokenUsage, type TokenUsageProps } from '../token-usage'
 
 export type AgentStepKind = 'reasoning' | 'tool' | 'message' | 'handoff' | 'approval'
@@ -210,7 +211,9 @@ export function AgentRun({
 
       <ol aria-label={`Steps of ${name}`} className="m-0 list-none p-4 pb-2">
         {steps.map((step, i) => (
-          <StepRow key={step.id} step={step} last={i === steps.length - 1} nextStarted={steps[i + 1]?.status !== 'queued'} />
+          <FailureReportedContext.Provider key={step.id} value={shown !== undefined && i === failedIndex}>
+            <StepRow step={step} last={i === steps.length - 1} nextStarted={steps[i + 1]?.status !== 'queued'} />
+          </FailureReportedContext.Provider>
         ))}
       </ol>
 
@@ -269,12 +272,10 @@ function StepRow({ step, last, nextStarted }: { step: AgentStep; last: boolean; 
                 'transition-colors duration-(--motion-cut) ease-cut enabled:hover:bg-ink-soft disabled:cursor-default',
               )}
             >
-              <ChevronRight
+              <Plus
                 aria-hidden
                 className={cn(
-                  'mt-[15px] size-3.5 shrink-0 text-ink-muted transition-transform duration-(--motion-cut) ease-cut',
-                  // Mirrored in RTL, so opening turns it the other way to point down.
-                  'rtl:-scale-x-100 group-data-[panel-open]/step:rotate-90 rtl:group-data-[panel-open]/step:-rotate-90',
+                  'mt-[15px] size-3.5 shrink-0 text-ink-muted transition-transform duration-(--motion-base) ease-cut group-data-[panel-open]/step:rotate-45',
                   forcedOpen && 'invisible',
                 )}
               />

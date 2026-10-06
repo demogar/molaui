@@ -23,7 +23,9 @@ import {
 /**
  * A date you can type or pick — the APG "date picker dialog" pattern: a text
  * input, a button beside it that opens a calendar in a dialog, and focus
- * returned to that button when the dialog closes.
+ * returned to that button when the dialog closes. The dialog is non-modal:
+ * Base UI's Popover, whose popup has `role="dialog"`, so the page behind it
+ * is not made inert for a date.
  *
  * ── typing is first-class ──
  * Someone who knows the date types it faster than they can page to it, and

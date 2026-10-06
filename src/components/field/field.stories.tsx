@@ -29,7 +29,7 @@ export const Default: Story = {
   render: () => (
     <div className="grid max-w-md gap-6">
       <Field label="Run name" hint="Shown in the run list and in alerts.">
-        {(control) => <Input {...control} placeholder="nightly-eval-openings" />}
+        {(control) => <Input {...control} placeholder="nightly-eval-refunds" />}
       </Field>
     </div>
   ),
@@ -39,7 +39,7 @@ export const States: Story = {
   render: () => (
     <div className="grid max-w-md gap-6">
       <Field label="Required" required>
-        {(control) => <Input {...control} defaultValue="growth-agent" />}
+        {(control) => <Input {...control} defaultValue="support-agent" />}
       </Field>
       <Field label="Webhook URL" optional hint="We POST the run summary here when it finishes.">
         {/* A URL reads left to right in every language, so the input is pinned LTR;
@@ -114,7 +114,7 @@ export const TextareaAutosize: Story = {
             autosize
             rows={3}
             defaultValue={
-              'You are the knowledge agent for the coaching team.\nAnswer from the attached opening repertoire only, and cite the source page for every claim.'
+              'You are the knowledge agent for the support team.\nAnswer from the attached help centre only, and cite the source page for every claim.'
             }
           />
         )}

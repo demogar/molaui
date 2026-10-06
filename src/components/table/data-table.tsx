@@ -409,7 +409,9 @@ export function DataTable<Row>({
               data-slot="data-table-bulk"
               className="flex h-full min-w-0 flex-1 items-center gap-2 bg-oro-soft ps-3 pe-1 shadow-[inset_3px_0_0_var(--ink)] rtl:shadow-[inset_-3px_0_0_var(--ink)] forced-selected"
             >
-              <span className="shrink-0 text-sm tabular-nums text-ink">
+              {/* `dir="auto"`: a count that opens with a digit is otherwise
+                  reordered in a right-to-left page, "runs selected 3". */}
+              <span dir="auto" className="shrink-0 text-sm tabular-nums text-ink">
                 <span className="font-semibold">{fmt(selectedCount)}</span> {nounFor(selectedCount)} selected
               </span>
               <Button variant="ghost" size="sm" icon={<X />} onClick={clearSelection}>
@@ -444,7 +446,7 @@ export function DataTable<Row>({
           {paginationVariant === 'pages' ? (
             // The compact pager says its range itself; the numbered one only
             // says where you are, so the range goes beside it.
-            <p className="m-0 me-auto text-sm tabular-nums text-ink-2">
+            <p dir="auto" className="m-0 me-auto text-sm tabular-nums text-ink-2">
               <span className="font-semibold text-ink">
                 {fmt((currentPage - 1) * pageSize + 1)}–{fmt(Math.min(currentPage * pageSize, total))}
               </span>{' '}

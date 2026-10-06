@@ -112,13 +112,13 @@ export function Message({
               'before:h-[3px] before:w-4 before:shrink-0 before:bg-[var(--band)] before:content-[""]',
               roleBand({ role }),
               // A tool's name is a machine literal, not a label: set in mono,
-              // in its own case, and allowed to break — `query_experiment` in
+              // in its own case, and allowed to break — `query_rollout` in
               // expanded caps overran the 8.5rem column into the message.
               role === 'tool' && 'literal text-xs normal-case tracking-normal',
             )}
           >
             {/* Break a tool name only at its own seams: a zero-width space after
-                each underscore, so `query_experiment` wraps as two words rather
+                each underscore, so `query_rollout` wraps as two words rather
                 than mid-word. */}
             {role === 'tool' ? name.replace(/_/g, '_\u200b') : name}
           </span>

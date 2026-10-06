@@ -22,14 +22,14 @@ export interface AgentRun {
 export const FIXTURE_NOW = new Date('2026-10-05T18:00:00Z')
 
 const AGENTS = [
-  'Opening explainer',
-  'Puzzle tagger',
+  'Docs answerer',
+  'Invoice checker',
   'Support triage',
-  'Lesson summariser',
-  'Cheat-report reviewer',
+  'Ticket summariser',
+  'Abuse-report reviewer',
   'Release-notes drafter',
-  'Coach feedback',
-  'Experiment analyst',
+  'Refund reviewer',
+  'Feedback analyst',
 ]
 const MODELS = ['cayuco-deep-3', 'cayuco-steady-3', 'cayuco-swift-2']
 /** Finished runs only: what is still running or queued is decided by recency. */

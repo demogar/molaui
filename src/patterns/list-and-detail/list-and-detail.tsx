@@ -65,7 +65,9 @@ const RUN_TONE: Record<RecentRunStatus, BadgeTone> = {
   succeeded: 'success',
   running: 'info',
   failed: 'danger',
-  cancelled: 'warn',
+  // A person stopped it: stated without alarm, as RunStatus does. Gold is
+  // for work that is waiting on someone.
+  cancelled: 'neutral',
 }
 
 const integer = new Intl.NumberFormat('en-US')
@@ -142,8 +144,8 @@ export function AgentsScreen({ agents = AGENTS, defaultSelectedId, defaultView =
     <PageHeader
       breadcrumb={
         <nav aria-label="Breadcrumb" className="text-xs text-ink-muted">
-          <a href="#growth" className="text-ink-2 underline decoration-keyline hover:text-ink">
-            Growth
+          <a href="#support" className="text-ink-2 underline decoration-keyline hover:text-ink">
+            Support
           </a>
           <span aria-hidden className="mx-1.5">
             /
@@ -152,7 +154,7 @@ export function AgentsScreen({ agents = AGENTS, defaultSelectedId, defaultView =
         </nav>
       }
       title="Agents"
-      description="The agents that work in the Growth workspace, what they run on and how they are doing."
+      description="The agents that work in the Support workspace, what they run on and how they are doing."
       actions={<Button icon={<Plus />}>Create agent</Button>}
     />
   )
@@ -163,7 +165,7 @@ export function AgentsScreen({ agents = AGENTS, defaultSelectedId, defaultView =
         {header}
         <div className="p-4 sm:p-6">
           <EmptyState
-            title="No agents in Growth yet"
+            title="No agents in Support yet"
             description="An agent answers questions and calls tools on the workspace’s behalf. Create one, try it on a few prompts, then set it live."
             actions={<Button icon={<Plus />}>Create agent</Button>}
             headingLevel={2}

@@ -75,7 +75,9 @@ export function Stat({ label, value, unit, delta, trend, hint, className, ...pro
       <dt className="rotulo text-ink-muted">{label}</dt>
       <dd className="m-0 flex flex-col gap-2">
         <span className="flex items-end justify-between gap-4">
-          <span className="flex min-w-0 items-baseline gap-1.5">
+          {/* A figure and its unit are one literal: `dir="auto"` keeps "97.8 %"
+              and "0.4 pt" in order in a right-to-left page. */}
+          <span dir="auto" className="flex min-w-0 items-baseline gap-1.5">
             <span className="font-display text-2xl leading-none font-bold tracking-display tabular-nums wdth-display text-ink">
               {value}
             </span>
@@ -102,7 +104,9 @@ function StatDeltaLine({ delta }: { delta: StatDelta }) {
     <span className="flex items-center gap-1.5 text-xs">
       <span className={cn('inline-flex items-center gap-0.5 font-semibold tabular-nums', SENTIMENT_TONE[sentiment])}>
         <Glyph aria-hidden className="size-3.5" strokeWidth={2.5} />
-        <span aria-hidden>{delta.value}</span>
+        <span aria-hidden dir="auto">
+          {delta.value}
+        </span>
       </span>
       {delta.period ? (
         <span aria-hidden className="text-ink-muted">
@@ -167,15 +171,17 @@ export function Sparkline({
 }
 
 export interface StatGroupProps extends React.ComponentProps<'dl'> {
-  /** Columns at the widest breakpoint. Tiles wrap down to two, then one. */
+  /** Columns when there is room for them. Tiles wrap down to two, then one. */
   columns?: 2 | 3 | 4 | 5
 }
 
+// Container widths, not viewport breakpoints: about 11rem a tile before the
+// next column is added.
 const COLUMNS = {
-  2: 'sm:grid-cols-2',
-  3: 'sm:grid-cols-2 lg:grid-cols-3',
-  4: 'sm:grid-cols-2 lg:grid-cols-4',
-  5: 'sm:grid-cols-3 lg:grid-cols-5',
+  2: '@md:grid-cols-2',
+  3: '@md:grid-cols-2 @2xl:grid-cols-3',
+  4: '@md:grid-cols-2 @3xl:grid-cols-4',
+  5: '@xl:grid-cols-3 @4xl:grid-cols-5',
 } as const
 
 /**
@@ -185,22 +191,29 @@ const COLUMNS = {
  *
  * The dividers are a 1px gap over a keyline ground rather than per-tile
  * borders, so they stay correct whatever the column count wraps to.
+ *
+ * Columns follow the width the group is given, not the window: a group in a
+ * side panel or a two-column page used to keep four columns at a desktop
+ * width and squeeze each tile to a sliver. The wrapper is the query
+ * container, because a grid cannot query its own width.
  */
 export function StatGroup({ columns = 4, className, children, ...props }: StatGroupProps) {
   return (
     <StatGroupContext.Provider value={true}>
-      <dl
-        data-slot="stat-group"
-        className={cn(
-          'm-0 grid grid-cols-1 gap-px bg-keyline shadow-cut',
-          '[&>[data-slot=stat]]:bg-cloth-pale',
-          COLUMNS[columns],
-          className,
-        )}
-        {...props}
-      >
-        {children}
-      </dl>
+      <div className="@container">
+        <dl
+          data-slot="stat-group"
+          className={cn(
+            'm-0 grid grid-cols-1 gap-px bg-keyline shadow-cut',
+            '[&>[data-slot=stat]]:bg-cloth-pale',
+            COLUMNS[columns],
+            className,
+          )}
+          {...props}
+        >
+          {children}
+        </dl>
+      </div>
     </StatGroupContext.Provider>
   )
 }

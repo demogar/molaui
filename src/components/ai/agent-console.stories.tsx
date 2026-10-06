@@ -27,7 +27,7 @@ const meta = {
         component: [
           'Every AI component, composed into a working console for **Cayuco**, a fictional internal knowledge-and-agent platform. Ask it something (or pick a suggestion): the agent plans, calls two tools, and streams a cited answer, while the run panel on the right shows the same work as a timeline with live clocks and token usage. Press **Stop** mid-answer to see cancellation; the transcript keeps what arrived.',
           '',
-          'The demo content — a puzzle-rush onboarding experiment — is invented, and the answer is scripted: there is no model behind this page.',
+          'The demo content — an in-app help panel rollout — is invented, and the answer is scripted: there is no model behind this page.',
         ].join('\n'),
       },
     },
@@ -49,7 +49,7 @@ interface Turn {
 }
 
 const USAGE_PER_TURN = { input: 18_420, output: 1_204, cached: 12_800, costUsd: 0.0731 }
-const SUGGESTIONS = [OPERATOR_QUESTION, 'Which guardrails did onboarding v3 define, and did any of them regress?']
+const SUGGESTIONS = [OPERATOR_QUESTION, 'Which guardrails did help panel v2 define, and did any of them regress?']
 
 const cite = citationRenderer(SOURCES)
 
@@ -90,8 +90,8 @@ function AssistantTurn({ t, base, stopped, onRetry, feedback, onFeedback }: {
         />
         {t >= query.start ? (
           <ToolCall
-            name="query_experiment"
-            title="Experiment results"
+            name="query_rollout"
+            title="Rollout results"
             status={toolStatus(query)}
             startedAt={base + query.start}
             endedAt={t >= query.end ? base + query.end : stopped ? base + t : undefined}
@@ -102,12 +102,12 @@ function AssistantTurn({ t, base, stopped, onRetry, feedback, onFeedback }: {
         {t >= brief.start ? (
           <ToolCall
             name="search_docs"
-            title="Experiment brief"
+            title="Rollout brief"
             status={toolStatus(brief)}
             startedAt={base + brief.start}
             endedAt={t >= brief.end ? base + brief.end : stopped ? base + t : undefined}
-            args={{ query: 'onboarding v3 guardrails', top_k: 3 }}
-            result={t >= brief.end ? '3 passages · docs.cayuco.internal/briefs/onboarding-v3' : undefined}
+            args={{ query: 'help panel v2 guardrails', top_k: 3 }}
+            result={t >= brief.end ? '3 passages · docs.cayuco.internal/briefs/help-panel-v2' : undefined}
           />
         ) : null}
         {t >= answer.start ? (
@@ -172,7 +172,7 @@ function AgentConsole() {
           <p className="m-0 font-display text-base font-bold tracking-display wdth-display">Cayuco</p>
           <span className="rotulo text-ink-muted">Knowledge agent</span>
         </div>
-        <span className="literal hidden text-xs text-ink-muted sm:inline">workspace: growth-analytics</span>
+        <span className="literal hidden text-xs text-ink-muted sm:inline">workspace: support-ops</span>
       </header>
 
       <div className="grid min-h-0 grid-cols-1 lg:grid-cols-[minmax(0,1fr)_400px]">
@@ -181,10 +181,10 @@ function AgentConsole() {
             <div className="flex flex-1 items-center justify-center p-6">
               <div className="flex max-w-lg flex-col gap-5">
                 <h1 className="m-0 font-display text-2xl leading-tight font-bold tracking-display wdth-display">
-                  Ask about an experiment, a metric or a brief.
+                  Ask about a rollout, a metric or a brief.
                 </h1>
                 <p className="m-0 font-text text-lg text-ink-2">
-                  Cayuco reads the experiment warehouse and the docs archive, cites what it used, and asks before it changes anything.
+                  Cayuco reads the rollout warehouse and the docs archive, cites what it used, and asks before it changes anything.
                 </p>
                 <div className="flex flex-col items-start gap-2">
                   {SUGGESTIONS.map((s) => (
@@ -226,7 +226,7 @@ function AgentConsole() {
             <PromptInput
               className="mx-auto max-w-3xl"
               label="Message Cayuco"
-              placeholder="Ask about an experiment, a metric, a brief…"
+              placeholder="Ask about a rollout, a metric, a brief…"
               value={draft}
               onValueChange={setDraft}
               status={generating ? 'generating' : 'idle'}

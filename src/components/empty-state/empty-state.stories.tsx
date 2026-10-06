@@ -8,9 +8,9 @@ const meta = {
   title: 'Components/Feedback/Empty state',
   component: EmptyState,
   args: {
-    title: 'No experiments yet',
-    description: 'An experiment ships a change to a slice of players and measures what it does.',
-    actions: <Button icon={<Plus />}>New experiment</Button>,
+    title: 'No saved replies yet',
+    description: 'A saved reply answers a common question in one click, in the same words every time.',
+    actions: <Button icon={<Plus />}>New saved reply</Button>,
   },
   argTypes: {
     variant: { control: 'inline-radio', options: ['empty', 'no-results', 'error', 'no-permission'] },
@@ -20,7 +20,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A condition, not an apology. The panel is packed with **relleno** — what a mola does with an area that has nothing in it yet — and the words sit on a raised plate above it. Four variants, because they are four different conversations: an empty filter result must never tell someone to “create your first experiment”.',
+          'A condition, not an apology. The panel is packed with **relleno** — what a mola does with an area that has nothing in it yet — and the words sit on a raised plate above it. Four variants, because they are four different conversations: an empty filter result must never tell someone to “create your first saved reply”.',
       },
     },
   },

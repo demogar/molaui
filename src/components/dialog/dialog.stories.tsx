@@ -3,6 +3,7 @@ import { Trash2 } from 'lucide-react'
 import { fn } from 'storybook/test'
 
 import { Button } from '../button'
+import { Field, Input } from '../field'
 import { AlertDialog, Dialog, DialogClose, DialogContent, DialogTrigger } from './dialog'
 
 const meta = {
@@ -17,11 +18,11 @@ const meta = {
     docs: {
       description: {
         component:
-          'A panel cut out of the page and laid on top of it. The top seam is the full **relleno** — the layer colour slit with ink — which is how a mola marks where one layer ends; it says “you are inside something” without a title bar or a tint. The backdrop recedes toward the page’s own cloth rather than toward grey. Focus trap, scroll lock, Escape and the inert page come from Base UI; the corner close is always present, because a touch screen-reader user has no Escape key.',
+          'A panel cut out of the page and laid on top of it. The top seam is the full **relleno** — the layer colour slit with ink — which is how a mola marks where one layer ends; it says “you are inside something” without a title bar or a tint. The backdrop recedes toward the page’s own cloth rather than toward grey. Focus trap, scroll lock, Escape and the inert page come from Base UI; the corner close is always present, because a touch screen-reader user has no Escape key. The action row stacks full width, the confirm on top, when it is narrower than 24rem — so a small alert dialog never strands its confirm on a second line.',
       },
     },
   },
-  args: { title: 'Rename experiment' },
+  args: { title: 'Rename rollout' },
 } satisfies Meta<typeof DialogContent>
 
 export default meta
@@ -30,10 +31,10 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   render: () => (
     <Dialog>
-      <DialogTrigger render={<Button variant="secondary">Rename experiment</Button>} />
+      <DialogTrigger render={<Button variant="secondary">Rename rollout</Button>} />
       <DialogContent
-        title="Rename experiment"
-        description="The slug stays the same, so links to this experiment keep working."
+        title="Rename rollout"
+        description="The slug stays the same, so links to this rollout keep working."
         footer={
           <>
             <DialogClose render={<Button variant="ghost">Cancel</Button>} />
@@ -41,13 +42,7 @@ export const Default: Story = {
           </>
         }
       >
-        <label className="block">
-          <span className="mb-2 block rotulo text-ink-2">Name</span>
-          <input
-            defaultValue="Puzzle streak nudge — v3"
-            className="h-(--control-h) w-full rounded-none border-0 bg-cloth-pale px-3 text-ink shadow-cut focus:shadow-[var(--focus-ring)] focus:outline-none"
-          />
-        </label>
+        <Field label="Name">{(control) => <Input {...control} defaultValue="Help panel for new workspaces — v2" />}</Field>
       </DialogContent>
     </Dialog>
   ),

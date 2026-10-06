@@ -132,9 +132,9 @@ import { ToolCall } from '@demogar/mola-ui'
   <ToolCall
     name="update_feature_flag"
     status="waiting"
-    args={{ flag: 'onboarding_v3', percent: 100 }}
+    args={{ flag: 'help_panel_v2', percent: 100 }}
     approval={{
-      reason: 'Changes a live flag for every new player.',
+      reason: 'Changes a live flag for every new workspace.',
       onApprove: approve,
       onDeny: deny,
     }}

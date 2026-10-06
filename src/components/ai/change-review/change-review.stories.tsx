@@ -13,7 +13,7 @@ const meta = {
   title: 'AI/Change review',
   component: ChangeReview,
   args: {
-    title: 'Roll variant B out to beginners',
+    title: 'Roll the help panel out to Starter',
     agent: 'Cayuco research agent',
     model: 'cayuco-deep-3',
     summary: <p className="m-0">{CHANGE_SUMMARY}</p>,
@@ -44,9 +44,9 @@ type Story = StoryObj<typeof meta>
 
 const files = (layout: 'unified' | 'split' = 'unified') => (
   <>
-    <FieldChanges title="Feature flag onboarding_puzzle_rush" changes={FLAG_CHANGES} />
-    <FileDiff path="flags/onboarding_puzzle_rush.yaml" diff={FLAG_DIFF} layout={layout} />
-    <FileDiff path="dashboards/onboarding.yaml" previousPath="dashboards/onboarding-v2.yaml" kind="renamed" diff={DASHBOARD_DIFF} layout={layout} />
+    <FieldChanges title="Feature flag help_panel_v2" changes={FLAG_CHANGES} />
+    <FileDiff path="flags/help_panel_v2.yaml" diff={FLAG_DIFF} layout={layout} />
+    <FileDiff path="dashboards/help-panel.yaml" previousPath="dashboards/help-panel-v1.yaml" kind="renamed" diff={DASHBOARD_DIFF} layout={layout} />
   </>
 )
 
@@ -84,7 +84,7 @@ export const Rejected: Story = {
     reviewer: 'M. Herrera',
     defaultDecision: {
       status: 'rejected',
-      reason: 'The guardrail already moved the wrong way. We ship nothing until the first-game delay is understood.',
+      reason: 'The guardrail already moved the wrong way. We roll out nothing until the slower first reply is understood.',
     },
   },
 }
@@ -99,14 +99,14 @@ function Controlled() {
         </Button>
       </div>
       <ChangeReview
-        title="Roll variant B out to beginners"
+        title="Roll the help panel out to Starter"
         agent="Cayuco research agent"
         model="cayuco-deep-3"
         reviewer="M. Herrera"
         decision={decision}
         onDecide={(status, reason) => setDecision({ status, ...(reason ? { reason } : {}) })}
       >
-        <FieldChanges title="Feature flag onboarding_puzzle_rush" changes={FLAG_CHANGES} />
+        <FieldChanges title="Feature flag help_panel_v2" changes={FLAG_CHANGES} />
       </ChangeReview>
     </div>
   )
@@ -126,15 +126,15 @@ export const TryIt: Story = {
 export const DiffOnly: StoryObj<typeof FileDiff> = {
   render: () => (
     <div className="flex flex-col gap-3">
-      <FileDiff path="flags/onboarding_puzzle_rush.yaml" diff={FLAG_DIFF} headingLevel={3} />
-      <FileDiff path="alerts/crash_free.yaml" kind="added" headingLevel={3} hunks={[{ oldStart: 0, newStart: 1, lines: [
-        { kind: 'add', text: 'metric: crash_free_sessions' },
-        { kind: 'add', text: 'threshold: 0.996' },
-        { kind: 'add', text: 'channel: growth-onboarding-alerts' },
+      <FileDiff path="flags/help_panel_v2.yaml" diff={FLAG_DIFF} headingLevel={3} />
+      <FileDiff path="alerts/escalation_rate.yaml" kind="added" headingLevel={3} hunks={[{ oldStart: 0, newStart: 1, lines: [
+        { kind: 'add', text: 'metric: escalation_rate' },
+        { kind: 'add', text: 'threshold: 0.04' },
+        { kind: 'add', text: 'channel: support-experience-alerts' },
       ] }]} />
-      <FileDiff path="flags/onboarding_v2_tooltip.yaml" kind="deleted" headingLevel={3} defaultCollapsed hunks={[{ oldStart: 1, newStart: 0, lines: [
-        { kind: 'remove', text: 'flag: onboarding_v2_tooltip' },
-        { kind: 'remove', text: 'owner: growth-onboarding' },
+      <FileDiff path="flags/help_panel_v1_tooltip.yaml" kind="deleted" headingLevel={3} defaultCollapsed hunks={[{ oldStart: 1, newStart: 0, lines: [
+        { kind: 'remove', text: 'flag: help_panel_v1_tooltip' },
+        { kind: 'remove', text: 'owner: support-experience' },
       ] }]} />
     </div>
   ),

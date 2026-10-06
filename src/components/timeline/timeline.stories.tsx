@@ -14,13 +14,13 @@ const meta = {
     },
   },
   args: {
-    label: 'Experiment history',
+    label: 'Rollout history',
     items: [
-      { meta: 'Oct 1 · 09:12', title: 'Experiment drafted', description: 'Coach note after first loss — 10% of new players.', tone: 'neutral' },
-      { meta: 'Oct 1 · 15:40', title: 'Review approved', description: 'Guardrail added: support tickets per 1,000 players.', tone: 'success' },
-      { meta: 'Oct 2 · 08:00', title: 'Rollout paused', description: 'Coach agent latency above 6s at p95.', tone: 'warn' },
+      { meta: 'Oct 1 · 09:12', title: 'Rollout drafted', description: 'Help panel for new workspaces — 10% of them.', tone: 'neutral' },
+      { meta: 'Oct 1 · 15:40', title: 'Review approved', description: 'Guardrail added: escalations per 1,000 tickets.', tone: 'success' },
+      { meta: 'Oct 2 · 08:00', title: 'Rollout paused', description: 'Docs agent latency above 6s at p95.', tone: 'warn' },
       { meta: 'Oct 3 · 11:24', title: 'Rollback of agent v14', description: 'Prompt regression; restored v13.', tone: 'danger' },
-      { meta: 'Now', title: 'Collecting day-7 data', description: '4 of 7 days elapsed.', tone: 'active' },
+      { meta: 'Now', title: 'Collecting week-1 data', description: '4 of 7 days elapsed.', tone: 'active' },
     ],
   },
   decorators: [(Story) => <div className="max-w-md"><Story /></div>],
@@ -36,18 +36,18 @@ export const Flush: Story = { args: { gap: 'flush' } }
 export const Editorial: Story = {
   args: {
     size: 'editorial',
-    label: 'Route',
+    label: 'Incident',
     gap: 'spaced',
     items: [
-      { meta: 'Day 1–2', title: 'Panama City', description: 'Casco Viejo on foot, the canal at Miraflores before the midday heat.' },
-      { meta: 'Day 3', title: 'Boquete', description: 'Cloud forest, coffee farms, a morning on the Quetzal trail.' },
-      { meta: 'Day 4–5', title: 'Bocas del Toro', description: 'Water taxis between islands; snorkel the reef at Cayo Zapatilla.' },
+      { meta: 'Day 1', title: 'Refunds stall', description: 'Starter invoices stop syncing, and the refund queue grows all morning.' },
+      { meta: 'Day 2', title: 'Cause found', description: 'A billing webhook retried with an expired key; replays start at noon.' },
+      { meta: 'Day 3–4', title: 'Queue cleared', description: 'Every stalled refund is paid; each customer gets a written apology.' },
     ],
   },
   parameters: {
     docs: {
       description: {
-        story: 'The scale the component was born at, in Must Do Panama — kept for narrative sequences, with the reading voice for the notes.',
+        story: 'The scale the component was born at, in the editorial system this grew out of — kept for narrative sequences such as an incident write-up, with the reading voice for the notes.',
       },
     },
   },
@@ -58,7 +58,7 @@ export const Steps: StoryObj<typeof StepList> = {
     <StepList
       items={[
         { title: 'Freeze the agent version', note: 'Pin the prompt and model id so the rollback target is known.' },
-        { title: 'Shadow 5% of traffic', note: 'Compare answers with the current agent; nothing is shown to players.' },
+        { title: 'Shadow 5% of traffic', note: 'Compare answers with the current agent; nothing is shown to customers.' },
         { title: 'Ramp to 50%', note: 'Only if the guardrail holds for 48 hours.' },
         { title: 'Retire the old version' },
       ]}

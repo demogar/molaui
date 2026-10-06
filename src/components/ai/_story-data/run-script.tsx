@@ -49,12 +49,12 @@ export const RUN_SCRIPT: ScriptStep[] = [
   {
     id: 'query',
     kind: 'tool',
-    title: 'Query the experiment results',
+    title: 'Query the rollout results',
     start: 2400,
     end: 4300,
     render: (status, _p, base, s) => (
       <ToolCall
-        name="query_experiment"
+        name="query_rollout"
         status={status}
         startedAt={base + s.start}
         endedAt={status === 'succeeded' ? base + s.end : undefined}
@@ -66,7 +66,7 @@ export const RUN_SCRIPT: ScriptStep[] = [
   {
     id: 'brief',
     kind: 'tool',
-    title: 'Read the experiment brief',
+    title: 'Read the rollout brief',
     start: 4300,
     end: 5400,
     render: (status, _p, base, s) => (
@@ -75,8 +75,8 @@ export const RUN_SCRIPT: ScriptStep[] = [
         status={status}
         startedAt={base + s.start}
         endedAt={status === 'succeeded' ? base + s.end : undefined}
-        args={{ query: 'onboarding v3 guardrails', top_k: 3 }}
-        result={status === 'succeeded' ? '3 passages · docs.cayuco.internal/briefs/onboarding-v3' : undefined}
+        args={{ query: 'help panel v2 guardrails', top_k: 3 }}
+        result={status === 'succeeded' ? '3 passages · docs.cayuco.internal/briefs/help-panel-v2' : undefined}
       />
     ),
   },
@@ -131,7 +131,7 @@ export function staticSteps(
       {
         id: 'segments',
         kind: 'tool',
-        title: 'Break the result down by cohort',
+        title: 'Break the result down by plan',
         status: 'failed',
         durationMs: 412,
         detail: (
@@ -139,8 +139,8 @@ export function staticSteps(
             name="query_warehouse"
             status="failed"
             durationMs={412}
-            args={{ table: 'analytics.exp_0412_segments', group_by: 'cohort' }}
-            error='PermissionDenied: role "agent_readonly" lacks SELECT on analytics.exp_0412_segments'
+            args={{ table: 'analytics.ro_0412_segments', group_by: 'plan' }}
+            error='PermissionDenied: role "agent_readonly" lacks SELECT on analytics.ro_0412_segments'
           />
         ),
       },
@@ -153,16 +153,16 @@ export function staticSteps(
       {
         id: 'rollout',
         kind: 'approval',
-        title: 'Roll variant B out to beginners',
+        title: 'Roll the help panel out to Starter',
         status: 'waiting',
         startedAt: base + RUN_LENGTH,
         detail: (
           <ToolCall
             name="update_feature_flag"
             status="waiting"
-            args={{ flag: 'onboarding_puzzle_rush', variant: 'B', audience: 'self_rated_beginner', percent: 100 }}
+            args={{ flag: 'help_panel_v2', variant: 'panel', audience: 'plan_starter', percent: 100 }}
             approval={{
-              reason: 'It changes a live feature flag for every new beginner. The agent cannot undo this on its own.',
+              reason: 'It changes a live feature flag for every new Starter workspace. The agent cannot undo this on its own.',
               onApprove: fn(),
               onDeny: fn(),
             }}
@@ -228,21 +228,21 @@ export function stepWindow(id: string): { start: number; end: number } {
 }
 
 /* ── failure and recovery ────────────────────────────────────────────
- * The same run with a fourth step — a warehouse query by cohort — that is
+ * The same run with a fourth step — a warehouse query by plan — that is
  * denied on the first attempt. The failed frame is derived from the script
  * like every other frame, so retrying from that step is "carry on deriving
  * from the step's start time", and the steps before it keep the output they
  * already produced. */
 
-const SEGMENT_ARGS = { table: 'analytics.exp_0412_segments', group_by: 'cohort' }
-export const SEGMENT_ERROR = 'PermissionDenied: role "agent_readonly" lacks SELECT on analytics.exp_0412_segments'
+const SEGMENT_ARGS = { table: 'analytics.ro_0412_segments', group_by: 'plan' }
+export const SEGMENT_ERROR = 'PermissionDenied: role "agent_readonly" lacks SELECT on analytics.ro_0412_segments'
 
 export const RECOVERY_SCRIPT: ScriptStep[] = [
   ...RUN_SCRIPT.slice(0, 3),
   {
     id: 'segments',
     kind: 'tool',
-    title: 'Break the result down by cohort',
+    title: 'Break the result down by plan',
     start: 5400,
     end: 6600,
     render: (status, _p, base, s) => (
@@ -252,7 +252,7 @@ export const RECOVERY_SCRIPT: ScriptStep[] = [
         startedAt={base + s.start}
         endedAt={status === 'succeeded' ? base + s.end : undefined}
         args={SEGMENT_ARGS}
-        result={status === 'succeeded' ? { rows: 2, beginner: '+4.1 pts', imported_rating: '+0.4 pts' } : undefined}
+        result={status === 'succeeded' ? { rows: 2, starter: '-6.1 per 1k', enterprise: '-0.4 per 1k' } : undefined}
       />
     ),
   },

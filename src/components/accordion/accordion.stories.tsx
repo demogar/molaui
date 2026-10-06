@@ -49,7 +49,7 @@ export const WithMeta: Story = {
       </AccordionItem>
       <AccordionItem value="tools">
         <AccordionTrigger meta="6 tools">Tools</AccordionTrigger>
-        <AccordionPanel>search_kb, fetch_game, lookup_player, …</AccordionPanel>
+        <AccordionPanel>search_kb, fetch_ticket, lookup_account, …</AccordionPanel>
       </AccordionItem>
       <AccordionItem value="limits">
         <AccordionTrigger meta="Defaults">Limits</AccordionTrigger>

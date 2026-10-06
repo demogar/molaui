@@ -72,7 +72,7 @@ export const WithoutTrend: Story = {
   render: () => (
     <StatGroup columns={3}>
       <Stat label="Documents indexed" value="18,442" hint="Last sync 4 minutes ago" />
-      <Stat label="Open experiments" value="7" />
+      <Stat label="Open escalations" value="7" />
       <Stat label="Tokens this month" value="412.6" unit="M" />
     </StatGroup>
   ),

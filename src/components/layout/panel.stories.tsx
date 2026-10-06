@@ -21,7 +21,7 @@ const meta = {
     <Panel {...args} className="max-w-sm">
       <Heading level={3}>Weekly digest agent</Heading>
       <Text size="sm" tone={2} className="mt-2">
-        Summarises the week’s experiment results for the growth channel every Monday.
+        Summarises the week’s escalated tickets for the support channel every Monday.
       </Text>
       <Text size="xs" tone="muted" className="mt-3">
         Last run 2 h ago · 14 tool calls

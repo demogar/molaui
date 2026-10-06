@@ -48,7 +48,7 @@ export const Dirty: Story = {
 
 export const WithValidationErrors: Story = {
   name: 'With validation errors',
-  args: { defaultDraft: { name: '', slug: 'Growth Team', tokensPerRun: 250000 }, defaultValidated: true },
+  args: { defaultDraft: { name: '', slug: 'Support Team', tokensPerRun: 250000 }, defaultValidated: true },
   parameters: {
     docs: {
       description: {

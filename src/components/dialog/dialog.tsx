@@ -8,6 +8,7 @@ import * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { Button, IconButton } from '../button'
+import { fieldControlClasses, fieldControlSizes } from '../field/field-control'
 
 /**
  * A modal is a panel cut out of the page and laid on top of it, so it is the
@@ -71,7 +72,7 @@ export interface DialogContentProps
   /** The dialog's accessible name. Required: an unnamed modal is announced as "dialog" and nothing else. */
   title: React.ReactNode
   description?: React.ReactNode
-  /** Action row, right-aligned under the body. Usually a `ghost` cancel and one primary. */
+  /** Action row under the body: right-aligned, or stacked full width with the last action on top when the row is under 24rem. Usually a `ghost` cancel and one primary. */
   footer?: React.ReactNode
   /** The layer revealed in the top seam. */
   band?: Band
@@ -122,6 +123,19 @@ export function DialogContent({
   )
 }
 
+/**
+ * The action row of a dialog or drawer. Under 24rem of width it stacks:
+ * full-width buttons, the confirm on top and the way out under it. It used
+ * to wrap instead, so a small alert dialog with two longer labels ("Keep
+ * editing", "Discard changes") left the confirm alone on a second line,
+ * ragged against the first. Measured on the row's own width, not the
+ * window, because a small dialog is narrow on every screen.
+ */
+export const actionRowClasses = [
+  'flex flex-col-reverse gap-2 [&>*]:w-full',
+  '@sm:flex-row @sm:flex-wrap @sm:items-center @sm:justify-end @sm:[&>*]:w-auto',
+] as const
+
 const titleClasses = 'm-0 font-display text-xl font-bold leading-snug tracking-display wdth-display'
 const descriptionClasses = 'mt-1.5 mb-0 text-sm text-ink-2'
 
@@ -151,7 +165,13 @@ function DialogFrame({
         {close ? <div className="-mt-1 -me-2">{close}</div> : null}
       </div>
       {children ? <div className="scroll-cloth min-h-0 flex-1 overflow-y-auto px-6 pt-4 pb-2 text-sm">{children}</div> : null}
-      {footer ? <div className="mt-6 flex flex-wrap items-center justify-end gap-2 px-6 pb-6">{footer}</div> : <div className="pb-6" />}
+      {footer ? (
+        <div className="@container mt-6 px-6 pb-6">
+          <div className={cn(actionRowClasses)}>{footer}</div>
+        </div>
+      ) : (
+        <div className="pb-6" />
+      )}
     </>
   )
 }
@@ -286,11 +306,14 @@ export function AlertDialog({
                   autoComplete="off"
                   spellCheck={false}
                   disabled={pending}
+                  // The shared field classes, so it hovers, focuses and states
+                  // `pending` like every other input. The band follows the
+                  // dialog's tone: rojo only when the seam above is rojo.
                   className={cn(
-                    'literal h-(--control-h) w-full rounded-none border-0 bg-cloth-pale px-3 text-ink',
-                    'shadow-cut band-rojo [--cut-reveal:3px]',
-                    'transition-[box-shadow] duration-(--motion-cut) ease-cut',
-                    'hover:cut-band focus:shadow-[var(--focus-ring)] focus:outline-none',
+                    fieldControlClasses,
+                    fieldControlSizes.md,
+                    'literal',
+                    tone === 'danger' ? 'band-rojo' : 'band-oro',
                   )}
                 />
               </form>

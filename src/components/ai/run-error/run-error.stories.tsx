@@ -12,7 +12,7 @@ const meta = {
   title: 'AI/Run error',
   component: RunError,
   args: {
-    step: 'Break the result down by cohort',
+    step: 'Break the result down by plan',
     stepNumber: 4,
     stepCount: 5,
     tool: 'query_warehouse',
@@ -60,7 +60,7 @@ export const RateLimited: Story = {
     stepNumber: 4,
     stepCount: 4,
     tool: undefined,
-    error: '429 rate_limit_exceeded: 40,000 output tokens per minute for workspace growth-analytics',
+    error: '429 rate_limit_exceeded: 40,000 output tokens per minute for workspace support-ops',
     autoRetry: true,
   },
 }

@@ -85,26 +85,26 @@ export const Streamed: Story = {
 
 const LONG: Source = {
   id: 4,
-  title: 'Retention methodology: how day-7 is counted across time zones, reinstalls and merged accounts',
-  href: 'https://example.com/docs/metrics/d7-retention',
+  title: 'Ticket methodology: how tickets are counted across time zones, reopened threads and merged workspaces',
+  href: 'https://example.com/docs/metrics/tickets-per-1k',
   domain: 'docs.cayuco.internal',
   snippet:
-    'A player counts as retained on day 7 if they start at least one session between 144 and 192 hours after their first session, measured in UTC. Reinstalls keep the original first-session timestamp. Accounts merged within the window are counted once, under the older account, and the merged account’s sessions are attributed to it from the merge onwards.',
+    'A ticket counts towards a workspace’s first week if it is opened between 0 and 168 hours after the workspace is created, measured in UTC. Reopened threads keep the original ticket timestamp. Workspaces merged within the window are counted once, under the older workspace, and the merged workspace’s tickets are attributed to it from the merge onwards.',
   retrievedAt: '2026-10-05T14:02:08Z',
 }
 
 const BARE: Source = {
   id: 5,
   title: 'Guardrail dashboard',
-  href: 'https://example.com/dash/onboarding-guardrails',
+  href: 'https://example.com/dash/help-panel-guardrails',
   domain: 'dash.cayuco.internal',
 }
 
 export const LongSnippet: Story = {
   render: () => (
     <p className="m-0 max-w-prose font-text text-lg text-ink">
-      Day-7 retention is measured in UTC and counts merged accounts once
-      <Citation n={4} source={LONG} />, so the lift is not an artefact of reinstalls.
+      Tickets are counted in UTC and merged workspaces count once
+      <Citation n={4} source={LONG} />, so the drop is not an artefact of reopened threads.
     </p>
   ),
   parameters: {

@@ -22,10 +22,10 @@ const meta = {
     <Container {...args}>
       <Section>
         <SectionHeader
-          title="Experiments"
-          lead="Every test running on the growth platform, with its guardrails."
-          label="Growth platform"
-          actions={<Button size="sm">New experiment</Button>}
+          title="Rollouts"
+          lead="Every rollout running on the support platform, with its guardrails."
+          label="Support platform"
+          actions={<Button size="sm">New rollout</Button>}
         />
         <div className="h-32 bg-cloth-pale relleno-field shadow-cut" />
       </Section>

@@ -10,7 +10,7 @@ import { cn } from '../../lib/cn'
 import { chipVariants } from '../chip/chip'
 import { type FieldControlSize, fieldControlClasses, fieldControlSizes } from '../field/field-control'
 import { Label } from '../field/label'
-import { optionClasses } from '../select/select'
+import { optionClasses, optionDescriptionClasses } from '../select/select'
 
 /**
  * A select you can type into, for the lists too long to scroll: a model
@@ -141,7 +141,7 @@ function OptionRow({ option }: { option: ComboboxOption }) {
       <span className="col-start-2 min-w-0">
         <span className={cn('block truncate', option.literal && 'literal')}>{option.label}</span>
         {option.description ? (
-          <span className="block truncate text-xs font-normal opacity-80">{option.description}</span>
+          <span className={optionDescriptionClasses}>{option.description}</span>
         ) : null}
       </span>
     </ComboboxPrimitive.Item>
@@ -563,7 +563,7 @@ export function Autocomplete({
                   <span className="min-w-0">
                     <span className="block truncate">{option.label}</span>
                     {option.description ? (
-                      <span className="block truncate text-xs font-normal opacity-80">{option.description}</span>
+                      <span className={optionDescriptionClasses}>{option.description}</span>
                     ) : null}
                   </span>
                 </AutocompletePrimitive.Item>

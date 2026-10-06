@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { Bot, FileText, FlaskConical, Moon, Play, Plus, Search, Settings, Trash2 } from 'lucide-react'
+import { Bot, FileText, LifeBuoy, Moon, Play, Plus, Search, Settings, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { fn } from 'storybook/test'
 
@@ -12,7 +12,7 @@ const groups: CommandGroup[] = [
     heading: 'Actions',
     items: [
       { id: 'new-run', label: 'Start a new run', icon: <Play />, shortcut: ['⌘', 'R'], keywords: ['execute', 'invoke'], onSelect: fn() },
-      { id: 'new-exp', label: 'New experiment', icon: <Plus />, shortcut: ['⌘', 'E'], onSelect: fn() },
+      { id: 'new-rollout', label: 'New rollout', icon: <Plus />, shortcut: ['⌘', 'O'], onSelect: fn() },
       { id: 'theme', label: 'Toggle dark theme', icon: <Moon />, keywords: ['appearance', 'night'], onSelect: fn() },
       { id: 'purge', label: 'Purge knowledge index', icon: <Trash2 />, description: 'Owners only', disabled: true, onSelect: fn() },
     ],
@@ -21,14 +21,14 @@ const groups: CommandGroup[] = [
     heading: 'Agents',
     items: [
       { id: 'a1', label: 'knowledge-agent', description: 'Answers from the help centre', icon: <Bot />, onSelect: fn() },
-      { id: 'a2', label: 'game-review-agent', description: 'Annotates a finished game', icon: <Bot />, onSelect: fn() },
-      { id: 'a3', label: 'moderation-triage', description: 'Sorts fair-play reports', icon: <Bot />, onSelect: fn() },
+      { id: 'a2', label: 'refund-review-agent', description: 'Reviews a refund request', icon: <Bot />, onSelect: fn() },
+      { id: 'a3', label: 'abuse-triage', description: 'Sorts abuse reports', icon: <Bot />, onSelect: fn() },
     ],
   },
   {
     heading: 'Go to',
     items: [
-      { id: 'g1', label: 'Experiments', icon: <FlaskConical />, shortcut: ['G', 'E'], onSelect: fn() },
+      { id: 'g1', label: 'Escalations', icon: <LifeBuoy />, shortcut: ['G', 'E'], onSelect: fn() },
       { id: 'g2', label: 'Documents', icon: <FileText />, shortcut: ['G', 'D'], onSelect: fn() },
       { id: 'g3', label: 'Settings', icon: <Settings />, shortcut: ['G', 'S'], keywords: ['preferences'], onSelect: fn() },
     ],

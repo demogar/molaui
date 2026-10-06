@@ -121,7 +121,7 @@ export interface SelectItemProps extends SelectPrimitive.Item.Props {
  * so "highlighted" and "selected" look the same wherever a list appears.
  */
 export const optionClasses = [
-  'relative grid min-h-(--control-h) cursor-default grid-cols-[1rem_1fr] items-center gap-x-2.5 py-1.5 pe-3 ps-2 text-base outline-none select-none',
+  'group/option relative grid min-h-(--control-h) cursor-default grid-cols-[1rem_1fr] items-center gap-x-2.5 py-1.5 pe-3 ps-2 text-base outline-none select-none',
   'data-selected:bg-ink-soft data-selected:font-semibold',
   // Highlighted wins over selected: the cursor is what is about to happen.
   'data-highlighted:bg-ink data-highlighted:text-on-ink data-selected:data-highlighted:bg-ink data-highlighted:forced-selected',
@@ -130,6 +130,14 @@ export const optionClasses = [
   'focus-visible:shadow-none',
   'data-disabled:text-ink-muted data-disabled:cursor-not-allowed',
 ] as const
+
+/**
+ * The second line of an option. Secondary ink by token on cloth and on the
+ * highlighted ink fill alike; it was an 80% fade of whichever colour the row
+ * had, which no contrast pairing covers.
+ */
+export const optionDescriptionClasses =
+  'block truncate text-xs font-normal text-ink-2 group-data-highlighted/option:text-on-ink-muted group-data-disabled/option:text-ink-muted'
 
 export function SelectItem({ className, children, description, ...props }: SelectItemProps) {
   return (
@@ -144,7 +152,7 @@ export function SelectItem({ className, children, description, ...props }: Selec
       <span className="col-start-2 min-w-0">
         <SelectPrimitive.ItemText className="block truncate">{children}</SelectPrimitive.ItemText>
         {description ? (
-          <span className="block truncate text-xs font-normal opacity-80">{description}</span>
+          <span className={optionDescriptionClasses}>{description}</span>
         ) : null}
       </span>
     </SelectPrimitive.Item>

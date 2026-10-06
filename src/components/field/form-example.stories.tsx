@@ -38,9 +38,9 @@ const MODELS = [
 ]
 
 const TOOLS = [
-  { value: 'search_games', description: 'Query the game archive by player, opening or date.' },
-  { value: 'fetch_opening', description: 'Read a line from the opening book.' },
-  { value: 'run_engine', description: 'Evaluate a position. Costly; rate-limited.' },
+  { value: 'search_tickets', description: 'Query the ticket archive by account, tag or date.' },
+  { value: 'fetch_ticket', description: 'Read one ticket with its full thread.' },
+  { value: 'lookup_account', description: 'Read an account’s plan and billing. Rate-limited.' },
 ]
 
 const TEAMMATES = [
@@ -58,7 +58,7 @@ type Errors = Partial<Record<'name' | 'model' | 'prompt' | 'tools' | 'budget' | 
 
 function AgentConfigForm() {
   const [model, setModel] = useState<string | null>(null)
-  const [tools, setTools] = useState<string[]>(['search_games'])
+  const [tools, setTools] = useState<string[]>(['search_tickets'])
   const [budget, setBudget] = useState<number | null>(null)
   const [goLive, setGoLive] = useState<Date | null>(null)
   const [reviewers, setReviewers] = useState<string[]>([])
@@ -121,8 +121,8 @@ function AgentConfigForm() {
       <div className="relleno band-oro" aria-hidden />
 
       <div className="grid gap-6 px-6 py-6 sm:grid-cols-2">
-        <Field label="Name" required error={errors.name} hint="Used in run ids: opening-coach-…">
-          {(control) => <Input {...control} name="name" placeholder="opening-coach" autoComplete="off" />}
+        <Field label="Name" required error={errors.name} hint="Used in run ids: refund-reviewer-…">
+          {(control) => <Input {...control} name="name" placeholder="refund-reviewer" autoComplete="off" />}
         </Field>
         <Field label="Model" required error={errors.model}>
           {(control) => (
@@ -142,7 +142,7 @@ function AgentConfigForm() {
                 name="prompt"
                 autosize
                 rows={3}
-                placeholder="You are the opening coach. Answer only from the repertoire…"
+                placeholder="You are the refund reviewer. Answer only from the refund policy…"
               />
             )}
           </Field>
