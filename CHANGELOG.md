@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.3.0](https://github.com/demogar/molaui/compare/v0.2.0...v0.3.0) (2026-10-06)
+
+
+### Features
+
+* **ai:** add change approval, citation cards and run recovery ([#13](https://github.com/demogar/molaui/issues/13)) ([a15d16e](https://github.com/demogar/molaui/commit/a15d16e46239c37691aeb14d513077958ecae62f))
+
+
+### Bug Fixes
+
+* make components consistent with their own rules and docs ([#16](https://github.com/demogar/molaui/issues/16)) ([1c9e8db](https://github.com/demogar/molaui/commit/1c9e8dbdd6e1b46d1cde573c6f5ef895d331c7ba))
+
+
+### Documentation
+
+* add usage guidance, versioning policy, patterns and agent-readable docs ([#15](https://github.com/demogar/molaui/issues/15)) ([986dfe7](https://github.com/demogar/molaui/commit/986dfe7dde0aef643fd0be91ade865c1f84db65c))
+
 ## [0.2.0](https://github.com/demogar/molaui/compare/v0.1.0...v0.2.0) (2026-10-06)
 
 
