@@ -14,6 +14,7 @@ import {
   useElapsed,
   type RunStatusValue,
 } from '../run-status'
+import { RunError, type RunErrorProps } from '../run-error'
 import { TokenUsage, type TokenUsageProps } from '../token-usage'
 
 export type AgentStepKind = 'reasoning' | 'tool' | 'message' | 'handoff' | 'approval'
@@ -40,6 +41,13 @@ export interface AgentStep {
   defaultOpen?: boolean
 }
 
+/** Why the run stopped, and where. AgentRun works out the step's number and title from `stepId`. */
+export interface AgentRunFailure
+  extends Pick<RunErrorProps, 'kind' | 'tool' | 'error' | 'message' | 'at' | 'retryAt' | 'autoRetry'> {
+  /** The step the run stopped at. */
+  stepId?: string
+}
+
 export interface AgentRunProps extends Omit<React.ComponentProps<'section'>, 'children'> {
   /** The agent's name — "Cayuco research agent". */
   name: string
@@ -53,6 +61,14 @@ export interface AgentRunProps extends Omit<React.ComponentProps<'section'>, 'ch
   steps: readonly AgentStep[]
   onCancel?: () => void
   onRetry?: () => void
+  /**
+   * Shown while the run is failed, timed out or cancelled: what stopped it,
+   * in words and verbatim, with the ways back. It takes over the header's
+   * *Retry run*, so the retry sits next to the reason for it.
+   */
+  failure?: AgentRunFailure
+  /** Re-run from the failed step, keeping the work before it. Offered when `failure.stepId` is set. */
+  onRetryFromStep?: (stepId: string) => void
   /** Shown under the timeline once the run has finished. */
   summary?: React.ReactNode
   headingLevel?: 2 | 3
@@ -78,6 +94,10 @@ export interface AgentRunProps extends Omit<React.ComponentProps<'section'>, 'ch
  *     duration in tabular figures, so durations compare down the column.
  *   - A step waiting for approval or failed opens itself; everything else is
  *     one line until asked.
+ *   - When the run stops, `failure` puts the reason between the header and
+ *     the steps — the first thing read, before the timeline that explains
+ *     it — naming the step by number so it can be found on the spine. The
+ *     steps before it keep their output; nothing is cleared on failure.
  *
  * Status changes of the run itself are announced once each through a polite
  * status region. Steps are not announced individually — a run with forty
@@ -94,6 +114,8 @@ export function AgentRun({
   steps,
   onCancel,
   onRetry,
+  failure,
+  onRetryFromStep,
   summary,
   headingLevel = 3,
   className,
@@ -102,12 +124,33 @@ export function AgentRun({
   const Heading = headingLevel === 2 ? 'h2' : 'h3'
   const active = isActiveStatus(status)
   const headingId = React.useId()
+  const shown = failure !== undefined && isRetryableStatus(status) ? failure : undefined
+
+  // Retrying removes the panel the button was in. Focus would fall to the
+  // body and a keyboard user would start again from the top of the page, so
+  // it goes to the run's heading: the status under it is what changes next.
+  const headingRef = React.useRef<HTMLHeadingElement>(null)
+  const refocus = React.useRef(false)
+  const retrying = (action: () => void) => () => {
+    refocus.current = true
+    action()
+  }
+  React.useEffect(() => {
+    if (shown || !refocus.current) return
+    refocus.current = false
+    headingRef.current?.focus()
+  }, [shown])
+  const failedIndex = failure?.stepId === undefined ? -1 : steps.findIndex((s) => s.id === failure.stepId)
+  const failedStep = steps[failedIndex]
 
   const [prevStatus, setPrevStatus] = React.useState(status)
   const [announcement, setAnnouncement] = React.useState('')
   if (status !== prevStatus) {
     setPrevStatus(status)
-    setAnnouncement(`Run ${RUN_STATUS_LABEL[status].toLowerCase()}.`)
+    // A failure panel is an alert and says it in a full sentence; saying
+    // "Run failed." as well would be the same news twice.
+    const alerted = shown !== undefined && shown.kind !== 'cancelled' && status !== 'cancelled'
+    setAnnouncement(alerted ? '' : `Run ${RUN_STATUS_LABEL[status].toLowerCase()}.`)
   }
 
   return (
@@ -121,7 +164,7 @@ export function AgentRun({
       <header className="flex flex-col gap-3 border-b border-keyline p-4">
         <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
           <div className="flex min-w-0 flex-col gap-1.5">
-            <Heading id={headingId} className="m-0 font-display text-lg leading-snug font-bold tracking-display wdth-display">
+            <Heading ref={headingRef} id={headingId} tabIndex={-1} className="m-0 outline-none font-display text-lg leading-snug font-bold tracking-display wdth-display">
               {name}
             </Heading>
             <RunStatus status={status} startedAt={startedAt} endedAt={endedAt} />
@@ -132,7 +175,7 @@ export function AgentRun({
                 Cancel run
               </Button>
             ) : null}
-            {isRetryableStatus(status) && onRetry ? (
+            {isRetryableStatus(status) && onRetry && !shown ? (
               <Button size="sm" icon={<RotateCcw />} onClick={onRetry}>
                 Retry run
               </Button>
@@ -145,6 +188,25 @@ export function AgentRun({
           {usage ? <TokenUsage variant="inline" {...usage} /> : null}
         </div>
       </header>
+
+      {shown ? (
+        <RunError
+          className="mx-4 mt-4"
+          kind={shown.kind ?? (status === 'timed_out' ? 'timed_out' : status === 'cancelled' ? 'cancelled' : 'failed')}
+          step={typeof failedStep?.title === 'string' ? failedStep.title : undefined}
+          stepNumber={failedStep ? failedIndex + 1 : undefined}
+          stepCount={failedStep ? steps.length : undefined}
+          tool={shown.tool}
+          error={shown.error}
+          message={shown.message}
+          runId={runId}
+          at={shown.at}
+          retryAt={shown.retryAt}
+          autoRetry={shown.autoRetry}
+          onRetry={onRetry ? retrying(onRetry) : undefined}
+          onRetryFromStep={failedStep && onRetryFromStep ? retrying(() => onRetryFromStep(failedStep.id)) : undefined}
+        />
+      ) : null}
 
       <ol aria-label={`Steps of ${name}`} className="m-0 list-none p-4 pb-2">
         {steps.map((step, i) => (
@@ -169,6 +231,10 @@ function StepRow({ step, last, nextStarted }: { step: AgentStep; last: boolean; 
   const elapsed = useElapsed(step.startedAt, active ? step.endedAt : (step.endedAt ?? step.startedAt))
   const ms = step.durationMs ?? (step.startedAt !== undefined && (active || step.endedAt !== undefined) ? elapsed : undefined)
   const done = step.status === 'succeeded'
+  // Always controlled: a live step goes from running (opens on demand) to
+  // failed (forced open), and handing Base UI `open` only in the second state
+  // switched it from uncontrolled to controlled mid-life, which it rejects.
+  const [openState, setOpenState] = React.useState(step.defaultOpen ?? false)
 
   const headline = (
     <>
@@ -195,7 +261,7 @@ function StepRow({ step, last, nextStarted }: { step: AgentStep; last: boolean; 
       </span>
       <div className={cn('min-w-0', !last && 'pb-4')}>
         {hasDetail ? (
-          <Collapsible.Root defaultOpen={step.defaultOpen} {...(forcedOpen ? { open: true } : {})}>
+          <Collapsible.Root open={forcedOpen || openState} onOpenChange={setOpenState}>
             <Collapsible.Trigger
               disabled={forcedOpen}
               className={cn(

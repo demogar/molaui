@@ -37,7 +37,7 @@ type Story = StoryObj<typeof meta>
 
 const ModelPicker = () => (
   <Button size="sm" variant="ghost" className="normal-case tracking-normal">
-    <span className="literal text-xs">mola-research-2</span>
+    <span className="literal text-xs">cayuco-deep-3</span>
     <ChevronDown />
   </Button>
 )
