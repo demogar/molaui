@@ -105,9 +105,9 @@ export const FilterBar: Story = {
     },
   },
   render: (args) => (
-    <Toolbar {...args} variant="panel" className="max-w-3xl flex-nowrap">
-      <ToolbarInput aria-label="Search runs" placeholder="Search runs" type="search" wrapperClassName="flex-1 min-w-32" />
-      <ToolbarSeparator />
+    <Toolbar {...args} variant="panel" className="max-w-3xl sm:flex-nowrap">
+      <ToolbarInput aria-label="Search runs" placeholder="Search runs" type="search" wrapperClassName="min-w-32 flex-1 max-sm:basis-full" />
+      <ToolbarSeparator className="max-sm:hidden" />
       <ToolbarToggleGroup aria-label="Status" defaultValue={['all']}>
         <ToolbarToggle value="all">All</ToolbarToggle>
         <ToolbarToggle value="failed">Failed</ToolbarToggle>

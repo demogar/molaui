@@ -415,7 +415,10 @@ export function DataTable<Row>({
               <Button variant="ghost" size="sm" icon={<X />} onClick={clearSelection}>
                 Clear
               </Button>
-              <div className="ms-auto flex min-w-0 items-center gap-1.5">
+              {/* On a narrow screen the actions scroll inside the bar rather
+                  than wrapping it: the bar's height is the promise that the
+                  table does not move. */}
+              <div className="scroll-cloth ms-auto flex min-w-0 items-center gap-1.5 overflow-x-auto py-0.5 [&>*]:shrink-0">
                 {bulkActions({ selection: new Set(selection), clear: clearSelection })}
               </div>
             </div>
