@@ -104,7 +104,7 @@ const preview: Preview = {
       storySort: {
         order: [
           'Mola UI',
-          ['Introduction', 'Getting started', 'Principles', 'Changelog'],
+          ['Introduction', 'Getting started', 'Principles', 'References', 'Changelog'],
           'Foundations',
           ['Color', 'Typography', 'The cut', 'Density', 'Motion', 'Iconography', 'Accessibility'],
           'Components',

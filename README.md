@@ -30,11 +30,41 @@ admin consoles, knowledge bases, agent run monitors — documented in a standalo
   </tr>
 </table>
 
+## The name, and why we use it with care
+
+A **mola** is the hand-sewn textile of the Guna people of Panama. The word names both the panels
+and the blouse that Guna women make and wear. Two or more layers of cotton are basted together, a
+design is cut through the upper layers, and every cut edge is turned under and hemmed by hand to
+reveal the colour beneath. The technique is passed down from generation to generation, and a
+single panel can take months to make.
+
+A mola is more than decoration. In the early twentieth century Panama's government tried to stop
+Guna women wearing their traditional dress. Making and wearing molas became an act of resistance,
+and the Guna Revolution of 1925 won the Guna autonomy over their land and their culture. Today
+the mola is protected under Panama's Law 20 of 2000 as collective intellectual property of the Guna
+people.
+
+**Mola UI is not made by Guna people and does not speak for them.** It carries the name out of
+respect: to its author, the mola is one of the most authentic expressions of Panamanian culture,
+and a craft that deserves to be honoured, not borrowed lightly. The name also fits what this
+project tries to be. A mola carries a people's identity into everyday life. Each one is made by
+hand and is unique, yet every one is recognisably part of the same tradition, because it comes from
+a shared method. A design system does a humbler version of the same thing: it carries an identity
+and the knowledge of how to make things well into every product, so each screen is its own while
+plainly belonging to the same family.
+
+What that respect means in practice:
+
+- **We borrow the method, not the motifs.** Mola UI takes the grammar of the technique: stacked
+  layers, hard cut edges, the revealed band. It reproduces no Guna designs, symbols or patterns.
+- **We claim no rights over the mola.** It belongs to the Guna people.
+- **We name the source** wherever the name appears.
+- **If you want a mola, buy one from Guna artisans**, so the craft supports the people who keep it
+  alive.
+
 ## Why it looks like this
 
-A **mola** is the reverse-appliqué textile of the Guna people of Guna Yala, Panama: cotton layers
-stacked, the top layers cut away, so what remains is bounded by a hard outline and a revealed band
-of the colour beneath. That method is the system's grammar —
+The mola's method is the system's grammar —
 
 - **Every interactive edge is an ink keyline**, drawn with `box-shadow` so hover can *grow* a
   revealed band outward without moving a single neighbour.
@@ -110,6 +140,17 @@ src/docs/        Storybook docs: introduction, principles, foundations
 tokens/          generated DTCG tokens for Figma
 docs/adr/        architecture decision records
 ```
+
+## References
+
+Mola UI's identity, tokens and components are its own. How it is built, run and presented draws on
+Dan Mall's [*Design That Scales*](https://rosenfeldmedia.com/books/design-that-scales/) (Rosenfeld
+Media, 2023). From the book it takes these practices: grow the system out of real product work
+rather than designing it in the abstract; keep it a connected, versioned dependency rather than
+code to copy; show what it builds before its parts; and admit a component only when three use
+cases need it. The [References](https://demogar.github.io/molaui/?path=/docs/mola-ui-references--overview)
+page in Storybook maps each idea to where it applies, and lists the standards the system follows:
+WCAG 2.2, the W3C Design Tokens format and Conventional Commits.
 
 ## Contributing
 

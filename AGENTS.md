@@ -40,5 +40,8 @@ gh api -X PATCH repos/demogar/molaui/pulls/<n> -f title="feat: …"
 - Edit the version or `CHANGELOG.md` by hand — release-please owns them.
 - Put a real company's name, branding or product names in stories, fixtures,
   docs or screenshots. Demo data is the fictional Cayuco platform.
+- Reproduce Guna mola designs, symbols or patterns, or use the mola as decoration. Mola UI
+  borrows the method (layers, cut edges, revealed bands), not the motifs. The README section
+  "The name, and why we use it with care" explains why.
 - Add hex outside `src/styles/tokens.css`, a `border` on an interactive edge, a
   radius, or `opacity-*` on a disabled control.
