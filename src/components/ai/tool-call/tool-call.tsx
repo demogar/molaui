@@ -1,5 +1,5 @@
 import { Collapsible } from '@base-ui/react/collapsible'
-import { Check, ChevronRight, RotateCcw, ShieldAlert, Wrench, X } from 'lucide-react'
+import { Check, Plus, RotateCcw, ShieldAlert, Wrench, X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
@@ -104,15 +104,13 @@ export function ToolCall({
           className={cn(
             'group/trigger flex w-full min-h-(--control-h) items-center gap-2.5 px-3 py-2 text-start',
             'transition-colors duration-(--motion-cut) ease-cut enabled:hover:bg-ink-soft',
-            'focus-visible:shadow-[inset_0_0_0_2px_var(--ink)] disabled:cursor-default',
+            'focus-visible:shadow-[var(--focus-ring-inset)] disabled:cursor-default',
           )}
         >
-          <ChevronRight
+          <Plus
             aria-hidden
             className={cn(
-              'size-3.5 shrink-0 text-ink-muted transition-transform duration-(--motion-cut) ease-cut',
-              // Mirrored in RTL, so opening turns it the other way to point down.
-              'rtl:-scale-x-100 group-data-[panel-open]/trigger:rotate-90 rtl:group-data-[panel-open]/trigger:-rotate-90',
+              'size-3.5 shrink-0 text-ink-muted transition-transform duration-(--motion-base) ease-cut group-data-[panel-open]/trigger:rotate-45',
               (!hasBody || forcedOpen) && 'invisible',
             )}
           />

@@ -95,7 +95,7 @@ export function TabsTab({ className, count, icon, children, ...props }: TabsTabP
         '[&_svg]:size-4 [&_svg]:shrink-0',
         // The focus ring sits inside the tab so the list's overflow clip does
         // not shave it off at either end of a scrolling row.
-        'focus-visible:shadow-[inset_0_0_0_1.5px_var(--ink),inset_0_0_0_3.5px_var(--cloth-pale)]',
+        'focus-visible:shadow-[var(--focus-ring-inset)]',
         variant === 'panel' && [
           // Resting tabs stop 3px short of the list's foot, clear of the
           // panel's keyline; the active one runs to the foot and its cloth

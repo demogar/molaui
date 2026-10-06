@@ -17,7 +17,13 @@ import { cn } from '../../lib/cn'
  * system used for its step lists. The marker is a plus that turns 45° into a
  * cross, not a chevron that flips: a chevron says "this goes somewhere", a
  * plus says "there is more of this here", and the cross is the obvious way to
- * put it back.
+ * put it back. Every disclosure in the system uses it, the AI layer's
+ * reasoning, tool calls, run steps and diff hunks included (ADR 0006).
+ *
+ * Hover washes the trigger with `--ink-soft`, as every edgeless control does.
+ * It used to turn the title rojo, the editorial system's hover; in a product
+ * system red is danger, and a section heading that flashes red as the pointer
+ * crosses it reads, for a moment, as an error.
  *
  * The panel animates its height through Base UI's measured
  * `--accordion-panel-height`, so nothing is guessed at and reduced motion
@@ -55,11 +61,11 @@ export function AccordionItem({ className, ...props }: AccordionItemProps) {
 }
 
 const triggerClasses = [
-  'group/trigger flex w-full cursor-pointer items-center gap-3 py-3.5 text-start outline-none',
+  'group/trigger flex w-full cursor-pointer items-center gap-3 px-2 py-3.5 text-start outline-none',
   'font-ui text-base font-semibold text-ink',
-  'hover:text-rojo-deep',
+  'transition-colors duration-(--motion-cut) ease-cut hover:bg-ink-soft',
   'focus-visible:shadow-[var(--focus-ring)]',
-  'data-disabled:cursor-default data-disabled:text-ink-muted',
+  'data-disabled:cursor-default data-disabled:text-ink-muted data-disabled:hover:bg-transparent',
 ]
 
 const markerClasses =
@@ -96,7 +102,7 @@ export interface AccordionPanelProps extends Omit<AccordionPrimitive.Panel.Props
 export function AccordionPanel({ className, children, hiddenUntilFound = true, ...props }: AccordionPanelProps) {
   return (
     <AccordionPrimitive.Panel data-slot="accordion-panel" hiddenUntilFound={hiddenUntilFound} className={cn(panelClasses)} {...props}>
-      <div className={cn('pb-4', className)}>{children}</div>
+      <div className={cn('px-2 pb-4', className)}>{children}</div>
     </AccordionPrimitive.Panel>
   )
 }
@@ -116,7 +122,8 @@ export function CollapsibleTrigger({ className, children, ...props }: Collapsibl
     <CollapsiblePrimitive.Trigger
       data-slot="collapsible-trigger"
       className={cn(
-        'group/trigger inline-flex cursor-pointer items-center gap-1.5 py-1 font-ui text-sm font-semibold text-ink outline-none hover:text-rojo-deep',
+        'group/trigger -mx-1.5 inline-flex cursor-pointer items-center gap-1.5 px-1.5 py-1 font-ui text-sm font-semibold text-ink outline-none',
+        'transition-colors duration-(--motion-cut) ease-cut hover:bg-ink-soft',
         'focus-visible:shadow-[var(--focus-ring)]',
         className,
       )}

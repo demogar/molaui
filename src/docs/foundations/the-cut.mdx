@@ -27,6 +27,20 @@ concentric, never offset: a mola's layers are stacked, so the reveal goes all th
 Edges are `box-shadow`, not `border`, because the signature hover *grows* the edge by several
 pixels. A border would reflow the row; a shadow does not move a single neighbour.
 
+## Hover
+
+Two gestures, chosen by whether the control has an edge:
+
+- **A cut shape grows its band.** Buttons, fields, checkboxes, chips and cards reveal the layer
+  beneath on hover — gold by default, never red.
+- **An edgeless control washes.** Ghost buttons, rows, menu items and disclosure triggers take
+  `--ink-soft` behind them, and secondary text steps up to ink.
+
+Hover is never rojo, except on the danger button that is already red. Red means something can be
+lost or has failed; a heading or a field that flashes red as the pointer crosses it reads, for a
+moment, as an error. The editorial system turned links and accordion titles red on hover, and the
+product system dropped it for that reason.
+
 ## Relleno — the filler slit
 
 In a finished mola the negative space is packed with narrow slits cut to a lower layer. Here it is

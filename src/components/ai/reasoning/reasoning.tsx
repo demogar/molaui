@@ -1,5 +1,5 @@
 import { Collapsible } from '@base-ui/react/collapsible'
-import { ChevronRight } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import type * as React from 'react'
 
 import { cn } from '../../../lib/cn'
@@ -51,9 +51,9 @@ export function Reasoning({
           'transition-colors duration-(--motion-cut) ease-cut hover:bg-ink-soft hover:text-ink',
         )}
       >
-        <ChevronRight
+        <Plus
           aria-hidden
-          className="size-3.5 transition-transform duration-(--motion-cut) ease-cut rtl:-scale-x-100 group-data-[panel-open]/trigger:rotate-90 rtl:group-data-[panel-open]/trigger:-rotate-90"
+          className="size-3.5 shrink-0 transition-transform duration-(--motion-base) ease-cut group-data-[panel-open]/trigger:rotate-45"
         />
         {thinking ? <span aria-hidden className="inline-block h-[9px] w-5 band-oro relleno-working shadow-cut" /> : null}
         <span>

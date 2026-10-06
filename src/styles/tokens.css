@@ -182,6 +182,13 @@
   --focus-ring:
     0 0 0 var(--cut-w) var(--ink), 0 0 0 calc(var(--cut-w) + 2px) var(--cloth-pale),
     0 0 0 calc(var(--cut-w) + 5px) var(--ink);
+  /* The same two tones drawn inward, for an item that sits inside a clipping
+   * or framed container — a tab in a scrolling list, a row inside a tool call,
+   * a diff hunk header — where the outer ring would be shaved off or would
+   * collide with the frame's own keyline. Four components had each written
+   * their own inset ring (2px ink in three, ink-then-cloth in tabs); this is
+   * the one they share. */
+  --focus-ring-inset: inset 0 0 0 2px var(--ink), inset 0 0 0 3.5px var(--cloth-pale);
 
   /* ── elevation ────────────────────────────────────────────────────
    * The only blur in the system, and only for what genuinely floats: menus,
