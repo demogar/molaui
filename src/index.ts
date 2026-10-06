@@ -40,6 +40,7 @@ export * from './components/toast'
 
 // Overlays
 export * from './components/dialog'
+export * from './components/drawer'
 export * from './components/popover'
 export * from './components/tooltip'
 export * from './components/menu'
