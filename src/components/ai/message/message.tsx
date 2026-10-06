@@ -237,6 +237,8 @@ function MessageActions({
   )
 }
 
+// 'en-US' for the same reason as PromptInput's estimate: the runtime default
+// differs between server and browser. The time zone stays the reader's own.
 function formatTime(date: Date) {
-  return date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })
+  return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
 }

@@ -88,7 +88,7 @@ export function SourceList({ sources, className, ...props }: SourceListProps) {
                 <span>{source.domain}</span>
                 {retrieved ? (
                   <time dateTime={retrieved.toISOString()} className="tabular">
-                    read {retrieved.toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                    read {retrieved.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                   </time>
                 ) : null}
               </span>

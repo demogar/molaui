@@ -50,4 +50,9 @@ describe('PromptInput', () => {
     await userEvent.type(field(), '{Enter}')
     expect(onSubmit).not.toHaveBeenCalled()
   })
+
+  it('groups the token estimate in a fixed locale, whatever the runtime default', () => {
+    render(<PromptInput label="Message" onSubmit={vi.fn()} defaultValue={'x'.repeat(5000)} />)
+    expect(screen.getByLabelText('About 1,250 tokens')).toHaveTextContent('~1,250 tok')
+  })
 })
