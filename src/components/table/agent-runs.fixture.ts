@@ -31,7 +31,7 @@ const AGENTS = [
   'Coach feedback',
   'Experiment analyst',
 ]
-const MODELS = ['claude-opus-5-5', 'claude-sonnet-5-5', 'claude-haiku-4-5']
+const MODELS = ['cayuco-deep-3', 'cayuco-steady-3', 'cayuco-swift-2']
 /** Finished runs only: what is still running or queued is decided by recency. */
 const SETTLED: RunStatus[] = [
   'succeeded', 'succeeded', 'succeeded', 'succeeded', 'succeeded', 'succeeded', 'succeeded',
@@ -56,7 +56,7 @@ export function makeAgentRuns(count = 40, seed = 7): AgentRun[] {
     const status: RunStatus = i === 0 ? 'queued' : i < 4 ? 'running' : pick(SETTLED)
     const model = pick(MODELS)
     const tokens = status === 'queued' ? 0 : Math.round(800 + rand() * 48_000)
-    const rate = model.includes('opus') ? 0.000045 : model.includes('sonnet') ? 0.000012 : 0.000003
+    const rate = model.includes('deep') ? 0.000045 : model.includes('steady') ? 0.000012 : 0.000003
     minutesAgo += Math.round(1 + rand() * 38)
     return {
       id: `run_${(0x5a3f00 + i * 7919 + Math.floor(rand() * 4096)).toString(16)}`,

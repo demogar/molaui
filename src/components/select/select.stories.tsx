@@ -6,11 +6,11 @@ import { Select, type SelectOptionGroup } from './select'
 
 const models: SelectOptionGroup[] = [
   {
-    label: 'Anthropic',
+    label: 'Cayuco',
     items: [
-      { value: 'claude-opus-5-5', label: 'Claude Opus 5.5', description: 'Deep reasoning · slowest' },
-      { value: 'claude-sonnet-5-5', label: 'Claude Sonnet 5.5', description: 'Balanced · default' },
-      { value: 'claude-haiku-4-5', label: 'Claude Haiku 4.5', description: 'Fast · classification' },
+      { value: 'cayuco-deep-3', label: 'Cayuco Deep 3', description: 'Deep reasoning · slowest' },
+      { value: 'cayuco-steady-3', label: 'Cayuco Steady 3', description: 'Balanced · default' },
+      { value: 'cayuco-swift-2', label: 'Cayuco Swift 2', description: 'Fast · classification' },
     ],
   },
   {
@@ -54,7 +54,7 @@ export const Default: Story = {
 }
 
 function GroupedDemo() {
-  const [value, setValue] = useState<string | null>('claude-sonnet-5-5')
+  const [value, setValue] = useState<string | null>('cayuco-steady-3')
   return (
     <div className="grid max-w-sm gap-3">
       <Field label="Model" hint="Applies to new runs only.">

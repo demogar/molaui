@@ -19,7 +19,7 @@ const meta = {
     items: [
       { term: 'Run', detail: 'run_5a9e19', literal: true },
       { term: 'Status', detail: <Badge tone="success" dot>Succeeded</Badge> },
-      { term: 'Model', detail: 'claude-sonnet-5-5', literal: true },
+      { term: 'Model', detail: 'cayuco-steady-3', literal: true },
       { term: 'Tokens', detail: '42,933' },
       { term: 'Cost', detail: '$0.5152' },
       { term: 'Duration', detail: '2m 03s' },

@@ -178,19 +178,19 @@ export const Primitives: Story = {
       </TableHeader>
       <TableBody>
         <TableRow>
-          <TableCell className="literal">claude-opus-5-5</TableCell>
+          <TableCell className="literal">cayuco-deep-3</TableCell>
           <TableCell numeric>412</TableCell>
           <TableCell numeric>9,841,220</TableCell>
           <TableCell numeric>$442.85</TableCell>
         </TableRow>
         <TableRow>
-          <TableCell className="literal">claude-sonnet-5-5</TableCell>
+          <TableCell className="literal">cayuco-steady-3</TableCell>
           <TableCell numeric>2,118</TableCell>
           <TableCell numeric>31,004,118</TableCell>
           <TableCell numeric>$372.05</TableCell>
         </TableRow>
         <TableRow>
-          <TableCell className="literal">claude-haiku-4-5</TableCell>
+          <TableCell className="literal">cayuco-swift-2</TableCell>
           <TableCell numeric>9,670</TableCell>
           <TableCell numeric>58,220,941</TableCell>
           <TableCell numeric>$174.66</TableCell>

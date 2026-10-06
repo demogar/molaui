@@ -32,9 +32,9 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 const MODELS = [
-  { value: 'claude-opus-5-5', label: 'Claude Opus 5.5', description: 'Deep reasoning · slowest' },
-  { value: 'claude-sonnet-5-5', label: 'Claude Sonnet 5.5', description: 'Balanced · default' },
-  { value: 'claude-haiku-4-5', label: 'Claude Haiku 4.5', description: 'Fast · classification' },
+  { value: 'cayuco-deep-3', label: 'Cayuco Deep 3', description: 'Deep reasoning · slowest' },
+  { value: 'cayuco-steady-3', label: 'Cayuco Steady 3', description: 'Balanced · default' },
+  { value: 'cayuco-swift-2', label: 'Cayuco Swift 2', description: 'Fast · classification' },
 ]
 
 const TOOLS = [
