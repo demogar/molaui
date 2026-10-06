@@ -21,7 +21,17 @@ interface Entry {
 const index = JSON.parse(
   readFileSync(resolve(import.meta.dirname, '../../storybook-static/index.json'), 'utf8'),
 ) as { entries: Record<string, Entry> }
-const stories = Object.values(index.entries).filter((e) => e.type === 'story')
+/**
+ * Stories with no stable picture, each covered by its neighbours:
+ * - long-answer streams 20,000 tokens to measure render cost; it is still
+ *   mid-stream after 15 seconds of fake time, and how far it got depends on
+ *   how fast the runner renders.
+ * - thread-stick-to-bottom adds a turn every 900ms and follows it with
+ *   native scrolling, whose scroll events arrive on the browser's schedule,
+ *   not the fake clock's; about one run in four, "Jump to latest" showed.
+ */
+const UNSTABLE = new Set(['ai-streaming-text--long-answer', 'ai-message--thread-stick-to-bottom'])
+const stories = Object.values(index.entries).filter((e) => e.type === 'story' && !UNSTABLE.has(e.id))
 const firstOfEach = stories.filter((s, i) => stories.findIndex((t) => t.title === s.title) === i)
 
 interface Mode {
@@ -57,8 +67,9 @@ async function open(page: Page, id: string, mode: Mode) {
   await page.goto(`/iframe.html?id=${id}&viewMode=story&globals=${globals.join(';')}`)
   // Storybook boots on timers too, so the paused clock is stepped until the
   // story is on screen: Storybook has shown it, the decorator has applied
-  // the theme, and the root (or a portal) holds something. `sb-show-main` alone arrives a
-  // beat before React commits, and an empty root made a 16×16 screenshot.
+  // the theme, and the root (or a portal) holds something. `sb-show-main`
+  // alone arrives a beat before React commits, and an empty root made a
+  // 16×16 screenshot.
   await expect(async () => {
     await page.clock.runFor(100)
     const ready = await page.evaluate(
@@ -73,8 +84,44 @@ async function open(page: Page, id: string, mode: Mode) {
     expect(ready).toBe(true)
   }).toPass({ timeout: 20_000, intervals: [0] })
   await page.evaluate(() => document.fonts.ready)
-  // Long enough for every simulated stream, countdown and enter transition.
-  await page.clock.runFor(15_000)
+  await settle(page)
+}
+
+/**
+ * Runs fake time forward until the story stops changing, or 15 seconds of
+ * it have passed (every simulated stream, countdown and enter transition is
+ * shorter).
+ *
+ * One `runFor(15_000)` was tried first and was flaky in CI: a simulated
+ * stream schedules its next token from an effect, after React re-renders,
+ * and React renders on a real MessageChannel task that the fake clock does
+ * not drive. In one jump only the timers already queued fire, so how far a
+ * stream got depended on the machine's speed. Stepping 100ms at a time and
+ * letting React's queued tasks run between steps makes every run take the
+ * same path.
+ */
+async function settle(page: Page) {
+  const flush = () =>
+    page.evaluate(async () => {
+      // Tasks run in order, so a message posted now runs after any render
+      // React has already queued; three rounds cover a render that yields.
+      for (let i = 0; i < 3; i++) {
+        await new Promise<void>((resolve) => {
+          const channel = new MessageChannel()
+          channel.port1.onmessage = () => resolve()
+          channel.port2.postMessage(null)
+        })
+      }
+      return document.body.innerHTML.length + ':' + document.body.innerText.length
+    })
+  let last = await flush()
+  let quiet = 0
+  for (let elapsed = 0; elapsed < 15_000 && quiet < 10; elapsed += 100) {
+    await page.clock.runFor(100)
+    const now = await flush()
+    quiet = now === last ? quiet + 1 : 0
+    last = now
+  }
 }
 
 /**

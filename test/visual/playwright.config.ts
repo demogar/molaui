@@ -19,7 +19,10 @@ export default defineConfig({
   outputDir: '../../test-results/visual',
   fullyParallel: true,
   workers: process.env.CI ? 4 : undefined,
-  retries: 0,
+  // One retry in CI: a real regression fails twice and still fails the job,
+  // while a one-off rendering hiccup on a busy runner is reported as flaky
+  // in the summary instead of blocking the pull request.
+  retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI
     ? [['github'], ['html', { outputFolder: '../../playwright-report', open: 'never' }]]
     : [['list'], ['html', { outputFolder: '../../playwright-report', open: 'never' }]],
