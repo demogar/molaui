@@ -30,6 +30,10 @@ const meta = {
     a11y: { config: { rules: [{ id: 'aria-hidden-focus', enabled: false }] } },
     layout: 'centered',
     docs: {
+      // Opens on render, so each story gets its own frame: open overlays
+      // inline on the docs page would stack over the text, and a modal one
+      // would lock the whole page.
+      story: { inline: false, height: '640px' },
       description: {
         component:
           'Actions on a thing that do not each deserve a button. The highlighted row fills with **ink** — the top layer cut out around the one row you are on — rather than a pale tint that vanishes in sunlight. A destructive item highlights in **rojo**, so red arrives at the moment of choosing and a menu at rest does not shout. Typeahead, arrow keys, submenus and focus return come from Base UI.',

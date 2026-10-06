@@ -129,7 +129,7 @@ export const Multiple: Story = {
     docs: {
       description: {
         story:
-          'Chips wrap inside the field, which grows a row at a time in steps of the chip height, so one row is exactly the height of a single-value field. Backspace in an empty input removes the last chip; each chip’s remove button is named "Remove <person>".',
+          'Chips wrap inside the field, which grows a row at a time in steps of the chip height, so one row is exactly the height of a single-value field. Backspace in an empty input removes the last chip; each chip’s remove button is named “Remove” and the person’s name.',
       },
     },
   },

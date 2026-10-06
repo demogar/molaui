@@ -11,6 +11,10 @@ const meta = {
   parameters: {
     layout: 'centered',
     docs: {
+      // Opens on render, so each story gets its own frame: open overlays
+      // inline on the docs page would stack over the text, and a modal one
+      // would lock the whole page.
+      story: { inline: false, height: '160px' },
       description: {
         component:
           'The inverse panel at its smallest: ink ground, cloth type, no blur. A tooltip is a label, not a place — it should never look like something you can move into and click. The `shortcut` slot exists because, after the name, the most useful thing a tooltip in a tool can say is how to do it without the pointer. Never the only home for information: it does not exist on touch.',

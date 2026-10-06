@@ -10,6 +10,10 @@ const meta = {
   parameters: {
     layout: 'centered',
     docs: {
+      // Opens on render, so each story gets its own frame: open overlays
+      // inline on the docs page would stack over the text, and a modal one
+      // would lock the whole page.
+      story: { inline: false, height: '320px' },
       description: {
         component:
           'A non-modal panel anchored to the control that opened it. The plainest floating surface: raised cloth, the ink keyline, the one blur. **No arrow** — the transform origin already says where it came from, and a zero-radius panel with a triangle bolted on reads as a speech bubble. When given, `title` names the popover and `description` describes it.',

@@ -24,6 +24,10 @@ const meta = {
   component: DatePicker,
   parameters: {
     docs: {
+      // Opens on render, so each story gets its own frame: open overlays
+      // inline on the docs page would stack over the text, and a modal one
+      // would lock the whole page.
+      story: { inline: false, height: '480px' },
       description: {
         component:
           'The WAI-ARIA APG **date picker dialog**: a text input you can type into, and a button that opens a calendar grid in a popover. Base UI has no calendar, so the grid owns its keyboard model and keeps to the APG one exactly — arrows by day and week (mirrored in right-to-left), PageUp/PageDown by month, Shift for a year, Home/End to the edges of the week, Enter or Space to choose, Escape to close with focus back on the button.\n\n' +

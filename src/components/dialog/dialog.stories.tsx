@@ -142,6 +142,8 @@ export const TypedConfirmation: Story = {
   ),
   parameters: {
     docs: {
+      // Opens on render: its own frame, so the modal does not lock the docs page.
+      story: { inline: false, height: '420px' },
       description: {
         story:
           'For an irreversible action at scale, the confirm stays disarmed until the exact resource name is typed. `onConfirm` may return a promise: the button shows its working strip, nothing else is pressable, and the dialog only closes when the work succeeds.',

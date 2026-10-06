@@ -46,6 +46,10 @@ const meta = {
     // redirect. Verified by keyboard in the tests; disabled for that rule only.
     a11y: { config: { rules: [{ id: 'aria-hidden-focus', enabled: false }] } },
     docs: {
+      // Opens on render, so each story gets its own frame: open overlays
+      // inline on the docs page would stack over the text, and a modal one
+      // would lock the whole page.
+      story: { inline: false, height: '520px' },
       story: { inline: false, height: '560px' },
       description: {
         component:
