@@ -96,15 +96,31 @@ Then export it from `src/index.ts`.
 
   | Type | Use it for | Release effect |
   |---|---|---|
-  | `feat` | a new component, state, token or prop | minor bump (patch while < 1.0) |
+  | `feat` | a new component, state, token or prop | minor bump |
   | `fix` | a bug fix | patch bump |
   | `perf` | a performance improvement | patch bump |
   | `refactor`, `docs`, `test`, `build`, `ci`, `chore` | everything else | no release on its own |
 
   Add `!` after the type (`feat(tokens)!: ...`) or a `BREAKING CHANGE:` footer for breaking
-  changes — a renamed token or a removed prop is breaking.
+  changes — a renamed token or a removed prop is breaking. Before 1.0.0 a breaking change bumps
+  the minor version; from 1.0.0 it bumps the major.
 - Keep pull requests focused. One concern per PR makes review and the changelog clearer.
 - Keep the branch up to date with `main` before merging.
+
+## Versioning and deprecation
+
+The full policy is the [Versioning](https://demogar.github.io/molaui/?path=/docs/mola-ui-versioning--overview)
+page in Storybook. In short:
+
+- **The public API is more than the exports.** Props and their values, token names and the
+  utilities built on them, the `styles.css`/`tailwind.css`/`tokens.css` entry points, the
+  `data-*` attributes components write, roles and keyboard behaviour, and the per-density metrics
+  are all covered. Changing any of them in a way that breaks a consumer is a breaking change.
+- **Deprecate before you remove.** Ship the replacement in a minor release, mark the old API
+  `@deprecated` (since, instead, removal), call `deprecate()` from `src/lib/deprecate.ts` where it
+  is used, and keep it working. Remove it in the next major, no sooner than one minor later.
+- **Ship a codemod for mechanical changes.** Renames get a tested script in `codemods/` built on
+  the TypeScript compiler API; see `codemods/skeleton-line-to-text.ts`.
 
 ## Repository settings
 
