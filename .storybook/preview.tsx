@@ -130,7 +130,7 @@ const preview: Preview = {
     layout: 'padded',
     backgrounds: { disable: true },
     controls: { expanded: true, sort: 'requiredFirst' },
-    docs: { theme: molaTheme, page: DocsPage, toc: { headingSelector: 'h2, h3' } },
+    docs: { theme: molaTheme, page: DocsPage, toc: { headingSelector: 'h2, h3', ignoreSelector: '[data-usage] h3' } },
     a11y: { test: 'error' },
     options: {
       storySort: {

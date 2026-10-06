@@ -31,7 +31,7 @@ function AlternativeLink({ alt }: { alt: Alternative }) {
  */
 export function UsageGuide({ usage }: { usage: Usage }) {
   return (
-    <section className="sb-unstyled not-prose my-8 grid gap-6 font-ui text-sm text-ink">
+    <section data-usage className="sb-unstyled not-prose my-8 grid gap-6 font-ui text-sm text-ink">
       <h2 className="m-0 text-xl font-bold text-ink">Usage</h2>
       <div className="grid gap-6 md:grid-cols-2">
         <div className="grid content-start gap-2">

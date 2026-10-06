@@ -2,6 +2,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { deprecate } from '../../lib/deprecate'
 
 /**
  * The sweep every bone shares: a band of raised cloth passing over the slot,
@@ -37,7 +38,10 @@ const skeletonVariants = cva(['rounded-none bg-cloth-shade', skeletonShimmer], {
        * all but vanished into the page.
        */
       text: 'h-[0.8em] w-full bg-cloth-deep forced-colors:bg-[GrayText] forced-colors:forced-color-adjust-none',
-      /** @deprecated Use `text`. Kept so existing call sites do not break. */
+      /**
+       * @deprecated Since 0.2.0; removed in 1.0.0. Use `text`, which is the
+       * same bone. `codemods/skeleton-line-to-text.ts` rewrites call sites.
+       */
       line: 'h-[0.8em] w-full bg-cloth-deep forced-colors:bg-[GrayText] forced-colors:forced-color-adjust-none',
       /** A person or agent mark, square-cut like `Avatar`. */
       avatar: 'shrink-0 shadow-cut',
@@ -78,6 +82,13 @@ export interface SkeletonProps extends React.ComponentProps<'div'>, VariantProps
  * every bone in it saying "loading" in turn.
  */
 export function Skeleton({ shape, size, className, ...props }: SkeletonProps) {
+  if (shape === 'line') {
+    deprecate('skeleton-shape-line', {
+      what: '<Skeleton shape="line">',
+      instead: '<Skeleton shape="text">',
+      removal: '1.0.0',
+    })
+  }
   return (
     <div
       data-slot="skeleton"
