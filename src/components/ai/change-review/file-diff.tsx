@@ -121,11 +121,16 @@ export function FileDiff({
           <span aria-hidden className={cn('relative inline-block size-[11px] overflow-hidden shadow-cut', KIND_MARK[kind])} />
           {KIND_LABEL[kind]}
         </span>
-        <Heading id={headingId} className="m-0 min-w-0 flex-1 literal text-sm font-medium text-ink [overflow-wrap:anywhere]">
+        {/* On a phone the path takes its own line under the kind and the count,
+            so it breaks at its slashes rather than mid-name. */}
+        <Heading
+          id={headingId}
+          className="order-last m-0 w-full min-w-0 literal text-sm font-medium text-ink [overflow-wrap:break-word] @md:order-none @md:w-auto @md:flex-1"
+        >
           {previousPath ? (
             <>
               <span dir="ltr" className="text-ink-muted">
-                {previousPath}
+                <BreakablePath path={previousPath} />
               </span>
               <span className="text-ink-muted">
                 <span aria-hidden> → </span>
@@ -133,9 +138,11 @@ export function FileDiff({
               </span>
             </>
           ) : null}
-          <span dir="ltr">{path}</span>
+          <span dir="ltr">
+            <BreakablePath path={path} />
+          </span>
         </Heading>
-        <ChangeCount added={added} removed={removed} className="shrink-0" />
+        <ChangeCount added={added} removed={removed} className="ms-auto shrink-0 @md:ms-0" />
       </header>
       {hunks.length === 0 ? (
         <p className="m-0 px-3 py-3 font-ui text-sm text-ink-muted">
@@ -148,6 +155,21 @@ export function FileDiff({
       )}
     </section>
   )
+}
+
+/** A path with a break opportunity after each slash. */
+function BreakablePath({ path }: { path: string }) {
+  const parts = path.split('/')
+  return parts.map((part, i) => (
+    <React.Fragment key={i}>
+      {part}
+      {i < parts.length - 1 ? (
+        <>
+          /<wbr />
+        </>
+      ) : null}
+    </React.Fragment>
+  ))
 }
 
 function Hunk({ hunk, layout, defaultOpen, first }: { hunk: DiffHunk; layout: 'unified' | 'split'; defaultOpen: boolean; first: boolean }) {
@@ -170,7 +192,7 @@ function Hunk({ hunk, layout, defaultOpen, first }: { hunk: DiffHunk; layout: 'u
             'rtl:-scale-x-100 group-data-[panel-open]/hunk:rotate-90 rtl:group-data-[panel-open]/hunk:-rotate-90',
           )}
         />
-        <span dir="ltr" className="literal text-xs text-ink-2">
+        <span dir="ltr" className="shrink-0 whitespace-nowrap literal text-xs text-ink-2">
           @@ -{hunk.oldStart},{oldCount} +{hunk.newStart},{newCount} @@
         </span>
         {/* A space between the two, for the accessible name; flex ignores it for layout. */}
@@ -217,7 +239,7 @@ function UnifiedLines({ lines, className }: { lines: readonly DiffLine[]; classN
         <li
           key={i}
           data-kind={line.kind}
-          className={cn('grid grid-cols-[3.5em_3.5em_1.75em_minmax(0,1fr)] pe-3', WASH[line.kind])}
+          className={cn('grid grid-cols-[2.75em_2.75em_1.5em_minmax(0,1fr)] pe-3 @md:grid-cols-[3.5em_3.5em_1.75em_minmax(0,1fr)]', WASH[line.kind])}
         >
           <span aria-hidden className={gutter}>
             {line.oldNumber ?? ''}
