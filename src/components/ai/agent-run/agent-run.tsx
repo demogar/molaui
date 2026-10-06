@@ -199,7 +199,7 @@ function StepRow({ step, last, nextStarted }: { step: AgentStep; last: boolean; 
             <Collapsible.Trigger
               disabled={forcedOpen}
               className={cn(
-                'group/step -mx-2 -my-1 flex w-[calc(100%+1rem)] items-start gap-2 px-2 py-1 text-left',
+                'group/step -mx-2 -my-1 flex w-[calc(100%+1rem)] items-start gap-2 px-2 py-1 text-start',
                 'transition-colors duration-(--motion-cut) ease-cut enabled:hover:bg-ink-soft disabled:cursor-default',
               )}
             >
@@ -207,7 +207,8 @@ function StepRow({ step, last, nextStarted }: { step: AgentStep; last: boolean; 
                 aria-hidden
                 className={cn(
                   'mt-[15px] size-3.5 shrink-0 text-ink-muted transition-transform duration-(--motion-cut) ease-cut',
-                  'group-data-[panel-open]/step:rotate-90',
+                  // Mirrored in RTL, so opening turns it the other way to point down.
+                  'rtl:-scale-x-100 group-data-[panel-open]/step:rotate-90 rtl:group-data-[panel-open]/step:-rotate-90',
                   forcedOpen && 'invisible',
                 )}
               />
@@ -218,7 +219,7 @@ function StepRow({ step, last, nextStarted }: { step: AgentStep; last: boolean; 
           </Collapsible.Root>
         ) : (
           <>
-            <div className="flex items-start gap-2 pl-5.5">{headline}</div>
+            <div className="flex items-start gap-2 ps-5.5">{headline}</div>
             {working ? <WorkingStrip /> : null}
           </>
         )}

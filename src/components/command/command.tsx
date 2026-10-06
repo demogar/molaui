@@ -286,7 +286,7 @@ export function CommandPalette({
             <span className="flex items-center gap-1.5">
               <Kbd>↵</Kbd> select
             </span>
-            <span className="ml-auto tabular-nums">
+            <span className="ms-auto tabular-nums">
               {flat.length} {flat.length === 1 ? 'result' : 'results'}
             </span>
           </div>

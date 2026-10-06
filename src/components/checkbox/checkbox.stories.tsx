@@ -46,7 +46,7 @@ function ParentDemo() {
   return (
     <CheckboxGroup legend="Tools" value={value} onValueChange={setValue} allValues={[...TOOLS]}>
       <Checkbox parent label="All tools" />
-      <div className="flex flex-col gap-3 pl-6">
+      <div className="flex flex-col gap-3 ps-6">
         {TOOLS.map((tool) => (
           <Checkbox key={tool} value={tool} label={<span className="literal">{tool}</span>} />
         ))}

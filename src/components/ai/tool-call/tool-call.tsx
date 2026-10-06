@@ -98,7 +98,7 @@ export function ToolCall({
         <Collapsible.Trigger
           disabled={!hasBody || forcedOpen}
           className={cn(
-            'group/trigger flex w-full min-h-(--control-h) items-center gap-2.5 px-3 py-2 text-left',
+            'group/trigger flex w-full min-h-(--control-h) items-center gap-2.5 px-3 py-2 text-start',
             'transition-colors duration-(--motion-cut) ease-cut enabled:hover:bg-ink-soft',
             'focus-visible:shadow-[inset_0_0_0_2px_var(--ink)] disabled:cursor-default',
           )}
@@ -107,7 +107,8 @@ export function ToolCall({
             aria-hidden
             className={cn(
               'size-3.5 shrink-0 text-ink-muted transition-transform duration-(--motion-cut) ease-cut',
-              'group-data-[panel-open]/trigger:rotate-90',
+              // Mirrored in RTL, so opening turns it the other way to point down.
+              'rtl:-scale-x-100 group-data-[panel-open]/trigger:rotate-90 rtl:group-data-[panel-open]/trigger:-rotate-90',
               (!hasBody || forcedOpen) && 'invisible',
             )}
           />
@@ -161,7 +162,7 @@ function ErrorBlock({
   onRetry?: () => void
 }) {
   return (
-    <div role="alert" className="flex flex-wrap items-start gap-x-4 gap-y-3 bg-rojo-soft px-3.5 py-3 shadow-[inset_3px_0_0_var(--rojo)]">
+    <div role="alert" className="flex flex-wrap items-start gap-x-4 gap-y-3 bg-rojo-soft px-3.5 py-3 shadow-[inset_3px_0_0_var(--rojo)] rtl:shadow-[inset_-3px_0_0_var(--rojo)]">
       <div className="min-w-0 flex-1">
         <p className="m-0 font-ui text-sm font-semibold text-ink">
           {status === 'timed_out' ? 'The tool did not answer in time.' : 'The tool returned an error.'}
@@ -187,7 +188,7 @@ function ApprovalBlock({ approval }: { approval: ToolCallApproval }) {
           <div className="m-0 mt-1 font-ui text-sm text-ink-on-tint">{approval.reason}</div>
         </div>
       </div>
-      <div className="flex flex-wrap gap-2 pl-6.5">
+      <div className="flex flex-wrap gap-2 ps-6.5">
         <Button size="sm" icon={<Check />} onClick={approval.onApprove}>
           {approval.approveLabel ?? 'Approve'}
         </Button>
@@ -214,7 +215,7 @@ export function ToolCallGroup({ label, count, className, children, ...props }: T
   return (
     <div role="group" aria-label={label ?? `${count} tools in parallel`} className={cn('flex flex-col gap-2', className)} {...props}>
       <p className="m-0 rotulo text-ink-muted">{label ?? `${count} tools in parallel`}</p>
-      <div className="flex flex-col gap-2 border-l-[3px] border-ink pl-3">{children}</div>
+      <div className="flex flex-col gap-2 border-s-[3px] border-ink ps-3">{children}</div>
     </div>
   )
 }

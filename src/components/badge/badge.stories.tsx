@@ -41,16 +41,16 @@ export const Matrix: Story = {
       <table className="border-separate border-spacing-x-4 border-spacing-y-3">
         <thead>
           <tr>
-            <th className="rotulo text-left text-ink-muted">Tone</th>
-            <th className="rotulo text-left text-ink-muted">Solid</th>
-            <th className="rotulo text-left text-ink-muted">Soft</th>
-            <th className="rotulo text-left text-ink-muted">Outline</th>
+            <th className="rotulo text-start text-ink-muted">Tone</th>
+            <th className="rotulo text-start text-ink-muted">Solid</th>
+            <th className="rotulo text-start text-ink-muted">Soft</th>
+            <th className="rotulo text-start text-ink-muted">Outline</th>
           </tr>
         </thead>
         <tbody>
           {TONES.map((tone) => (
             <tr key={tone}>
-              <td className="pr-4 font-ui text-sm text-ink-2">{tone}</td>
+              <td className="pe-4 font-ui text-sm text-ink-2">{tone}</td>
               {(['solid', 'soft', 'outline'] as const).map((variant) => (
                 <td key={variant}>
                   <Badge tone={tone} variant={variant} dot>

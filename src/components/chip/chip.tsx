@@ -72,7 +72,7 @@ export function Chip({ className, size, type = 'checkbox', count, children, ...p
         // the chip is announced as "Failed12".
         <>
           {' '}
-          <span className="ml-0.5 text-xs tabular opacity-75">{count.toLocaleString('en-US')}</span>
+          <span className="ms-0.5 text-xs tabular opacity-75">{count.toLocaleString('en-US')}</span>
         </>
       ) : null}
     </label>

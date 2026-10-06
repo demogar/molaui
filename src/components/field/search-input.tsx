@@ -80,7 +80,7 @@ export function SearchInput({
             type="button"
             aria-label={clearLabel}
             onClick={clear}
-            className="-mr-1 grid size-6 place-items-center text-ink-muted transition-colors duration-(--motion-cut) hover:bg-ink-soft hover:text-ink [&_svg]:size-3.5"
+            className="-me-1 grid size-6 place-items-center text-ink-muted transition-colors duration-(--motion-cut) hover:bg-ink-soft hover:text-ink [&_svg]:size-3.5"
           >
             <X aria-hidden />
           </button>

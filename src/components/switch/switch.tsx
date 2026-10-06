@@ -59,7 +59,7 @@ export function Switch({
         className={cn(
           'block size-3.5 rounded-none bg-ink forced-ink',
           'transition-transform duration-(--motion-base) ease-cut',
-          'data-checked:translate-x-4 data-checked:bg-on-layer data-checked:shadow-[0_0_0_1.5px_var(--ink)] data-checked:forced-on-selected',
+          'data-checked:translate-x-4 rtl:data-checked:-translate-x-4 data-checked:bg-on-layer data-checked:shadow-[0_0_0_1.5px_var(--ink)] data-checked:forced-on-selected',
           'data-disabled:bg-ink-muted',
         )}
       />

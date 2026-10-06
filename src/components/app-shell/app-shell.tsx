@@ -102,7 +102,7 @@ export function AppShell({
             href={`#${shell.mainId}`}
             className={cn(
               'sr-only z-50 bg-ink px-3 py-2 text-sm font-semibold text-on-ink',
-              'focus:not-sr-only focus:fixed focus:top-2 focus:left-2',
+              'focus:not-sr-only focus:fixed focus:top-2 focus:inset-s-2',
             )}
           >
             Skip to content
@@ -115,7 +115,7 @@ export function AppShell({
             data-collapsed={collapsed || undefined}
             className={cn(
               'hidden shrink-0 flex-col overflow-hidden bg-cloth-pale nav:flex',
-              'shadow-[inset_-1px_0_0_var(--keyline)]',
+              'shadow-[inset_-1px_0_0_var(--keyline)] rtl:shadow-[inset_1px_0_0_var(--keyline)]',
               'w-60 transition-[width] duration-(--motion-base) ease-cut data-collapsed:w-14',
             )}
           >
@@ -136,16 +136,17 @@ export function AppShell({
             />
             <DialogPrimitive.Popup
               className={cn(
-                'fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col bg-cloth-pale text-ink nav:hidden',
+                'fixed inset-y-0 inset-s-0 z-50 flex w-72 max-w-[85vw] flex-col bg-cloth-pale text-ink nav:hidden',
                 'shadow-floating',
                 'transition-transform duration-(--motion-base) ease-cut',
                 'data-ending-style:-translate-x-full data-starting-style:-translate-x-full',
+                'rtl:data-ending-style:translate-x-full rtl:data-starting-style:translate-x-full',
               )}
             >
               {/* A header the height of the topbar, so the sheet's first row lines
                   up with the bar it slid over, and a visible close: Escape and a
                   backdrop tap are both invisible affordances on a phone. */}
-              <div className="flex h-12 shrink-0 items-center justify-between pr-2 pl-5 shadow-[inset_0_-1.5px_0_var(--ink)]">
+              <div className="flex h-12 shrink-0 items-center justify-between pe-2 ps-5 shadow-[inset_0_-1.5px_0_var(--ink)]">
                 <DialogPrimitive.Title className="m-0 rotulo text-ink-2">Navigation</DialogPrimitive.Title>
                 <DialogPrimitive.Close
                   render={
@@ -186,7 +187,7 @@ export function SidebarToggle({ className }: { className?: string }) {
         onClick={() => shell.setCollapsed(!shell.collapsed)}
         className={cn('hidden nav:inline-flex', className)}
       >
-        {shell.collapsed ? <PanelLeftOpen /> : <PanelLeftClose />}
+        {shell.collapsed ? <PanelLeftOpen className="rtl:-scale-x-100" /> : <PanelLeftClose className="rtl:-scale-x-100" />}
       </IconButton>
       <IconButton
         variant="ghost"

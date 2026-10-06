@@ -66,7 +66,7 @@ export function UncertaintyNote({ title = 'The model is unsure', action, classNa
     <aside
       data-slot="uncertainty-note"
       aria-label={title}
-      className={cn('flex gap-3 bg-anil-soft px-4 py-3 shadow-[inset_3px_0_0_var(--anil)]', className)}
+      className={cn('flex gap-3 bg-anil-soft px-4 py-3 shadow-[inset_3px_0_0_var(--anil)] rtl:shadow-[inset_-3px_0_0_var(--anil)]', className)}
       {...props}
     >
       <CircleHelp aria-hidden className="mt-0.5 size-4 shrink-0 text-anil" />

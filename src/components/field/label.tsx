@@ -36,14 +36,14 @@ export function Label({
     <label data-slot="label" className={cn('block rotulo text-ink-2', className)} {...props}>
       {children}
       {required ? (
-        <span aria-hidden className="ml-0.5 text-rojo">
+        <span aria-hidden className="ms-0.5 text-rojo">
           *
         </span>
       ) : null}
       {optional ? (
         <>
           {' '}
-          <span className="ml-1.5 rotulo font-medium tracking-[0.08em] text-ink-muted normal-case">
+          <span className="ms-1.5 rotulo font-medium tracking-[0.08em] text-ink-muted normal-case">
             Optional
           </span>
         </>

@@ -138,7 +138,7 @@ export function Message({
           {status === 'error' ? (
             <div
               role="alert"
-              className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-3 bg-rojo-soft px-4 py-3 shadow-[inset_3px_0_0_var(--rojo)]"
+              className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-3 bg-rojo-soft px-4 py-3 shadow-[inset_3px_0_0_var(--rojo)] rtl:shadow-[inset_-3px_0_0_var(--rojo)]"
             >
               <div className="min-w-0 flex-1">
                 <p className="m-0 font-ui text-sm font-semibold text-ink">The response stopped before it finished.</p>
@@ -183,7 +183,7 @@ function MessageActions({
   return (
     <div
       className={cn(
-        '-ml-1.5 mt-3 flex items-center gap-1',
+        '-ms-1.5 mt-3 flex items-center gap-1',
         'transition-opacity duration-(--motion-cut) ease-cut',
         '[@media(hover:hover)]:opacity-0 group-hover/message:opacity-100 group-focus-within/message:opacity-100',
       )}

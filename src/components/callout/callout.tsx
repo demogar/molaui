@@ -124,7 +124,7 @@ export function Callout({
           {actions ? <div className="mt-3 flex flex-wrap gap-2">{actions}</div> : null}
         </div>
         {onDismiss ? (
-          <IconButton label="Dismiss" variant="ghost" size="sm" onClick={onDismiss} className="-mt-1 -mr-1.5">
+          <IconButton label="Dismiss" variant="ghost" size="sm" onClick={onDismiss} className="-mt-1 -me-1.5">
             <X />
           </IconButton>
         ) : null}

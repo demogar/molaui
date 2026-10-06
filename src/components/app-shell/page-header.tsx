@@ -58,7 +58,7 @@ export function PageHeader({
       {meta && meta.length > 0 ? (
         <ul className="m-0 flex list-none flex-wrap items-center gap-y-1 p-0 text-xs text-ink-muted">
           {meta.map((item, i) => (
-            <li key={i} className={cn('flex items-center gap-1.5', i > 0 && 'ml-3 pl-3 shadow-[inset_1px_0_0_var(--keyline)]')}>
+            <li key={i} className={cn('flex items-center gap-1.5', i > 0 && 'ms-3 ps-3 shadow-[inset_1px_0_0_var(--keyline)] rtl:shadow-[inset_-1px_0_0_var(--keyline)]')}>
               {item}
             </li>
           ))}

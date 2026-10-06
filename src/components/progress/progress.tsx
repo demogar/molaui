@@ -152,7 +152,7 @@ export function Meter({
             key={t}
             aria-hidden
             className="absolute inset-y-0 w-[1.5px] bg-ink forced-ink"
-            style={{ left: `calc(${t * 100}% - 0.75px)` }}
+            style={{ insetInlineStart: `calc(${t * 100}% - 0.75px)` }}
           />
         ))}
       </MeterPrimitive.Track>

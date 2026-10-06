@@ -33,21 +33,21 @@ export const Playground: Story = {}
 export const AllStatuses: Story = {
   render: () => (
     <div className="max-w-full overflow-x-auto">
-      <table className="border-collapse text-left">
+      <table className="border-collapse text-start">
         <thead>
           <tr className="border-b border-ink">
-            <th className="rotulo py-2 pr-8 font-semibold text-ink-2">Status</th>
-            <th className="rotulo py-2 pr-8 font-semibold text-ink-2">Label register</th>
+            <th className="rotulo py-2 pe-8 font-semibold text-ink-2">Status</th>
+            <th className="rotulo py-2 pe-8 font-semibold text-ink-2">Label register</th>
             <th className="rotulo py-2 font-semibold text-ink-2">Inline register</th>
           </tr>
         </thead>
         <tbody>
           {STATUSES.map((status) => (
             <tr key={status} className="border-b border-keyline">
-              <td className="py-2.5 pr-8">
+              <td className="py-2.5 pe-8">
                 <code className="literal text-ink-2">{status}</code>
               </td>
-              <td className="py-2.5 pr-8">
+              <td className="py-2.5 pe-8">
                 <RunStatus status={status} />
               </td>
               <td className="py-2.5">
