@@ -9,3 +9,9 @@ coverage/
 
 # Private reference material
 .context/
+temp/
+test-results/
+playwright-report/
+reports/
+test/visual/__screenshots__/*
+!test/visual/__screenshots__/linux/

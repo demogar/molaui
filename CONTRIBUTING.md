@@ -36,20 +36,68 @@ npm run dev        # Storybook on :6006
 
 ## The gates
 
-A change is ready when all of these pass — CI runs the same list:
+A change is ready when all of these pass — CI runs the same list in its `Gates` job:
 
 ```bash
-npm run check   # lint · typecheck · test · tokens:check · manifest:check · build · build-storybook
+npm run check   # lint · typecheck · test · tokens:check · manifest:check · build · api:check · size · build-storybook
 ```
 
 Never weaken a gate to get green. If a gate is wrong, fix it in its own commit and say why.
 
-For anything visual, also run the browser audit against a running Storybook. It checks colour
-contrast in both themes and horizontal overflow at 390px, which jsdom cannot:
+CI also runs three browser jobs side by side with `Gates`. Each can be run locally:
+
+| Job | Locally | What it holds |
+|---|---|---|
+| Browser audit | `npm run build-storybook && npm run audit` | axe with colour contrast in both themes and no horizontal overflow at 390px, over every story and every docs page, plus console errors. The report lands in `reports/audit/`. |
+| Visual regression | `npm run build-storybook && npm run visual` | every story in both themes, and each component's first story in compact density, RTL and forced colours, against the Linux baselines. |
+| Consumer smoke tests | `npm run build && npm run consumers` | the packed tarball installed, built and checked in a browser in three apps: Vite on `styles.css`, Vite with its own Tailwind v4 on `tailwind.css`, and the Next.js App Router. |
+
+For a quick look while Storybook's dev server is running, `node scripts/audit.mjs
+http://localhost:6006` still works; add `--only <story id fragment>` to audit a few pages.
+
+### The public API report
+
+`etc/mola-ui.api.md` lists every export of `@demogar/mola-ui` and its type signature, generated
+from `dist/` by [API Extractor](https://api-extractor.com/). If you add, remove or change an
+export, `npm run api:check` fails until you regenerate the report and commit it:
 
 ```bash
-node scripts/audit.mjs http://localhost:6006
+npm run build && npm run api
 ```
+
+The diff of that file is the API change a reviewer signs off. A removed or changed signature is
+a breaking change (see [Versioning](#versioning-and-deprecation)).
+
+### Bundle budgets
+
+`npm run size` measures the built package with [size-limit](https://github.com/ai/size-limit):
+the whole library, a typical tree-shaken import (`Button` + `Field`) and `styles.css`, minified
+and brotli-compressed. The budgets live in `.size-limit.json`, set from measurements with about
+10% headroom. If a change goes over, first check that it should cost that much (a new dependency,
+or something that breaks tree-shaking, are the usual causes). Raise a budget only in its own
+commit that says why.
+
+### Visual baselines
+
+The baselines in `test/visual/__screenshots__/linux/` are rendered on Linux by CI, never on a
+laptop: font rasterisation differs between operating systems by more than the threshold. Running
+`npm run visual` on macOS writes local baselines to an ignored `darwin/` folder, which is useful
+to compare your own before and after but is never committed.
+
+When a visual change is intended, or a new story needs a baseline:
+
+1. Push the branch and open the pull request. The **Visual regression** job fails and uploads a
+   `visual-report` artifact with the expected, actual and diff image of every failing story. Look
+   at every diff.
+2. If the changes are all intended, add the **`update-visual-baselines`** label to the pull
+   request. The *Update visual baselines* workflow renders the baselines on Linux, commits only the
+   images that changed to the branch, and removes the label. (From a branch without a pull
+   request: `gh workflow run "Update visual baselines" --ref <branch>`.)
+3. The bot's commit does not start CI by itself unless the `RELEASE_PLEASE_TOKEN` secret is set.
+   Without it, push again (`git commit --allow-empty -m "test(visual): rerun ci"` is fine) so the
+   checks run on the new baselines.
+
+When you delete or rename a story, delete its baselines too; Playwright does not prune them.
 
 ## Anatomy of a component
 
@@ -126,14 +174,15 @@ page in Storybook. In short:
 
 `main` is guarded by the ruleset in `.github/rulesets/main.json`: no direct pushes, force pushes
 or deletion; changes arrive by squash-merged pull request with resolved conversations and passing
-`Gates` and `Conventional PR title` checks. Admins can bypass only through a pull request. To
-change it, edit the file and re-apply it:
+`Gates`, `Browser audit`, `Visual regression`, `Consumer smoke tests` and `Conventional PR title`
+checks. Admins can bypass only through a pull request. To change it, edit the file and re-apply
+it (an edit to the file alone changes nothing on GitHub):
 
 ```bash
 gh api -X PUT repos/demogar/molaui/rulesets/<id> --input .github/rulesets/main.json
 ```
 
-Every push to `main` that passes the gates publishes Storybook to GitHub Pages.
+Every push to `main` that passes all the CI jobs publishes Storybook to GitHub Pages.
 
 ## Releases
 
@@ -144,8 +193,23 @@ Releases are automated with [release-please](https://github.com/googleapis/relea
 2. Merging that PR tags `vx.y.z` and publishes a GitHub Release.
 3. The same workflow then tests and builds the tagged commit and publishes
    [`@demogar/mola-ui`](https://www.npmjs.com/package/@demogar/mola-ui) to npm, with provenance,
-   and to GitHub Packages. The npm step needs the `NPM_TOKEN` repository secret and is skipped
-   without it.
+   and to GitHub Packages.
+
+### Publishing to npm with trusted publishing
+
+The publish job uses npm [trusted publishing](https://docs.npmjs.com/trusted-publishers): npm
+trades the job's GitHub OIDC token for a short-lived token, so no long-lived secret can leak, and
+provenance is attached automatically. Until a trusted publisher is configured, npm falls back to
+the `NPM_TOKEN` repository secret. To switch over (a package owner on npmjs.com does this once):
+
+1. Sign in to [npmjs.com](https://www.npmjs.com/) and open
+   **@demogar/mola-ui → Settings → Trusted Publisher**.
+2. Choose **GitHub Actions** and enter: organization or user `demogar`, repository `molaui`,
+   workflow filename `release-please.yml`, environment left empty. Save.
+3. Optionally, under **Publishing access**, choose *Require two-factor authentication and
+   disallow tokens*, so only the trusted workflow can publish.
+4. After the next release has published successfully, delete the `NPM_TOKEN` repository secret
+   (`gh secret delete NPM_TOKEN`) and revoke the token on npmjs.com.
 
 Never edit the version or `CHANGELOG.md` by hand. The Storybook changelog page renders
 `CHANGELOG.md` directly.

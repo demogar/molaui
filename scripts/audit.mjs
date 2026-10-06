@@ -2,6 +2,7 @@
 // contrast) in both themes, horizontal overflow at phone width, and console
 // errors. Exits non-zero on any finding, so CI can gate on it.
 //   node scripts/audit.mjs <base> [--out <dir>] [--only <id substring>] [--workers <n>]
+//   node scripts/audit.mjs --serve storybook-static [--out <dir>]   (npm run audit)
 //
 // Run it against a static build (`npm run build-storybook`, then
 // `node scripts/serve-static.mjs`), not the dev server: the dev server
@@ -16,6 +17,8 @@ import { join } from 'node:path'
 
 import { chromium } from 'playwright'
 
+import { serve } from './serve-static.mjs'
+
 const args = process.argv.slice(2)
 const flag = (name, fallback) => {
   const i = args.indexOf(name)
@@ -24,7 +27,9 @@ const flag = (name, fallback) => {
 const outDir = flag('--out')
 const only = flag('--only')
 const workers = Number(flag('--workers', 4))
-const base = args[0] ?? 'http://localhost:6006'
+const serveDir = flag('--serve')
+const server = serveDir ? await serve(serveDir, 0) : null
+const base = server ? `http://localhost:${server.address().port}` : (args[0] ?? 'http://localhost:6006')
 const PAGE_TIMEOUT = 45_000
 
 const require = createRequire(import.meta.url)
@@ -191,6 +196,7 @@ async function worker(queue) {
 const queue = [...jobs]
 await Promise.all(Array.from({ length: workers }, () => worker(queue)))
 await browser.close()
+server?.close()
 
 const label = (f) => `[${f.width === 390 ? '390px' : f.theme}] ${f.viewMode === 'docs' ? 'docs ' : ''}${f.id}: ${f.finding}`
 const lines = failures.map(label).sort()

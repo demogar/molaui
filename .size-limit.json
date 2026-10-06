@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Everything (import *)",
+    "path": "dist/index.js",
+    "import": "*",
+    "limit": "170 kB"
+  },
+  {
+    "name": "Button + Field (tree-shaken)",
+    "path": "dist/index.js",
+    "import": "{ Button, Field }",
+    "limit": "15 kB"
+  },
+  {
+    "name": "styles.css",
+    "path": "dist/mola-ui.css",
+    "rolldown": false,
+    "limit": "17.5 kB"
+  }
+]

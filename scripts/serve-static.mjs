@@ -1,6 +1,7 @@
 // Serves a static build (the Storybook in storybook-static/ by default) for the
 // browser audit and the visual tests.
 //   node scripts/serve-static.mjs [dir] [port]
+// or `serve(dir, port)` from another script (the audit's `--serve`).
 //
 // The audit used to run against `npm run dev`, and stalled there: the dev
 // server compiles each story on first request and holds its HMR socket open,
@@ -11,9 +12,8 @@
 import { createReadStream, statSync } from 'node:fs'
 import { createServer } from 'node:http'
 import { extname, join, normalize, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-const root = resolve(process.argv[2] ?? 'storybook-static')
-const port = Number(process.argv[3] ?? 6007)
 const types = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
@@ -29,16 +29,26 @@ const types = {
   '.md': 'text/markdown; charset=utf-8',
 }
 
-createServer((req, res) => {
-  const path = decodeURIComponent(new URL(req.url ?? '/', 'http://x').pathname)
-  let file = join(root, normalize(path))
-  if (!file.startsWith(root)) return res.writeHead(403).end()
-  try {
-    if (statSync(file).isDirectory()) file = join(file, 'index.html')
-    statSync(file)
-  } catch {
-    return res.writeHead(404).end()
-  }
-  res.writeHead(200, { 'content-type': types[extname(file)] ?? 'application/octet-stream' })
-  createReadStream(file).pipe(res)
-}).listen(port, () => console.log(`serving ${root} on http://localhost:${port}`))
+export function serve(dir, port) {
+  const root = resolve(dir)
+  const server = createServer((req, res) => {
+    const path = decodeURIComponent(new URL(req.url ?? '/', 'http://x').pathname)
+    let file = join(root, normalize(path))
+    if (!file.startsWith(root)) return res.writeHead(403).end()
+    try {
+      if (statSync(file).isDirectory()) file = join(file, 'index.html')
+      statSync(file)
+    } catch {
+      return res.writeHead(404).end()
+    }
+    res.writeHead(200, { 'content-type': types[extname(file)] ?? 'application/octet-stream' })
+    createReadStream(file).pipe(res)
+  })
+  return new Promise((done) => server.listen(port, () => done(server)))
+}
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  const [dir = 'storybook-static', port = '6007'] = process.argv.slice(2)
+  await serve(dir, Number(port))
+  console.log(`serving ${resolve(dir)} on http://localhost:${port}`)
+}

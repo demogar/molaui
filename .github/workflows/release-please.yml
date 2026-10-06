@@ -37,6 +37,14 @@ jobs:
   # rebuilt and tested from the tagged commit, then published twice: to
   # npmjs.com, where people install it from, and to GitHub Packages, so it is
   # listed on the repository page.
+  #
+  # npmjs.com publishing uses trusted publishing: npm exchanges this job's
+  # OIDC token for a short-lived publish token, so no long-lived secret is
+  # needed and provenance is recorded automatically. It needs npm 11.5.1 or
+  # later (Node 22 ships npm 10) and a trusted publisher configured on
+  # npmjs.com for this repository and workflow file (CONTRIBUTING.md,
+  # "Releases"). Until that is configured, npm falls back to the NPM_TOKEN
+  # secret through NODE_AUTH_TOKEN; once it is, the secret can be deleted.
   publish:
     name: Publish package
     needs: release-please
@@ -45,10 +53,8 @@ jobs:
     permissions:
       contents: read
       packages: write
-      # Provenance: npm records that this exact workflow built the package.
+      # Trusted publishing and provenance both need the OIDC token.
       id-token: write
-    env:
-      HAS_NPM_TOKEN: ${{ secrets.NPM_TOKEN != '' }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -62,13 +68,12 @@ jobs:
       - run: npm run build
 
       - name: Publish to npmjs.com
-        if: env.HAS_NPM_TOKEN == 'true'
         uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           registry-url: https://registry.npmjs.org
-      - if: env.HAS_NPM_TOKEN == 'true'
-        run: npm publish --provenance --access public
+      - run: npm install -g npm@11.21.0
+      - run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

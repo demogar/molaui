@@ -23,17 +23,29 @@ npm run manifest         # regenerate docs/ai/components.json, llms.txt, llms-fu
 npm run manifest:check   # fail if those are stale or the README/introduction counts are wrong
 npm run build            # library build to dist/
 npm run build-storybook  # static Storybook to storybook-static/
-npm run check            # all gates, same list CI runs
+npm run api              # regenerate etc/mola-ui.api.md from dist/ (API Extractor; needs build)
+npm run api:check        # fail if the public API changed without the report
+npm run size             # size-limit budgets in .size-limit.json (needs build)
+npm run check            # all gates, same list CI's Gates job runs
+npm run audit            # browser audit of storybook-static/ (needs build-storybook); report in reports/audit/
+npm run visual           # visual regression vs Linux baselines (needs build-storybook)
+npm run visual:update    # rewrite changed baselines for this OS (only linux/ is committed)
+npm run consumers        # npm pack, install into test/consumers/* apps, build, check in a browser (needs build)
 ```
+
+CI (`.github/workflows/ci.yml`) runs `Gates`, `Browser audit`, `Visual regression` and `Consumer smoke tests` in parallel; all four are required by the ruleset. Visual baselines must be rendered on Linux: label the PR `update-visual-baselines` (workflow `visual-baselines.yml`) rather than committing baselines from macOS, then push again so CI reruns. Shared CI setup (Node, npm cache, cached Playwright Chromium) is the composite action `.github/actions/setup`.
 
 A change is ready only when `npm run check` passes. Never weaken a gate to get green; if a gate is wrong, fix it in its own commit and say why.
 
 Browser scripts (need a running Storybook, use Playwright):
-- `node scripts/audit.mjs http://localhost:6006` — axe *with* color contrast in both themes, 390px horizontal-overflow check, console errors, over every story.
+- `node scripts/audit.mjs http://localhost:6006 [--only <id fragment>]` — axe *with* color contrast in both themes, 390px horizontal-overflow check, console errors, over every story and every docs page; exits non-zero on findings. Prefer the static build (`npm run audit`): the dev server stalls it.
+- `node scripts/serve-static.mjs [dir] [port]` — serves `storybook-static/` (used by the audit and the visual tests).
 - `node scripts/shoot.mjs <outDir> <base> <storyId[:theme[:density[:width]]]>...` — screenshots for visual review.
 - `node scripts/readme-shots.mjs http://localhost:6006` — regenerates `docs/screenshots/` at 2x, except `agent-console.png`, which was captured by driving the console story by hand.
 
-`audit.mjs` deliberately ignores Base UI focus-guard nodes (an `aria-hidden-focus` false positive) and the intentional unresolvable image request in the `broken-image` story.
+`audit.mjs` deliberately ignores Base UI focus-guard nodes (an `aria-hidden-focus` false positive) and the intentional unresolvable image request in the `broken-image` story. On docs pages it skips Storybook's args table and the landmark-uniqueness/heading-order rules (a docs page stacks several complete examples); each story is audited for those on its own page.
+
+The visual tests (`test/visual/`) freeze time with Playwright's clock and run 15s of fake time before the screenshot, so simulated streams and countdowns finish deterministically. A story is screenshotted cropped to its content (root plus portals).
 
 ### Dependency gotchas
 - `npm install` of many packages in one command has crashed with `Cannot read properties of null (reading 'edgesOut')`; install in smaller groups.
