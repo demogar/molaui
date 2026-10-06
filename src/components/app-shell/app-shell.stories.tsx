@@ -33,7 +33,7 @@ const runs = makeAgentRuns(40)
 const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 4 })
 const integer = new Intl.NumberFormat('en-US')
 
-const TONE = { succeeded: 'success', running: 'info', failed: 'danger', queued: 'neutral', cancelled: 'warn' } as const
+const TONE = { succeeded: 'success', running: 'info', failed: 'danger', queued: 'neutral', cancelled: 'neutral' } as const
 
 const columns: DataTableColumn<AgentRun>[] = [
   { key: 'id', header: 'Run', width: '9.5rem', cell: (r) => <span className="literal text-ink-2">{r.id}</span> },

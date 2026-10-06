@@ -58,7 +58,9 @@ const STATUS_TONE: Record<RunStatus, BadgeTone> = {
   running: 'info',
   failed: 'danger',
   queued: 'neutral',
-  cancelled: 'warn',
+  // A person stopped it: stated without alarm, as RunStatus does. Gold is
+  // for work that is waiting on someone.
+  cancelled: 'neutral',
 }
 
 const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 4 })

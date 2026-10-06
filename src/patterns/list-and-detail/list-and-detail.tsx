@@ -65,7 +65,9 @@ const RUN_TONE: Record<RecentRunStatus, BadgeTone> = {
   succeeded: 'success',
   running: 'info',
   failed: 'danger',
-  cancelled: 'warn',
+  // A person stopped it: stated without alarm, as RunStatus does. Gold is
+  // for work that is waiting on someone.
+  cancelled: 'neutral',
 }
 
 const integer = new Intl.NumberFormat('en-US')

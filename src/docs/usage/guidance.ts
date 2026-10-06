@@ -549,6 +549,10 @@ export const USAGE: Record<string, Usage> = {
         do: 'Use soft badges down a column.',
         dont: 'Fill a column with solid badges; fifty solid statuses read as a quilt.',
       },
+      {
+        do: 'Map a stopped or cancelled state to neutral; a person chose it.',
+        dont: 'Show a cancellation in gold; warn is for work that is degraded or waiting on someone.',
+      },
     ],
     content: [
       'One or two words in sentence case, with no punctuation: “Succeeded”, “Needs review”.',
