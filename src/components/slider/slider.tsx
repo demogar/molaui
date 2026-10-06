@@ -70,7 +70,7 @@ export function Slider({
       ) : null}
       <SliderPrimitive.Control className="flex h-5 w-full touch-none items-center select-none data-disabled:cursor-not-allowed">
         <SliderPrimitive.Track className="relative h-1.5 w-full bg-cloth-shade shadow-cut">
-          <SliderPrimitive.Indicator className="bg-ink data-disabled:bg-ink-muted" />
+          <SliderPrimitive.Indicator className="bg-ink forced-ink data-disabled:bg-ink-muted" />
           {Array.from({ length: thumbCount }, (_, index) => (
           <SliderPrimitive.Thumb
             key={index}
@@ -79,7 +79,7 @@ export function Slider({
               'size-4 rounded-none bg-cloth-pale shadow-cut band-oro [--cut-reveal:3px]',
               'transition-[box-shadow] duration-(--motion-cut) ease-cut',
               'hover:cut-band data-dragging:cut-band',
-              'has-focus-visible:shadow-[var(--focus-ring)]',
+              'has-focus-visible:shadow-[var(--focus-ring)] has-focus-visible:forced-focus',
               'data-disabled:bg-cloth-shade data-disabled:hover:shadow-cut',
             )}
           />

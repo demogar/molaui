@@ -69,12 +69,40 @@
   }
 
   /* Windows High Contrast removes box-shadows, which would take every keyline
-   * and the focus ring with them. A transparent outline is repainted in the
-   * system colour there and is invisible everywhere else. */
+   * and the focus ring with them, so focus becomes an outline in the system
+   * colour there.
+   *
+   * Important, because this rule sits in the base layer and two things in
+   * the utilities layer beat it otherwise. Composite items (tabs, menu rows,
+   * accordion triggers) carry `outline-none`, and every keyline draws a 1px
+   * forced-colours outline of its own (cloth.css). The first left those
+   * items with no focus indicator at all in this mode; the second shrank the
+   * ring to the keyline, the same edge whether focused or not. Important
+   * declarations reverse layer order, so an important rule in the base layer
+   * beats both a normal and an important one among the utilities — exactly
+   * the precedence an accessibility fallback needs. */
   @media (forced-colors: active) {
     :focus-visible {
-      outline: 2px solid CanvasText;
-      outline-offset: 2px;
+      outline: 2px solid CanvasText !important;
+      outline-offset: 2px !important;
+    }
+
+    /* A tab row scrolls inside its list, whose overflow clip shaved the
+     * outer ring down to one edge. Drawn inside, as the ordinary ring is. */
+    [role='tab']:focus-visible {
+      outline-offset: -2px !important;
+    }
+
+    /* Disabled is stated, not faded, and in this mode the statement is the
+     * system's own disabled colour, so it reads as disabled in the user's
+     * palette. Important for the same reason: a component's `text-ink` and
+     * its keyline outline are utilities, and would otherwise repaint a
+     * disabled control in the ordinary text colour. */
+    :disabled,
+    [data-disabled],
+    [aria-disabled='true'] {
+      color: GrayText !important;
+      outline-color: GrayText !important;
     }
   }
 

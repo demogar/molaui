@@ -76,7 +76,7 @@ export function Progress({
           <span aria-hidden className="absolute inset-0 band-oro relleno-working" />
         ) : (
           <ProgressPrimitive.Indicator
-            className={cn('block h-full transition-[width] duration-(--motion-base) ease-cut', FILL[tone])}
+            className={cn('block h-full forced-ink transition-[width] duration-(--motion-base) ease-cut', FILL[tone])}
           />
         )}
       </ProgressPrimitive.Track>
@@ -145,13 +145,13 @@ export function Meter({
       </div>
       <MeterPrimitive.Track className={cn(trackClasses, sizeClasses[size])}>
         <MeterPrimitive.Indicator
-          className={cn('block h-full transition-[width,background-color] duration-(--motion-base) ease-cut', LEVEL_FILL[level])}
+          className={cn('block h-full forced-ink transition-[width,background-color] duration-(--motion-base) ease-cut', LEVEL_FILL[level])}
         />
         {ticks.map((t) => (
           <span
             key={t}
             aria-hidden
-            className="absolute inset-y-0 w-[1.5px] bg-ink"
+            className="absolute inset-y-0 w-[1.5px] bg-ink forced-ink"
             style={{ left: `calc(${t * 100}% - 0.75px)` }}
           />
         ))}

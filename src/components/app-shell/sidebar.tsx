@@ -119,6 +119,7 @@ export function NavItem({
           'hover:bg-ink-soft hover:text-ink',
           'aria-[current=page]:bg-ink-soft aria-[current=page]:font-semibold aria-[current=page]:text-ink',
           'aria-[current=page]:shadow-[inset_3px_0_0_var(--ink)]',
+          'aria-[current=page]:forced-selected',
           'focus-visible:shadow-[var(--focus-ring)]',
           '[&_svg]:size-4 [&_svg]:shrink-0',
           collapsed && 'justify-center px-0',

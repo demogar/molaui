@@ -244,7 +244,7 @@ export function CommandPalette({
                           className={cn(
                             'group/option mx-2 flex min-h-(--control-h) cursor-pointer items-center gap-3 px-2.5 py-2',
                             'font-ui text-sm text-ink [&_svg]:size-4 [&_svg]:shrink-0',
-                            'aria-selected:bg-ink aria-selected:text-on-ink',
+                            'aria-selected:bg-ink aria-selected:text-on-ink aria-selected:forced-selected',
                             'aria-disabled:cursor-default aria-disabled:text-ink-muted',
                           )}
                         >

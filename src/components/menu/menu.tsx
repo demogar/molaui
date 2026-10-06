@@ -37,7 +37,7 @@ export const MenuSubmenu = MenuPrimitive.SubmenuRoot
 const itemClasses = [
   'group/item relative flex min-h-(--control-h-sm) cursor-default items-center gap-2.5 px-2.5 py-1.5 outline-none select-none',
   'font-ui text-sm text-ink',
-  'data-highlighted:bg-ink data-highlighted:text-on-ink',
+  'data-highlighted:bg-ink data-highlighted:text-on-ink data-highlighted:forced-selected',
   // The ink fill IS the focus indicator here; the global two-tone ring on
   // top of it would double the mark and spill past the menu's edge.
   'focus-visible:shadow-none',

@@ -130,7 +130,7 @@ export function Pagination({
                   'font-ui text-sm font-semibold tabular-nums text-ink-2',
                   'transition-[background-color,color] duration-(--motion-cut) ease-cut',
                   'hover:bg-ink-soft hover:text-ink',
-                  'aria-[current=page]:bg-ink aria-[current=page]:text-on-ink',
+                  'aria-[current=page]:bg-ink aria-[current=page]:text-on-ink aria-[current=page]:forced-selected',
                 )}
               >
                 {fmt(item)}

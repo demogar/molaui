@@ -54,7 +54,7 @@ export function Radio({ className, label, description, ...props }: RadioProps) {
       className={cn(radioClasses, !label && className)}
       {...props}
     >
-      <RadioPrimitive.Indicator className="size-2 bg-ink data-unchecked:hidden data-disabled:bg-ink-muted" />
+      <RadioPrimitive.Indicator className="size-2 bg-ink forced-ink data-unchecked:hidden data-disabled:bg-ink-muted" />
     </RadioPrimitive.Root>
   )
 

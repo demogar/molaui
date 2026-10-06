@@ -155,7 +155,7 @@ export function StatusDot({ tone = 'neutral', pulse = false, label, className, .
       aria-label={label}
       aria-hidden={label ? undefined : true}
       className={cn(
-        'inline-block size-[7px] shrink-0 rounded-none',
+        'inline-block size-[7px] shrink-0 rounded-none forced-ink',
         DOT_TONE[tone],
         (tone === 'warn' || tone === 'accent') && 'shadow-[0_0_0_1px_var(--ink)]',
         pulse && 'animate-mola-pulse',

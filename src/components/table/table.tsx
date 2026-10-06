@@ -106,7 +106,7 @@ export function TableRow({ selected = false, className, ...props }: TableRowProp
         'transition-colors duration-(--motion-cut) ease-cut',
         '[&>td]:shadow-[inset_0_-1px_0_var(--keyline-soft)]',
         'hover:[&>td]:bg-ink-soft',
-        'data-selected:[&>td]:bg-oro-soft',
+        'data-selected:[&>td]:bg-oro-soft data-selected:[&>td]:forced-selected',
         'data-selected:[&>td:first-child]:shadow-[inset_3px_0_0_var(--ink),inset_0_-1px_0_var(--keyline-soft)]',
         className,
       )}
