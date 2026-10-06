@@ -57,6 +57,7 @@ export * from './components/description-list'
 export * from './components/timeline'
 export * from './components/avatar'
 export * from './components/app-shell'
+export * from './components/toolbar'
 
 // The AI interface layer
 export * from './components/ai'

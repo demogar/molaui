@@ -26,7 +26,7 @@ import { Kbd } from '../typography'
 import { AppShell, Topbar } from './app-shell'
 import { PageHeader } from './page-header'
 import { NavItem, NavSection, Sidebar } from './sidebar'
-import { Toolbar, ToolbarButton, ToolbarGroup, ToolbarSeparator } from './toolbar'
+import { Toolbar, ToolbarButton, ToolbarGroup, ToolbarSeparator } from '../toolbar'
 
 const meta = {
   title: 'Components/Layout/App shell',
