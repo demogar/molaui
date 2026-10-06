@@ -204,6 +204,7 @@
   /* ── inverse panel, and over arbitrary pixels ─────────────────────── */
   --color-on-ink: var(--on-ink);
   --color-on-ink-muted: var(--on-ink-muted);
+  --color-on-ink-accent: var(--on-ink-accent);
   --color-keyline-on-ink: var(--keyline-on-ink);
   --color-scrim: var(--scrim);
   --color-on-scrim: var(--on-scrim);

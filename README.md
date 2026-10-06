@@ -17,9 +17,10 @@ admin consoles, knowledge bases, agent run monitors — documented in a standalo
   application shell: 147 exported parts, built on [Base UI](https://base-ui.com) for behaviour and
   accessibility, and styled with Tailwind v4.
 - **An AI interface layer.** Streaming text, message threads, a composer whose send button becomes
-  stop, tool-call cards with human approval, long-running agent run timelines with live elapsed
-  time, reasoning disclosure, citations, token budgets, and confidence stated in words rather
-  than decimals.
+  stop, tool-call cards with human approval, change review with diffs and a decision that needs a
+  reason to say no, long-running agent run timelines with live elapsed time, run failure and
+  recovery that keeps partial output, reasoning disclosure, citations that preview their source on
+  hover, focus or tap, token budgets, and confidence stated in words rather than decimals.
 - **A working demo.** In the
   [agent console](https://demogar.github.io/molaui/?path=/story/ai-agent-console--console), ask a
   question and a simulated agent plans, calls two tools and streams a cited answer, with the run
@@ -151,7 +152,7 @@ npm run check   # lint · typecheck · test · tokens:check · build · build-st
   `light-dark()`, `var()`, OKLab `color-mix()` — and asserts each promised pairing. It caught a real
   dark-theme failure during the build (muted ink on the gold wash, 4.00:1) before any screen did.
 - **No hex outside `tokens.css`**, enforced by a test.
-- **Every story is a test**: all 247 stories render through the real Storybook config and pass axe
+- **Every story is a test**: all 268 stories render through the real Storybook config and pass axe
   in the unit suite; `scripts/audit.mjs` re-runs axe *with colour contrast* in a real browser in both
   themes, and checks every story for horizontal overflow at 390px.
 - **`tailwind-merge` knows the token vocabulary**, with a test that fails if a new colour token is

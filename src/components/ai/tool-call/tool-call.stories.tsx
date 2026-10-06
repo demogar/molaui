@@ -18,7 +18,7 @@ const meta = {
           'One tool invocation: what the model asked a system to do, with what, and what came back. Everything the machine did is a **literal** — operators inspect these and paste them into tickets.',
           '',
           '- **Collapsed by default, except when it needs you.** A run can make forty calls; forty open payloads is a wall. A failed call and a call waiting for approval open themselves — hiding them would hide the only thing that matters.',
-          '- **Human in the loop.** Approval says *why* in words and gives Approve and Deny equal size. A consent control that nudges is not consent; for a tool that writes to production it is a bug.',
+          '- **Human in the loop.** Approval says *why* in words and gives Approve and Deny the same size and variant, as Change review does for its three decisions. A consent control that nudges is not consent; for a tool that writes to production it is a bug.',
           '- **Working** is a strip of relleno along the top edge and a ticking clock — no spinner, no percentage.',
         ].join('\n'),
       },

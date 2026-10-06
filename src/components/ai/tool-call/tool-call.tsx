@@ -1,6 +1,6 @@
 import { Collapsible } from '@base-ui/react/collapsible'
 import { Check, ChevronRight, RotateCcw, ShieldAlert, Wrench, X } from 'lucide-react'
-import type * as React from 'react'
+import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
 import { Button } from '../../button'
@@ -55,7 +55,8 @@ export interface ToolCallProps extends Omit<React.ComponentProps<'div'>, 'childr
  *
  * ── human in the loop ──
  * A call that needs approval states WHY in words, and offers Approve and Deny
- * as equally sized buttons, Deny never styled as the lesser option. A
+ * as buttons of the same size and variant, neither styled as the lesser
+ * option — the same rule `ChangeReview` follows for its three decisions. A
  * consent control that nudges is not consent; for a tool that writes to
  * production it is a bug.
  *
@@ -85,6 +86,9 @@ export function ToolCall({
   const forcedOpen = failed || waiting
   const working = status === 'running' || status === 'streaming'
   const hasBody = args !== undefined || result !== undefined || failed || waiting
+  // Always controlled: a live call goes from running to failed, and passing
+  // `open` only once forced switched Base UI from uncontrolled to controlled.
+  const [openState, setOpenState] = React.useState(defaultOpen)
 
   return (
     <div
@@ -94,7 +98,7 @@ export function ToolCall({
       {...props}
     >
       {working ? <span aria-hidden className="absolute inset-x-0 top-0 h-[3px] band-oro relleno-working" /> : null}
-      <Collapsible.Root defaultOpen={defaultOpen} {...(forcedOpen ? { open: true } : {})}>
+      <Collapsible.Root open={forcedOpen || openState} onOpenChange={setOpenState}>
         <Collapsible.Trigger
           disabled={!hasBody || forcedOpen}
           className={cn(
@@ -167,7 +171,13 @@ function ErrorBlock({
         <p className="m-0 font-ui text-sm font-semibold text-ink">
           {status === 'timed_out' ? 'The tool did not answer in time.' : 'The tool returned an error.'}
         </p>
-        {error ? <p className="m-0 mt-1 literal text-xs text-ink-on-tint [overflow-wrap:anywhere]">{error}</p> : null}
+        {/* Verbatim and left-to-right: a right-to-left paragraph would reorder
+            the punctuation of a string someone is going to paste into a search. */}
+        {error ? (
+          <p className="m-0 mt-1 literal text-xs text-ink-on-tint [overflow-wrap:anywhere]">
+            <span dir="ltr">{error}</span>
+          </p>
+        ) : null}
       </div>
       {onRetry ? (
         <Button size="sm" variant="secondary" icon={<RotateCcw />} onClick={onRetry}>
@@ -189,7 +199,10 @@ function ApprovalBlock({ approval }: { approval: ToolCallApproval }) {
         </div>
       </div>
       <div className="flex flex-wrap gap-2 ps-6.5">
-        <Button size="sm" icon={<Check />} onClick={approval.onApprove}>
+        {/* Same variant as Deny, as in ChangeReview. Approve was the ink
+            primary until the two were compared side by side: the doc said
+            "equal weight" and the pixels said "press this one". */}
+        <Button size="sm" variant="secondary" icon={<Check />} onClick={approval.onApprove}>
           {approval.approveLabel ?? 'Approve'}
         </Button>
         <Button size="sm" variant="secondary" icon={<X />} onClick={approval.onDeny}>

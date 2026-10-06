@@ -5,14 +5,14 @@ import { fn } from 'storybook/test'
 import { Button } from '../../button'
 import { ANSWER, OPERATOR_QUESTION, QUERY_ARGS, QUERY_RESULT, SOURCES } from '../_story-data/fixtures'
 import { useSimulatedStream } from '../_story-data/simulate'
-import { Citation, SourceList } from '../sources'
+import { SourceList, citationRenderer } from '../sources'
 import { StreamingText } from '../streaming-text'
 import { ToolCall } from '../tool-call'
 
 import { Message } from './message'
 import { Thread } from './thread'
 
-const cite = (n: number) => <Citation n={n} title={SOURCES[n - 1]?.title} />
+const cite = citationRenderer(SOURCES)
 
 const meta = {
   title: 'AI/Message',
@@ -50,7 +50,7 @@ export const Conversation: Story = {
       <Message
         role="assistant"
         author="Cayuco"
-        model="mola-research-2"
+        model="cayuco-deep-3"
         timestamp="2026-10-05T14:02:06Z"
         copyText={ANSWER}
         onRetry={fn()}
@@ -73,7 +73,7 @@ function StreamingTurn() {
       <Message
         role="assistant"
         author="Cayuco"
-        model="mola-research-2"
+        model="cayuco-deep-3"
         status={stream.status === 'streaming' ? 'streaming' : 'done'}
         copyText={ANSWER}
         onFeedback={fn()}
@@ -95,7 +95,7 @@ export const Failed: Story = {
       <Message
         role="assistant"
         author="Cayuco"
-        model="mola-research-2"
+        model="cayuco-deep-3"
         status="error"
         error="upstream_timeout: model did not return a token for 30000ms (req_7Hq2c91)"
         onRetry={fn()}

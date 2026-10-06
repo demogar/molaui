@@ -25,7 +25,7 @@ export function Hero() {
           ].map(([value, label]) => (
             <div key={label} className="m-0">
               <dt className="sr-only">{label}</dt>
-              <dd className="m-0 font-display text-3xl font-bold wdth-display text-oro tabular">{value}</dd>
+              <dd className="m-0 font-display text-3xl font-bold wdth-display text-on-ink-accent tabular">{value}</dd>
               <dd className="m-0 mt-1 rotulo text-on-ink-muted">{label}</dd>
             </div>
           ))}

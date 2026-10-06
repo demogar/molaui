@@ -175,8 +175,11 @@ export function PromptInput({
             <span className="hidden sm:inline">{shortcut}</span>
           )}
           {showEstimate && value.length > 0 ? (
-            <span className="tabular" aria-label={`About ${estimate} tokens`}>
-              ~{estimate.toLocaleString()} tok
+            // A fixed locale, as in Chip: the runtime's default differs between
+            // the server and the browser, which is a hydration mismatch, and the
+            // words around the figure are English anyway.
+            <span className="tabular" aria-label={`About ${estimate.toLocaleString('en-US')} tokens`}>
+              ~{estimate.toLocaleString('en-US')} tok
             </span>
           ) : null}
         </p>

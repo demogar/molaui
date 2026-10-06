@@ -7,6 +7,7 @@ import { fn } from 'storybook/test'
 
 import type { AgentStep } from '../agent-run'
 import { Reasoning } from '../reasoning'
+import { PartialOutput } from '../run-error'
 import type { RunStatusValue } from '../run-status'
 import { StreamingText } from '../streaming-text'
 import { ToolCall } from '../tool-call'
@@ -93,8 +94,8 @@ export const RUN_SCRIPT: ScriptStep[] = [
 
 export const RUN_LENGTH = RUN_SCRIPT.at(-1)!.end
 
-export function deriveSteps(t: number, base: number): AgentStep[] {
-  return RUN_SCRIPT.map((s) => {
+export function deriveSteps(t: number, base: number, script: readonly ScriptStep[] = RUN_SCRIPT): AgentStep[] {
+  return script.map((s) => {
     const status: RunStatusValue =
       t >= s.end ? 'succeeded' : t >= s.start ? (s.kind === 'message' ? 'streaming' : 'running') : 'queued'
     const progress = Math.max(0, Math.min(1, (t - s.start) / (s.end - s.start)))
@@ -111,8 +112,13 @@ export function deriveSteps(t: number, base: number): AgentStep[] {
   })
 }
 
-/** Static frames: the same run, finished, failed, held for approval, or stopped. */
-export function staticSteps(ending: 'succeeded' | 'failed' | 'waiting' | 'cancelled'): AgentStep[] {
+/** A cut that lands on a list marker leaves a lone "-"; end on the words instead. */
+export const cutClean = (text: string) => text.replace(/\n-\s*$/, '').trimEnd()
+
+/** Static frames: the same run, finished, failed, held for approval, stopped, rate limited or out of time. */
+export function staticSteps(
+  ending: 'succeeded' | 'failed' | 'waiting' | 'cancelled' | 'rate_limited' | 'timed_out',
+): AgentStep[] {
   const base = Date.parse('2026-10-05T14:01:50Z')
   const done = deriveSteps(RUN_LENGTH, base)
   if (ending === 'succeeded') return done.map((s) => ({ ...s, defaultOpen: false }))
@@ -135,7 +141,6 @@ export function staticSteps(ending: 'succeeded' | 'failed' | 'waiting' | 'cancel
             durationMs={412}
             args={{ table: 'analytics.exp_0412_segments', group_by: 'cohort' }}
             error='PermissionDenied: role "agent_readonly" lacks SELECT on analytics.exp_0412_segments'
-            onRetry={fn()}
           />
         ),
       },
@@ -166,9 +171,47 @@ export function staticSteps(ending: 'succeeded' | 'failed' | 'waiting' | 'cancel
       },
     ]
   }
+  if (ending === 'rate_limited') {
+    return [
+      ...first,
+      { id: 'answer', kind: 'message', title: 'Write the answer', status: 'failed', durationMs: 240, startedAt: fourthStart, endedAt: fourthStart + 240 },
+    ]
+  }
+  // Stopped part-way through the answer: what arrived is kept, and marked.
+  const partialAnswer = (progress: number, note: string) => (
+    <PartialOutput note={note}>
+      <StreamingText text={cutClean(partial(ANSWER, progress))} status="done" className="text-base" />
+    </PartialOutput>
+  )
+  if (ending === 'timed_out') {
+    return [
+      ...first,
+      {
+        id: 'answer',
+        kind: 'message',
+        title: 'Write the answer',
+        status: 'timed_out',
+        durationMs: 30_000,
+        startedAt: fourthStart,
+        endedAt: fourthStart + 30_000,
+        detail: partialAnswer(0.45, 'Output stops here: the model did not finish within 30 seconds.'),
+        defaultOpen: true,
+      },
+    ]
+  }
   return [
     ...first,
-    { id: 'answer', kind: 'message', title: 'Write the answer', status: 'cancelled', durationMs: 1730, startedAt: fourthStart, endedAt: fourthStart + 1730 },
+    {
+      id: 'answer',
+      kind: 'message',
+      title: 'Write the answer',
+      status: 'cancelled',
+      durationMs: 1730,
+      startedAt: fourthStart,
+      endedAt: fourthStart + 1730,
+      detail: partialAnswer(0.3, 'Output stops here: you stopped the run.'),
+      defaultOpen: true,
+    },
   ]
 }
 
@@ -182,4 +225,70 @@ export function stepProgress(t: number, id: string): number {
 export function stepWindow(id: string): { start: number; end: number } {
   const s = RUN_SCRIPT.find((step) => step.id === id)!
   return { start: s.start, end: s.end }
+}
+
+/* ── failure and recovery ────────────────────────────────────────────
+ * The same run with a fourth step — a warehouse query by cohort — that is
+ * denied on the first attempt. The failed frame is derived from the script
+ * like every other frame, so retrying from that step is "carry on deriving
+ * from the step's start time", and the steps before it keep the output they
+ * already produced. */
+
+const SEGMENT_ARGS = { table: 'analytics.exp_0412_segments', group_by: 'cohort' }
+export const SEGMENT_ERROR = 'PermissionDenied: role "agent_readonly" lacks SELECT on analytics.exp_0412_segments'
+
+export const RECOVERY_SCRIPT: ScriptStep[] = [
+  ...RUN_SCRIPT.slice(0, 3),
+  {
+    id: 'segments',
+    kind: 'tool',
+    title: 'Break the result down by cohort',
+    start: 5400,
+    end: 6600,
+    render: (status, _p, base, s) => (
+      <ToolCall
+        name="query_warehouse"
+        status={status}
+        startedAt={base + s.start}
+        endedAt={status === 'succeeded' ? base + s.end : undefined}
+        args={SEGMENT_ARGS}
+        result={status === 'succeeded' ? { rows: 2, beginner: '+4.1 pts', imported_rating: '+0.4 pts' } : undefined}
+      />
+    ),
+  },
+  ...RUN_SCRIPT.slice(3).map((s) => ({ ...s, start: s.start + 1200, end: s.end + 1200 })),
+]
+
+export const RECOVERY_LENGTH = RECOVERY_SCRIPT.at(-1)!.end
+/** Script time at which the first attempt at the segments query is denied. */
+export const RECOVERY_FAILS_AT = 5812
+export const RECOVERY_RESUMES_AT = 5400
+
+/**
+ * The run at script time `t`. On the first attempt it stops at
+ * `RECOVERY_FAILS_AT`: the segments step failed, the answer never started.
+ * After a retry from that step, `t` simply carries on from its start.
+ */
+export function deriveRecoverySteps(t: number, base: number, firstAttempt: boolean): AgentStep[] {
+  if (!firstAttempt || t < RECOVERY_FAILS_AT) return deriveSteps(t, base, RECOVERY_SCRIPT)
+  return deriveSteps(RECOVERY_RESUMES_AT, base, RECOVERY_SCRIPT).map((s) =>
+    s.id === 'segments'
+      ? {
+          ...s,
+          status: 'failed' as const,
+          startedAt: base + RECOVERY_RESUMES_AT,
+          endedAt: base + RECOVERY_FAILS_AT,
+          detail: (
+            <ToolCall
+              name="query_warehouse"
+              status="failed"
+              startedAt={base + RECOVERY_RESUMES_AT}
+              endedAt={base + RECOVERY_FAILS_AT}
+              args={SEGMENT_ARGS}
+              error={SEGMENT_ERROR}
+            />
+          ),
+        }
+      : s,
+  )
 }

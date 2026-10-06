@@ -52,6 +52,7 @@ const PAIRS: Pair[] = [
   ['--on-ink', '--ink', 4.5],
   ['--on-ink-muted', '--ink', 4.5],
   ['--oro', '--ink', 4.5, ['light']],
+  ['--on-ink-accent', '--ink', 4.5],
   // A tinted label.
   ['--rojo-on-shade', '--cloth-shade', 4.5],
   // The keyline bounds every control: a UI boundary owes 3:1.

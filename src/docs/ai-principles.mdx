@@ -44,21 +44,47 @@ survives a greyscale screenshot in a bug ticket.
   region is `aria-busy` while streaming.
 - Under reduced motion the caret stops blinking; the text still arrives.
 
-## 5. The human stays in the loop where it matters
+## 5. Approval comes before anything irreversible
 
-A tool call that writes, spends or sends can require approval. The call renders its exact
+A tool call that writes, spends or sends waits for a person. The call renders its exact
 arguments as a literal, and the run visibly **waits** — a distinct status with its own gold mark —
-until a person approves or denies it. Stop is always one press away: while a response generates,
-the composer's send button *becomes* the stop button, in the same place.
+until someone approves or denies it. A larger change, files or records, goes through
+**Change review**: the diff as the reviewer reads it, the agent's reasons in its own words, and the
+decision under it.
+
+- **Every choice has the same weight.** Approve, Deny, Request changes and Reject share a size and
+  a variant. A screen that makes Approve the ink button has decided for the reviewer, and on an
+  action the agent cannot undo, a nudged approval is a defect.
+- **A no carries a reason**, because the agent acts on it: it revises the change or stops proposing
+  it. A missing reason is stated in words and focus moves to the field; nothing is decided.
+- **The decision is recorded where the form was**, and takes focus, so it is heard once.
+
+Stop is always one press away: while a response generates, the composer's send button *becomes*
+the stop button, in the same place.
 
 ## 6. Failure is a first-class state
 
-A failed tool call shows the error **as the literal the tool returned**, what had already
-succeeded before it, and a retry scoped to the failure — not "Something went wrong". Timeouts and
-cancellations are distinct from failures, because the operator's next action differs.
+A failed run says **which step stopped it**, in a sentence and as the literal the tool returned,
+and keeps what had already arrived, marked as partial — not "Something went wrong". The way back
+sits next to it: **Retry from step N** keeps the work before the failure, **Retry run** starts
+again, and **Copy error details** puts run, step, tool, error and time on the clipboard for a
+ticket.
+
+Rate limits, timeouts and cancellations are distinct from failures, because the operator's next
+action differs. A wait shows a countdown that is announced with the error, at ten seconds and at
+zero, never every second. A cancellation was a person's choice, so it is stated without alarm.
 
 ## 7. Uncertainty is stated in words, not decimals
 
 Models are poorly calibrated, so a confidence of "87.3%" is precision the system does not have.
 Confidence is three steps — **High, Medium, Low** — with a segmented mark *and* the word, and the
 specific thing the model is unsure about is written as a note to verify, on an añil wash.
+
+## 8. Every claim can be checked where it is made
+
+A citation is only worth something if people check it, so checking has to cost nothing. Each
+inline marker matches a numbered source in the list below the answer — marker 2 is source 2,
+built from the same array — and previews that source where the reader is: on hover, on keyboard
+focus, and on a first tap on touch, with the title, the domain, the passage the answer used and
+when it was read. The preview is never the only route: the marker is still a link to the source
+card, and the card links to the document.

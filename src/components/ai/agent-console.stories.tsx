@@ -13,7 +13,7 @@ import { Message, Thread } from './message'
 import { PromptInput } from './prompt-input'
 import { Reasoning } from './reasoning'
 import type { RunStatusValue } from './run-status'
-import { Citation, SourceList } from './sources'
+import { SourceList, citationRenderer } from './sources'
 import { StreamingText } from './streaming-text'
 import { TokenUsage } from './token-usage'
 import { ToolCall } from './tool-call'
@@ -51,7 +51,7 @@ interface Turn {
 const USAGE_PER_TURN = { input: 18_420, output: 1_204, cached: 12_800, costUsd: 0.0731 }
 const SUGGESTIONS = [OPERATOR_QUESTION, 'Which guardrails did onboarding v3 define, and did any of them regress?']
 
-const cite = (n: number) => <Citation n={n} title={SOURCES[n - 1]?.title} />
+const cite = citationRenderer(SOURCES)
 
 function AssistantTurn({ t, base, stopped, onRetry, feedback, onFeedback }: {
   t: number
@@ -73,7 +73,7 @@ function AssistantTurn({ t, base, stopped, onRetry, feedback, onFeedback }: {
     <Message
       role="assistant"
       author="Cayuco"
-      model="mola-research-2"
+      model="cayuco-deep-3"
       timestamp={new Date(base)}
       status={done || stopped ? 'done' : 'streaming'}
       copyText={done ? ANSWER : undefined}
@@ -234,7 +234,7 @@ function AgentConsole() {
               onStop={stop}
               toolbar={
                 <Button size="sm" variant="ghost" className="normal-case tracking-normal">
-                  <span className="literal text-xs">mola-research-2</span>
+                  <span className="literal text-xs">cayuco-deep-3</span>
                   <ChevronDown />
                 </Button>
               }
@@ -247,7 +247,7 @@ function AgentConsole() {
             <AgentRun
               name="Cayuco research agent"
               runId={`run_01JA4R7M${String(last.id).padStart(4, '0')}`}
-              model="mola-research-2"
+              model="cayuco-deep-3"
               status={runStatus}
               startedAt={last.base}
               endedAt={runStatus === 'running' ? undefined : last.base + lastT}

@@ -140,9 +140,17 @@
    * A filled --ink region is the inverse panel: dark on light, light on dark.
    * Only cloth and gold carry text there; the layer colours measure under
    * 3:1 on --ink and are barred.
-   *   --on-ink 16.82 / 13.79   --on-ink-muted 8.36 / 6.56 */
+   *   --on-ink 16.82 / 13.79   --on-ink-muted 8.36 / 6.56
+   *   --on-ink-accent 9.34 / 5.67 */
   --on-ink: var(--cloth-pale);
   --on-ink-muted: color-mix(in oklab, var(--cloth-pale) 72%, var(--ink));
+  /* The one accent an ink panel takes — a figure, a key word. Gold, as the
+   * note above says, but only in the light theme: there the panel is dark and
+   * gold measures 9.34. In the dark theme the panel is bleached cotton and
+   * --oro falls to 1.50, which is what the introduction's hero figures did
+   * while they were written as `text-oro`. So the dark value is gold taken
+   * down until it reads on cotton: 5.67. */
+  --on-ink-accent: light-dark(#edb01f, #7a560a);
   --keyline-on-ink: color-mix(in oklab, var(--cloth-pale) 22%, transparent);
 
   /* ── over arbitrary pixels ────────────────────────────────────────
