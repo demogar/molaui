@@ -74,6 +74,22 @@ async function audit(page, job, errors) {
   if (!shown.includes('sb-show-main')) return [`did not render (${shown.trim()})`]
   await page.evaluate(() => document.fonts.ready)
   await page.waitForTimeout(250)
+  // The theme is applied by an effect after the first paint, and colours
+  // ease between themes. A fixed 250ms was enough locally, but on a slower
+  // CI runner axe once measured the app shell mid-transition: light-theme
+  // ink on the dark ground, 1.12:1. So every finite transition and animation
+  // is awaited (spinners and other infinite ones are left running).
+  await page.evaluate(() =>
+    Promise.race([
+      Promise.all(
+        document
+          .getAnimations()
+          .filter((a) => a.effect?.getComputedTiming().endTime !== Infinity)
+          .map((a) => a.finished.catch(() => {})),
+      ),
+      new Promise((resolve) => setTimeout(resolve, 5_000)),
+    ]),
+  )
 
   const found = []
   if (job.axe) {
