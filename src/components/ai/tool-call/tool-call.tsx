@@ -138,7 +138,7 @@ export function ToolCall({
               {failed && !reported ? <ErrorBlock status={status} error={error} onRetry={onRetry} /> : null}
               {args !== undefined ? <Payload label="arguments" value={args} /> : null}
               {result !== undefined ? <Payload label="result" value={result} /> : null}
-              {failed && reported && error ? <Payload label="error" value={error} /> : null}
+              {failed && reported && error ? <Payload label="error" value={error} wrap /> : null}
             </div>
           </Collapsible.Panel>
         ) : null}
@@ -147,7 +147,7 @@ export function ToolCall({
   )
 }
 
-function Payload({ label, value }: { label: string; value: unknown }) {
+function Payload({ label, value, wrap }: { label: string; value: unknown; wrap?: boolean }) {
   const isText = typeof value === 'string'
   return (
     <CodeBlock
@@ -155,6 +155,7 @@ function Payload({ label, value }: { label: string; value: unknown }) {
       language={isText ? 'text' : 'json'}
       code={isText ? value : JSON.stringify(value, null, 2)}
       maxHeight="16rem"
+      wrap={wrap}
     />
   )
 }
