@@ -237,7 +237,7 @@ export function ToolbarOverflow({ items, moreLabel = 'More actions', align = 'en
   // Re-measure when the labels change, not whenever the caller passes a new
   // array: items are usually an inline literal, a new reference every render.
   const signature = items.map((item) => `${item.key}:${item.label}`).join('|')
-  const count = items.length
+  const itemCount = items.length
 
   React.useLayoutEffect(() => {
     const frame = frameRef.current
@@ -251,9 +251,9 @@ export function ToolbarOverflow({ items, moreLabel = 'More actions', align = 'en
       const widths = nodes.map((node) => node.offsetWidth)
       // Without real layout every width is 0; keep everything rather than
       // folding it all into the menu.
-      if (available === 0 || widths.every((w) => w === 0)) return setVisible(count)
+      if (available === 0 || widths.every((w) => w === 0)) return setVisible(itemCount)
       const total = widths.reduce((sum, w, i) => sum + w + (i ? GAP : 0), 0)
-      if (total <= available) return setVisible(count)
+      if (total <= available) return setVisible(itemCount)
       const budget = available - (more?.offsetWidth ?? 0) - GAP
       let used = 0
       let count = 0
@@ -270,7 +270,7 @@ export function ToolbarOverflow({ items, moreLabel = 'More actions', align = 'en
     const observer = new ResizeObserver(fit)
     observer.observe(frame)
     return () => observer.disconnect()
-  }, [signature, count])
+  }, [signature, itemCount])
 
   const shown = items.slice(0, visible)
   const folded = items.slice(visible)
