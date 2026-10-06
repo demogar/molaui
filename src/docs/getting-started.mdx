@@ -7,7 +7,7 @@ import { Meta } from '@storybook/addon-docs/blocks'
 ## Install
 
 ```bash
-npm install mola-ui @base-ui/react
+npm install @demogar/mola-ui @base-ui/react
 # the three faces, self-hosted
 npm install @fontsource-variable/archivo @fontsource-variable/alegreya @fontsource-variable/martian-mono
 ```
@@ -19,17 +19,17 @@ npm install @fontsource-variable/archivo @fontsource-variable/alegreya @fontsour
 import '@fontsource-variable/archivo/wdth.css' // the width axis is load-bearing
 import '@fontsource-variable/alegreya/wght.css'
 import '@fontsource-variable/martian-mono/wdth.css'
-import 'mola-ui/styles.css'
+import '@demogar/mola-ui/styles.css'
 ```
 
-`mola-ui/styles.css` is pre-compiled: it contains exactly the utilities the components use, and
+`@demogar/mola-ui/styles.css` is pre-compiled: it contains exactly the utilities the components use, and
 nothing from the stories. Archivo must be the **`wdth`** build — labels and headings are set on
 the width axis, and the static build falls back to a normal-width face.
 
 ## Use a component
 
 ```tsx
-import { Button, Field, Input } from 'mola-ui'
+import { Button, Field, Input } from '@demogar/mola-ui'
 
 export function RenameAgent() {
   return (
@@ -71,7 +71,7 @@ Import the un-compiled layers into your own build instead of shipping a second T
 
 ```css
 @import 'tailwindcss';
-@import 'mola-ui/tailwind.css';
+@import '@demogar/mola-ui/tailwind.css';
 @source '../node_modules/mola-ui/dist';
 ```
 
@@ -80,13 +80,13 @@ Every token is then a utility in your app too: `bg-cloth-pale`, `text-ink-muted`
 
 ## Not on React?
 
-The components are React, but the system is not. `mola-ui/tokens.css` is plain CSS custom
+The components are React, but the system is not. `@demogar/mola-ui/tokens.css` is plain CSS custom
 properties with no build step, and the `cloth` utilities are plain CSS under Tailwind. A Vue or
 server-rendered app gets the full palette, both themes and the three densities with:
 
 ```vue
 <script setup>
-import 'mola-ui/tokens.css'
+import '@demogar/mola-ui/tokens.css'
 </script>
 
 <template>

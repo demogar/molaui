@@ -36,9 +36,9 @@ body:
     attributes:
       label: How you import the styles
       options:
-        - mola-ui/styles.css (compiled)
-        - mola-ui/tailwind.css (own Tailwind v4 build)
-        - mola-ui/tokens.css (tokens only)
+        - '@demogar/mola-ui/styles.css (compiled)'
+        - '@demogar/mola-ui/tailwind.css (own Tailwind v4 build)'
+        - '@demogar/mola-ui/tokens.css (tokens only)'
   - type: input
     id: env
     attributes:

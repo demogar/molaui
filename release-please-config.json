@@ -19,7 +19,7 @@
   ],
   "packages": {
     ".": {
-      "package-name": "mola-ui",
+      "package-name": "@demogar/mola-ui",
       "changelog-path": "CHANGELOG.md"
     }
   }
