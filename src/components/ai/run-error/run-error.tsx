@@ -37,7 +37,7 @@ const LABEL: Record<RunErrorKind, string> = {
 
 export interface RunErrorProps extends Omit<React.ComponentProps<'div'>, 'children' | 'title'> {
   kind?: RunErrorKind
-  /** The step that stopped, in words — "Break the result down by cohort". */
+  /** The step that stopped, in words — "Break the result down by plan". */
   step?: string
   /** The step's position, counted from 1. Shown as "step 4 of 5" and used to name *Retry from step 4*. */
   stepNumber?: number

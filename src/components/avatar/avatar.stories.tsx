@@ -45,7 +45,7 @@ export const Layers: Story = {
 }
 
 export const Agent: Story = {
-  args: { name: 'Opening explainer', icon: <Bot /> },
+  args: { name: 'Docs answerer', icon: <Bot /> },
   parameters: {
     docs: { description: { story: 'An agent gets a glyph instead of initials, so a person and a bot are never confused in an activity log.' } },
   },

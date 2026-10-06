@@ -5,16 +5,17 @@ import { cn } from '../../lib/cn'
 
 /**
  * Term and value pairs — the properties panel of every run, document and
- * experiment. Three layouts, each the answer to a different reading task:
+ * rollout. Three layouts, each the answer to a different reading task:
  *
  *   inline   term left, value right-aligned against it, quiet rules between.
  *            For a side panel scanned top to bottom: "what model? what cost?"
- *            Ported from Must Do Panama's independence disclosure.
+ *            Ported from a disclosure block in the editorial system
+ *            this grew out of.
  *   stacked  term above value, a fixed term column from `sm` up. For values
  *            long enough to wrap — a prompt, a description, a URL.
  *   grid     two columns under one heavy ink rule, value in body type under
- *            its term. For a summary block closing a section. Ported from the
- *            itinerary fact grid.
+ *            its term. For a summary block closing a section. Ported from that
+ *            system's fact grid.
  *
  * `<div>` wrappers around each pair, not bare `<dt>`/`<dd>` siblings: it is
  * the one grouping a `<dl>` permits, and without it the grid would lay out

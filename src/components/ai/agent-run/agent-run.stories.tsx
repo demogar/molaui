@@ -139,7 +139,7 @@ export const RateLimited: Story = {
     status: 'failed',
     endedAt: BASE + 5640,
     steps: staticSteps('rate_limited'),
-    failure: { stepId: 'answer', kind: 'rate_limited', autoRetry: true, error: '429 rate_limit_exceeded: 40,000 output tokens per minute for workspace growth-analytics' },
+    failure: { stepId: 'answer', kind: 'rate_limited', autoRetry: true, error: '429 rate_limit_exceeded: 40,000 output tokens per minute for workspace support-ops' },
     onRetryFromStep: fn(),
   },
   parameters: {

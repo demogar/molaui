@@ -7,13 +7,13 @@ import { StreamingText } from '../streaming-text'
 import { Citation, SourceList, citationRenderer, type Source } from './sources'
 
 const SOURCES: Source[] = [
-  { id: 1, title: 'Results table', href: 'https://example.com/1', domain: 'experiments.cayuco.internal', snippet: 'Control 31.2%.' },
+  { id: 1, title: 'Results table', href: 'https://example.com/1', domain: 'rollouts.cayuco.internal', snippet: 'Control 31.2.' },
   {
     id: 2,
     title: 'Segment breakdown',
     href: 'https://example.com/2',
-    domain: 'experiments.cayuco.internal',
-    snippet: 'Beginner cohort: +4.1 pts.',
+    domain: 'rollouts.cayuco.internal',
+    snippet: 'Starter cohort: −6.1 per 1,000.',
     retrievedAt: '2026-10-05T14:02:03Z',
   },
 ]
@@ -37,7 +37,7 @@ describe('Citation', () => {
     expect(screen.getByRole('link', { name: 'Source 2: Segment breakdown' })).toHaveFocus()
     const open = await screen.findByRole('link', { name: /Open source 2/ })
     expect(open).toHaveAttribute('href', 'https://example.com/2')
-    expect(screen.getByText('“Beginner cohort: +4.1 pts.”')).toBeInTheDocument()
+    expect(screen.getByText('“Starter cohort: −6.1 per 1,000.”')).toBeInTheDocument()
     await user.keyboard('{Escape}')
     expect(screen.queryByRole('link', { name: /Open source 2/ })).not.toBeInTheDocument()
   })
@@ -69,7 +69,7 @@ describe('citationRenderer', () => {
     const render2 = citationRenderer(SOURCES)
     render(
       <>
-        <StreamingText text="Lift is in beginners [2], overall too [1]." renderCitation={render2} />
+        <StreamingText text="Drop is in Starter [2], overall too [1]." renderCitation={render2} />
         <SourceList sources={SOURCES} />
       </>,
     )

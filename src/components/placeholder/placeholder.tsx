@@ -3,9 +3,9 @@ import type * as React from 'react'
 import { cn } from '../../lib/cn'
 
 export interface PlaceholderProps extends React.ComponentProps<'div'> {
-  /** The kind of thing that goes here — "Photography", "Chart", "Preview". */
+  /** The kind of thing that goes here — "Image", "Chart", "Preview". */
   label?: string
-  /** What it would show — "Panama Canal", "Retention by cohort". */
+  /** What it would show — "Account logo", "Tickets by plan". */
   name: string
   /** Announced in place of the missing content. */
   alt: string

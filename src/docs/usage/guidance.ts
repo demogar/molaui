@@ -55,7 +55,7 @@ export const USAGE: Record<string, Usage> = {
         dont: 'Add a percentage or a spinner to a run; it has no knowable total, and the system has no spinner by design.',
       },
       {
-        do: 'Title each step in words, “Break the result down by cohort”, and put the tool’s literal name in its detail.',
+        do: 'Title each step in words, “Break the result down by plan”, and put the tool’s literal name in its detail.',
         dont: 'Title a step with a raw tool name or “Step 4”; the spine already numbers the steps.',
       },
     ],
@@ -88,8 +88,8 @@ export const USAGE: Record<string, Usage> = {
       },
     ],
     content: [
-      'Title the change by what it does, “Roll variant B out to beginners”, not by the files it touches.',
-      'Name a record by its type and key, so each field change has an owner: “Feature flag onboarding_puzzle_rush”.',
+      'Title the change by what it does, “Roll the help panel out to Starter”, not by the files it touches.',
+      'Name a record by its type and key, so each field change has an owner: “Feature flag help_panel_v2”.',
       'A reason for a no says what is wrong and what would make it acceptable, because the agent acts on it.',
     ],
   },
@@ -116,7 +116,7 @@ export const USAGE: Record<string, Usage> = {
       },
     ],
     content: [
-      'Write the basis as a short fact in lower case, since it follows the level: “sources disagree on the cohort size”.',
+      'Write the basis as a short fact in lower case, since it follows the level: “sources disagree on the segment size”.',
       'Title an UncertaintyNote with the claim, “Unverified figure”, not with “Warning” or “Note”.',
     ],
   },
@@ -342,7 +342,7 @@ export const USAGE: Record<string, Usage> = {
       },
     ],
     content: [
-      'The title says what the call is for, “Experiment results”; the name stays exactly as the model called it.',
+      'The title says what the call is for, “Rollout results”; the name stays exactly as the model called it.',
       'Name approval buttons by the action: “Approve rollout” and “Deny”, not “Yes” and “No”.',
       'Keep the approval reason to a sentence or two: what changes, for whom, and whether it can be undone.',
     ],
@@ -626,7 +626,7 @@ export const USAGE: Record<string, Usage> = {
       { when: 'A person or agent without a photo; initials stand in.', use: 'Components/Data display/Avatar' },
     ],
     content: [
-      'label is the kind, “Chart” or “Preview”; name is the thing, “Retention by cohort”.',
+      'label is the kind, “Chart” or “Preview”; name is the thing, “Tickets by plan”.',
       'alt says what is missing, “No data yet: run latency by agent”, because it is announced in place of the content.',
     ],
   },

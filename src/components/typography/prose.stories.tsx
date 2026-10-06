@@ -18,21 +18,21 @@ const meta = {
   render: (args) => (
     <Prose {...args}>
       <p>
-        Short answer: the <strong>rating-band experiment</strong> moved puzzle retention for new players, but not
-        for anyone who already had a rating above 1200.
+        Short answer: the <strong>saved-replies rollout</strong> sped up first replies for Starter workspaces, but not
+        for anyone already on the Enterprise plan.
       </p>
       <h2>What the data says</h2>
       <p>
-        Across 41,382 eligible accounts, day-7 return rose from 38.1% to 41.6%. The effect sits almost entirely in
-        the first band. I queried <code>events.puzzle_session</code> and joined on <code>experiment_exposure</code>;
+        Across 41,382 eligible tickets, same-day resolution rose from 38.1% to 41.6%. The effect sits almost entirely in
+        the Starter plan. I queried <code>events.ticket_reply</code> and joined on <code>rollout_exposure</code>;
         the exact query is in the tool call above.
       </p>
       <ol>
-        <li>New players saw easier first puzzles and solved more of them.</li>
-        <li>Experienced players saw no change, as expected — their first puzzle is already calibrated.</li>
+        <li>Starter agents found a matching saved reply and sent more of them.</li>
+        <li>Enterprise agents saw no change, as expected — their replies are already templated.</li>
         <li>No guardrail metric moved outside its interval.</li>
       </ol>
-      <blockquote>Treat the 1200+ result as a null, not as a negative effect. The interval spans zero.</blockquote>
+      <blockquote>Treat the Enterprise result as a null, not as a negative effect. The interval spans zero.</blockquote>
       <h3>Caveats</h3>
       <ul>
         <li>

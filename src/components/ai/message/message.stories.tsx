@@ -44,8 +44,8 @@ export const Conversation: Story = {
       <Message role="user" author="M. Herrera" timestamp="2026-10-05T14:01:40Z">
         {OPERATOR_QUESTION}
       </Message>
-      <Message role="tool" author="query_experiment" timestamp="2026-10-05T14:01:58Z">
-        <ToolCall name="query_experiment" title="Experiment results" status="succeeded" durationMs={1840} args={QUERY_ARGS} result={QUERY_RESULT} />
+      <Message role="tool" author="query_rollout" timestamp="2026-10-05T14:01:58Z">
+        <ToolCall name="query_rollout" title="Rollout results" status="succeeded" durationMs={1840} args={QUERY_ARGS} result={QUERY_RESULT} />
       </Message>
       <Message
         role="assistant"
@@ -132,7 +132,7 @@ function LongThread() {
           {i % 2 ? (
             <StreamingText text={`Turn ${i + 1}. ${ANSWER.split('\n\n')[i % 3]}`} />
           ) : (
-            `Follow-up question ${i + 1}: what about the imported-rating cohort?`
+            `Follow-up question ${i + 1}: what about Enterprise workspaces?`
           )}
         </Message>
       ))}

@@ -20,7 +20,7 @@ const meta = {
       story: { inline: false, height: '760px' },
       description: {
         component:
-          'The frame an internal tool lives in. Exactly the viewport tall, and only `<main>` scrolls — so the switcher, search and way back are never twenty rows away. From 920px the sidebar is in the layout and collapses to an icon rail; below it, the **same tree** renders in a modal sheet, so desktop and mobile navigation cannot drift apart. The demo is *Cayuco* — a fictional growth and agent platform, named for the dugout canoe of the Panamanian isthmus.',
+          'The frame an internal tool lives in. Exactly the viewport tall, and only `<main>` scrolls — so the switcher, search and way back are never twenty rows away. From 920px the sidebar is in the layout and collapses to an icon rail; below it, the **same tree** renders in a modal sheet, so desktop and mobile navigation cannot drift apart. The demo is *Cayuco* — a fictional agent platform for support, docs and billing teams, named for a dugout canoe.',
       },
     },
   },
@@ -72,8 +72,8 @@ function RunsPage() {
       <PageHeader
         breadcrumb={
           <nav aria-label="Breadcrumb" className="text-xs text-ink-muted">
-            <a href="#growth" className="text-ink-2 underline decoration-keyline hover:text-ink">
-              Growth
+            <a href="#support" className="text-ink-2 underline decoration-keyline hover:text-ink">
+              Support
             </a>
             <span aria-hidden className="mx-1.5">
               /
@@ -82,7 +82,7 @@ function RunsPage() {
           </nav>
         }
         title="Runs"
-        description="Every agent run in the Growth workspace. Failed runs keep their full trace for 30 days."
+        description="Every agent run in the Support workspace. Failed runs keep their full trace for 30 days."
         actions={
           <>
             <Button variant="secondary" icon={<Download />}>

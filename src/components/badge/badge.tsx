@@ -167,9 +167,9 @@ export function StatusDot({ tone = 'neutral', pulse = false, label, className, .
 }
 
 /**
- * The editorial recommendation scale from Must Do Panama, where this system
- * was born — kept as lineage, and because "how strongly do we stand behind
- * this" is a scale a growth or knowledge tool also has. Gold is the layer a
+ * The editorial recommendation scale of the editorial system this grew out
+ * of — kept as lineage, and because "how strongly do we stand behind
+ * this" is a scale a support or knowledge tool also has. Gold is the layer a
  * mola reveals last and least, so gold is `essential`.
  */
 export const recommendationVariants = cva('inline-flex items-center rotulo px-2.5 py-[6px] rounded-none shadow-cut', {

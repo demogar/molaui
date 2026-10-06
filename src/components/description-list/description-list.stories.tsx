@@ -10,7 +10,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Term and value pairs: the properties panel of every run, document and experiment. Three layouts for three reading tasks — **inline** for a side panel scanned top to bottom, **stacked** for values long enough to wrap, **grid** for a summary closing a section. Values marked `literal` are set in the machine face so an id is never mistaken for prose.',
+          'Term and value pairs: the properties panel of every run, document and rollout. Three layouts for three reading tasks — **inline** for a side panel scanned top to bottom, **stacked** for values long enough to wrap, **grid** for a summary closing a section. Values marked `literal` are set in the machine face so an id is never mistaken for prose.',
       },
     },
   },
@@ -37,14 +37,14 @@ export const Stacked: Story = {
   args: {
     layout: 'stacked',
     items: [
-      { term: 'Agent', detail: 'Opening explainer' },
+      { term: 'Agent', detail: 'Docs answerer' },
       {
         term: 'System prompt',
         detail:
-          'Explain the opening the player just played in two sentences, name the main idea, and suggest one line to study next. Never mention engine evaluations above +3.',
+          'Answer the customer’s question in two sentences, name the setting involved, and link one article to read next. Never quote a price the billing page does not show.',
       },
-      { term: 'Source', detail: 'knowledge/openings/sicilian-najdorf.md', literal: true },
-      { term: 'Owner', detail: 'Learning squad' },
+      { term: 'Source', detail: 'knowledge/help-centre/sso-setup.md', literal: true },
+      { term: 'Owner', detail: 'Docs team' },
     ],
   },
   decorators: [(Story) => <div className="max-w-2xl"><Story /></div>],
@@ -54,10 +54,10 @@ export const Grid: Story = {
   args: {
     layout: 'grid',
     items: [
-      { term: 'Hypothesis', detail: 'A post-game coach note lifts day-7 return.' },
-      { term: 'Audience', detail: '10% of new players, rated under 1200' },
-      { term: 'Primary metric', detail: 'Day-7 return rate' },
-      { term: 'Guardrail', detail: 'Support tickets per 1,000 players' },
+      { term: 'Hypothesis', detail: 'An in-app help panel cuts first-week tickets.' },
+      { term: 'Audience', detail: '10% of new workspaces, Starter plan' },
+      { term: 'Primary metric', detail: 'Tickets per 1,000 workspaces' },
+      { term: 'Guardrail', detail: 'Time to first reply, in seconds' },
     ],
   },
   decorators: [(Story) => <div className="max-w-2xl"><Story /></div>],

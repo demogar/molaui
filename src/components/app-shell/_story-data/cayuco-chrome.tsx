@@ -4,7 +4,7 @@
  * the same product rather than two drawings of it. Not exported from the
  * package.
  */
-import { Bell, BookOpen, Bot, ChevronsUpDown, CircleHelp, FlaskConical, LayoutDashboard, ListTree, Search, Settings } from 'lucide-react'
+import { Bell, BookOpen, Bot, ChevronsUpDown, CircleHelp, LayoutDashboard, LifeBuoy, ListTree, Search, Settings } from 'lucide-react'
 import type * as React from 'react'
 
 import { Avatar } from '../../avatar'
@@ -47,8 +47,8 @@ export function CayucoTopbar() {
             <CayucoMark />
             <span className="font-display text-base font-bold tracking-display wdth-display">Cayuco</span>
           </a>
-          <Button variant="ghost" size="sm" className="max-sm:hidden" aria-label="Switch workspace, current: Growth">
-            Growth
+          <Button variant="ghost" size="sm" className="max-sm:hidden" aria-label="Switch workspace, current: Support">
+            Support
             <ChevronsUpDown />
           </Button>
         </>
@@ -90,8 +90,8 @@ export function CayucoSidebar({ active = 'Runs' }: { active?: string }) {
         {item('Runs', <ListTree />, { count: 3, countLabel: 'failed in the last hour', countTone: 'attention' })}
         {item('Knowledge', <BookOpen />)}
       </NavSection>
-      <NavSection title="Growth">
-        {item('Experiments', <FlaskConical />, { count: 7, countLabel: 'running' })}
+      <NavSection title="Support">
+        {item('Escalations', <LifeBuoy />, { count: 7, countLabel: 'open' })}
       </NavSection>
     </Sidebar>
   )

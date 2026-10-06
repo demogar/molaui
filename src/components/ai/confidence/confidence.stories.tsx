@@ -28,7 +28,7 @@ export const Levels: Story = {
   render: () => (
     <div className="flex flex-col items-start gap-3">
       <Confidence level="high" basis="3 sources agree" />
-      <Confidence level="medium" basis="sources disagree on the cohort size" />
+      <Confidence level="medium" basis="sources disagree on the segment size" />
       <Confidence level="low" basis="single source, 9 months old" />
     </div>
   ),

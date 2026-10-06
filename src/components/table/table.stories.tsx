@@ -391,7 +391,7 @@ export const NoResults: Story = {
       empty={{
         variant: 'no-results',
         title: 'No runs match these filters',
-        description: 'Nothing failed on the Growth workspace in the last 24 hours.',
+        description: 'Nothing failed in the Support workspace in the last 24 hours.',
         actions: (
           <Button size="sm" variant="secondary">
             Clear filters

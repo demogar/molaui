@@ -17,7 +17,7 @@ const models: SelectOptionGroup[] = [
     label: 'Internal',
     items: [
       { value: 'ranker-v3', label: 'Ranker v3', description: 'Retired', disabled: true },
-      { value: 'ranker-v4', label: 'Ranker v4', description: 'Puzzle difficulty' },
+      { value: 'ranker-v4', label: 'Ranker v4', description: 'Ticket priority' },
     ],
   },
 ]

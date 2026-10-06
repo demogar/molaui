@@ -7,7 +7,7 @@ import { AgentRun, type AgentStep } from '../agent-run'
 import { PartialOutput, RunError, formatRunErrorDetails } from './run-error'
 import { formatCountdown } from './use-countdown'
 
-const ERROR = 'PermissionDenied: role "agent_readonly" lacks SELECT on analytics.exp_0412_segments'
+const ERROR = 'PermissionDenied: role "agent_readonly" lacks SELECT on analytics.ro_0412_segments'
 
 afterEach(() => {
   vi.useRealTimers()
@@ -15,10 +15,10 @@ afterEach(() => {
 
 describe('RunError', () => {
   it('names the step, says what happened in a sentence, and shows the error verbatim', () => {
-    render(<RunError step="Break the result down by cohort" stepNumber={4} stepCount={5} tool="query_warehouse" error={ERROR} />)
+    render(<RunError step="Break the result down by plan" stepNumber={4} stepCount={5} tool="query_warehouse" error={ERROR} />)
     const alert = screen.getByRole('alert')
     expect(alert).toHaveTextContent('Failed')
-    expect(alert).toHaveTextContent('Stopped at step 4 of 5: Break the result down by cohort.')
+    expect(alert).toHaveTextContent('Stopped at step 4 of 5: Break the result down by plan.')
     expect(alert).toHaveTextContent('query_warehouse returned an error, so the run stopped.')
     const literal = screen.getByText(ERROR)
     expect(literal).toHaveAttribute('dir', 'ltr')
@@ -104,9 +104,9 @@ describe('formatRunErrorDetails', () => {
 
 describe('PartialOutput', () => {
   it('keeps what arrived and says where it ends', () => {
-    render(<PartialOutput>Variant B lifted retention</PartialOutput>)
+    render(<PartialOutput>The help panel cut tickets</PartialOutput>)
     expect(screen.getByText('Partial output')).toBeInTheDocument()
-    expect(screen.getByText('Variant B lifted retention')).toBeInTheDocument()
+    expect(screen.getByText('The help panel cut tickets')).toBeInTheDocument()
     expect(screen.getByText('Output stops here. The rest never arrived.')).toBeInTheDocument()
   })
 })
@@ -114,7 +114,7 @@ describe('PartialOutput', () => {
 describe('AgentRun with a failure', () => {
   const steps: AgentStep[] = [
     { id: 'plan', kind: 'reasoning', title: 'Plan', status: 'succeeded', durationMs: 2400 },
-    { id: 'seg', kind: 'tool', title: 'Break down by cohort', status: 'failed', durationMs: 412 },
+    { id: 'seg', kind: 'tool', title: 'Break down by plan', status: 'failed', durationMs: 412 },
     { id: 'answer', kind: 'message', title: 'Answer', status: 'queued' },
   ]
 
@@ -131,7 +131,7 @@ describe('AgentRun with a failure', () => {
         failure={{ stepId: 'seg', tool: 'query_warehouse', error: ERROR }}
       />,
     )
-    expect(screen.getByRole('alert')).toHaveTextContent('Stopped at step 2 of 3: Break down by cohort.')
+    expect(screen.getByRole('alert')).toHaveTextContent('Stopped at step 2 of 3: Break down by plan.')
     // The panel owns retry; the header does not offer a second one.
     expect(screen.getAllByRole('button', { name: 'Retry run' })).toHaveLength(1)
     await userEvent.click(screen.getByRole('button', { name: 'Retry from step 2' }))

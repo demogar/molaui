@@ -41,7 +41,7 @@ const DECISION_INK: Record<ChangeDecisionStatus, string> = {
 }
 
 export interface ChangeReviewProps extends Omit<React.ComponentProps<'section'>, 'children' | 'title'> {
-  /** What the change does, in words — "Roll variant B out to beginners". */
+  /** What the change does, in words — "Roll the help panel out to Starter". */
   title: React.ReactNode
   /** Who proposed it — "Cayuco research agent". */
   agent: string
@@ -247,7 +247,7 @@ export interface FieldChange {
 }
 
 export interface FieldChangesProps extends Omit<React.ComponentProps<'section'>, 'children' | 'title'> {
-  /** What the record is — "Feature flag onboarding_puzzle_rush". */
+  /** What the record is — "Feature flag help_panel_v2". */
   title: React.ReactNode
   changes: readonly FieldChange[]
   headingLevel?: 3 | 4 | 5

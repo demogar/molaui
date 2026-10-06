@@ -1,4 +1,4 @@
-/** The settings of the fictional Cayuco "Growth" workspace, as last saved. */
+/** The settings of the fictional Cayuco "Support" workspace, as last saved. */
 
 export type ModelId = 'cayuco-deep-3' | 'cayuco-steady-3' | 'cayuco-swift-2'
 
@@ -19,9 +19,9 @@ export interface WorkspaceSettings {
 export type SettingsErrors = Partial<Record<keyof WorkspaceSettings, string>>
 
 export const SAVED_SETTINGS: WorkspaceSettings = {
-  name: 'Growth',
-  slug: 'growth',
-  description: 'Agents that help players learn: explainers, coaching, puzzles and the support queue.',
+  name: 'Support',
+  slug: 'support',
+  description: 'Agents that help customers: triage, docs answers, refunds and the support queue.',
   defaultModel: 'cayuco-steady-3',
   monthlyLimit: 2000,
   tokensPerRun: 40000,
@@ -61,7 +61,7 @@ export function validate(settings: WorkspaceSettings): SettingsErrors {
   else if (settings.name.trim().length > 40) errors.name = 'Keep the name to 40 characters or fewer.'
   if (!settings.slug) errors.slug = 'Enter a slug. It is the workspace’s address in links and the API.'
   else if (!SLUG.test(settings.slug))
-    errors.slug = 'Use lowercase letters, digits and single hyphens only, for example growth-team.'
+    errors.slug = 'Use lowercase letters, digits and single hyphens only, for example support-team.'
   if (settings.monthlyLimit === null)
     errors.monthlyLimit = 'Set a monthly limit. Without one, runs can spend without a ceiling.'
   else if (settings.monthlyLimit < 50) errors.monthlyLimit = 'The lowest monthly limit is $50.'

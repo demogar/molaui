@@ -19,7 +19,7 @@ export interface ToolCallApproval {
 export interface ToolCallProps extends Omit<React.ComponentProps<'div'>, 'children'> {
   /** The tool's identifier, exactly as the model called it. */
   name: string
-  /** What the call is for, in words — "Query experiment results". Optional; the name is always shown. */
+  /** What the call is for, in words — "Query rollout results". Optional; the name is always shown. */
   title?: string
   status: RunStatusValue
   startedAt?: number | Date

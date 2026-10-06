@@ -74,24 +74,24 @@ export const EvaluationDataset: Story = {
 const KNOWLEDGE_FILES: FileUploadItem[] = [
   {
     id: 'kb-1',
-    name: 'Opening repertoire — club handbook.pdf',
+    name: 'Support playbook — team handbook.pdf',
     size: 4.8 * MB,
-    file: demoFile('Opening repertoire — club handbook.pdf', 4.8 * MB, 'application/pdf'),
+    file: demoFile('Support playbook — team handbook.pdf', 4.8 * MB, 'application/pdf'),
     status: 'done',
   },
   {
     id: 'kb-2',
-    name: 'tournament-rules-2026.md',
+    name: 'refund-policy-2026.md',
     size: 38_400,
-    file: demoFile('tournament-rules-2026.md', 38_400),
+    file: demoFile('refund-policy-2026.md', 38_400),
     status: 'uploading',
     progress: 0.64,
   },
   {
     id: 'kb-3',
-    name: 'Coach onboarding notes.pdf',
+    name: 'Agent onboarding notes.pdf',
     size: 2.1 * MB,
-    file: demoFile('Coach onboarding notes.pdf', 2.1 * MB, 'application/pdf'),
+    file: demoFile('Agent onboarding notes.pdf', 2.1 * MB, 'application/pdf'),
     status: 'queued',
   },
   {

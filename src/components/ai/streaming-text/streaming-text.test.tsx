@@ -54,7 +54,7 @@ describe('StreamingText', () => {
 // blank line inside a fence, a fence closed mid-line, a ``` with no newline
 // after it yet, runs of three newlines, a list, a citation split mid-token.
 const TRICKY = [
-  'Variant **B** lifted retention [1].',
+  'The help panel **cut** tickets [1].',
   '- one\n- two `code`\n- three',
   '```sql\nselect 1\n\n\nfrom t\n```',
   'After the fence, same line? No: next paragraph [2].\n\n\n',
@@ -82,7 +82,7 @@ describe('createBlockParser', () => {
   // Re-parsing from the top costs the sum of every prefix — quadratic; the
   // settled cache costs about one paragraph per chunk.
   it('parses each chunk at the cost of the block still arriving, not the whole answer', () => {
-    const paragraph = 'The lift is concentrated in beginners [2], and the guardrail moved the wrong way. '.repeat(3)
+    const paragraph = 'The drop is concentrated in Starter [2], and the guardrail moved the wrong way. '.repeat(3)
     const full = Array.from({ length: 200 }, () => paragraph.trim()).join('\n\n')
     let parsed = 0
     const parse = createBlockParser((text) => {

@@ -128,7 +128,7 @@ export const Recommendation: Story = {
     docs: {
       description: {
         story:
-          'Lineage: the editorial scale from Must Do Panama, where this system was born. Gold is the layer a mola reveals last and least, so gold is *essential*.',
+          'Lineage: the recommendation scale of the editorial system this grew out of. Gold is the layer a mola reveals last and least, so gold is *essential*.',
       },
     },
   },

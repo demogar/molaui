@@ -225,8 +225,8 @@ export function RunsAdminScreen() {
       <PageHeader
         breadcrumb={
           <nav aria-label="Breadcrumb" className="text-xs text-ink-muted">
-            <a href="#growth" className="text-ink-2 underline decoration-keyline hover:text-ink">
-              Growth
+            <a href="#support" className="text-ink-2 underline decoration-keyline hover:text-ink">
+              Support
             </a>
             <span aria-hidden className="mx-1.5">
               /
@@ -235,7 +235,7 @@ export function RunsAdminScreen() {
           </nav>
         }
         title="Runs"
-        description="Every agent run in the Growth workspace. Failed runs keep their full trace for 30 days."
+        description="Every agent run in the Support workspace. Failed runs keep their full trace for 30 days."
         actions={
           <>
             <Button variant="secondary" icon={<Download />}>

@@ -6,14 +6,14 @@ import { ToolCall } from './tool-call'
 
 describe('ToolCall', () => {
   it('shows the tool name as a literal and its status in words', () => {
-    render(<ToolCall name="query_experiment" status="succeeded" durationMs={1840} />)
-    expect(screen.getByText('query_experiment')).toHaveClass('literal')
+    render(<ToolCall name="query_rollout" status="succeeded" durationMs={1840} />)
+    expect(screen.getByText('query_rollout')).toHaveClass('literal')
     expect(screen.getByText('Succeeded')).toBeInTheDocument()
     expect(screen.getByText('1.8s')).toBeInTheDocument()
   })
 
   it('is collapsed by default and opens on demand', async () => {
-    render(<ToolCall name="q" status="succeeded" args={{ id: 'exp-0412' }} />)
+    render(<ToolCall name="q" status="succeeded" args={{ id: 'ro-0412' }} />)
     const trigger = screen.getByRole('button', { name: /q/ })
     expect(trigger).toHaveAttribute('aria-expanded', 'false')
     await userEvent.click(trigger)

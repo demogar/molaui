@@ -9,7 +9,7 @@ import { ToolCall, ToolCallGroup } from './tool-call'
 const meta = {
   title: 'AI/Tool call',
   component: ToolCall,
-  args: { name: 'query_experiment', title: 'Experiment results', status: 'succeeded', durationMs: 1840, args: QUERY_ARGS, result: QUERY_RESULT },
+  args: { name: 'query_rollout', title: 'Rollout results', status: 'succeeded', durationMs: 1840, args: QUERY_ARGS, result: QUERY_RESULT },
   decorators: [(Story) => <div className="max-w-2xl">{Story()}</div>],
   parameters: {
     docs: {
@@ -35,7 +35,7 @@ export const Open: Story = { args: { defaultOpen: true } }
 
 function RunningCall() {
   const [startedAt] = React.useState(() => Date.now())
-  return <ToolCall name="search_docs" title="Search the brief archive" status="running" startedAt={startedAt} args={{ query: 'onboarding v3 guardrails', top_k: 5 }} />
+  return <ToolCall name="search_docs" title="Search the brief archive" status="running" startedAt={startedAt} args={{ query: 'help panel v2 guardrails', top_k: 5 }} />
 }
 
 export const Running: Story = { render: () => <RunningCall /> }
@@ -47,7 +47,7 @@ export const Failed: Story = {
     status: 'failed',
     durationMs: 412,
     result: undefined,
-    error: 'PermissionDenied: role "agent_readonly" lacks SELECT on analytics.exp_0412_segments',
+    error: 'PermissionDenied: role "agent_readonly" lacks SELECT on analytics.ro_0412_segments',
     onRetry: fn(),
   },
 }
@@ -59,13 +59,13 @@ export const TimedOut: Story = {
 export const NeedsApproval: Story = {
   args: {
     name: 'update_feature_flag',
-    title: 'Roll out variant B',
+    title: 'Roll out the help panel',
     status: 'waiting',
     durationMs: undefined,
-    args: { flag: 'onboarding_puzzle_rush', variant: 'B', audience: 'self_rated_beginner', percent: 100 },
+    args: { flag: 'help_panel_v2', variant: 'panel', audience: 'plan_starter', percent: 100 },
     result: undefined,
     approval: {
-      reason: 'It changes a live feature flag for every new beginner. The agent cannot undo this on its own.',
+      reason: 'It changes a live feature flag for every new Starter workspace. The agent cannot undo this on its own.',
       onApprove: fn(),
       onDeny: fn(),
       approveLabel: 'Approve rollout',
@@ -77,8 +77,8 @@ export const NeedsApproval: Story = {
 export const ParallelCalls: Story = {
   render: () => (
     <ToolCallGroup count={3}>
-      <ToolCall name="query_experiment" status="succeeded" durationMs={1840} args={QUERY_ARGS} result={QUERY_RESULT} />
-      <ToolCall name="search_docs" status="succeeded" durationMs={620} args={{ query: 'onboarding v3 guardrails' }} result="3 passages" />
+      <ToolCall name="query_rollout" status="succeeded" durationMs={1840} args={QUERY_ARGS} result={QUERY_RESULT} />
+      <ToolCall name="search_docs" status="succeeded" durationMs={620} args={{ query: 'help panel v2 guardrails' }} result="3 passages" />
       <ToolCall name="fetch_dashboard" status="failed" durationMs={30_000} error="deadline exceeded after 30s" onRetry={fn()} />
     </ToolCallGroup>
   ),

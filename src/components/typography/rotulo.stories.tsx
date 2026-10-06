@@ -7,7 +7,7 @@ import { Rotulo } from './rotulo'
 const meta = {
   title: 'Components/Typography/Rotulo',
   component: Rotulo,
-  args: { children: 'Growth platform', band: 'rojo' },
+  args: { children: 'Support platform', band: 'rojo' },
   argTypes: { band: { control: 'inline-radio', options: ['rojo', 'anil', 'verde', 'oro', 'cloth'] } },
   parameters: {
     docs: {
@@ -27,9 +27,9 @@ export const Default: Story = {}
 export const UnderABlock: Story = {
   render: () => (
     <div className="max-w-xl">
-      <Heading level={2}>Ship experiments without a deploy</Heading>
+      <Heading level={2}>Ship rollouts without a deploy</Heading>
       <Lead className="mt-3">Targeting, variants and holdouts, configured where the people who own them work.</Lead>
-      <Rotulo className="mt-5">Growth platform</Rotulo>
+      <Rotulo className="mt-5">Support platform</Rotulo>
     </div>
   ),
 }

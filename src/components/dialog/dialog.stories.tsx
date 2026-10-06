@@ -21,7 +21,7 @@ const meta = {
       },
     },
   },
-  args: { title: 'Rename experiment' },
+  args: { title: 'Rename rollout' },
 } satisfies Meta<typeof DialogContent>
 
 export default meta
@@ -30,10 +30,10 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   render: () => (
     <Dialog>
-      <DialogTrigger render={<Button variant="secondary">Rename experiment</Button>} />
+      <DialogTrigger render={<Button variant="secondary">Rename rollout</Button>} />
       <DialogContent
-        title="Rename experiment"
-        description="The slug stays the same, so links to this experiment keep working."
+        title="Rename rollout"
+        description="The slug stays the same, so links to this rollout keep working."
         footer={
           <>
             <DialogClose render={<Button variant="ghost">Cancel</Button>} />
@@ -44,7 +44,7 @@ export const Default: Story = {
         <label className="block">
           <span className="mb-2 block rotulo text-ink-2">Name</span>
           <input
-            defaultValue="Puzzle streak nudge — v3"
+            defaultValue="Help panel for new workspaces — v2"
             className="h-(--control-h) w-full rounded-none border-0 bg-cloth-pale px-3 text-ink shadow-cut focus:shadow-[var(--focus-ring)] focus:outline-none"
           />
         </label>

@@ -206,7 +206,7 @@ export function SettingsPage({
       <PageHeader
         breadcrumb={
           <nav aria-label="Breadcrumb" className="text-xs text-ink-muted">
-            <a href="#growth" className="text-ink-2 underline decoration-keyline hover:text-ink">
+            <a href="#support" className="text-ink-2 underline decoration-keyline hover:text-ink">
               {saved.name}
             </a>
             <span aria-hidden className="mx-1.5">

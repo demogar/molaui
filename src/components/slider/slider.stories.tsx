@@ -44,7 +44,7 @@ export const Percentage: Story = {
     step: 5,
     minLabel: undefined,
     maxLabel: undefined,
-    formatValue: (text) => `${text}% of players`,
+    formatValue: (text) => `${text}% of workspaces`,
   },
   render: (args) => (
     <div className="max-w-sm">
@@ -55,7 +55,7 @@ export const Percentage: Story = {
 
 export const Range: Story = {
   args: {
-    label: 'Rating band',
+    label: 'Monthly tickets',
     defaultValue: [1200, 1800],
     min: 400,
     max: 3000,

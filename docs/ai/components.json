@@ -163,7 +163,7 @@
             "dont": "Add a percentage or a spinner to a run; it has no knowable total, and the system has no spinner by design."
           },
           {
-            "do": "Title each step in words, “Break the result down by cohort”, and put the tool’s literal name in its detail.",
+            "do": "Title each step in words, “Break the result down by plan”, and put the tool’s literal name in its detail.",
             "dont": "Title a step with a raw tool name or “Step 4”; the spine already numbers the steps."
           }
         ],
@@ -364,8 +364,8 @@
           }
         ],
         "content": [
-          "Title the change by what it does, “Roll variant B out to beginners”, not by the files it touches.",
-          "Name a record by its type and key, so each field change has an owner: “Feature flag onboarding_puzzle_rush”.",
+          "Title the change by what it does, “Roll the help panel out to Starter”, not by the files it touches.",
+          "Name a record by its type and key, so each field change has an owner: “Feature flag help_panel_v2”.",
           "A reason for a no says what is wrong and what would make it acceptable, because the agent acts on it."
         ]
       },
@@ -404,7 +404,7 @@
               "name": "title",
               "type": "ReactNode",
               "required": true,
-              "description": "What the change does, in words — \"Roll variant B out to beginners\"."
+              "description": "What the change does, in words — \"Roll the help panel out to Starter\"."
             },
             {
               "name": "children",
@@ -472,7 +472,7 @@
               "name": "title",
               "type": "ReactNode",
               "required": true,
-              "description": "What the record is — \"Feature flag onboarding_puzzle_rush\"."
+              "description": "What the record is — \"Feature flag help_panel_v2\"."
             },
             {
               "name": "headingLevel",
@@ -699,7 +699,7 @@
           }
         ],
         "content": [
-          "Write the basis as a short fact in lower case, since it follows the level: “sources disagree on the cohort size”.",
+          "Write the basis as a short fact in lower case, since it follows the level: “sources disagree on the segment size”.",
           "Title an UncertaintyNote with the claim, “Unverified figure”, not with “Warning” or “Note”."
         ]
       },
@@ -1393,7 +1393,7 @@
               "name": "step",
               "type": "string",
               "required": false,
-              "description": "The step that stopped, in words — \"Break the result down by cohort\"."
+              "description": "The step that stopped, in words — \"Break the result down by plan\"."
             },
             {
               "name": "stepCount",
@@ -2092,7 +2092,7 @@
           }
         ],
         "content": [
-          "The title says what the call is for, “Experiment results”; the name stays exactly as the model called it.",
+          "The title says what the call is for, “Rollout results”; the name stays exactly as the model called it.",
           "Name approval buttons by the action: “Approve rollout” and “Deny”, not “Yes” and “No”.",
           "Keep the approval reason to a sentence or two: what changes, for whom, and whether it can be undone."
         ]
@@ -2170,7 +2170,7 @@
               "name": "title",
               "type": "string",
               "required": false,
-              "description": "What the call is for, in words — \"Query experiment results\". Optional; the name is always shown."
+              "description": "What the call is for, in words — \"Query rollout results\". Optional; the name is always shown."
             }
           ]
         },
@@ -2841,7 +2841,7 @@
       "category": "Data display",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-data-display-description-list--overview",
       "summary": "Term and value pairs: the properties of a run, a document or an evaluation.",
-      "description": "Term and value pairs: the properties panel of every run, document and experiment. Three layouts for three reading tasks — **inline** for a side panel scanned top to bottom, **stacked** for values long enough to wrap, **grid** for a summary closing a section. Values marked `literal` are set in the machine face so an id is never mistaken for prose.",
+      "description": "Term and value pairs: the properties panel of every run, document and rollout. Three layouts for three reading tasks — **inline** for a side panel scanned top to bottom, **stacked** for values long enough to wrap, **grid** for a summary closing a section. Values marked `literal` are set in the machine face so an id is never mistaken for prose.",
       "usage": {
         "use": [
           "A side panel of properties scanned top to bottom, with the inline layout.",
@@ -2898,7 +2898,7 @@
           "name": "DescriptionItem",
           "kind": "type",
           "source": "src/components/description-list/description-list.tsx",
-          "description": "Term and value pairs — the properties panel of every run, document and experiment. Three layouts, each the answer to a different reading task:"
+          "description": "Term and value pairs — the properties panel of every run, document and rollout. Three layouts, each the answer to a different reading task:"
         },
         {
           "name": "DescriptionListProps",
@@ -3706,7 +3706,7 @@
           "name": "TimelineTone",
           "kind": "type",
           "source": "src/components/timeline/timeline.tsx",
-          "description": "A vertical sequence drawn as a spine beside the events it connects: an audit log, a deploy history, the stages of an experiment."
+          "description": "A vertical sequence drawn as a spine beside the events it connects: an audit log, a deploy history, the stages of a rollout."
         }
       ],
       "stories": [
@@ -3902,7 +3902,7 @@
           "name": "recommendationVariants",
           "kind": "function",
           "source": "src/components/badge/badge.tsx",
-          "description": "The editorial recommendation scale from Must Do Panama, where this system was born — kept as lineage, and because \"how strongly do we stand behind this\" is a scale a growth or knowledge tool also has. Gold is the layer a mola reveals last and least, so gold is `essential`."
+          "description": "The editorial recommendation scale of the editorial system this grew out of — kept as lineage, and because \"how strongly do we stand behind this\" is a scale a support or knowledge tool also has. Gold is the layer a mola reveals last and least, so gold is `essential`."
         },
         {
           "name": "BadgeProps",
@@ -4109,7 +4109,7 @@
       "category": "Feedback",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-feedback-empty-state--overview",
       "summary": "What a panel shows when it has nothing to show, in four variants: empty, no results, error and no permission.",
-      "description": "A condition, not an apology. The panel is packed with **relleno** — what a mola does with an area that has nothing in it yet — and the words sit on a raised plate above it. Four variants, because they are four different conversations: an empty filter result must never tell someone to “create your first experiment”.",
+      "description": "A condition, not an apology. The panel is packed with **relleno** — what a mola does with an area that has nothing in it yet — and the words sit on a raised plate above it. Four variants, because they are four different conversations: an empty filter result must never tell someone to “create your first saved reply”.",
       "usage": {
         "use": [
           "Nothing exists yet, and the action creates the first one.",
@@ -4263,7 +4263,7 @@
       "category": "Feedback",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-feedback-placeholder--overview",
       "summary": "A slot for something that does not exist yet, such as a chart with no data, announced as one image.",
-      "description": "The slot where something will go and has not yet — designed as a condition, not an apology. A blank grey box reads as a failure to load; a cut panel filled with relleno reads as a slot cut and waiting, which is what relleno is for in a real mola. Born as the photo placeholder of Must Do Panama.",
+      "description": "The slot where something will go and has not yet — designed as a condition, not an apology. A blank grey box reads as a failure to load; a cut panel filled with relleno reads as a slot cut and waiting, which is what relleno is for in a real mola. Born as the photo placeholder of the editorial system this grew out of.",
       "usage": {
         "use": [
           "A chart, preview or image that cannot render yet, held at its final size.",
@@ -4284,7 +4284,7 @@
           }
         ],
         "content": [
-          "label is the kind, “Chart” or “Preview”; name is the thing, “Retention by cohort”.",
+          "label is the kind, “Chart” or “Preview”; name is the thing, “Tickets by plan”.",
           "alt says what is missing, “No data yet: run latency by agent”, because it is announced in place of the content."
         ]
       },
@@ -4305,14 +4305,14 @@
               "name": "name",
               "type": "string",
               "required": true,
-              "description": "What it would show — \"Panama Canal\", \"Retention by cohort\"."
+              "description": "What it would show — \"Account logo\", \"Tickets by plan\"."
             },
             {
               "name": "label",
               "type": "string",
               "required": false,
               "default": "Placeholder",
-              "description": "The kind of thing that goes here — \"Photography\", \"Chart\", \"Preview\"."
+              "description": "The kind of thing that goes here — \"Image\", \"Chart\", \"Preview\"."
             },
             {
               "name": "tone",
@@ -7522,7 +7522,7 @@
       "category": "Layout",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-layout-app-shell--overview",
       "summary": "The frame a tool lives in: a top bar, a sidebar that collapses to a rail or becomes a sheet, and one scrolling main region.",
-      "description": "The frame an internal tool lives in. Exactly the viewport tall, and only `<main>` scrolls — so the switcher, search and way back are never twenty rows away. From 920px the sidebar is in the layout and collapses to an icon rail; below it, the **same tree** renders in a modal sheet, so desktop and mobile navigation cannot drift apart. The demo is *Cayuco* — a fictional growth and agent platform, named for the dugout canoe of the Panamanian isthmus.",
+      "description": "The frame an internal tool lives in. Exactly the viewport tall, and only `<main>` scrolls — so the switcher, search and way back are never twenty rows away. From 920px the sidebar is in the layout and collapses to an icon rail; below it, the **same tree** renders in a modal sheet, so desktop and mobile navigation cannot drift apart. The demo is *Cayuco* — a fictional agent platform for support, docs and billing teams, named for a dugout canoe.",
       "usage": {
         "use": [
           "The outer frame of an application with navigation, search and a work area.",
@@ -11317,7 +11317,7 @@
     {
       "title": "AI/Agent console",
       "docs": "https://demogar.github.io/molaui/?path=/docs/ai-agent-console--overview",
-      "description": "Every AI component, composed into a working console for **Cayuco**, a fictional internal knowledge-and-agent platform. Ask it something (or pick a suggestion): the agent plans, calls two tools, and streams a cited answer, while the run panel on the right shows the same work as a timeline with live clocks and token usage. Press **Stop** mid-answer to see cancellation; the transcript keeps what arrived.\n\nThe demo content — a puzzle-rush onboarding experiment — is invented, and the answer is scripted: there is no model behind this page.",
+      "description": "Every AI component, composed into a working console for **Cayuco**, a fictional internal knowledge-and-agent platform. Ask it something (or pick a suggestion): the agent plans, calls two tools, and streams a cited answer, while the run panel on the right shows the same work as a timeline with live clocks and token usage. Press **Stop** mid-answer to see cancellation; the transcript keeps what arrived.\n\nThe demo content — an in-app help panel rollout — is invented, and the answer is scripted: there is no model behind this page.",
       "stories": [
         {
           "name": "Console",
