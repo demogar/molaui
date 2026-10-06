@@ -1,6 +1,6 @@
 {
   "name": "@demogar/mola-ui",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A design system cut like a mola: flat layers, hard keylines, revealed bands. React components for dense internal tools and AI-native interfaces.",
   "license": "MIT",
   "author": "Demóstenes García (https://github.com/demogar)",
