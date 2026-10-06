@@ -31,9 +31,9 @@ export const chipVariants = cva(
     // Hover is scoped to the unchecked state: a checked chip is cloth on ink,
     // and revealing a band around it would fight the fill it just took.
     'hover:not-has-checked:cut-band hover:not-has-checked:text-ink',
-    'has-checked:bg-ink has-checked:text-on-ink',
+    'has-checked:bg-ink has-checked:text-on-ink has-checked:forced-selected',
     // The focus ring is itself a two-tone band, so it stands in for the keyline.
-    'has-focus-visible:shadow-[var(--focus-ring)]',
+    'has-focus-visible:shadow-[var(--focus-ring)] has-focus-visible:forced-focus',
     'has-disabled:pointer-events-none has-disabled:bg-cloth-shade has-disabled:text-ink-muted',
     '[&_svg]:size-3.5 [&_svg]:shrink-0',
   ],
@@ -72,7 +72,7 @@ export function Chip({ className, size, type = 'checkbox', count, children, ...p
         // the chip is announced as "Failed12".
         <>
           {' '}
-          <span className="ml-0.5 text-xs tabular opacity-75">{count.toLocaleString('en-US')}</span>
+          <span className="ms-0.5 text-xs tabular opacity-75">{count.toLocaleString('en-US')}</span>
         </>
       ) : null}
     </label>

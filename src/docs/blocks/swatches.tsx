@@ -21,7 +21,7 @@ function Ratio({ fg, bg, theme }: { fg: string; bg: string; theme: ThemeName }) 
   return (
     <span className="tabular">
       {r.toFixed(2)}
-      <span className="ml-1.5 rotulo text-ink-muted">{verdict}</span>
+      <span className="ms-1.5 rotulo text-ink-muted">{verdict}</span>
     </span>
   )
 }
@@ -59,7 +59,7 @@ export function SwatchGrid({ swatches }: { swatches: SwatchSpec[] }) {
                   <div key={theme} className="contents">
                     <dt className="rotulo self-center">{theme}</dt>
                     <dd className="m-0 literal text-ink-2">{rgb ? toHex(rgb) : 'translucent'}</dd>
-                    <dd className="m-0 text-right">
+                    <dd className="m-0 text-end">
                       <Ratio fg={token} bg={on} theme={theme} />
                     </dd>
                   </div>
@@ -80,7 +80,7 @@ export function PairingTable({ pairs }: { pairs: [fg: string, bg: string][] }) {
     <div className="sb-unstyled not-prose my-6 overflow-x-auto shadow-cut">
       <table className="w-full border-collapse text-sm">
         <thead>
-          <tr className="bg-cloth-shade text-left">
+          <tr className="bg-cloth-shade text-start">
             <th className="rotulo p-3 font-semibold">Pairing</th>
             <th className="rotulo p-3 font-semibold">Light</th>
             <th className="rotulo p-3 font-semibold">Dark</th>

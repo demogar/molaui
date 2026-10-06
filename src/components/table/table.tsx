@@ -106,8 +106,9 @@ export function TableRow({ selected = false, className, ...props }: TableRowProp
         'transition-colors duration-(--motion-cut) ease-cut',
         '[&>td]:shadow-[inset_0_-1px_0_var(--keyline-soft)]',
         'hover:[&>td]:bg-ink-soft',
-        'data-selected:[&>td]:bg-oro-soft',
+        'data-selected:[&>td]:bg-oro-soft data-selected:[&>td]:forced-selected',
         'data-selected:[&>td:first-child]:shadow-[inset_3px_0_0_var(--ink),inset_0_-1px_0_var(--keyline-soft)]',
+        'rtl:data-selected:[&>td:first-child]:shadow-[inset_-3px_0_0_var(--ink),inset_0_-1px_0_var(--keyline-soft)]',
         className,
       )}
       {...props}
@@ -150,7 +151,7 @@ export function TableHead({
         'h-(--row-h) bg-cloth-pale px-3 align-middle',
         'rotulo whitespace-nowrap text-ink-2',
         'shadow-[inset_0_-1.5px_0_var(--ink)]',
-        numeric ? 'text-right' : 'text-left',
+        numeric ? 'text-end' : 'text-start',
         stickyHeader && 'sticky top-0 z-10',
         className,
       )}
@@ -207,7 +208,7 @@ export function TableCell({
       title={title ?? (truncate && typeof children === 'string' ? children : undefined)}
       className={cn(
         'h-(--row-h) px-3 align-middle',
-        numeric && 'text-right tabular-nums',
+        numeric && 'text-end tabular-nums',
         truncate && 'max-w-0 truncate',
         className,
       )}
@@ -222,7 +223,7 @@ export function TableCaption({ className, ...props }: React.ComponentProps<'capt
   return (
     <caption
       data-slot="table-caption"
-      className={cn('caption-bottom px-3 pt-3 text-left text-xs text-ink-muted', className)}
+      className={cn('caption-bottom px-3 pt-3 text-start text-xs text-ink-muted', className)}
       {...props}
     />
   )

@@ -45,7 +45,7 @@ describe('Table primitives', () => {
       </Table>,
     )
     expect(screen.getByRole('columnheader', { name: 'Cost' })).toHaveAttribute('scope', 'col')
-    expect(screen.getByRole('cell')).toHaveClass('text-right', 'tabular-nums')
+    expect(screen.getByRole('cell')).toHaveClass('text-end', 'tabular-nums')
   })
 
   it('only announces aria-sort on the sorted column', () => {

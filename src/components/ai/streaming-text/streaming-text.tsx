@@ -100,9 +100,9 @@ export function StreamingText({
             )
           case 'ul':
             return (
-              <ul key={i} className="m-0 list-[square] pl-[1.25em] marker:text-rojo">
+              <ul key={i} className="m-0 list-[square] ps-[1.25em] marker:text-rojo">
                 {block.items.map((item, j) => (
-                  <li key={j} className="pl-1 [&+li]:mt-1">
+                  <li key={j} className="ps-1 [&+li]:mt-1">
                     <Inlines inlines={item} renderCitation={renderCitation} />
                     {last && j === block.items.length - 1 ? caret : null}
                   </li>
@@ -171,7 +171,7 @@ export function Caret({ className }: { className?: string }) {
       aria-hidden
       data-slot="caret"
       className={cn(
-        'ml-[0.08em] inline-block h-[0.95em] w-[0.5em] translate-y-[0.14em] bg-current animate-mola-caret',
+        'ms-[0.08em] inline-block h-[0.95em] w-[0.5em] translate-y-[0.14em] bg-current animate-mola-caret',
         className,
       )}
     />

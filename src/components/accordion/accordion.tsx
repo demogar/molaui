@@ -55,7 +55,7 @@ export function AccordionItem({ className, ...props }: AccordionItemProps) {
 }
 
 const triggerClasses = [
-  'group/trigger flex w-full cursor-pointer items-center gap-3 py-3.5 text-left outline-none',
+  'group/trigger flex w-full cursor-pointer items-center gap-3 py-3.5 text-start outline-none',
   'font-ui text-base font-semibold text-ink',
   'hover:text-rojo-deep',
   'focus-visible:shadow-[var(--focus-ring)]',
@@ -63,7 +63,7 @@ const triggerClasses = [
 ]
 
 const markerClasses =
-  'ml-auto size-4 shrink-0 text-ink-2 transition-transform duration-(--motion-base) ease-cut group-data-panel-open/trigger:rotate-45'
+  'ms-auto size-4 shrink-0 text-ink-2 transition-transform duration-(--motion-base) ease-cut group-data-panel-open/trigger:rotate-45'
 
 export interface AccordionTriggerProps extends Omit<AccordionPrimitive.Trigger.Props, 'className'> {
   className?: string

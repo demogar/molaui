@@ -175,7 +175,7 @@ export function DataTable<Row>({
       <TableHeader>
         <TableRow className="hover:[&>td]:bg-transparent">
           {selectable ? (
-            <TableHead className="w-11 pr-0">
+            <TableHead className="w-11 pe-0">
               <TableCheckbox
                 aria-label={allSelected ? 'Deselect all rows' : 'Select all rows'}
                 checked={allSelected}
@@ -215,7 +215,7 @@ export function DataTable<Row>({
             return (
               <TableRow key={id} selected={selectable && isSelected}>
                 {selectable ? (
-                  <TableCell className="w-11 pr-0">
+                  <TableCell className="w-11 pe-0">
                     <TableCheckbox
                       aria-label={rowLabel ? rowLabel(row) : `Select row ${id}`}
                       checked={isSelected}

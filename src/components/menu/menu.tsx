@@ -37,7 +37,7 @@ export const MenuSubmenu = MenuPrimitive.SubmenuRoot
 const itemClasses = [
   'group/item relative flex min-h-(--control-h-sm) cursor-default items-center gap-2.5 px-2.5 py-1.5 outline-none select-none',
   'font-ui text-sm text-ink',
-  'data-highlighted:bg-ink data-highlighted:text-on-ink',
+  'data-highlighted:bg-ink data-highlighted:text-on-ink data-highlighted:forced-selected',
   // The ink fill IS the focus indicator here; the global two-tone ring on
   // top of it would double the mark and spill past the menu's edge.
   'focus-visible:shadow-none',
@@ -85,7 +85,7 @@ export function MenuShortcut({ className, ...props }: React.ComponentProps<'span
   return (
     <span
       className={cn(
-        'ml-auto pl-4 font-ui text-xs tabular-nums tracking-[0.04em] text-ink-muted group-data-highlighted/item:text-on-ink-muted',
+        'ms-auto ps-4 font-ui text-xs tabular-nums tracking-[0.04em] text-ink-muted group-data-highlighted/item:text-on-ink-muted',
         className,
       )}
       {...props}
@@ -207,7 +207,7 @@ export function MenuSubmenuTrigger({ className, icon, children, ...props }: Menu
         </span>
       ) : null}
       <span className="min-w-0 flex-1 truncate">{children}</span>
-      <ChevronRight aria-hidden className="-mr-1 ml-auto text-ink-muted group-data-highlighted/item:text-on-ink-muted" />
+      <ChevronRight aria-hidden className="-me-1 ms-auto text-ink-muted rtl:-scale-x-100 group-data-highlighted/item:text-on-ink-muted" />
     </MenuPrimitive.SubmenuTrigger>
   )
 }

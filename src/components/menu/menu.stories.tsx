@@ -61,7 +61,7 @@ export const RowActions: Story = {
         <MenuItem icon={<GitBranch />}>Fork from last step</MenuItem>
         <MenuSubmenu>
           <MenuSubmenuTrigger icon={<Share2 />}>Export</MenuSubmenuTrigger>
-          <MenuContent side="right" align="start" sideOffset={2} alignOffset={-6}>
+          <MenuContent side="inline-end" align="start" sideOffset={2} alignOffset={-6}>
             <MenuItem icon={<Download />}>Trace as JSON</MenuItem>
             <MenuItem icon={<Download />}>Transcript as Markdown</MenuItem>
             <MenuItem disabled icon={<Download />}>

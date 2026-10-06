@@ -65,7 +65,7 @@ function SearchTrigger() {
       className="flex h-(--control-h-sm) w-full max-w-md items-center gap-2 bg-cloth px-2.5 text-sm text-ink-muted shadow-cut transition-shadow duration-(--motion-cut) hover:cut-band band-oro [--cut-reveal:3px]"
     >
       <Search aria-hidden className="size-4 shrink-0" />
-      <span className="flex-1 truncate text-left">Search runs, agents, documents…</span>
+      <span className="flex-1 truncate text-start">Search runs, agents, documents…</span>
       <Kbd className="max-sm:hidden">⌘K</Kbd>
     </button>
   )
@@ -95,7 +95,7 @@ function CayucoTopbar() {
           <IconButton label="Notifications, 2 unread" variant="ghost" size="sm">
             <Bell />
           </IconButton>
-          <Avatar name="Ana Pérez" size="sm" className="ml-1" />
+          <Avatar name="Ana Pérez" size="sm" className="ms-1" />
         </>
       }
     />
@@ -235,7 +235,7 @@ function RunsPage() {
             <ToolbarGroup>
               <ToolbarButton>Last 24 hours</ToolbarButton>
             </ToolbarGroup>
-            <ToolbarButton icon={<RefreshCw />} aria-label="Refresh" className="ml-auto" />
+            <ToolbarButton icon={<RefreshCw />} aria-label="Refresh" className="ms-auto" />
           </Toolbar>
           <DataTable
             label="Agent runs"

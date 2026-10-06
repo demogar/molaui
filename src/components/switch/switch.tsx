@@ -49,7 +49,7 @@ export function Switch({
         'bg-cloth-shade shadow-cut band-oro [--cut-reveal:2px]',
         'transition-[background-color,box-shadow] duration-(--motion-cut) ease-cut',
         'hover:cut-band focus-visible:shadow-[var(--focus-ring)]',
-        'data-checked:bg-verde',
+        'data-checked:bg-verde data-checked:forced-selected',
         'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:hover:shadow-cut',
         !label && className,
       )}
@@ -57,9 +57,9 @@ export function Switch({
     >
       <SwitchPrimitive.Thumb
         className={cn(
-          'block size-3.5 rounded-none bg-ink',
+          'block size-3.5 rounded-none bg-ink forced-ink',
           'transition-transform duration-(--motion-base) ease-cut',
-          'data-checked:translate-x-4 data-checked:bg-on-layer data-checked:shadow-[0_0_0_1.5px_var(--ink)]',
+          'data-checked:translate-x-4 rtl:data-checked:-translate-x-4 data-checked:bg-on-layer data-checked:shadow-[0_0_0_1.5px_var(--ink)] data-checked:forced-on-selected',
           'data-disabled:bg-ink-muted',
         )}
       />

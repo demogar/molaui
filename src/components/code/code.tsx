@@ -124,14 +124,14 @@ export function CodeBlock({
       className={cn('m-0 min-w-0 rounded-none bg-cloth-pale shadow-cut', className)}
       {...props}
     >
-      <figcaption className="flex min-h-(--control-h-sm) items-center gap-3 bg-cloth-shade py-1 pr-1 pl-3 shadow-[inset_0_-1px_0_var(--keyline)]">
+      <figcaption className="flex min-h-(--control-h-sm) items-center gap-3 bg-cloth-shade py-1 pe-1 ps-3 shadow-[inset_0_-1px_0_var(--keyline)]">
         <span id={labelId} className="min-w-0 truncate rotulo text-ink-2">
           {title}
         </span>
         {label && language !== 'text' ? (
           <span className="rotulo text-ink-muted">{language}</span>
         ) : null}
-        <span className="ml-auto flex items-center gap-1">
+        <span className="ms-auto flex items-center gap-1">
           <IconButton
             label={wrap ? 'Do not wrap lines' : 'Wrap lines'}
             variant="ghost"
@@ -152,14 +152,18 @@ export function CodeBlock({
           {copied ? 'Copied to clipboard' : ''}
         </span>
       </figcaption>
+      {/* Code reads left to right in every language, so the body is pinned
+          LTR while the header follows the page: in an Arabic interface the
+          label and buttons mirror and the source does not. */}
       <div
+        dir="ltr"
         className="flex overflow-auto scroll-cloth [--code-lh:calc(var(--text-xs)*1.7)]"
         style={maxHeight ? { maxHeight } : undefined}
       >
         {lineNumbers ? (
           <div
             aria-hidden
-            className="sticky left-0 shrink-0 bg-cloth-pale py-3 pr-3 pl-3 text-right font-ui text-xs leading-(--code-lh) text-ink-muted tabular select-none shadow-[inset_-1px_0_0_var(--keyline-soft)]"
+            className="sticky inset-s-0 shrink-0 bg-cloth-pale px-3 py-3 text-end font-ui text-xs leading-(--code-lh) text-ink-muted tabular select-none shadow-[inset_-1px_0_0_var(--keyline-soft)]"
           >
             {lines.map((_, i) => (
               <div key={i}>{i + 1}</div>

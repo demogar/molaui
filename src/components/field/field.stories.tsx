@@ -42,7 +42,9 @@ export const States: Story = {
         {(control) => <Input {...control} defaultValue="growth-agent" />}
       </Field>
       <Field label="Webhook URL" optional hint="We POST the run summary here when it finishes.">
-        {(control) => <Input {...control} leading={<Globe />} placeholder="https://" />}
+        {/* A URL reads left to right in every language, so the input is pinned LTR;
+            in an RTL page its placeholder would otherwise render as "//:https". */}
+        {(control) => <Input {...control} type="url" dir="ltr" leading={<Globe />} placeholder="https://" />}
       </Field>
       <Field label="Timeout" error="Must be between 1 and 900 seconds.">
         {(control) => <Input {...control} defaultValue="1200" trailing="s" />}

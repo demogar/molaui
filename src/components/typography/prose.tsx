@@ -49,9 +49,9 @@ export function Prose({ size = 'base', fluid = false, className, ...props }: Pro
         '[&_strong]:font-bold [&_em]:italic',
         // links are underlined: colour alone cannot be the only signal
         '[&_a]:text-rojo-deep [&_a]:underline [&_a]:decoration-rojo-rule [&_a:hover]:decoration-current',
-        '[&_ul]:list-disc [&_ol]:list-decimal [&_ul]:pl-[1.3em] [&_ol]:pl-[1.5em] [&_li+li]:mt-[0.3em] [&_li]:pl-[0.2em]',
+        '[&_ul]:list-disc [&_ol]:list-decimal [&_ul]:ps-[1.3em] [&_ol]:ps-[1.5em] [&_li+li]:mt-[0.3em] [&_li]:ps-[0.2em]',
         '[&_ol>li]:marker:font-ui [&_ol>li]:marker:tabular [&_ol>li]:marker:text-[0.85em]',
-        '[&_blockquote]:border-l-[3px] [&_blockquote]:border-oro [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-ink-2',
+        '[&_blockquote]:border-s-[3px] [&_blockquote]:border-oro [&_blockquote]:ps-4 [&_blockquote]:italic [&_blockquote]:text-ink-2',
         '[&_:not(pre)>code]:literal [&_:not(pre)>code]:text-[0.78em] [&_:not(pre)>code]:bg-ink-soft [&_:not(pre)>code]:px-[0.3em] [&_:not(pre)>code]:py-[0.1em]',
         '[&_pre]:literal [&_pre]:overflow-x-auto [&_pre]:bg-cloth-shade [&_pre]:p-3 [&_pre]:text-[0.8em] [&_pre]:leading-[1.6] [&_pre]:shadow-cut',
         '[&_hr]:my-[1.5em] [&_hr]:h-px [&_hr]:border-0 [&_hr]:bg-keyline',

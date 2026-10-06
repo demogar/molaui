@@ -1,5 +1,6 @@
 'use client'
 
+import { useDirection } from '@base-ui/react/direction-provider'
 import { Toast as ToastPrimitive } from '@base-ui/react/toast'
 import { X } from 'lucide-react'
 import * as React from 'react'
@@ -120,7 +121,7 @@ export function ToastProvider({ children, limit = 3, timeout = 5000 }: ToastProv
     <ToastPrimitive.Provider limit={limit} timeout={timeout}>
       {children}
       <ToastPrimitive.Portal>
-        <ToastPrimitive.Viewport className="fixed right-4 bottom-4 z-[60] w-[calc(100vw-2rem)] outline-none sm:right-6 sm:bottom-6 sm:w-[24rem]">
+        <ToastPrimitive.Viewport className="fixed inset-e-4 bottom-4 z-[60] w-[calc(100vw-2rem)] outline-none sm:inset-e-6 sm:bottom-6 sm:w-[24rem]">
           <ToastList />
         </ToastPrimitive.Viewport>
       </ToastPrimitive.Portal>
@@ -139,34 +140,38 @@ const stackClasses = [
   '[--scale:calc(max(0,1-(var(--toast-index)*0.06)))] [--shrink:calc(1-var(--scale))]',
   '[--height:var(--toast-frontmost-height,var(--toast-height))]',
   '[--offset-y:calc(var(--toast-offset-y)*-1+calc(var(--toast-index)*var(--gap)*-1)+var(--toast-swipe-movement-y))]',
-  'absolute right-0 bottom-0 z-[calc(1000-var(--toast-index))] w-full origin-bottom select-none',
+  'absolute inset-e-0 bottom-0 z-[calc(1000-var(--toast-index))] w-full origin-bottom select-none',
   '[transform:translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--toast-swipe-movement-y)-(var(--toast-index)*var(--peek))-(var(--shrink)*var(--height))))_scale(var(--scale))]',
   'h-(--height) data-expanded:h-(--toast-height)',
   'data-expanded:[transform:translateX(var(--toast-swipe-movement-x))_translateY(var(--offset-y))]',
   // The gap between expanded toasts is part of the hover target, so the
   // stack does not collapse as the pointer crosses it.
-  "after:absolute after:top-full after:left-0 after:h-[calc(var(--gap)+1px)] after:w-full after:content-['']",
+  "after:absolute after:top-full after:inset-s-0 after:h-[calc(var(--gap)+1px)] after:w-full after:content-['']",
   'data-starting-style:[transform:translateY(150%)]',
   '[&[data-ending-style]:not([data-limited]):not([data-swipe-direction])]:[transform:translateY(150%)]',
   'data-ending-style:data-[swipe-direction=down]:[transform:translateY(calc(var(--toast-swipe-movement-y)+150%))]',
   'data-ending-style:data-[swipe-direction=right]:[transform:translateX(calc(var(--toast-swipe-movement-x)+150%))_translateY(var(--offset-y))]',
+  'data-ending-style:data-[swipe-direction=left]:[transform:translateX(calc(var(--toast-swipe-movement-x)-150%))_translateY(var(--offset-y))]',
   'data-ending-style:opacity-0 data-limited:opacity-0',
   '[transition:transform_var(--motion-slow)_var(--ease-cut),opacity_var(--motion-base),height_var(--motion-cut)]',
 ]
 
 function ToastList() {
   const { toasts } = ToastPrimitive.useToastManager()
+  // The stack sits at the inline end, so it is dismissed by swiping toward
+  // that edge: right in LTR, left in RTL. Never across the page.
+  const swipeDirection: ('left' | 'right' | 'down')[] = useDirection() === 'rtl' ? ['left', 'down'] : ['right', 'down']
   return toasts.map((toast) => {
     const tone = (toast.type ?? 'neutral') as ToastTone
     return (
       <ToastPrimitive.Root
         key={toast.id}
         toast={toast}
-        swipeDirection={['right', 'down']}
+        swipeDirection={swipeDirection}
         data-slot="toast"
         className={cn(stackClasses, 'bg-cloth-pale text-ink shadow-floating')}
       >
-        <ToastPrimitive.Content className="flex h-full items-start gap-3 overflow-hidden py-3 pr-2 pl-4 transition-opacity duration-(--motion-base) data-behind:opacity-0 data-expanded:opacity-100">
+        <ToastPrimitive.Content className="flex h-full items-start gap-3 overflow-hidden py-3 pe-2 ps-4 transition-opacity duration-(--motion-base) data-behind:opacity-0 data-expanded:opacity-100">
           <span aria-hidden className={cn('mt-[5px] size-2.5 shrink-0', MARK[tone])} />
           <div className="min-w-0 flex-1">
             <ToastPrimitive.Title className="m-0 font-ui text-sm font-semibold leading-snug">

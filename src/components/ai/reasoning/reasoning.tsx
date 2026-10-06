@@ -53,7 +53,7 @@ export function Reasoning({
       >
         <ChevronRight
           aria-hidden
-          className="size-3.5 transition-transform duration-(--motion-cut) ease-cut group-data-[panel-open]/trigger:rotate-90"
+          className="size-3.5 transition-transform duration-(--motion-cut) ease-cut rtl:-scale-x-100 group-data-[panel-open]/trigger:rotate-90 rtl:group-data-[panel-open]/trigger:-rotate-90"
         />
         {thinking ? <span aria-hidden className="inline-block h-[9px] w-5 band-oro relleno-working shadow-cut" /> : null}
         <span>
@@ -62,7 +62,7 @@ export function Reasoning({
         </span>
       </Collapsible.Trigger>
       <Collapsible.Panel className="overflow-hidden">
-        <div className="mt-2 border-l-[3px] border-keyline pl-4">
+        <div className="mt-2 border-s-[3px] border-keyline ps-4">
           <StreamingText
             text={text}
             status={thinking ? 'streaming' : 'done'}

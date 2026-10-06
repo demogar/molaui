@@ -69,7 +69,7 @@ const termVariants = cva('m-0', {
 const detailVariants = cva('m-0 min-w-0 text-ink', {
   variants: {
     layout: {
-      inline: 'text-right text-sm tabular-nums break-words',
+      inline: 'text-end text-sm tabular-nums break-words',
       stacked: 'text-sm break-words',
       grid: 'mt-1 text-base',
     },

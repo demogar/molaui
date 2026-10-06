@@ -10,6 +10,11 @@
  * the blur all but vanishes against a near-black ground, which is why the
  * keyline is never optional here: it is what still says "this floats".
  *
+ * It is the `shadow-floating` theme utility rather than the same value as an
+ * arbitrary shadow, which this used to be: the named utility also carries the
+ * forced-colours outline (cloth.css), and the arbitrary one left every menu
+ * and popover without an edge in High Contrast.
+ *
  * Enter and exit come from Base UI's `data-starting-style` /
  * `data-ending-style`: a 4px settle and a fade on `--motion-base`, from the
  * transform origin the positioner computes so a menu grows out of its trigger
@@ -18,7 +23,7 @@
  */
 export const floatingSurface = [
   'bg-cloth-pale text-ink rounded-none outline-none',
-  'shadow-[var(--cut),var(--elevation-raised)]',
+  'shadow-floating',
   'origin-(--transform-origin)',
   'transition-[opacity,transform] duration-(--motion-base) ease-cut',
   'data-starting-style:opacity-0 data-starting-style:scale-[0.98]',

@@ -134,7 +134,7 @@ export function ButtonArrow() {
   return (
     <ArrowRight
       aria-hidden
-      className="transition-transform duration-(--motion-cut) ease-cut group-hover/button:translate-x-[3px]"
+      className="transition-transform duration-(--motion-cut) ease-cut group-hover/button:translate-x-[3px] rtl:-scale-x-100 rtl:group-hover/button:-translate-x-[3px]"
     />
   )
 }

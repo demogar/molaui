@@ -172,7 +172,7 @@ function AgentConfigForm() {
       </div>
 
       <footer className="flex flex-wrap items-center justify-end gap-3 bg-cloth-shade px-6 py-4 shadow-[inset_0_1.5px_0_var(--ink)]">
-        <p role="status" className="m-0 mr-auto text-sm text-ink-success">
+        <p role="status" className="m-0 me-auto text-sm text-ink-success">
           {saved ? 'Saved. New runs use this configuration.' : ''}
         </p>
         <Button type="reset" variant="ghost" onClick={() => setErrors({})}>

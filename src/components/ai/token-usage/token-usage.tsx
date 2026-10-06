@@ -96,7 +96,7 @@ export function TokenUsage({
             </span>
             <span className="tabular text-ink-2">
               {LEVEL_WORD[level] ? (
-                <span className={cn('mr-2 font-semibold', level === 'danger' ? 'text-ink-danger' : 'text-ink-warn')}>
+                <span className={cn('me-2 font-semibold', level === 'danger' ? 'text-ink-danger' : 'text-ink-warn')}>
                   {LEVEL_WORD[level]}
                 </span>
               ) : null}
@@ -124,13 +124,13 @@ function ContextMeter({ ratio, level, className }: { ratio: number; level: 'ok' 
     >
       <div
         className={cn(
-          'absolute inset-y-0 left-0 transition-[width] duration-(--motion-base) ease-cut',
+          'absolute inset-y-0 inset-s-0 transition-[width] duration-(--motion-base) ease-cut',
           level === 'danger' ? 'bg-rojo' : level === 'warn' ? 'bg-oro' : 'bg-ink',
         )}
         style={{ width: `${pct}%` }}
       />
       {/* The 80% threshold, cut into the track, so the reader sees the line before crossing it. */}
-      <span aria-hidden className="absolute inset-y-0 left-[80%] w-px bg-ink-muted" />
+      <span aria-hidden className="absolute inset-y-0 inset-s-[80%] w-px bg-ink-muted" />
     </div>
   )
 }

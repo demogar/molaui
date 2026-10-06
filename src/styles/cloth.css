@@ -17,6 +17,10 @@
 
 @utility cut {
   box-shadow: var(--cut);
+  @media (forced-colors: active) {
+    outline: 1px solid CanvasText !important;
+    outline-offset: -1px !important;
+  }
 }
 
 /* A shape, the blade edge, the colour beneath it, and the blade edge again.
@@ -27,6 +31,10 @@
     0 0 0 var(--cut-w) var(--ink),
     0 0 0 calc(var(--cut-w) + var(--cut-reveal)) var(--band),
     0 0 0 calc(var(--cut-w) * 2 + var(--cut-reveal)) var(--ink);
+  @media (forced-colors: active) {
+    outline: 1px solid CanvasText !important;
+    outline-offset: -1px !important;
+  }
 }
 
 @utility band-oro {
@@ -47,6 +55,133 @@
 }
 @utility band-cloth {
   --band: var(--cloth-pale);
+}
+
+/* ── forced colours ───────────────────────────────────────────────────
+ * Windows High Contrast (`forced-colors: active`) drops every box-shadow and
+ * repaints every author colour with the user's system palette. Both devices
+ * this system is built on go with it: the cut is a box-shadow, and a fill is
+ * a background colour that is forced to Canvas. Unhandled, an input loses its
+ * edge, a switch disappears entirely, and a slider is a label and a number.
+ *
+ * The keyline comes back as an outline — the one edge forced colours keeps.
+ * It is inset by its own width so it never paints over a neighbour or
+ * reflows a row, and it is drawn in CanvasText, which is the colour the user
+ * chose for edges and text. It is important because popups and panels carry
+ * `outline-none` to suppress the browser's focus outline, and that utility
+ * was quietly erasing the edge on every menu, select and command palette.
+ * The base layer's important focus and disabled rules still outrank it: an
+ * important declaration in a lower layer beats one in a higher layer. Every shadow utility that carries the cut gets
+ * it: `cut` and `cut-band` above, and the `shadow-cut` / `shadow-floating`
+ * theme utilities here, which keep their Tailwind definition and gain this
+ * one alongside it.
+ *
+ * A fill that carries information — a switch thumb, a slider's track
+ * indicator, a progress bar, a radio dot, the highlighted row of a menu —
+ * opts out of forcing with `forced-color-adjust: none` and paints itself in
+ * a system colour instead, so it follows the user's palette rather than
+ * ours. The three roles map to the three system pairs:
+ *
+ *   forced-ink          a mark: CanvasText, like text
+ *   forced-selected     the chosen or highlighted item: Highlight with
+ *                       HighlightText on it (children follow the colour)
+ *   forced-on-selected  a mark that sits on a selected fill: HighlightText
+ *
+ * Their declarations are important. These utilities sit beside the fill they
+ * replace — `bg-ink forced-ink`, `data-checked:bg-verde
+ * data-checked:forced-selected` — and Tailwind orders utilities by property,
+ * not by the order in the class list, so without it the author fill won about
+ * half the time and kept its own colour in a mode that had opted out of
+ * forcing: a green switch and a gold meter in a high-contrast theme. They
+ * apply only under `forced-colors: active`, so nothing else is outranked.
+ * Disabled turns each one to GrayText, the system's disabled colour.
+ *
+ * Everything else — a decorative wash, a band — is left to be forced away,
+ * which is the point of the mode. State still reads, because state was never
+ * colour alone: the glyph and the word survive. */
+@utility shadow-cut {
+  @media (forced-colors: active) {
+    outline: 1px solid CanvasText !important;
+    outline-offset: -1px !important;
+  }
+}
+@utility shadow-floating {
+  @media (forced-colors: active) {
+    outline: 1px solid CanvasText !important;
+    outline-offset: -1px !important;
+  }
+}
+
+/* A variant that takes the cut away takes its forced edge with it — a ghost
+ * button, or an input that hands its ring to the field around it. */
+@utility shadow-none {
+  @media (forced-colors: active) {
+    outline: none !important;
+  }
+}
+
+@utility forced-ink {
+  @media (forced-colors: active) {
+    forced-color-adjust: none;
+    background-color: CanvasText !important;
+    box-shadow: none !important;
+    &:is([data-disabled], [data-disabled] *) {
+      background-color: GrayText !important;
+    }
+  }
+}
+
+@utility forced-selected {
+  @media (forced-colors: active) {
+    forced-color-adjust: none;
+    background-color: Highlight !important;
+    color: HighlightText !important;
+    box-shadow: none !important;
+    /* Opting out is inherited, so everything inside a selected item keeps
+     * its author colours unless told otherwise: a status badge in a selected
+     * table row stayed a dark chip, now with HighlightText on it. Children
+     * take the selected pair instead, except a child that names its own
+     * forced role (a switch thumb is `forced-on-selected` inside a
+     * `forced-selected` track). */
+    & *:not([class*='forced-']) {
+      color: inherit !important;
+      background-color: transparent !important;
+      outline-color: currentColor !important;
+      box-shadow: none !important;
+    }
+    /* Opting out of forcing is inherited by pseudo-elements, so a selected
+     * panel tab kept its gold band. A band is decoration; it goes. */
+    &::before,
+    &::after {
+      background-color: transparent !important;
+      box-shadow: none !important;
+    }
+    &:is([data-disabled], [data-disabled] *) {
+      background-color: GrayText !important;
+      color: Canvas !important;
+    }
+  }
+}
+
+@utility forced-on-selected {
+  @media (forced-colors: active) {
+    forced-color-adjust: none;
+    background-color: HighlightText !important;
+    box-shadow: none !important;
+    &:is([data-disabled], [data-disabled] *) {
+      background-color: Canvas !important;
+    }
+  }
+}
+
+/* A control whose focus lands on a visually hidden input — a slider thumb —
+ * shows the forced-colours focus outline on itself instead. Important for the
+ * same reason as the base rule: see `:focus-visible` in base.css. */
+@utility forced-focus {
+  @media (forced-colors: active) {
+    outline: 2px solid CanvasText !important;
+    outline-offset: 2px !important;
+  }
 }
 
 /* ── relleno ──────────────────────────────────────────────────────────
@@ -249,6 +384,16 @@
   );
   background-size: 18px 100%;
   animation: var(--animate-mola-shuttle);
+  /* Forced colours drop the gradient and repaint the band as Canvas, which
+   * also covered the track's edge: an indeterminate bar became nothing at
+   * all. The same slits in the system's text colour keep "work is
+   * happening" visible in the user's palette. */
+  @media (forced-colors: active) {
+    forced-color-adjust: none;
+    background-color: Canvas;
+    background-image: repeating-linear-gradient(90deg, CanvasText 0 2px, transparent 2px 9px);
+    box-shadow: inset 0 0 0 1px CanvasText;
+  }
 }
 
 /* ── inverse panel ────────────────────────────────────────────────────

@@ -148,7 +148,7 @@ function DialogFrame({
           {title}
           {description}
         </div>
-        {close ? <div className="-mt-1 -mr-2">{close}</div> : null}
+        {close ? <div className="-mt-1 -me-2">{close}</div> : null}
       </div>
       {children ? <div className="scroll-cloth min-h-0 flex-1 overflow-y-auto px-6 pt-4 pb-2 text-sm">{children}</div> : null}
       {footer ? <div className="mt-6 flex flex-wrap items-center justify-end gap-2 px-6 pb-6">{footer}</div> : <div className="pb-6" />}

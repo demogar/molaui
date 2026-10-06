@@ -77,12 +77,12 @@ export function Pagination({
 }: PaginationProps) {
   const prev = (
     <IconButton label="Previous page" variant="secondary" size="sm" disabled={page <= 1} onClick={() => onPageChange(page - 1)}>
-      <ChevronLeft />
+      <ChevronLeft className="rtl:-scale-x-100" />
     </IconButton>
   )
   const next = (
     <IconButton label="Next page" variant="secondary" size="sm" disabled={page >= pageCount} onClick={() => onPageChange(page + 1)}>
-      <ChevronRight />
+      <ChevronRight className="rtl:-scale-x-100" />
     </IconButton>
   )
 
@@ -116,7 +116,7 @@ export function Pagination({
   return (
     <nav aria-label={ariaLabel} data-slot="pagination" className={className} {...props}>
       <ul className="m-0 flex list-none items-center gap-1 p-0">
-        <li className="mr-1">{prev}</li>
+        <li className="me-1">{prev}</li>
         {getPageRange(page, pageCount, siblings).map((item) =>
           typeof item === 'number' ? (
             <li key={item}>
@@ -130,7 +130,7 @@ export function Pagination({
                   'font-ui text-sm font-semibold tabular-nums text-ink-2',
                   'transition-[background-color,color] duration-(--motion-cut) ease-cut',
                   'hover:bg-ink-soft hover:text-ink',
-                  'aria-[current=page]:bg-ink aria-[current=page]:text-on-ink',
+                  'aria-[current=page]:bg-ink aria-[current=page]:text-on-ink aria-[current=page]:forced-selected',
                 )}
               >
                 {fmt(item)}
@@ -142,7 +142,7 @@ export function Pagination({
             </li>
           ),
         )}
-        <li className="ml-1">{next}</li>
+        <li className="ms-1">{next}</li>
       </ul>
     </nav>
   )

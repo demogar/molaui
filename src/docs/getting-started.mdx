@@ -65,6 +65,25 @@ page is one attribute.
 Density re-scales control heights, row heights, the small end of the type scale and the spacing
 unit together. No component takes a density prop.
 
+## Right-to-left
+
+Layout follows `dir`, because every component is written in logical properties. Keyboard direction
+does not: Base UI reads it from React context, so arrow keys in a slider, tabs or a menu, and the
+side a submenu opens on, need the provider too. Set both, once, at the root:
+
+```tsx
+import { DirectionProvider } from '@demogar/mola-ui'
+
+document.documentElement.dir = 'rtl'
+
+<DirectionProvider direction="rtl">
+  <App />
+</DirectionProvider>
+```
+
+`dir` belongs on `<html>`, not on a wrapper, for the same reason as the theme: menus and dialogs
+portal to `<body>` and must mirror too. See Foundations / Accessibility for what changes.
+
 ## Already on Tailwind v4?
 
 Import the un-compiled layers into your own build instead of shipping a second Tailwind:

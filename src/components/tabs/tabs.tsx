@@ -65,7 +65,7 @@ export function TabsList({ className, children, ...props }: TabsListProps) {
       {variant === 'underline' ? (
         <TabsPrimitive.Indicator
           className={cn(
-            'absolute bottom-0 left-(--active-tab-left) h-[3px] w-(--active-tab-width) bg-ink',
+            'absolute bottom-0 left-(--active-tab-left) h-[3px] w-(--active-tab-width) bg-ink forced-ink',
             'transition-[left,width] duration-(--motion-base) ease-cut',
           )}
         />
@@ -102,7 +102,7 @@ export function TabsTab({ className, count, icon, children, ...props }: TabsTabP
           // paints over that keyline (the panel is pulled up under the list,
           // and the list sits above it), so tab and panel are one shape.
           'mb-[3px] bg-cloth-shade band-oro hover:bg-cloth-deep',
-          'data-active:mb-0 data-active:bg-cloth-pale',
+          'data-active:mb-0 data-active:bg-cloth-pale data-active:forced-selected',
           'data-active:shadow-[-1.5px_0_0_0_var(--ink),1.5px_0_0_0_var(--ink),0_-1.5px_0_0_var(--ink)]',
           "data-active:before:absolute data-active:before:inset-x-0 data-active:before:-top-[6.5px] data-active:before:h-[5px] data-active:before:bg-(--band) data-active:before:shadow-[0_-1.5px_0_0_var(--ink),-1.5px_0_0_0_var(--ink),1.5px_0_0_0_var(--ink)] data-active:before:content-['']",
         ],

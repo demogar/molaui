@@ -206,7 +206,7 @@ export function AttachmentChip({ name, detail, onRemove, className, ...props }: 
   return (
     <span
       data-slot="attachment-chip"
-      className={cn('inline-flex max-w-full items-center gap-2 bg-cloth-shade py-1 pr-1 pl-2.5 shadow-cut', className)}
+      className={cn('inline-flex max-w-full items-center gap-2 bg-cloth-shade py-1 pe-1 ps-2.5 shadow-cut', className)}
       {...props}
     >
       <span className="literal truncate text-xs text-ink">{name}</span>

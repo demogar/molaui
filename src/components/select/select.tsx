@@ -57,7 +57,7 @@ export function SelectTrigger({
       className={cn(
         fieldControlClasses,
         fieldControlSizes[size],
-        'flex cursor-default items-center justify-between gap-3 text-left',
+        'flex cursor-default items-center justify-between gap-3 text-start',
         'focus-visible:shadow-[var(--focus-ring)] data-popup-open:shadow-[var(--focus-ring)]',
         'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
         className,
@@ -121,10 +121,10 @@ export function SelectItem({ className, children, description, ...props }: Selec
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        'relative grid min-h-(--control-h) cursor-default grid-cols-[1rem_1fr] items-center gap-x-2.5 py-1.5 pr-3 pl-2 text-base outline-none select-none',
+        'relative grid min-h-(--control-h) cursor-default grid-cols-[1rem_1fr] items-center gap-x-2.5 py-1.5 pe-3 ps-2 text-base outline-none select-none',
         'data-selected:bg-ink-soft data-selected:font-semibold',
         // Highlighted wins over selected: the cursor is what is about to happen.
-        'data-highlighted:bg-ink data-highlighted:text-on-ink data-selected:data-highlighted:bg-ink',
+        'data-highlighted:bg-ink data-highlighted:text-on-ink data-selected:data-highlighted:bg-ink data-highlighted:forced-selected',
         // The ink fill IS the focus indicator here; the document-wide ring on
         // top of it would draw a second, competing one inside the popup.
         'focus-visible:shadow-none',

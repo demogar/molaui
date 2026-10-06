@@ -100,10 +100,10 @@ export function SegmentedControl<V extends string = string>({
             fill && 'min-w-0 flex-1',
             // The slit between segments: an inset ink line on every segment
             // but the first, so the seams never double.
-            'not-first:shadow-[inset_1.5px_0_0_var(--ink)]',
+            'not-first:shadow-[inset_1.5px_0_0_var(--ink)] rtl:not-first:shadow-[inset_-1.5px_0_0_var(--ink)]',
             'transition-[background-color,color] duration-(--motion-cut) ease-cut',
             'hover:bg-ink-soft hover:text-ink',
-            'data-pressed:bg-ink data-pressed:text-on-ink data-pressed:hover:bg-ink',
+            'data-pressed:bg-ink data-pressed:text-on-ink data-pressed:hover:bg-ink data-pressed:forced-selected',
             'focus-visible:z-10 focus-visible:shadow-[var(--focus-ring)]',
             'data-disabled:cursor-not-allowed data-disabled:text-ink-muted data-disabled:hover:bg-transparent',
             '[&_svg]:size-4 [&_svg]:shrink-0',
