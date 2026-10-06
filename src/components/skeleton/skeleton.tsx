@@ -30,10 +30,15 @@ const skeletonVariants = cva(['rounded-none bg-cloth-shade', skeletonShimmer], {
     shape: {
       /** A card, a chart, an image: keeps the keyline every other shape has. */
       block: 'relleno-field shadow-cut',
-      /** A line of text that has not arrived. Sized in `em`, so it follows the type around it. */
-      text: 'h-[0.8em] w-full forced-colors:bg-[GrayText] forced-colors:forced-color-adjust-none',
+      /**
+       * A line of text that has not arrived. Sized in `em`, so it follows the
+       * type around it. Deep cloth, one step past a block's fill: a bar this
+       * thin has no keyline to find it by, and in the dark theme shade cloth
+       * all but vanished into the page.
+       */
+      text: 'h-[0.8em] w-full bg-cloth-deep forced-colors:bg-[GrayText] forced-colors:forced-color-adjust-none',
       /** @deprecated Use `text`. Kept so existing call sites do not break. */
-      line: 'h-[0.8em] w-full forced-colors:bg-[GrayText] forced-colors:forced-color-adjust-none',
+      line: 'h-[0.8em] w-full bg-cloth-deep forced-colors:bg-[GrayText] forced-colors:forced-color-adjust-none',
       /** A person or agent mark, square-cut like `Avatar`. */
       avatar: 'shrink-0 shadow-cut',
     },
