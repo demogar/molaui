@@ -437,7 +437,17 @@ export function DataTable<Row>({
       ) : null}
       {table}
       {paginated && total > 0 ? (
-        <div className="flex items-center justify-end gap-3">
+        <div className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2">
+          {paginationVariant === 'pages' ? (
+            // The compact pager says its range itself; the numbered one only
+            // says where you are, so the range goes beside it.
+            <p className="m-0 me-auto text-sm tabular-nums text-ink-2">
+              <span className="font-semibold text-ink">
+                {fmt((currentPage - 1) * pageSize + 1)}–{fmt(Math.min(currentPage * pageSize, total))}
+              </span>{' '}
+              of {fmt(total)} {nounFor(total)}
+            </p>
+          ) : null}
           <Pagination
             aria-label={label ? `${label} pages` : 'Pages'}
             variant={paginationVariant}
