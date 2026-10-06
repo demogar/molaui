@@ -1,16 +1,9 @@
-import { Meta } from '@storybook/addon-docs/blocks'
+import { Markdown, Meta } from '@storybook/addon-docs/blocks'
+
+import changelog from '../../CHANGELOG.md?raw'
 
 <Meta title="Mola UI/Changelog" />
 
-# Changelog
+{/* CHANGELOG.md is written by release-please; this page renders it rather than keeping a copy. */}
 
-## 0.1.0 — 2026-10-05
-
-First public release.
-
-- Tokens: two themes in one declaration (`light-dark()`), three densities, contrast contract
-  test, DTCG export for Figma.
-- Components: actions, forms, overlays, feedback, navigation, data display, application shell.
-- AI interface layer: streaming text, threads, composer, tool calls with approval, agent run
-  timeline, reasoning, citations, token usage, confidence.
-- Extracted from the Mola design system of mustdopanama.com and re-argued for product density.
+<Markdown>{changelog}</Markdown>

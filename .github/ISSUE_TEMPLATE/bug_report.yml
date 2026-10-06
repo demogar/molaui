@@ -1,0 +1,45 @@
+name: Bug report
+description: A component, token or doc page does not behave as documented
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead. Screenshots help.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: A Storybook story id, a minimal snippet, or a CodeSandbox/StackBlitz link.
+      placeholder: |
+        1. Open components-button--primary in the dark theme
+        2. ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Mola UI version or commit
+    validations:
+      required: true
+  - type: dropdown
+    id: theme
+    attributes:
+      label: Theme and density
+      multiple: true
+      options: [light, dark, compact, comfortable, spacious]
+  - type: dropdown
+    id: entry
+    attributes:
+      label: How you import the styles
+      options:
+        - mola-ui/styles.css (compiled)
+        - mola-ui/tailwind.css (own Tailwind v4 build)
+        - mola-ui/tokens.css (tokens only)
+  - type: input
+    id: env
+    attributes:
+      label: Browser, React and bundler versions

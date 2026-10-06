@@ -3,6 +3,26 @@
   "version": "0.1.0",
   "description": "A design system cut like a mola: flat layers, hard keylines, revealed bands. React components for dense internal tools and AI-native interfaces.",
   "license": "MIT",
+  "author": "Demóstenes García (https://github.com/demogar)",
+  "homepage": "https://demogar.github.io/molaui/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/demogar/molaui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/demogar/molaui/issues"
+  },
+  "keywords": [
+    "design-system",
+    "react",
+    "tailwindcss",
+    "base-ui",
+    "design-tokens",
+    "storybook",
+    "ai",
+    "agents",
+    "components"
+  ],
   "type": "module",
   "sideEffects": [
     "**/*.css"

@@ -111,6 +111,13 @@ tokens/          generated DTCG tokens for Figma
 docs/adr/        architecture decision records
 ```
 
+## Contributing
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) for the gates, the rules a review holds you to, and how
+releases are cut. Everyone taking part follows the [Code of Conduct](CODE_OF_CONDUCT.md). Report
+security issues privately, as described in [SECURITY.md](SECURITY.md). Changes are listed in the
+[changelog](CHANGELOG.md).
+
 ## Credits
 
 Designed and directed by Demóstenes García, and built with [Claude Code](https://claude.com/claude-code)
@@ -118,4 +125,4 @@ as the daily working practice. The mola is the textile art of the Guna people; t
 its method, not its motifs. Typefaces: Archivo (Omnibus-Type), Alegreya (Juan Pablo del Peral, Huerta
 Tipográfica), Martian Mono (Evil Martians) — all under the SIL Open Font License.
 
-MIT licensed.
+[MIT licensed](LICENSE).
