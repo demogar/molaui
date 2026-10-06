@@ -10,23 +10,43 @@ admin consoles, knowledge bases, agent run monitors — documented in a standalo
 
 ## What's inside
 
-| | |
-| --- | --- |
-| **Tokens** | One CSS file. Two themes declared once with `light-dark()`, three densities on one attribute, zero radius. Every contrast pairing — 100+ of them, in both themes — computed from the CSS and enforced by a test. Exported to W3C design-token JSON for Figma. |
-| **60 components** | Actions, forms, overlays, feedback, navigation, data display, and an application shell. 130 exported parts, built on [Base UI](https://base-ui.com) for behaviour and accessibility, styled with Tailwind v4. |
-| **An AI interface layer** | Streaming text, message threads, a composer whose send button becomes stop, tool-call cards with human approval, long-running agent run timelines with live elapsed time, reasoning disclosure, citations, token budgets, and confidence stated in words rather than decimals. |
-| **A working demo** | *AI / Agent console* — ask a question and a simulated agent plans, calls two tools, and streams a cited answer, with the run timeline and token usage updating beside it. |
+- **Tokens.** One CSS file. Two themes declared once with `light-dark()`, three densities on one
+  attribute, zero radius. Every contrast pairing, 100+ of them across both themes, is computed
+  from the CSS and enforced by a test. The tokens are exported to W3C design-token JSON for Figma.
+- **60 components.** Actions, forms, overlays, feedback, navigation, data display and an
+  application shell: 130 exported parts, built on [Base UI](https://base-ui.com) for behaviour and
+  accessibility, and styled with Tailwind v4.
+- **An AI interface layer.** Streaming text, message threads, a composer whose send button becomes
+  stop, tool-call cards with human approval, long-running agent run timelines with live elapsed
+  time, reasoning disclosure, citations, token budgets, and confidence stated in words rather
+  than decimals.
+- **A working demo.** In the
+  [agent console](https://demogar.github.io/molaui/?path=/story/ai-agent-console--console), ask a
+  question and a simulated agent plans, calls two tools and streams a cited answer, with the run
+  timeline and token usage updating beside it.
 
 ![The agent console after a run: a cited answer in the reading face, an uncertainty note, confidence in words, and the run timeline with token usage beside it](docs/screenshots/agent-console.png)
 
 <table>
   <tr>
-    <td><img src="docs/screenshots/agent-run-failed-dark.png" alt="An agent run that failed at step four, in the dark theme, with the tool's error literal and a scoped retry"></td>
-    <td><img src="docs/screenshots/tool-call-approval.png" alt="A tool call waiting for human approval, its arguments shown as JSON"></td>
+    <td width="50%" valign="top">
+      <img src="docs/screenshots/agent-run-failed-dark.png" alt="An agent run that failed at step four, in the dark theme, with the tool's error literal and a scoped retry"><br>
+      <sub><b>A failed agent run</b>, dark theme: the tool's error as a literal, and a retry scoped to the failed step.</sub>
+    </td>
+    <td width="50%" valign="top">
+      <img src="docs/screenshots/tool-call-approval.png" alt="A tool call waiting for human approval, its arguments shown as JSON"><br>
+      <sub><b>A tool call waiting for approval</b>, with its arguments shown as JSON and the reason it needs a person.</sub>
+    </td>
   </tr>
   <tr>
-    <td><img src="docs/screenshots/thread-light.png" alt="A thread: the operator's question, a tool call, and the model's cited answer set in the reading face"></td>
-    <td><img src="docs/screenshots/app-shell-dark-compact.png" alt="The runs view in the dark theme at compact density"></td>
+    <td width="50%" valign="top">
+      <img src="docs/screenshots/thread-light.png" alt="A thread: the operator's question, a tool call, and the model's cited answer set in the reading face"><br>
+      <sub><b>A thread</b>: the question, a tool call, and the model's cited answer set in the reading face.</sub>
+    </td>
+    <td width="50%" valign="top">
+      <img src="docs/screenshots/app-shell-dark-compact.png" alt="The runs view in the dark theme at compact density"><br>
+      <sub><b>The runs view</b> in the dark theme at compact density.</sub>
+    </td>
   </tr>
 </table>
 
