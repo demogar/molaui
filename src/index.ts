@@ -24,6 +24,7 @@ export * from './components/switch'
 export * from './components/chip'
 export * from './components/segmented'
 export * from './components/slider'
+export * from './components/combobox'
 
 // Feedback
 export * from './components/badge'
