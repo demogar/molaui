@@ -4,7 +4,8 @@ import { Meta } from '@storybook/addon-docs/blocks'
 
 # Accessibility
 
-Accessibility is enforced at four levels, so a regression fails a check rather than a person.
+Accessibility is enforced at four levels, so a regression fails a check rather than a person. Two
+more sections cover the modes the system adapts to: forced colours and right-to-left.
 
 ## 1. The palette is a tested contract
 
@@ -34,3 +35,59 @@ being re-implemented per component.
 - **Streaming announces completion, not tokens.** A live region that reads every token is
   unusable; the thread is `aria-busy` while streaming and announces once when done.
 - **Touch targets** never fall below 24px, even in `compact`.
+
+## 5. Forced colours
+
+Windows High Contrast and other forced-colour modes replace every author colour with the user's
+system palette and **remove every `box-shadow`**. Both of the system's devices go with them: the
+cut is a box-shadow, and a fill is a background colour that is forced to the page colour.
+Unhandled, an input lost its edge, a switch disappeared entirely and a slider was a label and a
+number.
+
+What the system does under `@media (forced-colors: active)`:
+
+- **Every keyline becomes an outline.** `shadow-cut`, `shadow-floating`, `cut` and `cut-band` also
+  draw a 1px `CanvasText` outline, inset by its own width so nothing shifts. Inputs, buttons,
+  selects, checkboxes, cards, menus and dialogs keep their edges in the user's colour.
+- **Focus is a 2px `CanvasText` outline**, offset 2px, on everything that takes focus — including
+  composite items that carry `outline-none` and controls whose focus lands on a hidden input (a
+  slider thumb, a chip).
+- **Fills that carry meaning opt out of forcing and repaint in system colours**, through three
+  utilities: `forced-ink` (a mark: switch and slider thumbs, the slider's and progress bar's fill,
+  a radio dot, a status dot), `forced-selected` (the chosen or highlighted item: a pressed
+  segment, a checked chip, the current page, a highlighted menu, select or command row, a selected
+  panel tab or table row — `Highlight` with `HighlightText`) and `forced-on-selected` (a mark on a
+  selected fill: the thumb of a switch that is on).
+- **Disabled is `GrayText`**, the system's own disabled colour, on the control, its edge and its
+  fills.
+- **Decoration is left to be forced away.** Bands, washes and relleno textures disappear, which is
+  the point of the mode. State still reads, because it was never colour alone: the check, the
+  dot and the word survive.
+
+Check it in Chromium with DevTools › Rendering › *Emulate CSS media feature forced-colors*, or
+from the command line: `node scripts/shoot.mjs --forced-colors <outDir> <storybook> <storyId>`. A
+dark theme is shot against Chromium's dark contrast palette.
+
+## 6. Right-to-left
+
+Every component is laid out in logical properties — `ps-`/`pe-`, `ms-`/`me-`, `inset-s-`/`inset-e-`,
+`text-start`/`text-end`, `border-s` — so `dir="rtl"` mirrors it with no second set of classes. A
+test (`src/test/logical-properties.test.ts`) fails if a physical left or right utility appears in
+a component, with a short reviewed allowlist: Base UI's tab indicator is positioned from a
+physical measurement, and a dialog centred with `left-1/2 -translate-x-1/2` is symmetric already.
+
+- **Directional icons mirror** with `rtl:-scale-x-100`: pagination and disclosure chevrons, the
+  submenu chevron, the button arrow and the sidebar toggle. Icons that do not mean "forward" or
+  "back" stay as drawn: play, the trend arrows on a stat (up is still up), external links.
+- **Edges that mark a side move with it**: the current sidebar item's bar, a selected table row's
+  bar and an error callout's rule are on the inline start.
+- **Motion follows**: the switch thumb travels left to turn on, the mobile drawer slides in from
+  the right, and a toast is swiped away toward the edge it sits on, which is now the left.
+- **Code stays left to right.** A code block's body is pinned `dir="ltr"`; its header mirrors.
+- **Keyboard direction comes from `DirectionProvider`**, not from `dir`. Set both at the root (see
+  Getting started). The Storybook toolbar's *Direction* control does exactly that, and
+  `node scripts/shoot.mjs --rtl …` screenshots a story mirrored.
+
+The stories are written in English, so in RTL their punctuation moves to the visual left of each
+sentence. That is the Unicode bidirectional algorithm working correctly on Latin text, not a bug
+in the component.
