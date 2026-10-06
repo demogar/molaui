@@ -9641,7 +9641,7 @@
       "category": "Overlays",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-overlays-dialog--overview",
       "summary": "Dialog for a short modal task; AlertDialog to confirm an action that destroys something.",
-      "description": "A panel cut out of the page and laid on top of it. The top seam is the full **relleno** — the layer colour slit with ink — which is how a mola marks where one layer ends; it says “you are inside something” without a title bar or a tint. The backdrop recedes toward the page’s own cloth rather than toward grey. Focus trap, scroll lock, Escape and the inert page come from Base UI; the corner close is always present, because a touch screen-reader user has no Escape key.",
+      "description": "A panel cut out of the page and laid on top of it. The top seam is the full **relleno** — the layer colour slit with ink — which is how a mola marks where one layer ends; it says “you are inside something” without a title bar or a tint. The backdrop recedes toward the page’s own cloth rather than toward grey. Focus trap, scroll lock, Escape and the inert page come from Base UI; the corner close is always present, because a touch screen-reader user has no Escape key. The action row stacks full width, the confirm on top, when it is narrower than 24rem — so a small alert dialog never strands its confirm on a second line.",
       "usage": {
         "use": [
           "A short task the person finishes or cancels before going back, such as renaming an agent.",
@@ -9804,7 +9804,7 @@
               "name": "footer",
               "type": "ReactNode",
               "required": false,
-              "description": "Action row, right-aligned under the body. Usually a `ghost` cancel and one primary."
+              "description": "Action row under the body: right-aligned, or stacked full width with the last action on top when the row is under 24rem. Usually a `ghost` cancel and one primary."
             },
             {
               "name": "hideClose",

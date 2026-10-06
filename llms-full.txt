@@ -2367,7 +2367,7 @@ The confirmation for an action that destroys something. Built on Base UI's Alert
 | `band` | `"rojo" \| "anil" \| "verde" \| "oro"` | `oro` | The layer revealed in the top seam. |
 | `className` | `string` |  |  |
 | `description` | `ReactNode` |  |  |
-| `footer` | `ReactNode` |  | Action row, right-aligned under the body. Usually a `ghost` cancel and one primary. |
+| `footer` | `ReactNode` |  | Action row under the body: right-aligned, or stacked full width with the last action on top when the row is under 24rem. Usually a `ghost` cancel and one primary. |
 | `hideClose` | `boolean` | `false` | Hide the corner close button. Only when the footer carries an explicit way out. |
 | `size` | `"sm" \| "lg" \| "md" \| null` |  |  |
 
