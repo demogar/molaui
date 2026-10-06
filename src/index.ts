@@ -34,6 +34,7 @@ export * from './components/badge'
 export * from './components/callout'
 export * from './components/progress'
 export * from './components/placeholder'
+export * from './components/skeleton'
 export * from './components/empty-state'
 export * from './components/toast'
 

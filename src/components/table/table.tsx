@@ -2,6 +2,7 @@ import { ArrowDown, ArrowUp, ArrowUpDown, Check, Minus } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { skeletonShimmer } from '../skeleton/skeleton'
 
 /**
  * The table primitives. A table in an internal tool is read for hours, so
@@ -271,7 +272,8 @@ export function TableSkeletonRows({ rows = 5, columns }: { rows?: number; column
             <td key={c} className="h-(--row-h) px-3 align-middle shadow-[inset_0_-1px_0_var(--keyline-soft)]">
               <span
                 className={cn(
-                  'block h-2.5 animate-mola-pulse bg-cloth-deep relleno-field',
+                  'block h-2.5 bg-cloth-deep relleno-field',
+                  skeletonShimmer,
                   widths[(r + c * 2) % widths.length],
                 )}
               />
