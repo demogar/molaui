@@ -55,7 +55,8 @@ export interface ToolCallProps extends Omit<React.ComponentProps<'div'>, 'childr
  *
  * ── human in the loop ──
  * A call that needs approval states WHY in words, and offers Approve and Deny
- * as equally sized buttons, Deny never styled as the lesser option. A
+ * as buttons of the same size and variant, neither styled as the lesser
+ * option — the same rule `ChangeReview` follows for its three decisions. A
  * consent control that nudges is not consent; for a tool that writes to
  * production it is a bug.
  *
@@ -198,7 +199,10 @@ function ApprovalBlock({ approval }: { approval: ToolCallApproval }) {
         </div>
       </div>
       <div className="flex flex-wrap gap-2 ps-6.5">
-        <Button size="sm" icon={<Check />} onClick={approval.onApprove}>
+        {/* Same variant as Deny, as in ChangeReview. Approve was the ink
+            primary until the two were compared side by side: the doc said
+            "equal weight" and the pixels said "press this one". */}
+        <Button size="sm" variant="secondary" icon={<Check />} onClick={approval.onApprove}>
           {approval.approveLabel ?? 'Approve'}
         </Button>
         <Button size="sm" variant="secondary" icon={<X />} onClick={approval.onDeny}>

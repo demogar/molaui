@@ -35,6 +35,7 @@ describe('ToolCall', () => {
       <ToolCall name="update_flag" status="waiting" approval={{ reason: 'Writes to production.', onApprove, onDeny }} />,
     )
     expect(screen.getByText('Writes to production.')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Approve' }).className).toBe(screen.getByRole('button', { name: 'Deny' }).className)
     await userEvent.click(screen.getByRole('button', { name: 'Deny' }))
     await userEvent.click(screen.getByRole('button', { name: 'Approve' }))
     expect(onDeny).toHaveBeenCalledOnce()

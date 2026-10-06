@@ -43,6 +43,7 @@
  * (`ToolCall` with `approval`).
  */
 export * from './agent-run'
+export * from './change-review'
 export * from './confidence'
 export * from './message'
 export * from './prompt-input'
