@@ -20,7 +20,7 @@ const meta = {
       story: { inline: false, height: '760px' },
       description: {
         component:
-          'The frame an internal tool lives in. Exactly the viewport tall, and only `<main>` scrolls — so the switcher, search and way back are never twenty rows away. From 920px the sidebar is in the layout and collapses to an icon rail; below it, the **same tree** renders in a modal sheet, so desktop and mobile navigation cannot drift apart. The demo is *Cayuco* — a fictional agent platform for support, docs and billing teams, named for a dugout canoe.',
+          'The frame an internal tool lives in. Exactly the viewport tall, and only `<main>` scrolls — so the switcher, search and way back are never twenty rows away. From 920px the sidebar is in the layout and collapses to an icon rail; below it, the **same tree** renders in a modal sheet, so desktop and mobile navigation cannot drift apart. The demo is *Cayuco* — a fictional agent platform for support, docs and billing teams, named for the dugout canoe of the Panamanian isthmus.',
       },
     },
   },
