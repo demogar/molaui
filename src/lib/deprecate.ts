@@ -16,8 +16,13 @@
  */
 const warned = new Set<string>()
 
+// Declared here rather than taken from @types/node, which the library's own
+// type build does not load: a module-scoped declaration emits nothing and
+// leaves the literal `process.env.NODE_ENV` for the bundler to replace.
+declare const process: { env: { NODE_ENV?: string } } | undefined
+
 function isProduction() {
-  return typeof process !== 'undefined' && process.env?.NODE_ENV === 'production'
+  return typeof process !== 'undefined' && process.env.NODE_ENV === 'production'
 }
 
 export interface Deprecation {
