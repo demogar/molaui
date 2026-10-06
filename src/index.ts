@@ -24,17 +24,23 @@ export * from './components/switch'
 export * from './components/chip'
 export * from './components/segmented'
 export * from './components/slider'
+export * from './components/combobox'
+export * from './components/number-input'
+export * from './components/date-picker'
+export * from './components/file-upload'
 
 // Feedback
 export * from './components/badge'
 export * from './components/callout'
 export * from './components/progress'
 export * from './components/placeholder'
+export * from './components/skeleton'
 export * from './components/empty-state'
 export * from './components/toast'
 
 // Overlays
 export * from './components/dialog'
+export * from './components/drawer'
 export * from './components/popover'
 export * from './components/tooltip'
 export * from './components/menu'
@@ -53,6 +59,7 @@ export * from './components/description-list'
 export * from './components/timeline'
 export * from './components/avatar'
 export * from './components/app-shell'
+export * from './components/toolbar'
 
 // The AI interface layer
 export * from './components/ai'

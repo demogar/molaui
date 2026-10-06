@@ -87,6 +87,7 @@
   --animate-mola-pulse: mola-pulse 1.6s var(--ease-cut) infinite;
   --animate-mola-caret: mola-caret 1.05s steps(1) infinite;
   --animate-mola-shuttle: mola-shuttle 1.2s linear infinite;
+  --animate-mola-shimmer: mola-shimmer 1.8s var(--ease-cut) infinite;
   --animate-mola-in: mola-in var(--motion-base) var(--ease-cut) both;
 
   @keyframes mola-pulse {
@@ -114,6 +115,15 @@
     }
     to {
       background-position-x: 18px;
+    }
+  }
+  /* A sweep of raised cloth passing over a slot that is still empty. */
+  @keyframes mola-shimmer {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(100%);
     }
   }
   @keyframes mola-in {

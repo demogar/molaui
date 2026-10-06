@@ -2,6 +2,8 @@ import { ArrowDown, ArrowUp, ArrowUpDown, Check, Minus } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { EmptyState, type EmptyStateProps } from '../empty-state'
+import { skeletonShimmer } from '../skeleton/skeleton'
 
 /**
  * The table primitives. A table in an internal tool is read for hours, so
@@ -232,25 +234,37 @@ export function TableCaption({ className, ...props }: React.ComponentProps<'capt
 /**
  * The empty state, as a row. It spans the table rather than replacing it, so
  * the headers stay and the reader still knows what would have been here.
- * Relleno fills the slot, as it fills every empty area in this system: a slot
- * cut and waiting, not a failure.
+ *
+ * It is `EmptyState` — the same four conversations (empty, no results, error,
+ * no permission) and the same relleno slot — drawn without its own keyline,
+ * because the table frame is already the edge, and a second cut inside it
+ * reads as a box in a box.
  */
 export function TableEmpty({
   colSpan,
   title = 'Nothing here yet',
+  variant,
+  actions,
   children,
 }: {
   colSpan: number
   title?: React.ReactNode
+  variant?: EmptyStateProps['variant']
+  /** One or two buttons; for a filtered table, the one that clears the filters. */
+  actions?: React.ReactNode
   children?: React.ReactNode
 }) {
   return (
     <tr data-slot="table-empty">
       <td colSpan={colSpan} className="p-0">
-        <div className="relleno-field bg-cloth-shade px-6 py-10 text-center">
-          <p className="m-0 font-display text-base font-semibold wdth-display text-ink">{title}</p>
-          {children ? <div className="mx-auto mt-1.5 max-w-prose text-sm text-ink-2">{children}</div> : null}
-        </div>
+        <EmptyState
+          size="sm"
+          variant={variant}
+          title={title}
+          description={children}
+          actions={actions}
+          className="shadow-none forced-colors:outline-none"
+        />
       </td>
     </tr>
   )
@@ -271,7 +285,8 @@ export function TableSkeletonRows({ rows = 5, columns }: { rows?: number; column
             <td key={c} className="h-(--row-h) px-3 align-middle shadow-[inset_0_-1px_0_var(--keyline-soft)]">
               <span
                 className={cn(
-                  'block h-2.5 animate-mola-pulse bg-cloth-deep relleno-field',
+                  'block h-2.5 bg-cloth-deep relleno-field',
+                  skeletonShimmer,
                   widths[(r + c * 2) % widths.length],
                 )}
               />

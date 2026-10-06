@@ -3,6 +3,10 @@ import { useRef, useState } from 'react'
 
 import { Button } from '../button'
 import { Checkbox, CheckboxGroup } from '../checkbox'
+import { Combobox } from '../combobox'
+import { DatePicker } from '../date-picker'
+import { FileUpload } from '../file-upload'
+import { NumberInput } from '../number-input'
 import { Radio, RadioGroup } from '../radio'
 import { Select } from '../select'
 import { Slider } from '../slider'
@@ -28,9 +32,9 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 const MODELS = [
-  { value: 'claude-opus-5-5', label: 'Claude Opus 5.5', description: 'Deep reasoning · slowest' },
-  { value: 'claude-sonnet-5-5', label: 'Claude Sonnet 5.5', description: 'Balanced · default' },
-  { value: 'claude-haiku-4-5', label: 'Claude Haiku 4.5', description: 'Fast · classification' },
+  { value: 'cayuco-deep-3', label: 'Cayuco Deep 3', description: 'Deep reasoning · slowest' },
+  { value: 'cayuco-steady-3', label: 'Cayuco Steady 3', description: 'Balanced · default' },
+  { value: 'cayuco-swift-2', label: 'Cayuco Swift 2', description: 'Fast · classification' },
 ]
 
 const TOOLS = [
@@ -39,11 +43,25 @@ const TOOLS = [
   { value: 'run_engine', description: 'Evaluate a position. Costly; rate-limited.' },
 ]
 
-type Errors = Partial<Record<'name' | 'model' | 'prompt' | 'tools', string>>
+const TEAMMATES = [
+  { value: 'ana-rios', label: 'Ana Ríos', description: 'Evaluation' },
+  { value: 'bruno-vega', label: 'Bruno Vega', description: 'Platform' },
+  { value: 'carla-pinzon', label: 'Carla Pinzón', description: 'Evaluation' },
+  { value: 'dalia-osei', label: 'Dalia Osei', description: 'Safety' },
+  { value: 'hana-sato', label: 'Hana Sato', description: 'Retrieval' },
+]
+
+// Pinned so the story renders the same calendar in every screenshot.
+const TODAY = new Date(2026, 9, 6)
+
+type Errors = Partial<Record<'name' | 'model' | 'prompt' | 'tools' | 'budget' | 'goLive' | 'reviewers', string>>
 
 function AgentConfigForm() {
   const [model, setModel] = useState<string | null>(null)
   const [tools, setTools] = useState<string[]>(['search_games'])
+  const [budget, setBudget] = useState<number | null>(null)
+  const [goLive, setGoLive] = useState<Date | null>(null)
+  const [reviewers, setReviewers] = useState<string[]>([])
   const [errors, setErrors] = useState<Errors>({})
   const [saved, setSaved] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -58,6 +76,10 @@ function AgentConfigForm() {
     if (String(data.get('prompt') ?? '').trim().length < 20)
       next.prompt = 'Write at least 20 characters — an empty system prompt is a default nobody chose.'
     if (tools.length === 0) next.tools = 'Enable at least one tool, or this agent can only talk.'
+    if (budget === null) next.budget = 'Set a token budget; a run without one can spend without limit.'
+    else if (budget > 200000) next.budget = 'The workspace allows at most 200,000 tokens per run.'
+    if (!goLive) next.goLive = 'Choose the day this configuration goes live.'
+    if (reviewers.length === 0) next.reviewers = 'Add at least one reviewer to approve changes.'
     return next
   }
 
@@ -141,6 +163,67 @@ function AgentConfigForm() {
 
       <div className="h-px bg-keyline" aria-hidden />
 
+      <div className="grid gap-6 px-6 py-6 sm:grid-cols-2">
+        <Field label="Token budget per run" required error={errors.budget} hint="Up to 200,000.">
+          {(control) => (
+            <NumberInput
+              {...control}
+              name="budget"
+              locale="en-US"
+              unit="tokens"
+              placeholder="40,000"
+              min={1000}
+              step={1000}
+              largeStep={10000}
+              value={budget}
+              onValueChange={setBudget}
+            />
+          )}
+        </Field>
+        <Field label="Go live on" required error={errors.goLive}>
+          {(control) => (
+            <DatePicker
+              {...control}
+              name="goLive"
+              locale="en-GB"
+              today={TODAY}
+              min={TODAY}
+              value={goLive}
+              onValueChange={setGoLive}
+            />
+          )}
+        </Field>
+        <div className="sm:col-span-2">
+          <Field
+            label="Reviewers"
+            required
+            error={errors.reviewers}
+            hint="Every change to this agent waits for one of them to approve it."
+          >
+            {(control) => (
+              <Combobox
+                {...control}
+                multiple
+                name="reviewers"
+                items={TEAMMATES}
+                value={reviewers}
+                onValueChange={setReviewers}
+                placeholder="Add people"
+              />
+            )}
+          </Field>
+        </div>
+        <div className="sm:col-span-2">
+          <Field label="Grounding documents" optional hint="The agent may quote these in answers.">
+            {(control) => (
+              <FileUpload {...control} name="documents" multiple accept=".pdf,.md" maxSize={10_000_000} locale="en-US" />
+            )}
+          </Field>
+        </div>
+      </div>
+
+      <div className="h-px bg-keyline" aria-hidden />
+
       <div className="grid gap-8 px-6 py-6 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
           <CheckboxGroup legend="Tools" value={tools} onValueChange={setTools}>
@@ -175,7 +258,16 @@ function AgentConfigForm() {
         <p role="status" className="m-0 me-auto text-sm text-ink-success">
           {saved ? 'Saved. New runs use this configuration.' : ''}
         </p>
-        <Button type="reset" variant="ghost" onClick={() => setErrors({})}>
+        <Button
+          type="reset"
+          variant="ghost"
+          onClick={() => {
+            setErrors({})
+            setBudget(null)
+            setGoLive(null)
+            setReviewers([])
+          }}
+        >
           Discard
         </Button>
         <Button type="submit" loading={saving}>

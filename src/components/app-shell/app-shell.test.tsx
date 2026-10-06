@@ -5,7 +5,6 @@ import { describe, expect, it } from 'vitest'
 import { AppShell, Topbar } from './app-shell'
 import { PageHeader } from './page-header'
 import { NavItem, NavSection, Sidebar } from './sidebar'
-import { Toolbar, ToolbarButton } from './toolbar'
 
 function Shell(props: { defaultSidebarCollapsed?: boolean }) {
   return (
@@ -71,22 +70,6 @@ describe('PageHeader', () => {
     render(<PageHeader title="Runs" meta={['Live', 'Updated 12s ago']} />)
     expect(screen.getByRole('heading', { level: 1, name: 'Runs' })).toBeInTheDocument()
     expect(screen.getAllByRole('listitem')).toHaveLength(2)
-  })
-})
-
-describe('Toolbar', () => {
-  it('is one named toolbar that moves focus with the arrow keys', async () => {
-    render(
-      <Toolbar aria-label="Run actions">
-        <ToolbarButton>Re-run</ToolbarButton>
-        <ToolbarButton>Stop</ToolbarButton>
-      </Toolbar>,
-    )
-    expect(screen.getByRole('toolbar', { name: 'Run actions' })).toBeInTheDocument()
-    await userEvent.tab()
-    expect(screen.getByRole('button', { name: 'Re-run' })).toHaveFocus()
-    await userEvent.keyboard('{ArrowRight}')
-    expect(screen.getByRole('button', { name: 'Stop' })).toHaveFocus()
   })
 })
 

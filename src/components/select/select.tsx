@@ -116,21 +116,26 @@ export interface SelectItemProps extends SelectPrimitive.Item.Props {
   description?: React.ReactNode
 }
 
+/**
+ * One option row in any listbox popup: this select and the combobox share it,
+ * so "highlighted" and "selected" look the same wherever a list appears.
+ */
+export const optionClasses = [
+  'relative grid min-h-(--control-h) cursor-default grid-cols-[1rem_1fr] items-center gap-x-2.5 py-1.5 pe-3 ps-2 text-base outline-none select-none',
+  'data-selected:bg-ink-soft data-selected:font-semibold',
+  // Highlighted wins over selected: the cursor is what is about to happen.
+  'data-highlighted:bg-ink data-highlighted:text-on-ink data-selected:data-highlighted:bg-ink data-highlighted:forced-selected',
+  // The ink fill IS the focus indicator here; the document-wide ring on
+  // top of it would draw a second, competing one inside the popup.
+  'focus-visible:shadow-none',
+  'data-disabled:text-ink-muted data-disabled:cursor-not-allowed',
+] as const
+
 export function SelectItem({ className, children, description, ...props }: SelectItemProps) {
   return (
     <SelectPrimitive.Item
       data-slot="select-item"
-      className={cn(
-        'relative grid min-h-(--control-h) cursor-default grid-cols-[1rem_1fr] items-center gap-x-2.5 py-1.5 pe-3 ps-2 text-base outline-none select-none',
-        'data-selected:bg-ink-soft data-selected:font-semibold',
-        // Highlighted wins over selected: the cursor is what is about to happen.
-        'data-highlighted:bg-ink data-highlighted:text-on-ink data-selected:data-highlighted:bg-ink data-highlighted:forced-selected',
-        // The ink fill IS the focus indicator here; the document-wide ring on
-        // top of it would draw a second, competing one inside the popup.
-        'focus-visible:shadow-none',
-        'data-disabled:text-ink-muted data-disabled:cursor-not-allowed',
-        className,
-      )}
+      className={cn(optionClasses, className)}
       {...props}
     >
       <SelectPrimitive.ItemIndicator className="col-start-1 flex [&_svg]:size-3.5">
