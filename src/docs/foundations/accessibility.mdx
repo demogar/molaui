@@ -84,6 +84,8 @@ physical measurement, and a dialog centred with `left-1/2 -translate-x-1/2` is s
 - **Motion follows**: the switch thumb travels left to turn on, the mobile drawer slides in from
   the right, and a toast is swiped away toward the edge it sits on, which is now the left.
 - **Code stays left to right.** A code block's body is pinned `dir="ltr"`; its header mirrors.
+  Do the same for inputs that hold a URL, an email address or an id: `<Input dir="ltr" />`.
+  Without it, a placeholder such as `https://` renders as `//:https` in an RTL page.
 - **Keyboard direction comes from `DirectionProvider`**, not from `dir`. Set both at the root (see
   Getting started). The Storybook toolbar's *Direction* control does exactly that, and
   `node scripts/shoot.mjs --rtl …` screenshots a story mirrored.
