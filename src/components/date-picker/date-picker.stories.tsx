@@ -24,9 +24,13 @@ const meta = {
   component: DatePicker,
   parameters: {
     docs: {
+      // Opens on render, so each story gets its own frame: open overlays
+      // inline on the docs page would stack over the text, and a modal one
+      // would lock the whole page.
+      story: { inline: false, height: '480px' },
       description: {
         component:
-          'The WAI-ARIA APG **date picker dialog**: a text input you can type into, and a button that opens a calendar grid in a popover. Base UI has no calendar, so the grid owns its keyboard model and keeps to the APG one exactly — arrows by day and week (mirrored in right-to-left), PageUp/PageDown by month, Shift for a year, Home/End to the edges of the week, Enter or Space to choose, Escape to close with focus back on the button.\n\n' +
+          'The WAI-ARIA APG **date picker dialog**: a text input you can type into, and a button that opens a calendar grid in a non-modal dialog anchored to the field. Base UI has no calendar, so the grid owns its keyboard model and keeps to the APG one exactly — arrows by day and week (mirrored in right-to-left), PageUp/PageDown by month, Shift for a year, Home/End to the edges of the week, Enter or Space to choose, Escape to close with focus back on the button.\n\n' +
           'Month and weekday names, digits, the typed order and the first day of the week all come from `Intl` for the `locale` you pass; nothing defaults to `en-US` behind your back. Typed dates commit on blur or Enter, and a refusal is a sentence that says why — try `31/02/2027`, or a day before the minimum. The range picker types too, with a start and an end input inside its popup that share the same parsing and sentences. Values are plain `Date`s at local midnight and submit as `yyyy-mm-dd`; there is no date library, because calendar days need none.',
       },
     },

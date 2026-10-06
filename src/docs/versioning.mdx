@@ -1,0 +1,124 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Mola UI/Versioning" />
+
+# Versioning and deprecation
+
+Mola UI is installed, not copied, so every product that uses it depends on its version number
+meaning something. This page says what the number promises, what counts as a breaking change,
+and how something is retired without breaking the products that use it.
+
+## Semantic versioning, as applied here
+
+Releases follow [semver](https://semver.org): `major.minor.patch`.
+
+| Release | Contains | Safe to take without reading the notes? |
+| --- | --- | --- |
+| **Patch** `0.2.1` | Fixes and performance work. No new API. | Yes |
+| **Minor** `0.3.0` | New components, props, tokens and states; deprecations. | Yes. Deprecated APIs keep working and warn in development. |
+| **Major** `1.0.0` | Removals and other breaking changes, each with a migration note. | No. Read the changelog, then run the codemods it lists. |
+
+**Before 1.0.0** the minor number does the work of the major. A breaking change ships as
+`0.x → 0.(x+1)`, never in a patch, and a deprecation still gets at least one minor of warning
+before its removal. Pin `~0.2.0` rather than `^0.2.0` while the version starts with zero.
+
+## What counts as a breaking change
+
+The public API is wider than the exported names. A consumer can depend on anything they can see,
+style or select, so all of these are covered:
+
+| Surface | Breaking | Not breaking |
+| --- | --- | --- |
+| **Exported names** from `@demogar/mola-ui` (components, hooks, helpers, types) | Removing or renaming one; changing a function's signature | Adding one |
+| **Props** | Removing or renaming a prop or one of its values; narrowing its type; changing a default that changes behaviour | Adding an optional prop or a new variant value |
+| **Entry points**: `styles.css`, `tailwind.css`, `tokens.css` | Removing or moving one | Adding one |
+| **Token names**: CSS custom properties in `tokens.css` (`--ink`, `--control-h`) and the Tailwind utilities built on them (`bg-cloth-pale`, `text-ink-muted`) | Removing or renaming one; changing what it means (`--warn` becoming a danger colour) | Adding one; adjusting a value within its documented role |
+| **Mola utilities**: `shadow-cut`, `cut-band`, `relleno`, `rotulo`, `band-*`, `forced-*` | Removing or renaming one | Adding one |
+| **Attributes the system reads**: `data-theme`, `data-density`, `dir` | Removing one or a value | Adding a value |
+| **Attributes components write**: `data-slot`, `data-status`, `data-shape` and the other `data-*` hooks, including the state attributes Base UI sets (`data-open`, `data-checked`) | Removing or renaming one, or a value of it | Adding one |
+| **Accessible structure**: roles, accessible names, keyboard behaviour | Removing a role or a key binding; renaming a label consumers query in tests | A fix that makes behaviour match the WAI-ARIA pattern |
+| **Metrics consumers lay out against**: control and row heights per density, the spacing unit, the type scale | Changing a value | |
+| **Visual design**: colours within a role, keyline weight, motion, glyphs | A change that fails a contrast pairing in `contract.test.ts` | Everything else. Restyling within a role is a `feat` or `fix`. |
+
+**Not public**, and free to change in any release: DOM nesting and element types that have no
+`data-*` hook, class names on internal elements, anything under `src/patterns/` or in a story,
+and module paths inside `dist/`. Style a component through its props, its `className`, the
+tokens and the `data-*` hooks. A selector such as `div > span:first-child` will break.
+
+## Deprecation
+
+Nothing public is removed without first being deprecated in a minor release that ships the
+replacement. Deprecation has four parts, and a change needs all four:
+
+1. **Mark it.** A JSDoc `@deprecated` tag that says since when, what to use and when it goes, so
+   editors strike it through at the call site:
+
+   ```ts
+   /** @deprecated Since 0.2.0; removed in 1.0.0. Use `text`, which is the same bone. */
+   ```
+2. **Warn in development.** Call `deprecate()` from `src/lib/deprecate.ts` where the old API is
+   used. It writes one console warning per deprecation, not one per render, and drops out of
+   production builds:
+
+   ```ts
+   if (shape === 'line') {
+     deprecate('skeleton-shape-line', {
+       what: '<Skeleton shape="line">',
+       instead: '<Skeleton shape="text">',
+       removal: '1.0.0',
+     })
+   }
+   ```
+
+   A token can't warn at runtime. Keep the old name as an alias of the new one in `tokens.css`
+   (`--old: var(--new);`) with a comment that says when it goes.
+3. **Keep it working.** The old API behaves exactly as before until it is removed.
+4. **Say it in the changelog.** The pull request title is a `feat` (or `refactor`) commit, and its
+   body has a `Deprecated:` line that release-please carries into the release notes.
+
+**Removal** happens in the next major release, and no sooner than one minor after the
+deprecation shipped. Before 1.0.0, that is the next breaking minor. The removal commit is marked
+breaking (`feat(skeleton)!:`) with a `BREAKING CHANGE:` footer that says what to do instead.
+
+## How releases are cut
+
+Versions aren't chosen by hand. [release-please](https://github.com/googleapis/release-please)
+reads the Conventional Commit on `main` that each squash-merged pull request becomes:
+
+| Commit | Before 1.0.0 | From 1.0.0 |
+| --- | --- | --- |
+| `fix:`, `perf:` | patch | patch |
+| `feat:` | minor | minor |
+| `feat!:`, or a `BREAKING CHANGE:` footer | minor | **major** |
+| `docs:`, `refactor:`, `test:`, `build:`, `ci:`, `chore:` | no release on their own | no release on their own |
+
+release-please keeps a release pull request open with the next version and the generated
+[changelog](?path=/docs/mola-ui-changelog--overview). Merging it tags the release and publishes
+the package. The version in `package.json` and `CHANGELOG.md` are never edited by hand.
+
+## Codemods
+
+When a breaking change is mechanical (a renamed prop, prop value, export or token), the release
+that removes the old API ships a codemod in [`codemods/`](https://github.com/demogar/molaui/tree/main/codemods),
+named for what it does: `skeleton-line-to-text.ts`.
+
+```bash
+npx tsx codemods/skeleton-line-to-text.ts src/ --dry   # list what would change
+npx tsx codemods/skeleton-line-to-text.ts src/         # rewrite in place
+```
+
+Each codemod:
+
+- **uses the TypeScript compiler API**, which a typed React project already has, rather than a
+  codemod framework that would be a dependency for one rename;
+- **splices the edit into the original text**, so formatting and comments stay as they were and
+  the diff shows only the change;
+- **changes only what it can prove is ours**: an element imported from `@demogar/mola-ui`,
+  aliases included, with a literal value;
+- **reports what it can't decide**, such as `shape={kind}`, with a file and line, rather than
+  guessing;
+- **is tested** against fixtures that include the cases it must leave alone;
+- **is kept** for one major release after the removal, then deleted.
+
+A change that can't be made mechanically, such as a component split in two, gets a migration
+section in the release notes instead. Its pull request explains why there is no codemod.

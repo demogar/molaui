@@ -5,7 +5,7 @@ import { cn } from '../../lib/cn'
 
 /**
  * The gap scale, named by role rather than by pixel. Every value is a spacing
- * multiple, so it scales with density: `md` is 12px comfortable, 10.5px
+ * multiple, so it scales with density: `md` is 16px comfortable, 14px
  * compact. Seven steps and no more — a layout that needs an eighth is a layout
  * that needs a divider, not another number.
  */

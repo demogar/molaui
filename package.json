@@ -55,9 +55,11 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check": "npm run lint && npm run typecheck && npm test && npm run tokens:check && npm run build && npm run build-storybook",
+    "check": "npm run lint && npm run typecheck && npm test && npm run tokens:check && npm run manifest:check && npm run build && npm run build-storybook",
     "tokens": "tsx scripts/export-tokens.ts",
-    "tokens:check": "tsx scripts/export-tokens.ts --check"
+    "tokens:check": "tsx scripts/export-tokens.ts --check",
+    "manifest": "tsx scripts/export-manifest.ts",
+    "manifest:check": "tsx scripts/export-manifest.ts --check"
   },
   "peerDependencies": {
     "react": ">=19",
@@ -95,6 +97,7 @@
     "jsdom": "30.1.2",
     "playwright": "1.62.1",
     "react": "19.3.0",
+    "react-docgen-typescript": "2.4.0",
     "react-dom": "19.3.0",
     "remark-gfm": "4.0.1",
     "storybook": "10.6.1",

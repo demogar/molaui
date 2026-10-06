@@ -1,0 +1,3570 @@
+# Mola UI
+
+> A design system cut like a mola: flat layers, hard keylines, revealed bands. React components for dense internal tools and AI-native interfaces. Published as `@demogar/mola-ui`: React 19, Base UI for behaviour, Tailwind v4 for styling, design tokens as CSS custom properties.
+
+Install and set up:
+
+```bash
+npm install @demogar/mola-ui @base-ui/react @fontsource-variable/archivo @fontsource-variable/alegreya @fontsource-variable/martian-mono
+```
+
+```tsx
+import '@fontsource-variable/archivo/wdth.css'
+import '@fontsource-variable/alegreya/wght.css'
+import '@fontsource-variable/martian-mono/wdth.css'
+import '@demogar/mola-ui/styles.css'
+import { Button } from '@demogar/mola-ui'
+```
+
+Theme and density are attributes, not props: `<html data-theme="dark" data-density="compact">`. Already on Tailwind v4? Import `@demogar/mola-ui/tailwind.css` into your own build instead of `styles.css`. For right-to-left, set `dir="rtl"` on `<html>` and wrap the app in `DirectionProvider`.
+
+## Rules
+
+- Interactive edges use `shadow-cut` (or `shadow-floating` on overlays), never `border`. `border-keyline` is for decorative dividers only. A box-shadow edge can grow a revealed band on hover without moving its neighbours, and the named utilities keep an outline in forced-colours mode.
+- Radius is zero. `rounded-full` only for something that is genuinely a dot. The system is cut cloth: nothing in it is rounded.
+- State is never colour alone: glyph, word and colour, in that order of importance. It has to survive colour blindness, a greyscale screenshot and forced colours.
+- Disabled is stated, not faded. No `opacity-*` on a disabled control. Opacity fades the keyline and the label to about 2:1, a failure axe does not report because disabled controls are exempt.
+- Colours come from tokens. No hex, rgb or arbitrary colour values outside `tokens.css`. Every token pairing has a measured contrast ratio in both themes; a colour outside the token file was never measured.
+- Theme and density are attributes (`data-theme`, `data-density`) on `<html>` or a subtree, not props or React context. Dialogs and menus portal to `<body>` and must inherit them. No component takes a density prop.
+- Lay out with logical properties: `ps-`/`pe-`, `ms-`/`me-`, `inset-s-`/`inset-e-`, `text-start`/`text-end`. `dir="rtl"` then mirrors the layout with no second set of classes.
+- Typefaces have roles: Archivo (`font-ui`) for the interface, Alegreya (`font-text`) for prose from a person or a model, Martian Mono (`literal`) only for machine literals. A reader can tell from the letterforms whether the product, a person or the machine is speaking.
+- Labels are sentence case; buttons start with a verb and name the object (“Cancel run”, not “OK”). A button that names its consequence can be chosen without reading the surrounding text.
+- Unknown duration is the relleno working state, never a spinner; elapsed time counts up instead of a progress bar inventing a percentage. Model work has no knowable total, and a bar that stalls at 90% is a lie.
+- Anything that writes to the world waits for a person, with the choices given equal weight (`ToolCall` approval, `ChangeReview`). An agent’s action is only as safe as the decision in front of it.
+- Use the components for behaviour. Do not re-implement focus trapping, roving focus or typeahead; the components are built on Base UI. A maintained primitive gets keyboard and screen-reader behaviour right in more cases than a local copy.
+
+## Actions
+
+### Button
+
+https://demogar.github.io/molaui/?path=/docs/components-actions-button--overview
+
+A cut-shape button for an action on this page, with IconButton for an action shown as an icon alone.
+
+When to use:
+- Starting an action: run, save, delete, cancel.
+- Primary for the main action of a panel, secondary for the rest, danger only for destruction, ghost for the least emphasis.
+- Work in flight after a press, with loading, which keeps the label and adds the working strip instead of a spinner.
+- Icon-only actions in dense rows and toolbars, with IconButton and its required label.
+
+When not to:
+- Going to another page or URL. Use a link: an a element, or your router’s link styled with buttonVariants.
+- A row of related actions above a table or canvas, with one tab stop. Use Toolbar.
+- More actions on one object than deserve a button each. Use Menu.
+- Choosing between views, where the pressed state stays. Use Segmented control.
+
+- Do: Keep one primary button per panel, and keep danger for actions that destroy something.
+- Don’t: Use danger red for emphasis, or set several primary buttons side by side.
+- Do: Let a disabled button keep its stated look, and say nearby why it is unavailable.
+- Don’t: Fade a button with opacity, or disable it with no explanation.
+
+Content:
+- Start with a verb and name the object: “Delete run”, “Start run”, not “OK”, “Yes” or “Submit”.
+- Write labels in sentence case with no trailing period; the button sets them in capitals itself.
+- Give IconButton a label that names the action and the object, “Copy run id”; it is also the tooltip.
+
+#### `Button` (component)
+
+- `variant`: `primary`, `secondary`, `danger`, `ghost` (default `primary`)
+- `size`: `sm`, `md`, `lg` (default `md`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+| `icon` | `ReactNode` |  | Leading icon. Decorative: the label is the accessible name. |
+| `loading` | `boolean` | `false` | Work is in flight. The label stays (so the button never changes width mid-click), a strip of working relleno runs along its foot, and the button stops accepting presses while staying focusable and announced as busy. |
+| `size` | `"sm" \| "md" \| "lg"` |  |  |
+| `variant` | `"primary" \| "secondary" \| "danger" \| "ghost"` |  |  |
+| `withArrow` | `boolean` | `false` | Trailing arrow that slides 3px on hover — for actions that move you somewhere. |
+
+Also accepts the props of `ButtonProps`, `NativeButtonProps`.
+
+#### `ButtonArrow` (component)
+
+The arrow micro-interaction, exported so a router `<Link>` styled with `buttonVariants` gets the same one.
+
+- `variant`: `primary`, `secondary`, `danger`, `ghost` (default `primary`)
+- `size`: `sm`, `md`, `lg` (default `md`)
+
+#### `IconButton` (component)
+
+A square button that carries only an icon. `label` is required and becomes the accessible name and the native tooltip, because an icon-only control with no name is the single most common accessibility failure in tool UIs.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` (required) | `string` |  | The accessible name. Required: an icon is not a label. |
+| `className` | `string` |  |  |
+| `loading` | `boolean` |  | Work is in flight. The label stays (so the button never changes width mid-click), a strip of working relleno runs along its foot, and the button stops accepting presses while staying focusable and announced as busy. |
+| `size` | `"sm" \| "lg" \| "md" \| null` |  |  |
+| `variant` | `"danger" \| "primary" \| "secondary" \| "ghost" \| null` |  |  |
+
+Also accepts the props of `ButtonProps`, `NativeButtonProps`.
+
+#### `buttonVariants` (function)
+
+A button is a cut shape, so its edge is a `box-shadow` keyline rather than a `border`. The signature hover reveals a band of the layer beneath the shape, which means the edge has to grow by several pixels without moving anything around it. A border would reflow the toolbar; a shadow does not.
+
+Types: `ButtonProps`, `IconButtonProps`
+
+## Data display
+
+### Avatar
+
+https://demogar.github.io/molaui/?path=/docs/components-data-display-avatar--overview
+
+A person or an agent as a square tile, with initials or a glyph on a colour picked from the name.
+
+When to use:
+- Showing who did something in a log, a page header or a list of reviewers.
+- Marking an agent with a glyph through icon, so a person and a bot are never confused.
+- Several people in one place, with AvatarGroup, which folds the rest into a “+n” tile past max.
+
+When not to:
+- Stating a status or a role. Use Badge.
+- An image or chart slot that has nothing in it yet. Use Placeholder.
+
+- Do: Pass the full name; it becomes the accessible name and seeds the colour.
+- Don’t: Pass initials or a handle as the name; a screen reader then announces “AP”.
+
+Content:
+- Name people by full name and agents as people know them: “Support triage”.
+- Name an AvatarGroup by role: “Reviewers”, “On call”.
+
+#### `Avatar` (component)
+
+- `size`: `xs`, `sm`, `md`, `lg`, `xl` (default `md`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `name` (required) | `string` |  | The person's or agent's name. Becomes the accessible name and seeds the colour. |
+| `icon` | `ReactNode` |  | Shown instead of initials when there is no image — e.g. a bot glyph for an agent. |
+| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` |  |  |
+| `src` | `string` |  |  |
+
+#### `AvatarGroup` (component)
+
+Overlapping tiles, each separated from the next by a ring of the page ground inside its keyline — the gap a blade leaves between two shapes cut from the same layer. Without it, overlapping squares merge into one shape and the count is unreadable.
+
+- `size`: `xs`, `sm`, `md`, `lg`, `xl` (default `md`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` (required) | `string` |  | Names the group: "Reviewers", "On call". |
+| `max` | `number` | `4` | Show at most this many; the rest collapse into a "+n" tile. |
+| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` | `md` |  |
+
+#### `avatarLayer` (function)
+
+#### `avatarVariants` (function)
+
+#### `initials` (function)
+
+Types: `AvatarGroupProps`, `AvatarProps`
+
+### Code
+
+https://demogar.github.io/molaui/?path=/docs/components-data-display-code--overview
+
+Machine text: Code for an inline literal, CodeBlock for a labelled block with copy and wrap.
+
+When to use:
+- An id, a field name or a flag inside a sentence, with Code.
+- A tool’s arguments, a query or a log tail, with CodeBlock; JSON is tokenised by value kind.
+- A payload cut off mid-stream; CodeBlock shows exactly what arrived.
+
+When not to:
+- Figures compared down a column, such as cost and duration; they are Archivo with tabular figures. Use Meta.
+- A keyboard shortcut. Use Kbd.
+- A proposed change to a file, shown as additions and removals. Use Change review.
+- Labels, headings or emphasis; the monospace is only for text a machine reads. Use Text.
+
+- Do: Use Code for a literal inside a sentence.
+- Don’t: Break a sentence with a CodeBlock to show one id.
+- Do: Turn copyable off for payloads that must not leave the page.
+- Don’t: Put a CodeBlock on a black terminal panel; it sits on the same cloth as everything else.
+
+Content:
+- Show literals exactly as the system stores them; do not change their case or add spaces.
+- Label a CodeBlock by its role or file name, as the reader would search for it: “arguments”, “query.sql”.
+
+#### `Code` (component)
+
+An inline machine literal: an id, a field name, a flag.
+
+#### `CodeBlock` (component)
+
+A block of machine text — a tool call's arguments, a query, a log tail.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `code` (required) | `string` |  |  |
+| `copyable` | `boolean` | `true` | Hide the copy button — for payloads that must not leave the page. |
+| `label` | `string` |  | A filename or a role — "arguments", "result", "query.sql". |
+| `language` | `CodeLanguage` | `text` | Shown as a tag in the header. Only `json` is tokenized; everything else is plain. |
+| `lineNumbers` | `boolean` | `false` |  |
+| `maxHeight` | `string` |  | Scroll inside after this height (any CSS length). |
+| `wrap` | `boolean` | `false` | Start with long lines wrapped. The reader can toggle it. |
+
+#### `tokenizeJson` (function)
+
+#### `JSON_TOKEN_CLASS` (constant)
+
+Types: `CodeBlockProps`, `CodeLanguage`, `JsonToken`, `JsonTokenKind`
+
+### Description list
+
+https://demogar.github.io/molaui/?path=/docs/components-data-display-description-list--overview
+
+Term and value pairs: the properties of a run, a document or an evaluation.
+
+When to use:
+- A side panel of properties scanned top to bottom, with the inline layout.
+- Values long enough to wrap, such as a system prompt or a path, with the stacked layout.
+- A summary that closes a section, with the grid layout.
+- Ids, hashes and model names marked literal, so they are never read as prose.
+
+When not to:
+- Many records with the same fields, compared row against row. Use Table.
+- A few headline figures with their change over time. Use Stat.
+- The fields of a record before and after a proposed change. Use FieldChanges.
+
+- Do: Mark ids and model strings literal, and leave prose and figures in the system voice.
+- Don’t: Set every value in the monospace.
+
+Content:
+- Terms are short nouns in sentence case, without colons: “Model”, “Duration”.
+- Give values their units, “41s”, “$0.2185”, and show a status as a Badge rather than a bare word.
+
+#### `DescriptionList` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `items` (required) | `DescriptionItem[]` |  |  |
+| `layout` | `"grid" \| "inline" \| "stacked" \| null` | `inline` |  |
+
+Types: `DescriptionItem`, `DescriptionListProps`
+
+### Stat
+
+https://demogar.github.io/molaui/?path=/docs/components-data-display-stat--overview
+
+A KPI tile: a label, a figure, a change with its direction and sentiment, and an optional sparkline.
+
+When to use:
+- Headline figures at the top of a page, grouped in a StatGroup cut from one panel.
+- A change whose direction and meaning differ, such as latency going down being good news.
+- The shape of the recent past as a sparkline beside the figure.
+
+When not to:
+- A reading against a limit or threshold, such as a quota. Use Meter.
+- Many properties of one object. Use Description list.
+- A trend that needs axes, values or several series. A sparkline is a glyph; use a chart.
+
+- Do: State direction and sentiment separately, so cost going down reads as good.
+- Don’t: Assume up is green; latency going up is a regression.
+
+Content:
+- The label names the measure and its window: “Runs today”, “p95 duration”.
+- Put the unit in unit, “%”, and the comparison in the delta’s period, “vs yesterday”.
+- Group digits and keep only the precision a reader uses: “1,204”, “97.8”.
+
+#### `Sparkline` (component)
+
+An ink polyline — no fill, no gradient, no axis. A sparkline is the shape of the recent past and nothing more; the moment it grows a gridline it is a chart pretending to be a glyph. The last point is a square cut out in rojo (it is the "now" the figure beside it states), drawn as a square because a blade does not cut circles.
+
+#### `Stat` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` (required) | `ReactNode` |  |  |
+| `value` (required) | `ReactNode` |  |  |
+| `delta` | `StatDelta` |  |  |
+| `hint` | `ReactNode` |  | A line of context under the figure. |
+| `trend` | `number[]` |  | The recent series, oldest first. Drawn in ink with the latest point cut out in rojo. |
+| `unit` | `ReactNode` |  | Set smaller beside the figure: "ms", "runs", "%". |
+
+#### `StatGroup` (component)
+
+Tiles cut from one panel rather than four floating cards: one ink keyline around the group, decorative keylines between tiles. Four separate cut shapes in a row would put eight ink edges where the eye needs one.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `columns` | `2 \| 3 \| 4 \| 5` | `4` | Columns at the widest breakpoint. Tiles wrap down to two, then one. |
+
+Types: `StatDelta`, `StatGroupProps`, `StatProps`
+
+### Table
+
+https://demogar.github.io/molaui/?path=/docs/components-data-display-table--overview
+
+Table primitives for rows of records, and DataTable for columns as data with sorting, selection, column visibility and pages.
+
+When to use:
+- Comparing many records with the same fields, such as runs, documents or evaluations.
+- Sorting, selection, bulk actions and pages on client or server data, with DataTable.
+- A layout DataTable does not cover, such as virtualised rows, with the primitives.
+
+When not to:
+- The properties of one record. Use Description list.
+- Events where the order is the content. Use Timeline.
+- A handful of headline figures. Use Stat.
+
+- Do: Right-align numeric columns, header included, in tabular figures.
+- Don’t: Left-align costs and durations, or set them in the monospace.
+- Do: Show the no-results empty row with Clear filters when filters hide every row.
+- Don’t: Tell someone to create their first run when a filter is hiding the runs they have.
+
+Content:
+- Headers are short nouns in sentence case: “Run”, “Started”, “Cost”.
+- Show a value that does not exist yet as an em dash, “—”, not as zero.
+- Set noun so counts read naturally: “3 runs selected”.
+
+#### `Table` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `frameClassName` | `string` |  | Classes for the scrolling frame, e.g. `max-h-96`. |
+| `framed` | `boolean` | `false` | Bound the table with a keyline on a raised ground — for a table that is the panel. |
+| `stickyHeader` | `boolean` | `false` | Keep the header row visible while the body scrolls. Give the frame a height via `frameClassName`. |
+
+#### `TableBody` (component)
+
+#### `TableCaption` (component)
+
+#### `TableCell` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `numeric` | `boolean` | `false` | Right-aligned tabular figures. |
+| `truncate` | `boolean` | `false` | Cut long content to one line with an ellipsis. The full text goes in `title` when the content is a string, so it is never lost — only folded. |
+
+#### `TableCheckbox` (component)
+
+A native checkbox, drawn as a cut square. Native, so space toggles it, forms submit it and screen readers announce it with no ARIA to keep in sync; the visible square is a sibling painted from the input's own `:checked` and `:indeterminate` state.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `indeterminate` | `boolean` | `false` | Some but not all rows are selected. A DOM property, not an attribute, so it is set by effect. |
+
+#### `TableEmpty` (component)
+
+The empty state, as a row. It spans the table rather than replacing it, so the headers stay and the reader still knows what would have been here.
+
+#### `TableFooter` (component)
+
+#### `TableHead` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `numeric` | `boolean` | `false` | Right-align, for a column of figures. Header and cells must agree or the label floats off its numbers. |
+| `onSort` | `(() => void)` |  |  |
+| `sort` | `SortDirection` |  | Makes the header a sort control. `none` renders the control in its idle state; `aria-sort` is only set on the column actually sorted, because announcing "not sorted" on every column is noise. |
+
+#### `TableHeader` (component)
+
+#### `TableRow` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `selected` | `boolean` | `false` | The row is part of the current selection. Gold, because gold is the layer this system marks a choice with — it is also the text-selection colour — while añil stays free to mean "information". The fill is a wash, not the layer, so every ink in the row still clears AA; and an ink bar on the leading edge carries the state for anyone who cannot see the hue. |
+
+#### `TableSkeletonRows` (component)
+
+Loading rows: real rows at the real height, so the table does not jump when the data lands. Bar widths vary by a fixed pattern rather than at random, so a re-render does not make the skeleton twitch.
+
+#### `DataTable` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `columns` (required) | `DataTableColumn<Row>[]` |  |  |
+| `getRowId` (required) | `(row: Row) => string` |  |  |
+| `rows` (required) | `Row[]` |  |  |
+| `bulkActions` | `((context: DataTableBulkContext) => ReactNode)` |  | Actions for the selected rows, shown in the bar above the table while any are selected. |
+| `caption` | `ReactNode` |  |  |
+| `className` | `string` |  |  |
+| `columnMenu` | `boolean` | `false` | Adds a "Columns" menu to the bar above the table. |
+| `defaultHiddenColumns` | `Iterable<string>` |  |  |
+| `defaultPage` | `number` | `1` |  |
+| `defaultSelection` | `Iterable<string>` |  |  |
+| `defaultSort` | `DataTableSort` |  |  |
+| `empty` | `ReactNode \| DataTableEmpty` |  |  |
+| `frameClassName` | `string` |  |  |
+| `framed` | `boolean` | `false` |  |
+| `hiddenColumns` | `ReadonlySet<string>` |  | Controlled hidden columns, by key. |
+| `label` | `string` |  | Names the table for assistive tech when there is no visible caption. |
+| `loading` | `boolean` | `false` |  |
+| `manual` | `boolean` | `false` | Sorting and paging are done by the server: rows are one page, already sorted. |
+| `noun` | `{ one: string; other: string; }` | `{ one: 'row', other: 'rows' }` | What a row is, for counts: `{ one: 'run', other: 'runs' }`. |
+| `onHiddenColumnsChange` | `((hidden: Set<string>) => void)` |  |  |
+| `onPageChange` | `((page: number) => void)` |  |  |
+| `onSelectionChange` | `((selection: Set<string>) => void)` |  |  |
+| `onSortChange` | `((sort: DataTableSort \| null) => void)` |  |  |
+| `page` | `number` |  | Controlled page, 1-based. |
+| `pageSize` | `number` |  | Rows per page. Setting it turns pagination on. |
+| `paginationVariant` | `"pages" \| "compact"` | `compact` |  |
+| `rowCount` | `number` |  | The total across every page, when `manual`. |
+| `rowLabel` | `((row: Row) => string)` |  | How a row checkbox is named, e.g. `(run) => \`Select ${run.id}\``. |
+| `selectable` | `boolean` | `false` |  |
+| `selection` | `ReadonlySet<string>` |  | Controlled selection. Pair with `onSelectionChange`. |
+| `sort` | `DataTableSort \| null` |  | Controlled sort. `null` is "no sort"; leave undefined to let the table own it. |
+| `stickyHeader` | `boolean` | `false` |  |
+
+#### `DataTableColumnMenu` (component)
+
+Which columns show. Toggling does not close the menu, because columns are chosen several at a time. The last visible column cannot be hidden — a table with no columns is not a state worth being able to reach — and a column marked `hideable: false` is shown checked and disabled, so the menu still says it exists.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `columns` (required) | `DataTableColumn<Row>[]` |  |  |
+| `hidden` (required) | `ReadonlySet<string>` |  |  |
+| `onToggle` (required) | `(key: string, visible: boolean) => void` |  |  |
+| `className` | `string` |  |  |
+
+Types: `TableCellProps`, `TableCheckboxProps`, `TableHeadProps`, `TableProps`, `TableRowProps`, `DataTableBulkContext`, `DataTableColumn`, `DataTableColumnMenuProps`, `DataTableEmpty`, `DataTableProps`, `DataTableSort`, `SortValue`
+
+### Timeline
+
+https://demogar.github.io/molaui/?path=/docs/components-data-display-timeline--overview
+
+Timeline for events already written down, on a spine; StepList for ordered steps a person follows.
+
+When to use:
+- An audit log, a deploy history or the stages of an evaluation, with Timeline.
+- A runbook or a checklist, with StepList and its ruled bands.
+- The event happening now, with the active tone and its working relleno.
+
+When not to:
+- A live agent run whose steps change as it works. Use Agent run.
+- Records compared by their fields rather than read in order. Use Table.
+- Sections of one document that open and close. Use Accordion.
+
+- Do: Put when or where in meta, and what happened in the title.
+- Don’t: Leave the node colour to say what happened; the words have to carry it.
+
+Content:
+- Timeline titles state the event in the past tense: “Review approved”, “Rollout paused”.
+- StepList titles are instructions: “Freeze the agent version”.
+- Use one time format down the list: “Oct 1 · 09:12”.
+
+#### `StepList` (component)
+
+Ruled, ordered steps — a runbook, an onboarding checklist, the stages of a rollout. Where `Timeline` is a spine with a node per event, this is a stack of ruled bands with a label column, and merging the two would mean a component whose every rule is conditional.
+
+- `tone`: `default`, `inverse`
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `tone` | `"default" \| "inverse"` | `default` | `inverse` sets the list on an ink panel. |
+
+#### `Timeline` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `items` (required) | `TimelineItem[]` |  |  |
+| `label` (required) | `string` |  | Names the list, since the spine carries no heading of its own. |
+| `className` | `string` |  |  |
+| `gap` | `"spaced" \| "flush"` | `spaced` | `spaced`   separate events, a gap between rows. `flush`    one continuous journey, carried by the connector alone. |
+| `size` | `"default" \| "editorial"` | `default` | `default`   product scale: semibold titles at body size. `editorial` the travel-guide scale it was born at, for a narrative. |
+| `titleAs` | `"h3" \| "h4" \| "p"` | `p` | The element each title renders as. Defaults to a non-heading, since most logs are not outlines. |
+
+Types: `StepListItem`, `TimelineItem`, `TimelineProps`, `TimelineTone`
+
+## Feedback
+
+### Badge
+
+https://demogar.github.io/molaui/?path=/docs/components-feedback-badge--overview
+
+A small status mark in one of the system’s tones; StatusDot for a square dot beside a label; RecommendationBadge for an editorial scale.
+
+When to use:
+- The state of a row or an object: queued, live, failed, pinned.
+- Soft by default; solid for the one state on a row that must be seen first; outline for categories.
+- A state that is live right now, with pulse, which stills under reduced motion.
+
+When not to:
+- The state of a run, a step or a tool call; model work has its own vocabulary. Use Run status.
+- A message with a sentence and an action. Use Callout.
+- A filter a person turns on and off. Use Chip.
+- A count on a tab; tabs and navigation items take count themselves. Use Tabs.
+
+- Do: Give every badge a word, and every StatusDot a label beside it or its own label.
+- Don’t: Let a coloured dot alone carry a state.
+- Do: Use soft badges down a column.
+- Don’t: Fill a column with solid badges; fifty solid statuses read as a quilt.
+
+Content:
+- One or two words in sentence case, with no punctuation: “Succeeded”, “Needs review”.
+- Use the same status words as the filters and headers around it.
+
+#### `Badge` (component)
+
+- `tone`: `neutral`, `info`, `success`, `warn`, `danger`, `accent` (default `neutral`)
+- `variant`: `solid`, `soft`, `outline` (default `soft`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `dot` | `boolean` | `false` | A leading StatusDot in the badge's tone. |
+| `pulse` | `boolean` | `false` | Pulse the dot — for a state that is live right now (running, streaming). |
+| `tone` | `"neutral" \| "info" \| "success" \| "warn" \| "danger" \| "accent"` |  |  |
+| `variant` | `"solid" \| "soft" \| "outline"` |  |  |
+
+#### `RecommendationBadge` (component)
+
+- `level`: `essential`, `highly`, `detour`, `time` (default `essential`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `level` | `"essential" \| "highly" \| "detour" \| "time"` |  |  |
+
+#### `StatusDot` (component)
+
+A square, not a circle. It is a scrap of cut cloth, and a round dot is the one shape a blade cannot make. Gold dots carry an ink keyline because gold on light cloth is 1.66:1 — under the 3:1 a graphic mark needs to be seen.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `string` |  | Announced text for a dot used on its own. Omit when the dot sits beside a label that already says the state — then it is decorative and hidden. |
+| `pulse` | `boolean` | `false` | The state is live. Respects reduced motion: the pulse stills, the dot stays. |
+| `tone` | `BadgeTone` | `neutral` |  |
+
+#### `RECOMMENDATION_LABELS` (constant)
+
+#### `badgeVariants` (function)
+
+A status mark. Small, flat, cut — a scrap of the layer that says what state something is in.
+
+#### `recommendationVariants` (function)
+
+The editorial recommendation scale from Must Do Panama, where this system was born — kept as lineage, and because "how strongly do we stand behind this" is a scale a growth or knowledge tool also has. Gold is the layer a mola reveals last and least, so gold is `essential`.
+
+Types: `BadgeProps`, `BadgeTone`, `RecommendationBadgeProps`, `RecommendationLevel`, `StatusDotProps`
+
+### Callout
+
+https://demogar.github.io/molaui/?path=/docs/components-feedback-callout--overview
+
+A message that belongs to a region of the page, with a tone, an optional title and actions.
+
+When to use:
+- A standing condition of a page or panel: a model that retires soon, a read-only workspace, a stale index.
+- Something to read before working in the region, with one or two actions.
+- A notice the person can dismiss, with onDismiss, where the caller decides whether it returns.
+
+When not to:
+- Something that has just happened, possibly elsewhere, such as a finished re-index. Use Toast.
+- A decision the person must make before going on. Use AlertDialog.
+- A panel with nothing to show. Use Empty state.
+- A short status on a row. Use Badge.
+
+- Do: Match the tone to the consequence: warn for a limit approaching, danger for something broken.
+- Don’t: Use danger for news or tips; red has to keep meaning broken.
+- Do: Put a callout that appears after an action inside a live region, or use a toast.
+- Don’t: Insert a static callout after an action and expect a screen reader to notice it.
+
+Content:
+- The title states the condition: “Token budget at 86%”, not “Warning” or “Heads up”.
+- The body says what it means and what to do: “Switch the model in settings to keep evaluation history comparable.”
+- Actions are verbs on the object: “Retry from 812”, “View log”.
+
+#### `Callout` (component)
+
+- `tone`: `neutral`, `info`, `success`, `warn`, `danger` (default `info`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `actions` | `ReactNode` |  | Buttons under the body. Usually one secondary, at `size="sm"`. |
+| `headingLevel` | `2 \| 3 \| 4 \| 5` | `3` | The heading element for `title`. |
+| `icon` | `ReactNode` |  | Replace the tone's default icon, or `false` for none. |
+| `onDismiss` | `(() => void)` |  | Renders a dismiss button. The caller owns whether it comes back. |
+| `title` | `ReactNode` |  |  |
+| `tone` | `"neutral" \| "info" \| "success" \| "warn" \| "danger"` |  |  |
+
+#### `calloutVariants` (function)
+
+A message that belongs to a region of the page — "this agent is using a deprecated model", "billing is in read-only mode" — rather than to a moment, which is a toast's job.
+
+Types: `CalloutProps`, `CalloutTone`
+
+### Empty state
+
+https://demogar.github.io/molaui/?path=/docs/components-feedback-empty-state--overview
+
+What a panel shows when it has nothing to show, in four variants: empty, no results, error and no permission.
+
+When to use:
+- Nothing exists yet, and the action creates the first one.
+- Filters hide everything, and the action clears them.
+- The panel could not load, and the action retries.
+- The content exists but is not the reader’s to see, and the text says who can grant it.
+
+When not to:
+- Content that is on its way. Use Skeleton.
+- One slot, such as a chart or an image, waiting for its content. Use Placeholder.
+- A warning about a page that does have content. Use Callout.
+- A table with no rows; the table’s own empty row keeps the headers. Use Table.
+
+- Do: Pick the variant for the conversation: no-results says filters are hiding things, and clears them.
+- Don’t: Tell someone filtering their runs to “create your first run”.
+- Do: Say who can grant access in no-permission.
+- Don’t: Show “Access denied” with no next step.
+
+Content:
+- The title states the condition: “No runs match these filters”, “Traces did not load”.
+- The description gives the cause or the count: “3 filters are hiding 1,284 runs.”
+- An error says what happened and what happens next: “The trace store returned 503. This panel will try again in 30s.”
+
+#### `EmptyState` (component)
+
+- `variant`: `empty`, `no-results`, `error`, `no-permission` (default `empty`)
+- `size`: `sm`, `md`, `lg` (default `md`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `title` (required) | `ReactNode` |  |  |
+| `actions` | `ReactNode` |  | One or two buttons. The first is the way forward. |
+| `description` | `ReactNode` |  |  |
+| `headingLevel` | `2 \| 3 \| 4` | `3` |  |
+| `icon` | `ReactNode` |  | Replace the variant's icon, or `false` for none. |
+| `size` | `"sm" \| "md" \| "lg"` |  |  |
+| `variant` | `"empty" \| "no-results" \| "error" \| "no-permission"` |  |  |
+
+#### `emptyStateVariants` (function)
+
+The state a panel is in when it has nothing to show — designed as a condition rather than as an apology.
+
+Types: `EmptyStateProps`
+
+### Placeholder
+
+https://demogar.github.io/molaui/?path=/docs/components-feedback-placeholder--overview
+
+A slot for something that does not exist yet, such as a chart with no data, announced as one image.
+
+When to use:
+- A chart, preview or image that cannot render yet, held at its final size.
+- A layout where the slot must keep its place, with a label for the kind of thing and a name for what it would show.
+
+When not to:
+- Content that is loading and will arrive shortly. Use Skeleton.
+- A whole panel with nothing in it, which needs an action. Use Empty state.
+- A person or agent without a photo; initials stand in. Use Avatar.
+
+Content:
+- label is the kind, “Chart” or “Preview”; name is the thing, “Retention by cohort”.
+- alt says what is missing, “No data yet: run latency by agent”, because it is announced in place of the content.
+
+#### `Placeholder` (component)
+
+The slot where something will go and has not yet: a photograph that has not been shot, a chart with no data, a preview that cannot render.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `alt` (required) | `string` |  | Announced in place of the missing content. |
+| `name` (required) | `string` |  | What it would show — "Panama Canal", "Retention by cohort". |
+| `label` | `string` | `Placeholder` | The kind of thing that goes here — "Photography", "Chart", "Preview". |
+| `tone` | `"default" \| "deep"` | `default` |  |
+
+Types: `PlaceholderProps`
+
+### Progress
+
+https://demogar.github.io/molaui/?path=/docs/components-feedback-progress--overview
+
+Progress for work moving toward done, which may be indeterminate; Meter for a reading inside a known range, with thresholds.
+
+When to use:
+- An upload, an ingest or an evaluation over a known number of items, with Progress.
+- Work that has started but has no known size yet, with a null value: the working relleno, not a spinner.
+- A budget, a quota or a context window, with Meter and its warn and danger thresholds.
+
+When not to:
+- A model call or an agent run with no knowable total; show elapsed time, not a percentage. Use Run status.
+- Content loading into a known layout. Use Skeleton.
+- A headline figure with no range. Use Stat.
+- Choosing a value on a scale. Use Slider.
+
+- Do: Use Meter for a reading that can go down as well as up, such as tokens used this month.
+- Don’t: Use Progress for a quota; a quota is not work moving toward done.
+- Do: Use valueText to give the count: “212 / 300”.
+- Don’t: Invent a percentage to make a wait feel shorter.
+
+Content:
+- Progress labels name the work as it happens: “Embedding documents”, “Evaluating prompts”.
+- A bar that stays on screen after the work ends says how it ended: “Failed at 67%”.
+- Meter labels name the measure and its period: “Tokens this month”.
+
+#### `Meter` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+| `label` | `ReactNode` |  |  |
+| `size` | `"sm" \| "lg" \| "md"` | `md` |  |
+| `thresholds` | `{ warn?: number; danger?: number; } \| undefined` | `{ warn: 0.75, danger: 0.9 }` | Fractions of the range at which the fill changes: gold past `warn`, rojo past `danger`. Drawn on the track as ticks. Pass `{}` for none. |
+| `valueText` | `((formatted: string, value: number) => ReactNode)` |  |  |
+
+Also accepts the props of `MeterRootProps`.
+
+#### `Progress` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+| `label` | `ReactNode` |  | Visible label; also the accessible name. Use `aria-label` when there is no room for one. |
+| `showValue` | `boolean` | `true` | Show the formatted value at the end of the label row. Ignored while indeterminate. |
+| `size` | `"sm" \| "lg" \| "md"` | `md` |  |
+| `tone` | `"danger" \| "success" \| "ink"` | `ink` | Fill colour. Ink is in-flight; verde/rojo for a finished state that stays on screen. |
+| `valueText` | `((formatted: string \| null, value: number \| null) => ReactNode)` |  | Replaces the value text, e.g. "212 / 300 prompts". |
+
+Also accepts the props of `ProgressRootProps`.
+
+#### `meterLevel` (function)
+
+Which band a reading is in — exported for the stat tiles and tables that colour a number to match.
+
+Types: `MeterProps`, `ProgressProps`
+
+### Skeleton
+
+https://demogar.github.io/molaui/?path=/docs/components-feedback-skeleton--overview
+
+Bones in the shape of content that has not arrived, with SkeletonGroup to mark the region busy and say once what is loading.
+
+When to use:
+- A card, list or table whose layout is known while its data loads.
+- Swapping bones for content in place, so the layout barely moves when the data lands.
+- Lines of text that follow the surrounding type size, with SkeletonText.
+
+When not to:
+- Work with a known size, such as an upload. Use Progress.
+- A slot whose content does not exist yet, rather than one that is loading. Use Placeholder.
+- A button waiting on its own action; give it its loading state. Use Button.
+- Text a model is still writing. Use Streaming text.
+
+- Do: Wrap the bones in SkeletonGroup with a label, so the region is announced once.
+- Don’t: Add a spinner or a “Loading…” line to each bone; the system has no spinner, by design.
+- Do: Cut the bones to the content’s shape: an avatar bone, a short line for a name.
+- Don’t: Cover the area with one generic block.
+
+Content:
+- The group label names what is loading: “Loading agent”, “Loading runs”.
+
+#### `Skeleton` (component)
+
+Loading is a cut shape whose content has not arrived, so a block keeps the keyline every other shape has and carries the same relleno as the empty state.
+
+- `shape`: `block`, `text`, `line`, `avatar` (default `block`)
+- `size`: `xs`, `sm`, `md`, `lg`, `xl` (default `md`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `shape` | `"block" \| "text" \| "line" \| "avatar"` |  |  |
+| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` |  |  |
+
+#### `SkeletonGroup` (component)
+
+The region that is loading, and the one place that says so.
+
+- `shape`: `block`, `text`, `line`, `avatar` (default `block`)
+- `size`: `xs`, `sm`, `md`, `lg`, `xl` (default `md`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `fallback` (required) | `ReactNode` |  | The bones, shown while loading. |
+| `label` (required) | `string` |  | What is loading, said once: "Loading agent", "Loading runs". |
+| `loading` (required) | `boolean` |  | While true the bones show and the region is busy. |
+| `children` | `ReactNode` |  | The real content, shown once loaded. |
+
+#### `SkeletonText` (component)
+
+Lines of text that have not arrived. The last line is short, because a paragraph ends ragged; a block of equal bars reads as a table.
+
+- `shape`: `block`, `text`, `line`, `avatar` (default `block`)
+- `size`: `xs`, `sm`, `md`, `lg`, `xl` (default `md`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `lines` | `number` | `3` |  |
+
+Types: `SkeletonGroupProps`, `SkeletonProps`, `SkeletonTextProps`
+
+### Toast
+
+https://demogar.github.io/molaui/?path=/docs/components-feedback-toast--overview
+
+A floating notice for something that happened elsewhere or just now; a running toast turns into its result in place.
+
+When to use:
+- Confirming an action whose result is not visible where the operator is.
+- Long work the operator may leave, with toast.running, then toast.update with the outcome.
+- One follow-up action, such as Undo or View run.
+
+When not to:
+- A condition of the page that stays true, such as read-only mode. Use Callout.
+- Anything that needs a decision, or more than one action. Use Dialog.
+- A validation error on a field. Use Field.
+- Confirming a copy to the clipboard. Confirm it in place, as CodeBlock and Message do.
+
+- Do: Update the running toast with the outcome, so the result lands where the work was.
+- Don’t: Leave the running toast and fire a second, unrelated success toast.
+
+Content:
+- The title states what happened, in the past tense: “Index rebuilt”, “Deploy failed”.
+- The description adds the cause or the figures: “1,204 documents · 3m 41s”.
+- The action is one verb: “Undo”, “Retry”, “View”.
+
+#### `ToastProvider` (component)
+
+Mount once near the root. Renders the viewport, bottom-right, into a portal.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `limit` | `number` | `3` | Toasts kept visible at once; older ones fold away. |
+| `timeout` | `number` | `5000` | Default auto-dismiss, ms. |
+
+#### `useToast` (hook)
+
+The toast API. Call from anywhere inside a `ToastProvider`.
+
+Types: `ToastOptions`, `ToastProviderProps`, `ToastTone`
+
+## Forms
+
+### Checkbox
+
+https://demogar.github.io/molaui/?path=/docs/components-forms-checkbox--overview
+
+A square that turns a choice on or off, applied when the form is saved; CheckboxGroup for any number of choices from a set.
+
+When to use:
+- One yes-or-no setting that takes effect on Save.
+- Any number of options from a short visible list, with CheckboxGroup and its legend.
+- A parent that selects all its children, and goes indeterminate when only some are on.
+
+When not to:
+- A setting that takes effect the moment it changes. Use Switch.
+- Exactly one option from a set. Use Radio.
+- Filters above a list that apply as they are pressed. Use Chip.
+- A long list of options that people would rather search. Use Combobox.
+
+- Do: Label the positive choice: “Stream partial output”.
+- Don’t: Label a negative, “Don’t stream output”, which makes checked mean off.
+
+Content:
+- Labels state what is turned on, in sentence case, with no trailing period.
+- Conditions go in description, not in the label: “Up to three times, with exponential backoff.”
+- The legend names the set: “Tools”, “Notify on”.
+
+#### `Checkbox` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+| `description` | `ReactNode` |  | Second line under the label. Linked as the control's description. |
+| `label` | `ReactNode` |  | Visible label. The whole label is the press target. |
+
+Also accepts the props of `CheckboxRootProps`, `NativeButtonProps`.
+
+#### `CheckboxGroup` (component)
+
+A set of checkboxes that share one value array, inside a real fieldset and legend — so a screen reader announces "Tools, group" before the first option and every option is heard in that context, which no `aria-label` on a div reproduces across readers.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `legend` (required) | `ReactNode` |  | The group's name, rendered as the fieldset legend in the label register. |
+| `className` | `string` |  |  |
+| `description` | `ReactNode` |  | Copy under the legend. |
+| `orientation` | `"horizontal" \| "vertical"` | `vertical` | Lay options out in a row rather than a column. |
+
+Also accepts the props of `CheckboxGroupProps`.
+
+#### `checkboxBoxClasses` (constant)
+
+A square cut from the cloth. Unchecked, it is raised cloth inside an ink keyline; checked, the square is filled with ink and the mark is cut out of it in cloth — the same inversion a selected chip and a selected segment make, so "on" looks the same wherever it appears.
+
+Types: `CheckboxGroupProps`, `CheckboxProps`
+
+### Chip
+
+https://demogar.github.io/molaui/?path=/docs/components-forms-chip--overview
+
+A filter chip with a real checkbox or radio inside, filled with ink when on, with an optional count.
+
+When to use:
+- Filters above a list or table that apply as they are pressed.
+- Showing how many rows each filter would leave, with count.
+- One of a few fixed ranges, such as 1h, 24h and 7d, with type set to radio.
+
+When not to:
+- A status shown to the reader rather than chosen by them. Use Badge.
+- Switching between views of the same data. Use Segmented control.
+- Options in a form that is saved later. Use Checkbox.
+- Values picked from a long list into a field; Combobox shows them as chips inside it. Use Combobox.
+
+- Do: Wrap chips in a ChipGroup with a legend, so “Failed” is heard as a status filter.
+- Don’t: Leave a row of chips unnamed; “Failed” on its own sounds like an error.
+
+Content:
+- Use the same words as the status being filtered: “Succeeded”, “Failed”.
+- Keep default chips to one line; use the comfortable size for labels that wrap.
+
+#### `Chip` (component)
+
+- `size`: `default`, `comfortable` (default `default`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `children` (required) | `ReactNode` |  | The visible label. Also the control's accessible name, via the wrapping `<label>`. |
+| `count` | `number` |  | A count after the label: how many rows this filter would leave. Tabular, so a row of chips does not jitter as counts change. |
+| `size` | `"default" \| "comfortable"` |  |  |
+| `type` | `"checkbox" \| "radio"` | `checkbox` | `radio` for one-of-N within a `name` group, `checkbox` for multi-select. |
+
+#### `ChipGroup` (component)
+
+A row of chips inside a real fieldset. The legend is what a screen reader says before the first chip — "Status, group" — so "Failed" is heard as a status filter rather than as an alarming word on its own.
+
+- `size`: `default`, `comfortable` (default `default`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `legend` (required) | `ReactNode` |  | What the chips filter. Rendered as the legend, so each chip is announced in its context. |
+| `hideLegend` | `boolean` | `false` | Hide the legend visually while keeping it for assistive technology — for a toolbar row whose meaning is obvious from position. |
+
+#### `chipVariants` (function)
+
+A filter you can see the state of. A real `<input type="checkbox|radio">` sits inside the styled `<label>`, hidden with the clip pattern (`sr-only`) rather than `display:none`, so it stays focusable and in the accessibility tree. Keyboard handling, radio-group arrow keys, the checked state and form submission all come from the platform — there is no ARIA widget to keep in sync and nothing to re-implement.
+
+Types: `ChipGroupProps`, `ChipProps`
+
+### Combobox
+
+https://demogar.github.io/molaui/?path=/docs/components-forms-combobox--overview
+
+A select you can type into: Combobox always ends on an option from the list; Autocomplete takes free text with suggestions.
+
+When to use:
+- A list too long to scroll, such as people, tools or runs, where typing narrows it.
+- Several values from a long list, with multiple, shown as chips inside the field.
+- A server search, with filter set to null and loading and status reporting the results.
+- Free text where suggestions save keystrokes and keep names consistent, such as a run label, with Autocomplete.
+
+When not to:
+- A short list people can scan without typing. Use Select.
+- Two to five options that should all be visible. Use Radio.
+- Jumping to a page or running a command from anywhere. Use Command palette.
+- Filtering the rows of a list as you type. Use SearchInput.
+
+- Do: Use Combobox when the form must submit a value the list offered, such as a reviewer.
+- Don’t: Use Autocomplete for a reviewer or an owner; a half-typed name would be submitted as typed.
+- Do: Write the empty message for the moment: before typing, what can be searched; after, the query that found nothing.
+- Don’t: Leave the popup blank while results load or when nothing matches.
+
+Content:
+- The placeholder says what to type: “Search people”, “run-4187 or eval-sweeper”.
+- Keep a disabled option in the list, with its reason as the description: “Requires approval”.
+
+#### `Autocomplete` (component)
+
+Free text with suggestions: a run label, a tag, a search. The typed text is the value; picking a suggestion only fills it in.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `items` (required) | `(string \| ComboboxOption)[]` |  | Suggestions. Plain strings, or options with a description line. |
+| `aria-describedby` | `string` |  |  |
+| `aria-invalid` | `boolean \| "true" \| "false"` |  |  |
+| `aria-label` | `string` |  |  |
+| `autoComplete` | `string` | `off` |  |
+| `className` | `string` |  |  |
+| `defaultValue` | `string` |  |  |
+| `disabled` | `boolean` |  |  |
+| `emptyMessage` | `ReactNode` |  | What the popup says when nothing matches. Omit to close the popup instead. |
+| `id` | `string` |  |  |
+| `label` | `ReactNode` |  |  |
+| `loading` | `boolean` | `false` |  |
+| `locale` | `LocalesArgument` |  | Locale for the built-in matching. Omitted, the runtime's locale is used. |
+| `name` | `string` |  |  |
+| `onValueChange` | `((value: string) => void)` |  | Every change to the text, typed or chosen. |
+| `placeholder` | `string` |  |  |
+| `readOnly` | `boolean` |  |  |
+| `required` | `boolean` |  |  |
+| `size` | `"sm" \| "lg" \| "md"` | `md` |  |
+| `status` | `ReactNode` |  |  |
+| `value` | `string` |  |  |
+
+#### `Combobox` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `items` (required) | `Items` |  | Flat options, or labelled groups. With `filter={null}`, the options to show right now. |
+| `aria-describedby` | `string` |  |  |
+| `aria-invalid` | `boolean \| "true" \| "false"` |  |  |
+| `aria-label` | `string` |  |  |
+| `className` | `string` |  |  |
+| `clearLabel` | `string` |  | Accessible name of the clear button. |
+| `defaultValue` | `string \| string[] \| null` |  |  |
+| `disabled` | `boolean` |  |  |
+| `emptyMessage` | `ReactNode` |  | What the popup says when nothing matches. |
+| `filter` | `((option: ComboboxOption, query: string) => boolean) \| null` |  | How typed text matches an option. Pass `null` when the caller filters — a server search — and hand the results in through `items`. |
+| `id` | `string` |  |  |
+| `label` | `ReactNode` |  | A visible label above the field. Omit it inside `Field`, which renders its own, and spread Field's control props onto this component instead. |
+| `loading` | `boolean` |  | Results are on their way: the popup shows the working texture and "Searching…". |
+| `locale` | `LocalesArgument` |  | Locale for the built-in matching. Omitted, the runtime's locale is used. |
+| `multiple` | `boolean` |  |  |
+| `name` | `string` |  |  |
+| `onInputValueChange` | `((query: string) => void)` |  | What is typed, as it is typed: the hook for a server search. |
+| `onValueChange` | `((value: string \| null) => void) \| ((value: string[]) => void)` |  |  |
+| `placeholder` | `string` |  |  |
+| `readOnly` | `boolean` |  |  |
+| `removeLabel` | `((label: string) => string)` |  | Accessible name of each chip's remove button. |
+| `required` | `boolean` |  |  |
+| `size` | `"sm" \| "lg" \| "md"` |  |  |
+| `status` | `ReactNode` |  | A line above the results — "Showing 20 of 312", or an error from the search. |
+| `triggerLabel` | `string` |  | Accessible name of the button that opens the list. |
+| `value` | `string \| string[] \| null` |  |  |
+
+Types: `AutocompleteProps`, `ComboboxMultipleProps`, `ComboboxOption`, `ComboboxOptionGroup`, `ComboboxProps`, `ComboboxSingleProps`
+
+### Date picker
+
+https://demogar.github.io/molaui/?path=/docs/components-forms-date-picker--overview
+
+DatePicker for one date, typed or picked from a calendar; DateRangePicker for a period, with presets and two typed ends.
+
+When to use:
+- One date, such as when to run an evaluation, with DatePicker.
+- A period for a report or a filter, with DateRangePicker and presets such as the last 7 days.
+- Dates with bounds or unavailable days, through min, max and isDateDisabled.
+
+When not to:
+- A period between two dates, where two single pickers would not check the order. Use DateRangePicker.
+- One date; a range picker would ask for a second press. Use DatePicker.
+- A duration, such as a timeout in seconds. Use Number input.
+- A few fixed relative ranges, such as 1h, 24h and 7d. Use Chip.
+
+- Do: Pass locale, so the typed order, digits and first day of the week follow it.
+- Don’t: Guess the date order from the language; es-ES and es-PA write dates in different orders.
+- Do: Keep typed entry on in DateRangePicker; typing is the accessible path into a date.
+- Don’t: Turn typedEntry off unless the presets and the grid cover every case.
+
+Content:
+- Label the field by what the date is for: “Run evaluation on”, “Report period”.
+- Leave the placeholder to the component; it is the locale’s own pattern.
+- Rules the picker cannot know, such as required, go to Field as an instruction: “Choose a date for the evaluation.”
+
+#### `Calendar` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `activeCellRef` | `Ref<HTMLTableCellElement>` |  | Ref to the day cell that holds the roving tab stop. |
+| `autoFocus` | `boolean` | `false` | Move focus to the active day when the calendar mounts — for a popup that has just opened. |
+| `className` | `string` |  |  |
+| `defaultFocusedDate` | `Date \| null` |  | Where focus starts. Defaults to the selected day, else today. |
+| `headingId` | `string` |  | Id for the month heading, so a dialog can be named by it. |
+| `isDateDisabled` | `((date: Date) => boolean)` |  | Days that exist but cannot be chosen: weekends in a freeze, public holidays. |
+| `locale` | `LocalesArgument` |  | BCP 47 tag. `undefined` uses the runtime's locale, as Intl does. |
+| `max` | `Date \| null` |  |  |
+| `min` | `Date \| null` |  |  |
+| `onSelect` | `((date: Date) => void)` |  | Called with the day a person chose. Range logic belongs to the caller. |
+| `renderHeading` | `((props: { id: string; className: string; children: ReactNode; }) => ReactNode)` |  | Render the heading as the popup's title instead of a plain element. |
+| `selected` | `DateRange` |  | The selected day, or the range. A single date is a range whose ends match. |
+| `today` | `Date` |  | Inject "now" for stable stories and tests. |
+| `visibleDate` | `Date \| null` |  | Show this day's month and move the tab stop to it, without moving focus — for a date typed elsewhere that the grid should follow. Compared by identity, so a new `Date` for the same day shows it again after the person has paged away. |
+| `weekStartsOn` | `number` |  | 0 = Sunday … 6 = Saturday. Overrides the locale's first day of the week. |
+
+#### `DatePicker` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `aria-describedby` | `string` |  |  |
+| `aria-invalid` | `boolean \| "true" \| "false"` |  |  |
+| `aria-label` | `string` |  |  |
+| `className` | `string` |  |  |
+| `defaultOpen` | `boolean` | `false` | Open the calendar on first render — for a step that exists only to pick a date. |
+| `defaultValue` | `Date \| null` | `null` |  |
+| `disabled` | `boolean` |  |  |
+| `id` | `string` |  |  |
+| `isDateDisabled` | `((date: Date) => boolean)` |  |  |
+| `locale` | `LocalesArgument` |  | BCP 47 tag for names, digits, typed order and week start. `undefined` uses the runtime's locale. |
+| `max` | `Date \| null` |  |  |
+| `min` | `Date \| null` |  |  |
+| `name` | `string` |  | Submitted as `yyyy-mm-dd`, whatever the display locale. |
+| `onValueChange` | `((value: Date \| null) => void)` |  |  |
+| `placeholder` | `string` |  | Defaults to the locale's format, e.g. `DD/MM/YYYY`. |
+| `required` | `boolean` |  |  |
+| `size` | `"sm" \| "lg" \| "md"` | `md` |  |
+| `today` | `Date` |  | Inject "now" for stable stories and tests. |
+| `value` | `Date \| null` |  |  |
+| `weekStartsOn` | `number` |  | 0 = Sunday … 6 = Saturday. Overrides the locale's first day of the week. |
+
+#### `DateRangePicker` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `aria-describedby` | `string` |  |  |
+| `aria-invalid` | `boolean \| "true" \| "false"` |  |  |
+| `aria-label` | `string` |  |  |
+| `className` | `string` |  |  |
+| `defaultOpen` | `boolean` | `false` | Open the calendar on first render. |
+| `defaultValue` | `DateRange` | `{ start: null, end: null }` |  |
+| `disabled` | `boolean` |  |  |
+| `id` | `string` |  |  |
+| `isDateDisabled` | `((date: Date) => boolean)` |  |  |
+| `locale` | `LocalesArgument` |  |  |
+| `max` | `Date \| null` |  |  |
+| `min` | `Date \| null` |  |  |
+| `name` | `string` |  | Submitted as `<name>-start` and `<name>-end`, `yyyy-mm-dd`. |
+| `onValueChange` | `((value: DateRange) => void)` |  |  |
+| `placeholder` | `string` | `Choose a period` |  |
+| `presets` | `DateRangePreset[]` | `[   { label: 'Last 7 days', range: (t) => ({ start: addDays(t, -6), end: t }) },   { label: 'Last 30 days', range: (t) => ({ start: addDays(t, -29), end: t }) },   { label: 'Last 90 days', range: (t) => ({ start: addDays(t, -89), end: t }) },   { label: 'This month', range: (t) => ({ start: startOfMonth(t), end: t }) },   {     label: 'Last month',     range: (t) => {       const previous = addMonths(startOfMonth(t), -1)       return { start: previous, end: endOfMonth(previous) }     },   }, ]` | Pass `[]` for none. |
+| `required` | `boolean` |  |  |
+| `size` | `"sm" \| "lg" \| "md"` | `md` |  |
+| `today` | `Date` |  |  |
+| `typedEntry` | `boolean` | `true` | Start and end inputs above the calendar. On by default: typing is the accessible path into a date, not an extra, and the single picker always has it. Turn it off only where presets and the grid cover every case. |
+| `value` | `DateRange` |  |  |
+| `weekStartsOn` | `number` |  |  |
+
+#### `formatDateRange` (function)
+
+"6 – 12 Oct 2026" in the locale's own words, or null for an incomplete range.
+
+#### `defaultRangePresets` (constant)
+
+The presets an analytics screen reaches for. "Last 7 days" includes today: it is the seven days you can see on the chart, ending now.
+
+#### `getDatePattern` (function)
+
+The typed format for a locale, read from `formatToParts` rather than from a table of locales — so it is right for any locale the engine knows, and the guidance shown under the field can never disagree with what is accepted. The letters are Latin (DD, MM, YYYY) in every locale: it is the convention people recognise as a format, where translated letters are not.
+
+Types: `CalendarProps`, `DatePickerProps`, `DateRangePickerProps`, `DateLocale`, `DatePattern`, `DateRange`, `DateRangePreset`
+
+### Field
+
+https://demogar.github.io/molaui/?path=/docs/components-forms-field--overview
+
+A label, a control and a hint or error wired together; the page also covers Input, Textarea, SearchInput and Label.
+
+When to use:
+- Any form control that needs a visible label, a hint and a validation message, through the render prop.
+- One line of text with Input, with a unit or an icon inside the field through leading and trailing.
+- Several lines with Textarea, which grows with its content when autosize is set.
+- Filtering a list with SearchInput, which shows a shortcut cap when empty and a clear button when not.
+
+When not to:
+- A number that is stepped, bounded or formatted. Use Number input.
+- A choice from a known list. Use Select.
+- A date or a period. Use Date picker.
+- A prompt to a model, with attachments and a send button. Use Prompt input.
+
+- Do: Spread the control props onto the control, so its id, description and invalid state are wired.
+- Don’t: Use the placeholder as the label; it disappears as soon as someone types.
+- Do: Put the unit inside the field with trailing: “seconds”, “tokens”.
+- Don’t: Write the unit as text after the field, where it reads as a second field.
+
+Content:
+- Labels are short nouns in sentence case: “Run name”, “Webhook URL”.
+- Hints explain the consequence: “Shown in the run list and in alerts.”
+- Errors say what is wrong and how to fix it: “Must be between 1 and 900 seconds.”
+
+#### `Label` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `optional` | `boolean` | `false` | Renders the "Optional" tag. |
+| `required` | `boolean` | `false` | Renders the required asterisk. Does NOT set `required` on any control. |
+
+#### `Field` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` (required) | `ReactNode` |  |  |
+| `description` | `ReactNode` |  | Alias of `hint`, for callers who think of it as a description. `hint` wins if both are set. |
+| `error` | `ReactNode` |  | Validation message under the control. Its presence is what marks the field invalid. |
+| `hint` | `ReactNode` |  | Supporting copy under the control. |
+| `labelAside` | `ReactNode` |  | Something to the right of the label: a character count, a "Reset" link. |
+| `optional` | `boolean` | `false` | Renders the "Optional" tag. Ignored when `required`. |
+| `required` | `boolean` | `false` |  |
+
+#### `Input` (component)
+
+A text control. Without adornments it is the bare `<input>` wearing the shared control classes; with them, the CUT moves to a wrapper and the input inside goes transparent, so the icon or unit sits inside the same keyline as the text rather than beside it — a unit outside the box reads as a second field.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `leading` | `ReactNode` |  | Inside the cut, before the text: an icon, a currency sign, a protocol. |
+| `size` | `"sm" \| "lg" \| "md"` | `md` | Height and type from the density tokens. |
+| `trailing` | `ReactNode` |  | Inside the cut, after the text: a unit ("ms", "tokens"), a button. |
+
+#### `Textarea` (component)
+
+Multi-line text: a system prompt, a note on a run, a JSON override. Same cut and states as `Input`; padding comes from the density tokens so the first line sits where a single-line input's text would.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `autosize` | `boolean` | `false` | Grow with the content instead of scrolling inside a fixed box, using `field-sizing: content` — no script, no resize observer, and it still respects `rows` as the minimum and `max-h-*` as the ceiling. Browsers without it fall back to the normal resizable textarea, which is the correct degradation rather than a broken one. |
+
+#### `SearchInput` (component)
+
+The filter box that heads every list in an internal tool.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `clearLabel` | `string` | `Clear search` | Accessible name for the clear button. |
+| `onClear` | `(() => void)` |  | Called after the clear button empties the field. |
+| `shortcut` | `string` |  | The keyboard shortcut that focuses this field, shown as a key cap while the field is empty — e.g. `⌘K` or `/`. Display only: binding the key is the page's job, because only the page knows what else is listening. |
+| `size` | `"sm" \| "lg" \| "md"` |  | Height and type from the density tokens. |
+
+#### `fieldControlClasses` (constant)
+
+The one class list every text control shares — Input, Textarea, the Select trigger, and the wrapper an adorned Input draws instead of the input itself.
+
+#### `fieldControlSizes` (constant)
+
+Height, padding and type per size. Every value is a density token, so the same `md` input is 28px in a compact table filter and 48px in a spacious form without a prop changing.
+
+Types: `LabelProps`, `FieldControlProps`, `FieldProps`, `FieldControlSize`, `InputProps`, `TextareaProps`, `SearchInputProps`
+
+### File upload
+
+https://demogar.github.io/molaui/?path=/docs/components-forms-file-upload--overview
+
+A dropzone with a real Browse button, and a list of the files put there with their status and progress.
+
+When to use:
+- Attaching or uploading files, such as an evaluation dataset or documents for the knowledge index.
+- Driving the transfer with onUpload, which queues, uploads, reports progress and retries each file.
+- Stating the accepted types and the size limit before a file is chosen.
+
+When not to:
+- Attaching files to the next prompt in a conversation. Use Prompt input.
+- Pasting text, such as a JSON override; a field is faster than a file. Use Textarea.
+
+- Do: Reject a file in a sentence that names it and the rule: “budget.xlsx is 14.2 MB; the limit is 10 MB.”
+- Don’t: Say “Invalid file”, or add a rejected file to the list.
+
+Content:
+- When onUpload rejects, its error message is one sentence the person can act on; it is shown under the row.
+- Pass messages to translate the copy, and keep each rule stated with its figure.
+
+#### `FileUpload` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `accept` | `string` |  | Native `accept`: `.jsonl,.csv`, `application/pdf`, `image/*`. Enforced on drop as well as in the picker. |
+| `aria-describedby` | `string` |  |  |
+| `aria-invalid` | `boolean \| "true" \| "false"` |  |  |
+| `aria-label` | `string` |  |  |
+| `className` | `string` |  |  |
+| `defaultFiles` | `FileUploadItem[]` |  | Rows to start with: files already on the server, or a fixed state for a demo. |
+| `disabled` | `boolean` | `false` |  |
+| `id` | `string` |  |  |
+| `locale` | `LocalesArgument` |  | Locale for sizes and lists. Omit to use the runtime's locale. |
+| `maxConcurrent` | `number` | `2` | How many `onUpload` calls run at once. |
+| `maxFiles` | `number` |  | Total files in the list, including ones already there. |
+| `maxSize` | `number` |  | Bytes, per file. |
+| `messages` | `Partial<FileUploadMessages>` |  | Copy, for another language. Merged over the English defaults. |
+| `multiple` | `boolean` | `false` |  |
+| `name` | `string` |  | Submitted with a form when there is no `onUpload`. |
+| `onFilesChange` | `((files: FileUploadItem[]) => void)` |  | Every change to the list: added, progressed, finished, failed, removed. |
+| `onReject` | `((rejections: FileRejection[]) => void)` |  | Files turned away, with the rule each broke. |
+| `onUpload` | `((file: File, context: UploadContext) => Promise<void>)` |  | Upload one file. Resolve when done; reject with an Error whose message says why. |
+| `required` | `boolean` |  |  |
+
+#### `defaultFileUploadMessages` (constant)
+
+#### `describeAccept` (function)
+
+The accepted types as a person would say them — ".jsonl or .csv" — joined with the locale's own "or". MIME types are kept as written; a reader who sees `application/pdf` can still act on it, and inventing friendly names for every type is a table nobody maintains.
+
+#### `formatFileSize` (function)
+
+A byte count in the reader's locale: "14.2 MB", "14,2 MB", "١٤٫٢ م.ب".
+
+#### `matchesAccept` (function)
+
+Whether a file matches an `accept` string, using the rules the native picker uses: `.ext` against the name, `type/*` against the MIME prefix, an exact MIME type against the type. The picker's filter is advice — every platform lets the person switch it to "All files", and drag and drop skips it entirely — so the component checks again rather than trusting it.
+
+#### `validateFiles` (function)
+
+Splits a batch into the files that pass and the ones that do not, each with the one rule it broke. Type is checked before size, because "wrong kind of file" is the more useful thing to hear about a 2 GB video dropped on a CSV field. Count is checked last and in order, so the first files chosen are the ones kept.
+
+Types: `FileUploadItem`, `FileUploadMessages`, `FileUploadProps`, `FileUploadStatus`, `UploadContext`, `FileRejection`, `FileRejectionReason`
+
+### Number input
+
+https://demogar.github.io/molaui/?path=/docs/components-forms-number-input--overview
+
+A number you can type and step, formatted for a locale, with bounds, a unit and steppers inside the field.
+
+When to use:
+- An exact value with bounds, such as a token budget, a retry count or a timeout.
+- Currency, percentages and units Intl knows, through format.
+- A short unit suffix such as “tokens”, which is also added to the description.
+
+When not to:
+- A value where its place in a range matters more than the exact figure, such as temperature. Use Slider.
+- An identifier made of digits, such as a run number; it is text, not a quantity. Use Input.
+- A date or a period. Use Date picker.
+
+- Do: Pass locale and a format, so “12,000 tokens” reads as a number.
+- Don’t: Use a native number input, which formats nothing and changes value when the page scrolls.
+- Do: Leave the wheel off in forms, and set allowWheelScrub only on a field that is the point of its screen.
+- Don’t: Let scrolling past a field change its value.
+
+Content:
+- Labels name the quantity and its scope: “Token budget per run”, “Retries before halting”.
+- Errors give the bound: “The workspace allows at most 8 concurrent runs.”
+
+#### `NumberInput` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `aria-describedby` | `string` |  | Identifies the element (or elements) that describes the object. |
+| `aria-invalid` | `boolean \| "true" \| "false"` |  | Indicates the entered value does not conform to the format expected by the application. |
+| `aria-label` | `string` |  | Defines a string value that labels the current element. |
+| `className` | `string` |  |  |
+| `decrementLabel` | `string` | `Decrease` |  |
+| `incrementLabel` | `string` | `Increase` | Accessible names of the steppers. |
+| `label` | `ReactNode` |  | Visible label above the field. Omit inside `Field`, which renders its own. |
+| `onValueChange` | `((value: number \| null) => void)` |  |  |
+| `placeholder` | `string` |  |  |
+| `size` | `"sm" \| "lg" \| "md"` | `md` |  |
+| `unit` | `string` |  | Short unit suffix inside the cut: "tokens", "ms", "%". Also added to the accessible description. |
+
+Also accepts the props of `NumberFieldRootProps`.
+
+Types: `NumberInputProps`
+
+### Radio
+
+https://demogar.github.io/molaui/?path=/docs/components-forms-radio--overview
+
+One choice from a small set, all visible, in a named RadioGroup; square, and told from a checkbox by its mark.
+
+When to use:
+- Exactly one of two to five options that people should compare side by side.
+- Options that each need a description, such as what happens when a tool call fails.
+
+When not to:
+- Any number of options. Use Checkbox.
+- More options than fit comfortably, or options that do not need comparing. Use Select.
+- Switching views, where the change is instant and nothing is submitted. Use Segmented control.
+- A single setting that is on or off. Use Switch.
+
+- Do: Give the group a label that asks the question: “When a tool call fails”.
+- Don’t: Leave the group unnamed; a screen reader then announces “group” and nothing else.
+
+Content:
+- Option labels are parallel and start the same way: “Retry, then continue”, “Skip the step”, “Halt the run”.
+- The consequence goes in description: “The run is marked failed and the owner is paged.”
+
+#### `Radio` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+| `description` | `ReactNode` |  |  |
+| `label` | `ReactNode` |  |  |
+
+Also accepts the props of `NativeButtonProps`, `RadioRootProps`.
+
+#### `RadioGroup` (component)
+
+The group, named by a visible label in the rótulo register via `aria-labelledby` — a radiogroup with no name is announced as "group" and nothing else, which leaves a screen reader user choosing between options to a question they never heard.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` (required) | `ReactNode` |  | The question the options answer. Names the radiogroup. |
+| `className` | `string` |  |  |
+| `description` | `ReactNode` |  |  |
+| `orientation` | `"horizontal" \| "vertical"` | `vertical` |  |
+
+Also accepts the props of `RadioGroupProps`.
+
+Types: `RadioGroupProps`, `RadioProps`
+
+### Segmented control
+
+https://demogar.github.io/molaui/?path=/docs/components-forms-segmented-control--overview
+
+One choice from a few views or settings, all visible and switched instantly, cut from one piece.
+
+When to use:
+- Switching between views of the same content: Table, Board, Timeline.
+- A setting with two to five short options that applies at once, such as density.
+- Icon-only segments in a tight space, with the labels kept as accessible names.
+
+When not to:
+- More than five options, or options that need explaining. Use Select.
+- A choice that is submitted with a form. Use Radio.
+- Panels of different content, each with its own heading. Use Tabs.
+- Filters that can be combined. Use Chip.
+
+- Do: Always have one segment selected; pressing the selected one does nothing.
+- Don’t: Use segments as a row of separate action buttons.
+
+Content:
+- Labels are one word where possible: “Table”, “Board”.
+- Name the group with aria-label: “View”, “Density”.
+
+#### `SegmentedControl` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `aria-label` (required) | `string` |  | Names the group. Required: three buttons reading "Table", "Board", "List" mean nothing until a screen reader hears "View". |
+| `options` (required) | `SegmentedOption<V>[]` |  |  |
+| `className` | `string` |  |  |
+| `defaultValue` | `string` |  |  |
+| `disabled` | `boolean` |  |  |
+| `fill` | `boolean` | `false` | Segments share the full width equally. |
+| `iconOnly` | `boolean` | `false` | Render icons only; labels become the accessible names. |
+| `onValueChange` | `((value: V) => void)` |  |  |
+| `size` | `"sm" \| "md"` | `md` |  |
+| `value` | `string` |  |  |
+
+Types: `SegmentedControlProps`, `SegmentedOption`
+
+### Select
+
+https://demogar.github.io/molaui/?path=/docs/components-forms-select--overview
+
+A choice from a list in a popup, with an optional second line per option and labelled groups.
+
+When to use:
+- One value from a list short enough to scan without typing, such as an environment or a model.
+- Options that need a second line, such as a model’s speed and cost.
+- A field in a form, inside Field, or a compact filter in a toolbar.
+
+When not to:
+- A list long enough that people would rather type. Use Combobox.
+- Two to five options that should all be visible. Use Radio.
+- Switching views instantly. Use Segmented control.
+- A list of actions rather than a value. Use Menu.
+
+- Do: Keep a retired option in the list, disabled, with the reason as its description.
+- Don’t: Remove an option someone may look for without saying where it went.
+
+Content:
+- Option labels are the names people use, “Cayuco Steady 3”; the description adds the trade-off, “Balanced · default”.
+- The placeholder says what to choose: “Choose an environment”.
+
+#### `Select` (component)
+
+The one-line form, for the nine selects in ten that are a label and a list. The parts above are exported for the tenth.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `items` (required) | `SelectOption<V>[] \| SelectOptionGroup<V>[]` |  | Flat options, or labelled groups. |
+| `aria-describedby` | `string` |  |  |
+| `aria-invalid` | `boolean \| "true" \| "false"` |  |  |
+| `aria-label` | `string` |  |  |
+| `className` | `string` |  |  |
+| `defaultValue` | `string \| null` |  |  |
+| `disabled` | `boolean` |  |  |
+| `id` | `string` |  |  |
+| `label` | `ReactNode` |  | A visible label rendered above the trigger. Omit it when the select sits inside `Field`, which renders its own — and spread Field's control props onto this component instead. |
+| `name` | `string` |  |  |
+| `onValueChange` | `((value: V \| null) => void)` |  |  |
+| `placeholder` | `ReactNode` | `Select…` |  |
+| `required` | `boolean` |  |  |
+| `size` | `"sm" \| "lg" \| "md"` | `md` |  |
+| `value` | `string \| null` |  |  |
+
+#### `SelectContent` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  | CSS class applied to the element, or a function that returns a class based on the component's state. |
+| `sideOffset` | `number` | `6` | Gap between trigger and popup, in px. |
+
+Also accepts the props of `SelectPopupProps`.
+
+#### `SelectGroup` (component)
+
+#### `SelectGroupLabel` (component)
+
+#### `SelectItem` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  | CSS class applied to the element, or a function that returns a class based on the component's state. |
+| `description` | `ReactNode` |  | Secondary line under the label: a model's context window, a team's size. |
+
+Also accepts the props of `NativeButtonProps`, `SelectItemProps`.
+
+#### `SelectRoot` (component)
+
+A select is two shapes in this system, and they are different materials.
+
+#### `SelectSeparator` (component)
+
+#### `SelectTrigger` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  | CSS class applied to the element, or a function that returns a class based on the component's state. |
+| `placeholder` | `ReactNode` |  | Shown when there is no value. |
+| `size` | `"sm" \| "lg" \| "md"` | `md` |  |
+
+Also accepts the props of `NativeButtonProps`, `SelectTriggerProps`.
+
+#### `SelectValue` (component)
+
+Types: `SelectContentProps`, `SelectItemProps`, `SelectOption`, `SelectOptionGroup`, `SelectProps`, `SelectTriggerProps`
+
+### Slider
+
+https://demogar.github.io/molaui/?path=/docs/components-forms-slider--overview
+
+A value or a range on a continuous scale, with the value always printed in tabular figures.
+
+When to use:
+- A value where the range matters as much as the number, such as temperature or a rollout percentage.
+- A range between two values, with two thumbs.
+- A scale whose ends need words, through minLabel and maxLabel.
+
+When not to:
+- An exact figure someone will type, such as a budget of 40,000 tokens. Use Number input.
+- A reading the person cannot change. Use Meter.
+- A few discrete options. Use Segmented control.
+
+- Do: Format the printed value with its unit, through formatValue: “25% of runs”.
+- Don’t: Turn showValue off, so the value can only be learned by dragging.
+
+Content:
+- End labels describe the effect at each end, not the number: “Precise”, “Creative”.
+
+#### `Slider` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+| `formatValue` | `((formatted: string, value: number) => ReactNode)` |  | Format the printed value. Defaults to Base UI's locale formatting via `format`. |
+| `label` | `ReactNode` |  | Visible label. Names the thumb(s). |
+| `maxLabel` | `ReactNode` |  |  |
+| `minLabel` | `ReactNode` |  | Labels under the two ends of the track: "Precise" / "Creative". |
+| `showValue` | `boolean` | `true` | Print the current value beside the label. |
+
+Also accepts the props of `SliderRootProps`.
+
+Types: `SliderProps`
+
+### Switch
+
+https://demogar.github.io/molaui/?path=/docs/components-forms-switch--overview
+
+A setting that takes effect the moment it is switched; on is verde, the colour of live.
+
+When to use:
+- Turning a capability on or off at once: streaming, a tool, a flag.
+- Settings lists, with labelPosition set to start so labels align left and switches right.
+
+When not to:
+- A choice that waits for a Save button. Use Checkbox.
+- A choice between two named options rather than on and off. Use Radio.
+- A pressed state in a row of controls, such as Wrap lines. Use Toolbar.
+
+- Do: Apply the change as soon as the switch moves, and say in the description what it affects.
+- Don’t: Mix switches and checkboxes in a form that is saved later; a switch says it has already happened.
+
+Content:
+- Label the capability, not the action: “Stream responses”, not “Turn on streaming”.
+- The description states the effect or the cost: “Stored for 30 days; may contain user text.”
+
+#### `Switch` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+| `description` | `ReactNode` |  |  |
+| `label` | `ReactNode` |  |  |
+| `labelPosition` | `"start" \| "end"` | `end` | Put the label before the switch — for settings lists, where labels align left and switches right. |
+
+Also accepts the props of `NativeButtonProps`, `SwitchRootProps`.
+
+Types: `SwitchProps`
+
+## Layout
+
+### App shell
+
+https://demogar.github.io/molaui/?path=/docs/components-layout-app-shell--overview
+
+The frame a tool lives in: a top bar, a sidebar that collapses to a rail or becomes a sheet, and one scrolling main region.
+
+When to use:
+- The outer frame of an application with navigation, search and a work area.
+- Navigation with sections, a current page and counts, through Sidebar, NavSection and NavItem.
+- The product mark, search and account controls, through Topbar.
+
+When not to:
+- The title, description and actions at the top of one page inside the shell. Use Page header.
+- Details beside the work, opened from a row. Use Drawer.
+- Switching between views inside a page. Use Tabs.
+
+- Do: Mark the current destination with active, and set countTone to attention only for things that need a person.
+- Don’t: Fill every count in rojo; totals are not alarms.
+
+Content:
+- Navigation labels are short nouns: “Runs”, “Agents”, “Evaluations”.
+- Give a count its countLabel, “3 failed”, so the number is not read alone.
+- Name the Sidebar landmark: “Main”, “Settings”.
+
+#### `AppShell` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `sidebar` (required) | `ReactNode` |  |  |
+| `topbar` (required) | `ReactNode` |  |  |
+| `defaultSidebarCollapsed` | `boolean` | `false` |  |
+| `onSidebarCollapsedChange` | `((collapsed: boolean) => void)` |  |  |
+| `sidebarCollapsed` | `boolean` |  | Controlled collapse of the desktop sidebar. |
+
+#### `SidebarToggle` (component)
+
+The control that collapses the sidebar on desktop and opens the sheet on mobile. Two buttons, one shown per breakpoint, rather than one button that asks `matchMedia` what it is: CSS decides which exists, so the server render is already right and nothing flickers on hydration.
+
+#### `Topbar` (component)
+
+The bar across the top. Raised cloth bounded by one ink rule — the single structural edge in the frame; the sidebar's edge is a quiet keyline, so the eye reads one horizontal plane over the work rather than a box around it.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `center` | `ReactNode` |  | Search, or a command-palette trigger. Centred in the free space. |
+| `end` | `ReactNode` |  | Notifications, help, the signed-in user. |
+| `start` | `ReactNode` |  | The product mark or switcher. |
+
+#### `NavItem` (component)
+
+One destination. Active is an ink bar on the leading edge plus a washed ground and a heavier label — three cues, so it never depends on the wash alone, which nearly disappears on some displays.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `children` (required) | `string` |  | The visible label. A string, so it can also be the rail's tooltip. |
+| `active` | `boolean` | `false` | The current page. Sets `aria-current="page"`. |
+| `count` | `number` |  | A count beside the label: open items, failures. |
+| `countLabel` | `string` |  | Read with the count: "3 failed". Without it the number is read alone. |
+| `countTone` | `"neutral" \| "attention"` | `neutral` | `attention` fills the count in rojo — for things that need a person, not for totals. |
+| `icon` | `ReactNode` |  |  |
+
+#### `NavSection` (component)
+
+A titled group of items. The title is in the rótulo register; collapsed to a rail it becomes a short keyline, and the words stay for screen readers so the groups are still announced.
+
+#### `Sidebar` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` (required) | `string` |  | Names the navigation landmark: "Main", "Settings". |
+| `footer` | `ReactNode` |  |  |
+| `header` | `ReactNode` |  |  |
+
+#### `SidebarContext` (constant)
+
+Types: `AppShellProps`, `SidebarContextValue`, `TopbarProps`, `NavItemProps`, `SidebarProps`
+
+### Container
+
+https://demogar.github.io/molaui/?path=/docs/components-layout-container--overview
+
+The page column, in prose, page, wide and full widths; Section and SectionHeader set the rhythm down the page.
+
+When to use:
+- Holding a page to a readable or a working width, with gutters that move with density.
+- Wide tables and dashboards, with size set to wide.
+- Reading pages, with size set to prose, which never widens.
+- Spacing sections down a page with Section, and titling them with SectionHeader.
+
+When not to:
+- A bounded region with its own ground and edge. Use Panel.
+- Columns of cards or tiles. Use Grid.
+- The outer frame of an application. Use App shell.
+
+Content:
+- A SectionHeader label goes under the heading and says what kind of section it is: “Evaluation suite”.
+
+#### `Container` (component)
+
+- `size`: `page`, `wide`, `prose`, `full` (default `page`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `size` | `"page" \| "wide" \| "prose" \| "full"` |  |  |
+
+#### `Section` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `divided` | `boolean` | `false` | A keyline between this section and the one above it. |
+| `rhythm` | `"page" \| "panel"` | `panel` | `page` is the editorial 56/80/112px rhythm; `panel` is the tool rhythm. |
+
+#### `SectionHeader` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `title` (required) | `ReactNode` |  |  |
+| `actions` | `ReactNode` |  | Actions, aligned to the heading's baseline on the right. |
+| `className` | `string` |  |  |
+| `label` | `string` |  | The section's label. It renders UNDER the heading, not above it: a small label above a heading pre-announces what the heading is about to say better. Below, the same string reads as what kind of section this is. |
+| `lead` | `ReactNode` |  |  |
+| `level` | `1 \| 2 \| 3` | `2` |  |
+
+#### `containerVariants` (function)
+
+The page column. `page` is the editorial width the system was born at; `wide` is for tools, where a table with twelve columns deserves the screen; `prose` is the reading measure and never widens.
+
+Types: `ContainerProps`, `SectionHeaderProps`, `SectionProps`
+
+### Divider
+
+https://demogar.github.io/molaui/?path=/docs/components-layout-divider--overview
+
+Three dividers in rising weight and rarity: a keyline, a relleno seam and the sawtooth diente.
+
+When to use:
+- A keyline between rows or fields.
+- A relleno seam between two major parts of a page.
+- A diente only where the page gives way to a filled panel.
+
+When not to:
+- Sections that already have headings and space between them. Use Section.
+- Groups of controls in a row. Use Toolbar.
+
+- Do: Use the keyline by default, and relleno only where a hairline is too weak.
+- Don’t: Put relleno between every card; the texture turns into wallpaper.
+
+Content:
+- A divider carries no words; when a division needs a name, give it a heading instead.
+
+#### `Divider` (component)
+
+The system's three dividers, in rising order of weight and rarity.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `band` | `DividerBand` | `oro` |  |
+| `orientation` | `"horizontal" \| "vertical"` | `horizontal` |  |
+| `up` | `boolean` | `false` | Teeth pointing up — for the top edge of a filled panel. |
+| `variant` | `"keyline" \| "relleno" \| "diente"` | `keyline` | `keyline` — the decorative 1px rule. Between rows, between fields. `relleno` — the filler slit: a band of colour cut by fine ink lines. For the seam between two parts of a page, not between list items. `diente`  — the sawtooth left where one ground is cut away from another. For the major seam only, where the page gives way to a filled panel. Set `color` on the element to choose the ground. |
+
+Types: `DividerBand`, `DividerProps`
+
+### Grid
+
+https://demogar.github.io/molaui/?path=/docs/components-layout-grid--overview
+
+Column patterns that reflow; auto fits as many columns of at least minItem as there is room for.
+
+When to use:
+- Cards or tiles that reflow with no breakpoints, with cols set to auto and a minItem.
+- Fixed patterns of halves, thirds, quarters or fifths.
+- Cells cut from one panel that share keylines, with gap set to seamless.
+
+When not to:
+- Rows of records with the same fields. Use Table.
+- Headline figures, which have their own group. Use Stat.
+- One column or one row of items with a single gap. Use Stack.
+
+Content:
+- Keep tiles in a grid parallel: the same fields, in the same order, with the same units.
+
+#### `Grid` (component)
+
+- `cols`: `halves`, `thirds`, `quarters`, `fifths`, `auto` (default `thirds`)
+- `gap`: `tight`, `default`, `wide`, `seamless` (default `default`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `cols` | `"halves" \| "thirds" \| "quarters" \| "fifths" \| "auto"` |  |  |
+| `gap` | `"tight" \| "default" \| "wide" \| "seamless"` |  |  |
+| `minItem` | `string` |  | For `cols="auto"`: the narrowest a cell may get, as a CSS length. |
+
+#### `gridVariants` (function)
+
+The responsive column patterns that recur. `auto` is the one a tool reaches for most: as many columns of at least `minItem` as fit, which is what a grid of stat tiles or agent cards actually wants — it never needs a breakpoint.
+
+Types: `GridProps`
+
+### Page header
+
+https://demogar.github.io/molaui/?path=/docs/components-layout-page-header--overview
+
+The top of a page inside the shell: a breadcrumb, the title, a description, actions, a row of facts and optional tabs.
+
+When to use:
+- Saying where the reader is, what the page is and what they can do on it.
+- Short facts about the object, such as status, owner and last update, through meta.
+- Tabs that switch views of the page, on the header’s bottom edge.
+
+When not to:
+- A title for a section inside a page. Use SectionHeader.
+- A title that is the whole point of the screen, such as an onboarding panel. Use Display.
+
+- Do: Keep the page’s main action in actions, where it wraps under the title on a narrow screen.
+- Don’t: Hide the main action in an overflow menu.
+
+Content:
+- The title is the object’s name or the collection’s: “Runs”, “Support triage”.
+- The description says what the page holds in one sentence.
+- Meta items are short facts, not sentences: “Updated 12s ago”, “Retention 30 days”.
+
+#### `PageHeader` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `title` (required) | `ReactNode` |  |  |
+| `actions` | `ReactNode` |  |  |
+| `breadcrumb` | `ReactNode` |  |  |
+| `description` | `ReactNode` |  |  |
+| `meta` | `ReactNode[]` |  |  |
+| `tabs` | `ReactNode` |  | A Tabs list. Sits on the header's bottom edge so the active tab cuts into it. |
+
+Types: `PageHeaderProps`
+
+### Panel
+
+https://demogar.github.io/molaui/?path=/docs/components-layout-panel--overview
+
+A cut surface: a region of one ground bounded by an edge, where the tone decides the ink.
+
+When to use:
+- Grouping content into a region of a page, bounded by the ink keyline.
+- A filled region on a layer colour; the panel resets the ink so the text stays legible.
+- The one panel on a screen that is its point, with edge set to band.
+
+When not to:
+- A message about a region, with a tone and an action. Use Callout.
+- Content that floats over the page. Use Popover.
+- A region with nothing in it yet. Use Empty state.
+
+- Do: Set the ground with tone, so every ink inside follows it.
+- Don’t: Add a background class to a div; secondary text inside it renders dark on dark.
+- Do: Keep edge band to one panel per screen.
+- Don’t: Band every card on the page.
+
+Content:
+- Title a panel by what it holds, “Weekly digest agent”, not “Details” or “Info”.
+
+#### `Panel` (component)
+
+- `tone`: `pale`, `cloth`, `shade`, `ink`, `rojo`, `anil`, `verde`, `oro` (default `pale`)
+- `edge`: `cut`, `band`, `none` (default `cut`)
+- `padding`: `none`, `sm`, `md`, `lg` (default `md`)
+- `band`: `oro`, `rojo`, `anil`, `verde`, `cloth` (default `oro`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `as` | `"div" \| "article" \| "aside" \| "section"` | `div` | Render as a landmark-free `section` (named by its heading) instead of a `div`. |
+| `band` | `"oro" \| "rojo" \| "anil" \| "verde" \| "cloth"` |  |  |
+| `edge` | `"cut" \| "band" \| "none"` |  |  |
+| `padding` | `"none" \| "sm" \| "md" \| "lg"` |  |  |
+| `tone` | `"pale" \| "cloth" \| "shade" \| "ink" \| "rojo" \| "anil" \| "verde" \| "oro"` |  |  |
+
+#### `panelVariants` (function)
+
+The cut surface: a region of one ground, bounded by a hard edge.
+
+Types: `PanelProps`, `PanelTone`
+
+### Stack
+
+https://demogar.github.io/molaui/?path=/docs/components-layout-stack--overview
+
+Stack for a column with one gap, Inline for a row that wraps, and RowBetween for one thing at each end.
+
+When to use:
+- Vertical rhythm between blocks, with a gap named by role.
+- A row of buttons or badges that wraps on a phone, with Inline.
+- A panel header with a title at one end and an action at the other, with RowBetween.
+
+When not to:
+- A row of controls that should be one tab stop. Use Toolbar.
+- Columns that reflow with the available width. Use Grid.
+- Groups that need more separation than a larger gap. Use Divider.
+
+- Do: Pick a gap from the seven named steps.
+- Don’t: Add an arbitrary margin as an eighth step; a layout that needs one needs a divider.
+
+Content:
+- In a RowBetween header, pair a noun title with a verb action: “Run history” and “Export CSV”.
+
+#### `Stack` (component)
+
+Vertical rhythm: children down a column, one gap between them.
+
+- `direction`: `column`, `row` (default `column`)
+- `align`: `start`, `center`, `end`, `stretch`, `baseline`
+- `justify`: `start`, `center`, `end`, `between`
+- `wrap`: `true`, `false` (default `false`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `align` | `"start" \| "center" \| "end" \| "stretch" \| "baseline"` |  |  |
+| `direction` | `"column" \| "row"` |  |  |
+| `gap` | `"xs" \| "sm" \| "lg" \| "md" \| "none" \| "2xs" \| "xl" \| null` |  |  |
+| `justify` | `"start" \| "center" \| "end" \| "between"` |  |  |
+| `wrap` | `true \| false` |  |  |
+
+#### `Inline` (component)
+
+A row that wraps — toolbars, badge rows, button groups. Wraps by default, because a row of controls that cannot wrap is the thing that forces a 508px-wide document on a 390px phone (a real defect this system shipped).
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `align` | `"start" \| "center" \| "end" \| "stretch" \| "baseline" \| null` | `center` |  |
+| `gap` | `"xs" \| "sm" \| "lg" \| "md" \| "none" \| "2xs" \| "xl" \| null` | `sm` |  |
+| `justify` | `"start" \| "center" \| "end" \| "between" \| null` |  |  |
+| `wrap` | `boolean \| null` | `true` |  |
+
+#### `RowBetween` (component)
+
+One thing on the left, one on the right: a panel header, a table toolbar.
+
+#### `stackVariants` (function)
+
+Types: `Gap`, `InlineProps`, `StackProps`
+
+### Toolbar
+
+https://demogar.github.io/molaui/?path=/docs/components-layout-toolbar--overview
+
+A row of related controls with one tab stop and arrow-key movement, with toggles, a field and an overflow menu.
+
+When to use:
+- Actions and filters above a table or canvas, such as Re-run, Stop and Share trace.
+- Pressed states, with ToolbarToggle and ToolbarToggleGroup.
+- A filter field in the row, with ToolbarInput and an aria-label.
+- More actions than fit, folded into a More menu with ToolbarOverflow.
+
+When not to:
+- One or two actions; plain buttons are enough. Use Button.
+- Switching between views. Use Segmented control.
+- Actions on one row of a table. Use Menu.
+
+- Do: Separate groups with ToolbarSeparator.
+- Don’t: Group with extra space; between identical ghost buttons it reads as uneven spacing.
+- Do: Order overflow items by priority, with the destructive action last.
+- Don’t: Put Delete first, where it stays in the row the longest.
+
+Content:
+- Name the toolbar with aria-label: “Run actions”, “Filter runs”.
+- Buttons are verbs; toggles name what they show: “Wrap lines”, “Tool calls”.
+
+#### `Toolbar` (component)
+
+- `variant`: `panel`, `bare` (default `bare`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `aria-label` (required) | `string` |  | Names the toolbar: "Run actions", "Text formatting". |
+| `className` | `string` |  |  |
+| `variant` | `"panel" \| "bare"` |  |  |
+
+Also accepts the props of `ToolbarRootProps`.
+
+#### `ToolbarButton` (component)
+
+A Button that takes part in the toolbar's arrow-key focus. Ghost and small by default.
+
+- `variant`: `panel`, `bare` (default `bare`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+| `icon` | `ReactNode` |  |  |
+| `size` | `"sm" \| "lg" \| "md" \| null` | `sm` |  |
+| `variant` | `"panel" \| "bare"` | `ghost` |  |
+
+Also accepts the props of `NativeButtonProps`, `ToolbarButtonProps`.
+
+#### `ToolbarGroup` (component)
+
+- `variant`: `panel`, `bare` (default `bare`)
+
+#### `ToolbarInput` (component)
+
+A text field that is one of the toolbar's stops. The arrow keys move the caret while there is text to move through and only leave the field at its edges — Base UI's rule, and the one that lets a person edit a filter without being thrown onto the next button.
+
+- `variant`: `panel`, `bare` (default `bare`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+| `icon` | `ReactNode` |  | A leading glyph. Defaults to the search glyph; `false` for none. |
+| `wrapperClassName` | `string` |  | Classes for the wrapper, e.g. a width. |
+
+Also accepts the props of `ToolbarInputProps`.
+
+#### `ToolbarOverflow` (component)
+
+Actions that fold into a "More" menu when the row runs out of room.
+
+- `variant`: `panel`, `bare` (default `bare`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `items` (required) | `ToolbarOverflowItem[]` |  | In priority order: the first items stay visible longest. |
+| `align` | `"start" \| "end"` | `end` | Which end of the free space the buttons hug. |
+| `className` | `string` |  |  |
+| `moreLabel` | `string` | `More actions` | The name of the menu button that collects what does not fit. |
+
+#### `ToolbarSeparator` (component)
+
+- `variant`: `panel`, `bare` (default `bare`)
+
+#### `ToolbarToggle` (component)
+
+A two-state button: "Show archived", "Wrap lines". Inside a `ToolbarToggleGroup` it is one of a set.
+
+- `variant`: `panel`, `bare` (default `bare`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+| `defaultPressed` | `boolean` |  |  |
+| `icon` | `ReactNode` |  |  |
+| `onPressedChange` | `((pressed: boolean) => void)` |  |  |
+| `pressed` | `boolean` |  |  |
+| `size` | `"sm" \| "lg" \| "md" \| null` | `sm` |  |
+| `value` | `string` |  | Identifies the toggle inside a `ToolbarToggleGroup`. |
+
+Also accepts the props of `NativeButtonProps`, `ToolbarButtonProps`.
+
+#### `ToolbarToggleGroup` (component)
+
+A set of toggles: one-of (the default) or `multiple`. It sits inside the toolbar's roving focus rather than adding a second arrow-key scope, so the arrows walk straight through it and out the other side.
+
+- `variant`: `panel`, `bare` (default `bare`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `aria-label` (required) | `string` |  | Names the set: "Density", "Status". |
+| `className` | `string` |  |  |
+
+Also accepts the props of `ToggleGroupProps`.
+
+Types: `ToolbarButtonProps`, `ToolbarInputProps`, `ToolbarOverflowItem`, `ToolbarOverflowProps`, `ToolbarProps`, `ToolbarToggleGroupProps`, `ToolbarToggleProps`
+
+## Navigation
+
+### Accordion
+
+https://demogar.github.io/molaui/?path=/docs/components-navigation-accordion--overview
+
+Sections of one document that open one or several at a time; Collapsible for a single disclosure.
+
+When to use:
+- Answers in an FAQ, or the advanced settings of an agent.
+- Settings where comparing two sections matters, with multiple.
+- One disclosure inside something else, such as a raw response, with Collapsible.
+
+When not to:
+- Peer views of one object where only one shows at a time. Use Tabs.
+- Content most readers need on every visit. Leave it open on the page.
+- The model’s thinking behind an answer. Use Reasoning.
+- Ordered steps to follow. Use StepList.
+
+- Do: Say in the trigger what is inside, with a count in meta.
+- Don’t: Hide a required field inside a closed section.
+
+Content:
+- Triggers are questions in an FAQ, “What counts as a run?”, and nouns in settings, “Limits”.
+- Meta is a short fact: “6 tools”, “Defaults”.
+
+#### `Accordion` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+
+Also accepts the props of `AccordionRootProps`.
+
+#### `AccordionItem` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+
+Also accepts the props of `AccordionItemProps`, `UseCollapsibleRootParameters`.
+
+#### `AccordionPanel` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+
+Also accepts the props of `AccordionRootProps`.
+
+#### `AccordionTrigger` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+| `meta` | `ReactNode` |  | Secondary text on the same line, right of the title — a count, a status. |
+
+Also accepts the props of `NativeButtonProps`.
+
+#### `Collapsible` (component)
+
+One disclosure on its own — "Show 12 more fields", "Raw response". No rules, no heading semantics: it is a control inside something else, not a section.
+
+#### `CollapsiblePanel` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+
+Also accepts the props of `CollapsiblePanelProps`.
+
+#### `CollapsibleTrigger` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+
+Also accepts the props of `NativeButtonProps`.
+
+Types: `AccordionItemProps`, `AccordionPanelProps`, `AccordionProps`, `AccordionTriggerProps`, `CollapsiblePanelProps`, `CollapsibleTriggerProps`
+
+### Breadcrumb
+
+https://demogar.github.io/molaui/?path=/docs/components-navigation-breadcrumb--overview
+
+Where a page sits, as links back up the path, with the current page as plain text.
+
+When to use:
+- Pages nested two or more levels deep: Workspace / Agents / knowledge-agent / Run #4182.
+- Long ids in the path, shortened in the middle with middleTruncate.
+
+When not to:
+- Moving between pages of the same list. Use Pagination.
+- Switching between views of one page. Use Tabs.
+- Top-level navigation between parts of the product. Use App shell.
+
+- Do: Pass renderLink to use your router’s link.
+- Don’t: Link the current page; a link to where you already are does nothing.
+
+Content:
+- Use each page’s own title as its crumb, so the trail matches the headings.
+- Shorten ids in the middle, keeping both ends: “run_8f3a…c21e”.
+
+#### `Breadcrumb` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `items` (required) | `BreadcrumbItem[]` |  |  |
+| `renderLink` | `((props: { href: string; className: string; children: ReactNode; }) => ReactNode)` |  |  |
+
+#### `middleTruncate` (function)
+
+`run_8f3a2b91c21e` → `run_8f3a…c21e`. Both ends survive; the middle is what nobody reads.
+
+Types: `BreadcrumbItem`, `BreadcrumbProps`
+
+### Pagination
+
+https://demogar.github.io/molaui/?path=/docs/components-navigation-pagination--overview
+
+Moving through a long ordered result, as numbered pages or as a compact range with two arrows.
+
+When to use:
+- Results where a page is a place people come back to, with the pages variant.
+- Dense tables where the question is how much is left, with the compact variant: “51–100 of 1,284”.
+
+When not to:
+- A table that also sorts and selects; DataTable includes its pagination. Use DataTable.
+- Showing where a page sits in the hierarchy. Use Breadcrumb.
+- Steps of a flow that must be done in order. Use StepList.
+
+- Do: Wire onPageChange to the router when a page should have its own URL.
+- Don’t: Expect the page numbers to be links; the component does not own your URLs.
+
+Content:
+- Give the compact variant pageSize and total, so it states the range rather than “Page 2 of 26”.
+
+#### `Pagination` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `onPageChange` (required) | `(page: number) => void` |  |  |
+| `page` (required) | `number` |  | 1-based. |
+| `pageCount` (required) | `number` |  |  |
+| `pageSize` | `number` |  | For the compact range text: rows per page and the total row count. |
+| `siblings` | `number` | `1` | Pages either side of the current one in the `pages` variant. |
+| `total` | `number` |  |  |
+| `variant` | `"pages" \| "compact"` | `pages` |  |
+
+#### `getPageRange` (function)
+
+The visible slots for `page` of `pageCount` (both 1-based). Always `5 + 2 × siblings` long once it needs ellipses.
+
+Types: `PageRangeItem`, `PaginationProps`
+
+### Tabs
+
+https://demogar.github.io/molaui/?path=/docs/components-navigation-tabs--overview
+
+Switching between views of one thing: underline for views, panel for tabs that are containers.
+
+When to use:
+- Views of one object, such as a run’s Trace, Output, Cost and Logs, with the underline variant.
+- Containers, such as a code sample in three languages, with the panel variant.
+- A count on a tab, such as the number of tool calls, through count.
+
+When not to:
+- Changing how the same data is displayed, such as Table or Board. Use Segmented control.
+- Sections someone may want open together. Use Accordion.
+- Moving between parts of the product. Use App shell.
+
+- Do: Keep labels short, in sentence case.
+- Don’t: Set tab labels in capitals; a row of capitalised labels reads as buttons.
+
+Content:
+- Labels are one or two nouns: “Trace”, “Output”, “Cost”.
+- Let a long list scroll rather than shortening labels until they stop meaning anything.
+
+#### `Tabs` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+| `variant` | `Variant` | `underline` |  |
+
+Also accepts the props of `TabsRootProps`.
+
+#### `TabsList` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+
+Also accepts the props of `TabsListProps`.
+
+#### `TabsPanel` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+
+Also accepts the props of `TabsPanelProps`.
+
+#### `TabsTab` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+| `count` | `number` |  | Trailing count, e.g. the number of tool calls. Tabular. |
+| `icon` | `ReactNode` |  |  |
+
+Also accepts the props of `NativeButtonProps`, `TabsTabProps`.
+
+Types: `TabsListProps`, `TabsPanelProps`, `TabsProps`, `TabsTabProps`
+
+## Overlays
+
+### Command palette
+
+https://demogar.github.io/molaui/?path=/docs/components-overlays-command-palette--overview
+
+The keyboard’s front door: a searchable list of commands and destinations, opened with ⌘K or Ctrl+K.
+
+When to use:
+- Jumping to a run, an agent or a page by name from anywhere in the tool.
+- Running a command without the pointer, with its shortcut shown beside it.
+- Matching synonyms and ids through keywords.
+
+When not to:
+- Choosing a value for a form field from a long list. Use Combobox.
+- Actions on one object, opened from that object. Use Menu.
+- Filtering the list on the current page. Use SearchInput.
+
+- Do: Group results under headings, such as Actions, Agents and Go to.
+- Don’t: Expect fuzzy matches; every typed word must appear in the label, description or keywords.
+- Do: Keep unavailable commands visible and disabled, with the reason as the description.
+- Don’t: Hide commands the person cannot run without saying why.
+
+Content:
+- Commands start with a verb, “Start a new run”; destinations are nouns, “Settings”.
+- Descriptions add the reason or the context: “Owners only”, “Answers from the help centre”.
+
+#### `CommandPalette` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `groups` (required) | `CommandGroup[]` |  |  |
+| `onOpenChange` (required) | `(open: boolean) => void` |  |  |
+| `open` (required) | `boolean` |  |  |
+| `label` | `string` | `Command palette` | Accessible name of the dialog. |
+| `placeholder` | `string` | `Type a command or search…` |  |
+| `renderEmpty` | `((query: string) => ReactNode)` |  | Shown when nothing matches. Receives the query. |
+
+#### `filterCommands` (function)
+
+The groups and items that match `query`, empty groups dropped, label-prefix matches first within each group.
+
+#### `useCommandShortcut` (hook)
+
+Opens the palette on ⌘K / Ctrl-K, anywhere on the page. Ctrl as well as ⌘, because half of every internal team is on Windows or Linux and a shortcut that silently does nothing there is worse than none.
+
+Types: `CommandGroup`, `CommandItem`, `CommandPaletteProps`
+
+### Dialog
+
+https://demogar.github.io/molaui/?path=/docs/components-overlays-dialog--overview
+
+Dialog for a short modal task; AlertDialog to confirm an action that destroys something.
+
+When to use:
+- A short task the person finishes or cancels before going back, such as renaming an agent.
+- Read-only detail that needs the screen for a moment, with only the body scrolling.
+- Confirming a destructive action with AlertDialog, which opens on Cancel and ignores clicks outside.
+- An irreversible action at scale, with confirmationText set to the resource’s exact name.
+
+When not to:
+- Details beside the work that the person compares with the page. Use Drawer.
+- A small panel anchored to a control, without trapping focus. Use Popover.
+- A notice that needs no decision. Use Toast.
+- A change an agent proposes for a person to review. Use Change review.
+
+- Do: Name the object and the consequence in a destructive confirm: “Its trace, tool calls and outputs are removed for everyone.”
+- Don’t: Ask “Are you sure?” over OK and Cancel.
+- Do: Return a promise from onConfirm, so the dialog stays open if the work fails.
+- Don’t: Close the dialog before the work has succeeded.
+
+Content:
+- Titles name the task or ask the question: “Rename agent”, “Delete this run?”.
+- The confirm button repeats the verb and object: “Delete run”, never “OK” or “Yes”.
+- The footer holds a ghost Cancel and one primary action.
+
+#### `AlertDialog` (component)
+
+The confirmation for an action that destroys something. Built on Base UI's AlertDialog, which differs from Dialog in exactly the ways a destructive confirm needs: `role="alertdialog"`, and an outside click does not dismiss it — a stray click on the page behind must not count as an answer.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `confirmLabel` (required) | `string` |  | The verb on the confirm button: "Delete run", never "OK". |
+| `description` (required) | `ReactNode` |  |  |
+| `onConfirm` (required) | `() => void \| Promise<void>` |  | May return a promise. While it is pending the confirm button shows its working strip, both buttons stop accepting presses, and the dialog stays open; it closes when the promise resolves and stays open if it rejects, so the operator can see the failure where they caused it. |
+| `title` (required) | `ReactNode` |  |  |
+| `cancelLabel` | `string` | `Cancel` |  |
+| `confirmationText` | `string` |  | When set, the confirm button stays disabled until this exact string is typed — the run id, the project slug. For actions that cannot be undone and that a muscle-memory Enter could otherwise fire. |
+| `defaultOpen` | `boolean` |  |  |
+| `onOpenChange` | `((open: boolean) => void)` |  |  |
+| `open` | `boolean` |  |  |
+| `tone` | `"danger" \| "neutral"` | `danger` | `danger` cuts the seam in rojo and arms the confirm button in red. |
+| `trigger` | `ReactElement<unknown, string \| JSXElementConstructor<any>>` |  | Rendered as the trigger, e.g. a danger `Button`. |
+
+#### `Dialog` (component)
+
+#### `DialogClose` (component)
+
+#### `DialogContent` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `title` (required) | `ReactNode` |  | The dialog's accessible name. Required: an unnamed modal is announced as "dialog" and nothing else. |
+| `band` | `"rojo" \| "anil" \| "verde" \| "oro"` | `oro` | The layer revealed in the top seam. |
+| `className` | `string` |  |  |
+| `description` | `ReactNode` |  |  |
+| `footer` | `ReactNode` |  | Action row, right-aligned under the body. Usually a `ghost` cancel and one primary. |
+| `hideClose` | `boolean` | `false` | Hide the corner close button. Only when the footer carries an explicit way out. |
+| `size` | `"sm" \| "lg" \| "md" \| null` |  |  |
+
+Also accepts the props of `DialogPopupProps`.
+
+#### `DialogTrigger` (component)
+
+Types: `AlertDialogProps`, `DialogContentProps`
+
+### Drawer
+
+https://demogar.github.io/molaui/?path=/docs/components-overlays-drawer--overview
+
+A panel that slides in from an edge: details beside a list, filters, or quick actions in a bottom sheet.
+
+When to use:
+- The details of a row, opened from a table, with an end drawer.
+- Filters for a list, applied from the footer of a start drawer.
+- Quick actions on a phone, with a bottom sheet.
+
+When not to:
+- A short task or a decision that should hold all the attention. Use Dialog.
+- A few options attached to one control. Use Popover.
+- Navigation for the whole product. Use App shell.
+
+- Do: Put the apply action in the footer, which stays visible while the body scrolls.
+- Don’t: Hide the close button; a touch screen-reader user has no Escape key.
+
+Content:
+- Titles name what is inside: “Run details”, “Filter runs”.
+- An apply button states the result: “Show 42 runs”.
+
+#### `Drawer` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `side` | `DrawerSide` | `end` | The edge the drawer slides in from. `start` and `end` are logical and swap in right-to-left; the swipe that dismisses it follows. Defaults to `end`, where a details panel beside a list belongs. |
+
+Also accepts the props of `DrawerRootProps`.
+
+#### `DrawerClose` (component)
+
+#### `DrawerContent` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `title` (required) | `ReactNode` |  | The drawer's accessible name. Required: an unnamed modal is announced as "dialog" and nothing else. |
+| `band` | `"rojo" \| "anil" \| "verde" \| "oro"` | `oro` | The layer revealed in the top seam. |
+| `className` | `string` |  |  |
+| `description` | `ReactNode` |  |  |
+| `footer` | `ReactNode` |  | Action row pinned under the scrolling body, behind a keyline. Usually a `ghost` cancel and one primary. |
+| `hideClose` | `boolean` | `false` | Hide the close button. Only when the footer carries an explicit way out. |
+| `size` | `"sm" \| "lg" \| "md"` | `md` | Width of a side drawer, or height of a bottom sheet. Always capped by the viewport. |
+
+Also accepts the props of `DrawerPopupProps`.
+
+#### `DrawerTrigger` (component)
+
+Types: `DrawerContentProps`, `DrawerProps`, `DrawerSide`
+
+### Menu
+
+https://demogar.github.io/molaui/?path=/docs/components-overlays-menu--overview
+
+Actions on a thing that do not each deserve a button, with checkbox and radio items, submenus and shortcuts.
+
+When to use:
+- Row actions behind an icon button such as “Run actions”.
+- View options, such as columns to show and a sort order, with checkbox and radio items.
+- Related actions grouped in a submenu, such as export formats.
+
+When not to:
+- One or two actions that are always needed. Use Button.
+- Choosing a value for a form field. Use Select.
+- Finding any command in the product by name. Use Command palette.
+- A panel with fields or an explanation. Use Popover.
+
+- Do: Mark a destructive item with tone set to danger, and put it last, after a separator.
+- Don’t: Place Delete between harmless actions.
+
+Content:
+- Items are verbs on the object: “Rename”, “Duplicate”, “Delete run”.
+- Submenu items name the format or the target: “Trace as JSON”.
+- Group labels are short nouns: “Columns”, “Sort by”.
+
+#### `Menu` (component)
+
+Actions on a thing — a run, a row, a document — that do not each deserve a button.
+
+#### `MenuCheckboxItem` (component)
+
+The check sits in a fixed leading column, so checked and unchecked labels stay aligned down the menu. Toggling does not close the menu: a set of column toggles is chosen several at a time.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+| `shortcut` | `string` |  |  |
+
+Also accepts the props of `MenuCheckboxItemProps`, `NativeButtonProps`.
+
+#### `MenuContent` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `align` | `Align` | `start` |  |
+| `alignOffset` | `number` | `0` |  |
+| `className` | `string` |  |  |
+| `side` | `Side` | `bottom` |  |
+| `sideOffset` | `number` | `6` |  |
+
+Also accepts the props of `MenuPopupProps`.
+
+#### `MenuGroup` (component)
+
+#### `MenuGroupLabel` (component)
+
+#### `MenuItem` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+| `icon` | `ReactNode` |  | Leading icon; decorative. |
+| `shortcut` | `string` |  |  |
+| `tone` | `"default" \| "danger"` | `default` | Destroys something: highlights in rojo instead of ink. |
+
+Also accepts the props of `MenuItemProps`, `NativeButtonProps`.
+
+#### `MenuRadioGroup` (component)
+
+#### `MenuRadioItem` (component)
+
+One-of-N. The mark is a filled square — a radio dot would be the only round thing in the system.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+
+Also accepts the props of `MenuRadioItemProps`, `NativeButtonProps`.
+
+#### `MenuSeparator` (component)
+
+#### `MenuShortcut` (component)
+
+Right-aligned key hint.
+
+#### `MenuSubmenu` (component)
+
+#### `MenuSubmenuTrigger` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+| `icon` | `ReactNode` |  |  |
+
+Also accepts the props of `MenuSubmenuTriggerProps`, `NativeButtonProps`.
+
+#### `MenuTrigger` (component)
+
+Types: `MenuCheckboxItemProps`, `MenuContentProps`, `MenuItemProps`, `MenuRadioItemProps`, `MenuSubmenuTriggerProps`
+
+### Popover
+
+https://demogar.github.io/molaui/?path=/docs/components-overlays-popover--overview
+
+A non-modal panel anchored to the control that opened it.
+
+When to use:
+- Filters for one table column, with Apply and Reset.
+- A short explanation someone asks for, such as what a step budget is.
+- The details of one item, in a few lines or controls.
+
+When not to:
+- A label for an icon-only control. Use Tooltip.
+- A list of actions. Use Menu.
+- A task that should hold focus until it is done. Use Dialog.
+- A preview of a cited source. Use Citation.
+
+- Do: Give the popover a title, or an aria-label when it has none.
+- Don’t: Put information people need only inside a popover they may never open.
+
+Content:
+- The title says what the popover does: “Filter by status”.
+- The description says how it applies: “Runs matching any checked status are shown.”
+
+#### `Popover` (component)
+
+A non-modal panel anchored to the control that opened it — filters on a table column, the details of a run step, a share sheet.
+
+#### `PopoverClose` (component)
+
+#### `PopoverContent` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `align` | `Align` | `start` |  |
+| `className` | `string` |  |  |
+| `description` | `ReactNode` |  |  |
+| `side` | `Side` | `bottom` |  |
+| `sideOffset` | `number` | `8` |  |
+| `title` | `ReactNode` |  | Heading, wired as the popover's accessible name. |
+
+Also accepts the props of `PopoverPopupProps`.
+
+#### `PopoverTrigger` (component)
+
+#### `floatingSurface` (constant)
+
+The one class list every floating surface in the system shares: popovers, menus, tooltips' larger cousins, the command palette, toasts.
+
+Types: `PopoverContentProps`
+
+### Tooltip
+
+https://demogar.github.io/molaui/?path=/docs/components-overlays-tooltip--overview
+
+A short label on hover or focus, with an optional keyboard shortcut.
+
+When to use:
+- Naming an icon-only button, and its shortcut.
+- A row of icon buttons inside TooltipProvider, so each next label appears without a delay.
+
+When not to:
+- Information people need to finish the task; a tooltip does not exist on touch. Use Popover.
+- Anything with a link or a button in it. Use Popover.
+- Explaining a form field; give it a hint. Use Field.
+
+- Do: Pair a tooltip with IconButton’s label.
+- Don’t: Use a tooltip instead of an accessible name.
+
+Content:
+- A verb phrase in sentence case, with no trailing period: “Copy run id”.
+- Write keys as they appear on the keyboard: ⌘, ⇧, R.
+
+#### `Tooltip` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `children` (required) | `ReactElement<unknown, string \| JSXElementConstructor<any>>` |  | The element that triggers it. Must be focusable — usually a Button or IconButton. |
+| `content` (required) | `ReactNode` |  |  |
+| `align` | `Align` | `center` |  |
+| `className` | `string` |  |  |
+| `defaultOpen` | `boolean` |  |  |
+| `delay` | `number` |  | Overrides the provider's delay for this tooltip. |
+| `onOpenChange` | `((open: boolean, eventDetails: TooltipRootChangeEventDetails) => void)` |  |  |
+| `open` | `boolean` |  |  |
+| `shortcut` | `string[]` |  | Keys, in order: `['⌘', 'K']`. |
+| `side` | `Side` | `top` |  |
+
+#### `TooltipProvider` (component)
+
+A tooltip is the inverse panel at its smallest: ink ground, cloth type. It is the one floating surface that is NOT raised cloth, on purpose — a tooltip is a label, not a place, and it should never be mistaken for something you can move the pointer into and click. The ink ground also makes it the only thing on screen at that value, so a 12px label is found at a glance against a dense table.
+
+Types: `TooltipProps`
+
+## Typography
+
+### Display
+
+https://demogar.github.io/molaui/?path=/docs/components-typography-display--overview
+
+Archivo Bold set wide, for the one title that is the point of a screen.
+
+When to use:
+- An empty state, an onboarding panel or the page that introduces a tool.
+- The signature display-cut class, on a filled panel, once per page.
+
+When not to:
+- Page titles in a working view. Use Heading.
+- A label that says what kind of block this is. Use Rotulo.
+
+- Do: Use one per screen at most.
+- Don’t: Set display-cut on light cloth; it reads as a sticker, not appliqué.
+
+Content:
+- Keep it to a few words; it is set at up to 76px.
+
+#### `Display` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `as` | `"h1" \| "h2" \| "p"` | `h1` | The heading element. Defaults to h1; the visual register does not change. |
+
+Types: `DisplayProps`
+
+### Heading
+
+https://demogar.github.io/molaui/?path=/docs/components-typography-heading--overview
+
+Four heading levels for wayfinding in a tool, with size to separate the look from the outline.
+
+When to use:
+- A page title at level 1, panel titles at 2, groups at 3, and a label over a cluster of fields at 4.
+- A heading whose look should differ from its outline level, through size.
+
+When not to:
+- The one statement that is the point of a screen. Use Display.
+- A label that says what kind of block this is. Use Rotulo.
+- Bold text that is not a heading. Use Text.
+
+- Do: Change size to get a smaller heading.
+- Don’t: Skip a level in the outline to get a smaller heading.
+
+Content:
+- Sentence case, with no trailing period: “Run history”, “Tool calls in this step”.
+- Name the content, not the action: “Arguments”, not “View the arguments”.
+
+#### `Heading` (component)
+
+- `size`: `1`, `2`, `3`, `4`
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `level` (required) | `HeadingLevel` |  |  |
+| `size` | `1 \| 2 \| 3 \| 4` |  | Visual size, when it must differ from the outline level. |
+
+#### `headingVariants` (function)
+
+Four levels, and the visual size follows the level unless told otherwise.
+
+Types: `HeadingLevel`, `HeadingProps`
+
+### Kbd
+
+https://demogar.github.io/molaui/?path=/docs/components-typography-kbd--overview
+
+A key as a cut shape, with KbdChord for keys pressed together.
+
+When to use:
+- A keyboard shortcut in text, a hint or a footer.
+- Keys pressed together, such as ⌘ and K, with KbdChord.
+
+When not to:
+- A literal the machine reads, such as an id or a flag. Use Code.
+- The shortcut of an icon button, shown on hover. Use Tooltip.
+
+Content:
+- Use the key’s symbol or its printed name: ⌘, ⇧, ↵, Esc.
+- When a shortcut differs between platforms, show both, or bind both as the command palette does with ⌘K and Ctrl+K.
+
+#### `Kbd` (component)
+
+A key, as a cut shape: raised cloth, ink keyline, and a heavier foot where the keycap sits on the board — the one place a solid offset is honest, because a key really is a block that moves down when pressed.
+
+#### `KbdChord` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `keys` (required) | `string[]` |  | The keys, in order: `['⌘', 'K']`. |
+
+Types: `KbdChordProps`
+
+### Lead
+
+https://demogar.github.io/molaui/?path=/docs/components-typography-lead--overview
+
+The paragraph under a page title that says what the screen is for, in the reading voice.
+
+When to use:
+- One or two sentences under a page or section title, read once on a first visit.
+- The explanation under a Display title on an onboarding or first-run screen.
+
+When not to:
+- Interface text, such as descriptions and hints. Use Text.
+- Several paragraphs of long-form content. Use Prose.
+
+Content:
+- Say what the screen is for and what the reader can do there, in plain sentences.
+
+#### `Lead` (component)
+
+The first thing someone says, so it is set in the reading voice rather than the system one. Alegreya from here down; Archivo above and around.
+
+### Meta
+
+https://demogar.github.io/molaui/?path=/docs/components-typography-meta--overview
+
+Small facts compared down a column, such as duration, cost, count and time, in tabular figures.
+
+When to use:
+- A line of figures under a title or in a row: “2.4 s · 3,812 tokens · $0.014”.
+- Timestamps and counts that are reference rather than content, such as when a run started.
+
+When not to:
+- Ids and other machine literals. Use Code.
+- Labelled properties of one object. Use Description list.
+- Descriptions or hints written as sentences. Use Text.
+
+Content:
+- Separate facts with a middle dot, “ · ”, and always give the unit.
+- Keep each fact to a figure and its unit; no sentences.
+
+#### `Meta` (component)
+
+Duration, cost, count, timestamp — facts that are compared down a column, so they carry tabular figures. This is the role a monospace usually plays in tool UIs, minus the costume: Archivo's tabular figures line up exactly as well and keep the row in one voice.
+
+### Prose
+
+https://demogar.github.io/molaui/?path=/docs/components-typography-prose--overview
+
+The reading voice for long-form markup, such as a document, a run summary or a model’s answer.
+
+When to use:
+- Rendered markdown or rich text that cannot be annotated element by element.
+- A model’s finished answer, so it reads as speech rather than as interface.
+- A chat column or a side panel, with size set to sm.
+
+When not to:
+- An answer that is still streaming. Use Streaming text.
+- Interface text: labels, hints and descriptions. Use Text.
+- A single introductory paragraph under a title. Use Lead.
+
+- Do: Keep the reading measure, and let margins absorb the width.
+- Don’t: Set fluid on long text in a wide panel; the lines grow too long to read.
+
+Content:
+- Headings inside prose use the same sentence case as the rest of the interface.
+
+#### `Prose` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `fluid` | `boolean` | `false` | Let the text run the full width of its container instead of the reading measure. |
+| `size` | `"sm" \| "base"` | `base` | `sm` for a chat column or a side panel; `base` for a document. |
+
+Types: `ProseProps`
+
+### Pullquote
+
+https://demogar.github.io/molaui/?path=/docs/components-typography-pullquote--overview
+
+A voice interrupting the prose: a quotation in the reading face, under a relleno band, with its source.
+
+When to use:
+- A quoted customer, a key finding in a research summary, or a sentence from an answer an operator pinned.
+- Breaking a long write-up, such as an evaluation report, with the sentence the reader should keep.
+
+When not to:
+- A passage quoted as evidence for a claim. Use Sources.
+- A message about the page. Use Callout.
+
+Content:
+- Quote exactly, and give cite as who said it and where: “Evaluation lead, research interview 7”.
+
+#### `Pullquote` (component)
+
+A voice interrupting the prose, so it keeps the reading face and takes a relleno band above it rather than a hairline rule — the filler slit is this system's divider, and a pull quote is exactly the seam it was made for.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `cite` | `string` |  | Who said it. Rendered in the label register, under the quote. |
+| `className` | `string` |  |  |
+
+Types: `PullquoteProps`
+
+### Rotulo
+
+https://demogar.github.io/molaui/?path=/docs/components-typography-rotulo--overview
+
+The label register, cut short by a band, set under the block it belongs to.
+
+When to use:
+- Saying what kind of thing a block is, or who it is from, under its heading.
+- A label inside a dense header, with plain, which drops the band.
+
+When not to:
+- An eyebrow above a heading; the heading says it better. Use Heading.
+- A status. Use Badge.
+- The label of a form field. Use Label.
+
+- Do: Put the rótulo under the heading.
+- Don’t: Put it above the heading as an eyebrow.
+- Do: Keep the oro band for ink grounds.
+- Don’t: Use oro on light cloth, where it measures 1.66:1 and disappears.
+
+Content:
+- Two or three words in sentence case; the register sets them in capitals.
+
+#### `Rotulo` (component)
+
+The label register — Archivo pushed out along its width axis, cut short by a band of the layer beneath.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `band` | `RotuloBand` | `rojo` | The revealed band before the label. Defaults to rojo: on light cloth, gold measures 1.66:1 and the mark disappears. Gold is for ink grounds. |
+| `plain` | `boolean` | `false` | Drop the band and keep only the lettering — for a label inside a dense header. |
+
+Types: `RotuloBand`, `RotuloProps`
+
+### Text
+
+https://demogar.github.io/molaui/?path=/docs/components-typography-text--overview
+
+Running interface text in the system voice, in three inks: ink, ink-2 and muted.
+
+When to use:
+- Descriptions, hints and secondary lines in the interface.
+- Figures compared down a column, with tabular.
+- A result stated in words, with tone set to danger or success.
+
+When not to:
+- Long-form text someone reads, such as an answer or an article. Use Prose.
+- Headings. Use Heading.
+- Machine literals. Use Code.
+
+- Do: Use ink for what the reader came for, ink-2 for what explains it, and muted for what they can skip.
+- Don’t: Add a fourth grey, or let colour alone carry a result.
+
+Content:
+- Sentence case throughout; full sentences end with a full stop, labels do not.
+
+#### `Text` (component)
+
+- `size`: `xs`, `sm`, `base`, `lg` (default `base`)
+- `tone`: `default`, `2`, `muted`, `danger`, `success` (default `default`)
+- `weight`: `regular`, `medium`, `semibold` (default `regular`)
+- `tabular`: `true`, `false` (default `false`)
+- `truncate`: `true`, `false` (default `false`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `as` | `"div" \| "p" \| "span"` | `p` |  |
+| `size` | `"xs" \| "sm" \| "base" \| "lg"` |  |  |
+| `tabular` | `true \| false` |  |  |
+| `tone` | `"default" \| 2 \| "muted" \| "danger" \| "success"` |  |  |
+| `truncate` | `true \| false` |  |  |
+| `weight` | `"regular" \| "medium" \| "semibold"` |  |  |
+
+#### `textVariants` (function)
+
+Running UI text in the system voice. Three inks and no more: ink for what the reader came for, ink-2 for what explains it, muted for what they can skip. A fourth grey would be a grey nobody can tell from its neighbours — and muted is already the floor, at 4.83:1 on the shaded ground.
+
+Types: `TextProps`
+
+## AI interface
+
+### Agent run
+
+https://demogar.github.io/molaui/?path=/docs/ai-agent-run--overview
+
+A long-running agent run as a timeline: its status and live clock, each step on one spine, and the reason it stopped.
+
+When to use:
+- Showing a run an operator watches or comes back to, step by step, while it works and after it ends.
+- Answering “is it still working, what is it doing, how long has it taken, does it need me” on one panel.
+- Putting the way back next to a failure: pass failure and a Run error sits between the header and the steps.
+- Offering Cancel run while the run is open, and Retry run once it has failed or been stopped.
+
+When not to:
+- Events that have already been written down, such as a deploy history or an audit log. Use Timeline.
+- A fixed sequence of instructions a person follows, such as a runbook. Use StepList.
+- One tool invocation, shown on its own or inside a message. Use Tool call.
+- Work with a known total, such as embedding 1,204 documents. Use Progress.
+
+- Do: Show elapsed time that keeps counting on the active step, with the working relleno under it.
+- Don’t: Add a percentage or a spinner to a run; it has no knowable total, and the system has no spinner by design.
+- Do: Title each step in words, “Break the result down by cohort”, and put the tool’s literal name in its detail.
+- Don’t: Title a step with a raw tool name or “Step 4”; the spine already numbers the steps.
+
+Content:
+- Name the agent as people know it, in sentence case: “Cayuco research agent”.
+- Step titles start with a verb and name the object: “Query the run history”, not “Querying…”.
+- Write the summary as a result: “Answered with 3 sources. One guardrail flagged for review.”
+
+#### `AgentRun` (component)
+
+A long-running agent run, as a timeline.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `name` (required) | `string` |  | The agent's name — "Cayuco research agent". |
+| `runId` (required) | `string` |  |  |
+| `status` (required) | `RunStatusValue` |  |  |
+| `steps` (required) | `readonly AgentStep[]` |  |  |
+| `endedAt` | `number \| Date` |  |  |
+| `failure` | `AgentRunFailure` |  | Shown while the run is failed, timed out or cancelled: what stopped it, in words and verbatim, with the ways back. It takes over the header's *Retry run*, so the retry sits next to the reason for it. |
+| `headingLevel` | `2 \| 3` | `3` |  |
+| `model` | `string` |  | The model identifier, set as a literal. |
+| `onCancel` | `(() => void)` |  |  |
+| `onRetry` | `(() => void)` |  |  |
+| `onRetryFromStep` | `((stepId: string) => void)` |  | Re-run from the failed step, keeping the work before it. Offered when `failure.stepId` is set. |
+| `startedAt` | `number \| Date` |  |  |
+| `summary` | `ReactNode` |  | Shown under the timeline once the run has finished. |
+| `usage` | `Pick<TokenUsageProps, "input" \| "output" \| "cached" \| "costUsd" \| "contextWindow">` |  |  |
+
+Types: `AgentRunFailure`, `AgentRunProps`, `AgentStep`, `AgentStepKind`
+
+### Change review
+
+https://demogar.github.io/molaui/?path=/docs/ai-change-review--overview
+
+A change an agent proposes, shown as the reviewer reads it, with Approve, Request changes and Reject under it.
+
+When to use:
+- An agent proposes edits to files or records that a person must approve before they are applied.
+- The reviewer needs the diff, the agent’s reasons in its own words and the decision in one place.
+- Showing a record change field by field, before and after, with FieldChanges rather than a JSON diff.
+
+When not to:
+- One tool call that needs a yes or no before it runs; the approval belongs on the call. Use Tool call.
+- Confirming a destructive action the person started themselves. Use AlertDialog.
+- Code or a payload that is not a change. Use CodeBlock.
+
+- Do: Keep Approve, Request changes and Reject the same size and variant, as the component draws them.
+- Don’t: Restyle Approve as the ink primary or Reject as a quiet link; a nudged approval is a defect.
+- Do: Pass the agent’s explanation as summary, so the reviewer can judge its reasoning.
+- Don’t: Show the diff alone and leave the reviewer to guess why the agent made the change.
+
+Content:
+- Title the change by what it does, “Roll variant B out to beginners”, not by the files it touches.
+- Name a record by its type and key, so each field change has an owner: “Feature flag onboarding_puzzle_rush”.
+- A reason for a no says what is wrong and what would make it acceptable, because the agent acts on it.
+
+#### `ChangeCount` (component)
+
+"+12 −3": the size of a change, at a glance.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `added` (required) | `number` |  |  |
+| `removed` (required) | `number` |  |  |
+
+#### `ChangeReview` (component)
+
+An agent proposes a change; a person reviews it and decides.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `agent` (required) | `string` |  | Who proposed it — "Cayuco research agent". |
+| `title` (required) | `ReactNode` |  | What the change does, in words — "Roll variant B out to beginners". |
+| `children` | `ReactNode` |  | The change itself: `FileDiff`s, `FieldChanges`, or both. |
+| `decision` | `ChangeDecision \| null` |  | Controlled decision. `null` means undecided. |
+| `defaultDecision` | `ChangeDecision \| null` | `null` | Uncontrolled starting decision. |
+| `headingLevel` | `2 \| 3` | `3` |  |
+| `model` | `string` |  | The model identifier, set as a literal. |
+| `onDecide` | `((status: ChangeDecisionStatus, reason: string) => void)` |  | Called with a valid decision only: never for a rejection without a reason. |
+| `reviewer` | `string` |  | Who decided, shown with the outcome — "M. Herrera". |
+| `summary` | `ReactNode` |  | The agent's explanation of the change, in its own words. Set as prose. |
+
+#### `FieldChanges` (component)
+
+A change to a record rather than a file: a feature flag, a customer's plan, a schedule. Each field reads before → after.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `changes` (required) | `readonly FieldChange[]` |  |  |
+| `title` (required) | `ReactNode` |  | What the record is — "Feature flag onboarding_puzzle_rush". |
+| `headingLevel` | `3 \| 4 \| 5` | `4` |  |
+
+#### `FileDiff` (component)
+
+One file's change, as a reviewer reads it.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `path` (required) | `string` |  | The file's path after the change. |
+| `defaultCollapsed` | `boolean` | `false` | Start with every hunk collapsed. |
+| `diff` | `string` |  | One file's unified diff, as `git diff` prints it. |
+| `headingLevel` | `3 \| 4 \| 5` | `4` | Heading level for the path. Defaults to 4, under a `ChangeReview` heading. |
+| `hunks` | `readonly (DiffHunk \| DiffHunkInput)[]` |  | Or the hunks, structured. Wins over `diff`. |
+| `kind` | `FileChangeKind` | `modified` |  |
+| `layout` | `"split" \| "unified"` | `unified` | `unified` is one column of lines. `split` sets old against new side by side once the diff's container is 48rem wide, and stays unified below that — a phone has no room for two columns of code. |
+| `previousPath` | `string` |  | The path before a rename. |
+
+#### `countChanges` (function)
+
+Lines added and removed across hunks — the figures `ChangeCount` shows.
+
+#### `parseUnifiedDiff` (function)
+
+Parse the hunks of one file's unified diff. File headers (`diff --git`, `index`, `---`, `+++`) are skipped — the path is `FileDiff`'s own prop — and so is `\ No newline at end of file`, which is a fact about bytes, not a line anyone reviews.
+
+Types: `ChangeCountProps`, `ChangeDecision`, `ChangeDecisionStatus`, `ChangeReviewProps`, `FieldChange`, `FieldChangesProps`, `FileChangeKind`, `FileDiffProps`, `DiffHunk`, `DiffHunkInput`, `DiffLine`, `DiffLineKind`
+
+### Confidence
+
+https://demogar.github.io/molaui/?path=/docs/ai-confidence--overview
+
+How sure the system is, in three levels and in words, with UncertaintyNote for a specific claim to check.
+
+When to use:
+- Stating how well an answer is supported, High, Medium or Low, with the basis it rests on.
+- Flagging one claim the reader should verify, next to that claim, with UncertaintyNote.
+- Offering the action that verifies a doubtful claim, such as opening the dashboard it came from.
+
+When not to:
+- Showing confidence as a percentage or score. No model is calibrated enough for “87.3%”; state a level and its basis.
+- Saying that something failed or needs attention; uncertainty is information, not an alarm. Use Callout.
+- A reading inside a known range, such as a token budget. Use Meter.
+
+- Do: Give a basis an operator can check: “3 sources agree”, “single source, 9 months old”.
+- Don’t: Show a bare level, or a decimal that will be read as a measurement.
+- Do: Say in the note exactly what to verify and why it is in doubt.
+- Don’t: Put a generic disclaimer under every answer; people stop reading it by the second day.
+
+Content:
+- Write the basis as a short fact in lower case, since it follows the level: “sources disagree on the cohort size”.
+- Title an UncertaintyNote with the claim, “Unverified figure”, not with “Warning” or “Note”.
+
+#### `Confidence` (component)
+
+How sure the system is, in three steps and in words.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `level` (required) | `ConfidenceLevel` |  |  |
+| `basis` | `string` |  | What the confidence rests on — "3 sources agree", "single source". |
+
+#### `UncertaintyNote` (component)
+
+Where the model flags its own doubt, in the answer, next to the claim.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `action` | `ReactNode` |  | An action that resolves it — "Open the dashboard". |
+| `title` | `string` | `The model is unsure` | The short claim — "Unverified figure". Defaults to "The model is unsure". |
+
+Types: `ConfidenceLevel`, `ConfidenceProps`, `UncertaintyNoteProps`
+
+### Message
+
+https://demogar.github.io/molaui/?path=/docs/ai-message--overview
+
+One turn of a conversation, laid out as a ledger: who spoke, when, with which model, and what they said or did.
+
+When to use:
+- Transcripts between an operator, an assistant, the system and its tools, where each turn is a record.
+- Assistant answers with copy, regenerate and rating actions, and a stated failure with Retry.
+- A long conversation in Thread, which follows new turns only while the reader is at the bottom.
+
+When not to:
+- The model’s thinking before it answers; it is evidence, not part of the answer. Use Reasoning.
+- A run that stopped at a step and can resume from it; a message error covers one turn only. Use Run error.
+- Rendering the answer’s text; a message is the frame and the answer goes inside it. Use Streaming text.
+- A standing notice outside a conversation, such as a read-only workspace. Use Callout.
+
+- Do: Pass the system’s error verbatim in error, so an operator can paste it into a ticket.
+- Don’t: Replace it with “Something went wrong”; the component already adds the plain sentence above it.
+- Do: Let every turn take the full measure, one after another.
+- Don’t: Wrap turns in chat bubbles; long answers, tables and code need the whole column.
+
+Content:
+- Set author to the name people know, “Cayuco” or “M. Herrera”; the role is only the fallback.
+- Pass the model as its identifier, “cayuco-deep-3”; it is shown as a literal.
+- System turns state what changed in a sentence or two: “Context reset. Earlier turns are summarised.”
+
+#### `Message` (component)
+
+One turn of a conversation.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `role` (required) | `MessageRole` |  |  |
+| `author` | `string` |  | Who is speaking, if more specific than the role — "Cayuco", "M. Herrera". |
+| `copyText` | `string` |  | Copies this text. Omit to hide the copy action. |
+| `error` | `string` |  | The error, verbatim from the system. Shown as a literal — operators paste it into tickets. |
+| `feedback` | `"up" \| "down"` |  | The rating already given, if any. |
+| `model` | `string` |  | The model that produced it. A machine identifier, so it is set as a literal. |
+| `onFeedback` | `((value: "up" \| "down") => void)` |  | Called with the reader's rating. Omit to hide the rating actions. |
+| `onRetry` | `(() => void)` |  |  |
+| `status` | `"error" \| "streaming" \| "done"` | `done` | `error`: the message failed partway. Content so far stays; the error is stated under it. |
+| `timestamp` | `string \| Date` |  |  |
+
+#### `Thread` (component)
+
+The scrolling transcript.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` (required) | `string` |  | Names the region. Required: a transcript is a landmark worth finding. |
+| `stickThreshold` | `number` | `48` | Distance from the bottom, in px, that still counts as "at the bottom". |
+
+Types: `MessageProps`, `MessageRole`, `ThreadProps`
+
+### Prompt input
+
+https://demogar.github.io/molaui/?path=/docs/ai-prompt-input--overview
+
+The composer: a field that grows, attachments, a toolbar, and a send button that becomes Stop while a response generates.
+
+When to use:
+- Taking the next prompt in a conversation or an agent console.
+- Letting the operator stop a response from the place the send button was.
+- Keeping a draft while offline, with the reason it cannot be sent stated beside it.
+- Long briefs where Enter should add a line, with submitOn set to mod-enter.
+
+When not to:
+- A multi-line field in a form that is submitted with other fields. Use Textarea.
+- Searching or filtering a list. Use SearchInput.
+- Jumping to a page or running a command by name. Use Command palette.
+
+- Do: Set status to offline and keep the field editable, so the draft survives a dropped connection.
+- Don’t: Disable the field while offline or while a response generates; the operator loses the draft or the next prompt.
+
+Content:
+- The label names who is being addressed: “Message Cayuco”.
+- Write the placeholder as a hint of scope, “Ask about a run, an evaluation, a document…”, never as the only label.
+- Name attachments by file name, with type and size as the detail: “CSV · 4.1 MB”.
+
+#### `AttachmentChip` (component)
+
+A file or context item attached to the next prompt. The filename is a literal.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `name` (required) | `string` |  |  |
+| `detail` | `string` |  | e.g. "CSV · 48 KB". |
+| `onRemove` | `(() => void)` |  |  |
+
+#### `PromptInput` (component)
+
+The composer.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` (required) | `string` |  | The visible-to-assistive-tech name of the field — "Message Cayuco". |
+| `onSubmit` (required) | `(value: string) => void` |  | Called with the trimmed prompt. The field clears itself when uncontrolled. |
+| `attachments` | `ReactNode` |  | Attachment chips, above the field. |
+| `defaultValue` | `string` |  |  |
+| `disabled` | `boolean` | `false` |  |
+| `maxRows` | `number` | `10` | Rows before the field scrolls instead of growing. |
+| `onStop` | `(() => void)` |  | Called by the stop button while `status` is `generating`. |
+| `onValueChange` | `((value: string) => void)` |  |  |
+| `placeholder` | `string` | `Ask anything…` |  |
+| `showEstimate` | `boolean` | `true` | Show the rough token estimate. |
+| `status` | `"idle" \| "generating" \| "offline"` | `idle` | `generating`: a response is streaming. The field stays editable — the operator can draft the next prompt — and the send button becomes stop. `offline`: sending is impossible. The draft is kept, and the reason is said. |
+| `submitOn` | `"enter" \| "mod-enter"` | `enter` | `enter`: Enter sends, Shift+Enter is a newline — chat convention. `mod-enter`: ⌘/Ctrl+Enter sends, Enter is a newline — for long prompts, where an accidental send costs a model run. |
+| `toolbar` | `ReactNode` |  | Leading controls in the footer — a model picker, a tool toggle. |
+| `value` | `string` |  |  |
+
+Types: `AttachmentChipProps`, `PromptInputProps`
+
+### Reasoning
+
+https://demogar.github.io/molaui/?path=/docs/ai-reasoning--overview
+
+The model’s thinking behind a disclosure, summarised as “Thought for 12.4s” and set a step quieter than the answer.
+
+When to use:
+- Keeping reasoning available as evidence, for the moment the answer looks wrong.
+- Showing that the model is still thinking, with the working texture and a live clock.
+
+When not to:
+- The answer itself. Use Message.
+- The steps an agent took, such as tool calls and handoffs. Use Agent run.
+- Doubt about one claim, which belongs next to the claim. Use UncertaintyNote.
+
+- Do: Leave reasoning closed, so the answer is what is read first.
+- Don’t: Open reasoning by default above every answer; when the answer is right, it is noise.
+
+Content:
+- Pass startedAt and endedAt, or durationMs, so the summary states a time rather than the bare word “Reasoning”.
+
+#### `Reasoning` (component)
+
+The model's thinking, behind a disclosure.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `text` (required) | `string` |  | The reasoning text so far. |
+| `defaultOpen` | `boolean` | `false` |  |
+| `durationMs` | `number` |  | A known duration, when there are no timestamps. |
+| `endedAt` | `number \| Date` |  |  |
+| `startedAt` | `number \| Date` |  |  |
+| `status` | `"streaming" \| "done"` | `done` | `streaming` while the model is still thinking. |
+
+Types: `ReasoningProps`
+
+### Run error
+
+https://demogar.github.io/molaui/?path=/docs/ai-run-error--overview
+
+Why a run stopped: the step, a plain sentence, the error verbatim, and the ways back in order of cost.
+
+When to use:
+- A run failed, was rate limited, timed out or was cancelled, and the operator has to decide what to do next.
+- Offering Retry from step N, Retry run and Copy error details next to the reason.
+- Keeping output that arrived before the stop, marked as partial, with PartialOutput.
+
+When not to:
+- A failed run shown with its steps; pass failure to the run and it places this panel itself. Use Agent run.
+- One tool call that failed; the call shows its own error and Retry call. Use Tool call.
+- A condition of a page or region that is not a run failure, such as a stale index. Use Callout.
+- A panel that could not load its data. Use Empty state.
+
+- Do: Choose the kind that matches the next move: failed, rate_limited, timed_out or cancelled.
+- Don’t: Report a rate limit or a person’s cancellation as a plain failure; what the operator does next differs.
+- Do: Pass the step’s number and title, so the headline matches the timeline.
+- Don’t: Show “Something went wrong” with no step, no sentence and no literal.
+
+Content:
+- A custom message says what happened and what was kept: “The query was denied, so the run stopped. Steps 1–3 are kept.”
+- Pass the error exactly as the tool returned it; do not reword, shorten or translate it.
+- A cancellation is stated without alarm, in the past tense: “You stopped the run.”
+
+#### `PartialOutput` (component)
+
+Output that stopped arriving before it was finished — kept, and marked.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `note` | `ReactNode` |  | What cut it short, in words. Defaults to a plain statement. |
+
+#### `RunError` (component)
+
+What stopped a run, said plainly, with the way back next to it.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `at` | `number \| Date` |  | When it stopped, for the copied details. |
+| `autoRetry` | `boolean` | `false` | At `retryAt`, retry by itself instead of re-enabling the buttons. |
+| `copyable` | `boolean` | `kind !== 'cancelled'` | Offer *Copy error details*. On by default except for a cancellation, which is not an error. |
+| `error` | `string` |  | The error, verbatim. |
+| `kind` | `RunErrorKind` | `failed` |  |
+| `message` | `ReactNode` |  | Replaces the plain sentence under the headline. |
+| `onRetry` | `(() => void)` |  |  |
+| `onRetryFromStep` | `(() => void)` |  |  |
+| `retryAt` | `number \| Date` |  | When a retry is allowed (or will happen). Shows a countdown. |
+| `runId` | `string` |  | The run id, for the copied details. |
+| `step` | `string` |  | The step that stopped, in words — "Break the result down by cohort". |
+| `stepCount` | `number` |  |  |
+| `stepNumber` | `number` |  | The step's position, counted from 1. Shown as "step 4 of 5" and used to name *Retry from step 4*. |
+| `tool` | `string` |  | The tool that failed, exactly as the model called it. |
+
+#### `formatRunErrorDetails` (function)
+
+The plain-text block *Copy error details* puts on the clipboard: everything a ticket needs, one fact per line.
+
+#### `formatCountdown` (function)
+
+`24s`, `1m 05s`. Whole seconds, rounded up, because a countdown that says "0s" while there is still half a second to wait is a promise broken in front of the reader. Zero-padded past a minute so it ticks in place.
+
+#### `useCountdown` (hook)
+
+Milliseconds left until `until`, ticking while there is time left and stopping at zero. `undefined` without a target.
+
+Types: `PartialOutputProps`, `RunErrorKind`, `RunErrorProps`
+
+### Run status
+
+https://demogar.github.io/molaui/?path=/docs/ai-run-status--overview
+
+The one status vocabulary for a run, a step and a tool call: a glyph, a word and a colour, with an elapsed clock.
+
+When to use:
+- The state of any unit of model work: queued, running, streaming, needs approval, succeeded, failed, cancelled or timed out.
+- Elapsed time that keeps counting for open work, or a fixed duration for finished work.
+- Status in a header, in the label register, or in a row or sentence with register set to inline.
+
+When not to:
+- A status that is not model work, such as a document tag or a deploy state. Use Badge.
+- Work with a known total that can honestly show how much is done. Use Progress.
+- A whole run with its steps. Use Agent run.
+
+- Do: Use label to make a state more specific, such as “Thinking” for a reasoning step; the glyph stays.
+- Don’t: Invent a ninth status such as “Rate limited”; it is a reason on a failed run, said in words.
+
+Content:
+- Keep the status words as they are: “Succeeded”, “Failed”, “Needs approval”, “Timed out”.
+- Use the same words everywhere on the page; a run is not “Errored” in a table and “Failed” in its header.
+
+#### `RunStatus` (component)
+
+Glyph + word + colour, always all three. State is never carried by colour alone: a red dot means nothing to one reader in twelve, and "Failed" in running text means the same thing to everyone.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `status` (required) | `RunStatusValue` |  |  |
+| `durationMs` | `number` |  | A known duration, for a finished step that has no timestamps. |
+| `endedAt` | `number \| Date` |  | When it ended. Freezes the clock; omit while the work is open. |
+| `label` | `string` |  | Override the word — e.g. "Thinking" for a running reasoning step. The glyph stays. |
+| `register` | `"label" \| "inline"` | `label` | `label`: the rótulo register, for headers. `inline`: sentence case, for rows and running text. |
+| `startedAt` | `number \| Date` |  | When the work started. With it, an elapsed clock follows the label. |
+
+#### `RunStatusGlyph` (component)
+
+The glyph. Square, because nothing in this system is round except a dot that has to be a dot; keylined, because every mark is a cut shape.
+
+#### `RUN_STATUS_LABEL` (constant)
+
+#### `isActiveStatus` (function)
+
+Work is still open: the clock is ticking and the operator can cancel.
+
+#### `isRetryableStatus` (function)
+
+A failure the operator can do something about.
+
+#### `isTerminalStatus` (function)
+
+Work is over and will not change again without a retry.
+
+#### `formatDuration` (function)
+
+`0.4s`, `12.4s`, `4m 07s`, `1h 02m`. One decimal under a minute because that is where tenths change a decision; whole units above it because nobody cancels a 4-minute run over a tenth of a second. Seconds are zero-padded past the first minute so a ticking clock never changes width — the figure is set tabular, and a `4m 7s` → `4m 10s` jump would still shift the row.
+
+#### `useElapsed` (hook)
+
+Milliseconds since `startedAt`, ticking while the work is still open.
+
+Types: `RunStatusProps`, `RunStatusValue`
+
+### Sources
+
+https://demogar.github.io/molaui/?path=/docs/ai-sources--overview
+
+Inline citation markers and the numbered list of sources they point to, with a preview card on hover, focus or first tap.
+
+When to use:
+- An answer makes claims drawn from documents, and readers need to check them where they are made.
+- Listing what each source is, where it lives, the passage used and when it was read.
+- Rendering [n] markers in streamed text, with citationRenderer built from the same array as the list.
+
+When not to:
+- Ordinary links in running text that are not evidence for a claim. Use Prose.
+- Saying how strongly the sources support the answer. Use Confidence.
+- A tool’s raw result, such as the rows a query returned. Use Tool call.
+
+- Do: Build the renderer once from the sources array, so marker 2 always opens source 2.
+- Don’t: Number markers and list items separately; one mismatch sends the reader to the wrong document.
+- Do: Include the passage the answer used and when it was read.
+- Don’t: List only a title and a link; checking one sentence then means opening every document.
+
+Content:
+- Use the document’s own title as the source title, not its URL or file name.
+- Quote the passage exactly as retrieved; do not paraphrase it.
+- Give the domain as people know it: “docs.cayuco.internal”.
+
+#### `Citation` (component)
+
+An inline citation marker: a small cut chip with the source's number.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `n` (required) | `number` |  |  |
+| `cardSide` | `"bottom" \| "top"` | `top` | Which side of the marker the card opens on. |
+| `source` | `Source` |  | The source this marker points at. With it, hovering or focusing the marker opens a preview card — title, domain, the passage used — so the claim can be checked without leaving the sentence. |
+| `title` | `string` |  | The source's title, for the accessible name. "[2]" alone tells a screen reader nothing. Defaults to `source.title`. |
+
+#### `SourceList` (component)
+
+The sources an answer drew on, as an ordered list whose numbers match the inline citations. Each card says what it is (title), where it lives (domain), what was used (the snippet, in the reading voice — it is quoted prose) and when it was read.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `sources` (required) | `readonly Source[]` |  |  |
+
+#### `citationRenderer` (function)
+
+A `renderCitation` for `StreamingText`, built from the same array the `SourceList` renders, so marker [2] opens source 2 and links to its card.
+
+Types: `CitationProps`, `Source`, `SourceListProps`
+
+### Streaming text
+
+https://demogar.github.io/molaui/?path=/docs/ai-streaming-text--overview
+
+A model’s answer arriving a token at a time, in the reading voice, without layout shift, and announced once when it ends.
+
+When to use:
+- Rendering an assistant’s answer as it streams, with a block caret at the end.
+- Paragraphs, lists, code blocks, inline code and [n] citation markers from a model.
+- Text the reader may skim, such as reasoning, with tone set to muted.
+
+When not to:
+- Long-form markup that does not stream, such as rendered documentation. Use Prose.
+- Text the system says in its own voice, such as labels and hints. Use Text.
+- Saying that work is under way before any text exists, outside a message. Use Run status.
+
+- Do: Append to text as tokens arrive and pass status, so completion is announced once.
+- Don’t: Wrap the text in a live region; a screen reader would read every token aloud.
+- Do: Pass a stable renderCitation, built once at module scope or with useMemo.
+- Don’t: Create the renderer inline on every render; finished blocks then render again on every token.
+
+Content:
+- Override doneAnnouncement only with a short, complete sentence: “Summary complete.”
+
+#### `Caret` (component)
+
+The block caret: ink, half an em wide, the height of the x-height plus ascenders. A thin bar caret reads as a text field waiting for input; a block reads as output being written, which is the opposite thing.
+
+#### `StreamingText` (component)
+
+Text that arrives a token at a time.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `text` (required) | `string` |  | Everything received so far. Grows; never rewritten from the top. |
+| `doneAnnouncement` | `string` | `Response complete.` | Spoken once when a stream that was running completes. |
+| `errorAnnouncement` | `string` | `Response stopped with an error.` | Spoken once when a stream that was running fails. |
+| `renderCitation` | `((n: number) => ReactNode)` |  | How an inline `[n]` marker renders. Without it the marker stays as text. Pass a stable function (module scope or `useCallback`): finished blocks skip re-rendering only while it stays the same. |
+| `status` | `StreamStatus` | `done` |  |
+| `tone` | `"default" \| "muted"` | `default` | `muted` for text the reader may skim — reasoning, not the answer. |
+
+#### `parseBlocks` (function)
+
+#### `parseInline` (function)
+
+Types: `StreamStatus`, `StreamingTextProps`, `Block`, `InlineRun`
+
+### Token usage
+
+https://demogar.github.io/molaui/?path=/docs/ai-token-usage--overview
+
+What a run consumed: input, cached and output tokens, cost, and how full the context window is.
+
+When to use:
+- A run summary that reports tokens and cost, or a run header, with the inline variant.
+- Warning before the context window fills: the meter turns gold at 80% and rojo at 95%, and says so.
+
+When not to:
+- A workspace budget or a monthly quota. Use Meter.
+- A headline figure on a dashboard, such as tokens this month. Use Stat.
+
+- Do: Pass contextWindow whenever it is known, so the meter shows how close the run is to the limit.
+- Don’t: Report spend alone; a full context fails quietly and looks like the model forgetting.
+
+Content:
+- Pass raw numbers; counts are shown compact, “12.4k”, and cost in US dollars to four decimals, “$0.0731”.
+
+#### `TokenUsage` (component)
+
+What a run consumed.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `input` (required) | `number` |  |  |
+| `output` (required) | `number` |  |  |
+| `cached` | `number` |  | Input tokens served from cache — cheaper, and worth knowing about. |
+| `contextWindow` | `number` |  | The model's context window. With it, a meter shows how full the context is. |
+| `costUsd` | `number` |  | Cost in USD, if the platform knows it. |
+| `variant` | `"full" \| "inline"` | `full` | `full`: a definition list and meter. `inline`: one line, for a run header. |
+
+#### `contextLevel` (function)
+
+Types: `TokenUsageProps`
+
+### Tool call
+
+https://demogar.github.io/molaui/?path=/docs/ai-tool-call--overview
+
+One tool invocation: the tool’s literal name, its arguments, the result or error, and an approval when a person must decide.
+
+When to use:
+- Showing what the model asked a system to do, with what, and what came back.
+- Holding a call that writes, spends or sends until a person approves or denies it.
+- Calls the model made at the same time, grouped with ToolCallGroup.
+
+When not to:
+- A larger change to files or records that needs a diff and a reason. Use Change review.
+- The whole run the calls belong to. Use Agent run.
+- A payload shown on its own, outside a call. Use CodeBlock.
+
+- Do: Say in the approval reason what the call changes and whether the agent can undo it.
+- Don’t: Ask for approval with no reason, or make Approve the primary button and Deny a link.
+- Do: Pass args and result as objects, so they render as formatted JSON.
+- Don’t: Rewrite payloads as prose; operators inspect them and paste them into tickets.
+
+Content:
+- The title says what the call is for, “Experiment results”; the name stays exactly as the model called it.
+- Name approval buttons by the action: “Approve rollout” and “Deny”, not “Yes” and “No”.
+- Keep the approval reason to a sentence or two: what changes, for whom, and whether it can be undone.
+
+#### `ToolCall` (component)
+
+One tool invocation: what the model asked a system to do, with what, and what came back.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `name` (required) | `string` |  | The tool's identifier, exactly as the model called it. |
+| `status` (required) | `RunStatusValue` |  |  |
+| `approval` | `ToolCallApproval` |  | Present when `status` is `waiting`: the call is held for a person. |
+| `args` | `unknown` |  | The arguments the model sent. Objects are shown as formatted JSON. |
+| `defaultOpen` | `boolean` | `false` | Start expanded. Waiting and failed calls are always expanded. |
+| `durationMs` | `number` |  |  |
+| `endedAt` | `number \| Date` |  |  |
+| `error` | `string` |  | The error, verbatim. |
+| `onRetry` | `(() => void)` |  |  |
+| `result` | `unknown` |  | What came back. Objects as JSON; strings as text. |
+| `startedAt` | `number \| Date` |  |  |
+| `title` | `string` |  | What the call is for, in words — "Query experiment results". Optional; the name is always shown. |
+
+#### `ToolCallGroup` (component)
+
+Calls the model made at the same time. Drawn as a bracket on the left — one ink rule spanning the group — so "these ran together" is a shape, not a sentence the operator has to find.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `count` (required) | `number` |  |  |
+| `label` | `string` |  | Defaults to "N tools in parallel". |
+
+Types: `ToolCallApproval`, `ToolCallGroupProps`, `ToolCallProps`
+
+## Utilities
+
+- `cn` (function, src/lib/cn.ts): Join class names, letting later Tailwind utilities override earlier conflicting ones.
+- `contrast` (function, src/tokens/color.ts): WCAG 2.x contrast ratio, 1–21.
+- `mixOklab` (function, src/tokens/color.ts): `color-mix(in oklab, a pct%, b)` for opaque colours.
+- `parseHex` (function, src/tokens/color.ts)
+- `toHex` (function, src/tokens/color.ts)
+- `DirectionProvider` (component, @base-ui/react): Enables RTL behavior for Base UI components.
+- `useDirection` (hook, @base-ui/react)
+- `TextDirection` (type, @base-ui/react)

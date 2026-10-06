@@ -1,7 +1,9 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import * as React from 'react'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
+
+import { resetDeprecations } from '../../lib/deprecate'
 
 import { Skeleton, SkeletonGroup, SkeletonText } from './skeleton'
 
@@ -22,6 +24,15 @@ describe('Skeleton', () => {
     const { container } = render(<Skeleton shape="avatar" size="lg" />)
     expect(container.firstElementChild).toHaveClass('size-10')
     expect(container.firstElementChild).toHaveAttribute('data-shape', 'avatar')
+  })
+
+  it('still draws the deprecated line shape, and says to use text', () => {
+    resetDeprecations()
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const { container } = render(<Skeleton shape="line" />)
+    expect(container.firstElementChild).toHaveAttribute('data-shape', 'line')
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('Use <Skeleton shape="text"> instead'))
+    warn.mockRestore()
   })
 
   it('drops the sweep under reduced motion', () => {

@@ -18,7 +18,7 @@ import { Label } from '../field/label'
  * a pair of browser-styled arrows from no design system, and Chrome changes
  * the value when the page is scrolled over a focused field. NumberField
  * parses and formats with `Intl.NumberFormat` for the `locale` passed (so
- * `es-PA` types 1.500,5 and `ar-EG` shows Arabic-Indic digits), clamps to
+ * `de-DE` types 1.500,5 and `ar-EG` shows Arabic-Indic digits), clamps to
  * `min`/`max`, and owns the keyboard: ArrowUp/Down by `step`, Shift by
  * `largeStep`, Alt by `smallStep`, Home/End to the bounds. PageUp/PageDown
  * are added here, by `largeStep`, because the APG spinbutton pattern lists
