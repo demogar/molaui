@@ -33,7 +33,7 @@ export const COLORS = [
   'on-layer', 'on-oro',
   'danger', 'success', 'warn', 'info',
   'ink-danger', 'ink-success', 'ink-warn', 'ink-info',
-  'on-ink', 'on-ink-muted', 'keyline-on-ink',
+  'on-ink', 'on-ink-muted', 'on-ink-accent', 'keyline-on-ink',
   'scrim', 'on-scrim', 'on-scrim-muted', 'backdrop',
 ] as const
 

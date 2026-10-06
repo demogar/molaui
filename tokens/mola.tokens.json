@@ -134,6 +134,10 @@
         "$type": "color",
         "$value": "#afb1af"
       },
+      "on-ink-accent": {
+        "$type": "color",
+        "$value": "#edb01f"
+      },
       "on-scrim": {
         "$type": "color",
         "$value": "#f6f7f2"
@@ -275,6 +279,10 @@
       "on-ink-muted": {
         "$type": "color",
         "$value": "#515456"
+      },
+      "on-ink-accent": {
+        "$type": "color",
+        "$value": "#7a560a"
       },
       "on-scrim": {
         "$type": "color",

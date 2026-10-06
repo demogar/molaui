@@ -356,6 +356,7 @@
    * for a dark ground can now be dropped on a coloured one. */
   --on-ink: var(--on-layer);
   --on-ink-muted: var(--on-layer);
+  --on-ink-accent: var(--on-layer);
 }
 
 /* ── figures ──────────────────────────────────────────────────────────
