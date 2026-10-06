@@ -13,8 +13,8 @@ admin consoles, knowledge bases, agent run monitors — documented in a standalo
 - **Tokens.** One CSS file. Two themes declared once with `light-dark()`, three densities on one
   attribute, zero radius. Every contrast pairing, 100+ of them across both themes, is computed
   from the CSS and enforced by a test. The tokens are exported to W3C design-token JSON for Figma.
-- **67 components.** Actions, forms, overlays, feedback, navigation, data display and an
-  application shell: 137 exported parts, built on [Base UI](https://base-ui.com) for behaviour and
+- **68 components.** Actions, forms, overlays, feedback, navigation, data display and an
+  application shell: 147 exported parts, built on [Base UI](https://base-ui.com) for behaviour and
   accessibility, and styled with Tailwind v4.
 - **An AI interface layer.** Streaming text, message threads, a composer whose send button becomes
   stop, tool-call cards with human approval, long-running agent run timelines with live elapsed
@@ -151,7 +151,7 @@ npm run check   # lint · typecheck · test · tokens:check · build · build-st
   `light-dark()`, `var()`, OKLab `color-mix()` — and asserts each promised pairing. It caught a real
   dark-theme failure during the build (muted ink on the gold wash, 4.00:1) before any screen did.
 - **No hex outside `tokens.css`**, enforced by a test.
-- **Every story is a test**: all 205 stories render through the real Storybook config and pass axe
+- **Every story is a test**: all 247 stories render through the real Storybook config and pass axe
   in the unit suite; `scripts/audit.mjs` re-runs axe *with colour contrast* in a real browser in both
   themes, and checks every story for horizontal overflow at 390px.
 - **`tailwind-merge` knows the token vocabulary**, with a test that fails if a new colour token is
