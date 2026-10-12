@@ -475,6 +475,28 @@ export const USAGE: Record<string, Usage> = {
       'Group digits and keep only the precision a reader uses: “1,204”, “97.8”.',
     ],
   },
+  'Components/Data display/Swatch': {
+    summary: 'A small decorative colour key, square or round, in one of the badge tones, placed before the word it keys.',
+    use: [
+      'A legend entry that ties a word to the colour of map pins, chart series or rows.',
+      'A marker before a group heading or a filter label, so it reads in the same colour as what it filters.',
+      'Round only when the thing it keys is itself a dot, such as a map pin.',
+    ],
+    avoid: [
+      { when: 'The state of a row or an object, or a mark that must be announced on its own.', use: 'Components/Feedback/Badge', label: 'StatusDot' },
+      { when: 'A short aside with a coloured marker before its title.', use: 'Components/Feedback/Callout' },
+    ],
+    practices: [
+      {
+        do: 'Put the word beside every swatch; the swatch is hidden from screen readers.',
+        dont: 'Let a row of coloured squares stand in for a legend.',
+      },
+      {
+        do: 'Use tone="accent" when the key must match a gold field exactly.',
+        dont: 'Paint a swatch with bg-oro by hand; on light cloth it falls below 3:1.',
+      },
+    ],
+  },
   'Components/Data display/Table': {
     summary: 'Table primitives for rows of records, and DataTable for columns as data with sorting, selection, column visibility and pages.',
     use: [
@@ -565,6 +587,7 @@ export const USAGE: Record<string, Usage> = {
       'A standing condition of a page or panel: a model that retires soon, a read-only workspace, a stale index.',
       'Something to read before working in the region, with one or two actions.',
       'A notice the person can dismiss, with onDismiss, where the caller decides whether it returns.',
+      'A one-line aside beside a hero or at the head of a list, with variant="flat": the wash and a swatch, no seam, and it keeps its own height in a grid.',
     ],
     avoid: [
       { when: 'Something that has just happened, possibly elsewhere, such as a finished re-index.', use: 'Components/Feedback/Toast' },

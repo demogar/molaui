@@ -384,9 +384,13 @@ export interface CalloutProps extends Omit<React_2.ComponentProps<'div'>, 'title
 // @public (undocumented)
 export type CalloutTone = NonNullable<VariantProps<typeof calloutVariants>['tone']>;
 
+// @public (undocumented)
+export type CalloutVariant = NonNullable<VariantProps<typeof calloutVariants>['variant']>;
+
 // @public
 export const calloutVariants: (props?: ({
     tone?: "danger" | "success" | "warn" | "info" | "neutral" | null | undefined;
+    variant?: "flat" | "seam" | null | undefined;
 } & ClassProp) | undefined) => string;
 
 // @public
@@ -2296,6 +2300,23 @@ export interface StreamingTextProps extends Omit<React_2.ComponentProps<'div'>, 
 
 // @public (undocumented)
 export type StreamStatus = 'idle' | 'streaming' | 'done' | 'error';
+
+// @public
+export function Swatch(input: SwatchProps): React_2.JSX.Element;
+
+// @public (undocumented)
+export interface SwatchProps extends Omit<React_2.ComponentProps<'span'>, 'children'>, VariantProps<typeof swatchVariants> {
+}
+
+// @public (undocumented)
+export type SwatchTone = NonNullable<VariantProps<typeof swatchVariants>['tone']>;
+
+// @public
+export const swatchVariants: (props?: ({
+    tone?: "danger" | "success" | "warn" | "info" | "accent" | "neutral" | null | undefined;
+    size?: "sm" | "md" | null | undefined;
+    shape?: "round" | "square" | null | undefined;
+} & ClassProp) | undefined) => string;
 
 // @public (undocumented)
 export function Switch(input: SwitchProps): React_2.JSX.Element;

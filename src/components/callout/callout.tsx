@@ -6,6 +6,7 @@ import * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { IconButton } from '../button'
+import { Swatch } from '../swatch'
 
 /**
  * A message that belongs to a region of the page — "this agent is using a
@@ -28,10 +29,24 @@ import { IconButton } from '../button'
  * icon is coloured; the title and body never are — colour owns the region,
  * never the reading column.
  *
+ * ── flat ──
+ * The seam, the keyline and the icon are a lot of material for a one-line
+ * aside beside a hero or at the head of a list: there the seam reads as a
+ * gold stripe across the top of the page rather than as a message. `flat`
+ * keeps only the wash and puts the tone in a square Swatch before the title —
+ * the soft-badge treatment, at the size of a paragraph. No keyline either: like
+ * a soft badge, it belongs to the region, it is not a shape cut out of it.
+ *
+ * A flat callout is also `h-fit`. A grid or flex row stretches its items to
+ * the tallest one, and a message the height of the hero beside it is a tinted
+ * slab with a sentence at the top. `self-start` was tried first, but in a
+ * flex column it also shrinks the callout to its content's width; `h-fit`
+ * stops the stretch along the block axis only.
+ *
  * A callout is static. One that appears in response to something the operator
  * did should be rendered inside a live region, or be a toast.
  */
-export const calloutVariants = cva('relative rounded-none shadow-cut text-ink', {
+export const calloutVariants = cva('relative rounded-none text-ink', {
   variants: {
     tone: {
       neutral: 'bg-ink-soft band-cloth',
@@ -40,11 +55,16 @@ export const calloutVariants = cva('relative rounded-none shadow-cut text-ink', 
       warn: 'bg-oro-soft band-oro',
       danger: 'bg-rojo-soft band-rojo',
     },
+    variant: {
+      seam: 'shadow-cut',
+      flat: 'h-fit',
+    },
   },
-  defaultVariants: { tone: 'info' },
+  defaultVariants: { tone: 'info', variant: 'seam' },
 })
 
 export type CalloutTone = NonNullable<VariantProps<typeof calloutVariants>['tone']>
+export type CalloutVariant = NonNullable<VariantProps<typeof calloutVariants>['variant']>
 
 const ICON: Record<CalloutTone, React.ComponentType<{ className?: string }>> = {
   neutral: Info,
@@ -75,7 +95,10 @@ export interface CalloutProps
   actions?: React.ReactNode
   /** Renders a dismiss button. The caller owns whether it comes back. */
   onDismiss?: () => void
-  /** Replace the tone's default icon, or `false` for none. */
+  /**
+   * Replace the tone's default mark — the icon, or in `flat` the square
+   * swatch — or `false` for none.
+   */
   icon?: React.ReactNode | false
   /** The heading element for `title`. */
   headingLevel?: 2 | 3 | 4 | 5
@@ -83,6 +106,7 @@ export interface CalloutProps
 
 export function Callout({
   tone,
+  variant,
   title,
   actions,
   onDismiss,
@@ -93,6 +117,8 @@ export function Callout({
   ...props
 }: CalloutProps) {
   const t = tone ?? 'info'
+  const v = variant ?? 'seam'
+  const flat = v === 'flat'
   const Icon = ICON[t]
   const Heading = `h${headingLevel}` as const
   const titleId = React.useId()
@@ -100,18 +126,28 @@ export function Callout({
     <div
       data-slot="callout"
       data-tone={t}
+      data-variant={v}
       aria-labelledby={title ? titleId : undefined}
       role={title ? 'region' : undefined}
-      className={cn(calloutVariants({ tone: t }), className)}
+      className={cn(calloutVariants({ tone: t, variant: v }), className)}
       {...props}
     >
-      <div aria-hidden className="relleno h-2" />
-      <div className="flex gap-3 px-4 pt-3.5 pb-4">
-        {icon !== false ? (
+      {flat ? null : <div aria-hidden className="relleno h-2" />}
+      <div className={cn('flex', flat ? 'gap-2.5 px-4 py-3' : 'gap-3 px-4 pt-3.5 pb-4')}>
+        {icon === false ? null : flat ? (
+          // One line box of whatever comes first — the title or the body — so
+          // the swatch sits centred on the first line however that line wraps.
+          <span
+            aria-hidden
+            className={cn('flex h-[1lh] shrink-0 items-center text-sm', title ? 'leading-snug' : 'leading-body')}
+          >
+            {icon ?? <Swatch tone={t} />}
+          </span>
+        ) : (
           <span aria-hidden className={cn('mt-px shrink-0 [&_svg]:size-[18px]', ICON_INK[t])}>
             {icon ?? <Icon />}
           </span>
-        ) : null}
+        )}
         <div className="min-w-0 flex-1">
           {title ? (
             <Heading id={titleId} className="m-0 font-ui text-sm font-semibold leading-snug text-ink">
