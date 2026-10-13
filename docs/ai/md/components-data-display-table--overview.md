@@ -56,6 +56,7 @@ Each story is a live example in Storybook.
 - [EmptyPrimitive](https://demogar.github.io/molaui/?path=/story/components-data-display-table--empty-primitive)
 - [Loading](https://demogar.github.io/molaui/?path=/story/components-data-display-table--loading)
 - [NoResults](https://demogar.github.io/molaui/?path=/story/components-data-display-table--no-results)
+- [NoResultsOnAPhone](https://demogar.github.io/molaui/?path=/story/components-data-display-table--no-results-on-a-phone)
 - [Paginated](https://demogar.github.io/molaui/?path=/story/components-data-display-table--paginated)
 - [Primitives](https://demogar.github.io/molaui/?path=/story/components-data-display-table--primitives)
 - [ServerSide](https://demogar.github.io/molaui/?path=/story/components-data-display-table--server-side)
@@ -194,7 +195,7 @@ Types: `TableCellProps`, `TableCheckboxProps`, `TableHeadProps`, `TableProps`, `
 
 ### Testing status
 
-- Automated, jsdom: each of its 10 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 11 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes.
 - Screen readers: not yet tested by hand.
