@@ -1,7 +1,7 @@
 // Browser audit over every story and every docs page: axe (with real colour
 // contrast) in both themes, that every `data-theme` subtree paints its own
 // ground, horizontal overflow at phone width, and console errors. Exits non-zero on any finding, so CI can gate on it.
-//   node scripts/audit.mjs <base> [--out <dir>] [--only <id substring>] [--workers <n>]
+//   node scripts/audit.mjs <base> [--out <dir>] [--only <id substring>] [--workers <n>] [--shard <i>/<n>]
 //   node scripts/audit.mjs --serve storybook-static [--out <dir>]   (npm run audit)
 //
 // Run it against a static build (`npm run build-storybook`, then
@@ -28,6 +28,8 @@ const outDir = flag('--out')
 const only = flag('--only')
 const workers = Number(flag('--workers', 4))
 const serveDir = flag('--serve')
+// CI splits the pages across runners: one runner took about seven minutes.
+const [shard, shards] = flag('--shard', '1/1').split('/').map(Number)
 const server = serveDir ? await serve(serveDir, 0) : null
 const base = server ? `http://localhost:${server.address().port}` : (args[0] ?? 'http://localhost:6006')
 const PAGE_TIMEOUT = 45_000
@@ -40,16 +42,22 @@ const entries = Object.values(index.entries).filter((e) => !only || e.id.include
 const stories = entries.filter((e) => e.type === 'story')
 const docs = entries.filter((e) => e.type === 'docs')
 
-/** One unit of work: a page, in a theme, at a width, with a set of checks. */
+/**
+ * One unit of work: a page in a theme, with a set of checks. The phone-width
+ * overflow check reuses the light page after axe by narrowing the viewport;
+ * a third page load per entry, at 390px, was a third of the audit's time.
+ */
 const jobs = []
 for (const theme of ['light', 'dark']) {
-  for (const s of stories) jobs.push({ id: s.id, viewMode: 'story', theme, width: 1280, axe: true })
+  for (const s of stories) jobs.push({ id: s.id, viewMode: 'story', theme, overflow: theme === 'light' })
   // On a docs page the chrome stays light, but every example frame follows
   // the theme global, so both themes are audited there too.
-  for (const d of docs) jobs.push({ id: d.id, viewMode: 'docs', theme, width: 1280, axe: true })
+  for (const d of docs) jobs.push({ id: d.id, viewMode: 'docs', theme, overflow: theme === 'light' })
 }
-for (const s of stories) jobs.push({ id: s.id, viewMode: 'story', theme: 'light', width: 390, overflow: true })
-for (const d of docs) jobs.push({ id: d.id, viewMode: 'docs', theme: 'light', width: 390, overflow: true })
+// Interleaved, so every shard gets its share of the heavy docs pages.
+const mine = jobs.filter((_, i) => i % shards === shard - 1)
+const WIDE = { width: 1280, height: 900 }
+const PHONE = { width: 390, height: 900 }
 
 const IGNORED_CONSOLE = [
   /Download the React DevTools/,
@@ -92,107 +100,106 @@ async function audit(page, job, errors) {
   )
 
   const found = []
-  if (job.axe) {
-    await page.addScriptTag({ content: axeSource })
-    found.push(
-      ...(await page.evaluate(async (docs) => {
-        const rules = {
-          region: { enabled: false },
-          'landmark-one-main': { enabled: false },
-          'page-has-heading-one': { enabled: false },
-        }
-        // A docs page stacks several complete examples, so a page header or
-        // an accordion appears once per story: their landmarks repeat and
-        // their headings follow Storybook's own. Uniqueness and order across
-        // examples means nothing to a reader, and every story is audited for
-        // these rules on its own page above.
-        if (docs) {
-          for (const id of [
-            'landmark-unique',
-            'landmark-no-duplicate-banner',
-            'landmark-no-duplicate-contentinfo',
-            'landmark-no-duplicate-main',
-            'heading-order',
-            // Storybook's preview frame is `overflow: auto`, and a sub-pixel
-            // of rounding makes axe count it as a scroll region. The story
-            // pages audit the components' own scroll regions.
-            'scrollable-region-focusable',
-          ])
-            rules[id] = { enabled: false }
-        }
-        // The args table is Storybook's control editor, not documentation:
-        // its object editor nests bare <li>s and its boolean toggle dims the
-        // unselected word. Everything else on the page is audited.
-        // Seen twice in a thousand pages: axe reports a run still in flight
-        // on a freshly loaded document. Waiting for it is enough.
-        while (window.axe._running) await new Promise((resolve) => setTimeout(resolve, 100))
-        const r = await window.axe.run(
-          docs ? { include: ['#storybook-docs'], exclude: ['.docblock-argstable'] } : '#storybook-root',
-          { rules },
-        )
-        // Base UI's focus guards are tabbable, aria-hidden sentinels that keep
-        // focus inside an open menu or dialog. axe cannot know they are
-        // sentinels; the components' keyboard tests prove the trap works.
-        const isGuard = (n) => n.target.join(' ').includes('data-base-ui-focus-guard')
-        return r.violations
-          .map((v) => ({ ...v, nodes: v.nodes.filter((n) => !isGuard(n)) }))
-          .filter((v) => v.nodes.length > 0)
-          .map(
-            (v) =>
-              `${v.id} ×${v.nodes.length}: ${v.nodes
-                .slice(0, 2)
-                .map((n) => n.target.join(' ') + ' — ' + (n.failureSummary ?? '').split('\n')[1])
-                .join(' | ')}`,
-          )
-      }, job.viewMode === 'docs')),
-    )
-  }
-  if (job.axe) {
-    // A `data-theme` subtree must actually re-theme. Every themed element
-    // (the document, each docs example frame, each swatch half, plus one
-    // probe per theme added here) gets a hidden child painted with `--cloth`;
-    // all of one theme must agree, and light must differ from dark. This
-    // caught tokens resolved once, on :root, by Lightning CSS's light-dark()
-    // fallback, which left every nested dark frame light. axe could not see
-    // it: light ink on a light ground has fine contrast.
-    const theming = await page.evaluate(() => {
-      const probes = ['light', 'dark'].map((theme) => {
-        const el = document.createElement('div')
-        el.dataset.theme = theme
-        el.hidden = true
-        document.body.append(el)
-        return el
-      })
-      const seen = { light: new Set(), dark: new Set() }
-      for (const host of document.querySelectorAll('[data-theme="light"], [data-theme="dark"]')) {
-        const child = document.createElement('div')
-        child.style.cssText = 'display:none;background-color:var(--cloth)'
-        ;(host === document.documentElement ? document.body : host).append(child)
-        const color = getComputedStyle(child).backgroundColor
-        child.remove()
-        seen[host.dataset.theme].add(color)
+  await page.addScriptTag({ content: axeSource })
+  found.push(
+    ...(await page.evaluate(async (docs) => {
+      const rules = {
+        region: { enabled: false },
+        'landmark-one-main': { enabled: false },
+        'page-has-heading-one': { enabled: false },
       }
-      for (const p of probes) p.remove()
-      const found = []
-      for (const theme of ['light', 'dark'])
-        if (seen[theme].size > 1)
-          found.push(`data-theme="${theme}" subtrees disagree on --cloth: ${[...seen[theme]].join(' vs ')}`)
-      const [light] = seen.light
-      if (light && seen.dark.has(light))
-        found.push(`a data-theme="dark" subtree paints the light --cloth (${light}): nested theming is broken`)
-      return found
+      // A docs page stacks several complete examples, so a page header or
+      // an accordion appears once per story: their landmarks repeat and
+      // their headings follow Storybook's own. Uniqueness and order across
+      // examples means nothing to a reader, and every story is audited for
+      // these rules on its own page above.
+      if (docs) {
+        for (const id of [
+          'landmark-unique',
+          'landmark-no-duplicate-banner',
+          'landmark-no-duplicate-contentinfo',
+          'landmark-no-duplicate-main',
+          'heading-order',
+          // Storybook's preview frame is `overflow: auto`, and a sub-pixel
+          // of rounding makes axe count it as a scroll region. The story
+          // pages audit the components' own scroll regions.
+          'scrollable-region-focusable',
+        ])
+          rules[id] = { enabled: false }
+      }
+      // The args table is Storybook's control editor, not documentation:
+      // its object editor nests bare <li>s and its boolean toggle dims the
+      // unselected word. Everything else on the page is audited.
+      // Seen twice in a thousand pages: axe reports a run still in flight
+      // on a freshly loaded document. Waiting for it is enough.
+      while (window.axe._running) await new Promise((resolve) => setTimeout(resolve, 100))
+      const r = await window.axe.run(
+        docs ? { include: ['#storybook-docs'], exclude: ['.docblock-argstable'] } : '#storybook-root',
+        { rules },
+      )
+      // Base UI's focus guards are tabbable, aria-hidden sentinels that keep
+      // focus inside an open menu or dialog. axe cannot know they are
+      // sentinels; the components' keyboard tests prove the trap works.
+      const isGuard = (n) => n.target.join(' ').includes('data-base-ui-focus-guard')
+      return r.violations
+        .map((v) => ({ ...v, nodes: v.nodes.filter((n) => !isGuard(n)) }))
+        .filter((v) => v.nodes.length > 0)
+        .map(
+          (v) =>
+            `${v.id} ×${v.nodes.length}: ${v.nodes
+              .slice(0, 2)
+              .map((n) => n.target.join(' ') + ' — ' + (n.failureSummary ?? '').split('\n')[1])
+              .join(' | ')}`,
+        )
+    }, job.viewMode === 'docs')),
+  )
+  // A `data-theme` subtree must actually re-theme. Every themed element
+  // (the document, each docs example frame, each swatch half, plus one
+  // probe per theme added here) gets a hidden child painted with `--cloth`;
+  // all of one theme must agree, and light must differ from dark. This
+  // caught tokens resolved once, on :root, by Lightning CSS's light-dark()
+  // fallback, which left every nested dark frame light. axe could not see
+  // it: light ink on a light ground has fine contrast.
+  const theming = await page.evaluate(() => {
+    const probes = ['light', 'dark'].map((theme) => {
+      const el = document.createElement('div')
+      el.dataset.theme = theme
+      el.hidden = true
+      document.body.append(el)
+      return el
     })
-    found.push(...theming)
-  }
+    const seen = { light: new Set(), dark: new Set() }
+    for (const host of document.querySelectorAll('[data-theme="light"], [data-theme="dark"]')) {
+      const child = document.createElement('div')
+      child.style.cssText = 'display:none;background-color:var(--cloth)'
+      ;(host === document.documentElement ? document.body : host).append(child)
+      const color = getComputedStyle(child).backgroundColor
+      child.remove()
+      seen[host.dataset.theme].add(color)
+    }
+    for (const p of probes) p.remove()
+    const found = []
+    for (const theme of ['light', 'dark'])
+      if (seen[theme].size > 1)
+        found.push(`data-theme="${theme}" subtrees disagree on --cloth: ${[...seen[theme]].join(' vs ')}`)
+    const [light] = seen.light
+    if (light && seen.dark.has(light))
+      found.push(`a data-theme="dark" subtree paints the light --cloth (${light}): nested theming is broken`)
+    return found
+  })
+  found.push(...theming)
   if (job.overflow) {
-    // The args table is a fixed-width grid Storybook does not lay out for a
-    // phone, so it is set aside for the measurement; the examples, prose and
-    // doc blocks around it must still fit.
-    const over = await page.evaluate(() => {
+    // Last, because it changes the page. The args table is a fixed-width grid
+    // Storybook does not lay out for a phone, so it is set aside for the
+    // measurement; the examples, prose and doc blocks around it must still
+    // fit. Two frames let resize listeners and observers re-render first.
+    await page.setViewportSize(PHONE)
+    const over = await page.evaluate(async () => {
       for (const t of document.querySelectorAll('.docblock-argstable')) t.style.display = 'none'
+      for (let i = 0; i < 2; i++) await new Promise((resolve) => requestAnimationFrame(resolve))
       return document.documentElement.scrollWidth - window.innerWidth
     })
-    if (over > 1) found.push(`overflows by ${over}px`)
+    if (over > 1) found.push(`[390px] overflows by ${over}px`)
   }
   for (const e of errors) {
     if (IGNORED_CONSOLE.some((re) => re.test(e))) continue
@@ -214,9 +221,9 @@ const started = Date.now()
 async function worker(queue) {
   let page
   let errors = []
-  const fresh = async (width) => {
+  const fresh = async () => {
     await page?.close().catch(() => {})
-    page = await browser.newPage({ viewport: { width, height: 900 } })
+    page = await browser.newPage({ viewport: WIDE })
     page.on('pageerror', (e) => errors.push(String(e)))
     page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
     // The settings-page pattern guards unsaved changes with `beforeunload`.
@@ -225,7 +232,8 @@ async function worker(queue) {
     page.on('dialog', (d) => d.accept().catch(() => {}))
   }
   for (let job = queue.shift(); job; job = queue.shift()) {
-    if (!page || page.viewportSize().width !== job.width) await fresh(job.width)
+    if (!page) await fresh()
+    else if (page.viewportSize().width !== WIDE.width) await page.setViewportSize(WIDE)
     errors = []
     let timer
     const limit = new Promise((_, reject) => {
@@ -237,7 +245,7 @@ async function worker(queue) {
     } catch (e) {
       failures.push({ ...job, finding: String(e.message ?? e).split('\n')[0] })
       // A page that timed out may still be busy; never reuse it.
-      await fresh(job.width)
+      await fresh()
     } finally {
       clearTimeout(timer)
     }
@@ -245,22 +253,23 @@ async function worker(queue) {
     // started loading, and its console error then landed on that page (seen
     // in CI as a DNS error on the callout docs page). A fresh tab keeps the
     // error with the job that caused it.
-    if (loadsBrokenImage(job)) await fresh(job.width)
+    if (loadsBrokenImage(job)) await fresh()
     done++
-    if (done % 100 === 0) console.log(`  ${done}/${jobs.length} pages`)
+    if (done % 100 === 0) console.log(`  ${done}/${mine.length} pages`)
   }
   await page?.close().catch(() => {})
 }
 
-const queue = [...jobs]
+const queue = [...mine]
 await Promise.all(Array.from({ length: workers }, () => worker(queue)))
 await browser.close()
 server?.close()
 
-const label = (f) => `[${f.width === 390 ? '390px' : f.theme}] ${f.viewMode === 'docs' ? 'docs ' : ''}${f.id}: ${f.finding}`
+const label = (f) => `[${f.theme}] ${f.viewMode === 'docs' ? 'docs ' : ''}${f.id}: ${f.finding}`
 const lines = failures.map(label).sort()
 const seconds = Math.round((Date.now() - started) / 1000)
-const summary = `${stories.length} stories and ${docs.length} docs pages audited (${jobs.length} page loads, ${seconds}s): ${
+const part = shards > 1 ? `, shard ${shard}/${shards}` : ''
+const summary = `${stories.length} stories and ${docs.length} docs pages audited (${mine.length} page loads${part}, ${seconds}s): ${
   failures.length ? `${failures.length} findings` : 'CLEAN'
 }`
 console.log(summary)

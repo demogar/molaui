@@ -13,9 +13,10 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
-# Five independent jobs, run side by side. Each browser job builds its own
+# Independent jobs, run side by side. Each browser shard builds its own
 # Storybook (about ten seconds) rather than waiting on Gates for an artifact,
-# so the slowest job sets the wall-clock time, not the sum of them.
+# so the slowest job sets the wall-clock time, not the sum of them. The target
+# is three to four minutes for the whole run.
 jobs:
   gates:
     # The ruleset requires this name: rename it there too.
@@ -39,43 +40,73 @@ jobs:
         with:
           path: storybook-static
 
-  audit:
-    name: Browser audit
+  # The two browser jobs each took seven to nine minutes on one runner, so
+  # each is split across four. The ruleset requires the names "Browser audit"
+  # and "Visual regression"; a small job with each name passes only when every
+  # shard did, so the shard count can change without touching the ruleset.
+  audit-shard:
+    name: Browser audit (${{ matrix.shard }}/4)
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
         with:
           playwright: 'true'
       - run: npm run build-storybook -- --quiet
-      - run: npm run audit
+      - run: npm run audit -- --shard ${{ matrix.shard }}/4
       - uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: browser-audit
+          name: browser-audit-${{ matrix.shard }}
           path: reports/audit
           if-no-files-found: ignore
 
-  visual:
-    name: Visual regression
+  audit:
+    # The ruleset requires this name: rename it there too.
+    name: Browser audit
+    needs: audit-shard
+    if: always()
     runs-on: ubuntu-latest
+    steps:
+      - run: test "${{ needs.audit-shard.result }}" = success
+
+  visual-shard:
+    name: Visual regression (${{ matrix.shard }}/4)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/setup
         with:
           playwright: 'true'
       - run: npm run build-storybook -- --quiet
-      - run: npm run visual
+      - run: npm run visual -- --shard=${{ matrix.shard }}/4
       # The report holds expected, actual and diff for every failure. To
       # accept an intended change, see "Visual baselines" in CONTRIBUTING.md.
       - uses: actions/upload-artifact@v7
         if: failure()
         with:
-          name: visual-report
+          name: visual-report-${{ matrix.shard }}
           path: |
             playwright-report
             test-results/visual
           if-no-files-found: ignore
+
+  visual:
+    # The ruleset requires this name: rename it there too.
+    name: Visual regression
+    needs: visual-shard
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - run: test "${{ needs.visual-shard.result }}" = success
 
   consumers:
     name: Consumer smoke tests
