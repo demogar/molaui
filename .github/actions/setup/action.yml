@@ -1,5 +1,5 @@
 name: Set up
-description: Node from .nvmrc, npm ci from the cache, and optionally Playwright's Chromium.
+description: Node from .nvmrc, node_modules from the cache (npm ci on a miss), and optionally Playwright's Chromium.
 
 inputs:
   playwright:
@@ -13,7 +13,16 @@ runs:
       with:
         node-version-file: .nvmrc
         cache: npm
-    - run: npm ci
+    # npm ci took 20 to 45 seconds in every job even with npm's download
+    # cache warm; most of it is unpacking. The installed tree is cached whole,
+    # keyed on everything that decides it, and npm ci runs only on a miss.
+    - id: modules
+      uses: actions/cache@v6
+      with:
+        path: node_modules
+        key: node-modules-${{ runner.os }}-${{ hashFiles('.nvmrc', 'package-lock.json') }}
+    - if: steps.modules.outputs.cache-hit != 'true'
+      run: npm ci
       shell: bash
 
     # The browser download is cached per Playwright version; the system

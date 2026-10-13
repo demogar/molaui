@@ -48,7 +48,7 @@ CI also runs three browser jobs side by side with `Gates`. Each can be run local
 
 | Job | Locally | What it holds |
 |---|---|---|
-| Browser audit | `npm run build-storybook && npm run audit` | axe with colour contrast in both themes and no horizontal overflow at 390px, over every story and every docs page, plus console errors. The report lands in `reports/audit/`. |
+| Browser audit | `npm run build-storybook && npm run audit` | axe with colour contrast in both themes, every `data-theme` subtree painting its own ground, and no horizontal overflow at 390px, over every story and every docs page, plus console errors. The report lands in `reports/audit/`. |
 | Visual regression | `npm run build-storybook && npm run visual` | every story in both themes, and each component's first story in compact density, RTL and forced colours, against the Linux baselines. |
 | Consumer smoke tests | `npm run build && npm run consumers` | the packed tarball installed, built and checked in a browser in three apps: Vite on `styles.css`, Vite with its own Tailwind v4 on `tailwind.css`, and the Next.js App Router. |
 
@@ -86,9 +86,9 @@ to compare your own before and after but is never committed.
 
 When a visual change is intended, or a new story needs a baseline:
 
-1. Push the branch and open the pull request. The **Visual regression** job fails and uploads a
-   `visual-report` artifact with the expected, actual and diff image of every failing story. Look
-   at every diff.
+1. Push the branch and open the pull request. The **Visual regression** job fails, and each of
+   its four shards with a failure uploads a `visual-report-<shard>` artifact with the expected,
+   actual and diff image of every failing story. Look at every diff.
 2. If the changes are all intended, add the **`update-visual-baselines`** label to the pull
    request. The *Update visual baselines* workflow renders the baselines on Linux, commits only the
    images that changed to the branch, and removes the label. (From a branch without a pull

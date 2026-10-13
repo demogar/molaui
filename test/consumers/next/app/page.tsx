@@ -21,6 +21,9 @@ export default function Page() {
       <Stat label="Runs today" value="128" />
       <AgentNameField />
       <Button>Run agent</Button>
+      {/* A nested theme in each direction: the runner checks they paint different grounds. */}
+      <section data-theme="dark" data-probe="dark">Dark panel</section>
+      <section data-theme="light" data-probe="light">Light panel</section>
       <Dialog defaultOpen>
         <DialogContent
           title="Publish the run report?"

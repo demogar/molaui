@@ -14,27 +14,29 @@ import { mixOklab, parseHex, type RGB } from './color'
 
 export type ThemeName = 'light' | 'dark'
 
-/** `--name: value;` declarations from the first `:root { … }` block. */
+/**
+ * `--name: value;` declarations from every rule whose selector list includes
+ * `:root` (`:root { … }`, `:root, [data-theme] { … }`), at any `@layer`
+ * depth. The colour tokens and the length tokens are separate rules, because
+ * only the colours are redeclared on `[data-theme]`; see tokens.css.
+ */
 export function parseRootDeclarations(css: string): Map<string, string> {
   const stripped = css.replace(/\/\*[\s\S]*?\*\//g, '')
-  const start = stripped.search(/:root\s*\{/)
-  if (start < 0) throw new Error('No :root block')
-  const open = stripped.indexOf('{', start)
-  let depth = 0
-  let end = open
-  for (let i = open; i < stripped.length; i++) {
-    if (stripped[i] === '{') depth++
-    if (stripped[i] === '}') depth--
-    if (depth === 0) {
-      end = i
-      break
+  const decls = new Map<string, string>()
+  let preludeStart = 0
+  for (let i = 0; i < stripped.length; i++) {
+    const ch = stripped[i]
+    if (ch === '}' || ch === ';') preludeStart = i + 1
+    if (ch !== '{') continue
+    const selectors = stripped.slice(preludeStart, i).split(',').map((s) => s.trim())
+    preludeStart = i + 1
+    if (!selectors.includes(':root')) continue
+    const end = stripped.indexOf('}', i)
+    for (const m of stripped.slice(i + 1, end).matchAll(/(--[a-z0-9-]+)\s*:\s*([^;]+);/g)) {
+      decls.set(m[1]!, m[2]!.replace(/\s+/g, ' ').trim())
     }
   }
-  const body = stripped.slice(open + 1, end)
-  const decls = new Map<string, string>()
-  for (const m of body.matchAll(/(--[a-z0-9-]+)\s*:\s*([^;]+);/g)) {
-    decls.set(m[1]!, m[2]!.replace(/\s+/g, ' ').trim())
-  }
+  if (decls.size === 0) throw new Error('No :root block')
   return decls
 }
 

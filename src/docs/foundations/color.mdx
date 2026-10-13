@@ -101,3 +101,10 @@ Each token is written once with both values, and `color-scheme` picks one. That 
 a duplicated `[data-theme=dark]` block does not: the OS preference is honoured with no script, any
 subtree can flip theme on its own, and a token cannot exist in one theme and be forgotten in the
 other.
+
+The colour tokens are declared on `:root` and again on every `[data-theme]` element. A browser
+that reads `light-dark()` natively doesn't need the second one. A production build does: Lightning
+CSS rewrites `light-dark()` for older browsers into custom properties, and those resolve where the
+token is declared, not where it is used. With the tokens on `:root` alone, a dark panel inside a
+light page painted light. The browser audit now checks that every `data-theme` subtree paints its
+own ground.

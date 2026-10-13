@@ -35,12 +35,12 @@ npm run visual:update    # rewrite changed baselines for this OS (only linux/ is
 npm run consumers        # npm pack, install into test/consumers/* apps, build, check in a browser (needs build)
 ```
 
-CI (`.github/workflows/ci.yml`) runs `Gates`, `Browser audit`, `Visual regression` and `Consumer smoke tests` in parallel; all four are required by the ruleset. Visual baselines must be rendered on Linux: label the PR `update-visual-baselines` (workflow `visual-baselines.yml`) rather than committing baselines from macOS, then push again so CI reruns. Shared CI setup (Node, npm cache, cached Playwright Chromium) is the composite action `.github/actions/setup`.
+CI (`.github/workflows/ci.yml`) runs `Gates`, `Browser audit`, `Visual regression` and `Consumer smoke tests` in parallel; all four are required by the ruleset. `Browser audit` and `Visual regression` are each a matrix of four shards (`audit.mjs --shard i/n`, Playwright `--shard`) plus a small job with the required name that passes only if every shard did, so changing the shard count does not touch the ruleset. The whole run should stay within three to four minutes. Visual baselines must be rendered on Linux: label the PR `update-visual-baselines` (workflow `visual-baselines.yml`) rather than committing baselines from macOS, then push again so CI reruns. Shared CI setup (Node, `node_modules` cached on the lockfile with `npm ci` only on a miss, cached Playwright Chromium) is the composite action `.github/actions/setup`.
 
 A change is ready only when `npm run check` passes. Never weaken a gate to get green; if a gate is wrong, fix it in its own commit and say why.
 
 Browser scripts (need a running Storybook, use Playwright):
-- `node scripts/audit.mjs http://localhost:6006 [--only <id fragment>]` — axe *with* color contrast in both themes, 390px horizontal-overflow check, console errors, over every story and every docs page; exits non-zero on findings. Prefer the static build (`npm run audit`): the dev server stalls it.
+- `node scripts/audit.mjs http://localhost:6006 [--only <id fragment>] [--shard i/n]` — axe *with* color contrast in both themes, 390px horizontal-overflow check (the light page, narrowed after axe, not a third load), console errors, over every story and every docs page; exits non-zero on findings. Prefer the static build (`npm run audit`): the dev server stalls it.
 - `node scripts/serve-static.mjs [dir] [port]` — serves `storybook-static/` (used by the audit and the visual tests).
 - `node scripts/shoot.mjs <outDir> <base> <storyId[:theme[:density[:width]]]>...` — screenshots for visual review.
 - `node scripts/readme-shots.mjs http://localhost:6006` — regenerates `docs/screenshots/` at 2x, except `agent-console.png`, which was captured by driving the console story by hand.
