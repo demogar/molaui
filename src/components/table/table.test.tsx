@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
 import { DataTable, type DataTableColumn } from './data-table'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './table'
+import { Table, TableBody, TableCell, TableEmpty, TableHead, TableHeader, TableRow } from './table'
 
 interface Row {
   id: string
@@ -64,6 +64,48 @@ describe('Table primitives', () => {
         </Table>,
       )
       expect(container.querySelector('[data-slot=table-frame]')).not.toHaveAttribute('tabindex')
+    } finally {
+      scroll.mockRestore()
+      client.mockRestore()
+      vi.unstubAllGlobals()
+    }
+  })
+
+  it('sizes an empty row’s message to the visible frame, not the scrolled table', () => {
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        observe() {}
+        disconnect() {}
+      },
+    )
+    // jsdom has no layout: a 900px table in a 390px frame, as on a phone.
+    const scroll = vi.spyOn(HTMLElement.prototype, 'scrollWidth', 'get').mockReturnValue(900)
+    const client = vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockReturnValue(390)
+    try {
+      render(
+        <Table aria-label="Queued runs">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Run</TableHead>
+              <TableHead numeric>Waiting</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableEmpty colSpan={2} title="The queue is clear" actions={<button>Start a run</button>}>
+              Runs appear here while they wait for a worker.
+            </TableEmpty>
+          </TableBody>
+        </Table>,
+      )
+      const table = screen.getByRole('table', { name: 'Queued runs' })
+      expect(table.parentElement!.style.getPropertyValue('--table-viewport')).toBe('390px')
+      const heading = within(table).getByRole('heading', { name: 'The queue is clear' })
+      // The message sits in one block, stuck to the inline start and as wide as
+      // the frame, whose classes are logical so right-to-left follows.
+      const block = heading.closest('td')!.firstElementChild!
+      expect(block).toHaveClass('sticky', 'start-0', 'w-[var(--table-viewport,100%)]')
+      expect(within(table).getByRole('button', { name: 'Start a run' })).toBeInTheDocument()
     } finally {
       scroll.mockRestore()
       client.mockRestore()

@@ -146,7 +146,7 @@
       "screenReadersByHand": false
     },
     "Components/Data display/Table": {
-      "stories": 10,
+      "stories": 11,
       "unitTests": [
         "src/components/table/table.test.tsx"
       ],

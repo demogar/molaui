@@ -23,7 +23,7 @@ const meta = {
       story: { inline: false, height: '640px' },
       description: {
         component:
-          'The knowledge sources of a Cayuco workspace: a header, a search field and a table. Composed from `PageHeader`, `Breadcrumb`, `Field`, `SearchInput`, `Table` and `EmptyState`, with nothing written for it. The screen is ordinary on purpose; what it demonstrates is every condition in which there is no list to show.\n\n**Decisions.** *First run* takes the whole body and its action connects the first source; the search field is not drawn, because a search over nothing can only fail. *No results* keeps the count and the search field, puts the empty state in the table’s place and offers **Show all sources**, which clears the search and returns focus to the field. (Not “Clear search”: the field’s own clear button already has that name, and two controls with one name are one too many to a screen reader.) It never says “connect your first source” to someone who has five. *Error* says what is still true (the sources are still connected) and offers **Retry**; once the rows are back, focus moves to their heading. *No permission* names the two people who can grant access, and the header drops **Connect source**, because offering an action the reader cannot take is a second refusal. *Loading* is the table’s own shape with skeleton rows, `aria-busy`, and one polite “Loading knowledge sources”.',
+          'The knowledge sources of a Cayuco workspace: a header, a search field and a table. Composed from `PageHeader`, `Breadcrumb`, `Field`, `SearchInput`, `Table` and `EmptyState`, with nothing written for it. The screen is ordinary on purpose; what it demonstrates is every condition in which there is no list to show.\n\n**Decisions.** *First run* takes the whole body and its action connects the first source; the search field is not drawn, because a search over nothing can only fail. *No results* keeps the count, the search field and the table’s headers, puts the empty state in a `TableEmpty` row under them, and offers **Show all sources**, which clears the search and returns focus to the field. (Not “Clear search”: the field’s own clear button already has that name, and two controls with one name are one too many to a screen reader.) It never says “connect your first source” to someone who has five. *Error* says what is still true (the sources are still connected) and offers **Retry**; once the rows are back, focus moves to their heading. *No permission* names the two people who can grant access, and the header drops **Connect source**, because offering an action the reader cannot take is a second refusal. *Loading* is the table’s own shape with skeleton rows, `aria-busy`, and one polite “Loading knowledge sources”.',
       },
     },
   },
@@ -54,7 +54,7 @@ export const NoResults: Story = {
     docs: {
       description: {
         story:
-          'Five sources, none matching. The count and the search stay, so the list is visibly still there; the empty state in the table’s place shows every source again and puts focus back in the field.',
+          'Five sources, none matching. The count and the search stay, so the list is visibly still there, and so do the headers. The empty row is centred on what the frame shows, so on a phone, where the table scrolls sideways, it is in view; its action shows every source again and puts focus back in the field.',
       },
     },
   },
