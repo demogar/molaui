@@ -33,6 +33,7 @@ import pkg from '../package.json' with { type: 'json' }
 import { ACCESSIBILITY } from '../src/docs/usage/accessibility'
 import { ANATOMY, ROOT_PART } from '../src/docs/usage/anatomy'
 import type { Accessibility } from '../src/docs/usage/accessibility-types'
+import { type ChangeEntry, changesFor, parseChangelog } from '../src/docs/usage/changes'
 import { builtFrom, type Composition, compositionFiles } from '../src/docs/usage/composition'
 import { USAGE, type Usage } from '../src/docs/usage/guidance'
 import { type Phase, phaseOf, PHASES } from '../src/docs/usage/lifecycle'
@@ -267,6 +268,8 @@ interface Entry {
   stories: { name: string; id: string; url: string }[]
   /** The patterns and showcases that import it, read from their source. */
   usedIn?: string[]
+  /** Its entries in CHANGELOG.md, newest first, matched by commit scope (src/docs/usage/changes.ts). */
+  changes?: ChangeEntry[]
 }
 
 const entries = new Map<string, Entry>()
@@ -381,6 +384,12 @@ const usedIn = (title: string) =>
 for (const entry of sorted) {
   const where = usedIn(entry.title)
   if (where.length) entry.usedIn = where
+}
+
+const releases = parseChangelog(readFileSync(resolve(root, 'CHANGELOG.md'), 'utf8'))
+for (const entry of sorted) {
+  const changes = changesFor(entry.title, releases)
+  if (changes.length) entry.changes = changes
 }
 
 const patternGuidance = (usage: PatternUsage, title: string) => ({

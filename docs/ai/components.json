@@ -381,6 +381,26 @@
       "usedIn": [
         "AI/Agent console",
         "Patterns/Agent hand-off"
+      ],
+      "changes": [
+        {
+          "version": "0.3.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "ai"
+          ],
+          "subject": "add change approval, citation cards and run recovery",
+          "pr": {
+            "number": 13,
+            "url": "https://github.com/demogar/molaui/issues/13"
+          },
+          "commit": {
+            "sha": "a15d16e",
+            "url": "https://github.com/demogar/molaui/commit/a15d16e46239c37691aeb14d513077958ecae62f"
+          }
+        }
       ]
     },
     {
@@ -751,6 +771,26 @@
           "name": "TryIt",
           "id": "ai-change-review--try-it",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-change-review--try-it"
+        }
+      ],
+      "changes": [
+        {
+          "version": "0.3.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "ai"
+          ],
+          "subject": "add change approval, citation cards and run recovery",
+          "pr": {
+            "number": 13,
+            "url": "https://github.com/demogar/molaui/issues/13"
+          },
+          "commit": {
+            "sha": "a15d16e",
+            "url": "https://github.com/demogar/molaui/commit/a15d16e46239c37691aeb14d513077958ecae62f"
+          }
         }
       ]
     },
@@ -1839,6 +1879,26 @@
           "id": "ai-run-error--without-a-step",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-run-error--without-a-step"
         }
+      ],
+      "changes": [
+        {
+          "version": "0.3.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "ai"
+          ],
+          "subject": "add change approval, citation cards and run recovery",
+          "pr": {
+            "number": 13,
+            "url": "https://github.com/demogar/molaui/issues/13"
+          },
+          "commit": {
+            "sha": "a15d16e",
+            "url": "https://github.com/demogar/molaui/commit/a15d16e46239c37691aeb14d513077958ecae62f"
+          }
+        }
       ]
     },
     {
@@ -2207,6 +2267,26 @@
       ],
       "usedIn": [
         "AI/Agent console"
+      ],
+      "changes": [
+        {
+          "version": "0.3.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "ai"
+          ],
+          "subject": "add change approval, citation cards and run recovery",
+          "pr": {
+            "number": 13,
+            "url": "https://github.com/demogar/molaui/issues/13"
+          },
+          "commit": {
+            "sha": "a15d16e",
+            "url": "https://github.com/demogar/molaui/commit/a15d16e46239c37691aeb14d513077958ecae62f"
+          }
+        }
       ]
     },
     {
@@ -3928,6 +4008,26 @@
           "id": "components-data-display-swatch--tones",
           "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-swatch--tones"
         }
+      ],
+      "changes": [
+        {
+          "version": "0.4.0",
+          "date": "2026-10-13",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "callout"
+          ],
+          "subject": "add a flat variant and a swatch colour key",
+          "pr": {
+            "number": 20,
+            "url": "https://github.com/demogar/molaui/issues/20"
+          },
+          "commit": {
+            "sha": "fc8a390",
+            "url": "https://github.com/demogar/molaui/commit/fc8a390ee8206dcd1d059e30fc90c5c2bd4c2447"
+          }
+        }
       ]
     },
     {
@@ -4536,6 +4636,26 @@
         "Patterns/Empty states",
         "Patterns/Filtered table",
         "Patterns/List and detail"
+      ],
+      "changes": [
+        {
+          "version": "0.2.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "components"
+          ],
+          "subject": "add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features",
+          "pr": {
+            "number": 11,
+            "url": "https://github.com/demogar/molaui/issues/11"
+          },
+          "commit": {
+            "sha": "aeacb52",
+            "url": "https://github.com/demogar/molaui/commit/aeacb52f1b4212e472d3f4cc9aa984bfd760528a"
+          }
+        }
       ]
     },
     {
@@ -5209,6 +5329,26 @@
         "Patterns/Agent hand-off",
         "Patterns/Confirmation",
         "Patterns/List and detail"
+      ],
+      "changes": [
+        {
+          "version": "0.4.0",
+          "date": "2026-10-13",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "callout"
+          ],
+          "subject": "add a flat variant and a swatch colour key",
+          "pr": {
+            "number": 20,
+            "url": "https://github.com/demogar/molaui/issues/20"
+          },
+          "commit": {
+            "sha": "fc8a390",
+            "url": "https://github.com/demogar/molaui/commit/fc8a390ee8206dcd1d059e30fc90c5c2bd4c2447"
+          }
+        }
       ]
     },
     {
@@ -5939,6 +6079,26 @@
           "name": "Shapes",
           "id": "components-feedback-skeleton--shapes",
           "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-skeleton--shapes"
+        }
+      ],
+      "changes": [
+        {
+          "version": "0.2.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "components"
+          ],
+          "subject": "add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features",
+          "pr": {
+            "number": 11,
+            "url": "https://github.com/demogar/molaui/issues/11"
+          },
+          "commit": {
+            "sha": "aeacb52",
+            "url": "https://github.com/demogar/molaui/commit/aeacb52f1b4212e472d3f4cc9aa984bfd760528a"
+          }
         }
       ]
     },
@@ -6916,6 +7076,26 @@
       "usedIn": [
         "Components/Forms/Form example",
         "Patterns/Filtered table"
+      ],
+      "changes": [
+        {
+          "version": "0.2.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "components"
+          ],
+          "subject": "add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features",
+          "pr": {
+            "number": 11,
+            "url": "https://github.com/demogar/molaui/issues/11"
+          },
+          "commit": {
+            "sha": "aeacb52",
+            "url": "https://github.com/demogar/molaui/commit/aeacb52f1b4212e472d3f4cc9aa984bfd760528a"
+          }
+        }
       ]
     },
     {
@@ -7480,6 +7660,26 @@
       "usedIn": [
         "Components/Forms/Form example",
         "Patterns/Filtered table"
+      ],
+      "changes": [
+        {
+          "version": "0.2.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "components"
+          ],
+          "subject": "add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features",
+          "pr": {
+            "number": 11,
+            "url": "https://github.com/demogar/molaui/issues/11"
+          },
+          "commit": {
+            "sha": "aeacb52",
+            "url": "https://github.com/demogar/molaui/commit/aeacb52f1b4212e472d3f4cc9aa984bfd760528a"
+          }
+        }
       ]
     },
     {
@@ -8116,6 +8316,26 @@
       ],
       "usedIn": [
         "Components/Forms/Form example"
+      ],
+      "changes": [
+        {
+          "version": "0.2.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "components"
+          ],
+          "subject": "add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features",
+          "pr": {
+            "number": 11,
+            "url": "https://github.com/demogar/molaui/issues/11"
+          },
+          "commit": {
+            "sha": "aeacb52",
+            "url": "https://github.com/demogar/molaui/commit/aeacb52f1b4212e472d3f4cc9aa984bfd760528a"
+          }
+        }
       ]
     },
     {
@@ -8321,6 +8541,26 @@
       "usedIn": [
         "Components/Forms/Form example",
         "Patterns/Settings page"
+      ],
+      "changes": [
+        {
+          "version": "0.2.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "components"
+          ],
+          "subject": "add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features",
+          "pr": {
+            "number": 11,
+            "url": "https://github.com/demogar/molaui/issues/11"
+          },
+          "commit": {
+            "sha": "aeacb52",
+            "url": "https://github.com/demogar/molaui/commit/aeacb52f1b4212e472d3f4cc9aa984bfd760528a"
+          }
+        }
       ]
     },
     {
@@ -10951,6 +11191,26 @@
       ],
       "usedIn": [
         "Patterns/Filtered table"
+      ],
+      "changes": [
+        {
+          "version": "0.2.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "components"
+          ],
+          "subject": "add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features",
+          "pr": {
+            "number": 11,
+            "url": "https://github.com/demogar/molaui/issues/11"
+          },
+          "commit": {
+            "sha": "aeacb52",
+            "url": "https://github.com/demogar/molaui/commit/aeacb52f1b4212e472d3f4cc9aa984bfd760528a"
+          }
+        }
       ]
     },
     {
@@ -12347,6 +12607,26 @@
       ],
       "usedIn": [
         "Patterns/Filtered table"
+      ],
+      "changes": [
+        {
+          "version": "0.2.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "components"
+          ],
+          "subject": "add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features",
+          "pr": {
+            "number": 11,
+            "url": "https://github.com/demogar/molaui/issues/11"
+          },
+          "commit": {
+            "sha": "aeacb52",
+            "url": "https://github.com/demogar/molaui/commit/aeacb52f1b4212e472d3f4cc9aa984bfd760528a"
+          }
+        }
       ]
     },
     {

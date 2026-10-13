@@ -1,0 +1,51 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+import { ReleaseChanges, ReleaseStatus } from '../blocks/changes'
+
+<Meta title="Mola UI/What's new/0.2" />
+
+# What's new in 0.2
+
+<ReleaseStatus version="0.2.0" />
+
+0.2 adds the fields and data screens an internal tool needs first, and makes the cut hold up in
+Windows High Contrast and in right-to-left languages. The full list is at the end of this page and
+on the [Changelog](?path=/docs/mola-ui-changelog--overview).
+
+## The fields internal tools ask for
+
+- **[Combobox](?path=/docs/components-forms-combobox--overview)** searches a long list. With
+  `multiple`, each value is a chip you can see and remove. It groups options and has states for
+  options that load asynchronously. `Autocomplete`, beside it, accepts free text.
+- **[Date picker](?path=/docs/components-forms-date-picker--overview)** picks a date or a range
+  on a calendar grid that follows the WAI-ARIA pattern. The range picker also takes typed start
+  and end dates, and refuses an end before the start.
+- **[Number input](?path=/docs/components-forms-number-input--overview)** formats numbers for a
+  locale, and **[File upload](?path=/docs/components-forms-file-upload--overview)** is a dropzone
+  that checks each file's type, size and count, shows progress and offers a retry.
+
+## Tables that carry a whole admin screen
+
+[Table](?path=/docs/components-data-display-table--overview)'s `DataTable` gained pagination,
+server-side data (`manual`, with the total in `rowCount`), a bar for bulk actions and a Columns
+menu to hide columns. Around it, [Toolbar](?path=/docs/components-layout-toolbar--overview) gained
+toggles, an input and an overflow menu for what doesn't fit, and
+[Drawer](?path=/docs/components-overlays-drawer--overview) opens a record from the start, the end
+or the bottom of the page. The [Filtered table](?path=/docs/patterns-filtered-table--overview)
+pattern puts them together.
+
+## Edges in forced colours, and right-to-left
+
+Forced-colours mode drops box shadows, and Mola's edges are box shadows, so inputs lost their
+edges and switches disappeared. Each edge now draws a 1px system-colour outline in that mode, focus
+is a 2px outline, and fills that carry meaning (a slider thumb, a selected item) are repainted in
+system colours.
+
+Components lay out with logical properties, so they mirror in a right-to-left page, and directional
+icons flip with them. Base UI reads arrow-key direction from React context, so the library
+re-exports its `DirectionProvider`: set `dir` on `<html>` for layout and wrap the app in
+`DirectionProvider` for behaviour.
+
+## Everything in 0.2.0
+
+<ReleaseChanges version="0.2.0" />

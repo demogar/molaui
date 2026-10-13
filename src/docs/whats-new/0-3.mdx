@@ -1,0 +1,49 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+import { ReleaseChanges, ReleaseStatus } from '../blocks/changes'
+
+<Meta title="Mola UI/What's new/0.3" />
+
+# What's new in 0.3
+
+<ReleaseStatus version="0.3.0" />
+
+0.3 is about the moments when an agent acts: approving what it wants to change, checking what it
+cites, and recovering when it fails. The docs also learned to say when *not* to use a component.
+The full list is at the end of this page and on the
+[Changelog](?path=/docs/mola-ui-changelog--overview).
+
+## Approve a change before an agent makes it
+
+[Change review](?path=/docs/ai-change-review--overview) shows a change an agent proposes and asks
+for a decision: Approve, Request changes or Reject, with equal visual weight. Saying no needs a
+reason; without one, the error is stated and focus moves to the field. `FileDiff` shows the diff
+as lists, each line with a + or − glyph and hidden "Added:" or "Removed:" text, so the change is
+not carried by colour alone.
+
+## Check a citation where it is made, and recover from a failed run
+
+A citation marker in [Sources](?path=/docs/ai-sources--overview) now opens a preview card on hover,
+focus or tap, with the source's title, domain and the quoted passage. `citationRenderer(sources)`
+builds the markers from the same array the source list renders, so marker 2 always opens source 2.
+
+When a run fails, [Run error](?path=/docs/ai-run-error--overview) says which step stopped it, shows
+the error as written, and offers *Retry from step N*, *Retry run* and *Copy error details*. A rate
+limit counts down and is announced at ten seconds and at zero, not every second. `PartialOutput`
+keeps what arrived before the stop, marked as partial, and
+[Agent run](?path=/docs/ai-agent-run--overview) takes the failure and the retry.
+
+## Docs that say when not to use something
+
+Every component page now has usage guidance: when to use it, when not to and what to use instead,
+and do and don't. The [Versioning](?path=/docs/mola-ui-versioning--overview) page says what each
+release number promises. The first Patterns are whole Cayuco screens to copy, and `llms.txt` and
+`docs/ai/components.json` describe every component for coding agents, generated from the source.
+
+A consistency sweep came with it: disabled and secondary text use measured colour tokens instead
+of opacity fades, every disclosure uses the same marker, and components use the system's own
+controls inside themselves.
+
+## Everything in 0.3.0
+
+<ReleaseChanges version="0.3.0" />
