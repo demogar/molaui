@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.4.0](https://github.com/demogar/molaui/compare/v0.3.0...v0.4.0) (2026-10-13)
+
+
+### Features
+
+* **callout:** add a flat variant and a swatch colour key ([#20](https://github.com/demogar/molaui/issues/20)) ([fc8a390](https://github.com/demogar/molaui/commit/fc8a390ee8206dcd1d059e30fc90c5c2bd4c2447))
+* **docs:** add anatomy diagrams measured from the live component ([#25](https://github.com/demogar/molaui/issues/25)) ([f24a7f0](https://github.com/demogar/molaui/commit/f24a7f0320388cbe669cfdb21c98a82df6223749))
+
+
+### Bug Fixes
+
+* **docs:** read every :root rule in the token table ([#31](https://github.com/demogar/molaui/issues/31)) ([02cf9c7](https://github.com/demogar/molaui/commit/02cf9c7afa0b3010fede9eb7bf4434d9387c5043))
+* **theme:** make nested data-theme subtrees re-theme in built css ([#28](https://github.com/demogar/molaui/issues/28)) ([27dcae9](https://github.com/demogar/molaui/commit/27dcae9d6e798e452195bc06e6c3f6dde64c7037))
+
+
+### Documentation
+
+* add lifecycle labels, accessibility sections and a known gaps page ([#22](https://github.com/demogar/molaui/issues/22)) ([0691ad1](https://github.com/demogar/molaui/commit/0691ad1be082ad6f960f327203f2762ff4114651))
+* **foundations:** add spacing, layers, content and token pages ([#27](https://github.com/demogar/molaui/issues/27)) ([71a6f2d](https://github.com/demogar/molaui/commit/71a6f2d804675f2e8bb6d7efc4d726205b7d52ba))
+* **patterns:** add guidance, used-in links and three new patterns ([#26](https://github.com/demogar/molaui/issues/26)) ([fe06943](https://github.com/demogar/molaui/commit/fe06943baaf4c0ca8fe6dd8fa012aa926e7b1731))
+* surface architecture decisions in storybook ([#24](https://github.com/demogar/molaui/issues/24)) ([b79c1ac](https://github.com/demogar/molaui/commit/b79c1acf1d44515bd1524affa7aee60a874793a6))
+
 ## [0.3.0](https://github.com/demogar/molaui/compare/v0.2.0...v0.3.0) (2026-10-06)
 
 
