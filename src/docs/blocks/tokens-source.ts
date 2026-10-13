@@ -79,23 +79,29 @@ export interface TokenRow {
 }
 
 /**
- * Every custom property in the :root block of tokens.css, in file order, with
- * the section heading it sits under and its trailing comment. The values are
- * resolved by the same resolver the contrast contract uses, so the table and
- * the test cannot disagree.
+ * Every custom property declared in a rule whose selector list includes :root
+ * (the colour tokens sit in `:root, [data-theme]` inside `@layer theme`, the
+ * rest in a plain `:root`), in file order, with the section heading it sits
+ * under and its trailing comment. Reading only the first `:root {` block
+ * missed every colour once the theme fix moved them, so this walks the whole
+ * file and tracks which rule each line is in. The values are resolved by the
+ * same resolver the contrast contract uses, so the table and the test cannot
+ * disagree.
  */
 export function tokenRows(css: string = tokensCss, source: Map<string, string> = decls): TokenRow[] {
-  const start = css.search(/:root\s*\{/)
-  const lines = css.slice(start).split('\n')
   const rows: TokenRow[] = []
+  const seen = new Set<string>()
+  // One entry per open block: whether its selector list includes :root.
+  const stack: boolean[] = []
+  let prelude = ''
   let group = ''
-  let depth = 0
-  for (const line of lines) {
+  for (const line of css.split('\n')) {
     const heading = line.match(/\/\*\s*──\s*([^─]+?)\s*─/)
     if (heading) group = heading[1]!.replace(/:.*$/, '').trim()
     const decl = line.match(/^\s*(--[a-z0-9-]+)\s*:/)
-    if (decl && depth === 1 && source.has(decl[1]!)) {
+    if (decl && stack.at(-1) && source.has(decl[1]!) && !seen.has(decl[1]!)) {
       const name = decl[1]!
+      seen.add(name)
       const raw = source.get(name)!
       const note = line.match(/;\s*\/\*\s*(.+?)\s*\*\//)?.[1] ?? null
       const value = (theme: ThemeName) => {
@@ -119,10 +125,19 @@ export function tokenRows(css: string = tokensCss, source: Map<string, string> =
       })
     }
     for (const ch of line.replace(/\/\*.*?\*\//g, '')) {
-      if (ch === '{') depth++
-      if (ch === '}') depth--
+      if (ch === '{') {
+        stack.push(prelude.split(',').some((sel) => sel.trim() === ':root'))
+        prelude = ''
+      } else if (ch === '}') {
+        stack.pop()
+        prelude = ''
+      } else if (ch === ';') {
+        prelude = ''
+      } else {
+        prelude += ch
+      }
     }
-    if (depth <= 0 && rows.length) break
+    prelude += ' '
   }
   return rows
 }
