@@ -11,6 +11,7 @@ import { Drawer, DrawerClose, DrawerContent, DrawerTrigger, type DrawerSide } fr
 
 const meta = {
   title: 'Components/Overlays/Drawer',
+  tags: ['stable'],
   component: DrawerContent,
   parameters: {
     // Same as Dialog: Base UI's focus trap puts aria-hidden sentinel spans

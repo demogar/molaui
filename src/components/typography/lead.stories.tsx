@@ -4,6 +4,7 @@ import { Lead } from './lead'
 
 const meta = {
   title: 'Components/Typography/Lead',
+  tags: ['stable'],
   component: Lead,
   args: {
     children:

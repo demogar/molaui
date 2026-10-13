@@ -20,6 +20,7 @@ import {
 
 const meta = {
   title: 'Components/Data display/Table',
+  tags: ['stable'],
   component: Table,
   parameters: {
     docs: {

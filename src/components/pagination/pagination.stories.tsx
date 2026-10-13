@@ -5,6 +5,7 @@ import { Pagination } from './pagination'
 
 const meta = {
   title: 'Components/Navigation/Pagination',
+  tags: ['stable'],
   component: Pagination,
   args: { page: 5, pageCount: 26, onPageChange: () => {} },
   parameters: {

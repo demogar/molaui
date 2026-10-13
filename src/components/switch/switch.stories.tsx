@@ -4,6 +4,7 @@ import { Switch } from './switch'
 
 const meta = {
   title: 'Components/Forms/Switch',
+  tags: ['stable'],
   component: Switch,
   args: { label: 'Stream responses', defaultChecked: true },
   parameters: {

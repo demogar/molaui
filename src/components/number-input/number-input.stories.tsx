@@ -7,6 +7,7 @@ import { NumberInput } from './number-input'
 
 const meta = {
   title: 'Components/Forms/Number input',
+  tags: ['stable'],
   component: NumberInput,
   parameters: {
     docs: {

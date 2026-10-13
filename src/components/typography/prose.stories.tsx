@@ -4,6 +4,7 @@ import { Prose } from './prose'
 
 const meta = {
   title: 'Components/Typography/Prose',
+  tags: ['stable'],
   component: Prose,
   args: { size: 'base' },
   argTypes: { size: { control: 'inline-radio', options: ['sm', 'base'] } },

@@ -21,6 +21,8 @@ npm run tokens           # regenerate tokens/mola.tokens.json from tokens.css
 npm run tokens:check     # fail if tokens/mola.tokens.json is stale
 npm run manifest         # regenerate docs/ai/components.json, llms.txt, llms-full.txt
 npm run manifest:check   # fail if those are stale or the README/introduction counts are wrong
+npm run evidence         # regenerate docs/accessibility/evidence.json (testing status on each component page)
+npm run evidence:check   # fail if it is stale
 npm run build            # library build to dist/
 npm run build-storybook  # static Storybook to storybook-static/
 npm run api              # regenerate etc/mola-ui.api.md from dist/ (API Extractor; needs build)
@@ -90,6 +92,7 @@ Storybook docs pages (introduction, principles, foundations, changelog) are MDX 
 
 ### Usage guidance, patterns and agent docs
 - Every component has an autodocs page (`tags: ['autodocs']` in preview); `.storybook/docs-page.tsx` inserts a Usage section from `src/docs/usage/guidance.ts`, keyed by stories title. `src/docs/usage/usage.test.ts` fails if a component page has no entry; composed showcases and `Patterns/*` are exempt.
+- Component pages follow one contract, `SECTIONS` in `src/docs/usage/contract.ts`: summary and lifecycle phase → usage → examples → accessibility → related. The phase is a stories `tags` entry (`stable`, `experimental` or `deprecated`; exactly one per component page); keyboard tables and the "Mola handles / you handle" lists are in `src/docs/usage/accessibility.ts` (`NON_INTERACTIVE` lists pages with no keyboard table); the testing status is generated into `docs/accessibility/evidence.json` by `npm run evidence`. `usage.test.ts` fails a component page that cannot fill a section. A new component needs all of these.
 - `src/patterns/<name>/` holds whole Cayuco screens: `<name>.tsx` (the screen), stories, tests. They are excluded from the JS build and type declarations, but `src/styles/index.css` scans their non-story files, so a copied pattern finds its classes in the shipped CSS. The logical-properties guard scans them too.
 - `scripts/export-manifest.ts` builds `docs/ai/components.json`, `llms.txt` and `llms-full.txt` from the TypeScript checker, react-docgen-typescript, the stories and the usage guidance. Rerun `npm run manifest` after changing props, doc comments, stories or guidance. The design rules it publishes live in `src/docs/usage/rules.ts`; `skills/mola-ui/SKILL.md` is hand-written and must agree with them.
 - `src/test/links.test.ts` resolves every `?path=/docs/…` and `?path=/story/…` link in the README, MDX, sources, skill and generated docs against the ids Storybook assigns. Renaming a story or a title means fixing its links.

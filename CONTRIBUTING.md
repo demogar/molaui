@@ -39,7 +39,7 @@ npm run dev        # Storybook on :6006
 A change is ready when all of these pass — CI runs the same list in its `Gates` job:
 
 ```bash
-npm run check   # lint · typecheck · test · tokens:check · manifest:check · build · api:check · size · build-storybook
+npm run check   # lint · typecheck · test · tokens:check · manifest:check · evidence:check · build · api:check · size · build-storybook
 ```
 
 Never weaken a gate to get green. If a gate is wrong, fix it in its own commit and say why.

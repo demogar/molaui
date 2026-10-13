@@ -32,6 +32,16 @@ Theme and density are attributes, not props: `<html data-theme="dark" data-densi
 - Unknown duration is the relleno working state, never a spinner; elapsed time counts up instead of a progress bar inventing a percentage. Model work has no knowable total, and a bar that stalls at 90% is a lie.
 - Anything that writes to the world waits for a person, with the choices given equal weight (`ToolCall` approval, `ChangeReview`). An agent’s action is only as safe as the decision in front of it.
 - Use the components for behaviour. Do not re-implement focus trapping, roving focus or typeahead; the components are built on Base UI. A maintained primitive gets keyboard and screen-reader behaviour right in more cases than a local copy.
+- Check a component’s lifecycle phase before building on it. Stable is covered by semver, Experimental may change in a minor release, and Deprecated names its replacement: use that instead. A screen built on a component that is about to change or go is built twice.
+- Do what each component’s accessibility section leaves to you, usually an accessible name or a label. The component handles roles, focus and announcements. Axe catches a missing name only on the screens it is run on; the component cannot know what its button is for.
+
+## Lifecycle phases
+
+Every component has one phase. Stable unless the index says otherwise.
+
+- Experimental: Its API may change in a minor release, without a deprecation first.
+- Stable: Semantic versioning applies: nothing breaks without a deprecation first.
+- Deprecated: It still works and warns in development. It will be removed; move to its replacement.
 
 ## Actions
 
@@ -40,6 +50,8 @@ Theme and density are attributes, not props: `<html data-theme="dark" data-densi
 https://demogar.github.io/molaui/?path=/docs/components-actions-button--overview
 
 A cut-shape button for an action on this page, with IconButton for an action shown as an icon alone.
+
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
 
 When to use:
 - Starting an action: run, save, delete, cancel.
@@ -62,6 +74,21 @@ Content:
 - Start with a verb and name the object: “Delete run”, “Start run”, not “OK”, “Yes” or “Submit”.
 - Write labels in sentence case with no trailing period; the button sets them in capitals itself.
 - Give IconButton a label that names the action and the object, “Copy run id”; it is also the tooltip.
+
+Keyboard:
+- Tab: Moves focus to the button, including while it is loading.
+- Enter or Space: Activates it, unless it is disabled or loading.
+
+Mola handles:
+- Renders a native `<button>` through Base UI, so it is announced as a button with its label as the name.
+- While `loading`, sets `aria-busy`, stops accepting presses and stays focusable, so focus is not thrown back to the top of the page.
+- Hides the leading icon and the arrow from assistive tech, so the label alone is the name.
+- Gives `IconButton` its `label` as both the `aria-label` and the native tooltip.
+
+You handle:
+- Write a label that names the action with a verb: Deploy, Save changes.
+- Give every `IconButton` a `label`; the icon is not a name.
+- Use a link styled with `buttonVariants` when the control goes somewhere rather than does something.
 
 #### `Button` (component)
 
@@ -114,6 +141,8 @@ https://demogar.github.io/molaui/?path=/docs/components-data-display-avatar--ove
 
 A person or an agent as a square tile, with initials or a glyph on a colour picked from the name.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Showing who did something in a log, a page header or a list of reviewers.
 - Marking an agent with a glyph through icon, so a person and a bot are never confused.
@@ -129,6 +158,17 @@ When not to:
 Content:
 - Name people by full name and agents as people know them: “Support triage”.
 - Name an AvatarGroup by role: “Reviewers”, “On call”.
+
+Mola handles:
+- Gives the tile `role="img"` and the `name` as its accessible name and tooltip.
+- Hides the initials or icon from assistive tech, and gives the image an empty `alt`, so the name is read once.
+- Keeps the initials until the image has loaded, so a broken URL never shows a broken-image glyph.
+- Makes `AvatarGroup` a named group, and reads the overflow tile as "3 more" rather than "+3".
+
+You handle:
+- Pass the full name, not initials, as `name`.
+- Give `AvatarGroup` a `label` that says who the people are: Reviewers, On call.
+- Wrap the avatar in a link or button yourself if it opens a profile; it is not interactive.
 
 #### `Avatar` (component)
 
@@ -167,6 +207,8 @@ https://demogar.github.io/molaui/?path=/docs/components-data-display-code--overv
 
 Machine text: Code for an inline literal, CodeBlock for a labelled block with copy and wrap.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - An id, a field name or a flag inside a sentence, with Code.
 - A tool’s arguments, a query or a log tail, with CodeBlock; JSON is tokenised by value kind.
@@ -186,6 +228,21 @@ When not to:
 Content:
 - Show literals exactly as the system stores them; do not change their case or add spaces.
 - Label a CodeBlock by its role or file name, as the reader would search for it: “arguments”, “query.sql”.
+
+Keyboard:
+- Tab: Moves focus to the wrap toggle, the copy button, then the code itself.
+- Enter or Space: Toggles line wrapping, or copies the code, on the focused button.
+- ArrowUp or ArrowDown or ArrowLeft or ArrowRight: Scrolls the code while it has focus.
+
+Mola handles:
+- Makes the scrolling `<pre>` focusable and names it by the block label, so the overflow is reachable without a mouse.
+- Reports the wrap toggle as pressed or not pressed with `aria-pressed`.
+- Announces a copy through a polite status that is always mounted, as well as turning the icon into a check.
+- Pins the code body left to right in a right-to-left page, while the header mirrors.
+
+You handle:
+- Give the block a `label` that says what the code is: arguments, result, query.sql.
+- Set `copyable={false}` for content that must not leave the page.
 
 #### `Code` (component)
 
@@ -217,6 +274,8 @@ https://demogar.github.io/molaui/?path=/docs/components-data-display-description
 
 Term and value pairs: the properties of a run, a document or an evaluation.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - A side panel of properties scanned top to bottom, with the inline layout.
 - Values long enough to wrap, such as a system prompt or a path, with the stacked layout.
@@ -235,6 +294,14 @@ Content:
 - Terms are short nouns in sentence case, without colons: “Model”, “Duration”.
 - Give values their units, “41s”, “$0.2185”, and show a status as a Badge rather than a bare word.
 
+Mola handles:
+- Renders a real `<dl>` with each `<dt>` and `<dd>` pair grouped in a `<div>`, so terms and values are read together.
+- Sets values marked `literal` in the machine face, so an id is not mistaken for prose.
+
+You handle:
+- Write terms as short nouns, and keep each value to the fact it names.
+- Put a heading above the list; it has no name of its own.
+
 #### `DescriptionList` (component)
 
 | Prop | Type | Default | Description |
@@ -249,6 +316,8 @@ Types: `DescriptionItem`, `DescriptionListProps`
 https://demogar.github.io/molaui/?path=/docs/components-data-display-stat--overview
 
 A KPI tile: a label, a figure, a change with its direction and sentiment, and an optional sparkline.
+
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
 
 When to use:
 - Headline figures at the top of a page, grouped in a StatGroup cut from one panel.
@@ -267,6 +336,16 @@ Content:
 - The label names the measure and its window: “Runs today”, “p95 duration”.
 - Put the unit in unit, “%”, and the comparison in the delta’s period, “vs yesterday”.
 - Group digits and keep only the precision a reader uses: “1,204”, “97.8”.
+
+Mola handles:
+- Renders each tile as a `<dt>` and `<dd>` pair, inside one `<dl>` for a `StatGroup` or its own `<dl>` when alone.
+- Reads the delta as one sentence, "Up 12%, vs last week, an improvement", and hides the arrow and the separate parts.
+- Carries direction in the arrow and sentiment in the colour, so neither depends on colour alone.
+- Hides the sparkline from assistive tech, because the figure and the delta already say what it shows.
+
+You handle:
+- Set `sentiment` on every delta; the tile does not guess that up is good.
+- Give the comparison in `period` so the change has something to be measured against.
 
 #### `Sparkline` (component)
 
@@ -299,6 +378,8 @@ https://demogar.github.io/molaui/?path=/docs/components-data-display-swatch--ove
 
 A small decorative colour key, square or round, in one of the badge tones, placed before the word it keys.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - A legend entry that ties a word to the colour of map pins, chart series or rows.
 - A marker before a group heading or a filter label, so it reads in the same colour as what it filters.
@@ -312,6 +393,13 @@ When not to:
 - Don’t: Let a row of coloured squares stand in for a legend.
 - Do: Use tone="accent" when the key must match a gold field exactly.
 - Don’t: Paint a swatch with bg-oro by hand; on light cloth it falls below 3:1.
+
+Mola handles:
+- Is always `aria-hidden`, so it can never be the only carrier of a meaning.
+- Paints itself in the system text colour in forced colours mode, so the key stays visible.
+
+You handle:
+- Put the word the colour stands for beside the swatch.
 
 #### `Swatch` (component)
 
@@ -339,6 +427,8 @@ https://demogar.github.io/molaui/?path=/docs/components-data-display-table--over
 
 Table primitives for rows of records, and DataTable for columns as data with sorting, selection, column visibility and pages.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Comparing many records with the same fields, such as runs, documents or evaluations.
 - Sorting, selection, bulk actions and pages on client or server data, with DataTable.
@@ -358,6 +448,24 @@ Content:
 - Headers are short nouns in sentence case: “Run”, “Started”, “Cost”.
 - Show a value that does not exist yet as an em dash, “—”, not as zero.
 - Set noun so counts read naturally: “3 runs selected”.
+
+Keyboard:
+- Tab: Moves focus to the sort buttons, the row checkboxes and the other controls in turn.
+- Enter or Space: Sorts by the focused column header.
+- Space: Selects or clears the focused row checkbox, or every row on the page from the header box.
+- ArrowUp or ArrowDown or ArrowLeft or ArrowRight: Scrolls the table frame when it overflows and has focus.
+- Escape: Closes the column menu and returns focus to the Columns button.
+
+Mola handles:
+- Puts the scrolling frame in the tab order only when the table overflows it.
+- Sets `aria-sort` on the sorted column only, and `aria-selected` on selected rows.
+- Uses native checkboxes, and announces the selection count once through a polite status.
+- Marks a loading `DataTable` with `aria-busy` and hides its skeleton rows from assistive tech.
+
+You handle:
+- Name the table with `label` or `aria-label`, or a `caption`.
+- Give `rowLabel` so each row checkbox says which row it selects.
+- Mark figure columns `numeric`, on the header and the cells alike.
 
 #### `Table` (component)
 
@@ -468,6 +576,8 @@ https://demogar.github.io/molaui/?path=/docs/components-data-display-timeline--o
 
 Timeline for events already written down, on a spine; StepList for ordered steps a person follows.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - An audit log, a deploy history or the stages of an evaluation, with Timeline.
 - A runbook or a checklist, with StepList and its ruled bands.
@@ -485,6 +595,16 @@ Content:
 - Timeline titles state the event in the past tense: “Review approved”, “Rollout paused”.
 - StepList titles are instructions: “Freeze the agent version”.
 - Use one time format down the list: “Oct 1 · 09:12”.
+
+Mola handles:
+- Renders an `<ol>` named by `label`, so a screen reader says where an event sits in the sequence.
+- Hides the spine and the toned nodes from assistive tech; the title and meta carry what happened.
+- In `StepList`, hides positional numerals, which the list already announces, and reads authored labels.
+
+You handle:
+- Give the timeline a `label`.
+- Say what happened in each title, because the node colour is not read.
+- Set `titleAs` to a heading level that fits the page outline.
 
 #### `StepList` (component)
 
@@ -517,6 +637,8 @@ https://demogar.github.io/molaui/?path=/docs/components-feedback-badge--overview
 
 A small status mark in one of the system’s tones; StatusDot for a square dot beside a label; RecommendationBadge for an editorial scale.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - The state of a row or an object: queued, live, failed, pinned.
 - Soft by default; solid for the one state on a row that must be seen first; outline for categories.
@@ -538,6 +660,15 @@ When not to:
 Content:
 - One or two words in sentence case, with no punctuation: “Succeeded”, “Needs review”.
 - Use the same status words as the filters and headers around it.
+
+Mola handles:
+- Hides `StatusDot` from assistive tech when it sits beside a word, and gives it `role="img"` and a name when `label` is set.
+- Stills the pulse under reduced motion, leaving the dot in place.
+- Keeps dots visible in forced colours mode by painting them in the system text colour.
+
+You handle:
+- Put the state in words inside the badge: Failed, Running.
+- Give a `StatusDot` that stands alone a `label`.
 
 #### `Badge` (component)
 
@@ -587,6 +718,8 @@ https://demogar.github.io/molaui/?path=/docs/components-feedback-callout--overvi
 
 A message that belongs to a region of the page, with a tone, an optional title and actions.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - A standing condition of a page or panel: a model that retires soon, a read-only workspace, a stale index.
 - Something to read before working in the region, with one or two actions.
@@ -608,6 +741,21 @@ Content:
 - The title states the condition: “Token budget at 86%”, not “Warning” or “Heads up”.
 - The body says what it means and what to do: “Switch the model in settings to keep evaluation history comparable.”
 - Actions are verbs on the object: “Retry from 812”, “View log”.
+
+Keyboard:
+- Tab: Moves focus to the dismiss button, when `onDismiss` is set.
+- Enter or Space: Dismisses the callout.
+
+Mola handles:
+- Becomes a region named by its title when it has one, and stays out of the landmark list when it does not.
+- Renders the title as a real heading at `headingLevel`.
+- Hides the seam, the icon and the swatch from assistive tech; the title and body carry the tone in words.
+- Names the dismiss button "Dismiss".
+
+You handle:
+- Choose a `headingLevel` that fits the page outline.
+- Render a callout that appears in response to an action inside a live region, or use a toast.
+- Move focus somewhere sensible after a dismiss, because the button that had it is gone.
 
 #### `Callout` (component)
 
@@ -636,6 +784,8 @@ https://demogar.github.io/molaui/?path=/docs/components-feedback-empty-state--ov
 
 What a panel shows when it has nothing to show, in four variants: empty, no results, error and no permission.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Nothing exists yet, and the action creates the first one.
 - Filters hide everything, and the action clears them.
@@ -657,6 +807,16 @@ Content:
 - The title states the condition: “No runs match these filters”, “Traces did not load”.
 - The description gives the cause or the count: “3 filters are hiding 1,284 runs.”
 - An error says what happened and what happens next: “The trace store returned 503. This panel will try again in 30s.”
+
+Mola handles:
+- Renders the title as a real heading at `headingLevel`.
+- Gives the `error` variant `role="alert"`, so a failed load is announced.
+- Hides the icon and the seam from assistive tech.
+
+You handle:
+- Pick the variant that matches the situation, so the words fit it.
+- Choose a `headingLevel` that fits the page outline.
+- Pass the action that moves the person forward in `actions`.
 
 #### `EmptyState` (component)
 
@@ -685,6 +845,8 @@ https://demogar.github.io/molaui/?path=/docs/components-feedback-placeholder--ov
 
 A slot for something that does not exist yet, such as a chart with no data, announced as one image.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - A chart, preview or image that cannot render yet, held at its final size.
 - A layout where the slot must keep its place, with a label for the kind of thing and a name for what it would show.
@@ -697,6 +859,13 @@ When not to:
 Content:
 - label is the kind, “Chart” or “Preview”; name is the thing, “Tickets by plan”.
 - alt says what is missing, “No data yet: run latency by agent”, because it is announced in place of the content.
+
+Mola handles:
+- Gives the slot `role="img"` and `alt` as its accessible name.
+- Hides the visible label and name from assistive tech, so the slot is read once.
+
+You handle:
+- Write an `alt` that says what is missing and why: Account logo, not uploaded yet.
 
 #### `Placeholder` (component)
 
@@ -716,6 +885,8 @@ Types: `PlaceholderProps`
 https://demogar.github.io/molaui/?path=/docs/components-feedback-progress--overview
 
 Progress for work moving toward done, which may be indeterminate; Meter for a reading inside a known range, with thresholds.
+
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
 
 When to use:
 - An upload, an ingest or an evaluation over a known number of items, with Progress.
@@ -737,6 +908,16 @@ Content:
 - Progress labels name the work as it happens: “Embedding documents”, “Evaluating prompts”.
 - A bar that stays on screen after the work ends says how it ended: “Failed at 67%”.
 - Meter labels name the measure and its period: “Tokens this month”.
+
+Mola handles:
+- Gives `Progress` `role="progressbar"` and `Meter` `role="meter"`, with their values, through Base UI.
+- Names each bar by its visible `label`.
+- Leaves out the value while `Progress` is indeterminate, and stills the working texture under reduced motion.
+- Shows a meter's level as a figure and as ticks on the track, not by the fill colour alone.
+
+You handle:
+- Give every bar a `label`, or an `aria-label` when there is no room for one.
+- Use `valueText` when a count says more than a percentage: 212 of 300 prompts.
 
 #### `Meter` (component)
 
@@ -775,6 +956,8 @@ https://demogar.github.io/molaui/?path=/docs/components-feedback-skeleton--overv
 
 Bones in the shape of content that has not arrived, with SkeletonGroup to mark the region busy and say once what is loading.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - A card, list or table whose layout is known while its data loads.
 - Swapping bones for content in place, so the layout barely moves when the data lands.
@@ -793,6 +976,14 @@ When not to:
 
 Content:
 - The group label names what is loading: “Loading agent”, “Loading runs”.
+
+Mola handles:
+- Hides every bone from assistive tech.
+- In `SkeletonGroup`, marks the region `aria-busy` and says the `label` once through a polite status mounted from the first render.
+- Removes the sweep under reduced motion, and in forced colours draws text bones in the system grey.
+
+You handle:
+- Wrap the bones in a `SkeletonGroup` and say what is loading in its `label`: Loading runs.
 
 #### `Skeleton` (component)
 
@@ -839,6 +1030,8 @@ https://demogar.github.io/molaui/?path=/docs/components-feedback-toast--overview
 
 A floating notice for something that happened elsewhere or just now; a running toast turns into its result in place.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Confirming an action whose result is not visible where the operator is.
 - Long work the operator may leave, with toast.running, then toast.update with the outcome.
@@ -857,6 +1050,24 @@ Content:
 - The title states what happened, in the past tense: “Index rebuilt”, “Deploy failed”.
 - The description adds the cause or the figures: “1,204 documents · 3m 41s”.
 - The action is one verb: “Undo”, “Retry”, “View”.
+
+Keyboard:
+- F6: Moves focus to the toast region and pauses the timers.
+- Tab: Moves through the toasts and their action and dismiss buttons.
+- Enter or Space: Runs the action, or dismisses the toast, on the focused button.
+- Escape: Closes the toast that has focus.
+- Shift+Tab: Leaves the region from its start and returns focus to where it was.
+
+Mola handles:
+- Renders the stack in a polite live region, and announces `danger` toasts assertively.
+- Prefixes the title with hidden words for its tone: Success, Error, In progress.
+- Pauses the timers while the region has keyboard focus, and keeps a running toast until it is updated or dismissed.
+- Names the dismiss button "Dismiss".
+
+You handle:
+- Mount `ToastProvider` once, near the root.
+- Write a title that says what happened without the page around it.
+- Use a dialog for anything the person must answer; a toast can be missed.
 
 #### `ToastProvider` (component)
 
@@ -881,6 +1092,8 @@ https://demogar.github.io/molaui/?path=/docs/components-forms-checkbox--overview
 
 A square that turns a choice on or off, applied when the form is saved; CheckboxGroup for any number of choices from a set.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - One yes-or-no setting that takes effect on Save.
 - Any number of options from a short visible list, with CheckboxGroup and its legend.
@@ -899,6 +1112,20 @@ Content:
 - Labels state what is turned on, in sentence case, with no trailing period.
 - Conditions go in description, not in the label: “Up to three times, with exponential backoff.”
 - The legend names the set: “Tools”, “Notify on”.
+
+Keyboard:
+- Tab: Moves focus to the checkbox.
+- Space: Toggles it. Enter does not, as with a native checkbox.
+
+Mola handles:
+- Base UI renders `role="checkbox"` with `aria-checked`, and `aria-checked="mixed"` for indeterminate.
+- The `label` names the control and the whole label toggles it; the `description` sits outside the label and arrives once, through `aria-describedby`.
+- Indeterminate is a bar, not a faded check, so the third state is a shape and not a tint.
+- `CheckboxGroup` is a real `<fieldset>` and `<legend>`, so each option is heard in the group’s context.
+
+You handle:
+- Give every checkbox a `label`, or an `aria-label` when it stands alone in a table row.
+- Give a set of checkboxes a `CheckboxGroup` with a `legend` that names the question.
 
 #### `Checkbox` (component)
 
@@ -935,6 +1162,8 @@ https://demogar.github.io/molaui/?path=/docs/components-forms-chip--overview
 
 A filter chip with a real checkbox or radio inside, filled with ink when on, with an optional count.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Filters above a list or table that apply as they are pressed.
 - Showing how many rows each filter would leave, with count.
@@ -952,6 +1181,22 @@ When not to:
 Content:
 - Use the same words as the status being filtered: “Succeeded”, “Failed”.
 - Keep default chips to one line; use the comfortable size for labels that wrap.
+
+Keyboard:
+- Tab: Moves focus to the chip, or into a radio set at its checked chip.
+- Space: Toggles a checkbox chip, or checks a radio chip.
+- ArrowRight or ArrowDown: Moves to and checks the next chip in a radio set.
+- ArrowLeft or ArrowUp: Moves to and checks the previous chip in a radio set.
+
+Mola handles:
+- Each chip is a real `<input type="checkbox">` or `radio`, visually hidden but focusable, so state, keys and form submission come from the platform.
+- The wrapping `<label>` names the input, and `count` is joined with a real space so it is heard as “Failed 12”.
+- Checked is an ink fill, not a hue change, and forced colours keep it.
+- `ChipGroup` is a `<fieldset>` whose `legend` can be visually hidden with `hideLegend` and still be announced.
+
+You handle:
+- Wrap a row of chips in `ChipGroup` with a `legend` that says what they filter.
+- Give radio chips one shared `name`, or the arrow keys will not move between them.
 
 #### `Chip` (component)
 
@@ -987,6 +1232,8 @@ https://demogar.github.io/molaui/?path=/docs/components-forms-combobox--overview
 
 A select you can type into: Combobox always ends on an option from the list; Autocomplete takes free text with suggestions.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - A list too long to scroll, such as people, tools or runs, where typing narrows it.
 - Several values from a long list, with multiple, shown as chips inside the field.
@@ -1007,6 +1254,24 @@ When not to:
 Content:
 - The placeholder says what to type: “Search people”, “run-4187 or eval-sweeper”.
 - Keep a disabled option in the list, with its reason as the description: “Requires approval”.
+
+Keyboard:
+- Tab: Moves focus to the input.
+- ArrowDown or ArrowUp: Opens the list, then moves the highlight while the caret stays in the input.
+- Enter: Chooses the highlighted option.
+- Escape: Closes the list.
+- ArrowLeft: With `multiple`, reaches the chips from the start of the input; ArrowRight in right-to-left.
+- Backspace: With `multiple`, removes the focused chip, or the last one from an empty input.
+
+Mola handles:
+- Base UI renders a `combobox` input wired to a `listbox` with `aria-activedescendant`, and labelled `group`s for grouped options.
+- Loading and “No matches” are said in Base UI’s polite status regions, and the list carries `aria-busy` while loading.
+- The clear and open buttons are named (“Clear selection”), and each chip’s remove button is named “Remove <label>”.
+- With `multiple`, the input is described with the count and the key that reaches the chips.
+
+You handle:
+- Name it: put it in a `Field`, or pass `label` or `aria-label`.
+- Translate `clearLabel`, `triggerLabel`, `removeLabel` and `emptyMessage` with the rest of the page.
 
 #### `Autocomplete` (component)
 
@@ -1075,6 +1340,8 @@ https://demogar.github.io/molaui/?path=/docs/components-forms-date-picker--overv
 
 DatePicker for one date, typed or picked from a calendar; DateRangePicker for a period, with presets and two typed ends.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - One date, such as when to run an evaluation, with DatePicker.
 - A period for a report or a filter, with DateRangePicker and presets such as the last 7 days.
@@ -1095,6 +1362,25 @@ Content:
 - Label the field by what the date is for: “Run evaluation on”, “Report period”.
 - Leave the placeholder to the component; it is the locale’s own pattern.
 - Rules the picker cannot know, such as required, go to Field as an instruction: “Choose a date for the evaluation.”
+
+Keyboard:
+- Tab: Moves focus to the date input, then to the calendar button.
+- Enter: In the input, reads the typed date and states why if it is refused.
+- Enter or Space: On the calendar button, opens the calendar on the chosen day; in the grid, chooses the focused day.
+- ArrowLeft or ArrowRight or ArrowUp or ArrowDown: Moves by day and by week; left and right swap in right-to-left.
+- PageUp or PageDown or Shift+PageUp or Shift+PageDown: Moves by month, or by year with Shift.
+- Home or End: Moves to the first or last day of the week.
+- Escape: Closes the calendar without changing the value and returns focus to the button.
+
+Mola handles:
+- The calendar is a `grid` named by its month heading, with one tab stop; the day carries `aria-selected`, today `aria-current="date"`, and an unavailable day says so in its name.
+- The month heading is a polite live region, so paging is announced.
+- The input is described by its format (“Format: DD/MM/YYYY”), and a refused date is a sentence in a `role="alert"` with a mark, not colour alone.
+- The calendar button is named by the value, “Change date, 6 October 2026”, and focus returns to it when the calendar closes.
+
+You handle:
+- Name it: put it in a `Field`, or pass `aria-label`.
+- State rules the picker cannot know, such as “required”, through `Field`’s `error`.
 
 #### `Calendar` (component)
 
@@ -1188,6 +1474,8 @@ https://demogar.github.io/molaui/?path=/docs/components-forms-field--overview
 
 A label, a control and a hint or error wired together; the page also covers Input, Textarea, SearchInput and Label.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Any form control that needs a visible label, a hint and a validation message, through the render prop.
 - One line of text with Input, with a unit or an icon inside the field through leading and trailing.
@@ -1209,6 +1497,21 @@ Content:
 - Labels are short nouns in sentence case: “Run name”, “Webhook URL”.
 - Hints explain the consequence: “Shown in the run list and in alerts.”
 - Errors say what is wrong and how to fix it: “Must be between 1 and 900 seconds.”
+
+Keyboard:
+- Tab: Moves focus to the control.
+- Enter or Space: On a search field’s clear button, empties the field and returns focus to it.
+
+Mola handles:
+- `Field` links the label to the control and joins the hint and error into `aria-describedby`, in the order they are shown.
+- An error sets `aria-invalid`, is announced with `role="alert"`, and carries a cut square so it is not colour alone.
+- The required asterisk is hidden from assistive technology while `required` reaches the control; “Optional” is kept as a separate word.
+- `SearchInput` is a `searchbox`, and its clear button is named “Clear search”.
+
+You handle:
+- Spread the `control` props onto the control; without them it has no name and no description.
+- When several fields fail at once, add an error summary at the top of the form and move focus to it.
+- Bind the key shown by `shortcut` yourself; the key cap is display only.
 
 #### `Label` (component)
 
@@ -1274,6 +1577,8 @@ https://demogar.github.io/molaui/?path=/docs/components-forms-file-upload--overv
 
 A dropzone with a real Browse button, and a list of the files put there with their status and progress.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Attaching or uploading files, such as an evaluation dataset or documents for the knowledge index.
 - Driving the transfer with onUpload, which queues, uploads, reports progress and retries each file.
@@ -1289,6 +1594,20 @@ When not to:
 Content:
 - When onUpload rejects, its error message is one sentence the person can act on; it is shown under the row.
 - Pass messages to translate the copy, and keep each rule stated with its figure.
+
+Keyboard:
+- Tab: Moves focus to the browse button, then to each file’s Retry and Remove buttons.
+- Enter or Space: Opens the system file picker, or runs the focused Retry or Remove.
+
+Mola handles:
+- The keyboard path is a real `<button>`; the dropzone is not a fake button.
+- The accepted types and size limit are part of the button’s description, ahead of `Field`’s hint.
+- Drag state, added files, rejections and finished uploads are said in a polite status region, and each rejection is a sentence naming the file and the rule.
+- Removing a row moves focus to a neighbouring Remove button, or back to the browse button, never to the page.
+
+You handle:
+- Name it: put it in a `Field`, or pass `aria-label`; alone it is named only “Browse”.
+- Pass `messages` to translate every announcement and button name.
 
 #### `FileUpload` (component)
 
@@ -1340,6 +1659,8 @@ https://demogar.github.io/molaui/?path=/docs/components-forms-number-input--over
 
 A number you can type and step, formatted for a locale, with bounds, a unit and steppers inside the field.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - An exact value with bounds, such as a token budget, a retry count or a timeout.
 - Currency, percentages and units Intl knows, through format.
@@ -1358,6 +1679,22 @@ When not to:
 Content:
 - Labels name the quantity and its scope: “Token budget per run”, “Retries before halting”.
 - Errors give the bound: “The workspace allows at most 8 concurrent runs.”
+
+Keyboard:
+- Tab: Moves focus to the input. The − and + buttons are not tab stops.
+- ArrowUp or ArrowDown: Steps by `step`, with Shift by `largeStep` and with Alt by `smallStep`.
+- PageUp or PageDown: Steps by `largeStep`, within the bounds.
+- Home or End: Jumps to `min` or `max`.
+
+Mola handles:
+- Base UI’s NumberField formats and parses with `Intl.NumberFormat` for the `locale`, and clamps to `min` and `max`.
+- The steppers are named “Increase” and “Decrease”, and the one at a bound is disabled.
+- A `unit` is added to the input’s description, so the number is heard with it.
+- The wheel changes the value only when `allowWheelScrub` is set, so scrolling a form never edits it.
+
+You handle:
+- Name it: put it in a `Field`, or pass `label` or `aria-label`.
+- Translate `incrementLabel` and `decrementLabel`.
 
 #### `NumberInput` (component)
 
@@ -1385,6 +1722,8 @@ https://demogar.github.io/molaui/?path=/docs/components-forms-radio--overview
 
 One choice from a small set, all visible, in a named RadioGroup; square, and told from a checkbox by its mark.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Exactly one of two to five options that people should compare side by side.
 - Options that each need a description, such as what happens when a tool call fails.
@@ -1401,6 +1740,21 @@ When not to:
 Content:
 - Option labels are parallel and start the same way: “Retry, then continue”, “Skip the step”, “Halt the run”.
 - The consequence goes in description: “The run is marked failed and the owner is paged.”
+
+Keyboard:
+- Tab: Moves focus into the group at the checked radio, and Tab again leaves the group.
+- ArrowDown or ArrowRight: Moves to and checks the next radio, wrapping at the end.
+- ArrowUp or ArrowLeft: Moves to and checks the previous radio.
+- Space: Checks the focused radio. Enter does not.
+
+Mola handles:
+- Base UI renders `role="radio"` inside `role="radiogroup"`, so the square is still announced as a radio button.
+- `RadioGroup` is named by its visible `label` through `aria-labelledby`, and described by its `description`.
+- Each radio is named by its `label` alone, and its `description` arrives through `aria-describedby`.
+
+You handle:
+- Give `RadioGroup` a `label` that asks the question the options answer.
+- Give every radio a `label`.
 
 #### `Radio` (component)
 
@@ -1433,6 +1787,8 @@ https://demogar.github.io/molaui/?path=/docs/components-forms-segmented-control-
 
 One choice from a few views or settings, all visible and switched instantly, cut from one piece.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Switching between views of the same content: Table, Board, Timeline.
 - A setting with two to five short options that applies at once, such as density.
@@ -1450,6 +1806,21 @@ When not to:
 Content:
 - Labels are one word where possible: “Table”, “Board”.
 - Name the group with aria-label: “View”, “Density”.
+
+Keyboard:
+- Tab: Moves focus into the control, and Tab again leaves it.
+- ArrowLeft or ArrowRight: Moves focus between segments, wrapping at the ends.
+- Home or End: Moves focus to the first or last segment.
+- Enter or Space: Chooses the focused segment.
+
+Mola handles:
+- Base UI renders a group of `aria-pressed` buttons with roving focus.
+- The chosen segment is an ink fill, and pressing it again does not empty the control.
+- With `iconOnly`, each segment is named by its `label` and the icon is hidden from assistive technology.
+
+You handle:
+- Pass `aria-label` to name the group, such as “View”.
+- Give `label` as a string when you use `iconOnly`, so the segment has a name.
 
 #### `SegmentedControl` (component)
 
@@ -1474,6 +1845,8 @@ https://demogar.github.io/molaui/?path=/docs/components-forms-select--overview
 
 A choice from a list in a popup, with an optional second line per option and labelled groups.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - One value from a list short enough to scan without typing, such as an environment or a model.
 - Options that need a second line, such as a model’s speed and cost.
@@ -1491,6 +1864,24 @@ When not to:
 Content:
 - Option labels are the names people use, “Cayuco Steady 3”; the description adds the trade-off, “Balanced · default”.
 - The placeholder says what to choose: “Choose an environment”.
+
+Keyboard:
+- Tab: Moves focus to the trigger.
+- Enter or Space or ArrowDown or ArrowUp: Opens the list.
+- ArrowDown or ArrowUp: Moves the highlight through the options.
+- Home or End: Highlights the first or last option.
+- Enter or Space: Chooses the highlighted option and closes the list.
+- Escape: Closes the list without changing the value.
+
+Mola handles:
+- Base UI renders the trigger as a `combobox` and the list as a `listbox` of `option`s with `aria-selected`.
+- Typing a letter moves to the matching option, and on a closed trigger chooses it.
+- The current value is a check and a wash, the highlight an ink fill, so the two are never the same mark.
+- `label` is wired to the trigger with a real `<label>`, and `Field` passes its description and invalid state.
+
+You handle:
+- Name it: put it in a `Field`, or pass `label` or `aria-label`.
+- Give a `placeholder` that says what to choose when there is no value.
 
 #### `Select` (component)
 
@@ -1562,6 +1953,8 @@ https://demogar.github.io/molaui/?path=/docs/components-forms-slider--overview
 
 A value or a range on a continuous scale, with the value always printed in tabular figures.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - A value where the range matters as much as the number, such as temperature or a rollout percentage.
 - A range between two values, with two thumbs.
@@ -1577,6 +1970,22 @@ When not to:
 
 Content:
 - End labels describe the effect at each end, not the number: “Precise”, “Creative”.
+
+Keyboard:
+- Tab: Moves focus to the thumb, or to each thumb of a range in turn.
+- ArrowRight or ArrowUp: Increases by `step`, with Shift by `largeStep`; ArrowLeft increases in right-to-left.
+- ArrowLeft or ArrowDown: Decreases by `step`, with Shift by `largeStep`.
+- PageUp or PageDown: Changes by `largeStep`.
+- Home or End: Jumps to `min` or `max`.
+
+Mola handles:
+- Base UI renders a real `<input type="range">` in each thumb, with `role="slider"` and the value in `aria-valuenow` and `aria-valuetext`.
+- The `label` names every thumb.
+- The value is printed beside the label, so it is never learned only by dragging.
+
+You handle:
+- Give it a `label`; without one the thumb has no name.
+- The `minLabel` and `maxLabel` are hidden from assistive technology; if they carry meaning, say it in text near the slider.
 
 #### `Slider` (component)
 
@@ -1599,6 +2008,8 @@ https://demogar.github.io/molaui/?path=/docs/components-forms-switch--overview
 
 A setting that takes effect the moment it is switched; on is verde, the colour of live.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Turning a capability on or off at once: streaming, a tool, a flag.
 - Settings lists, with labelPosition set to start so labels align left and switches right.
@@ -1614,6 +2025,19 @@ When not to:
 Content:
 - Label the capability, not the action: “Stream responses”, not “Turn on streaming”.
 - The description states the effect or the cost: “Stored for 30 days; may contain user text.”
+
+Keyboard:
+- Tab: Moves focus to the switch.
+- Space or Enter: Turns it on or off.
+
+Mola handles:
+- Base UI renders `role="switch"` with `aria-checked`.
+- The `label` names the control and the whole label toggles it; the `description` arrives through `aria-describedby`.
+- On is stated three ways: the square moves end to end, the track turns verde, and the keyline stays.
+
+You handle:
+- Give every switch a `label`, or an `aria-label` when it stands alone.
+- Use a switch only for a setting that takes effect at once; a choice that waits for Save is a checkbox.
 
 #### `Switch` (component)
 
@@ -1636,6 +2060,8 @@ https://demogar.github.io/molaui/?path=/docs/components-layout-app-shell--overvi
 
 The frame a tool lives in: a top bar, a sidebar that collapses to a rail or becomes a sheet, and one scrolling main region.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - The outer frame of an application with navigation, search and a work area.
 - Navigation with sections, a current page and counts, through Sidebar, NavSection and NavItem.
@@ -1653,6 +2079,22 @@ Content:
 - Navigation labels are short nouns: “Runs”, “Agents”, “Evaluations”.
 - Give a count its countLabel, “3 failed”, so the number is not read alone.
 - Name the Sidebar landmark: “Main”, “Settings”.
+
+Keyboard:
+- Tab: Moves focus to the skip link first, then the sidebar toggle, the top bar and the navigation.
+- Enter: Follows the skip link to the main region, or the focused navigation link.
+- Enter or Space: Collapses or expands the sidebar, or opens the navigation sheet on a narrow screen.
+- Escape: Closes the navigation sheet and returns focus to the button that opened it.
+
+Mola handles:
+- Gives the page a banner, a named navigation, a main region and a skip link to it.
+- Reports the sidebar toggle's state with `aria-expanded` and `aria-controls`, and keeps item labels as screen-reader text when collapsed.
+- Opens the sidebar on a narrow screen as a modal sheet titled Navigation, which traps focus and has a visible close button.
+- Marks the active item with `aria-current="page"` and reads its count in words: Runs, 3 failed.
+
+You handle:
+- Give the sidebar a `label` that names the navigation.
+- Give each page one `h1`, usually through `PageHeader`.
 
 #### `AppShell` (component)
 
@@ -1713,6 +2155,8 @@ https://demogar.github.io/molaui/?path=/docs/components-layout-container--overvi
 
 The page column, in prose, page, wide and full widths; Section and SectionHeader set the rhythm down the page.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Holding a page to a readable or a working width, with gutters that move with density.
 - Wide tables and dashboards, with size set to wide.
@@ -1726,6 +2170,13 @@ When not to:
 
 Content:
 - A SectionHeader label goes under the heading and says what kind of section it is: “Evaluation suite”.
+
+Mola handles:
+- Renders a plain `<div>` with no role, so it adds nothing to what a screen reader hears.
+- Keeps a side gutter at every width, so content never touches the screen edge.
+
+You handle:
+- Add the landmark yourself, such as `<main>`, when the container holds one.
 
 #### `Container` (component)
 
@@ -1765,6 +2216,8 @@ https://demogar.github.io/molaui/?path=/docs/components-layout-divider--overview
 
 Three dividers in rising weight and rarity: a keyline, a relleno seam and the sawtooth diente.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - A keyline between rows or fields.
 - A relleno seam between two major parts of a page.
@@ -1779,6 +2232,13 @@ When not to:
 
 Content:
 - A divider carries no words; when a division needs a name, give it a heading instead.
+
+Mola handles:
+- Is `role="none"` by default, so a screen reader does not announce a separator between every pair of rows.
+- Sets `aria-orientation` when you pass `role="separator"`.
+
+You handle:
+- Pass `role="separator"` only when the division itself means something.
 
 #### `Divider` (component)
 
@@ -1799,6 +2259,8 @@ https://demogar.github.io/molaui/?path=/docs/components-layout-grid--overview
 
 Column patterns that reflow; auto fits as many columns of at least minItem as there is room for.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Cards or tiles that reflow with no breakpoints, with cols set to auto and a minItem.
 - Fixed patterns of halves, thirds, quarters or fifths.
@@ -1811,6 +2273,14 @@ When not to:
 
 Content:
 - Keep tiles in a grid parallel: the same fields, in the same order, with the same units.
+
+Mola handles:
+- Renders a plain `<div>` and never reorders its children, so reading order is source order.
+- Collapses to fewer columns on narrow screens, so a page does not scroll sideways.
+
+You handle:
+- Put children in the order they should be read.
+- Pass `role="list"`, and `role="listitem"` on each cell, when the cells are a list of like things.
 
 #### `Grid` (component)
 
@@ -1835,6 +2305,8 @@ https://demogar.github.io/molaui/?path=/docs/components-layout-page-header--over
 
 The top of a page inside the shell: a breadcrumb, the title, a description, actions, a row of facts and optional tabs.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Saying where the reader is, what the page is and what they can do on it.
 - Short facts about the object, such as status, owner and last update, through meta.
@@ -1851,6 +2323,14 @@ Content:
 - The title is the object’s name or the collection’s: “Runs”, “Support triage”.
 - The description says what the page holds in one sentence.
 - Meta items are short facts, not sentences: “Updated 12s ago”, “Retention 30 days”.
+
+Mola handles:
+- Renders the title as the page's `h1`.
+- Renders `meta` as a list, so a screen reader says how many facts there are.
+
+You handle:
+- Use one page header per page, so the page has one `h1`.
+- Pass a breadcrumb that is its own named navigation.
 
 #### `PageHeader` (component)
 
@@ -1871,6 +2351,8 @@ https://demogar.github.io/molaui/?path=/docs/components-layout-panel--overview
 
 A cut surface: a region of one ground bounded by an edge, where the tone decides the ink.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Grouping content into a region of a page, bounded by the ink keyline.
 - A filled region on a layer colour; the panel resets the ink so the text stays legible.
@@ -1888,6 +2370,14 @@ When not to:
 
 Content:
 - Title a panel by what it holds, “Weekly digest agent”, not “Details” or “Info”.
+
+Mola handles:
+- Renders a `<div>` by default, or a `section`, `article` or `aside` through `as`.
+- On a filled tone, redefines the whole ink ramp, so secondary text inside still clears contrast.
+- Draws its edge as an outline in forced colours mode, so the panel keeps its shape.
+
+You handle:
+- Name a `section` or `aside` with `aria-labelledby` pointing at its heading.
 
 #### `Panel` (component)
 
@@ -1916,6 +2406,8 @@ https://demogar.github.io/molaui/?path=/docs/components-layout-stack--overview
 
 Stack for a column with one gap, Inline for a row that wraps, and RowBetween for one thing at each end.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Vertical rhythm between blocks, with a gap named by role.
 - A row of buttons or badges that wraps on a phone, with Inline.
@@ -1931,6 +2423,13 @@ When not to:
 
 Content:
 - In a RowBetween header, pair a noun title with a verb action: “Run history” and “Export CSV”.
+
+Mola handles:
+- Renders a plain `<div>` with no role, so reading order is source order.
+- Lets `Inline` wrap by default, so a row of controls does not force the page wider than a phone.
+
+You handle:
+- Put children in the order they should be read.
 
 #### `Stack` (component)
 
@@ -1974,6 +2473,8 @@ https://demogar.github.io/molaui/?path=/docs/components-layout-toolbar--overview
 
 A row of related controls with one tab stop and arrow-key movement, with toggles, a field and an overflow menu.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Actions and filters above a table or canvas, such as Re-run, Stop and Share trace.
 - Pressed states, with ToolbarToggle and ToolbarToggleGroup.
@@ -1993,6 +2494,23 @@ When not to:
 Content:
 - Name the toolbar with aria-label: “Run actions”, “Filter runs”.
 - Buttons are verbs; toggles name what they show: “Wrap lines”, “Tool calls”.
+
+Keyboard:
+- Tab: Moves focus into the toolbar, onto one control.
+- ArrowRight or ArrowLeft: Moves between controls, wrapping at either end; mirrored in right-to-left.
+- Enter or Space: Activates the focused button, or presses the focused toggle.
+- Shift+Tab: Leaves the toolbar; it is one tab stop.
+
+Mola handles:
+- Renders `role="toolbar"` with roving focus from Base UI, so ten controls are one tab stop.
+- Reports toggles as pressed with `aria-pressed`.
+- In a text field, lets the arrow keys move the caret and leave only at its edges.
+- Removes overflowed actions from the row and puts them in a More menu, so the arrows never stall on a hidden control.
+
+You handle:
+- Name the toolbar with `aria-label`, and each toggle group too.
+- Give a `ToolbarInput` an `aria-label`; the placeholder is not a name.
+- Give icon-only buttons an `aria-label`.
 
 #### `Toolbar` (component)
 
@@ -2097,6 +2615,8 @@ https://demogar.github.io/molaui/?path=/docs/components-navigation-accordion--ov
 
 Sections of one document that open one or several at a time; Collapsible for a single disclosure.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Answers in an FAQ, or the advanced settings of an agent.
 - Settings where comparing two sections matters, with multiple.
@@ -2114,6 +2634,20 @@ When not to:
 Content:
 - Triggers are questions in an FAQ, “What counts as a run?”, and nouns in settings, “Limits”.
 - Meta is a short fact: “6 tools”, “Defaults”.
+
+Keyboard:
+- Tab: Moves focus from one trigger to the next, through any open panel’s content.
+- Enter or Space: Opens or closes the focused section.
+
+Mola handles:
+- Each trigger is a `<button>` inside an `<h3>`, with `aria-expanded` and `aria-controls`.
+- Each open panel is a `region` named by its trigger.
+- Closed panels are hidden until found, so find-in-page opens the section that holds the match.
+- The plus and cross marker is hidden from assistive technology; the state is in `aria-expanded`.
+
+You handle:
+- Place it under an `<h2>`, so the `<h3>` triggers sit in the page outline.
+- Use `Collapsible` for a single disclosure inside something else; it has no heading.
 
 #### `Accordion` (component)
 
@@ -2176,6 +2710,8 @@ https://demogar.github.io/molaui/?path=/docs/components-navigation-breadcrumb--o
 
 Where a page sits, as links back up the path, with the current page as plain text.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Pages nested two or more levels deep: Workspace / Agents / knowledge-agent / Run #4182.
 - Long ids in the path, shortened in the middle with middleTruncate.
@@ -2191,6 +2727,19 @@ When not to:
 Content:
 - Use each page’s own title as its crumb, so the trail matches the headings.
 - Shorten ids in the middle, keeping both ends: “run_8f3a…c21e”.
+
+Keyboard:
+- Tab: Moves focus from one link to the next.
+- Enter: Follows the focused link.
+
+Mola handles:
+- It is a `<nav>` named “Breadcrumb” holding an ordered list.
+- The last item is plain text with `aria-current="page"`, not a link to where you already are.
+- The slashes are drawn with CSS, so they are not read out.
+
+You handle:
+- Leave `href` off the last item.
+- When you shorten a label with `middleTruncate`, make sure the full id is on the page it leads to.
 
 #### `Breadcrumb` (component)
 
@@ -2211,6 +2760,8 @@ https://demogar.github.io/molaui/?path=/docs/components-navigation-pagination--o
 
 Moving through a long ordered result, as numbered pages or as a compact range with two arrows.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Results where a page is a place people come back to, with the pages variant.
 - Dense tables where the question is how much is left, with the compact variant: “51–100 of 1,284”.
@@ -2225,6 +2776,19 @@ When not to:
 
 Content:
 - Give the compact variant pageSize and total, so it states the range rather than “Page 2 of 26”.
+
+Keyboard:
+- Tab: Moves focus through Previous, the page buttons and Next.
+- Enter or Space: Goes to the focused page.
+
+Mola handles:
+- It is a `<nav>` named “Pagination”, with page buttons named “Page 5” and the current one marked `aria-current="page"`.
+- Previous and Next are named buttons, disabled at the ends.
+- The ellipses are hidden from assistive technology, and the compact range text is a polite live region.
+
+You handle:
+- Pass a distinct `aria-label` when a page has more than one pagination.
+- After a page change, move focus to the results or say what loaded; the page buttons do not announce it.
 
 #### `Pagination` (component)
 
@@ -2250,6 +2814,8 @@ https://demogar.github.io/molaui/?path=/docs/components-navigation-tabs--overvie
 
 Switching between views of one thing: underline for views, panel for tabs that are containers.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Views of one object, such as a run’s Trace, Output, Cost and Logs, with the underline variant.
 - Containers, such as a code sample in three languages, with the panel variant.
@@ -2266,6 +2832,21 @@ When not to:
 Content:
 - Labels are one or two nouns: “Trace”, “Output”, “Cost”.
 - Let a long list scroll rather than shortening labels until they stop meaning anything.
+
+Keyboard:
+- Tab: Moves focus to the selected tab, and from there to its panel.
+- ArrowLeft or ArrowRight: Moves focus between tabs, wrapping at the ends; swapped in right-to-left.
+- Home or End: Moves focus to the first or last tab.
+- Enter or Space: Selects the focused tab.
+
+Mola handles:
+- Base UI renders `tablist`, `tab` with `aria-selected`, and a `tabpanel` named by its tab and reachable with Tab.
+- Focus does not select a tab unless `activateOnFocus` is set, so passing over a tab never starts loading it.
+- A tab’s `icon` is hidden from assistive technology, and its `count` is part of its name.
+
+You handle:
+- Give every tab a text label, even when it has an icon.
+- Set `activateOnFocus` only when every panel is cheap to show.
 
 #### `Tabs` (component)
 
@@ -2312,6 +2893,8 @@ https://demogar.github.io/molaui/?path=/docs/components-overlays-command-palette
 
 The keyboard’s front door: a searchable list of commands and destinations, opened with ⌘K or Ctrl+K.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Jumping to a run, an agent or a page by name from anywhere in the tool.
 - Running a command without the pointer, with its shortcut shown beside it.
@@ -2330,6 +2913,22 @@ When not to:
 Content:
 - Commands start with a verb, “Start a new run”; destinations are nouns, “Settings”.
 - Descriptions add the reason or the context: “Owners only”, “Answers from the help centre”.
+
+Keyboard:
+- Control+K or Meta+K: Opens the palette, when the page calls `useCommandShortcut`.
+- ArrowDown or ArrowUp: Moves the highlight, skipping disabled commands and wrapping at the ends.
+- Enter: Runs the highlighted command and closes the palette.
+- Escape: Closes the palette.
+
+Mola handles:
+- It is a modal Base UI Dialog, titled by `label`, with focus held in the search input.
+- The input is a `combobox` controlling a `listbox`; the highlight is conveyed with `aria-activedescendant`, so the caret never leaves the input.
+- Commands sit in `group`s named by their headings, and disabled ones carry `aria-disabled`.
+- Icons and the key hints in the footer are hidden from assistive technology.
+
+You handle:
+- Call `useCommandShortcut` to bind ⌘K and Ctrl-K; the shortcuts shown on items are display only.
+- Write command labels as actions, “Start a new run”, and add `keywords` for the other words people use.
 
 #### `CommandPalette` (component)
 
@@ -2358,6 +2957,8 @@ https://demogar.github.io/molaui/?path=/docs/components-overlays-dialog--overvie
 
 Dialog for a short modal task; AlertDialog to confirm an action that destroys something.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - A short task the person finishes or cancels before going back, such as renaming an agent.
 - Read-only detail that needs the screen for a moment, with only the body scrolling.
@@ -2379,6 +2980,23 @@ Content:
 - Titles name the task or ask the question: “Rename agent”, “Delete this run?”.
 - The confirm button repeats the verb and object: “Delete run”, never “OK” or “Yes”.
 - The footer holds a ghost Cancel and one primary action.
+
+Keyboard:
+- Enter or Space: On the trigger, opens the dialog and moves focus into it.
+- Tab or Shift+Tab: Moves through the dialog’s controls; focus stays inside.
+- Escape: Closes the dialog and returns focus to the trigger.
+- Enter: In an alert dialog’s confirmation field, confirms once the text matches.
+
+Mola handles:
+- Base UI traps focus, locks scroll, makes the page inert and returns focus on close.
+- The dialog is named by `title` and described by `description`, and a named Close button is always rendered unless `hideClose` is set.
+- `AlertDialog` is a `role="alertdialog"` that an outside click does not dismiss, and it focuses Cancel first.
+- While an async confirm is pending, both buttons stop taking presses and the dialog cannot be closed.
+
+You handle:
+- Write a `title` that names the task; it is the dialog’s name.
+- Set `hideClose` only when the footer has its own way out.
+- Give the confirm button the verb, “Delete run”, never “OK”.
 
 #### `AlertDialog` (component)
 
@@ -2426,6 +3044,8 @@ https://demogar.github.io/molaui/?path=/docs/components-overlays-drawer--overvie
 
 A panel that slides in from an edge: details beside a list, filters, or quick actions in a bottom sheet.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - The details of a row, opened from a table, with an end drawer.
 - Filters for a list, applied from the footer of a start drawer.
@@ -2442,6 +3062,21 @@ When not to:
 Content:
 - Titles name what is inside: “Run details”, “Filter runs”.
 - An apply button states the result: “Show 42 runs”.
+
+Keyboard:
+- Enter or Space: On the trigger, opens the drawer and moves focus into it.
+- Tab or Shift+Tab: Moves through the drawer’s controls; focus stays inside.
+- Escape: Closes the drawer and returns focus to the trigger.
+
+Mola handles:
+- It is a Base UI Dialog underneath: focus trap, scroll lock, the inert page and focus return.
+- The drawer is named by `title` and described by `description`, with a named Close button unless `hideClose` is set.
+- The swipe to dismiss is an extra; Escape and the Close button do the same without a gesture.
+- The side is logical, so an end drawer opens from the left in right-to-left, and the swipe follows.
+
+You handle:
+- Write a `title` that names what the drawer holds.
+- Set `hideClose` only when the footer has its own way out.
 
 #### `Drawer` (component)
 
@@ -2477,6 +3112,8 @@ https://demogar.github.io/molaui/?path=/docs/components-overlays-menu--overview
 
 Actions on a thing that do not each deserve a button, with checkbox and radio items, submenus and shortcuts.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Row actions behind an icon button such as “Run actions”.
 - View options, such as columns to show and a sort order, with checkbox and radio items.
@@ -2495,6 +3132,24 @@ Content:
 - Items are verbs on the object: “Rename”, “Duplicate”, “Delete run”.
 - Submenu items name the format or the target: “Trace as JSON”.
 - Group labels are short nouns: “Columns”, “Sort by”.
+
+Keyboard:
+- Enter or Space or ArrowDown: On the trigger, opens the menu and focuses an item.
+- ArrowDown or ArrowUp: Moves between items, wrapping at the ends.
+- Home or End: Moves to the first or last item.
+- Enter or Space: Runs the focused item, or toggles a checkbox or radio item.
+- ArrowRight or ArrowLeft: Opens or closes a submenu; swapped in right-to-left.
+- Escape: Closes the menu and returns focus to the trigger.
+
+Mola handles:
+- Base UI renders `menu`, `menuitem`, `menuitemcheckbox` and `menuitemradio`, with typeahead and focus return.
+- The highlight is an ink fill, rojo on a destructive item, so the current row is a shape and not a tint.
+- Icons, check marks and the submenu chevron are hidden from assistive technology.
+- Checkbox and radio items keep the menu open, so several can be set in one visit.
+
+You handle:
+- Give the trigger an accessible name; an icon-only trigger needs an `IconButton` with a `label`.
+- Bind the keys shown by `shortcut` yourself; they are display only.
 
 #### `Menu` (component)
 
@@ -2577,6 +3232,8 @@ https://demogar.github.io/molaui/?path=/docs/components-overlays-popover--overvi
 
 A non-modal panel anchored to the control that opened it.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Filters for one table column, with Apply and Reset.
 - A short explanation someone asks for, such as what a step budget is.
@@ -2594,6 +3251,20 @@ When not to:
 Content:
 - The title says what the popover does: “Filter by status”.
 - The description says how it applies: “Runs matching any checked status are shown.”
+
+Keyboard:
+- Enter or Space: On the trigger, opens the popover and moves focus into it.
+- Tab: Moves through the popover’s controls, then on to the page after the trigger.
+- Escape: Closes the popover and returns focus to the trigger.
+
+Mola handles:
+- Base UI renders the popup as a non-modal `dialog`, with `aria-expanded` on the trigger.
+- A `title` names the popover and a `description` describes it.
+- An outside press closes it, and the page behind stays usable.
+
+You handle:
+- Pass a `title`, or label the popup yourself; without one it is announced only as “dialog”.
+- Use a Dialog instead when the content must be answered before going on.
 
 #### `Popover` (component)
 
@@ -2628,6 +3299,8 @@ https://demogar.github.io/molaui/?path=/docs/components-overlays-tooltip--overvi
 
 A short label on hover or focus, with an optional keyboard shortcut.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Naming an icon-only button, and its shortcut.
 - A row of icon buttons inside TooltipProvider, so each next label appears without a delay.
@@ -2643,6 +3316,20 @@ When not to:
 Content:
 - A verb phrase in sentence case, with no trailing period: “Copy run id”.
 - Write keys as they appear on the keyboard: ⌘, ⇧, R.
+
+Keyboard:
+- Tab: Focusing the trigger shows the tooltip, not only hovering it.
+- Escape: Hides the tooltip.
+
+Mola handles:
+- It opens on keyboard focus as well as on hover.
+- `shortcut` keys are rendered as `<kbd>` elements.
+- Inside a `TooltipProvider`, moving along a toolbar shows the next tooltip at once, after the first delay.
+
+You handle:
+- Give the trigger its own accessible name, such as an `IconButton` `label`; the tooltip is not wired to it as a name or description.
+- Never put information only in a tooltip; it does not exist on touch.
+- Pass a focusable element as the child.
 
 #### `Tooltip` (component)
 
@@ -2673,6 +3360,8 @@ https://demogar.github.io/molaui/?path=/docs/components-typography-display--over
 
 Archivo Bold set wide, for the one title that is the point of a screen.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - An empty state, an onboarding panel or the page that introduces a tool.
 - The signature display-cut class, on a filled panel, once per page.
@@ -2687,6 +3376,12 @@ When not to:
 Content:
 - Keep it to a few words; it is set at up to 76px.
 
+Mola handles:
+- Renders an `h1` by default, or an `h2` or `p` through `as`, without changing the look.
+
+You handle:
+- Use `as` so the element matches the outline: at most one `h1` per page.
+
 #### `Display` (component)
 
 | Prop | Type | Default | Description |
@@ -2700,6 +3395,8 @@ Types: `DisplayProps`
 https://demogar.github.io/molaui/?path=/docs/components-typography-heading--overview
 
 Four heading levels for wayfinding in a tool, with size to separate the look from the outline.
+
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
 
 When to use:
 - A page title at level 1, panel titles at 2, groups at 3, and a label over a cluster of fields at 4.
@@ -2716,6 +3413,13 @@ When not to:
 Content:
 - Sentence case, with no trailing period: “Run history”, “Tool calls in this step”.
 - Name the content, not the action: “Arguments”, not “View the arguments”.
+
+Mola handles:
+- Renders the element its `level` names, `h1` to `h4`.
+- Lets `size` change the look without changing the outline.
+
+You handle:
+- Pick `level` from the page outline and never skip one; change `size` for a smaller look.
 
 #### `Heading` (component)
 
@@ -2738,6 +3442,8 @@ https://demogar.github.io/molaui/?path=/docs/components-typography-kbd--overview
 
 A key as a cut shape, with KbdChord for keys pressed together.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - A keyboard shortcut in text, a hint or a footer.
 - Keys pressed together, such as ⌘ and K, with KbdChord.
@@ -2749,6 +3455,12 @@ When not to:
 Content:
 - Use the key’s symbol or its printed name: ⌘, ⇧, ↵, Esc.
 - When a shortcut differs between platforms, show both, or bind both as the command palette does with ⌘K and Ctrl+K.
+
+Mola handles:
+- Renders a `<kbd>`, and nests a chord's keys inside one outer `<kbd>`, as the HTML spec describes.
+
+You handle:
+- Write key names a screen reader can say, or add the spoken name nearby: Command K for ⌘K.
 
 #### `Kbd` (component)
 
@@ -2768,6 +3480,8 @@ https://demogar.github.io/molaui/?path=/docs/components-typography-lead--overvie
 
 The paragraph under a page title that says what the screen is for, in the reading voice.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - One or two sentences under a page or section title, read once on a first visit.
 - The explanation under a Display title on an onboarding or first-run screen.
@@ -2779,6 +3493,12 @@ When not to:
 Content:
 - Say what the screen is for and what the reader can do there, in plain sentences.
 
+Mola handles:
+- Renders a `<p>` held to the reading measure.
+
+You handle:
+- Use it once, under the page title; it is not a heading.
+
 #### `Lead` (component)
 
 The first thing someone says, so it is set in the reading voice rather than the system one. Alegreya from here down; Archivo above and around.
@@ -2788,6 +3508,8 @@ The first thing someone says, so it is set in the reading voice rather than the 
 https://demogar.github.io/molaui/?path=/docs/components-typography-meta--overview
 
 Small facts compared down a column, such as duration, cost, count and time, in tabular figures.
+
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
 
 When to use:
 - A line of figures under a title or in a row: “2.4 s · 3,812 tokens · $0.014”.
@@ -2802,6 +3524,12 @@ Content:
 - Separate facts with a middle dot, “ · ”, and always give the unit.
 - Keep each fact to a figure and its unit; no sentences.
 
+Mola handles:
+- Renders a `<p>` in tabular figures, so facts line up down a column.
+
+You handle:
+- Write the unit in words or a standard symbol, so the figure means something when read aloud.
+
 #### `Meta` (component)
 
 Duration, cost, count, timestamp — facts that are compared down a column, so they carry tabular figures. This is the role a monospace usually plays in tool UIs, minus the costume: Archivo's tabular figures line up exactly as well and keep the row in one voice.
@@ -2811,6 +3539,8 @@ Duration, cost, count, timestamp — facts that are compared down a column, so t
 https://demogar.github.io/molaui/?path=/docs/components-typography-prose--overview
 
 The reading voice for long-form markup, such as a document, a run summary or a model’s answer.
+
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
 
 When to use:
 - Rendered markdown or rich text that cannot be annotated element by element.
@@ -2828,6 +3558,14 @@ When not to:
 Content:
 - Headings inside prose use the same sentence case as the rest of the interface.
 
+Mola handles:
+- Styles the markup inside it without changing its elements, so headings, lists and quotes keep their meaning.
+- Underlines links, so they are not marked by colour alone.
+- Holds text to the reading measure unless `fluid` is set.
+
+You handle:
+- Supply markup with real headings in order, lists and link text that makes sense on its own.
+
 #### `Prose` (component)
 
 | Prop | Type | Default | Description |
@@ -2843,6 +3581,8 @@ https://demogar.github.io/molaui/?path=/docs/components-typography-pullquote--ov
 
 A voice interrupting the prose: a quotation in the reading face, under a relleno band, with its source.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - A quoted customer, a key finding in a research summary, or a sentence from an answer an operator pinned.
 - Breaking a long write-up, such as an evaluation report, with the sentence the reader should keep.
@@ -2853,6 +3593,13 @@ When not to:
 
 Content:
 - Quote exactly, and give cite as who said it and where: “Evaluation lead, research interview 7”.
+
+Mola handles:
+- Renders a `figure` with the quote in a `blockquote` and the attribution in a `figcaption` outside it.
+- Hides the relleno band from assistive tech.
+
+You handle:
+- Pass `cite` so the quote says who said it.
 
 #### `Pullquote` (component)
 
@@ -2871,6 +3618,8 @@ https://demogar.github.io/molaui/?path=/docs/components-typography-rotulo--overv
 
 The label register, cut short by a band, set under the block it belongs to.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Saying what kind of thing a block is, or who it is from, under its heading.
 - A label inside a dense header, with plain, which drops the band.
@@ -2887,6 +3636,12 @@ When not to:
 
 Content:
 - Two or three words in sentence case; the register sets them in capitals.
+
+Mola handles:
+- Renders a `<p>`; the band before it is drawn in CSS and is not read.
+
+You handle:
+- Place it under the block it labels, not above a heading as an eyebrow.
 
 #### `Rotulo` (component)
 
@@ -2905,6 +3660,8 @@ https://demogar.github.io/molaui/?path=/docs/components-typography-text--overvie
 
 Running interface text in the system voice, in three inks: ink, ink-2 and muted.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Descriptions, hints and secondary lines in the interface.
 - Figures compared down a column, with tabular.
@@ -2920,6 +3677,14 @@ When not to:
 
 Content:
 - Sentence case throughout; full sentences end with a full stop, labels do not.
+
+Mola handles:
+- Renders a `p`, `span` or `div` only, so body text cannot sit on a heading element.
+- Inherits the ink of the ground it sits on by default, so it stays legible on a filled panel.
+
+You handle:
+- Use `Heading` for headings; `Text` never carries the outline.
+- Say a danger or success state in words; the tone alone is colour.
 
 #### `Text` (component)
 
@@ -2952,6 +3717,8 @@ https://demogar.github.io/molaui/?path=/docs/ai-agent-run--overview
 
 A long-running agent run as a timeline: its status and live clock, each step on one spine, and the reason it stopped.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Showing a run an operator watches or comes back to, step by step, while it works and after it ends.
 - Answering “is it still working, what is it doing, how long has it taken, does it need me” on one panel.
@@ -2973,6 +3740,21 @@ Content:
 - Name the agent as people know it, in sentence case: “Cayuco research agent”.
 - Step titles start with a verb and name the object: “Query the run history”, not “Querying…”.
 - Write the summary as a result: “Answered with 3 sources. One guardrail flagged for review.”
+
+Keyboard:
+- Tab: Moves through Cancel run or Retry run, Copy run id, and each step that has detail.
+- Enter or Space: Activates the focused button, or opens and closes the focused step.
+- Shift+Tab: Moves back through the same stops.
+
+Mola handles:
+- The run is a section named by its heading, and the steps are an ordered list named “Steps of” the run.
+- Each change of run status is announced once through a polite status region; single steps are not announced, and a failure the panel already alerts is not said twice.
+- When a retry removes the failure panel, focus moves to the run’s heading instead of falling to the page.
+- Each step’s status is a glyph, a word and a colour, and a step that needs approval or has failed opens itself.
+
+You handle:
+- Give the run a `name` and each step a `title` in words; the tool’s literal name belongs in `detail`.
+- Set `headingLevel` so the run’s heading fits the page outline.
 
 #### `AgentRun` (component)
 
@@ -3003,6 +3785,8 @@ https://demogar.github.io/molaui/?path=/docs/ai-change-review--overview
 
 A change an agent proposes, shown as the reviewer reads it, with Approve, Request changes and Reject under it.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - An agent proposes edits to files or records that a person must approve before they are applied.
 - The reviewer needs the diff, the agent’s reasons in its own words and the decision in one place.
@@ -3022,6 +3806,21 @@ Content:
 - Title the change by what it does, “Roll the help panel out to Starter”, not by the files it touches.
 - Name a record by its type and key, so each field change has an owner: “Feature flag help_panel_v2”.
 - A reason for a no says what is wrong and what would make it acceptable, because the agent acts on it.
+
+Keyboard:
+- Tab: Moves to the Reason field, then to Approve, Request changes and Reject.
+- Enter or Space: Decides with the focused button.
+- Enter or Space: On a hunk header in a diff, folds or unfolds that hunk.
+
+Mola handles:
+- Reject or Request changes with an empty reason states the error in words, marks the field invalid, moves focus to it and does not call `onDecide`.
+- The outcome replaces the form and takes focus once, so it is heard once; a decision that arrives already made does not take focus.
+- The three decisions sit in a group named “Decision”, each a glyph and a word of the same weight.
+- Diff lines are list items that say “Added:” or “Removed:”, line numbers and +/− glyphs are hidden from screen readers, and counts are read as “12 lines added, 3 lines removed”.
+
+You handle:
+- Give the change a `title` that says what it does, and pass `reviewer` so the outcome says who decided.
+- Set `headingLevel` on the review and its diffs so the headings fit the page outline.
 
 #### `ChangeCount` (component)
 
@@ -3090,6 +3889,8 @@ https://demogar.github.io/molaui/?path=/docs/ai-confidence--overview
 
 How sure the system is, in three levels and in words, with UncertaintyNote for a specific claim to check.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Stating how well an answer is supported, High, Medium or Low, with the basis it rests on.
 - Flagging one claim the reader should verify, next to that claim, with UncertaintyNote.
@@ -3108,6 +3909,15 @@ When not to:
 Content:
 - Write the basis as a short fact in lower case, since it follows the level: “sources disagree on the segment size”.
 - Title an UncertaintyNote with the claim, “Unverified figure”, not with “Warning” or “Note”.
+
+Mola handles:
+- The level is said in words, “High confidence”, and the three segments are hidden from screen readers.
+- The segments differ in how many are filled, not only in colour, so the level reads in greyscale.
+- `UncertaintyNote` is an `<aside>` named by its `title`, with its icon hidden from screen readers.
+
+You handle:
+- Pass `basis` so the reader hears what the confidence rests on.
+- Give each `UncertaintyNote` a specific `title`; two notes with the default share one landmark name.
 
 #### `Confidence` (component)
 
@@ -3135,6 +3945,8 @@ https://demogar.github.io/molaui/?path=/docs/ai-message--overview
 
 One turn of a conversation, laid out as a ledger: who spoke, when, with which model, and what they said or did.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Transcripts between an operator, an assistant, the system and its tools, where each turn is a record.
 - Assistant answers with copy, regenerate and rating actions, and a stated failure with Retry.
@@ -3155,6 +3967,22 @@ Content:
 - Set author to the name people know, “Cayuco” or “M. Herrera”; the role is only the fallback.
 - Pass the model as its identifier, “cayuco-deep-3”; it is shown as a literal.
 - System turns state what changed in a sentence or two: “Context reset. Earlier turns are summarised.”
+
+Keyboard:
+- Tab: Reaches a message’s Copy, Regenerate and rating buttons, which stay in the tab order while hidden.
+- Enter or Space: Activates the focused action, Retry, or Jump to latest.
+- Tab: In a `Thread`, also stops on the transcript itself, so it can be scrolled.
+- ArrowUp or ArrowDown or PageUp or PageDown: Scrolls the focused transcript.
+
+Mola handles:
+- Each message is an article named by its speaker and time, and a failed message states the failure in an alert with the error verbatim.
+- The rating buttons are toggle buttons with `aria-pressed`, and a copy is confirmed in a status region.
+- A `Thread` is a region named by `label`, not a live region, so a streaming answer is not read token by token.
+- The thread follows new content only while the reader is at the bottom, and offers Jump to latest when they are not.
+
+You handle:
+- Give `Thread` a `label` that names the conversation.
+- Pass `author` when the speaker is more specific than the role, so the article’s name says who.
 
 #### `Message` (component)
 
@@ -3190,6 +4018,8 @@ https://demogar.github.io/molaui/?path=/docs/ai-prompt-input--overview
 
 The composer: a field that grows, attachments, a toolbar, and a send button that becomes Stop while a response generates.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Taking the next prompt in a conversation or an agent console.
 - Letting the operator stop a response from the place the send button was.
@@ -3208,6 +4038,23 @@ Content:
 - The label names who is being addressed: “Message Cayuco”.
 - Write the placeholder as a hint of scope, “Ask about a run, an evaluation, a document…”, never as the only label.
 - Name attachments by file name, with type and size as the detail: “CSV · 4.1 MB”.
+
+Keyboard:
+- Tab: Moves to the field, then to the toolbar, Send or Stop, and each attachment’s remove button.
+- Enter: Sends the prompt; with `submitOn="mod-enter"` it adds a new line instead.
+- Shift+Enter: Adds a new line when Enter sends.
+- Control+Enter or Meta+Enter: Sends the prompt when `submitOn` is `mod-enter`.
+- Enter or Space: Activates Send, Stop or Remove.
+
+Mola handles:
+- The field is labelled by `label` in a visually hidden `<label>`, and described by the hint line, which says why it cannot send while offline.
+- Offline keeps the field editable and the draft kept; while generating, Send becomes Stop in the same place.
+- Enter does not send while an input method is still composing.
+- The token estimate is heard as “About 120 tokens”, and each attachment’s remove button is named “Remove” and the file name.
+
+You handle:
+- Pass a `label` that says who the message goes to, such as “Message Cayuco”.
+- Give each control you put in `toolbar` its own accessible name.
 
 #### `AttachmentChip` (component)
 
@@ -3248,6 +4095,8 @@ https://demogar.github.io/molaui/?path=/docs/ai-reasoning--overview
 
 The model’s thinking behind a disclosure, summarised as “Thought for 12.4s” and set a step quieter than the answer.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Keeping reasoning available as evidence, for the moment the answer looks wrong.
 - Showing that the model is still thinking, with the working texture and a live clock.
@@ -3262,6 +4111,18 @@ When not to:
 
 Content:
 - Pass startedAt and endedAt, or durationMs, so the summary states a time rather than the bare word “Reasoning”.
+
+Keyboard:
+- Tab: Moves focus to the summary line.
+- Enter or Space: Opens or closes the reasoning.
+
+Mola handles:
+- The summary is a button with `aria-expanded`, named by its own words: “Thinking” or “Thought for 12.4s”.
+- Opened while the model thinks, the text is `aria-busy` and says “Reasoning complete.” once when it ends.
+- The working texture is hidden from screen readers; the word “Thinking” says the same thing.
+
+You handle:
+- Pass `startedAt` and `endedAt`, or `durationMs`, so the summary says how long the model thought.
 
 #### `Reasoning` (component)
 
@@ -3284,6 +4145,8 @@ https://demogar.github.io/molaui/?path=/docs/ai-run-error--overview
 
 Why a run stopped: the step, a plain sentence, the error verbatim, and the ways back in order of cost.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - A run failed, was rate limited, timed out or was cancelled, and the operator has to decide what to do next.
 - Offering Retry from step N, Retry run and Copy error details next to the reason.
@@ -3304,6 +4167,20 @@ Content:
 - A custom message says what happened and what was kept: “The query was denied, so the run stopped. Steps 1–3 are kept.”
 - Pass the error exactly as the tool returned it; do not reword, shorten or translate it.
 - A cancellation is stated without alarm, in the past tense: “You stopped the run.”
+
+Keyboard:
+- Tab: Moves to Retry from step, Retry run and Copy error details, in that order.
+- Enter or Space: Activates the focused button.
+
+Mola handles:
+- The panel is a group named by its headline, and a failure, rate limit or timeout is an alert; a cancellation is not.
+- A countdown is announced only with the error, at ten seconds and at zero, never every second.
+- While a retry must wait, the buttons are disabled and a sentence says until when; Retry from step is described by the headline.
+- Copy error details confirms the copy once in a status region.
+
+You handle:
+- Pass `step` and `stepNumber` so the headline and the retry button say where the run stopped.
+- Used on its own rather than inside `AgentRun`, move focus somewhere sensible when a retry removes the panel.
 
 #### `PartialOutput` (component)
 
@@ -3354,6 +4231,8 @@ https://demogar.github.io/molaui/?path=/docs/ai-run-status--overview
 
 The one status vocabulary for a run, a step and a tool call: a glyph, a word and a colour, with an elapsed clock.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - The state of any unit of model work: queued, running, streaming, needs approval, succeeded, failed, cancelled or timed out.
 - Elapsed time that keeps counting for open work, or a fixed duration for finished work.
@@ -3370,6 +4249,14 @@ When not to:
 Content:
 - Keep the status words as they are: “Succeeded”, “Failed”, “Needs approval”, “Timed out”.
 - Use the same words everywhere on the page; a run is not “Errored” in a table and “Failed” in its header.
+
+Mola handles:
+- Every status is a glyph, a word and a colour; the glyphs differ in shape, and the glyph is hidden from screen readers.
+- The elapsed clock is plain text, so it does not announce every tick.
+
+You handle:
+- Announce a change of status yourself where it matters; `RunStatus` is not a live region.
+- Use `label` to change the word, such as “Thinking”, and keep it a word a person would say.
 
 #### `RunStatus` (component)
 
@@ -3418,6 +4305,8 @@ https://demogar.github.io/molaui/?path=/docs/ai-sources--overview
 
 Inline citation markers and the numbered list of sources they point to, with a preview card on hover, focus or first tap.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - An answer makes claims drawn from documents, and readers need to check them where they are made.
 - Listing what each source is, where it lives, the passage used and when it was read.
@@ -3437,6 +4326,20 @@ Content:
 - Use the document’s own title as the source title, not its URL or file name.
 - Quote the passage exactly as retrieved; do not paraphrase it.
 - Give the domain as people know it: “docs.cayuco.internal”.
+
+Keyboard:
+- Tab: Moves to a citation marker and opens its preview card, or to a source card in the list.
+- Enter: Follows the focused marker to its source card, or opens the focused source in a new tab.
+- Escape: Closes the preview card.
+
+Mola handles:
+- A marker is a link named “Source 2:” and the source’s title, not “2”.
+- The preview card opens on keyboard focus as well as hover, and repeats the list card, so missing it loses nothing.
+- Links that open a new tab say so to screen readers, and the arrow glyphs are hidden from them.
+
+You handle:
+- Pass `source` or `title` to each `Citation`, or the marker is named only by its number.
+- Render the `SourceList` on the same page under a heading, so `#source-n` has somewhere to land.
 
 #### `Citation` (component)
 
@@ -3469,6 +4372,8 @@ https://demogar.github.io/molaui/?path=/docs/ai-streaming-text--overview
 
 A model’s answer arriving a token at a time, in the reading voice, without layout shift, and announced once when it ends.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Rendering an assistant’s answer as it streams, with a block caret at the end.
 - Paragraphs, lists, code blocks, inline code and [n] citation markers from a model.
@@ -3486,6 +4391,15 @@ When not to:
 
 Content:
 - Override doneAnnouncement only with a short, complete sentence: “Summary complete.”
+
+Mola handles:
+- The text is `aria-busy` while it streams, so it is not read token by token.
+- A polite status says “Response complete.” or “Response stopped with an error.” once, when a running stream ends, and not on mount.
+- The caret is hidden from screen readers, and under reduced motion it stops blinking.
+
+You handle:
+- Set `doneAnnouncement` when “Response complete.” is not the right words for what finished.
+- Name the citations you render through `renderCitation`; `Citation` does this from the source’s title.
 
 #### `Caret` (component)
 
@@ -3516,6 +4430,8 @@ https://demogar.github.io/molaui/?path=/docs/ai-token-usage--overview
 
 What a run consumed: input, cached and output tokens, cost, and how full the context window is.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - A run summary that reports tokens and cost, or a run header, with the inline variant.
 - Warning before the context window fills: the meter turns gold at 80% and rojo at 95%, and says so.
@@ -3529,6 +4445,14 @@ When not to:
 
 Content:
 - Pass raw numbers; counts are shown compact, “12.4k”, and cost in US dollars to four decimals, “$0.0731”.
+
+Mola handles:
+- The context bar is a `role="meter"` named “Context window used”, with a value text such as “84% of the context window, near the limit”.
+- Near and at the limit are said in words as well as in gold and red.
+- The full variant is a description list, so each figure is heard with its term.
+
+You handle:
+- Say whose usage it is, with a heading or the run it sits in; the component does not.
 
 #### `TokenUsage` (component)
 
@@ -3553,6 +4477,8 @@ https://demogar.github.io/molaui/?path=/docs/ai-tool-call--overview
 
 One tool invocation: the tool’s literal name, its arguments, the result or error, and an approval when a person must decide.
 
+Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
+
 When to use:
 - Showing what the model asked a system to do, with what, and what came back.
 - Holding a call that writes, spends or sends until a person approves or denies it.
@@ -3572,6 +4498,21 @@ Content:
 - The title says what the call is for, “Rollout results”; the name stays exactly as the model called it.
 - Name approval buttons by the action: “Approve rollout” and “Deny”, not “Yes” and “No”.
 - Keep the approval reason to a sentence or two: what changes, for whom, and whether it can be undone.
+
+Keyboard:
+- Tab: Moves to the call’s header, then to Approve, Deny, Retry call and the payload’s buttons when open.
+- Enter or Space: Opens or closes the call from its header, or activates the focused button.
+- ArrowUp or ArrowDown or ArrowLeft or ArrowRight: Scrolls a focused arguments or result block.
+
+Mola handles:
+- The header is a button with `aria-expanded`, and a failed call or one waiting for approval opens itself.
+- A failure is an alert with the error verbatim, except inside an `AgentRun` that has already raised it.
+- Status is a glyph, a word and a colour, and Approve and Deny are buttons of the same weight.
+- `ToolCallGroup` is a group named “N tools in parallel”, or by its `label`.
+
+You handle:
+- State in `approval.reason` why a person must approve, in words.
+- Pass a `title` in words when the tool’s name alone does not say what the call is for.
 
 #### `ToolCall` (component)
 

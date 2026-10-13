@@ -4,6 +4,7 @@ import { Meta } from './meta'
 
 const meta = {
   title: 'Components/Typography/Meta',
+  tags: ['stable'],
   component: Meta,
   args: { children: '2.4 s · 3,812 tokens · $0.014' },
   parameters: {

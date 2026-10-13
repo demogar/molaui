@@ -14,6 +14,7 @@ const LABEL: Record<BadgeTone, string> = {
 
 const meta = {
   title: 'Components/Feedback/Badge',
+  tags: ['stable'],
   component: Badge,
   args: { children: 'Succeeded', tone: 'success', variant: 'soft', dot: true },
   argTypes: {

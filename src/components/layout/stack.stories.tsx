@@ -11,6 +11,7 @@ const Box = ({ children }: { children: React.ReactNode }) => (
 
 const meta = {
   title: 'Components/Layout/Stack',
+  tags: ['stable'],
   component: Stack,
   args: { gap: 'md' },
   argTypes: { gap: { control: 'inline-radio', options: ['none', '2xs', 'xs', 'sm', 'md', 'lg', 'xl'] } },

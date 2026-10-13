@@ -9,6 +9,7 @@ import { AttachmentChip, PromptInput } from './prompt-input'
 
 const meta = {
   title: 'AI/Prompt input',
+  tags: ['stable'],
   component: PromptInput,
   args: { label: 'Message Cayuco', onSubmit: fn(), onStop: fn(), placeholder: 'Ask about a rollout, a metric, a doc…' },
   argTypes: {

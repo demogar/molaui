@@ -4,6 +4,7 @@ import { Kbd, KbdChord } from './kbd'
 
 const meta = {
   title: 'Components/Typography/Kbd',
+  tags: ['stable'],
   component: Kbd,
   args: { children: 'Esc' },
   parameters: {

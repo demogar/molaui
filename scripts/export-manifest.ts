@@ -27,7 +27,10 @@ import { isExportStory } from 'storybook/internal/csf'
 import ts from 'typescript'
 
 import pkg from '../package.json' with { type: 'json' }
+import { ACCESSIBILITY } from '../src/docs/usage/accessibility'
+import type { Accessibility } from '../src/docs/usage/accessibility-types'
 import { USAGE, type Usage } from '../src/docs/usage/guidance'
+import { type Phase, phaseOf, PHASES } from '../src/docs/usage/lifecycle'
 import { docsId, storyId } from '../src/docs/usage/links'
 import { RULES } from '../src/docs/usage/rules'
 
@@ -176,6 +179,7 @@ interface StoriesFile {
   title: string
   component?: unknown
   description?: string
+  phase?: Phase
   stories: { name: string; id: string }[]
   /** Source modules the stories file imports, absolute, without extension. */
   imports: Set<string>
@@ -185,7 +189,7 @@ const storyFiles = globSync('src/**/*.stories.tsx', { cwd: root }).sort()
 const stories: StoriesFile[] = []
 for (const file of storyFiles) {
   const mod = (await import(resolve(root, file))) as Record<string, unknown> & {
-    default: { title: string; component?: unknown; parameters?: { docs?: { description?: { component?: string } } } }
+    default: { title: string; component?: unknown; tags?: string[]; parameters?: { docs?: { description?: { component?: string } } } }
   }
   const meta = mod.default
   const text = readFileSync(resolve(root, file), 'utf8')
@@ -197,6 +201,7 @@ for (const file of storyFiles) {
     title: meta.title,
     component: meta.component,
     description: meta.parameters?.docs?.description?.component,
+    phase: phaseOf(meta.tags),
     stories: Object.keys(mod)
       .filter((key) => key !== 'default' && isExportStory(key, meta as never))
       .map((key) => ({ name: key, id: storyId(meta.title, key) })),
@@ -240,9 +245,12 @@ interface Entry {
   layer: 'components' | 'ai'
   category: string
   docs: string
+  /** The lifecycle phase, from the stories' tags; what it promises is on the Versioning page. */
+  phase?: Phase
   summary?: string
   description?: string
   usage?: Omit<Usage, 'summary'>
+  accessibility?: Accessibility
   exports: ExportEntry[]
   stories: { name: string; id: string; url: string }[]
 }
@@ -268,9 +276,13 @@ for (const info of exportsInfo) {
       layer: segments[0] === 'AI' ? 'ai' : 'components',
       category: segments.length > 2 ? segments[1]! : segments[0]!,
       docs: docsUrl(title),
+      ...(s.phase ? { phase: s.phase } : {}),
       ...(usage ? { summary: usage.summary } : {}),
       ...(s.description ? { description: s.description } : {}),
-      ...(usage ? { usage: { use: usage.use, avoid: usage.avoid, practices: usage.practices, content: usage.content } } : {}),
+      ...(usage
+        ? { usage: { use: usage.use, avoid: usage.avoid, practices: usage.practices, content: usage.content, replacedBy: usage.replacedBy } }
+        : {}),
+      ...(ACCESSIBILITY[title] ? { accessibility: ACCESSIBILITY[title] } : {}),
       exports: [],
       stories: s.stories.map((story) => ({ ...story, url: storyUrl(story.id) })),
     }
@@ -346,6 +358,7 @@ const manifest = {
   storybook: SITE,
   install,
   rules: RULES,
+  phases: PHASES,
   counts,
   tokens: {
     source: 'src/styles/tokens.css',
@@ -360,7 +373,9 @@ const manifest = {
 
 /* ── llms.txt and llms-full.txt ─────────────────────────────────────── */
 
-const linkLine = (e: Entry) => `- [${e.name}](${e.docs})${e.summary ? `: ${e.summary}` : ''}`
+/** Stable is the default and goes unsaid in the index; any other phase is the first thing an agent should see. */
+const phaseNote = (e: Entry) => (e.phase && e.phase !== 'stable' ? ` (${PHASES[e.phase].label})` : '')
+const linkLine = (e: Entry) => `- [${e.name}](${e.docs})${phaseNote(e)}${e.summary ? `: ${e.summary}` : ''}`
 const byLayer = (layer: Entry['layer']) => sorted.filter((e) => e.layer === layer)
 const categories = [...new Set(byLayer('components').map((e) => e.category))]
 
@@ -389,6 +404,12 @@ Theme and density are attributes, not props: \`<html data-theme="dark" data-dens
 ## Rules
 
 ${rulesBlock}
+
+## Lifecycle phases
+
+Every component has one phase. Stable unless the index says otherwise.
+
+${(Object.keys(PHASES) as Phase[]).map((p) => `- ${PHASES[p].label}: ${PHASES[p].promise}`).join('\n')}
 `
 
 const llms = `${header}
@@ -398,7 +419,8 @@ const llms = `${header}
 - [Getting started](${SITE}?path=/docs/mola-ui-getting-started--overview): install, theme, density, right-to-left, Tailwind
 - [Principles](${SITE}?path=/docs/mola-ui-principles--overview): the six rules every component obeys
 - [AI interface principles](${SITE}?path=/docs/ai-principles--overview): streaming, latency, approval, uncertainty, failure
-- [Versioning](${SITE}?path=/docs/mola-ui-versioning--overview): what counts as breaking, deprecation, codemods
+- [Versioning](${SITE}?path=/docs/mola-ui-versioning--overview): lifecycle phases, what counts as breaking, deprecation, codemods
+- [Known gaps](${SITE}?path=/docs/mola-ui-known-gaps--overview): open limitations, and what has not been tested by hand
 - [Component manifest](https://github.com/demogar/molaui/blob/main/docs/ai/components.json): every export, prop, variant and story as JSON
 - [Full text](${SITE}llms-full.txt): this file with every component's guidance and props inline
 
@@ -424,6 +446,8 @@ function propsTable(item: ExportEntry) {
 function fullEntry(e: Entry) {
   const parts = [`### ${e.name}`, '', `${e.docs}`, '']
   if (e.summary) parts.push(e.summary, '')
+  if (e.phase) parts.push(`Phase: ${PHASES[e.phase].label}. ${PHASES[e.phase].promise}`, '')
+  if (e.usage?.replacedBy) parts.push(`Replaced by ${e.usage.replacedBy.split('/').at(-1)}.`, '')
   if (e.usage) {
     parts.push('When to use:', ...e.usage.use.map((l) => `- ${l}`), '')
     parts.push(
@@ -433,6 +457,11 @@ function fullEntry(e: Entry) {
     )
     if (e.usage.practices?.length) parts.push(...e.usage.practices.flatMap((p) => [`- Do: ${p.do}`, `- Don’t: ${p.dont}`]), '')
     if (e.usage.content?.length) parts.push('Content:', ...e.usage.content.map((l) => `- ${l}`), '')
+  }
+  if (e.accessibility) {
+    const a = e.accessibility
+    if (a.keyboard?.length) parts.push('Keyboard:', ...a.keyboard.map((k) => `- ${k.keys.join(' or ')}: ${k.action}`), '')
+    parts.push('Mola handles:', ...a.handles.map((l) => `- ${l}`), '', 'You handle:', ...a.you.map((l) => `- ${l}`), '')
   }
   for (const item of e.exports.filter((x) => x.kind !== 'type')) {
     parts.push(`#### \`${item.name}\` (${item.kind})`, '')

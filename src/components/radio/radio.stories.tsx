@@ -5,6 +5,7 @@ import { Radio, RadioGroup } from './radio'
 
 const meta = {
   title: 'Components/Forms/Radio',
+  tags: ['stable'],
   component: RadioGroup,
   args: { label: 'When a tool call fails' },
   parameters: {

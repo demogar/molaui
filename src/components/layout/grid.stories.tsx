@@ -6,6 +6,7 @@ const cells = Array.from({ length: 8 }, (_, i) => i + 1)
 
 const meta = {
   title: 'Components/Layout/Grid',
+  tags: ['stable'],
   component: Grid,
   args: { cols: 'auto', gap: 'default', minItem: '200px' },
   argTypes: {

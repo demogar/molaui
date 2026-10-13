@@ -4,6 +4,7 @@ import { TokenUsage } from './token-usage'
 
 const meta = {
   title: 'AI/Token usage',
+  tags: ['stable'],
   component: TokenUsage,
   args: { input: 18_420, cached: 12_800, output: 1_204, costUsd: 0.0731, contextWindow: 200_000 },
   decorators: [(Story) => <div className="max-w-xl">{Story()}</div>],

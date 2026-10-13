@@ -4,6 +4,7 @@ import { Pullquote } from './pullquote'
 
 const meta = {
   title: 'Components/Typography/Pullquote',
+  tags: ['stable'],
   component: Pullquote,
   args: {
     children: 'I stopped writing SQL for every campaign question. I ask, it shows its work, I check the query.',

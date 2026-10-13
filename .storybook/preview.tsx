@@ -130,13 +130,13 @@ const preview: Preview = {
     layout: 'padded',
     backgrounds: { disable: true },
     controls: { expanded: true, sort: 'requiredFirst' },
-    docs: { theme: molaTheme, page: DocsPage, toc: { headingSelector: 'h2, h3', ignoreSelector: '[data-usage] h3' } },
+    docs: { theme: molaTheme, page: DocsPage, toc: { headingSelector: 'h2, h3', ignoreSelector: '[data-usage] h3, [data-a11y] h3, [data-related] h3' } },
     a11y: { test: 'error' },
     options: {
       storySort: {
         order: [
           'Mola UI',
-          ['Introduction', 'Getting started', 'Choosing a component', 'Principles', 'Versioning', 'References', 'Changelog'],
+          ['Introduction', 'Getting started', 'Choosing a component', 'Principles', 'Versioning', 'Known gaps', 'References', 'Changelog'],
           'Foundations',
           ['Color', 'Typography', 'The cut', 'Density', 'Motion', 'Iconography', 'Accessibility'],
           'Components',

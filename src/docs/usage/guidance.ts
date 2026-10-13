@@ -10,7 +10,9 @@
  * Keyed by the stories' `title`, which is also how the docs page finds its
  * entry and how the manifest builds the story link. `usage.test.ts` fails if a
  * component's stories have no entry, or an entry names a title that no longer
- * exists.
+ * exists. The rest of the page contract (contract.ts) adds the lifecycle
+ * phase, the accessibility section in accessibility.ts and its generated
+ * evidence.
  */
 export interface Alternative {
   /** The situation in which this component is the wrong choice. */
@@ -32,6 +34,13 @@ export interface Usage {
   practices?: { do: string; dont: string }[]
   /** Label wording, case, length, tone. */
   content?: string[]
+  /**
+   * Only on a page tagged `deprecated`: the stories title of its replacement.
+   * The phase itself lives in the stories' tags (see lifecycle.ts); a tag
+   * cannot carry a link, so the replacement it promises is named here, and
+   * contract.ts fails a deprecated page without one, or a live page with one.
+   */
+  replacedBy?: string
 }
 
 export const USAGE: Record<string, Usage> = {

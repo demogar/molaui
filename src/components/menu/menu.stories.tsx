@@ -21,6 +21,7 @@ import {
 
 const meta = {
   title: 'Components/Overlays/Menu',
+  tags: ['stable'],
   component: MenuContent,
   parameters: {
     // Base UI's focus trap puts aria-hidden sentinel spans (tabindex=0) beside

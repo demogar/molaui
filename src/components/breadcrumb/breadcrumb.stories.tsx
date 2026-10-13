@@ -4,6 +4,7 @@ import { Breadcrumb, middleTruncate } from './breadcrumb'
 
 const meta = {
   title: 'Components/Navigation/Breadcrumb',
+  tags: ['stable'],
   component: Breadcrumb,
   args: {
     items: [

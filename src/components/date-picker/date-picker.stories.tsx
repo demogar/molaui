@@ -21,6 +21,7 @@ const deployFreeze = (date: Date) =>
 
 const meta = {
   title: 'Components/Forms/Date picker',
+  tags: ['stable'],
   component: DatePicker,
   parameters: {
     docs: {

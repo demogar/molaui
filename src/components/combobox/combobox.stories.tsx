@@ -44,6 +44,7 @@ const tools: ComboboxOptionGroup[] = [
 
 const meta = {
   title: 'Components/Forms/Combobox',
+  tags: ['stable'],
   component: Combobox,
   parameters: {
     docs: {

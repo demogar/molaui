@@ -6,6 +6,7 @@ import { Callout } from './callout'
 
 const meta = {
   title: 'Components/Feedback/Callout',
+  tags: ['stable'],
   component: Callout,
   args: {
     tone: 'info',

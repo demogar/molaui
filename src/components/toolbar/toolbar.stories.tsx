@@ -15,6 +15,7 @@ import {
 
 const meta = {
   title: 'Components/Layout/Toolbar',
+  tags: ['stable'],
   component: Toolbar,
   args: { 'aria-label': 'Run actions' },
   parameters: {

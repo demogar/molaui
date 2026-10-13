@@ -5,6 +5,7 @@ import { Chip, ChipGroup } from './chip'
 
 const meta = {
   title: 'Components/Forms/Chip',
+  tags: ['stable'],
   component: Chip,
   args: { children: 'Failed' },
   parameters: {

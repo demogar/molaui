@@ -5,6 +5,7 @@ import { ToastProvider, useToast } from './toast'
 
 const meta = {
   title: 'Components/Feedback/Toast',
+  tags: ['stable'],
   component: ToastProvider,
   args: { children: null },
   decorators: [

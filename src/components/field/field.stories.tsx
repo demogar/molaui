@@ -10,6 +10,7 @@ import { Textarea } from './textarea'
 
 const meta = {
   title: 'Components/Forms/Field',
+  tags: ['stable'],
   component: Field,
   parameters: {
     docs: {

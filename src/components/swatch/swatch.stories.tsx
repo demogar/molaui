@@ -6,6 +6,7 @@ const TONES = ['neutral', 'info', 'success', 'warn', 'danger', 'accent'] as cons
 
 const meta = {
   title: 'Components/Data display/Swatch',
+  tags: ['stable'],
   component: Swatch,
   args: { tone: 'danger', size: 'md', shape: 'square' },
   argTypes: {

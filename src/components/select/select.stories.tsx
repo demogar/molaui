@@ -30,6 +30,7 @@ const environments = [
 
 const meta = {
   title: 'Components/Forms/Select',
+  tags: ['stable'],
   component: Select,
   args: { items: environments, label: 'Environment', defaultValue: 'staging' },
   parameters: {

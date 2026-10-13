@@ -9,6 +9,7 @@ const TONES: PanelTone[] = ['pale', 'cloth', 'shade', 'ink', 'rojo', 'anil', 've
 
 const meta = {
   title: 'Components/Layout/Panel',
+  tags: ['stable'],
   component: Panel,
   args: { tone: 'pale', edge: 'cut', padding: 'md' },
   argTypes: {

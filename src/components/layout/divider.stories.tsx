@@ -4,6 +4,7 @@ import { Divider } from './divider'
 
 const meta = {
   title: 'Components/Layout/Divider',
+  tags: ['stable'],
   component: Divider,
   args: { variant: 'keyline' },
   argTypes: {

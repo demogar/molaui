@@ -22,6 +22,7 @@ ORDER  BY plan;`
 
 const meta = {
   title: 'Components/Data display/Code',
+  tags: ['stable'],
   component: CodeBlock,
   args: { code: ARGS, language: 'json', label: 'arguments' },
   argTypes: {

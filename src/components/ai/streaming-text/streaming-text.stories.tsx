@@ -9,6 +9,7 @@ import { StreamingText } from './streaming-text'
 
 const meta = {
   title: 'AI/Streaming text',
+  tags: ['stable'],
   component: StreamingText,
   args: { text: ANSWER, status: 'done' },
   argTypes: { status: { control: 'inline-radio', options: ['idle', 'streaming', 'done', 'error'] } },

@@ -4,6 +4,7 @@ import { Accordion, AccordionItem, AccordionPanel, AccordionTrigger, Collapsible
 
 const meta = {
   title: 'Components/Navigation/Accordion',
+  tags: ['stable'],
   component: Accordion,
   parameters: {
     docs: {

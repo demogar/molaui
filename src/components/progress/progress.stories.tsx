@@ -5,6 +5,7 @@ import { Meter, Progress } from './progress'
 
 const meta = {
   title: 'Components/Feedback/Progress',
+  tags: ['stable'],
   component: Progress,
   args: { label: 'Embedding documents', value: 42 },
   parameters: {

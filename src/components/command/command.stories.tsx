@@ -37,6 +37,7 @@ const groups: CommandGroup[] = [
 
 const meta = {
   title: 'Components/Overlays/Command palette',
+  tags: ['stable'],
   component: CommandPalette,
   args: { open: true, onOpenChange: fn(), groups },
   parameters: {

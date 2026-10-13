@@ -43,6 +43,24 @@ export function RenameAgent() {
 }
 ```
 
+## How to read a component page
+
+Every component page has the same sections in the same order, so you always know where to look.
+
+1. **Summary and status.** What the component is for, in one sentence, and its lifecycle phase:
+   Experimental, Stable or Deprecated. [Versioning](?path=/docs/mola-ui-versioning--overview)
+   says what each phase promises. Under it, the decisions behind the component.
+2. **Usage.** When to use it, when not to and what to use instead, do and don't, and how to word it.
+3. **Examples.** The main example with its controls, then every documented state.
+4. **Accessibility.** The keys it answers to, what Mola handles and what you must still do, and
+   how it is tested: what runs on every pull request, and what has not been tested yet.
+5. **Related.** The components this page sends you to, and the ones that send readers here.
+
+Usage comes before the examples on purpose. "Should I use this at all?" is the first question,
+and the answer is often a different component. A test holds every component page to this order,
+and fails a page that would leave a section empty. What the pages don't have yet is listed on
+[Known gaps](?path=/docs/mola-ui-known-gaps--overview).
+
 ## Theme
 
 Two themes, chosen by `color-scheme`. With no attribute the system follows the operating system;
