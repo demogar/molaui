@@ -139,6 +139,8 @@ const preview: Preview = {
           ['Introduction', 'Getting started', 'Choosing a component', 'Principles', 'Versioning', 'Known gaps', 'References', 'Changelog'],
           'Foundations',
           ['Color', 'Typography', 'The cut', 'Density', 'Motion', 'Iconography', 'Accessibility'],
+          'Decisions',
+          ['All decisions'],
           'Components',
           'AI',
           'Patterns',
