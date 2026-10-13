@@ -65,11 +65,11 @@ const served = staticDirs.flatMap((dir) =>
 
 /** The repository file a site path is served from, or null when nothing serves it. */
 function sourceOf(path: string) {
-  for (const { to, from } of served) {
-    if (path === to) return from
-    if (path.startsWith(`${to}/`)) return `${from}/${path.slice(to.length + 1)}`
-  }
-  return null
+  // A file mapped on its own wins over a folder that would also cover it.
+  const file = served.find(({ to }) => to === path)
+  if (file) return file.from
+  const dir = served.find(({ to }) => path.startsWith(`${to}/`))
+  return dir ? `${dir.from}/${path.slice(dir.to.length + 1)}` : null
 }
 
 describe('links to files the site serves', () => {
@@ -94,11 +94,20 @@ describe('Markdown twins', () => {
   const ids = [...new Set([...storyTitles, ...mdxTitles].map(docsId))].sort()
   const twins = readdirSync(join(repoRoot, 'docs/ai/md')).filter((name) => name.endsWith('.md'))
 
-  it('exist for every docs page id, and for nothing else', () => {
-    expect(twins.map((name) => name.replace(/\.md$/, '')).sort()).toEqual(ids)
+  it('are served for every docs page id', () => {
+    const missing = ids.filter((id) => {
+      const from = sourceOf(`md/${id}.md`)
+      return !from || !existsSync(join(repoRoot, from))
+    })
+    expect(missing).toEqual([])
+  })
+
+  it('are generated only for pages that exist', () => {
+    expect(twins.map((name) => name.replace(/\.md$/, '')).filter((id) => !ids.includes(id))).toEqual([])
   })
 
   it('are served at md/<id>.md', () => {
     expect(sourceOf('md/components-actions-button--overview.md')).toBe('docs/ai/md/components-actions-button--overview.md')
+    expect(sourceOf('md/mola-ui-changelog--overview.md')).toBe('CHANGELOG.md')
   })
 })

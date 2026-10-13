@@ -355,6 +355,15 @@ ${density.join('\n\n')}
 
 /* ── MDX pages ──────────────────────────────────────────────────────── */
 
+/**
+ * Pages whose Markdown is already a file in the repository. That file is
+ * served as the twin, as is (.storybook/main.ts maps it into md/), instead of
+ * being generated. The changelog is CHANGELOG.md, which release-please
+ * rewrites in every release pull request: a generated copy would be stale on
+ * main the moment a release merged, and fail manifest:check there.
+ */
+export const SERVED_AS_IS: Record<string, string> = { 'Mola UI/Changelog': 'CHANGELOG.md' }
+
 export interface MdxPage {
   file: string
   title: string
@@ -480,8 +489,6 @@ function renderBlock(block: string, page: MdxPage, ctx: MdxContext): string {
       )
     case 'DecisionsBehind':
       return `The decisions behind this page are architecture decision records: see [Decisions](${twinUrl(ctx.site, 'Decisions/All decisions')}).`
-    case 'Markdown':
-      return /\{changelog\}/.test(block) ? read('CHANGELOG.md').trim() : `> Not included here: a block of rendered Markdown. See ${pageUrl}`
     default: {
       const alts = [...block.matchAll(/alt="([^"]+)"/g)].map((m) => m[1])
       const what = /^[A-Z]/.test(name) ? `an interactive \`${name}\` block` : 'a block of illustrations'

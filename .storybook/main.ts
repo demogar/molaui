@@ -14,6 +14,8 @@ const config: StorybookConfig = {
       to: `/${file}`,
     })),
     { from: '../docs/ai/md', to: '/md' },
+    // The changelog's twin is CHANGELOG.md itself (SERVED_AS_IS in scripts/agent-docs.ts).
+    { from: '../CHANGELOG.md', to: '/md/mola-ui-changelog--overview.md' },
   ],
   addons: [
     {

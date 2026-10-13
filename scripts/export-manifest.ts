@@ -34,7 +34,7 @@ import { isExportStory } from 'storybook/internal/csf'
 import ts from 'typescript'
 
 import pkg from '../package.json' with { type: 'json' }
-import { changeLine, componentTwin, mdxPages, mdxTwin, screenTwin, tokensText, twinPath, twinUrl } from './agent-docs'
+import { changeLine, componentTwin, mdxPages, mdxTwin, screenTwin, SERVED_AS_IS, tokensText, twinPath, twinUrl } from './agent-docs'
 import { ACCESSIBILITY } from '../src/docs/usage/accessibility'
 import { ANATOMY, ROOT_PART } from '../src/docs/usage/anatomy'
 import type { Accessibility } from '../src/docs/usage/accessibility-types'
@@ -648,7 +648,9 @@ const mdx = mdxPages()
 const twins: [string, string][] = [
   ...sorted.map((e) => [e.title, componentTwin(e, SITE)] as const),
   ...showcases.map((s) => [s.title, screenTwin(s, SITE)] as const),
-  ...mdx.map((page) => [page.title, mdxTwin(page, { site: SITE, pages: mdx, description: pkg.description })] as const),
+  ...mdx
+    .filter((page) => !SERVED_AS_IS[page.title])
+    .map((page) => [page.title, mdxTwin(page, { site: SITE, pages: mdx, description: pkg.description })] as const),
 ].map(([title, text]) => [twinPath(docsId(title)), text])
 
 /* ── write or check ─────────────────────────────────────────────────── */
