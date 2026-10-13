@@ -68,6 +68,29 @@ export const States: Story = {
   },
 }
 
+export const HintAndError: Story = {
+  render: () => (
+    <div className="grid max-w-md gap-6">
+      <Field
+        label="Timeout"
+        labelAside="Default 300 s"
+        hint="Between 1 and 900 seconds."
+        error="1200 is over the limit."
+      >
+        {(control) => <Input {...control} defaultValue="1200" trailing="s" />}
+      </Field>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The hint stays when the error arrives: it states the rule, and the error says how this value broke it. Both are wired to the control in the order they render, hint first. This is the example the anatomy diagram measures.',
+      },
+    },
+  },
+}
+
 export const Adornments: Story = {
   render: () => (
     <div className="grid max-w-md gap-6">

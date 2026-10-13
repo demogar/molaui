@@ -95,7 +95,10 @@ export function Message({
 }: MessageProps) {
   const name = author ?? ROLE_LABEL[role]
   const time = timestamp ? new Date(timestamp) : undefined
-  const hasActions = status !== 'streaming' && (copyText !== undefined || onRetry || onFeedback)
+  // On error, Retry moves into the error block, so retry alone leaves the
+  // action row with nothing in it: an empty row and a margin under the error.
+  const hasActions =
+    status !== 'streaming' && (copyText !== undefined || (onRetry && status !== 'error') || onFeedback)
 
   return (
     <article
@@ -109,6 +112,7 @@ export function Message({
       <div className="grid grid-cols-1 gap-x-6 gap-y-2 @lg:grid-cols-[8.5rem_minmax(0,1fr)]">
         <header className="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1 @lg:flex-col @lg:gap-1.5">
           <span
+            data-part="author"
             className={cn(
               'flex min-w-0 items-center gap-2 rotulo text-ink-2',
               'before:h-[3px] before:w-4 before:shrink-0 before:bg-[var(--band)] before:content-[""]',
@@ -125,21 +129,22 @@ export function Message({
             {role === 'tool' ? name.replace(/_/g, '_\u200b') : name}
           </span>
           {time ? (
-            <time dateTime={time.toISOString()} className="font-ui text-xs tabular text-ink-muted">
+            <time data-part="time" dateTime={time.toISOString()} className="font-ui text-xs tabular text-ink-muted">
               {formatTime(time)}
             </time>
           ) : null}
-          {model ? <span className="literal text-2xs text-ink-muted">{model}</span> : null}
+          {model ? <span data-part="model" className="literal text-2xs text-ink-muted">{model}</span> : null}
         </header>
 
         <div className="min-w-0">
-          <div className={cn(role === 'user' && 'font-ui text-base text-ink', role === 'tool' && 'text-sm')}>
+          <div data-part="body" className={cn(role === 'user' && 'font-ui text-base text-ink', role === 'tool' && 'text-sm')}>
             {children}
           </div>
 
           {status === 'error' ? (
             <div
               role="alert"
+              data-part="error"
               className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-3 bg-rojo-soft px-4 py-3 shadow-[inset_3px_0_0_var(--rojo)] rtl:shadow-[inset_-3px_0_0_var(--rojo)]"
             >
               <div className="min-w-0 flex-1">
@@ -184,6 +189,7 @@ function MessageActions({
 
   return (
     <div
+      data-part="actions"
       className={cn(
         '-ms-1.5 mt-3 flex items-center gap-1',
         'transition-opacity duration-(--motion-cut) ease-cut',

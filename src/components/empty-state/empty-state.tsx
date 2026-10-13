@@ -92,17 +92,17 @@ export function EmptyState({
       {...props}
     >
       {v === 'error' || v === 'no-permission' ? (
-        <div aria-hidden className="relleno absolute inset-x-0 top-0" />
+        <div aria-hidden data-part="seam" className="relleno absolute inset-x-0 top-0" />
       ) : null}
-      <div className="flex max-w-sm flex-col items-center bg-cloth-pale px-6 py-5 text-center shadow-cut">
+      <div data-part="plate" className="flex max-w-sm flex-col items-center bg-cloth-pale px-6 py-5 text-center shadow-cut">
         {icon !== false ? (
-          <span aria-hidden className="mb-3 grid size-9 place-items-center bg-ink text-on-ink [&_svg]:size-[18px]">
+          <span aria-hidden data-part="icon" className="mb-3 grid size-9 place-items-center bg-ink text-on-ink [&_svg]:size-[18px]">
             {icon ?? <Icon strokeWidth={2} />}
           </span>
         ) : null}
-        <Heading className="m-0 font-display text-lg font-bold leading-snug tracking-display wdth-display">{title}</Heading>
-        {description ? <p className="mt-1.5 mb-0 text-sm text-ink-2">{description}</p> : null}
-        {actions ? <div className="mt-4 flex flex-wrap justify-center gap-2">{actions}</div> : null}
+        <Heading data-part="title" className="m-0 font-display text-lg font-bold leading-snug tracking-display wdth-display">{title}</Heading>
+        {description ? <p data-part="description" className="mt-1.5 mb-0 text-sm text-ink-2">{description}</p> : null}
+        {actions ? <div data-part="actions" className="mt-4 flex flex-wrap justify-center gap-2">{actions}</div> : null}
       </div>
     </div>
   )

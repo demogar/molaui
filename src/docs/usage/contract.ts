@@ -1,4 +1,5 @@
 import evidenceFile from '../../../docs/accessibility/evidence.json'
+import { type Anatomy, ANATOMY } from './anatomy'
 import { ACCESSIBILITY, NON_INTERACTIVE } from './accessibility'
 import type { Accessibility } from './accessibility-types'
 import { USAGE, type Usage } from './guidance'
@@ -10,15 +11,28 @@ import { type Phase, phasesIn } from './lifecycle'
  *
  *   1. Summary and status   what it is for, and its lifecycle phase
  *   2. Usage                when to use it, when not to, do and don't, content
- *   3. Examples             the primary story, its controls, every story
- *   4. Accessibility        keyboard, what Mola handles, what you must do,
+ *   3. Anatomy (optional)   the live component with its parts pinned, and a
+ *                           legend of what each part does and is made of
+ *   4. Examples             the primary story, its controls, every story
+ *   5. Accessibility        keyboard, what Mola handles, what you must do,
  *                           and the evidence behind it
- *   5. Related              the components this page sends readers to, and
+ *   6. Related              the components this page sends readers to, and
  *                           the ones that send readers here
  *
  * Usage comes before the examples on purpose: "should I use this at all?" is
  * the first question, and a reader who scrolls past forty stories to find out
  * they wanted a different component has wasted the page.
+ *
+ * Anatomy sits between them: once a reader has decided to use the component,
+ * the parts are the vocabulary the rest of the page is written in. Props,
+ * stories and the accessibility notes say "the hint", "the seam", "the
+ * status"; naming them once, on the real thing, before the examples, means
+ * the reader meets each word with a picture. Before Usage it would be detail
+ * for someone who may be on the wrong page.
+ *
+ * Anatomy is the one optional section: only components with real parts have
+ * it (anatomy.ts says which and why). It renders nothing when a page has no
+ * entry, and its check only holds an entry that exists to the contract.
  *
  * The docs page (.storybook/docs-page.tsx) renders SECTIONS in this order,
  * and usage.test.ts runs each section's `missing` against every component
@@ -47,6 +61,8 @@ export interface PageData {
   usage?: Usage
   accessibility?: Accessibility
   evidence?: Evidence
+  /** The named parts, when the component has any worth a diagram. */
+  anatomy?: Anatomy
   /** Components this page names as the better choice in "When not to". */
   alternatives: RelatedLink[]
   /** Components whose own "When not to" sends readers here. */
@@ -69,6 +85,7 @@ export function pageData(title: string, tags: readonly string[] | undefined): Pa
     usage,
     accessibility: ACCESSIBILITY[title],
     evidence: EVIDENCE[title],
+    anatomy: ANATOMY[title],
     alternatives,
     pointingHere,
   }
@@ -78,7 +95,7 @@ function dedupe(links: RelatedLink[]) {
   return links.filter((link, i) => links.findIndex((other) => other.title === link.title) === i)
 }
 
-export type SectionId = 'summary' | 'usage' | 'examples' | 'accessibility' | 'related'
+export type SectionId = 'summary' | 'usage' | 'anatomy' | 'examples' | 'accessibility' | 'related'
 
 export interface Section {
   id: SectionId
@@ -106,6 +123,21 @@ export const SECTIONS: Section[] = [
       ...(page.usage?.use.length ? [] : ['at least one "When to use"']),
       ...(page.usage?.avoid.length ? [] : ['at least one "When not to"']),
     ],
+  },
+  {
+    id: 'anatomy',
+    heading: 'Anatomy',
+    // Optional: no entry, no section. An entry must name parts, uniquely, in
+    // kebab-case; anatomy.test.tsx checks them against the rendered story.
+    missing: (page) => {
+      const parts = page.anatomy?.parts.map((p) => p.part) ?? []
+      if (!page.anatomy) return []
+      return [
+        ...(parts.length ? [] : ['at least one part']),
+        ...parts.filter((p, i) => parts.indexOf(p) !== i).map((p) => `a part named once (${p})`),
+        ...parts.filter((p) => !/^[a-z]+(-[a-z]+)*$/.test(p)).map((p) => `a kebab-case part name (${p})`),
+      ]
+    },
   },
   {
     id: 'examples',

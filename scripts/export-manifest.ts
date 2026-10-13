@@ -28,6 +28,7 @@ import ts from 'typescript'
 
 import pkg from '../package.json' with { type: 'json' }
 import { ACCESSIBILITY } from '../src/docs/usage/accessibility'
+import { ANATOMY, ROOT_PART } from '../src/docs/usage/anatomy'
 import type { Accessibility } from '../src/docs/usage/accessibility-types'
 import { USAGE, type Usage } from '../src/docs/usage/guidance'
 import { type Phase, phaseOf, PHASES } from '../src/docs/usage/lifecycle'
@@ -251,6 +252,11 @@ interface Entry {
   description?: string
   usage?: Omit<Usage, 'summary'>
   accessibility?: Accessibility
+  /**
+   * The named parts and the `data-part` (or, for `root`, `data-slot`) each one
+   * carries in the DOM, so an agent can select or describe a part by name.
+   */
+  anatomy?: { slot: string; parts: { part: string; name: string; does: string; selector: string }[] }
   exports: ExportEntry[]
   stories: { name: string; id: string; url: string }[]
 }
@@ -283,6 +289,19 @@ for (const info of exportsInfo) {
         ? { usage: { use: usage.use, avoid: usage.avoid, practices: usage.practices, content: usage.content, replacedBy: usage.replacedBy } }
         : {}),
       ...(ACCESSIBILITY[title] ? { accessibility: ACCESSIBILITY[title] } : {}),
+      ...(ANATOMY[title]
+        ? {
+            anatomy: {
+              slot: ANATOMY[title].slot,
+              parts: ANATOMY[title].parts.map(({ part, name, does }) => ({
+                part,
+                name,
+                does,
+                selector: part === ROOT_PART ? `[data-slot="${ANATOMY[title]!.slot}"]` : `[data-part="${part}"]`,
+              })),
+            },
+          }
+        : {}),
       exports: [],
       stories: s.stories.map((story) => ({ ...story, url: storyUrl(story.id) })),
     }
@@ -463,6 +482,9 @@ function fullEntry(e: Entry) {
     const a = e.accessibility
     if (a.keyboard?.length) parts.push('Keyboard:', ...a.keyboard.map((k) => `- ${k.keys.join(' or ')}: ${k.action}`), '')
     parts.push('Mola handles:', ...a.handles.map((l) => `- ${l}`), '', 'You handle:', ...a.you.map((l) => `- ${l}`), '')
+  }
+  if (e.anatomy) {
+    parts.push('Anatomy:', ...e.anatomy.parts.map((p) => `- ${p.name} (\`${p.selector}\`): ${p.does}`), '')
   }
   for (const item of e.exports.filter((x) => x.kind !== 'type')) {
     parts.push(`#### \`${item.name}\` (${item.kind})`, '')

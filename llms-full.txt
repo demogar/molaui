@@ -347,6 +347,15 @@ You handle:
 - Set `sentiment` on every delta; the tile does not guess that up is good.
 - Give the comparison in `period` so the change has something to be measured against.
 
+Anatomy:
+- Tile (`[data-slot="stat"]`): A raised cloth tile with a keyline; inside a Stat group, the group draws it.
+- Label (`[data-part="label"]`): What is measured, in the label register.
+- Value (`[data-part="value"]`): The figure, in the display face with tabular numerals.
+- Trend (`[data-part="trend"]`): A decorative sparkline; the last point is a cut square.
+- Delta (`[data-part="delta"]`): Direction as a glyph, sentiment as a colour, and both in a sentence for screen readers.
+- Unit (`[data-part="unit"]`): The unit, muted, kept on the figure’s line in either direction.
+- Hint (`[data-part="hint"]`): One line of context: a budget, when it was last synced.
+
 #### `Sparkline` (component)
 
 An ink polyline — no fill, no gradient, no axis. A sparkline is the shape of the recent past and nothing more; the moment it grows a gridline it is a chart pretending to be a glyph. The last point is a square cut out in rojo (it is the "now" the figure beside it states), drawn as a square because a blade does not cut circles.
@@ -466,6 +475,13 @@ You handle:
 - Name the table with `label` or `aria-label`, or a `caption`.
 - Give `rowLabel` so each row checkbox says which row it selects.
 - Mark figure columns `numeric`, on the header and the cells alike.
+
+Anatomy:
+- Frame (`[data-slot="table-frame"]`): Scrolls the table in both directions, and joins the tab order when it overflows or has a sticky header.
+- Column header (`[data-part="head"]`): The label register on an ink rule; a sort control when sortable.
+- Row (`[data-part="row"]`): A row at the density’s row height, with a soft keyline under it.
+- Footer (`[data-part="footer"]`): Totals, on a shaded ground under an ink rule.
+- Caption (`[data-part="caption"]`): What the table shows, under it, read by screen readers as its name.
 
 #### `Table` (component)
 
@@ -757,6 +773,15 @@ You handle:
 - Render a callout that appears in response to an action inside a live region, or use a toast.
 - Move focus somewhere sensible after a dismiss, because the button that had it is gone.
 
+Anatomy:
+- Container (`[data-slot="callout"]`): The tone’s wash, bounded by the ink keyline like every cut shape.
+- Seam (`[data-part="seam"]`): The relleno along the top edge: the tone as a cut-back layer, not a coloured side bar.
+- Icon (`[data-part="icon"]`): The tone’s glyph, so the tone is never colour alone.
+- Title (`[data-part="title"]`): A real heading; it also names the region.
+- Body (`[data-part="body"]`): The message. Never coloured: the tone owns the region, not the reading column.
+- Actions (`[data-part="actions"]`): Usually one secondary button at the small size.
+- Dismiss (`[data-part="dismiss"]`): Present only with onDismiss; the caller decides whether it comes back.
+
 #### `Callout` (component)
 
 - `tone`: `neutral`, `info`, `success`, `warn`, `danger` (default `info`)
@@ -817,6 +842,15 @@ You handle:
 - Pick the variant that matches the situation, so the words fit it.
 - Choose a `headingLevel` that fits the page outline.
 - Pass the action that moves the person forward in `actions`.
+
+Anatomy:
+- Slot (`[data-slot="empty-state"]`): A shaded panel packed with relleno: a slot cut and waiting, not a blank rectangle.
+- Seam (`[data-part="seam"]`): The tone’s relleno along the top, on error and no-permission only.
+- Plate (`[data-part="plate"]`): A raised cloth plate, so the copy never reads across the slits.
+- Icon (`[data-part="icon"]`): A small ink square with the variant’s glyph. Not an illustration.
+- Title (`[data-part="title"]`): What state this is, as a heading.
+- Description (`[data-part="description"]`): Why, and what will happen next.
+- Actions (`[data-part="actions"]`): One or two buttons; the first is the way forward.
 
 #### `EmptyState` (component)
 
@@ -1512,6 +1546,12 @@ You handle:
 - Spread the `control` props onto the control; without them it has no name and no description.
 - When several fields fail at once, add an error summary at the top of the form and move focus to it.
 - Bind the key shown by `shortcut` yourself; the key cap is display only.
+
+Anatomy:
+- Label (`[data-part="label"]`): Names the control, in the label register, and is wired to it with htmlFor.
+- Label aside (`[data-part="label-aside"]`): A count or a default beside the label; never a second label.
+- Hint (`[data-part="hint"]`): States the rule. It stays when an error arrives, and is read first.
+- Error (`[data-part="error"]`): Says how this value broke the rule. Announced on insertion, and marked with a cut square so it is not colour alone.
 
 #### `Label` (component)
 
@@ -2332,6 +2372,13 @@ You handle:
 - Use one page header per page, so the page has one `h1`.
 - Pass a breadcrumb that is its own named navigation.
 
+Anatomy:
+- Header (`[data-slot="page-header"]`): Closes on a keyline, unless tabs sit at its foot.
+- Title (`[data-part="title"]`): The page’s one h1.
+- Description (`[data-part="description"]`): One sentence on what the page is for.
+- Actions (`[data-part="actions"]`): The page’s actions. They wrap below the title on a narrow screen rather than hide in a menu.
+- Meta (`[data-part="meta"]`): Status, owner and dates, as a list divided by keylines.
+
 #### `PageHeader` (component)
 
 | Prop | Type | Default | Description |
@@ -2847,6 +2894,13 @@ Mola handles:
 You handle:
 - Give every tab a text label, even when it has an icon.
 - Set `activateOnFocus` only when every panel is cheap to show.
+
+Anatomy:
+- List (`[data-part="list"]`): The row of tabs, on a keyline. Scrolls sideways rather than wrapping.
+- Tab (`[data-part="tab"]`): One tab. Roving focus and arrow keys come from Base UI.
+- Count (`[data-part="count"]`): An optional figure; it turns to ink on the active tab.
+- Indicator (`[data-part="indicator"]`): The ink bar under the active tab. It slides; the tab text never moves.
+- Panel (`[data-part="panel"]`): The content of the active tab.
 
 #### `Tabs` (component)
 
@@ -3984,6 +4038,15 @@ You handle:
 - Give `Thread` a `label` that names the conversation.
 - Pass `author` when the speaker is more specific than the role, so the article’s name says who.
 
+Anatomy:
+- Turn (`[data-slot="message"]`): One turn of the ledger, separated from the last by a keyline.
+- Author (`[data-part="author"]`): Who spoke, cut short by the role’s band.
+- Model (`[data-part="model"]`): Which model answered, as a machine literal.
+- Body (`[data-part="body"]`): The content. The model’s words are set in Alegreya; the operator’s in Archivo.
+- Error (`[data-part="error"]`): The failure in a sentence, the error verbatim, and Retry beside it.
+- Time (`[data-part="time"]`): When, as a machine-readable time element.
+- Actions (`[data-part="actions"]`): Copy, regenerate and rating. Shown on hover or focus, always on touch, and never while streaming.
+
 #### `Message` (component)
 
 One turn of a conversation.
@@ -4055,6 +4118,15 @@ Mola handles:
 You handle:
 - Pass a `label` that says who the message goes to, such as “Message Cayuco”.
 - Give each control you put in `toolbar` its own accessible name.
+
+Anatomy:
+- Container (`[data-slot="prompt-input"]`): The form, keylined. The focus ring goes on the whole box, not the textarea.
+- Attachments (`[data-part="attachments"]`): Attachment chips, above the text, each with its own remove button.
+- Input (`[data-part="input"]`): A textarea that grows to maxRows, labelled by a visually hidden label.
+- Toolbar (`[data-part="toolbar"]`): The caller’s controls: attach, model picker.
+- Hint (`[data-part="hint"]`): The send shortcut and the token estimate. It describes the textarea.
+- Send (`[data-part="send"]`): Disabled until there is something to send. Becomes Stop while generating.
+- Stop (`[data-part="stop"]`): Replaces Send while the model is generating.
 
 #### `AttachmentChip` (component)
 
@@ -4257,6 +4329,11 @@ Mola handles:
 You handle:
 - Announce a change of status yourself where it matters; `RunStatus` is not a live region.
 - Use `label` to change the word, such as “Thinking”, and keep it a word a person would say.
+
+Anatomy:
+- Glyph (`[data-part="glyph"]`): A cut square whose fill and mark differ per status, so status survives greyscale.
+- Label (`[data-part="label"]`): The status in words. The colour repeats it, never replaces it.
+- Duration (`[data-part="duration"]`): Elapsed time, ticking while the run is open, fixed once it ends.
 
 #### `RunStatus` (component)
 
@@ -4513,6 +4590,17 @@ Mola handles:
 You handle:
 - State in `approval.reason` why a person must approve, in words.
 - Pass a `title` in words when the tool’s name alone does not say what the call is for.
+
+Anatomy:
+- Container (`[data-slot="tool-call"]`): A keylined card. While it waits for a person it wears the gold band, revealed by the cut.
+- Header (`[data-part="header"]`): The disclosure trigger. A waiting or failed call is held open, so its trigger is inert.
+- Tool name (`[data-part="name"]`): The identifier exactly as the model called it, as a machine literal.
+- Title (`[data-part="title"]`): What the call is for, in words.
+- Status (`[data-part="status"]`): A Run status: glyph, word and colour, and the elapsed time when known.
+- Body (`[data-part="body"]`): The approval or the error first, then the arguments and the result.
+- Approval (`[data-part="approval"]`): Why a person has to decide, and two buttons of equal weight.
+- Progress (`[data-part="progress"]`): Working relleno along the top edge while the call runs.
+- Error (`[data-part="error"]`): What failed, the error verbatim, and Retry. A failed call is held open.
 
 #### `ToolCall` (component)
 

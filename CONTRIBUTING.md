@@ -111,6 +111,30 @@ src/components/<name>/
 
 Then export it from `src/index.ts`.
 
+### Parts and the anatomy diagram
+
+A component with real, separately styled parts (a label and a hint, a seam and a body, a header
+and a status) marks each one in its markup with `data-part`:
+
+```tsx
+<span data-part="hint" className="text-xs text-ink-muted">{hint}</span>
+```
+
+- **Kebab-case, and stable.** `data-part` is shipped DOM: consumers can select on it, so renaming
+  or removing one is a breaking change, like a prop. The root keeps its `data-slot` and needs no
+  `data-part`.
+- **Name it in the legend.** Add the component to `src/docs/usage/anatomy.ts`: the story the
+  diagram measures, the root's `data-slot`, and each part with a name and one sentence on what it
+  does. A part only another state shows (an error, a running call) names that story.
+- **Do not add it everywhere.** A component that is one shape (a badge, a divider) gets no
+  anatomy; a pin on a pill teaches nothing.
+
+The docs page then renders an **Anatomy** section between Usage and Examples: the live story with
+a numbered pin measured onto each part, and a legend with the system classes each part is made of,
+read from the same elements. `src/docs/usage/anatomy.test.tsx` renders every story of the
+component and fails if a declared part is missing, or if the component owns a `data-part` that is
+not in the legend.
+
 ## Rules a review will hold you to
 
 - **No hex outside `src/styles/tokens.css`.** A test enforces it.

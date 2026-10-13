@@ -132,37 +132,38 @@ export function Callout({
       className={cn(calloutVariants({ tone: t, variant: v }), className)}
       {...props}
     >
-      {flat ? null : <div aria-hidden className="relleno h-2" />}
+      {flat ? null : <div aria-hidden data-part="seam" className="relleno h-2" />}
       <div className={cn('flex', flat ? 'gap-2.5 px-4 py-3' : 'gap-3 px-4 pt-3.5 pb-4')}>
         {icon === false ? null : flat ? (
           // One line box of whatever comes first — the title or the body — so
           // the swatch sits centred on the first line however that line wraps.
           <span
             aria-hidden
+            data-part="icon"
             className={cn('flex h-[1lh] shrink-0 items-center text-sm', title ? 'leading-snug' : 'leading-body')}
           >
             {icon ?? <Swatch tone={t} />}
           </span>
         ) : (
-          <span aria-hidden className={cn('mt-px shrink-0 [&_svg]:size-[18px]', ICON_INK[t])}>
+          <span aria-hidden data-part="icon" className={cn('mt-px shrink-0 [&_svg]:size-[18px]', ICON_INK[t])}>
             {icon ?? <Icon />}
           </span>
         )}
         <div className="min-w-0 flex-1">
           {title ? (
-            <Heading id={titleId} className="m-0 font-ui text-sm font-semibold leading-snug text-ink">
+            <Heading id={titleId} data-part="title" className="m-0 font-ui text-sm font-semibold leading-snug text-ink">
               {title}
             </Heading>
           ) : null}
           {children ? (
-            <div className={cn('text-sm leading-body text-ink-2 [&_a]:text-rojo-on-shade [&_a]:underline', title && 'mt-1')}>
+            <div data-part="body" className={cn('text-sm leading-body text-ink-2 [&_a]:text-rojo-on-shade [&_a]:underline', title && 'mt-1')}>
               {children}
             </div>
           ) : null}
-          {actions ? <div className="mt-3 flex flex-wrap gap-2">{actions}</div> : null}
+          {actions ? <div data-part="actions" className="mt-3 flex flex-wrap gap-2">{actions}</div> : null}
         </div>
         {onDismiss ? (
-          <IconButton label="Dismiss" variant="ghost" size="sm" onClick={onDismiss} className="-mt-1 -me-1.5">
+          <IconButton data-part="dismiss" label="Dismiss" variant="ghost" size="sm" onClick={onDismiss} className="-mt-1 -me-1.5">
             <X />
           </IconButton>
         ) : null}

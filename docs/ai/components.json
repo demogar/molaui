@@ -81,7 +81,7 @@
     "parts": 145,
     "aiComponents": 12,
     "aiParts": 23,
-    "stories": 281
+    "stories": 282
   },
   "tokens": {
     "source": "src/styles/tokens.css",
@@ -967,6 +967,53 @@
           "Pass `author` when the speaker is more specific than the role, so the article’s name says who."
         ]
       },
+      "anatomy": {
+        "slot": "message",
+        "parts": [
+          {
+            "part": "root",
+            "name": "Turn",
+            "does": "One turn of the ledger, separated from the last by a keyline.",
+            "selector": "[data-slot=\"message\"]"
+          },
+          {
+            "part": "author",
+            "name": "Author",
+            "does": "Who spoke, cut short by the role’s band.",
+            "selector": "[data-part=\"author\"]"
+          },
+          {
+            "part": "model",
+            "name": "Model",
+            "does": "Which model answered, as a machine literal.",
+            "selector": "[data-part=\"model\"]"
+          },
+          {
+            "part": "body",
+            "name": "Body",
+            "does": "The content. The model’s words are set in Alegreya; the operator’s in Archivo.",
+            "selector": "[data-part=\"body\"]"
+          },
+          {
+            "part": "error",
+            "name": "Error",
+            "does": "The failure in a sentence, the error verbatim, and Retry beside it.",
+            "selector": "[data-part=\"error\"]"
+          },
+          {
+            "part": "time",
+            "name": "Time",
+            "does": "When, as a machine-readable time element.",
+            "selector": "[data-part=\"time\"]"
+          },
+          {
+            "part": "actions",
+            "name": "Actions",
+            "does": "Copy, regenerate and rating. Shown on hover or focus, always on touch, and never while streaming.",
+            "selector": "[data-part=\"actions\"]"
+          }
+        ]
+      },
       "exports": [
         {
           "name": "Message",
@@ -1187,6 +1234,53 @@
         "you": [
           "Pass a `label` that says who the message goes to, such as “Message Cayuco”.",
           "Give each control you put in `toolbar` its own accessible name."
+        ]
+      },
+      "anatomy": {
+        "slot": "prompt-input",
+        "parts": [
+          {
+            "part": "root",
+            "name": "Container",
+            "does": "The form, keylined. The focus ring goes on the whole box, not the textarea.",
+            "selector": "[data-slot=\"prompt-input\"]"
+          },
+          {
+            "part": "attachments",
+            "name": "Attachments",
+            "does": "Attachment chips, above the text, each with its own remove button.",
+            "selector": "[data-part=\"attachments\"]"
+          },
+          {
+            "part": "input",
+            "name": "Input",
+            "does": "A textarea that grows to maxRows, labelled by a visually hidden label.",
+            "selector": "[data-part=\"input\"]"
+          },
+          {
+            "part": "toolbar",
+            "name": "Toolbar",
+            "does": "The caller’s controls: attach, model picker.",
+            "selector": "[data-part=\"toolbar\"]"
+          },
+          {
+            "part": "hint",
+            "name": "Hint",
+            "does": "The send shortcut and the token estimate. It describes the textarea.",
+            "selector": "[data-part=\"hint\"]"
+          },
+          {
+            "part": "send",
+            "name": "Send",
+            "does": "Disabled until there is something to send. Becomes Stop while generating.",
+            "selector": "[data-part=\"send\"]"
+          },
+          {
+            "part": "stop",
+            "name": "Stop",
+            "does": "Replaces Send while the model is generating.",
+            "selector": "[data-part=\"stop\"]"
+          }
         ]
       },
       "exports": [
@@ -1777,6 +1871,29 @@
         "you": [
           "Announce a change of status yourself where it matters; `RunStatus` is not a live region.",
           "Use `label` to change the word, such as “Thinking”, and keep it a word a person would say."
+        ]
+      },
+      "anatomy": {
+        "slot": "run-status",
+        "parts": [
+          {
+            "part": "glyph",
+            "name": "Glyph",
+            "does": "A cut square whose fill and mark differ per status, so status survives greyscale.",
+            "selector": "[data-part=\"glyph\"]"
+          },
+          {
+            "part": "label",
+            "name": "Label",
+            "does": "The status in words. The colour repeats it, never replaces it.",
+            "selector": "[data-part=\"label\"]"
+          },
+          {
+            "part": "duration",
+            "name": "Duration",
+            "does": "Elapsed time, ticking while the run is open, fixed once it ends.",
+            "selector": "[data-part=\"duration\"]"
+          }
         ]
       },
       "exports": [
@@ -2445,6 +2562,65 @@
         "you": [
           "State in `approval.reason` why a person must approve, in words.",
           "Pass a `title` in words when the tool’s name alone does not say what the call is for."
+        ]
+      },
+      "anatomy": {
+        "slot": "tool-call",
+        "parts": [
+          {
+            "part": "root",
+            "name": "Container",
+            "does": "A keylined card. While it waits for a person it wears the gold band, revealed by the cut.",
+            "selector": "[data-slot=\"tool-call\"]"
+          },
+          {
+            "part": "header",
+            "name": "Header",
+            "does": "The disclosure trigger. A waiting or failed call is held open, so its trigger is inert.",
+            "selector": "[data-part=\"header\"]"
+          },
+          {
+            "part": "name",
+            "name": "Tool name",
+            "does": "The identifier exactly as the model called it, as a machine literal.",
+            "selector": "[data-part=\"name\"]"
+          },
+          {
+            "part": "title",
+            "name": "Title",
+            "does": "What the call is for, in words.",
+            "selector": "[data-part=\"title\"]"
+          },
+          {
+            "part": "status",
+            "name": "Status",
+            "does": "A Run status: glyph, word and colour, and the elapsed time when known.",
+            "selector": "[data-part=\"status\"]"
+          },
+          {
+            "part": "body",
+            "name": "Body",
+            "does": "The approval or the error first, then the arguments and the result.",
+            "selector": "[data-part=\"body\"]"
+          },
+          {
+            "part": "approval",
+            "name": "Approval",
+            "does": "Why a person has to decide, and two buttons of equal weight.",
+            "selector": "[data-part=\"approval\"]"
+          },
+          {
+            "part": "progress",
+            "name": "Progress",
+            "does": "Working relleno along the top edge while the call runs.",
+            "selector": "[data-part=\"progress\"]"
+          },
+          {
+            "part": "error",
+            "name": "Error",
+            "does": "What failed, the error verbatim, and Retry. A failed call is held open.",
+            "selector": "[data-part=\"error\"]"
+          }
         ]
       },
       "exports": [
@@ -3419,6 +3595,53 @@
           "Give the comparison in `period` so the change has something to be measured against."
         ]
       },
+      "anatomy": {
+        "slot": "stat",
+        "parts": [
+          {
+            "part": "root",
+            "name": "Tile",
+            "does": "A raised cloth tile with a keyline; inside a Stat group, the group draws it.",
+            "selector": "[data-slot=\"stat\"]"
+          },
+          {
+            "part": "label",
+            "name": "Label",
+            "does": "What is measured, in the label register.",
+            "selector": "[data-part=\"label\"]"
+          },
+          {
+            "part": "value",
+            "name": "Value",
+            "does": "The figure, in the display face with tabular numerals.",
+            "selector": "[data-part=\"value\"]"
+          },
+          {
+            "part": "trend",
+            "name": "Trend",
+            "does": "A decorative sparkline; the last point is a cut square.",
+            "selector": "[data-part=\"trend\"]"
+          },
+          {
+            "part": "delta",
+            "name": "Delta",
+            "does": "Direction as a glyph, sentiment as a colour, and both in a sentence for screen readers.",
+            "selector": "[data-part=\"delta\"]"
+          },
+          {
+            "part": "unit",
+            "name": "Unit",
+            "does": "The unit, muted, kept on the figure’s line in either direction.",
+            "selector": "[data-part=\"unit\"]"
+          },
+          {
+            "part": "hint",
+            "name": "Hint",
+            "does": "One line of context: a budget, when it was last synced.",
+            "selector": "[data-part=\"hint\"]"
+          }
+        ]
+      },
       "exports": [
         {
           "name": "Sparkline",
@@ -3745,6 +3968,41 @@
           "Name the table with `label` or `aria-label`, or a `caption`.",
           "Give `rowLabel` so each row checkbox says which row it selects.",
           "Mark figure columns `numeric`, on the header and the cells alike."
+        ]
+      },
+      "anatomy": {
+        "slot": "table-frame",
+        "parts": [
+          {
+            "part": "root",
+            "name": "Frame",
+            "does": "Scrolls the table in both directions, and joins the tab order when it overflows or has a sticky header.",
+            "selector": "[data-slot=\"table-frame\"]"
+          },
+          {
+            "part": "head",
+            "name": "Column header",
+            "does": "The label register on an ink rule; a sort control when sortable.",
+            "selector": "[data-part=\"head\"]"
+          },
+          {
+            "part": "row",
+            "name": "Row",
+            "does": "A row at the density’s row height, with a soft keyline under it.",
+            "selector": "[data-part=\"row\"]"
+          },
+          {
+            "part": "footer",
+            "name": "Footer",
+            "does": "Totals, on a shaded ground under an ink rule.",
+            "selector": "[data-part=\"footer\"]"
+          },
+          {
+            "part": "caption",
+            "name": "Caption",
+            "does": "What the table shows, under it, read by screen readers as its name.",
+            "selector": "[data-part=\"caption\"]"
+          }
         ]
       },
       "exports": [
@@ -4707,6 +4965,53 @@
           "Move focus somewhere sensible after a dismiss, because the button that had it is gone."
         ]
       },
+      "anatomy": {
+        "slot": "callout",
+        "parts": [
+          {
+            "part": "root",
+            "name": "Container",
+            "does": "The tone’s wash, bounded by the ink keyline like every cut shape.",
+            "selector": "[data-slot=\"callout\"]"
+          },
+          {
+            "part": "seam",
+            "name": "Seam",
+            "does": "The relleno along the top edge: the tone as a cut-back layer, not a coloured side bar.",
+            "selector": "[data-part=\"seam\"]"
+          },
+          {
+            "part": "icon",
+            "name": "Icon",
+            "does": "The tone’s glyph, so the tone is never colour alone.",
+            "selector": "[data-part=\"icon\"]"
+          },
+          {
+            "part": "title",
+            "name": "Title",
+            "does": "A real heading; it also names the region.",
+            "selector": "[data-part=\"title\"]"
+          },
+          {
+            "part": "body",
+            "name": "Body",
+            "does": "The message. Never coloured: the tone owns the region, not the reading column.",
+            "selector": "[data-part=\"body\"]"
+          },
+          {
+            "part": "actions",
+            "name": "Actions",
+            "does": "Usually one secondary button at the small size.",
+            "selector": "[data-part=\"actions\"]"
+          },
+          {
+            "part": "dismiss",
+            "name": "Dismiss",
+            "does": "Present only with onDismiss; the caller decides whether it comes back.",
+            "selector": "[data-part=\"dismiss\"]"
+          }
+        ]
+      },
       "exports": [
         {
           "name": "Callout",
@@ -4894,6 +5199,53 @@
           "Pick the variant that matches the situation, so the words fit it.",
           "Choose a `headingLevel` that fits the page outline.",
           "Pass the action that moves the person forward in `actions`."
+        ]
+      },
+      "anatomy": {
+        "slot": "empty-state",
+        "parts": [
+          {
+            "part": "root",
+            "name": "Slot",
+            "does": "A shaded panel packed with relleno: a slot cut and waiting, not a blank rectangle.",
+            "selector": "[data-slot=\"empty-state\"]"
+          },
+          {
+            "part": "seam",
+            "name": "Seam",
+            "does": "The tone’s relleno along the top, on error and no-permission only.",
+            "selector": "[data-part=\"seam\"]"
+          },
+          {
+            "part": "plate",
+            "name": "Plate",
+            "does": "A raised cloth plate, so the copy never reads across the slits.",
+            "selector": "[data-part=\"plate\"]"
+          },
+          {
+            "part": "icon",
+            "name": "Icon",
+            "does": "A small ink square with the variant’s glyph. Not an illustration.",
+            "selector": "[data-part=\"icon\"]"
+          },
+          {
+            "part": "title",
+            "name": "Title",
+            "does": "What state this is, as a heading.",
+            "selector": "[data-part=\"title\"]"
+          },
+          {
+            "part": "description",
+            "name": "Description",
+            "does": "Why, and what will happen next.",
+            "selector": "[data-part=\"description\"]"
+          },
+          {
+            "part": "actions",
+            "name": "Actions",
+            "does": "One or two buttons; the first is the way forward.",
+            "selector": "[data-part=\"actions\"]"
+          }
         ]
       },
       "exports": [
@@ -7115,6 +7467,35 @@
           "Bind the key shown by `shortcut` yourself; the key cap is display only."
         ]
       },
+      "anatomy": {
+        "slot": "field",
+        "parts": [
+          {
+            "part": "label",
+            "name": "Label",
+            "does": "Names the control, in the label register, and is wired to it with htmlFor.",
+            "selector": "[data-part=\"label\"]"
+          },
+          {
+            "part": "label-aside",
+            "name": "Label aside",
+            "does": "A count or a default beside the label; never a second label.",
+            "selector": "[data-part=\"label-aside\"]"
+          },
+          {
+            "part": "hint",
+            "name": "Hint",
+            "does": "States the rule. It stays when an error arrives, and is read first.",
+            "selector": "[data-part=\"hint\"]"
+          },
+          {
+            "part": "error",
+            "name": "Error",
+            "does": "Says how this value broke the rule. Announced on insertion, and marked with a cut square so it is not colour alone.",
+            "selector": "[data-part=\"error\"]"
+          }
+        ]
+      },
       "exports": [
         {
           "name": "Label",
@@ -7321,6 +7702,11 @@
           "name": "Default",
           "id": "components-forms-field--default",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-field--default"
+        },
+        {
+          "name": "HintAndError",
+          "id": "components-forms-field--hint-and-error",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-field--hint-and-error"
         },
         {
           "name": "LabelOnly",
@@ -9550,6 +9936,41 @@
           "Pass a breadcrumb that is its own named navigation."
         ]
       },
+      "anatomy": {
+        "slot": "page-header",
+        "parts": [
+          {
+            "part": "root",
+            "name": "Header",
+            "does": "Closes on a keyline, unless tabs sit at its foot.",
+            "selector": "[data-slot=\"page-header\"]"
+          },
+          {
+            "part": "title",
+            "name": "Title",
+            "does": "The page’s one h1.",
+            "selector": "[data-part=\"title\"]"
+          },
+          {
+            "part": "description",
+            "name": "Description",
+            "does": "One sentence on what the page is for.",
+            "selector": "[data-part=\"description\"]"
+          },
+          {
+            "part": "actions",
+            "name": "Actions",
+            "does": "The page’s actions. They wrap below the title on a narrow screen rather than hide in a menu.",
+            "selector": "[data-part=\"actions\"]"
+          },
+          {
+            "part": "meta",
+            "name": "Meta",
+            "does": "Status, owner and dates, as a list divided by keylines.",
+            "selector": "[data-part=\"meta\"]"
+          }
+        ]
+      },
       "exports": [
         {
           "name": "PageHeader",
@@ -10967,6 +11388,41 @@
         "you": [
           "Give every tab a text label, even when it has an icon.",
           "Set `activateOnFocus` only when every panel is cheap to show."
+        ]
+      },
+      "anatomy": {
+        "slot": "tabs",
+        "parts": [
+          {
+            "part": "list",
+            "name": "List",
+            "does": "The row of tabs, on a keyline. Scrolls sideways rather than wrapping.",
+            "selector": "[data-part=\"list\"]"
+          },
+          {
+            "part": "tab",
+            "name": "Tab",
+            "does": "One tab. Roving focus and arrow keys come from Base UI.",
+            "selector": "[data-part=\"tab\"]"
+          },
+          {
+            "part": "count",
+            "name": "Count",
+            "does": "An optional figure; it turns to ink on the active tab.",
+            "selector": "[data-part=\"count\"]"
+          },
+          {
+            "part": "indicator",
+            "name": "Indicator",
+            "does": "The ink bar under the active tab. It slides; the tab text never moves.",
+            "selector": "[data-part=\"indicator\"]"
+          },
+          {
+            "part": "panel",
+            "name": "Panel",
+            "does": "The content of the active tab.",
+            "selector": "[data-part=\"panel\"]"
+          }
         ]
       },
       "exports": [

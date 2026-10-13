@@ -75,24 +75,25 @@ export function RunStatusGlyph({
   const base = 'relative inline-block size-[0.8125em] shrink-0 overflow-hidden shadow-cut'
   switch (status) {
     case 'queued':
-      return <span aria-hidden data-status={status} className={cn(base, 'bg-cloth-pale', className)} />
+      return <span aria-hidden data-part="glyph" data-status={status} className={cn(base, 'bg-cloth-pale', className)} />
     case 'running':
-      return <span aria-hidden data-status={status} className={cn(base, 'band-oro relleno-working', className)} />
+      return <span aria-hidden data-part="glyph" data-status={status} className={cn(base, 'band-oro relleno-working', className)} />
     case 'streaming':
-      return <span aria-hidden data-status={status} className={cn(base, 'band-anil relleno-working', className)} />
+      return <span aria-hidden data-part="glyph" data-status={status} className={cn(base, 'band-anil relleno-working', className)} />
     case 'waiting':
       return (
         <span
           aria-hidden
+          data-part="glyph"
           data-status={status}
           className={cn(base, 'bg-cloth-pale', 'after:absolute after:inset-x-0 after:bottom-0 after:h-1/2 after:bg-oro', className)}
         />
       )
     case 'succeeded':
-      return <span aria-hidden data-status={status} className={cn(base, 'bg-verde', className)} />
+      return <span aria-hidden data-part="glyph" data-status={status} className={cn(base, 'bg-verde', className)} />
     case 'failed':
       return (
-        <span aria-hidden data-status={status} className={cn(base, 'bg-rojo text-on-layer', className)}>
+        <span aria-hidden data-part="glyph" data-status={status} className={cn(base, 'bg-rojo text-on-layer', className)}>
           <svg viewBox="0 0 10 10" className="absolute inset-0 size-full">
             <path d="M2.5 2.5l5 5M7.5 2.5l-5 5" stroke="currentColor" strokeWidth="1.6" />
           </svg>
@@ -100,7 +101,7 @@ export function RunStatusGlyph({
       )
     case 'cancelled':
       return (
-        <span aria-hidden data-status={status} className={cn(base, 'bg-cloth-pale text-ink-muted', className)}>
+        <span aria-hidden data-part="glyph" data-status={status} className={cn(base, 'bg-cloth-pale text-ink-muted', className)}>
           <svg viewBox="0 0 10 10" className="absolute inset-0 size-full">
             <path d="M1 9L9 1" stroke="currentColor" strokeWidth="1.4" />
           </svg>
@@ -110,6 +111,7 @@ export function RunStatusGlyph({
       return (
         <span
           aria-hidden
+          data-part="glyph"
           data-status={status}
           className={cn(base, 'bg-cloth-pale', 'after:absolute after:inset-x-0 after:bottom-0 after:h-[30%] after:bg-rojo', className)}
         />
@@ -184,9 +186,9 @@ export function RunStatus({
       {...props}
     >
       <RunStatusGlyph status={status} className={register === 'label' ? 'size-[11px]' : undefined} />
-      <span className={labelVariants({ status })}>{label ?? RUN_STATUS_LABEL[status]}</span>
+      <span data-part="label" className={labelVariants({ status })}>{label ?? RUN_STATUS_LABEL[status]}</span>
       {shown !== undefined ? (
-        <span className="tabular text-ink-muted normal-case tracking-normal">{formatDuration(shown)}</span>
+        <span data-part="duration" className="tabular text-ink-muted normal-case tracking-normal">{formatDuration(shown)}</span>
       ) : null}
     </span>
   )

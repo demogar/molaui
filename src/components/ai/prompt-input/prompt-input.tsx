@@ -145,13 +145,14 @@ export function PromptInput({
       )}
       {...props}
     >
-      {attachments ? <div className="flex flex-wrap gap-2 px-3 pt-3">{attachments}</div> : null}
+      {attachments ? <div data-part="attachments" className="flex flex-wrap gap-2 px-3 pt-3">{attachments}</div> : null}
       <label htmlFor={fieldId} className="sr-only">
         {label}
       </label>
       <textarea
         ref={textareaRef}
         id={fieldId}
+        data-part="input"
         rows={1}
         value={value}
         disabled={disabled}
@@ -166,8 +167,8 @@ export function PromptInput({
         )}
       />
       <div className="flex items-center gap-2 px-2 pb-2">
-        <div className="flex min-w-0 flex-1 items-center gap-2">{toolbar}</div>
-        <p id={hintId} className="m-0 flex items-center gap-2 font-ui text-xs text-ink-muted">
+        <div data-part="toolbar" className="flex min-w-0 flex-1 items-center gap-2">{toolbar}</div>
+        <p id={hintId} data-part="hint" className="m-0 flex items-center gap-2 font-ui text-xs text-ink-muted">
           {offline ? (
             <span className="flex items-center gap-1.5 text-ink-warn">
               <WifiOff aria-hidden className="size-3.5" />
@@ -186,11 +187,11 @@ export function PromptInput({
           ) : null}
         </p>
         {generating ? (
-          <Button type="button" size="sm" variant="secondary" icon={<Square className="fill-current" />} onClick={onStop}>
+          <Button data-part="stop" type="button" size="sm" variant="secondary" icon={<Square className="fill-current" />} onClick={onStop}>
             Stop
           </Button>
         ) : (
-          <Button type="submit" size="sm" icon={<ArrowUp />} disabled={!canSend}>
+          <Button data-part="send" type="submit" size="sm" icon={<ArrowUp />} disabled={!canSend}>
             Send
           </Button>
         )}

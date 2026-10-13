@@ -103,9 +103,10 @@ export function ToolCall({
       className={cn('relative bg-cloth-pale shadow-cut', waiting && 'band-oro cut-band [--cut-reveal:3px]', className)}
       {...props}
     >
-      {working ? <span aria-hidden className="absolute inset-x-0 top-0 h-[3px] band-oro relleno-working" /> : null}
+      {working ? <span aria-hidden data-part="progress" className="absolute inset-x-0 top-0 h-[3px] band-oro relleno-working" /> : null}
       <Collapsible.Root open={forcedOpen || openState} onOpenChange={setOpenState}>
         <Collapsible.Trigger
+          data-part="header"
           disabled={!hasBody || forcedOpen}
           className={cn(
             'group/trigger flex w-full min-h-(--control-h) items-center gap-2.5 px-3 py-2 text-start',
@@ -122,10 +123,11 @@ export function ToolCall({
           />
           <Wrench aria-hidden className="size-3.5 shrink-0 text-ink-muted" />
           <span className="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
-            <span className="literal truncate text-sm font-medium text-ink">{name}</span>
-            {title ? <span className="truncate font-ui text-sm text-ink-muted">{title}</span> : null}
+            <span data-part="name" className="literal truncate text-sm font-medium text-ink">{name}</span>
+            {title ? <span data-part="title" className="truncate font-ui text-sm text-ink-muted">{title}</span> : null}
           </span>
           <RunStatus
+            data-part="status"
             status={status}
             startedAt={startedAt}
             endedAt={endedAt}
@@ -134,7 +136,7 @@ export function ToolCall({
           />
         </Collapsible.Trigger>
         {hasBody ? (
-          <Collapsible.Panel className="border-t border-keyline">
+          <Collapsible.Panel data-part="body" className="border-t border-keyline">
             <div className="flex flex-col gap-3 p-3">
               {waiting ? <ApprovalBlock approval={approval} /> : null}
               {failed && !reported ? <ErrorBlock status={status} error={error} onRetry={onRetry} /> : null}
@@ -172,7 +174,7 @@ function ErrorBlock({
   onRetry?: () => void
 }) {
   return (
-    <div role="alert" className="flex flex-wrap items-start gap-x-4 gap-y-3 bg-rojo-soft px-3.5 py-3 shadow-[inset_3px_0_0_var(--rojo)] rtl:shadow-[inset_-3px_0_0_var(--rojo)]">
+    <div role="alert" data-part="error" className="flex flex-wrap items-start gap-x-4 gap-y-3 bg-rojo-soft px-3.5 py-3 shadow-[inset_3px_0_0_var(--rojo)] rtl:shadow-[inset_-3px_0_0_var(--rojo)]">
       <div className="min-w-0 flex-1">
         <p className="m-0 font-ui text-sm font-semibold text-ink">
           {status === 'timed_out' ? 'The tool did not answer in time.' : 'The tool returned an error.'}
@@ -196,7 +198,7 @@ function ErrorBlock({
 
 function ApprovalBlock({ approval }: { approval: ToolCallApproval }) {
   return (
-    <div className="flex flex-col gap-3 bg-oro-soft px-3.5 py-3">
+    <div data-part="approval" className="flex flex-col gap-3 bg-oro-soft px-3.5 py-3">
       <div className="flex items-start gap-2.5">
         <ShieldAlert aria-hidden className="mt-0.5 size-4 shrink-0 text-ink" />
         <div className="min-w-0">
