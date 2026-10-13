@@ -151,6 +151,9 @@ Every component has one phase. Stable unless the index says otherwise.
 
 - [Agent console](https://demogar.github.io/molaui/?path=/docs/ai-agent-console--overview)
 - [Form example](https://demogar.github.io/molaui/?path=/docs/components-forms-form-example--overview)
-- [Filtered table](https://demogar.github.io/molaui/?path=/docs/patterns-filtered-table--overview)
-- [List and detail](https://demogar.github.io/molaui/?path=/docs/patterns-list-and-detail--overview)
-- [Settings page](https://demogar.github.io/molaui/?path=/docs/patterns-settings-page--overview)
+- [Agent hand-off](https://demogar.github.io/molaui/?path=/docs/patterns-agent-hand-off--overview): An agent has done what it may and stopped at what it may not: the person approves its proposed action, or takes the task over and finishes it themselves.
+- [Confirmation](https://demogar.github.io/molaui/?path=/docs/patterns-confirmation--overview): A destructive action that cannot be undone and takes a round trip: ask first, show it working, and say plainly whether it happened.
+- [Empty states](https://demogar.github.io/molaui/?path=/docs/patterns-empty-states--overview): One screen, every way a list can have nothing to show: first run, no results, loading, error and no permission, each saying something different.
+- [Filtered table](https://demogar.github.io/molaui/?path=/docs/patterns-filtered-table--overview): A table of many records narrowed by several filters at once, with bulk actions on a selection and each record opening in a drawer.
+- [List and detail](https://demogar.github.io/molaui/?path=/docs/patterns-list-and-detail--overview): Every item on the start side and the chosen one on the end side, collapsing to one pane at a time when its container is narrow.
+- [Settings page](https://demogar.github.io/molaui/?path=/docs/patterns-settings-page--overview): A long settings form saved as a whole, with errors on save, a guard on leaving with unsaved changes, and a danger zone outside the form.

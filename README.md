@@ -25,7 +25,11 @@ admin consoles, knowledge bases, agent run monitors — documented in a standalo
   hover, focus or tap, token budgets, and confidence stated in words rather than decimals.
 - **Patterns.** Whole Cayuco screens composed only from the system, each with its decisions
   written down: a settings page with a save bar and unsaved-changes guard, a list and detail view
-  that collapses to one column on a phone, and a filtered table of agent runs.
+  that collapses to one column on a phone, a filtered table of agent runs, every empty state of a
+  list, a destructive confirm whose request can fail, and an agent handing a task to a person. Each
+  pattern page says when to use it, what it is built from (read from its imports), and where its
+  empty, loading, error and no-permission states are; each component page lists the patterns it
+  is used in.
 - **A working demo.** In the
   [agent console](https://demogar.github.io/molaui/?path=/story/ai-agent-console--console), ask a
   question and a simulated agent plans, calls two tools and streams a cited answer, with the run
@@ -177,7 +181,7 @@ smoke tests below.
   `light-dark()`, `var()`, OKLab `color-mix()` — and asserts each promised pairing. It caught a real
   dark-theme failure during the build (muted ink on the gold wash, 4.00:1) before any screen did.
 - **No hex outside `tokens.css`**, enforced by a test.
-- **Every story is a test**: all 281 stories render through the real Storybook config and pass axe
+- **Every story is a test**: all 298 stories render through the real Storybook config and pass axe
   in the unit suite; `scripts/audit.mjs` re-runs axe *with colour contrast* in a real browser in both
   themes, and checks every story for horizontal overflow at 390px. CI runs it on every pull request
   against the static build, over every docs page as well as every story, and fails on any finding.

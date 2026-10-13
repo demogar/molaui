@@ -81,7 +81,7 @@
     "parts": 145,
     "aiComponents": 12,
     "aiParts": 23,
-    "stories": 281
+    "stories": 298
   },
   "tokens": {
     "source": "src/styles/tokens.css",
@@ -377,6 +377,10 @@
           "id": "ai-agent-run--waiting-for-approval",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-agent-run--waiting-for-approval"
         }
+      ],
+      "usedIn": [
+        "AI/Agent console",
+        "Patterns/Agent hand-off"
       ]
     },
     {
@@ -874,6 +878,10 @@
           "id": "ai-confidence--note",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-confidence--note"
         }
+      ],
+      "usedIn": [
+        "AI/Agent console",
+        "Patterns/Agent hand-off"
       ]
     },
     {
@@ -1097,6 +1105,10 @@
           "id": "ai-message--thread-stick-to-bottom",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-message--thread-stick-to-bottom"
         }
+      ],
+      "usedIn": [
+        "AI/Agent console",
+        "Patterns/Agent hand-off"
       ]
     },
     {
@@ -1345,6 +1357,9 @@
           "id": "ai-prompt-input--with-attachments",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-prompt-input--with-attachments"
         }
+      ],
+      "usedIn": [
+        "AI/Agent console"
       ]
     },
     {
@@ -1477,6 +1492,9 @@
           "id": "ai-reasoning--thinking",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-reasoning--thinking"
         }
+      ],
+      "usedIn": [
+        "AI/Agent console"
       ]
     },
     {
@@ -1894,6 +1912,9 @@
           "id": "ai-run-status--with-elapsed-time",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-run-status--with-elapsed-time"
         }
+      ],
+      "usedIn": [
+        "Patterns/Agent hand-off"
       ]
     },
     {
@@ -2066,6 +2087,9 @@
           "id": "ai-sources--without-snippet",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-sources--without-snippet"
         }
+      ],
+      "usedIn": [
+        "AI/Agent console"
       ]
     },
     {
@@ -2240,6 +2264,9 @@
           "id": "ai-streaming-text--with-code",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-streaming-text--with-code"
         }
+      ],
+      "usedIn": [
+        "AI/Agent console"
       ]
     },
     {
@@ -2363,6 +2390,9 @@
           "id": "ai-token-usage--near-the-limit",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-token-usage--near-the-limit"
         }
+      ],
+      "usedIn": [
+        "AI/Agent console"
       ]
     },
     {
@@ -2595,6 +2625,10 @@
           "id": "ai-tool-call--timed-out",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-tool-call--timed-out"
         }
+      ],
+      "usedIn": [
+        "AI/Agent console",
+        "Patterns/Agent hand-off"
       ]
     },
     {
@@ -2864,6 +2898,16 @@
           "id": "components-actions-button--with-icons",
           "url": "https://demogar.github.io/molaui/?path=/story/components-actions-button--with-icons"
         }
+      ],
+      "usedIn": [
+        "AI/Agent console",
+        "Components/Forms/Form example",
+        "Patterns/Agent hand-off",
+        "Patterns/Confirmation",
+        "Patterns/Empty states",
+        "Patterns/Filtered table",
+        "Patterns/List and detail",
+        "Patterns/Settings page"
       ]
     },
     {
@@ -3262,6 +3306,9 @@
           "id": "components-data-display-code--wrapped",
           "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-code--wrapped"
         }
+      ],
+      "usedIn": [
+        "Patterns/Confirmation"
       ]
     },
     {
@@ -3363,6 +3410,10 @@
           "id": "components-data-display-description-list--stacked",
           "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-description-list--stacked"
         }
+      ],
+      "usedIn": [
+        "Patterns/Filtered table",
+        "Patterns/List and detail"
       ]
     },
     {
@@ -3514,6 +3565,9 @@
           "id": "components-data-display-stat--without-trend",
           "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-stat--without-trend"
         }
+      ],
+      "usedIn": [
+        "Patterns/List and detail"
       ]
     },
     {
@@ -4218,6 +4272,12 @@
           "id": "components-data-display-table--virtualized",
           "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-table--virtualized"
         }
+      ],
+      "usedIn": [
+        "Patterns/Confirmation",
+        "Patterns/Empty states",
+        "Patterns/Filtered table",
+        "Patterns/List and detail"
       ]
     },
     {
@@ -4626,6 +4686,13 @@
           "id": "components-feedback-badge--status-dots",
           "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-badge--status-dots"
         }
+      ],
+      "usedIn": [
+        "Patterns/Agent hand-off",
+        "Patterns/Confirmation",
+        "Patterns/Empty states",
+        "Patterns/Filtered table",
+        "Patterns/List and detail"
       ]
     },
     {
@@ -4832,6 +4899,11 @@
           "id": "components-feedback-callout--with-actions",
           "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-callout--with-actions"
         }
+      ],
+      "usedIn": [
+        "Patterns/Agent hand-off",
+        "Patterns/Confirmation",
+        "Patterns/List and detail"
       ]
     },
     {
@@ -4999,6 +5071,12 @@
           "id": "components-feedback-empty-state--small",
           "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-empty-state--small"
         }
+      ],
+      "usedIn": [
+        "Patterns/Agent hand-off",
+        "Patterns/Confirmation",
+        "Patterns/Empty states",
+        "Patterns/List and detail"
       ]
     },
     {
@@ -5665,6 +5743,10 @@
           "id": "components-feedback-toast--stacking",
           "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-toast--stacking"
         }
+      ],
+      "usedIn": [
+        "Patterns/Confirmation",
+        "Patterns/Settings page"
       ]
     },
     {
@@ -5840,6 +5922,9 @@
           "id": "components-forms-checkbox--states",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-checkbox--states"
         }
+      ],
+      "usedIn": [
+        "Components/Forms/Form example"
       ]
     },
     {
@@ -6475,6 +6560,10 @@
           "id": "components-forms-combobox--sizes",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-combobox--sizes"
         }
+      ],
+      "usedIn": [
+        "Components/Forms/Form example",
+        "Patterns/Filtered table"
       ]
     },
     {
@@ -7035,6 +7124,10 @@
           "id": "components-forms-date-picker--typed-in-locale",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-date-picker--typed-in-locale"
         }
+      ],
+      "usedIn": [
+        "Components/Forms/Form example",
+        "Patterns/Filtered table"
       ]
     },
     {
@@ -7347,6 +7440,13 @@
           "id": "components-forms-field--textarea-autosize",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-field--textarea-autosize"
         }
+      ],
+      "usedIn": [
+        "Components/Forms/Form example",
+        "Patterns/Agent hand-off",
+        "Patterns/Empty states",
+        "Patterns/Filtered table",
+        "Patterns/Settings page"
       ]
     },
     {
@@ -7627,6 +7727,9 @@
           "id": "components-forms-file-upload--validation-errors",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-file-upload--validation-errors"
         }
+      ],
+      "usedIn": [
+        "Components/Forms/Form example"
       ]
     },
     {
@@ -7828,6 +7931,10 @@
           "id": "components-forms-number-input--wheel-scrub",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-number-input--wheel-scrub"
         }
+      ],
+      "usedIn": [
+        "Components/Forms/Form example",
+        "Patterns/Settings page"
       ]
     },
     {
@@ -7999,6 +8106,10 @@
           "id": "components-forms-radio--horizontal",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-radio--horizontal"
         }
+      ],
+      "usedIn": [
+        "Components/Forms/Form example",
+        "Patterns/Settings page"
       ]
     },
     {
@@ -8549,6 +8660,10 @@
           "id": "components-forms-select--sizes",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-select--sizes"
         }
+      ],
+      "usedIn": [
+        "Components/Forms/Form example",
+        "Patterns/Settings page"
       ]
     },
     {
@@ -8712,6 +8827,9 @@
           "id": "components-forms-slider--range",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-slider--range"
         }
+      ],
+      "usedIn": [
+        "Components/Forms/Form example"
       ]
     },
     {
@@ -8836,6 +8954,10 @@
           "id": "components-forms-switch--states",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-switch--states"
         }
+      ],
+      "usedIn": [
+        "Components/Forms/Form example",
+        "Patterns/Settings page"
       ]
     },
     {
@@ -9110,6 +9232,9 @@
           "id": "components-layout-app-shell--mobile",
           "url": "https://demogar.github.io/molaui/?path=/story/components-layout-app-shell--mobile"
         }
+      ],
+      "usedIn": [
+        "Patterns/Settings page"
       ]
     },
     {
@@ -9607,6 +9732,14 @@
           "id": "components-layout-page-header--minimal",
           "url": "https://demogar.github.io/molaui/?path=/story/components-layout-page-header--minimal"
         }
+      ],
+      "usedIn": [
+        "Patterns/Agent hand-off",
+        "Patterns/Confirmation",
+        "Patterns/Empty states",
+        "Patterns/Filtered table",
+        "Patterns/List and detail",
+        "Patterns/Settings page"
       ]
     },
     {
@@ -10394,6 +10527,9 @@
           "id": "components-layout-toolbar--toggles",
           "url": "https://demogar.github.io/molaui/?path=/story/components-layout-toolbar--toggles"
         }
+      ],
+      "usedIn": [
+        "Patterns/Filtered table"
       ]
     },
     {
@@ -10737,6 +10873,11 @@
           "id": "components-navigation-breadcrumb--long-ids",
           "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-breadcrumb--long-ids"
         }
+      ],
+      "usedIn": [
+        "Patterns/Agent hand-off",
+        "Patterns/Confirmation",
+        "Patterns/Empty states"
       ]
     },
     {
@@ -11539,6 +11680,10 @@
           "id": "components-overlays-dialog--typed-confirmation",
           "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-dialog--typed-confirmation"
         }
+      ],
+      "usedIn": [
+        "Patterns/Confirmation",
+        "Patterns/Settings page"
       ]
     },
     {
@@ -11743,6 +11888,9 @@
           "id": "components-overlays-drawer--sizes",
           "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-drawer--sizes"
         }
+      ],
+      "usedIn": [
+        "Patterns/Filtered table"
       ]
     },
     {
@@ -12608,6 +12756,10 @@
           "id": "components-typography-heading--scale",
           "url": "https://demogar.github.io/molaui/?path=/story/components-typography-heading--scale"
         }
+      ],
+      "usedIn": [
+        "Patterns/List and detail",
+        "Patterns/Settings page"
       ]
     },
     {
@@ -13228,8 +13380,21 @@
   "patterns": [
     {
       "title": "AI/Agent console",
+      "kind": "showcase",
       "docs": "https://demogar.github.io/molaui/?path=/docs/ai-agent-console--overview",
       "description": "Every AI component, composed into a working console for **Cayuco**, a fictional internal knowledge-and-agent platform. Ask it something (or pick a suggestion): the agent plans, calls two tools, and streams a cited answer, while the run panel on the right shows the same work as a timeline with live clocks and token usage. Press **Stop** mid-answer to see cancellation; the transcript keeps what arrived.\n\nThe demo content — an in-app help panel rollout — is invented, and the answer is scripted: there is no model behind this page.",
+      "builtFrom": [
+        "AI/Agent run",
+        "AI/Confidence",
+        "AI/Message",
+        "AI/Prompt input",
+        "AI/Reasoning",
+        "AI/Sources",
+        "AI/Streaming text",
+        "AI/Token usage",
+        "AI/Tool call",
+        "Components/Actions/Button"
+      ],
       "stories": [
         {
           "name": "Console",
@@ -13240,8 +13405,22 @@
     },
     {
       "title": "Components/Forms/Form example",
+      "kind": "showcase",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-forms-form-example--overview",
       "description": "Every form component, composed into the kind of form an AI platform team edits daily. Submit it empty to see validation: errors appear under each invalid control, announced on insertion, and **focus moves to the first invalid field** — the behaviour `Field`’s `role=\"alert\"` decision was made for.",
+      "builtFrom": [
+        "Components/Actions/Button",
+        "Components/Forms/Checkbox",
+        "Components/Forms/Combobox",
+        "Components/Forms/Date picker",
+        "Components/Forms/Field",
+        "Components/Forms/File upload",
+        "Components/Forms/Number input",
+        "Components/Forms/Radio",
+        "Components/Forms/Select",
+        "Components/Forms/Slider",
+        "Components/Forms/Switch"
+      ],
       "stories": [
         {
           "name": "AgentConfiguration",
@@ -13251,9 +13430,516 @@
       ]
     },
     {
+      "title": "Patterns/Agent hand-off",
+      "kind": "pattern",
+      "docs": "https://demogar.github.io/molaui/?path=/docs/patterns-agent-hand-off--overview",
+      "summary": "An agent has done what it may and stopped at what it may not: the person approves its proposed action, or takes the task over and finishes it themselves.",
+      "description": "A Cayuco support agent has found a duplicate charge, drafted the refund and the reply, and stopped: the refund is over what it may do alone. Composed from the AI layer (`Message`, `Confidence`, `ToolCall` with `approval`, `RunStatus`, `AgentRun`) and the core (`PageHeader`, `Breadcrumb`, `Badge`, `Callout`, `Field`, `Textarea`, `EmptyState`), with nothing written for it.\n\n**Decisions.** The decision comes first: what the agent needs, in its own words in Alegreya, with its confidence as a level and a basis, then the exact call it wants to make, in Martian Mono, with **Approve refund** and **Deny** of equal weight. The run that led here sits beside it as a timeline, so the work can be checked without leaving the decision. **Take over** is always in the header while the hand-off is open: it stops the agent and gives the person the draft to edit and send as themselves. Deny is a take-over too, because the agent has nothing left to do once its plan is refused. Nothing reaches the customer until a person has decided.\n\nSomeone who may not approve a refund this size still sees the proposal, without an Approve that would fail after they decided; the callout names who can and offers to reassign. Approving, denying and taking over each remove the pressed button, so focus moves to the hand-off’s heading, which now says what happened, and the later outcome is announced politely when it lands.",
+      "builtFrom": [
+        "AI/Agent run",
+        "AI/Confidence",
+        "AI/Message",
+        "AI/Run status",
+        "AI/Tool call",
+        "Components/Actions/Button",
+        "Components/Feedback/Badge",
+        "Components/Feedback/Callout",
+        "Components/Feedback/Empty state",
+        "Components/Forms/Field",
+        "Components/Layout/Page header",
+        "Components/Navigation/Breadcrumb"
+      ],
+      "guidance": {
+        "summary": "An agent has done what it may and stopped at what it may not: the person approves its proposed action, or takes the task over and finishes it themselves.",
+        "use": [
+          "An agent reaches an action above its authority, such as a refund over its limit, and a person must decide before anything reaches a customer.",
+          "The person needs the agent’s reason, its confidence and the exact action side by side with the run that led there.",
+          "Taking over must always be possible: stopping the agent and finishing the task by hand, from its draft."
+        ],
+        "avoid": [
+          {
+            "when": "An approval in the middle of a conversation the operator is already watching.",
+            "use": "AI/Tool call"
+          },
+          {
+            "when": "Reviewing a set of file or record changes the agent proposes.",
+            "use": "AI/Change review"
+          },
+          {
+            "when": "Confirming a destructive action the person started themselves.",
+            "use": "Patterns/Confirmation"
+          },
+          {
+            "when": "Watching a run that does not need anyone.",
+            "use": "AI/Agent run"
+          }
+        ],
+        "parts": [
+          {
+            "title": "AI/Agent run",
+            "role": "The run beside the decision, as a timeline: what the agent did before it stopped, and what it does after."
+          },
+          {
+            "title": "AI/Confidence",
+            "role": "How sure the agent is that the charge is a duplicate, as a level and a basis a person can check."
+          },
+          {
+            "title": "AI/Message",
+            "role": "The agent’s reason for stopping in its own words, and the conversation with the customer, draft included."
+          },
+          {
+            "title": "AI/Run status",
+            "role": "The hand-off’s state in the header: Needs approval, Running, Succeeded, Failed or Taken over."
+          },
+          {
+            "title": "AI/Tool call",
+            "role": "The exact action proposed, with Approve refund and Deny of equal weight; later its failure, verbatim, with Retry call."
+          },
+          {
+            "title": "Components/Actions/Button",
+            "role": "Take over in the header, Reassign to billing, and Send reply."
+          },
+          {
+            "title": "Components/Feedback/Badge",
+            "role": "Whether the reply is a draft or sent, as a dot, a word and a tone."
+          },
+          {
+            "title": "Components/Feedback/Callout",
+            "role": "Who can approve, when the person cannot; and the result, once the refund is issued."
+          },
+          {
+            "title": "Components/Feedback/Empty state",
+            "role": "The queue with nothing waiting."
+          },
+          {
+            "title": "Components/Forms/Field",
+            "role": "The person’s reply after taking over, a labelled Textarea that starts from the agent’s draft."
+          },
+          {
+            "title": "Components/Layout/Page header",
+            "role": "The ticket’s subject, who handed it off, the status and Take over."
+          },
+          {
+            "title": "Components/Navigation/Breadcrumb",
+            "role": "Where the ticket sits: Support, Escalations, the ticket id."
+          }
+        ],
+        "states": {
+          "empty": {
+            "story": "https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--nothing-waiting",
+            "note": "Nothing needs the person: the empty state says what will appear and when."
+          },
+          "loading": {
+            "note": "Not shown. While the refund runs, the hand-off says “Issuing the refund” and the call carries the working relleno; a hand-off still loading would use Skeleton in the panel’s shape, as the Empty states pattern does for a table."
+          },
+          "error": {
+            "story": "https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--refund-fails",
+            "note": "The approved refund failed: the call shows the error verbatim with Retry call, nothing reaches the customer, and Take over stays."
+          },
+          "noPermission": {
+            "story": "https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--no-permission",
+            "note": "The person may not approve a refund this size: the proposal shows without Approve, the callout names who can and offers to reassign, and Take over stays."
+          }
+        },
+        "accessibility": [
+          "Approve, Deny and Take over each remove the button that was pressed, so focus moves to the hand-off’s heading, which says what happened.",
+          "Outcomes that land later, such as the refund finishing, go to one polite status; a failed refund is the tool call’s own alert, not a second one.",
+          "The agent’s words are in Alegreya, the action is in Martian Mono and the controls are in Archivo, so the voice can be told apart without colour.",
+          "Approve and Deny are the same size and variant, so neither is nudged."
+        ]
+      },
+      "stories": [
+        {
+          "name": "Approved",
+          "id": "patterns-agent-hand-off--approved",
+          "url": "https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--approved"
+        },
+        {
+          "name": "Default",
+          "id": "patterns-agent-hand-off--default",
+          "url": "https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--default"
+        },
+        {
+          "name": "NoPermission",
+          "id": "patterns-agent-hand-off--no-permission",
+          "url": "https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--no-permission"
+        },
+        {
+          "name": "NothingWaiting",
+          "id": "patterns-agent-hand-off--nothing-waiting",
+          "url": "https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--nothing-waiting"
+        },
+        {
+          "name": "RefundFails",
+          "id": "patterns-agent-hand-off--refund-fails",
+          "url": "https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--refund-fails"
+        },
+        {
+          "name": "TakenOver",
+          "id": "patterns-agent-hand-off--taken-over",
+          "url": "https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--taken-over"
+        }
+      ]
+    },
+    {
+      "title": "Patterns/Confirmation",
+      "kind": "pattern",
+      "docs": "https://demogar.github.io/molaui/?path=/docs/patterns-confirmation--overview",
+      "summary": "A destructive action that cannot be undone and takes a round trip: ask first, show it working, and say plainly whether it happened.",
+      "description": "Revoking an API key: destructive, impossible to undo, a round trip to the server, and able to fail. Composed from `PageHeader`, `Breadcrumb`, `Table`, `Badge`, `Code`, `AlertDialog`, `Callout`, `EmptyState` and `Toast`, with nothing written for it. The settings page pattern shows a confirm that succeeds; this one is about the parts a happy-path confirm leaves out.\n\n**Decisions.** Every revoke asks first; a *live* key also asks for its name to be typed, because it is the one whose loss breaks a customer-facing service. A test key does not, since asking everyone to type for everything teaches people to type without reading. The question names the key and the description names what stops working. Cancel has focus when the dialog opens.\n\nWhile the request is in flight the confirm shows its working strip and neither button nor Escape answers. If it succeeds, the dialog closes and a toast says what happened. If it fails, the dialog stays open where the operator acted, says **Not revoked** with the reason, and the same button tries again. Afterwards focus returns to the row’s Revoke button, which stays, disabled but focusable, because revoked keys stay listed for 30 days and a removed button would drop focus to the top of the page.",
+      "builtFrom": [
+        "Components/Actions/Button",
+        "Components/Data display/Code",
+        "Components/Data display/Table",
+        "Components/Feedback/Badge",
+        "Components/Feedback/Callout",
+        "Components/Feedback/Empty state",
+        "Components/Feedback/Toast",
+        "Components/Layout/Page header",
+        "Components/Navigation/Breadcrumb",
+        "Components/Overlays/Dialog"
+      ],
+      "guidance": {
+        "summary": "A destructive action that cannot be undone and takes a round trip: ask first, show it working, and say plainly whether it happened.",
+        "use": [
+          "Deleting, revoking or cancelling something that cannot be restored, such as an API key or a workspace.",
+          "The action takes a request that can be slow or fail, and the person must know which of the two it did.",
+          "The friction should match the damage: type-to-confirm for what breaks other people, a plain confirm otherwise."
+        ],
+        "avoid": [
+          {
+            "when": "An action that can be undone; do it at once and offer Undo in a toast.",
+            "use": "Components/Feedback/Toast"
+          },
+          {
+            "when": "Leaving a page with unsaved changes, or a destructive action beside a long form.",
+            "use": "Patterns/Settings page"
+          },
+          {
+            "when": "Approving an action an agent proposes.",
+            "use": "Patterns/Agent hand-off"
+          }
+        ],
+        "parts": [
+          {
+            "title": "Components/Actions/Button",
+            "role": "Revoke on each row, kept and disabled once revoked so focus has somewhere to return; Create key."
+          },
+          {
+            "title": "Components/Data display/Code",
+            "role": "The key’s hint, a machine literal, in the table and in the question."
+          },
+          {
+            "title": "Components/Data display/Table",
+            "role": "The keys, with who made them, when each was last used and its state."
+          },
+          {
+            "title": "Components/Feedback/Badge",
+            "role": "Live or Test, and Active or Revoked, in words as well as tone."
+          },
+          {
+            "title": "Components/Feedback/Callout",
+            "role": "Who can revoke, for a member who cannot."
+          },
+          {
+            "title": "Components/Feedback/Empty state",
+            "role": "No keys yet, and why to make one per service."
+          },
+          {
+            "title": "Components/Feedback/Toast",
+            "role": "What happened, after the dialog closes on success."
+          },
+          {
+            "title": "Components/Layout/Page header",
+            "role": "The page’s title, description and Create key."
+          },
+          {
+            "title": "Components/Navigation/Breadcrumb",
+            "role": "Settings, then API keys."
+          },
+          {
+            "title": "Components/Overlays/Dialog",
+            "role": "AlertDialog: the question, the consequence by name, type-to-confirm for live keys, the pending strip, and the failure."
+          }
+        ],
+        "states": {
+          "empty": {
+            "story": "https://demogar.github.io/molaui/?path=/story/patterns-confirmation--no-keys",
+            "note": "No keys: the empty state makes the case for one per service."
+          },
+          "loading": {
+            "note": "The list loading is not shown; it would be the table’s shape with skeleton rows, as in Empty states. The request in flight is shown by AlertDialog itself: the working strip on Revoke key, and neither button nor Escape answers."
+          },
+          "error": {
+            "story": "https://demogar.github.io/molaui/?path=/story/patterns-confirmation--revoke-fails",
+            "note": "The revoke failed: the dialog stays open, says “Not revoked” with the reason and that the key still works, and Revoke key tries again."
+          },
+          "noPermission": {
+            "story": "https://demogar.github.io/molaui/?path=/story/patterns-confirmation--member-view",
+            "note": "A member sees the keys but no Revoke or Create to press and fail at; the callout names the admins."
+          }
+        },
+        "accessibility": [
+          "Cancel has focus when the dialog opens, so a reflexive Enter keeps the key.",
+          "The failure is a `role=\"alert\"` line inside the dialog’s description, so it is announced and is part of the dialog’s accessible description.",
+          "After a revoke, focus returns to the row’s Revoke button, which stays, disabled but focusable; the state badge and the toast say it is done.",
+          "Each Revoke is named for its key (“Revoke Support widget”), so a list of them is not five identical buttons."
+        ]
+      },
+      "stories": [
+        {
+          "name": "ConfirmLiveKey",
+          "id": "patterns-confirmation--confirm-live-key",
+          "url": "https://demogar.github.io/molaui/?path=/story/patterns-confirmation--confirm-live-key"
+        },
+        {
+          "name": "Default",
+          "id": "patterns-confirmation--default",
+          "url": "https://demogar.github.io/molaui/?path=/story/patterns-confirmation--default"
+        },
+        {
+          "name": "MemberView",
+          "id": "patterns-confirmation--member-view",
+          "url": "https://demogar.github.io/molaui/?path=/story/patterns-confirmation--member-view"
+        },
+        {
+          "name": "NoKeys",
+          "id": "patterns-confirmation--no-keys",
+          "url": "https://demogar.github.io/molaui/?path=/story/patterns-confirmation--no-keys"
+        },
+        {
+          "name": "RevokeFails",
+          "id": "patterns-confirmation--revoke-fails",
+          "url": "https://demogar.github.io/molaui/?path=/story/patterns-confirmation--revoke-fails"
+        }
+      ]
+    },
+    {
+      "title": "Patterns/Empty states",
+      "kind": "pattern",
+      "docs": "https://demogar.github.io/molaui/?path=/docs/patterns-empty-states--overview",
+      "summary": "One screen, every way a list can have nothing to show: first run, no results, loading, error and no permission, each saying something different.",
+      "description": "The knowledge sources of a Cayuco workspace: a header, a search field and a table. Composed from `PageHeader`, `Breadcrumb`, `Field`, `SearchInput`, `Table` and `EmptyState`, with nothing written for it. The screen is ordinary on purpose; what it demonstrates is every condition in which there is no list to show.\n\n**Decisions.** *First run* takes the whole body and its action connects the first source; the search field is not drawn, because a search over nothing can only fail. *No results* keeps the count and the search field, puts the empty state in the table’s place and offers **Show all sources**, which clears the search and returns focus to the field. (Not “Clear search”: the field’s own clear button already has that name, and two controls with one name are one too many to a screen reader.) It never says “connect your first source” to someone who has five. *Error* says what is still true (the sources are still connected) and offers **Retry**; once the rows are back, focus moves to their heading. *No permission* names the two people who can grant access, and the header drops **Connect source**, because offering an action the reader cannot take is a second refusal. *Loading* is the table’s own shape with skeleton rows, `aria-busy`, and one polite “Loading knowledge sources”.",
+      "builtFrom": [
+        "Components/Actions/Button",
+        "Components/Data display/Table",
+        "Components/Feedback/Badge",
+        "Components/Feedback/Empty state",
+        "Components/Forms/Field",
+        "Components/Layout/Page header",
+        "Components/Navigation/Breadcrumb"
+      ],
+      "guidance": {
+        "summary": "One screen, every way a list can have nothing to show: first run, no results, loading, error and no permission, each saying something different.",
+        "use": [
+          "Designing any list or table screen: settle what each of these conditions says before the populated state.",
+          "Telling “nothing exists yet” apart from “your search hides it” and from “you may not see it”.",
+          "A load that can fail, where the reader needs to know what is still true and how to try again."
+        ],
+        "avoid": [
+          {
+            "when": "One panel that is empty, rather than a whole screen.",
+            "use": "Components/Feedback/Empty state"
+          },
+          {
+            "when": "A table that filters on several fields at once.",
+            "use": "Patterns/Filtered table"
+          },
+          {
+            "when": "A short loading moment inside a component that keeps its shape.",
+            "use": "Components/Feedback/Skeleton"
+          }
+        ],
+        "parts": [
+          {
+            "title": "Components/Actions/Button",
+            "role": "Connect source, Show all sources, Retry and Ask for access: one way forward per condition."
+          },
+          {
+            "title": "Components/Data display/Table",
+            "role": "The list, which keeps its headers while it loads, over TableSkeletonRows."
+          },
+          {
+            "title": "Components/Feedback/Badge",
+            "role": "Each source’s sync state, as a dot, a word and a tone."
+          },
+          {
+            "title": "Components/Feedback/Empty state",
+            "role": "First run, no results, error and no permission, each its own variant with its own action."
+          },
+          {
+            "title": "Components/Forms/Field",
+            "role": "The labelled search field, a SearchInput, shown only when there is something to search."
+          },
+          {
+            "title": "Components/Layout/Page header",
+            "role": "The title, what sources are for, and Connect source unless the reader cannot use it."
+          },
+          {
+            "title": "Components/Navigation/Breadcrumb",
+            "role": "Support, then Knowledge sources."
+          }
+        ],
+        "states": {
+          "empty": {
+            "story": "https://demogar.github.io/molaui/?path=/story/patterns-empty-states--first-run",
+            "note": "Nothing connected: the empty state is the whole body and connects the first source. No results is its own story: the count and search stay, and Show all sources clears it."
+          },
+          "loading": {
+            "story": "https://demogar.github.io/molaui/?path=/story/patterns-empty-states--loading",
+            "note": "The table’s real headers over skeleton rows, `aria-busy`, and one polite “Loading knowledge sources”."
+          },
+          "error": {
+            "story": "https://demogar.github.io/molaui/?path=/story/patterns-empty-states--load-error",
+            "note": "An alert that says what is still true and offers Retry; once the rows are back, focus moves to their heading."
+          },
+          "noPermission": {
+            "story": "https://demogar.github.io/molaui/?path=/story/patterns-empty-states--no-permission",
+            "note": "Names the two admins who can grant access, and drops Connect source from the header."
+          }
+        },
+        "accessibility": [
+          "Show all sources returns focus to the search field; it is not called “Clear search” because the field’s own clear button already has that name.",
+          "After Retry, focus moves to the heading of the list that loaded, since the Retry button has gone.",
+          "The error is announced once, as an alert; loading is announced once, as a status, not row by row.",
+          "Every empty state heading is a level 2 heading, so it is in the page outline where the table would be."
+        ]
+      },
+      "stories": [
+        {
+          "name": "Default",
+          "id": "patterns-empty-states--default",
+          "url": "https://demogar.github.io/molaui/?path=/story/patterns-empty-states--default"
+        },
+        {
+          "name": "FirstRun",
+          "id": "patterns-empty-states--first-run",
+          "url": "https://demogar.github.io/molaui/?path=/story/patterns-empty-states--first-run"
+        },
+        {
+          "name": "LoadError",
+          "id": "patterns-empty-states--load-error",
+          "url": "https://demogar.github.io/molaui/?path=/story/patterns-empty-states--load-error"
+        },
+        {
+          "name": "Loading",
+          "id": "patterns-empty-states--loading",
+          "url": "https://demogar.github.io/molaui/?path=/story/patterns-empty-states--loading"
+        },
+        {
+          "name": "NoPermission",
+          "id": "patterns-empty-states--no-permission",
+          "url": "https://demogar.github.io/molaui/?path=/story/patterns-empty-states--no-permission"
+        },
+        {
+          "name": "NoResults",
+          "id": "patterns-empty-states--no-results",
+          "url": "https://demogar.github.io/molaui/?path=/story/patterns-empty-states--no-results"
+        }
+      ]
+    },
+    {
       "title": "Patterns/Filtered table",
+      "kind": "pattern",
       "docs": "https://demogar.github.io/molaui/?path=/docs/patterns-filtered-table--overview",
+      "summary": "A table of many records narrowed by several filters at once, with bulk actions on a selection and each record opening in a drawer.",
       "description": "A whole Cayuco admin screen, composed from the system with nothing written for it: the app shell, a search field, an agent `Combobox`, a `DateRangePicker` with presets, a `Toolbar` of status toggles, and a `DataTable` with selection, a bulk-action bar, a Columns menu and pages. Choosing a run opens it in a `Drawer`.\n\n**Decisions.** The filters sit on one cut panel with the status toolbar, because they are one question asked of the data; the table’s own bar under it only ever describes the answer (how many runs, or what is selected). Every filter has a visible label — a placeholder is a hint and disappears as soon as someone types. The status toggles carry their counts, computed under the other filters, so “Failed 4” is what clicking it will show. A filter that matches nothing gives the *no results* empty state with **Clear filters**; it never says “create your first run”. Changing a filter clears the selection, and cancelling selected runs changes the data in place and clears it too, so the bar never offers an action on rows that are hidden or no longer qualify.",
+      "builtFrom": [
+        "Components/Actions/Button",
+        "Components/Data display/Description list",
+        "Components/Data display/Table",
+        "Components/Feedback/Badge",
+        "Components/Forms/Combobox",
+        "Components/Forms/Date picker",
+        "Components/Forms/Field",
+        "Components/Layout/Page header",
+        "Components/Layout/Toolbar",
+        "Components/Overlays/Drawer"
+      ],
+      "guidance": {
+        "summary": "A table of many records narrowed by several filters at once, with bulk actions on a selection and each record opening in a drawer.",
+        "use": [
+          "An admin list of hundreds of records that people narrow by text, owner, date and status, then act on in bulk.",
+          "Filters that combine; each status toggle shows how many records it would leave under the other filters.",
+          "Reading one record without losing the list, in a Drawer."
+        ],
+        "avoid": [
+          {
+            "when": "Under about twenty records, or one search box is enough.",
+            "use": "Patterns/Empty states"
+          },
+          {
+            "when": "Each record is worth a pane of its own, beside the list.",
+            "use": "Patterns/List and detail"
+          },
+          {
+            "when": "A small table with no filters or selection.",
+            "use": "Components/Data display/Table"
+          }
+        ],
+        "parts": [
+          {
+            "title": "Components/Actions/Button",
+            "role": "Export and New run in the header, and the bulk actions on a selection."
+          },
+          {
+            "title": "Components/Data display/Description list",
+            "role": "The chosen run’s details in the drawer."
+          },
+          {
+            "title": "Components/Data display/Table",
+            "role": "DataTable: sorting, selection, the bulk-action bar, the Columns menu, pages, and the no-results state."
+          },
+          {
+            "title": "Components/Feedback/Badge",
+            "role": "Each run’s status, as a dot, a word and a tone."
+          },
+          {
+            "title": "Components/Forms/Combobox",
+            "role": "The agent filter."
+          },
+          {
+            "title": "Components/Forms/Date picker",
+            "role": "DateRangePicker with presets, for when runs started."
+          },
+          {
+            "title": "Components/Forms/Field",
+            "role": "A visible label on every filter, and the search box."
+          },
+          {
+            "title": "Components/Layout/Page header",
+            "role": "The title, what the list holds, Export and New run."
+          },
+          {
+            "title": "Components/Layout/Toolbar",
+            "role": "The status toggles with their counts, Clear filters and Refresh."
+          },
+          {
+            "title": "Components/Overlays/Drawer",
+            "role": "One run, opened from its id without leaving the list."
+          }
+        ],
+        "states": {
+          "empty": {
+            "note": "Not a story: filtering to nothing gives the no-results empty state inside the table, with Clear filters. It never offers to create a first run. A workspace with no runs at all is the first-run case in Empty states."
+          },
+          "loading": {
+            "note": "Not a story: Refresh shows the table’s own loading rows in place, keeping the filters. A first load would do the same."
+          },
+          "error": {
+            "note": "Not shown. A failed load would be an error empty state with Retry in the table’s place, as in Empty states."
+          },
+          "noPermission": {
+            "note": "Not shown. Someone who may not cancel runs should see the selection without Cancel, not a Cancel that fails."
+          }
+        },
+        "accessibility": [
+          "The filters are a `search` landmark, and every filter has a visible label; a placeholder is a hint and disappears as soon as someone types.",
+          "Changing a filter clears the selection, so a bulk action never lands on rows the filter now hides.",
+          "The status toggles are one Toolbar, a single tab stop moved through with the arrow keys.",
+          "A table wider than its frame scrolls sideways, and the frame then takes focus so the keyboard can scroll it."
+        ]
+      },
       "stories": [
         {
           "name": "Runs",
@@ -13264,8 +13950,102 @@
     },
     {
       "title": "Patterns/List and detail",
+      "kind": "pattern",
       "docs": "https://demogar.github.io/molaui/?path=/docs/patterns-list-and-detail--overview",
+      "summary": "Every item on the start side and the chosen one on the end side, collapsing to one pane at a time when its container is narrow.",
       "description": "The Cayuco agents screen: every agent in the workspace on the start side, the chosen one on the end side. Composed from `PageHeader`, `Badge`, `Callout`, `StatGroup`, `DescriptionList`, `Table` and `EmptyState`, with nothing written for it.\n\n**Decisions.** The split is a *container* query, not a viewport breakpoint: it needs about 48rem of its own width, and the content area’s width depends on whether the sidebar is open, collapsed to its rail, or not there at all. Narrower than that, the screen shows one pane at a time — choosing an agent replaces the list with its detail, focus moves to the detail’s heading, and a visible **Back to agents** returns to the list with focus on the agent you came from. The browser’s back gesture was not enough on its own: it is invisible, and in an embedded tool it can leave the product.\n\nEach agent is a button marked `aria-current` when it is the one shown. A listbox was rejected: its options cannot carry a badge and a second line that a screen reader reads properly, and choosing an agent is navigation (a route, in a product), which is what `aria-current` says. The open agent wears the sidebar’s current-page cues — an ink bar on the leading edge, a washed ground, a heavier name — and every state is a dot, a word and a tone. The agent’s purpose is set in Alegreya because a person wrote it; the model, tools and ids are in Martian Mono because they are machine literals.",
+      "builtFrom": [
+        "Components/Actions/Button",
+        "Components/Data display/Description list",
+        "Components/Data display/Stat",
+        "Components/Data display/Table",
+        "Components/Feedback/Badge",
+        "Components/Feedback/Callout",
+        "Components/Feedback/Empty state",
+        "Components/Layout/Page header",
+        "Components/Typography/Heading"
+      ],
+      "guidance": {
+        "summary": "Every item on the start side and the chosen one on the end side, collapsing to one pane at a time when its container is narrow.",
+        "use": [
+          "Browsing a set of items, such as agents, where each has enough detail to need its own pane.",
+          "People compare items by moving down the list, with the detail beside it.",
+          "The same screen must work in a narrow container, one pane at a time, with a visible way back."
+        ],
+        "avoid": [
+          {
+            "when": "Hundreds of records narrowed by several filters.",
+            "use": "Patterns/Filtered table"
+          },
+          {
+            "when": "A quick look at one record without leaving a table.",
+            "use": "Components/Overlays/Drawer"
+          },
+          {
+            "when": "A few items whose detail fits in a line each.",
+            "use": "Components/Data display/Table"
+          }
+        ],
+        "parts": [
+          {
+            "title": "Components/Actions/Button",
+            "role": "Each agent in the list, Back to agents, Create agent, and pause or start."
+          },
+          {
+            "title": "Components/Data display/Description list",
+            "role": "The chosen agent’s model, tools and owner."
+          },
+          {
+            "title": "Components/Data display/Stat",
+            "role": "Runs, success rate and cost for the chosen agent, as a StatGroup."
+          },
+          {
+            "title": "Components/Data display/Table",
+            "role": "The chosen agent’s recent runs."
+          },
+          {
+            "title": "Components/Feedback/Badge",
+            "role": "Each agent’s state and each run’s status, as a dot, a word and a tone."
+          },
+          {
+            "title": "Components/Feedback/Callout",
+            "role": "A failing agent’s problem, at the top of its detail."
+          },
+          {
+            "title": "Components/Feedback/Empty state",
+            "role": "No agents at all, and a draft agent with no runs yet."
+          },
+          {
+            "title": "Components/Layout/Page header",
+            "role": "The title, how many agents are failing, and Create agent."
+          },
+          {
+            "title": "Components/Typography/Heading",
+            "role": "The detail pane’s heading, which takes focus when an agent opens in one column."
+          }
+        ],
+        "states": {
+          "empty": {
+            "story": "https://demogar.github.io/molaui/?path=/story/patterns-list-and-detail--empty",
+            "note": "No agents: the empty state alone, whose action creates the first. A draft agent’s detail has its own “No runs yet”."
+          },
+          "loading": {
+            "note": "Not shown. The list and the detail would each keep their shape with Skeleton while they load."
+          },
+          "error": {
+            "note": "Not shown as a load failure. A failing agent is a state of the data, shown as a danger Callout in its detail with the way to fix it."
+          },
+          "noPermission": {
+            "note": "Not shown. An agent the reader may not open should not be in the list, rather than open to a refusal."
+          }
+        },
+        "accessibility": [
+          "Each agent is a button marked `aria-current` when it is the one shown, because choosing one is navigation; a listbox could not carry the badge and second line.",
+          "In one column, opening an agent moves focus to the detail’s heading, and Back to agents returns it to the agent you came from.",
+          "The split is a container query, so it responds to the space it is given, with or without the sidebar.",
+          "The agent’s purpose is in Alegreya because a person wrote it; models, tools and ids are in Martian Mono."
+        ]
+      },
       "stories": [
         {
           "name": "Default",
@@ -13286,8 +14066,112 @@
     },
     {
       "title": "Patterns/Settings page",
+      "kind": "pattern",
       "docs": "https://demogar.github.io/molaui/?path=/docs/patterns-settings-page--overview",
+      "summary": "A long settings form saved as a whole, with errors on save, a guard on leaving with unsaved changes, and a danger zone outside the form.",
       "description": "The settings of a Cayuco workspace: General, Models and limits, Notifications, and a danger zone. Composed from `PageHeader`, `NavItem`, `Field`, `Input`, `Textarea`, `Select`, `NumberInput`, `RadioGroup`, `Switch`, `AlertDialog` and `Toast`, with nothing written for it.\n\n**Decisions.** Settings save together, with one button: a spend limit and the rule for what happens when it is reached are one decision, and saving them one control at a time would run the workspace on half of it. A sticky bar at the foot of the form counts the changes in words — *3 unsaved changes* — and is always there, quiet when there is nothing to save; a bar that vanished on save would take the focused button with it. Save confirms with a toast, and Discard offers **Undo** in one, so neither needs a dialog.\n\nErrors appear when Save is pressed, not while someone is still typing; each says what is wrong and how to fix it, focus goes to the first, and each clears as soon as its field is fixed. While the form is dirty, any link that leaves the page — the sidebar, the settings pages, the breadcrumb — asks **Discard unsaved changes?** first, with *Keep editing* focused and *Discard* as the destructive answer.\n\nThe danger zone sits after the form, not in it: deleting the workspace is immediate, so Save can never delete anything and Discard can never bring it back. Its confirm names the workspace and everything that goes with it, and asks for the slug to be typed.",
+      "builtFrom": [
+        "Components/Actions/Button",
+        "Components/Feedback/Toast",
+        "Components/Forms/Field",
+        "Components/Forms/Number input",
+        "Components/Forms/Radio",
+        "Components/Forms/Select",
+        "Components/Forms/Switch",
+        "Components/Layout/App shell",
+        "Components/Layout/Page header",
+        "Components/Overlays/Dialog",
+        "Components/Typography/Heading"
+      ],
+      "guidance": {
+        "summary": "A long settings form saved as a whole, with errors on save, a guard on leaving with unsaved changes, and a danger zone outside the form.",
+        "use": [
+          "Settings whose values are one decision together, such as a spend limit and what happens when it is reached.",
+          "A form long enough that Save must stay in reach, with a count of what is unsaved.",
+          "A page that also holds one immediate, destructive action that must not be part of Save."
+        ],
+        "avoid": [
+          {
+            "when": "A single setting that should take effect the moment it changes.",
+            "use": "Components/Forms/Switch"
+          },
+          {
+            "when": "A destructive action that is the subject of the page, and can fail.",
+            "use": "Patterns/Confirmation"
+          },
+          {
+            "when": "A short form in a dialog or a step of a flow.",
+            "use": "Components/Forms/Field"
+          }
+        ],
+        "parts": [
+          {
+            "title": "Components/Actions/Button",
+            "role": "Save changes and Discard in the sticky bar, and Delete workspace in the danger zone."
+          },
+          {
+            "title": "Components/Feedback/Toast",
+            "role": "Saved, and Discard with Undo, so neither needs a dialog."
+          },
+          {
+            "title": "Components/Forms/Field",
+            "role": "Every label, hint and error, around Input and Textarea."
+          },
+          {
+            "title": "Components/Forms/Number input",
+            "role": "Tokens per run and the monthly limit."
+          },
+          {
+            "title": "Components/Forms/Radio",
+            "role": "What happens when the limit is reached."
+          },
+          {
+            "title": "Components/Forms/Select",
+            "role": "The default model."
+          },
+          {
+            "title": "Components/Forms/Switch",
+            "role": "Each notification."
+          },
+          {
+            "title": "Components/Layout/App shell",
+            "role": "NavItem, for the settings pages beside the form."
+          },
+          {
+            "title": "Components/Layout/Page header",
+            "role": "The workspace’s name and what the page changes."
+          },
+          {
+            "title": "Components/Overlays/Dialog",
+            "role": "AlertDialog, for leaving with unsaved changes and for deleting the workspace."
+          },
+          {
+            "title": "Components/Typography/Heading",
+            "role": "Each section of the form."
+          }
+        ],
+        "states": {
+          "empty": {
+            "note": "Not applicable: a settings form always has values. A section with nothing to set would say why in its description."
+          },
+          "loading": {
+            "note": "Not shown. Saving is shown: Save changes carries its working strip and stays focusable. A first load would keep the form’s shape with Skeleton."
+          },
+          "error": {
+            "story": "https://demogar.github.io/molaui/?path=/story/patterns-settings-page--with-validation-errors",
+            "note": "Save pressed with three problems: each says what is wrong and what to do, focus is on the first, and the bar counts what needs fixing."
+          },
+          "noPermission": {
+            "note": "Not shown. Someone who may not change settings should see the values as read-only text with who can change them, not a form that refuses on Save."
+          }
+        },
+        "accessibility": [
+          "The bar at the foot is always mounted, and Save stays focusable while disabled, so saving never drops focus to the top of the page.",
+          "Errors appear on Save, not while typing; focus goes to the first, and each clears as soon as its field is fixed.",
+          "The unsaved count is a number in words, “3 unsaved changes”, not a dot, so it reads the same to a screen reader and in forced colours.",
+          "Leaving with unsaved changes asks first, with Keep editing focused."
+        ]
+      },
       "stories": [
         {
           "name": "Default",

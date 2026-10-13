@@ -8,9 +8,10 @@ import {
   RelatedSection,
   SummaryStatus,
 } from '../src/docs/blocks/page'
+import { PatternAccessibility, PatternGuide } from '../src/docs/blocks/pattern'
 import { UsageFor } from '../src/docs/blocks/usage'
 import { pageData, SECTIONS, type PageData, type SectionId } from '../src/docs/usage/contract'
-import { isShowcase } from '../src/docs/usage/showcases'
+import { isPattern, isShowcase } from '../src/docs/usage/showcases'
 
 /**
  * Every component page has the same sections in the same order, so a reader
@@ -22,8 +23,10 @@ import { isShowcase } from '../src/docs/usage/showcases'
  * The component's own description (the decisions behind it, from the stories
  * meta) sits with the summary, because it says what the thing is.
  *
- * A showcase or a pattern documents how parts fit together, not when to pick
- * one, so it keeps Storybook's plain page: description, then its stories.
+ * A pattern is a whole screen: its page adds its guidance (src/docs/blocks/
+ * pattern.tsx) around the stories. A showcase documents how one layer's parts
+ * fit together, not when to pick one, so it keeps Storybook's plain page:
+ * description, then its stories.
  */
 const RENDER: Record<SectionId, (page: PageData) => React.ReactNode> = {
   summary: (page) => (
@@ -49,6 +52,20 @@ export function DocsPage() {
   const of = useOf('meta')
   const meta = of.type === 'meta' ? of.preparedMeta : undefined
   const title = meta?.title ?? ''
+  if (isPattern(title)) {
+    return (
+      <>
+        <Title />
+        <Subtitle />
+        <PatternGuide title={title} />
+        <Description />
+        <ExamplesHeading />
+        <Primary />
+        <Stories title={<EveryExampleHeading />} />
+        <PatternAccessibility title={title} />
+      </>
+    )
+  }
   if (isShowcase(title)) {
     return (
       <>

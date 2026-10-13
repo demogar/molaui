@@ -1,6 +1,7 @@
 import evidenceFile from '../../../docs/accessibility/evidence.json'
 import { ACCESSIBILITY, NON_INTERACTIVE } from './accessibility'
 import type { Accessibility } from './accessibility-types'
+import { usedIn } from './composition-data'
 import { USAGE, type Usage } from './guidance'
 import { type Phase, phasesIn } from './lifecycle'
 
@@ -13,8 +14,9 @@ import { type Phase, phasesIn } from './lifecycle'
  *   3. Examples             the primary story, its controls, every story
  *   4. Accessibility        keyboard, what Mola handles, what you must do,
  *                           and the evidence behind it
- *   5. Related              the components this page sends readers to, and
- *                           the ones that send readers here
+ *   5. Related              the components this page sends readers to, the
+ *                           ones that send readers here, and the patterns
+ *                           and showcases it is used in
  *
  * Usage comes before the examples on purpose: "should I use this at all?" is
  * the first question, and a reader who scrolls past forty stories to find out
@@ -51,6 +53,8 @@ export interface PageData {
   alternatives: RelatedLink[]
   /** Components whose own "When not to" sends readers here. */
   pointingHere: RelatedLink[]
+  /** Patterns and showcases that import it, read from their source (composition.ts). */
+  usedIn: RelatedLink[]
 }
 
 export function pageData(title: string, tags: readonly string[] | undefined): PageData {
@@ -71,6 +75,7 @@ export function pageData(title: string, tags: readonly string[] | undefined): Pa
     evidence: EVIDENCE[title],
     alternatives,
     pointingHere,
+    usedIn: usedIn(title).map((from) => ({ title: from })),
   }
 }
 
@@ -134,6 +139,7 @@ export const SECTIONS: Section[] = [
   {
     id: 'related',
     heading: 'Related',
-    missing: (page) => (page.alternatives.length + page.pointingHere.length ? [] : ['at least one related component']),
+    missing: (page) =>
+      page.alternatives.length + page.pointingHere.length + page.usedIn.length ? [] : ['at least one related component or pattern'],
   },
 ]
