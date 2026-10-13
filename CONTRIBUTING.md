@@ -86,9 +86,9 @@ to compare your own before and after but is never committed.
 
 When a visual change is intended, or a new story needs a baseline:
 
-1. Push the branch and open the pull request. The **Visual regression** job fails and uploads a
-   `visual-report` artifact with the expected, actual and diff image of every failing story. Look
-   at every diff.
+1. Push the branch and open the pull request. The **Visual regression** job fails, and each of
+   its four shards with a failure uploads a `visual-report-<shard>` artifact with the expected,
+   actual and diff image of every failing story. Look at every diff.
 2. If the changes are all intended, add the **`update-visual-baselines`** label to the pull
    request. The *Update visual baselines* workflow renders the baselines on Linux, commits only the
    images that changed to the branch, and removes the label. (From a branch without a pull

@@ -171,7 +171,8 @@ npm run check   # lint · typecheck · test · tokens:check · manifest:check ·
 ```
 
 CI runs that list, plus three browser jobs in parallel: the audit, visual regression and consumer
-smoke tests below.
+smoke tests below. The audit and visual regression are each split across four runners, so the whole
+run takes about three minutes.
 
 - **The contrast contract** (`src/tokens/contract.test.ts`) resolves every token in both themes —
   `light-dark()`, `var()`, OKLab `color-mix()` — and asserts each promised pairing. It caught a real
