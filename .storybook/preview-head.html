@@ -1,0 +1,40 @@
+<script>
+  /* Every deploy to GitHub Pages replaces the whole site, and its files are
+   * named by content hash. A tab opened before a deploy (or an iframe.html
+   * served from the 10-minute Pages cache) then asks for a story chunk that
+   * no longer exists, and Storybook shows "Failed to fetch dynamically
+   * imported module". Reloading fetches the new build. Vite announces the
+   * failed import as `vite:preloadError`; a missing entry script never gets
+   * that far, so its load error is caught here too. The timestamp guard
+   * reloads at most once a minute, so a chunk that is really missing still
+   * shows its error instead of looping. */
+  ;(function () {
+    var KEY = 'mola-stale-build-reload'
+    function reloadOnce(event) {
+      var last = 0
+      try {
+        last = Number(sessionStorage.getItem(KEY)) || 0
+      } catch (e) {}
+      if (Date.now() - last < 60000) return
+      try {
+        sessionStorage.setItem(KEY, String(Date.now()))
+      } catch (e) {}
+      if (event && event.preventDefault) event.preventDefault()
+      var target = window.top && window.top !== window ? window.top : window
+      try {
+        target.location.reload()
+      } catch (e) {
+        window.location.reload()
+      }
+    }
+    window.addEventListener('vite:preloadError', reloadOnce)
+    window.addEventListener(
+      'error',
+      function (event) {
+        var el = event.target
+        if (el && el.tagName === 'SCRIPT' && /\/assets\//.test(el.src || '')) reloadOnce()
+      },
+      true,
+    )
+  })()
+</script>
