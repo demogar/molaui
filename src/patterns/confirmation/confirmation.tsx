@@ -1,4 +1,4 @@
-import { CircleAlert, Plus } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import * as React from 'react'
 
 import { PageHeader } from '../../components/app-shell/page-header'
@@ -39,21 +39,20 @@ import { ADMINS, API_KEYS, type ApiKey } from './_data'
  * acted, with the failure in words and the key's state unchanged ("Not
  * revoked"), and the same button tries again.
  *
- * AlertDialog has no slot for an error: it promises to stay open on a
- * rejected promise but leaves the caller to say why. The failure goes in its
- * description, which is the dialog's accessible description, as a
- * `role="alert"` line so it is announced when it appears. A dedicated
- * `error` prop would be better, and is noted on the pattern's page instead of
- * being worked around here.
+ * The failure goes in AlertDialog's `error`, which sits over the buttons,
+ * is announced once, and is linked to Revoke key. The screen keeps the
+ * message in its own state and clears it when the dialog opens for another
+ * key, so one key's failure is never shown under another key's question.
  *
  * ── where focus goes afterwards ──
- * On close, Base UI returns focus to the button that opened the dialog. So
- * a revoked key's row keeps its Revoke button, disabled and still focusable,
- * rather than removing it: a removed button would drop focus to the top of
- * the document, and AlertDialog does not expose Base UI's `finalFocus` to
- * send it anywhere else. The row's state badge and the toast say it is done.
- * Revoked keys stay listed for 30 days, as an audit trail, which is also why
- * the button has somewhere to stay.
+ * Cancel or Escape returns focus to the row's Revoke button, Base UI's
+ * default. A revoke that succeeds removes that button, because a revoked key
+ * has nothing left to revoke; its row stays for 30 days as an audit trail,
+ * with its state in words. So AlertDialog's `finalFocus` sends focus to the
+ * next active key's Revoke button, or the previous one at the end of the
+ * list, where the reader would carry on from. With none left it goes
+ * to the heading, which now reads "0 active keys". Without it focus would
+ * drop to the top of the document.
  */
 
 export interface ApiKeysScreenProps {
@@ -95,9 +94,21 @@ export function ApiKeysScreen({
   const toast = useToast()
   const uid = React.useId()
   const headingId = `${uid}-heading`
+  const headingRef = React.useRef<HTMLHeadingElement>(null)
+  const revokeButtons = React.useRef(new Map<string, HTMLButtonElement>())
+  // Set only by a revoke that succeeded; read once, when the dialog closes.
+  const focusAfterRevoke = React.useRef<string | null>(null)
 
   const target = keys.find((key) => key.id === confirmingId) ?? null
   const active = keys.filter((key) => key.state === 'active').length
+
+  const finalFocus = () => {
+    const next = focusAfterRevoke.current
+    focusAfterRevoke.current = null
+    if (next === null) return true
+    const button = next === 'heading' ? undefined : revokeButtons.current.get(next)
+    return button ?? headingRef.current ?? true
+  }
 
   const confirm = async () => {
     if (!target) return
@@ -109,6 +120,10 @@ export function ApiKeysScreen({
       // Rethrown so AlertDialog stays open: the failure belongs where the operator acted.
       throw cause
     }
+    const index = keys.findIndex((key) => key.id === target.id)
+    const isActive = (key: ApiKey | undefined) => key !== undefined && key.state === 'active' && key.id !== target.id
+    const next = keys.slice(index + 1).find(isActive) ?? keys.slice(0, index).reverse().find(isActive)
+    focusAfterRevoke.current = next?.id ?? 'heading'
     setKeys((all) => all.map((key) => (key.id === target.id ? { ...key, state: 'revoked' } : key)))
     toast.show({
       tone: 'success',
@@ -141,7 +156,7 @@ export function ApiKeysScreen({
           />
         ) : (
           <section aria-labelledby={headingId} className="grid gap-3">
-            <h2 id={headingId} className="m-0 font-ui text-base font-bold text-ink">
+            <h2 ref={headingRef} id={headingId} tabIndex={-1} className="m-0 font-ui text-base font-bold text-ink">
               {active} active {active === 1 ? 'key' : 'keys'}
             </h2>
             <Table framed aria-labelledby={headingId} className="min-w-[44rem]">
@@ -182,20 +197,24 @@ export function ApiKeysScreen({
                       </TableCell>
                       {canRevoke ? (
                         <TableCell className="text-end">
-                          <Button
-                            size="sm"
-                            variant="secondary"
-                            aria-label={`Revoke ${key.name}`}
-                            disabled={revoked}
-                            focusableWhenDisabled
-                            onClick={() => {
-                              setError(null)
-                              setConfirmingId(key.id)
-                              setOpen(true)
-                            }}
-                          >
-                            Revoke
-                          </Button>
+                          {revoked ? null : (
+                            <Button
+                              ref={(node) => {
+                                if (node) revokeButtons.current.set(key.id, node)
+                                else revokeButtons.current.delete(key.id)
+                              }}
+                              size="sm"
+                              variant="secondary"
+                              aria-label={`Revoke ${key.name}`}
+                              onClick={() => {
+                                setError(null)
+                                setConfirmingId(key.id)
+                                setOpen(true)
+                              }}
+                            >
+                              Revoke
+                            </Button>
+                          )}
                         </TableCell>
                       ) : null}
                     </TableRow>
@@ -216,19 +235,17 @@ export function ApiKeysScreen({
             <>
               {target.usedBy} stops working at once: every request with <Code>{target.hint}</Code> is refused. A
               revoked key cannot be restored; you would create a new one and update each service that used it.
-              {error ? (
-                <span role="alert" className="mt-3 flex gap-2 font-semibold text-danger">
-                  <CircleAlert aria-hidden className="mt-0.5 size-4 shrink-0" strokeWidth={2.5} />
-                  <span>
-                    Not revoked. {error} The key still works. Try again, or cancel and check the key’s status later.
-                  </span>
-                </span>
-              ) : null}
             </>
           ) : (
             ''
           )
         }
+        error={
+          error
+            ? `Not revoked. ${error} The key still works. Try again, or cancel and check the key’s status later.`
+            : undefined
+        }
+        finalFocus={finalFocus}
         confirmLabel="Revoke key"
         confirmationText={target?.environment === 'live' ? target.name : undefined}
         onConfirm={confirm}

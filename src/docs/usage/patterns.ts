@@ -116,7 +116,7 @@ export const PATTERNS: Record<string, PatternUsage> = {
       { when: 'Approving an action an agent proposes.', use: 'Patterns/Agent hand-off' },
     ],
     parts: {
-      'Components/Actions/Button': 'Revoke on each row, kept and disabled once revoked so focus has somewhere to return; Create key.',
+      'Components/Actions/Button': 'Revoke on each active key’s row, gone once the key is revoked; Create key.',
       'Components/Data display/Code': 'The key’s hint, a machine literal, in the table and in the question.',
       'Components/Data display/Table': 'The keys, with who made them, when each was last used and its state.',
       'Components/Feedback/Badge': 'Live or Test, and Active or Revoked, in words as well as tone.',
@@ -126,7 +126,7 @@ export const PATTERNS: Record<string, PatternUsage> = {
       'Components/Layout/Page header': 'The page’s title, description and Create key.',
       'Components/Navigation/Breadcrumb': 'Settings, then API keys.',
       'Components/Overlays/Dialog':
-        'AlertDialog: the question, the consequence by name, type-to-confirm for live keys, the pending strip, and the failure.',
+        'AlertDialog: the question, the consequence by name, type-to-confirm for live keys, the pending strip, the failure in `error`, and where focus goes after in `finalFocus`.',
     },
     states: {
       empty: { story: 'NoKeys', note: 'No keys: the empty state makes the case for one per service.' },
@@ -144,8 +144,8 @@ export const PATTERNS: Record<string, PatternUsage> = {
     },
     accessibility: [
       'Cancel has focus when the dialog opens, so a reflexive Enter keeps the key.',
-      'The failure is a `role="alert"` line inside the dialog’s description, so it is announced and is part of the dialog’s accessible description.',
-      'After a revoke, focus returns to the row’s Revoke button, which stays, disabled but focusable; the state badge and the toast say it is done.',
+      'The failure is AlertDialog’s `error`: announced once as an alert, and the description of Revoke key, so it is read again with the verb.',
+      'Cancel returns focus to the row’s Revoke button. After a revoke that button is gone, so focus moves to the nearest active key’s Revoke, or to the “0 active keys” heading; the state badge and the toast say it is done.',
       'Each Revoke is named for its key (“Revoke Support widget”), so a list of them is not five identical buttons.',
     ],
   },

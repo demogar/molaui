@@ -23,7 +23,7 @@ const meta = {
       story: { inline: false, height: '640px' },
       description: {
         component:
-          'Revoking an API key: destructive, impossible to undo, a round trip to the server, and able to fail. Composed from `PageHeader`, `Breadcrumb`, `Table`, `Badge`, `Code`, `AlertDialog`, `Callout`, `EmptyState` and `Toast`, with nothing written for it. The settings page pattern shows a confirm that succeeds; this one is about the parts a happy-path confirm leaves out.\n\n**Decisions.** Every revoke asks first; a *live* key also asks for its name to be typed, because it is the one whose loss breaks a customer-facing service. A test key does not, since asking everyone to type for everything teaches people to type without reading. The question names the key and the description names what stops working. Cancel has focus when the dialog opens.\n\nWhile the request is in flight the confirm shows its working strip and neither button nor Escape answers. If it succeeds, the dialog closes and a toast says what happened. If it fails, the dialog stays open where the operator acted, says **Not revoked** with the reason, and the same button tries again. Afterwards focus returns to the row’s Revoke button, which stays, disabled but focusable, because revoked keys stay listed for 30 days and a removed button would drop focus to the top of the page.',
+          'Revoking an API key: destructive, impossible to undo, a round trip to the server, and able to fail. Composed from `PageHeader`, `Breadcrumb`, `Table`, `Badge`, `Code`, `AlertDialog`, `Callout`, `EmptyState` and `Toast`, with nothing written for it. The settings page pattern shows a confirm that succeeds; this one is about the parts a happy-path confirm leaves out.\n\n**Decisions.** Every revoke asks first; a *live* key also asks for its name to be typed, because it is the one whose loss breaks a customer-facing service. A test key does not, since asking everyone to type for everything teaches people to type without reading. The question names the key and the description names what stops working. Cancel has focus when the dialog opens.\n\nWhile the request is in flight the confirm shows its working strip and neither button nor Escape answers. If it succeeds, the dialog closes and a toast says what happened. If it fails, the dialog stays open where the operator acted, says **Not revoked** with the reason in AlertDialog’s `error`, and the same button tries again.\n\nCancel returns focus to the row’s Revoke button. A revoke that succeeds removes that button, since a revoked key (listed for 30 days as an audit trail) has nothing left to revoke, so AlertDialog’s `finalFocus` sends focus to the nearest active key’s Revoke button, or to the heading that counts them when none are left, rather than to the top of the page.',
       },
     },
   },
@@ -58,7 +58,7 @@ export const RevokeFails: Story = {
     docs: {
       description: {
         story:
-          'The request failed. The dialog stays open, says the key was not revoked and still works, and Revoke key tries again. The failure is an alert inside the dialog’s description, because AlertDialog has no error slot of its own.',
+          'The request failed. The dialog stays open, says the key was not revoked and still works, and Revoke key tries again. The failure is AlertDialog’s `error`: over the buttons, announced once, and read again with Revoke key when focus is on it.',
       },
     },
   },

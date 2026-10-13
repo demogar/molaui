@@ -81,7 +81,7 @@
     "parts": 145,
     "aiComponents": 12,
     "aiParts": 23,
-    "stories": 299
+    "stories": 300
   },
   "tokens": {
     "source": "src/styles/tokens.css",
@@ -11900,11 +11900,20 @@
           {
             "do": "Return a promise from onConfirm, so the dialog stays open if the work fails.",
             "dont": "Close the dialog before the work has succeeded."
+          },
+          {
+            "do": "Say why a confirm failed in AlertDialog’s `error`, starting with what did not happen: “Not deleted. The trace store didn’t answer.”",
+            "dont": "Put the failure in `description`, or close the dialog and report it in a toast."
+          },
+          {
+            "do": "Pass `finalFocus` when the confirm removes its own trigger, pointing at the next item or the list’s heading.",
+            "dont": "Keep a disabled button in place only so focus has somewhere to return."
           }
         ],
         "content": [
           "Titles name the task or ask the question: “Rename agent”, “Delete this run?”.",
           "The confirm button repeats the verb and object: “Delete run”, never “OK” or “Yes”.",
+          "An error starts with what did not happen, then why, then what is still true: “Not revoked. … The key still works.”",
           "The footer holds a ghost Cancel and one primary action."
         ]
       },
@@ -11928,7 +11937,7 @@
             "keys": [
               "Escape"
             ],
-            "action": "Closes the dialog and returns focus to the trigger."
+            "action": "Closes the dialog and returns focus to the trigger, or to `finalFocus` when it is set."
           },
           {
             "keys": [
@@ -11941,12 +11950,15 @@
           "Base UI traps focus, locks scroll, makes the page inert and returns focus on close.",
           "The dialog is named by `title` and described by `description`, and a named Close button is always rendered unless `hideClose` is set.",
           "`AlertDialog` is a `role=\"alertdialog\"` that an outside click does not dismiss, and it focuses Cancel first.",
-          "While an async confirm is pending, both buttons stop taking presses and the dialog cannot be closed."
+          "While an async confirm is pending, both buttons stop taking presses and the dialog cannot be closed.",
+          "An AlertDialog `error` is a `role=\"alert\"`, announced once when it appears and again after each failed retry, and it is the confirm button’s description."
         ],
         "you": [
           "Write a `title` that names the task; it is the dialog’s name.",
           "Set `hideClose` only when the footer has its own way out.",
-          "Give the confirm button the verb, “Delete run”, never “OK”."
+          "Give the confirm button the verb, “Delete run”, never “OK”.",
+          "Set `error` when a confirm fails, and clear it when the dialog opens for something else.",
+          "Set `finalFocus` when the confirm removes the trigger, so focus lands on the next item rather than the top of the page."
         ]
       },
       "exports": [
@@ -11994,6 +12006,18 @@
               "name": "defaultOpen",
               "type": "boolean",
               "required": false
+            },
+            {
+              "name": "error",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Why the last confirm failed, starting with what did not happen: \"Not revoked. The server didn't answer.\" Shown between the body and the buttons, announced once when it appears, and linked to the confirm button so it is read again when focus is there. Hidden while a retry is pending. Clear it when the dialog opens for something else."
+            },
+            {
+              "name": "finalFocus",
+              "type": "boolean | RefObject<HTMLElement | null> | ((closeType: InteractionType) => boolean | void | HTMLElement | null)",
+              "required": false,
+              "description": "Where focus goes when the dialog closes: Base UI's `finalFocus`. By default it returns to the trigger, which is right after Cancel. After a confirm that removed the trigger (a deleted row's button), return the element a reader would carry on from: the next row's action, or the list's heading. A function receives how the dialog was closed."
             },
             {
               "name": "onOpenChange",
@@ -12111,6 +12135,11 @@
         }
       ],
       "stories": [
+        {
+          "name": "ConfirmFails",
+          "id": "components-overlays-dialog--confirm-fails",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-dialog--confirm-fails"
+        },
         {
           "name": "Default",
           "id": "components-overlays-dialog--default",
@@ -14042,7 +14071,7 @@
       "kind": "pattern",
       "docs": "https://demogar.github.io/molaui/?path=/docs/patterns-confirmation--overview",
       "summary": "A destructive action that cannot be undone and takes a round trip: ask first, show it working, and say plainly whether it happened.",
-      "description": "Revoking an API key: destructive, impossible to undo, a round trip to the server, and able to fail. Composed from `PageHeader`, `Breadcrumb`, `Table`, `Badge`, `Code`, `AlertDialog`, `Callout`, `EmptyState` and `Toast`, with nothing written for it. The settings page pattern shows a confirm that succeeds; this one is about the parts a happy-path confirm leaves out.\n\n**Decisions.** Every revoke asks first; a *live* key also asks for its name to be typed, because it is the one whose loss breaks a customer-facing service. A test key does not, since asking everyone to type for everything teaches people to type without reading. The question names the key and the description names what stops working. Cancel has focus when the dialog opens.\n\nWhile the request is in flight the confirm shows its working strip and neither button nor Escape answers. If it succeeds, the dialog closes and a toast says what happened. If it fails, the dialog stays open where the operator acted, says **Not revoked** with the reason, and the same button tries again. Afterwards focus returns to the row’s Revoke button, which stays, disabled but focusable, because revoked keys stay listed for 30 days and a removed button would drop focus to the top of the page.",
+      "description": "Revoking an API key: destructive, impossible to undo, a round trip to the server, and able to fail. Composed from `PageHeader`, `Breadcrumb`, `Table`, `Badge`, `Code`, `AlertDialog`, `Callout`, `EmptyState` and `Toast`, with nothing written for it. The settings page pattern shows a confirm that succeeds; this one is about the parts a happy-path confirm leaves out.\n\n**Decisions.** Every revoke asks first; a *live* key also asks for its name to be typed, because it is the one whose loss breaks a customer-facing service. A test key does not, since asking everyone to type for everything teaches people to type without reading. The question names the key and the description names what stops working. Cancel has focus when the dialog opens.\n\nWhile the request is in flight the confirm shows its working strip and neither button nor Escape answers. If it succeeds, the dialog closes and a toast says what happened. If it fails, the dialog stays open where the operator acted, says **Not revoked** with the reason in AlertDialog’s `error`, and the same button tries again.\n\nCancel returns focus to the row’s Revoke button. A revoke that succeeds removes that button, since a revoked key (listed for 30 days as an audit trail) has nothing left to revoke, so AlertDialog’s `finalFocus` sends focus to the nearest active key’s Revoke button, or to the heading that counts them when none are left, rather than to the top of the page.",
       "builtFrom": [
         "Components/Actions/Button",
         "Components/Data display/Code",
@@ -14079,7 +14108,7 @@
         "parts": [
           {
             "title": "Components/Actions/Button",
-            "role": "Revoke on each row, kept and disabled once revoked so focus has somewhere to return; Create key."
+            "role": "Revoke on each active key’s row, gone once the key is revoked; Create key."
           },
           {
             "title": "Components/Data display/Code",
@@ -14115,7 +14144,7 @@
           },
           {
             "title": "Components/Overlays/Dialog",
-            "role": "AlertDialog: the question, the consequence by name, type-to-confirm for live keys, the pending strip, and the failure."
+            "role": "AlertDialog: the question, the consequence by name, type-to-confirm for live keys, the pending strip, the failure in `error`, and where focus goes after in `finalFocus`."
           }
         ],
         "states": {
@@ -14137,8 +14166,8 @@
         },
         "accessibility": [
           "Cancel has focus when the dialog opens, so a reflexive Enter keeps the key.",
-          "The failure is a `role=\"alert\"` line inside the dialog’s description, so it is announced and is part of the dialog’s accessible description.",
-          "After a revoke, focus returns to the row’s Revoke button, which stays, disabled but focusable; the state badge and the toast say it is done.",
+          "The failure is AlertDialog’s `error`: announced once as an alert, and the description of Revoke key, so it is read again with the verb.",
+          "Cancel returns focus to the row’s Revoke button. After a revoke that button is gone, so focus moves to the nearest active key’s Revoke, or to the “0 active keys” heading; the state badge and the toast say it is done.",
           "Each Revoke is named for its key (“Revoke Support widget”), so a list of them is not five identical buttons."
         ]
       },

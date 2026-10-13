@@ -3029,16 +3029,21 @@ When not to:
 - Don’t: Ask “Are you sure?” over OK and Cancel.
 - Do: Return a promise from onConfirm, so the dialog stays open if the work fails.
 - Don’t: Close the dialog before the work has succeeded.
+- Do: Say why a confirm failed in AlertDialog’s `error`, starting with what did not happen: “Not deleted. The trace store didn’t answer.”
+- Don’t: Put the failure in `description`, or close the dialog and report it in a toast.
+- Do: Pass `finalFocus` when the confirm removes its own trigger, pointing at the next item or the list’s heading.
+- Don’t: Keep a disabled button in place only so focus has somewhere to return.
 
 Content:
 - Titles name the task or ask the question: “Rename agent”, “Delete this run?”.
 - The confirm button repeats the verb and object: “Delete run”, never “OK” or “Yes”.
+- An error starts with what did not happen, then why, then what is still true: “Not revoked. … The key still works.”
 - The footer holds a ghost Cancel and one primary action.
 
 Keyboard:
 - Enter or Space: On the trigger, opens the dialog and moves focus into it.
 - Tab or Shift+Tab: Moves through the dialog’s controls; focus stays inside.
-- Escape: Closes the dialog and returns focus to the trigger.
+- Escape: Closes the dialog and returns focus to the trigger, or to `finalFocus` when it is set.
 - Enter: In an alert dialog’s confirmation field, confirms once the text matches.
 
 Mola handles:
@@ -3046,11 +3051,14 @@ Mola handles:
 - The dialog is named by `title` and described by `description`, and a named Close button is always rendered unless `hideClose` is set.
 - `AlertDialog` is a `role="alertdialog"` that an outside click does not dismiss, and it focuses Cancel first.
 - While an async confirm is pending, both buttons stop taking presses and the dialog cannot be closed.
+- An AlertDialog `error` is a `role="alert"`, announced once when it appears and again after each failed retry, and it is the confirm button’s description.
 
 You handle:
 - Write a `title` that names the task; it is the dialog’s name.
 - Set `hideClose` only when the footer has its own way out.
 - Give the confirm button the verb, “Delete run”, never “OK”.
+- Set `error` when a confirm fails, and clear it when the dialog opens for something else.
+- Set `finalFocus` when the confirm removes the trigger, so focus lands on the next item rather than the top of the page.
 
 #### `AlertDialog` (component)
 
@@ -3065,6 +3073,8 @@ The confirmation for an action that destroys something. Built on Base UI's Alert
 | `cancelLabel` | `string` | `Cancel` |  |
 | `confirmationText` | `string` |  | When set, the confirm button stays disabled until this exact string is typed — the run id, the project slug. For actions that cannot be undone and that a muscle-memory Enter could otherwise fire. |
 | `defaultOpen` | `boolean` |  |  |
+| `error` | `ReactNode` |  | Why the last confirm failed, starting with what did not happen: "Not revoked. The server didn't answer." Shown between the body and the buttons, announced once when it appears, and linked to the confirm button so it is read again when focus is there. Hidden while a retry is pending. Clear it when the dialog opens for something else. |
+| `finalFocus` | `boolean \| RefObject<HTMLElement \| null> \| ((closeType: InteractionType) => boolean \| void \| HTMLElement \| null)` |  | Where focus goes when the dialog closes: Base UI's `finalFocus`. By default it returns to the trigger, which is right after Cancel. After a confirm that removed the trigger (a deleted row's button), return the element a reader would carry on from: the next row's action, or the list's heading. A function receives how the dialog was closed. |
 | `onOpenChange` | `((open: boolean) => void)` |  |  |
 | `open` | `boolean` |  |  |
 | `tone` | `"danger" \| "neutral"` | `danger` | `danger` cuts the seam in rojo and arms the confirm button in red. |
@@ -4696,7 +4706,7 @@ When not to:
 - Approving an action an agent proposes. Use Agent hand-off.
 
 Built from (read from its imports):
-- Button: Revoke on each row, kept and disabled once revoked so focus has somewhere to return; Create key.
+- Button: Revoke on each active key’s row, gone once the key is revoked; Create key.
 - Code: The key’s hint, a machine literal, in the table and in the question.
 - Table: The keys, with who made them, when each was last used and its state.
 - Badge: Live or Test, and Active or Revoked, in words as well as tone.
@@ -4705,7 +4715,7 @@ Built from (read from its imports):
 - Toast: What happened, after the dialog closes on success.
 - Page header: The page’s title, description and Create key.
 - Breadcrumb: Settings, then API keys.
-- Dialog: AlertDialog: the question, the consequence by name, type-to-confirm for live keys, the pending strip, and the failure.
+- Dialog: AlertDialog: the question, the consequence by name, type-to-confirm for live keys, the pending strip, the failure in `error`, and where focus goes after in `finalFocus`.
 
 States:
 - Empty: No keys: the empty state makes the case for one per service. Story: https://demogar.github.io/molaui/?path=/story/patterns-confirmation--no-keys
@@ -4715,8 +4725,8 @@ States:
 
 Accessibility:
 - Cancel has focus when the dialog opens, so a reflexive Enter keeps the key.
-- The failure is a `role="alert"` line inside the dialog’s description, so it is announced and is part of the dialog’s accessible description.
-- After a revoke, focus returns to the row’s Revoke button, which stays, disabled but focusable; the state badge and the toast say it is done.
+- The failure is AlertDialog’s `error`: announced once as an alert, and the description of Revoke key, so it is read again with the verb.
+- Cancel returns focus to the row’s Revoke button. After a revoke that button is gone, so focus moves to the nearest active key’s Revoke, or to the “0 active keys” heading; the state badge and the toast say it is done.
 - Each Revoke is named for its key (“Revoke Support widget”), so a list of them is not five identical buttons.
 
 ### Empty states

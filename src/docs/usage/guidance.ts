@@ -1351,10 +1351,19 @@ export const USAGE: Record<string, Usage> = {
         do: 'Return a promise from onConfirm, so the dialog stays open if the work fails.',
         dont: 'Close the dialog before the work has succeeded.',
       },
+      {
+        do: 'Say why a confirm failed in AlertDialog’s `error`, starting with what did not happen: “Not deleted. The trace store didn’t answer.”',
+        dont: 'Put the failure in `description`, or close the dialog and report it in a toast.',
+      },
+      {
+        do: 'Pass `finalFocus` when the confirm removes its own trigger, pointing at the next item or the list’s heading.',
+        dont: 'Keep a disabled button in place only so focus has somewhere to return.',
+      },
     ],
     content: [
       'Titles name the task or ask the question: “Rename agent”, “Delete this run?”.',
       'The confirm button repeats the verb and object: “Delete run”, never “OK” or “Yes”.',
+      'An error starts with what did not happen, then why, then what is still true: “Not revoked. … The key still works.”',
       'The footer holds a ghost Cancel and one primary action.',
     ],
   },

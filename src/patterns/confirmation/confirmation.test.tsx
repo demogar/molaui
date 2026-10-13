@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
 import { ToastProvider } from '../../components/toast'
+import { API_KEYS } from './_data'
 import { ApiKeysScreen, type ApiKeysScreenProps } from './confirmation'
 
 const setup = (props: ApiKeysScreenProps = {}) => {
@@ -19,14 +20,36 @@ const setup = (props: ApiKeysScreenProps = {}) => {
 const rowOf = (name: string) => screen.getByRole('row', { name: new RegExp(`^${name}`), hidden: true })
 
 describe('ApiKeysScreen', () => {
-  it('lists keys with their state in words; a revoked key’s button stays, disabled but focusable', () => {
+  it('lists keys with their state in words; a revoked key has nothing left to revoke', () => {
     setup()
     expect(screen.getByRole('table', { name: '3 active keys' })).toBeInTheDocument()
     expect(within(rowOf('Quarterly export')).getByText('Revoked')).toBeInTheDocument()
-    const revoked = screen.getByRole('button', { name: 'Revoke Quarterly export' })
-    expect(revoked).toHaveAttribute('aria-disabled', 'true')
-    revoked.focus()
-    expect(revoked).toHaveFocus()
+    expect(screen.queryByRole('button', { name: 'Revoke Quarterly export' })).not.toBeInTheDocument()
+  })
+
+  it('after a revoke, focus moves to the nearest active key’s Revoke button, not the top of the page', async () => {
+    const user = setup({ revoke: () => Promise.resolve() })
+    screen.getByRole('button', { name: 'Revoke Staging tests' }).focus()
+    await user.keyboard('{Enter}')
+    const dialog = await screen.findByRole('alertdialog', { name: 'Revoke Staging tests?' })
+    await waitFor(() => expect(within(dialog).getByRole('button', { name: 'Cancel' })).toHaveFocus())
+    await user.tab()
+    expect(within(dialog).getByRole('button', { name: 'Revoke key' })).toHaveFocus()
+    await user.keyboard('{Enter}')
+    await waitFor(() => expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument())
+    expect(screen.queryByRole('button', { name: 'Revoke Staging tests' })).not.toBeInTheDocument()
+    // Staging tests was the last active key, so the previous one takes focus.
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Revoke Support widget' })).toHaveFocus())
+  })
+
+  it('after the last active key is revoked, focus goes to the heading that counts them', async () => {
+    const [only] = API_KEYS.filter((key) => key.environment === 'test')
+    const user = setup({ keys: [only!], revoke: () => Promise.resolve() })
+    await user.click(screen.getByRole('button', { name: 'Revoke Staging tests' }))
+    const dialog = await screen.findByRole('alertdialog')
+    await user.click(within(dialog).getByRole('button', { name: 'Revoke key' }))
+    await waitFor(() => expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument())
+    await waitFor(() => expect(screen.getByRole('heading', { level: 2, name: '0 active keys' })).toHaveFocus())
   })
 
   it('asks first, with Cancel focused; Escape keeps the key and returns focus to the row', async () => {
@@ -69,6 +92,8 @@ describe('ApiKeysScreen', () => {
     const dialog = await screen.findByRole('alertdialog')
     await user.click(within(dialog).getByRole('button', { name: 'Revoke key' }))
     expect(await within(dialog).findByRole('alert')).toHaveTextContent('Not revoked. Cayuco didn’t answer within 10 seconds.')
+    expect(dialog).not.toHaveAccessibleDescription(/Not revoked/)
+    expect(within(dialog).getByRole('button', { name: 'Revoke key' })).toHaveAccessibleDescription(/^Not revoked\./)
     expect(screen.getByRole('alertdialog')).toBeInTheDocument()
     expect(within(rowOf('Staging tests')).getByText('Active')).toBeInTheDocument()
 
