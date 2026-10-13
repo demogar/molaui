@@ -1,0 +1,154 @@
+# Mola UI: tokens
+
+> Every design token in `src/styles/tokens.css`, with its role and its value in each theme. Part of the agent docs for `@demogar/mola-ui`; the index is https://demogar.github.io/molaui/llms.txt.
+
+## Tokens
+
+Every custom property in `src/styles/tokens.css`, the one file allowed a colour literal. A colour is a `light-dark()` pair, resolved here to the hex it paints in each theme by the resolver the contrast test runs; a value that depends on what is underneath (a translucent mix, a shadow) is shown as written. The role is the section of the file a token sits in, and its own note where it has one. In markup, use the Tailwind utility: `--cloth-pale` is `bg-cloth-pale`, `--ink-muted` is `text-ink-muted`.
+
+### cloth
+
+| Token | Role | Light | Dark |
+| --- | --- | --- | --- |
+| `--cloth` | the page | `#edeee8` | `#16181c` |
+| `--cloth-pale` | raised: cards, inputs, sheets | `#f6f7f2` | `#1e2126` |
+| `--cloth-shade` | one step down from the page | `#e4e7dc` | `#111316` |
+| `--cloth-deep` | the deepest cloth before a layer takes over | `#d7dbcb` | `#2a2e34` |
+
+### ink
+
+| Token | Role | Light | Dark |
+| --- | --- | --- | --- |
+| `--ink` |  | `#14161a` | `#eceee6` |
+| `--ink-2` |  | `#3d4147` | `#c4c8bd` |
+| `--ink-muted` |  | `#5e636a` | `#9a9f97` |
+
+### keylines
+
+| Token | Role | Light | Dark |
+| --- | --- | --- | --- |
+| `--keyline` |  | `#c6cabc` | `#3a3f46` |
+| `--keyline-soft` |  | `#dcdfd3` | `#2a2d33` |
+
+### the four layers
+
+| Token | Role | Light | Dark |
+| --- | --- | --- | --- |
+| `--rojo` |  | `#c0272d` | `#f2685c` |
+| `--rojo-deep` | hover / pressed: one step further from the ground | `#9e1e24` | `#ff8a7e` |
+| `--anil` |  | `#1b4b8f` | `#86a8ee` |
+| `--verde` |  | `#0b6b4b` | `#4cc493` |
+| `--oro` |  | `#edb01f` | `#f0bc3a` |
+| `--on-layer` |  | `#f6f7f2` | `#1e2126` |
+| `--on-oro` |  | `#14161a` | `#1e2126` |
+
+### status
+
+| Token | Role | Light | Dark |
+| --- | --- | --- | --- |
+| `--danger` |  | `#9e1e24` | `#ff8a7e` |
+| `--success` |  | `#0b6b4b` | `#4cc493` |
+| `--warn` |  | `#8a6410` | `#e0b45a` |
+| `--info` |  | `#1b4b8f` | `#86a8ee` |
+| `--ink-danger` |  | `#9e1e24` | `#ff8a7e` |
+| `--ink-success` |  | `#0b6b4b` | `#4cc493` |
+| `--ink-warn` |  | `#8a6410` | `#e0b45a` |
+| `--ink-info` |  | `#1b4b8f` | `#86a8ee` |
+
+### washes
+
+| Token | Role | Light | Dark |
+| --- | --- | --- | --- |
+| `--rojo-soft` |  | `#f3e0d9` | `#352a2d` |
+| `--anil-soft` |  | `#dae2e7` | `#292f3b` |
+| `--verde-soft` |  | `#dce6dc` | `#253232` |
+| `--oro-soft` |  | `#f5ead0` | `#302f2c` |
+| `--ink-soft` |  | `#e4e5e1` | `#2a2d31` |
+| `--ink-on-tint` |  | `#3d4147` | `#c4c8bd` |
+| `--rojo-on-shade` |  | `#9e1e24` | `#ff8a7e` |
+| `--rojo-rule` |  | `color-mix(in oklab, var(--rojo) 45%, transparent)` | `color-mix(in oklab, var(--rojo) 45%, transparent)` |
+
+### on an ink panel
+
+| Token | Role | Light | Dark |
+| --- | --- | --- | --- |
+| `--on-ink` |  | `#f6f7f2` | `#1e2126` |
+| `--on-ink-muted` |  | `#afb1af` | `#515456` |
+| `--on-ink-accent` |  | `#edb01f` | `#7a560a` |
+| `--keyline-on-ink` |  | `color-mix(in oklab, var(--cloth-pale) 22%, transparent)` | `color-mix(in oklab, var(--cloth-pale) 22%, transparent)` |
+
+### over arbitrary pixels
+
+| Token | Role | Light | Dark |
+| --- | --- | --- | --- |
+| `--scrim` |  | `color-mix(in oklab, #14161a 74%, transparent)` | `color-mix(in oklab, #14161a 74%, transparent)` |
+| `--on-scrim` |  | `#f6f7f2` | `#f6f7f2` |
+| `--on-scrim-muted` |  | `color-mix(in oklab, #f6f7f2 78%, transparent)` | `color-mix(in oklab, #f6f7f2 78%, transparent)` |
+| `--backdrop` |  | `color-mix(in oklab, var(--cloth) 82%, transparent)` | `color-mix(in oklab, var(--cloth) 82%, transparent)` |
+
+### the cut
+
+| Token | Role | Light | Dark |
+| --- | --- | --- | --- |
+| `--band` |  | `#edb01f` | `#f0bc3a` |
+| `--cut` |  | `0 0 0 var(--cut-w) var(--ink)` | `0 0 0 var(--cut-w) var(--ink)` |
+| `--focus-ring` |  | `0 0 0 var(--cut-w) var(--ink), 0 0 0 calc(var(--cut-w) + 2px) var(--cloth-pale), 0 0 0 calc(var(--cut-w) + 5px) var(--ink)` | `0 0 0 var(--cut-w) var(--ink), 0 0 0 calc(var(--cut-w) + 2px) var(--cloth-pale), 0 0 0 calc(var(--cut-w) + 5px) var(--ink)` |
+| `--focus-ring-inset` |  | `inset 0 0 0 2px var(--ink), inset 0 0 0 3.5px var(--cloth-pale)` | `inset 0 0 0 2px var(--ink), inset 0 0 0 3.5px var(--cloth-pale)` |
+
+### elevation
+
+| Token | Role | Light | Dark |
+| --- | --- | --- | --- |
+| `--elevation-raised` |  | `0 14px 34px -10px light-dark( color-mix(in oklab, #14161a 34%, transparent), color-mix(in oklab, #0b0c0e 80%, transparent) )` | `0 14px 34px -10px light-dark( color-mix(in oklab, #14161a 34%, transparent), color-mix(in oklab, #0b0c0e 80%, transparent) )` |
+| `--cut-w` |  | `1.5px` | `1.5px` |
+| `--cut-reveal` |  | `5px` | `5px` |
+
+### motion
+
+| Token | Role | Light | Dark |
+| --- | --- | --- | --- |
+| `--motion-cut` |  | `120ms` | `120ms` |
+| `--motion-base` |  | `220ms` | `220ms` |
+| `--motion-slow` |  | `420ms` | `420ms` |
+
+### density
+
+| Token | Role | Light | Dark |
+| --- | --- | --- | --- |
+| `--control-h` |  | `36px` | `36px` |
+| `--control-h-sm` |  | `28px` | `28px` |
+| `--control-h-lg` |  | `44px` | `44px` |
+| `--control-px` |  | `14px` | `14px` |
+| `--row-h` |  | `40px` | `40px` |
+
+## Density
+
+Density is an attribute, `data-density`, on `<html>` or any subtree. Comfortable is the default and uses the values above; the other two redefine these:
+
+### `data-density="compact"`
+
+- `--spacing`: `0.21875rem`
+- `--text-2xs`: `11px`
+- `--text-xs`: `11.5px`
+- `--text-sm`: `12.5px`
+- `--text-base`: `13px`
+- `--text-lg`: `15px`
+- `--text-xl`: `18px`
+- `--control-h`: `28px`
+- `--control-h-sm`: `24px`
+- `--control-h-lg`: `36px`
+- `--control-px`: `10px`
+- `--row-h`: `30px`
+
+### `data-density="spacious"`
+
+- `--text-xs`: `13px`
+- `--text-sm`: `15px`
+- `--text-base`: `17px`
+- `--text-lg`: `20px`
+- `--text-xl`: `26px`
+- `--control-h`: `48px`
+- `--control-h-sm`: `36px`
+- `--control-h-lg`: `56px`
+- `--control-px`: `22px`
+- `--row-h`: `52px`

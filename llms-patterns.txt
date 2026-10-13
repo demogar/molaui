@@ -1,0 +1,243 @@
+# Mola UI: patterns
+
+> Whole Cayuco screens composed from the components, with nothing written for them. They live in `src/patterns/` and are not part of the package: copy one and adapt it. Part of the agent docs for `@demogar/mola-ui`; the index is https://demogar.github.io/molaui/llms.txt.
+
+### Agent hand-off
+
+https://demogar.github.io/molaui/?path=/docs/patterns-agent-hand-off--overview
+
+An agent has done what it may and stopped at what it may not: the person approves its proposed action, or takes the task over and finishes it themselves.
+
+When to use:
+- An agent reaches an action above its authority, such as a refund over its limit, and a person must decide before anything reaches a customer.
+- The person needs the agent’s reason, its confidence and the exact action side by side with the run that led there.
+- Taking over must always be possible: stopping the agent and finishing the task by hand, from its draft.
+
+When not to:
+- An approval in the middle of a conversation the operator is already watching. Use Tool call.
+- Reviewing a set of file or record changes the agent proposes. Use Change review.
+- Confirming a destructive action the person started themselves. Use Confirmation.
+- Watching a run that does not need anyone. Use Agent run.
+
+Built from (read from its imports):
+- Agent run: The run beside the decision, as a timeline: what the agent did before it stopped, and what it does after.
+- Confidence: How sure the agent is that the charge is a duplicate, as a level and a basis a person can check.
+- Message: The agent’s reason for stopping in its own words, and the conversation with the customer, draft included.
+- Run status: The hand-off’s state in the header: Needs approval, Running, Succeeded, Failed or Taken over.
+- Tool call: The exact action proposed, with Approve refund and Deny of equal weight; later its failure, verbatim, with Retry call.
+- Button: Take over in the header, Reassign to billing, and Send reply.
+- Badge: Whether the reply is a draft or sent, as a dot, a word and a tone.
+- Callout: Who can approve, when the person cannot; and the result, once the refund is issued.
+- Empty state: The queue with nothing waiting.
+- Field: The person’s reply after taking over, a labelled Textarea that starts from the agent’s draft.
+- Page header: The ticket’s subject, who handed it off, the status and Take over.
+- Breadcrumb: Where the ticket sits: Support, Escalations, the ticket id.
+
+States:
+- Empty: Nothing needs the person: the empty state says what will appear and when. Story: https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--nothing-waiting
+- Loading: Not shown. While the refund runs, the hand-off says “Issuing the refund” and the call carries the working relleno; a hand-off still loading would use Skeleton in the panel’s shape, as the Empty states pattern does for a table. (No story.)
+- Error: The approved refund failed: the call shows the error verbatim with Retry call, nothing reaches the customer, and Take over stays. Story: https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--refund-fails
+- No permission: The person may not approve a refund this size: the proposal shows without Approve, the callout names who can and offers to reassign, and Take over stays. Story: https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--no-permission
+
+Accessibility:
+- Approve, Deny and Take over each remove the button that was pressed, so focus moves to the hand-off’s heading, which says what happened.
+- Outcomes that land later, such as the refund finishing, go to one polite status; a failed refund is the tool call’s own alert, not a second one.
+- The agent’s words are in Alegreya, the action is in Martian Mono and the controls are in Archivo, so the voice can be told apart without colour.
+- Approve and Deny are the same size and variant, so neither is nudged.
+
+### Confirmation
+
+https://demogar.github.io/molaui/?path=/docs/patterns-confirmation--overview
+
+A destructive action that cannot be undone and takes a round trip: ask first, show it working, and say plainly whether it happened.
+
+When to use:
+- Deleting, revoking or cancelling something that cannot be restored, such as an API key or a workspace.
+- The action takes a request that can be slow or fail, and the person must know which of the two it did.
+- The friction should match the damage: type-to-confirm for what breaks other people, a plain confirm otherwise.
+
+When not to:
+- An action that can be undone; do it at once and offer Undo in a toast. Use Toast.
+- Leaving a page with unsaved changes, or a destructive action beside a long form. Use Settings page.
+- Approving an action an agent proposes. Use Agent hand-off.
+
+Built from (read from its imports):
+- Button: Revoke on each active key’s row, gone once the key is revoked; Create key.
+- Code: The key’s hint, a machine literal, in the table and in the question.
+- Table: The keys, with who made them, when each was last used and its state.
+- Badge: Live or Test, and Active or Revoked, in words as well as tone.
+- Callout: Who can revoke, for a member who cannot.
+- Empty state: No keys yet, and why to make one per service.
+- Toast: What happened, after the dialog closes on success.
+- Page header: The page’s title, description and Create key.
+- Breadcrumb: Settings, then API keys.
+- Dialog: AlertDialog: the question, the consequence by name, type-to-confirm for live keys, the pending strip, the failure in `error`, and where focus goes after in `finalFocus`.
+
+States:
+- Empty: No keys: the empty state makes the case for one per service. Story: https://demogar.github.io/molaui/?path=/story/patterns-confirmation--no-keys
+- Loading: The list loading is not shown; it would be the table’s shape with skeleton rows, as in Empty states. The request in flight is shown by AlertDialog itself: the working strip on Revoke key, and neither button nor Escape answers. (No story.)
+- Error: The revoke failed: the dialog stays open, says “Not revoked” with the reason and that the key still works, and Revoke key tries again. Story: https://demogar.github.io/molaui/?path=/story/patterns-confirmation--revoke-fails
+- No permission: A member sees the keys but no Revoke or Create to press and fail at; the callout names the admins. Story: https://demogar.github.io/molaui/?path=/story/patterns-confirmation--member-view
+
+Accessibility:
+- Cancel has focus when the dialog opens, so a reflexive Enter keeps the key.
+- The failure is AlertDialog’s `error`: announced once as an alert, and the description of Revoke key, so it is read again with the verb.
+- Cancel returns focus to the row’s Revoke button. After a revoke that button is gone, so focus moves to the nearest active key’s Revoke, or to the “0 active keys” heading; the state badge and the toast say it is done.
+- Each Revoke is named for its key (“Revoke Support widget”), so a list of them is not five identical buttons.
+
+### Empty states
+
+https://demogar.github.io/molaui/?path=/docs/patterns-empty-states--overview
+
+One screen, every way a list can have nothing to show: first run, no results, loading, error and no permission, each saying something different.
+
+When to use:
+- Designing any list or table screen: settle what each of these conditions says before the populated state.
+- Telling “nothing exists yet” apart from “your search hides it” and from “you may not see it”.
+- A load that can fail, where the reader needs to know what is still true and how to try again.
+
+When not to:
+- One panel that is empty, rather than a whole screen. Use Empty state.
+- A table that filters on several fields at once. Use Filtered table.
+- A short loading moment inside a component that keeps its shape. Use Skeleton.
+
+Built from (read from its imports):
+- Button: Connect source, Show all sources, Retry and Ask for access: one way forward per condition.
+- Table: The list, which keeps its headers while it loads, over TableSkeletonRows.
+- Badge: Each source’s sync state, as a dot, a word and a tone.
+- Empty state: First run, no results, error and no permission, each its own variant with its own action.
+- Field: The labelled search field, a SearchInput, shown only when there is something to search.
+- Page header: The title, what sources are for, and Connect source unless the reader cannot use it.
+- Breadcrumb: Support, then Knowledge sources.
+
+States:
+- Empty: Nothing connected: the empty state is the whole body and connects the first source. No results is its own story: the count and search stay, and Show all sources clears it. Story: https://demogar.github.io/molaui/?path=/story/patterns-empty-states--first-run
+- Loading: The table’s real headers over skeleton rows, `aria-busy`, and one polite “Loading knowledge sources”. Story: https://demogar.github.io/molaui/?path=/story/patterns-empty-states--loading
+- Error: An alert that says what is still true and offers Retry; once the rows are back, focus moves to their heading. Story: https://demogar.github.io/molaui/?path=/story/patterns-empty-states--load-error
+- No permission: Names the two admins who can grant access, and drops Connect source from the header. Story: https://demogar.github.io/molaui/?path=/story/patterns-empty-states--no-permission
+
+Accessibility:
+- Show all sources returns focus to the search field; it is not called “Clear search” because the field’s own clear button already has that name.
+- After Retry, focus moves to the heading of the list that loaded, since the Retry button has gone.
+- The error is announced once, as an alert; loading is announced once, as a status, not row by row.
+- Every empty state heading is a level 2 heading, so it is in the page outline where the table would be.
+
+### Filtered table
+
+https://demogar.github.io/molaui/?path=/docs/patterns-filtered-table--overview
+
+A table of many records narrowed by several filters at once, with bulk actions on a selection and each record opening in a drawer.
+
+When to use:
+- An admin list of hundreds of records that people narrow by text, owner, date and status, then act on in bulk.
+- Filters that combine; each status toggle shows how many records it would leave under the other filters.
+- Reading one record without losing the list, in a Drawer.
+
+When not to:
+- Under about twenty records, or one search box is enough. Use Empty states.
+- Each record is worth a pane of its own, beside the list. Use List and detail.
+- A small table with no filters or selection. Use Table.
+
+Built from (read from its imports):
+- Button: Export and New run in the header, and the bulk actions on a selection.
+- Description list: The chosen run’s details in the drawer.
+- Table: DataTable: sorting, selection, the bulk-action bar, the Columns menu, pages, and the no-results state.
+- Badge: Each run’s status, as a dot, a word and a tone.
+- Combobox: The agent filter.
+- Date picker: DateRangePicker with presets, for when runs started.
+- Field: A visible label on every filter, and the search box.
+- Page header: The title, what the list holds, Export and New run.
+- Toolbar: The status toggles with their counts, Clear filters and Refresh.
+- Drawer: One run, opened from its id without leaving the list.
+
+States:
+- Empty: Not a story: filtering to nothing gives the no-results empty state inside the table, with Clear filters. It never offers to create a first run. A workspace with no runs at all is the first-run case in Empty states. (No story.)
+- Loading: Not a story: Refresh shows the table’s own loading rows in place, keeping the filters. A first load would do the same. (No story.)
+- Error: Not shown. A failed load would be an error empty state with Retry in the table’s place, as in Empty states. (No story.)
+- No permission: Not shown. Someone who may not cancel runs should see the selection without Cancel, not a Cancel that fails. (No story.)
+
+Accessibility:
+- The filters are a `search` landmark, and every filter has a visible label; a placeholder is a hint and disappears as soon as someone types.
+- Changing a filter clears the selection, so a bulk action never lands on rows the filter now hides.
+- The status toggles are one Toolbar, a single tab stop moved through with the arrow keys.
+- A table wider than its frame scrolls sideways, and the frame then takes focus so the keyboard can scroll it.
+
+### List and detail
+
+https://demogar.github.io/molaui/?path=/docs/patterns-list-and-detail--overview
+
+Every item on the start side and the chosen one on the end side, collapsing to one pane at a time when its container is narrow.
+
+When to use:
+- Browsing a set of items, such as agents, where each has enough detail to need its own pane.
+- People compare items by moving down the list, with the detail beside it.
+- The same screen must work in a narrow container, one pane at a time, with a visible way back.
+
+When not to:
+- Hundreds of records narrowed by several filters. Use Filtered table.
+- A quick look at one record without leaving a table. Use Drawer.
+- A few items whose detail fits in a line each. Use Table.
+
+Built from (read from its imports):
+- Button: Each agent in the list, Back to agents, Create agent, and pause or start.
+- Description list: The chosen agent’s model, tools and owner.
+- Stat: Runs, success rate and cost for the chosen agent, as a StatGroup.
+- Table: The chosen agent’s recent runs.
+- Badge: Each agent’s state and each run’s status, as a dot, a word and a tone.
+- Callout: A failing agent’s problem, at the top of its detail.
+- Empty state: No agents at all, and a draft agent with no runs yet.
+- Page header: The title, how many agents are failing, and Create agent.
+- Heading: The detail pane’s heading, which takes focus when an agent opens in one column.
+
+States:
+- Empty: No agents: the empty state alone, whose action creates the first. A draft agent’s detail has its own “No runs yet”. Story: https://demogar.github.io/molaui/?path=/story/patterns-list-and-detail--empty
+- Loading: Not shown. The list and the detail would each keep their shape with Skeleton while they load. (No story.)
+- Error: Not shown as a load failure. A failing agent is a state of the data, shown as a danger Callout in its detail with the way to fix it. (No story.)
+- No permission: Not shown. An agent the reader may not open should not be in the list, rather than open to a refusal. (No story.)
+
+Accessibility:
+- Each agent is a button marked `aria-current` when it is the one shown, because choosing one is navigation; a listbox could not carry the badge and second line.
+- In one column, opening an agent moves focus to the detail’s heading, and Back to agents returns it to the agent you came from.
+- The split is a container query, so it responds to the space it is given, with or without the sidebar.
+- The agent’s purpose is in Alegreya because a person wrote it; models, tools and ids are in Martian Mono.
+
+### Settings page
+
+https://demogar.github.io/molaui/?path=/docs/patterns-settings-page--overview
+
+A long settings form saved as a whole, with errors on save, a guard on leaving with unsaved changes, and a danger zone outside the form.
+
+When to use:
+- Settings whose values are one decision together, such as a spend limit and what happens when it is reached.
+- A form long enough that Save must stay in reach, with a count of what is unsaved.
+- A page that also holds one immediate, destructive action that must not be part of Save.
+
+When not to:
+- A single setting that should take effect the moment it changes. Use Switch.
+- A destructive action that is the subject of the page, and can fail. Use Confirmation.
+- A short form in a dialog or a step of a flow. Use Field.
+
+Built from (read from its imports):
+- Button: Save changes and Discard in the sticky bar, and Delete workspace in the danger zone.
+- Toast: Saved, and Discard with Undo, so neither needs a dialog.
+- Field: Every label, hint and error, around Input and Textarea.
+- Number input: Tokens per run and the monthly limit.
+- Radio: What happens when the limit is reached.
+- Select: The default model.
+- Switch: Each notification.
+- App shell: NavItem, for the settings pages beside the form.
+- Page header: The workspace’s name and what the page changes.
+- Dialog: AlertDialog, for leaving with unsaved changes and for deleting the workspace.
+- Heading: Each section of the form.
+
+States:
+- Empty: Not applicable: a settings form always has values. A section with nothing to set would say why in its description. (No story.)
+- Loading: Not shown. Saving is shown: Save changes carries its working strip and stays focusable. A first load would keep the form’s shape with Skeleton. (No story.)
+- Error: Save pressed with three problems: each says what is wrong and what to do, focus is on the first, and the bar counts what needs fixing. Story: https://demogar.github.io/molaui/?path=/story/patterns-settings-page--with-validation-errors
+- No permission: Not shown. Someone who may not change settings should see the values as read-only text with who can change them, not a form that refuses on Save. (No story.)
+
+Accessibility:
+- The bar at the foot is always mounted, and Save stays focusable while disabled, so saving never drops focus to the top of the page.
+- Errors appear on Save, not while typing; focus goes to the first, and each clears as soon as its field is fixed.
+- The unsaved count is a number in words, “3 unsaved changes”, not a dot, so it reads the same to a screen reader and in forced colours.
+- Leaving with unsaved changes asks first, with Keep editing focused.

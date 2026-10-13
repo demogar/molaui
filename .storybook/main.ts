@@ -3,12 +3,19 @@ import remarkGfm from 'remark-gfm'
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(ts|tsx)'],
-  // llms.txt and llms-full.txt live at the repository root, where agents
-  // reading the source look for them, and are served at the site root too.
+  // The llms*.txt files live at the repository root, where agents reading the
+  // source look for them, and are served at the site root too. docs/ai/md
+  // holds a Markdown twin of every docs page, served as md/<page id>.md; the
+  // Copy for LLM button on a component page copies its twin.
   staticDirs: [
     '../public',
-    { from: '../llms.txt', to: '/llms.txt' },
-    { from: '../llms-full.txt', to: '/llms-full.txt' },
+    ...['llms.txt', 'llms-full.txt', 'llms-components.txt', 'llms-tokens.txt', 'llms-patterns.txt'].map((file) => ({
+      from: `../${file}`,
+      to: `/${file}`,
+    })),
+    { from: '../docs/ai/md', to: '/md' },
+    // The changelog's twin is CHANGELOG.md itself (SERVED_AS_IS in scripts/agent-docs.ts).
+    { from: '../CHANGELOG.md', to: '/md/mola-ui-changelog--overview.md' },
   ],
   addons: [
     {

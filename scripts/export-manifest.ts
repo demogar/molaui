@@ -7,6 +7,10 @@
  *   llms.txt                  the index an agent reads first (llmstxt.org)
  *   llms-full.txt             the same with every component's guidance and
  *                             props inline, for an agent that reads one file
+ *   llms-components.txt,      the same split by topic, and a Markdown twin of
+ *   llms-tokens.txt,          every docs page in docs/ai/md/ (see
+ *   llms-patterns.txt,        scripts/agent-docs.ts)
+ *   docs/ai/md/<id>.md
  *   docs/ai/composition.json  which components each pattern and showcase is
  *                             built from, read from its imports; the docs
  *                             pages render "Built from" and "Used in" from it
@@ -19,10 +23,10 @@
  * stories' titles and descriptions by importing them — and CI fails if the
  * committed copies are stale.
  *
- *   npm run manifest            writes all three
+ *   npm run manifest            writes them all
  *   npm run manifest:check      fails if any is stale (CI)
  */
-import { globSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { globSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { basename, dirname, relative, resolve } from 'node:path'
 
 import { withCompilerOptions, type ComponentDoc, type PropItem } from 'react-docgen-typescript'
@@ -30,6 +34,7 @@ import { isExportStory } from 'storybook/internal/csf'
 import ts from 'typescript'
 
 import pkg from '../package.json' with { type: 'json' }
+import { changeLine, componentTwin, mdxPages, mdxTwin, screenTwin, SERVED_AS_IS, tokensText, twinPath, twinUrl } from './agent-docs'
 import { ACCESSIBILITY } from '../src/docs/usage/accessibility'
 import { ANATOMY, ROOT_PART } from '../src/docs/usage/anatomy'
 import type { Accessibility } from '../src/docs/usage/accessibility-types'
@@ -460,7 +465,7 @@ const manifest = {
 
 /** Stable is the default and goes unsaid in the index; any other phase is the first thing an agent should see. */
 const phaseNote = (e: Entry) => (e.phase && e.phase !== 'stable' ? ` (${PHASES[e.phase].label})` : '')
-const linkLine = (e: Entry) => `- [${e.name}](${e.docs})${phaseNote(e)}${e.summary ? `: ${e.summary}` : ''}`
+const linkLine = (e: Entry) => `- [${e.name}](${e.docs}) ([Markdown](${twinUrl(SITE, e.title)}))${phaseNote(e)}${e.summary ? `: ${e.summary}` : ''}`
 const byLayer = (layer: Entry['layer']) => sorted.filter((e) => e.layer === layer)
 const categories = [...new Set(byLayer('components').map((e) => e.category))]
 
@@ -508,7 +513,15 @@ const llms = `${header}
 - [Versioning](${SITE}?path=/docs/mola-ui-versioning--overview): lifecycle phases, what counts as breaking, deprecation, codemods
 - [Known gaps](${SITE}?path=/docs/mola-ui-known-gaps--overview): open limitations, and what has not been tested by hand
 - [Component manifest](https://github.com/demogar/molaui/blob/main/docs/ai/components.json): every export, prop, variant and story as JSON
-- [Full text](${SITE}llms-full.txt): this file with every component's guidance and props inline
+
+## Files for agents
+
+Read the one you need rather than all of them. Every docs page also has a Markdown version: \`?path=/docs/<id>\` is \`${SITE}md/<id>.md\`, linked as "Markdown" below.
+
+- [Components](${SITE}llms-components.txt): every component's usage, props, accessibility, anatomy and where it is used
+- [Tokens](${SITE}llms-tokens.txt): every design token with its role and its value in the light and the dark theme
+- [Patterns](${SITE}llms-patterns.txt): whole screens, what each is built from, and its states
+- [Full text](${SITE}llms-full.txt): all of the above except the tokens, in one file
 
 ${categories.map((c) => `## ${c}\n\n${byLayer('components').filter((e) => e.category === c).map(linkLine).join('\n')}`).join('\n\n')}
 
@@ -518,7 +531,7 @@ ${byLayer('ai').map(linkLine).join('\n')}
 
 ## Patterns
 
-${showcases.map((s) => `- [${s.title.split('/').at(-1)}](${s.docs})${s.summary ? `: ${s.summary}` : ''}`).join('\n')}
+${showcases.map((s) => `- [${s.title.split('/').at(-1)}](${s.docs}) ([Markdown](${twinUrl(SITE, s.title)}))${s.summary ? `: ${s.summary}` : ''}`).join('\n')}
 `
 
 function propsTable(item: ExportEntry) {
@@ -566,6 +579,8 @@ function fullEntry(e: Entry) {
   }
   const types = e.exports.filter((x) => x.kind === 'type').map((x) => `\`${x.name}\``)
   if (types.length) parts.push(`Types: ${types.join(', ')}`, '')
+  if (e.usedIn?.length) parts.push(`Used in: ${e.usedIn.map((t) => t.split('/').at(-1)).join(', ')}`, '')
+  if (e.changes?.length) parts.push('Changes:', ...e.changes.map((c) => `- ${changeLine(c)}`), '')
   return parts.join('\n')
 }
 
@@ -615,12 +630,39 @@ ${showcases.filter((s) => s.guidance).map(patternEntry).join('\n')}
 ${utilities.map((u) => `- \`${u.name}\` (${u.kind}, ${u.source})${u.description ? `: ${u.description}` : ''}`).join('\n')}
 `
 
+/* ── split by topic, and a Markdown twin per docs page ──────────────── */
+
+const topicHeader = (topic: string, what: string) =>
+  `# Mola UI: ${topic}\n\n> ${what} Part of the agent docs for \`${pkg.name}\`; the index is ${SITE}llms.txt.\n`
+
+const componentsText = `${header}
+${categories.map((c) => `## ${c}\n\n${byLayer('components').filter((e) => e.category === c).map(fullEntry).join('\n')}`).join('\n')}
+## AI interface
+
+${byLayer('ai').map(fullEntry).join('\n')}`
+
+const patternsText = `${topicHeader('patterns', 'Whole Cayuco screens composed from the components, with nothing written for them. They live in `src/patterns/` and are not part of the package: copy one and adapt it.')}
+${showcases.filter((s) => s.guidance).map(patternEntry).join('\n')}`
+
+const mdx = mdxPages()
+const twins: [string, string][] = [
+  ...sorted.map((e) => [e.title, componentTwin(e, SITE)] as const),
+  ...showcases.map((s) => [s.title, screenTwin(s, SITE)] as const),
+  ...mdx
+    .filter((page) => !SERVED_AS_IS[page.title])
+    .map((page) => [page.title, mdxTwin(page, { site: SITE, pages: mdx, description: pkg.description })] as const),
+].map(([title, text]) => [twinPath(docsId(title)), text])
+
 /* ── write or check ─────────────────────────────────────────────────── */
 
 const outputs: [string, string][] = [
   ['docs/ai/components.json', `${JSON.stringify(manifest, null, 2)}\n`],
   ['llms.txt', llms],
   ['llms-full.txt', full],
+  ['llms-components.txt', componentsText],
+  ['llms-tokens.txt', tokensText(topicHeader('tokens', 'Every design token in `src/styles/tokens.css`, with its role and its value in each theme.'))],
+  ['llms-patterns.txt', patternsText],
+  ...twins,
   [
     'docs/ai/composition.json',
     `${JSON.stringify(
@@ -652,8 +694,13 @@ if (wrong.length) {
   process.exitCode = 1
 }
 
+/** A twin whose page is gone is stale too: it would keep answering for a page that no longer exists. */
+const orphans = readdirSync(resolve(root, 'docs/ai/md'), { withFileTypes: true })
+  .filter((d) => d.isFile() && !outputs.some(([path]) => path === `docs/ai/md/${d.name}`))
+  .map((d) => `docs/ai/md/${d.name}`)
+
 if (process.argv.includes('--check')) {
-  const stale = outputs.filter(([path, text]) => {
+  const stale = [...outputs, ...orphans.map((path) => [path, ''] as [string, string])].filter(([path, text]) => {
     try {
       return readFileSync(resolve(root, path), 'utf8') !== text
     } catch {
@@ -666,6 +713,8 @@ if (process.argv.includes('--check')) {
   }
   console.log('Agent docs are up to date.')
 } else {
+  mkdirSync(resolve(root, 'docs/ai/md'), { recursive: true })
+  for (const path of orphans) rmSync(resolve(root, path))
   for (const [path, text] of outputs) writeFileSync(resolve(root, path), text)
-  console.log(`Wrote ${outputs.map(([p]) => p).join(', ')}: ${counts.components} components (${counts.parts} parts), ${counts.aiComponents} AI components, ${counts.stories} stories.`)
+  console.log(`Wrote ${outputs.filter(([p]) => !p.startsWith('docs/ai/md/')).map(([p]) => p).join(', ')} and ${twins.length} Markdown twins in docs/ai/md: ${counts.components} components (${counts.parts} parts), ${counts.aiComponents} AI components, ${counts.stories} stories.`)
 }
