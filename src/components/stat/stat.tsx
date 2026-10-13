@@ -74,21 +74,25 @@ export function Stat({ label, value, unit, delta, trend, hint, className, ...pro
       )}
       {...props}
     >
-      <dt className="rotulo text-ink-muted">{label}</dt>
+      <dt data-part="label" className="rotulo text-ink-muted">{label}</dt>
       <dd className="m-0 flex flex-col gap-2">
         <span className="flex items-end justify-between gap-4">
           {/* A figure and its unit are one literal: `dir="auto"` keeps "97.8 %"
               and "0.4 pt" in order in a right-to-left page. */}
-          <span dir="auto" className="flex min-w-0 items-baseline gap-1.5">
+          <span dir="auto" data-part="value" className="flex min-w-0 items-baseline gap-1.5">
             <span className="font-display text-2xl leading-none font-bold tracking-display tabular-nums wdth-display text-ink">
               {value}
             </span>
-            {unit ? <span className="text-sm text-ink-muted">{unit}</span> : null}
+            {unit ? <span data-part="unit" className="text-sm text-ink-muted">{unit}</span> : null}
           </span>
-          {trend && trend.length > 1 ? <Sparkline values={trend} /> : null}
+          {trend && trend.length > 1 ? (
+            <span data-part="trend" className="flex shrink-0">
+              <Sparkline values={trend} />
+            </span>
+          ) : null}
         </span>
         {delta ? <StatDeltaLine delta={delta} /> : null}
-        {hint ? <span className="text-xs text-ink-muted">{hint}</span> : null}
+        {hint ? <span data-part="hint" className="text-xs text-ink-muted">{hint}</span> : null}
       </dd>
     </div>
   )
@@ -103,7 +107,7 @@ function StatDeltaLine({ delta }: { delta: StatDelta }) {
   const spoken = [`${word} ${delta.value}`, delta.period, SENTIMENT_WORD[sentiment]].filter(Boolean).join(', ')
 
   return (
-    <span className="flex items-center gap-1.5 text-xs">
+    <span data-part="delta" className="flex items-center gap-1.5 text-xs">
       <span className={cn('inline-flex items-center gap-0.5 font-semibold tabular-nums', SENTIMENT_TONE[sentiment])}>
         <Glyph aria-hidden className="size-3.5" strokeWidth={2.5} />
         <span aria-hidden dir="auto">
