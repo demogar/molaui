@@ -53,6 +53,7 @@ Theme and density are attributes, not props: `<html data-theme="dark" data-densi
 - [Code](https://demogar.github.io/molaui/?path=/docs/components-data-display-code--overview): Machine text: Code for an inline literal, CodeBlock for a labelled block with copy and wrap.
 - [Description list](https://demogar.github.io/molaui/?path=/docs/components-data-display-description-list--overview): Term and value pairs: the properties of a run, a document or an evaluation.
 - [Stat](https://demogar.github.io/molaui/?path=/docs/components-data-display-stat--overview): A KPI tile: a label, a figure, a change with its direction and sentiment, and an optional sparkline.
+- [Swatch](https://demogar.github.io/molaui/?path=/docs/components-data-display-swatch--overview): A small decorative colour key, square or round, in one of the badge tones, placed before the word it keys.
 - [Table](https://demogar.github.io/molaui/?path=/docs/components-data-display-table--overview): Table primitives for rows of records, and DataTable for columns as data with sorting, selection, column visibility and pages.
 - [Timeline](https://demogar.github.io/molaui/?path=/docs/components-data-display-timeline--overview): Timeline for events already written down, on a spine; StepList for ordered steps a person follows.
 

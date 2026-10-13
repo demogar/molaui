@@ -55,6 +55,17 @@ const PAIRS: Pair[] = [
   ['--on-ink-accent', '--ink', 4.5],
   // A tinted label.
   ['--rojo-on-shade', '--cloth-shade', 4.5],
+  // Swatch keys are graphics (3:1) on every ground, and a flat callout's
+  // swatch sits on its own tone's wash. --oro is absent on purpose: the
+  // accent swatch carries an ink keyline because gold on light cloth fails.
+  ...grounds.flatMap((g) =>
+    ['--ink-muted', '--anil', '--verde', '--warn', '--rojo'].map((c): Pair => [c, g, 3]),
+  ),
+  ['--ink-muted', '--ink-soft', 3],
+  ['--anil', '--anil-soft', 3],
+  ['--verde', '--verde-soft', 3],
+  ['--warn', '--oro-soft', 3],
+  ['--rojo', '--rojo-soft', 3],
   // The keyline bounds every control: a UI boundary owes 3:1.
   ...grounds.map((g): Pair => ['--ink', g, 3]),
 ]
