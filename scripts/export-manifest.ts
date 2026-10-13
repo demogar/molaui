@@ -476,6 +476,7 @@ const llms = `${header}
 - [Getting started](${SITE}?path=/docs/mola-ui-getting-started--overview): install, theme, density, right-to-left, Tailwind
 - [Principles](${SITE}?path=/docs/mola-ui-principles--overview): the six rules every component obeys
 - [AI interface principles](${SITE}?path=/docs/ai-principles--overview): streaming, latency, approval, uncertainty, failure
+- [Decisions](${SITE}?path=/docs/decisions-all-decisions--overview): the architecture decision records behind colour roles, themes, density and typography
 - [Versioning](${SITE}?path=/docs/mola-ui-versioning--overview): lifecycle phases, what counts as breaking, deprecation, codemods
 - [Known gaps](${SITE}?path=/docs/mola-ui-known-gaps--overview): open limitations, and what has not been tested by hand
 - [Component manifest](https://github.com/demogar/molaui/blob/main/docs/ai/components.json): every export, prop, variant and story as JSON
