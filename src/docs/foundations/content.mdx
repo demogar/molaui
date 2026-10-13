@@ -1,0 +1,78 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { ContentRules, WordList, WordingByComponent } from '../blocks/content'
+import { DecisionsBehind } from '../blocks/decisions'
+import { Specimen } from '../blocks/specimen'
+
+<Meta title="Foundations/Content and voice" />
+
+# Content and voice
+
+<DecisionsBehind foundation="Foundations/Content and voice" />
+
+An internal tool is read under pressure: a run has failed, an agent wants permission, a table has
+a hundred rows. The words have to say what happened and what each button will do, in as few
+words as that takes. This page gathers the rules the components already follow, so a screen
+built from them sounds like one product.
+
+## Three voices
+
+Every piece of text on a screen comes from one of three speakers, and the typeface says which.
+A reader can tell from the letterforms alone whether the product, a person or the machine is
+talking, which matters most in an agent transcript where all three sit together.
+
+<Specimen label="One screen, three speakers">
+  <div className="grid gap-6">
+    <div className="grid gap-1">
+      <p className="m-0 rotulo text-ink-muted">The system: Archivo</p>
+      <p className="m-0 text-base font-semibold">Run 4,812 failed at step 3. Retry from step 3</p>
+      <p className="m-0 text-sm text-ink-2">Labels, buttons, headings, status, figures. Plain, short and sentence case.</p>
+    </div>
+    <div className="grid gap-1">
+      <p className="m-0 rotulo text-ink-muted">A person or a model: Alegreya</p>
+      <p className="m-0 max-w-prose font-text text-lg leading-body">The rollout is safe for Starter, but I could not find a baseline for Enterprise, so treat that number as a guess.</p>
+      <p className="m-0 text-sm text-ink-2">Prose someone is saying to the reader: a model's answer, a teammate's note, a reason for a decision.</p>
+    </div>
+    <div className="grid gap-1">
+      <p className="m-0 rotulo text-ink-muted">The machine: Martian Mono</p>
+      <p className="m-0 literal text-base">run_8f2a · search_tickets(&#123; "status": "open" &#125;)</p>
+      <p className="m-0 text-sm text-ink-2">Literals someone inspects character by character: ids, payloads, hashes, model names. Never a label or a number in a table.</p>
+    </div>
+  </div>
+</Specimen>
+
+The faces and their scale are on [Typography](?path=/docs/foundations-typography--overview).
+
+## The rules
+
+These are the design rules that are about words. They are the same rules a review applies and the
+agent manifest publishes, read from one source.
+
+<ContentRules />
+
+In practice:
+
+- **Name the action and its object.** “Delete run”, “Save name”, “Retry from step 3”. A button
+  that names its consequence can be chosen without reading the dialog above it.
+- **Never “OK”, “Yes”, “Submit” or “Are you sure?”** A confirm button repeats the verb of the
+  question: the title asks “Delete this run?” and the button says “Delete run”.
+- **Say what happened, then what to do.** An error is a fact and a way out: “report.pdf is not an
+  accepted type. Use PDF or CSV.” Not “Invalid file”, and not an apology.
+- **Status is a word as well as a colour.** Queued, Running, Needs approval, Failed, Cancelled.
+  The glyph and colour help a glance; the word is what a screen reader and a greyscale screenshot
+  keep.
+- **Figures are tabular and carry their unit.** “1,204 tok”. Numbers compared down a column line
+  up, and none of them is set in monospace.
+
+## Words that are easy to swap
+
+These words sound interchangeable, and a product that mixes them teaches people to guess. Each one
+below is used for one job, and every “where” is a label a component ships today.
+
+<WordList />
+
+## Wording, component by component
+
+Each component page has its own wording guidance under Usage. Here it is gathered in one place,
+from the same source, so the guidance can be read and compared as a whole.
+
+<WordingByComponent />

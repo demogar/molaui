@@ -138,7 +138,7 @@ const preview: Preview = {
           'Mola UI',
           ['Introduction', 'Getting started', 'Choosing a component', 'Principles', 'Versioning', 'Known gaps', 'References', 'Changelog'],
           'Foundations',
-          ['Color', 'Typography', 'The cut', 'Density', 'Motion', 'Iconography', 'Accessibility'],
+          ['Color', 'Typography', 'Spacing', 'Density', 'The cut', 'Layers and elevation', 'Motion', 'Iconography', 'Content and voice', 'Accessibility', 'Tokens'],
           'Decisions',
           ['All decisions'],
           'Components',
