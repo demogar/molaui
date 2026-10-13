@@ -827,7 +827,7 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
     keyboard: [
       { keys: ['Enter', 'Space'], action: 'On the trigger, opens the dialog and moves focus into it.' },
       { keys: ['Tab', 'Shift+Tab'], action: 'Moves through the dialog’s controls; focus stays inside.' },
-      { keys: ['Escape'], action: 'Closes the dialog and returns focus to the trigger.' },
+      { keys: ['Escape'], action: 'Closes the dialog and returns focus to the trigger, or to `finalFocus` when it is set.' },
       { keys: ['Enter'], action: 'In an alert dialog’s confirmation field, confirms once the text matches.' },
     ],
     handles: [
@@ -835,11 +835,14 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
       'The dialog is named by `title` and described by `description`, and a named Close button is always rendered unless `hideClose` is set.',
       '`AlertDialog` is a `role="alertdialog"` that an outside click does not dismiss, and it focuses Cancel first.',
       'While an async confirm is pending, both buttons stop taking presses and the dialog cannot be closed.',
+      'An AlertDialog `error` is a `role="alert"`, announced once when it appears and again after each failed retry, and it is the confirm button’s description.',
     ],
     you: [
       'Write a `title` that names the task; it is the dialog’s name.',
       'Set `hideClose` only when the footer has its own way out.',
       'Give the confirm button the verb, “Delete run”, never “OK”.',
+      'Set `error` when a confirm fails, and clear it when the dialog opens for something else.',
+      'Set `finalFocus` when the confirm removes the trigger, so focus lands on the next item rather than the top of the page.',
     ],
   },
   'Components/Overlays/Drawer': {

@@ -29,6 +29,11 @@ import { fieldControlClasses, fieldControlSizes } from '../field/field-control'
  * from Base UI. The close button is always rendered: a touch screen reader
  * user has no Escape key, and Base UI's own guidance is that a modal without
  * a `Close` inside it cannot be left.
+ *
+ * `DialogContent` passes every Base UI `Popup` prop through, `initialFocus`
+ * and `finalFocus` included, so where focus lands on close is Base UI's own
+ * contract rather than one restated here. AlertDialog builds its popup
+ * itself, so it forwards `finalFocus` by name, with the same type.
  */
 
 const dialogPopupVariants = cva(
@@ -145,6 +150,7 @@ function DialogFrame({
   description,
   close,
   footer,
+  error,
   children,
 }: {
   band: Band
@@ -152,6 +158,7 @@ function DialogFrame({
   description: React.ReactNode
   close: React.ReactNode
   footer: React.ReactNode
+  error?: React.ReactNode
   children: React.ReactNode
 }) {
   return (
@@ -165,6 +172,7 @@ function DialogFrame({
         {close ? <div className="-mt-1 -me-2">{close}</div> : null}
       </div>
       {children ? <div className="scroll-cloth min-h-0 flex-1 overflow-y-auto px-6 pt-4 pb-2 text-sm">{children}</div> : null}
+      {error ? <div className="shrink-0 px-6 pt-4">{error}</div> : null}
       {footer ? (
         <div className="@container mt-6 px-6 pb-6">
           <div className={cn(actionRowClasses)}>{footer}</div>
@@ -202,6 +210,22 @@ export interface AlertDialogProps {
   confirmationText?: string
   /** `danger` cuts the seam in rojo and arms the confirm button in red. */
   tone?: 'danger' | 'neutral'
+  /**
+   * Why the last confirm failed, starting with what did not happen: "Not
+   * revoked. The server didn't answer." Shown between the body and the
+   * buttons, announced once when it appears, and linked to the confirm
+   * button so it is read again when focus is there. Hidden while a retry is
+   * pending. Clear it when the dialog opens for something else.
+   */
+  error?: React.ReactNode
+  /**
+   * Where focus goes when the dialog closes: Base UI's `finalFocus`. By
+   * default it returns to the trigger, which is right after Cancel. After a
+   * confirm that removed the trigger (a deleted row's button), return the
+   * element a reader would carry on from: the next row's action, or the
+   * list's heading. A function receives how the dialog was closed.
+   */
+  finalFocus?: AlertDialogPrimitive.Popup.Props['finalFocus']
 }
 
 /**
@@ -212,6 +236,24 @@ export interface AlertDialogProps {
  *
  * Initial focus goes to Cancel, not Confirm. The safe answer is the one a
  * reflexive Enter should give.
+ *
+ * ── a failed confirm says so in its own slot ──
+ * The first caller put the failure inside `description`, as a
+ * `role="alert"` line. That worked, but it made the error part of the
+ * dialog's accessible description, changing what the question was, and
+ * every caller had to rebuild the mark, the colour and the live region. The
+ * `error` slot sits under the body and over the buttons, next to the confirm
+ * that failed, and is drawn as a Field error is: the rojo cut square, the
+ * words, the danger ink, so the state is not colour alone.
+ *
+ * It is mounted, not toggled, and `role="alert"` announces on insertion,
+ * once. It unmounts while a retry is pending, so a second failure with the
+ * same words is a second insertion and is announced again; a region that
+ * kept its text would stay silent and the operator would not know the retry
+ * ran. The confirm button points at it with `aria-describedby`, as a field's
+ * control points at its error, so focus on the confirm reads the reason with
+ * the verb. It is not added to the dialog's own description, which would
+ * read it a second time whenever the dialog is announced again.
  */
 export function AlertDialog({
   open,
@@ -225,6 +267,8 @@ export function AlertDialog({
   onConfirm,
   confirmationText,
   tone = 'danger',
+  error,
+  finalFocus,
 }: AlertDialogProps) {
   const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen ?? false)
   const isOpen = open ?? uncontrolledOpen
@@ -232,6 +276,8 @@ export function AlertDialog({
   const [pending, setPending] = React.useState(false)
   const cancelRef = React.useRef<HTMLButtonElement>(null)
   const inputId = React.useId()
+  const errorId = React.useId()
+  const showError = error !== undefined && error !== null && error !== false && !pending
 
   const setOpen = (next: boolean) => {
     if (open === undefined) setUncontrolledOpen(next)
@@ -262,6 +308,7 @@ export function AlertDialog({
         <AlertDialogPrimitive.Popup
           data-slot="alert-dialog"
           initialFocus={cancelRef}
+          finalFocus={finalFocus}
           className={dialogPopupVariants({ size: 'sm' })}
         >
           <DialogFrame
@@ -271,6 +318,18 @@ export function AlertDialog({
               <AlertDialogPrimitive.Description className={descriptionClasses}>{description}</AlertDialogPrimitive.Description>
             }
             close={null}
+            error={
+              showError ? (
+                <p
+                  id={errorId}
+                  role="alert"
+                  className="m-0 flex items-start gap-2 text-sm leading-snug font-medium text-ink-danger"
+                >
+                  <span aria-hidden className="mt-[0.4em] size-2 shrink-0 bg-rojo shadow-cut" />
+                  <span>{error}</span>
+                </p>
+              ) : null
+            }
             footer={
               <>
                 <AlertDialogPrimitive.Close
@@ -282,6 +341,7 @@ export function AlertDialog({
                   variant={tone === 'danger' ? 'danger' : 'primary'}
                   disabled={!armed}
                   loading={pending}
+                  aria-describedby={showError ? errorId : undefined}
                   onClick={confirm}
                 >
                   {confirmLabel}

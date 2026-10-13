@@ -5,6 +5,7 @@
 ```ts
 
 import { Accordion as Accordion_2 } from '@base-ui/react/accordion';
+import { AlertDialog as AlertDialog_2 } from '@base-ui/react/alert-dialog';
 import { AlertDialogCloseProps } from '@base-ui/react';
 import { Button as Button_2 } from '@base-ui/react/button';
 import { Checkbox as Checkbox_2 } from '@base-ui/react/checkbox';
@@ -148,6 +149,8 @@ export interface AlertDialogProps {
     defaultOpen?: boolean;
     // (undocumented)
     description: React_2.ReactNode;
+    error?: React_2.ReactNode;
+    finalFocus?: AlertDialog_2.Popup.Props['finalFocus'];
     onConfirm: () => void | Promise<void>;
     // (undocumented)
     onOpenChange?: (open: boolean) => void;

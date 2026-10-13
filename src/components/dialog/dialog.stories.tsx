@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Trash2 } from 'lucide-react'
+import * as React from 'react'
 import { fn } from 'storybook/test'
 
 import { Button } from '../button'
@@ -143,6 +144,45 @@ export const TypedConfirmation: Story = {
       description: {
         story:
           'For an irreversible action at scale, the confirm stays disarmed until the exact resource name is typed. `onConfirm` may return a promise: the button shows its working strip, nothing else is pressable, and the dialog only closes when the work succeeds.',
+      },
+    },
+  },
+}
+
+const TIMEOUT = 'Not deleted. The trace store didn’t answer within 10 seconds. The run is unchanged.'
+
+export const ConfirmFails: Story = {
+  name: 'Confirm fails',
+  render: function Render() {
+    const [error, setError] = React.useState<string | undefined>(TIMEOUT)
+    return (
+      <AlertDialog
+        defaultOpen
+        trigger={
+          <Button variant="danger" icon={<Trash2 />}>
+            Delete run
+          </Button>
+        }
+        title="Delete this run?"
+        description="Its trace, tool calls and outputs are removed for everyone. This cannot be undone."
+        confirmLabel="Delete run"
+        error={error}
+        onOpenChange={(open) => (open ? setError(undefined) : undefined)}
+        onConfirm={async () => {
+          await new Promise((resolve) => setTimeout(resolve, 1200))
+          setError(TIMEOUT)
+          throw new Error('timeout')
+        }}
+      />
+    )
+  },
+  parameters: {
+    docs: {
+      // Opens on render: its own frame, so the modal does not lock the docs page.
+      story: { inline: false, height: '420px' },
+      description: {
+        story:
+          'When `onConfirm` rejects, the dialog stays open and `error` says why, starting with what did not happen. It sits over the buttons, next to the confirm that failed, drawn as a field error is: the rojo cut square, the words, the danger ink. It is a `role="alert"`, announced once when it appears, and it describes the confirm button, so focus there reads the reason with the verb. It is hidden while a retry is pending, so a second failure is announced again.',
       },
     },
   },

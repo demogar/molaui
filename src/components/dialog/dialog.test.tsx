@@ -1,5 +1,6 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import * as React from 'react'
 import { describe, expect, it, vi } from 'vitest'
 
 import { Button } from '../button'
@@ -32,6 +33,27 @@ describe('Dialog', () => {
     await userEvent.keyboard('{Escape}')
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
     expect(trigger).toHaveFocus()
+  })
+
+  it('passes finalFocus through to Base UI, so focus can return somewhere other than the trigger', async () => {
+    function Elsewhere() {
+      const target = React.useRef<HTMLButtonElement>(null)
+      return (
+        <>
+          <button ref={target}>Next row</button>
+          <Dialog>
+            <DialogTrigger render={<Button>Open</Button>} />
+            <DialogContent title="Rename" finalFocus={target} />
+          </Dialog>
+        </>
+      )
+    }
+    render(<Elsewhere />)
+    await userEvent.click(screen.getByRole('button', { name: 'Open' }))
+    await screen.findByRole('dialog')
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Next row' })).toHaveFocus())
   })
 
   it('always renders a named close button', async () => {
@@ -79,5 +101,80 @@ describe('AlertDialog', () => {
     await userEvent.click(await screen.findByRole('button', { name: 'Delete' }))
     await waitFor(() => expect(onConfirm).toHaveBeenCalled())
     expect(screen.getByRole('alertdialog')).toBeInTheDocument()
+  })
+
+  it('shows an error as one alert, over the buttons, describing the confirm but not the dialog', async () => {
+    render(
+      <AlertDialog
+        defaultOpen
+        title="Delete?"
+        description="Gone for good"
+        confirmLabel="Delete"
+        error="Not deleted. The server didn’t answer."
+        onConfirm={() => {}}
+      />,
+    )
+    const dialog = await screen.findByRole('alertdialog', { name: 'Delete?' })
+    expect(within(dialog).getAllByRole('alert')).toHaveLength(1)
+    expect(within(dialog).getByRole('alert')).toHaveTextContent('Not deleted. The server didn’t answer.')
+    expect(dialog).toHaveAccessibleDescription('Gone for good')
+    expect(within(dialog).getByRole('button', { name: 'Delete' })).toHaveAccessibleDescription(
+      'Not deleted. The server didn’t answer.',
+    )
+  })
+
+  it('hides the error while a retry is pending, so a repeated failure is announced again', async () => {
+    let reject: (reason: Error) => void = () => {}
+    const onConfirm = vi.fn(() => new Promise<void>((_, r) => (reject = r)))
+    render(
+      <AlertDialog defaultOpen title="Delete?" description="x" confirmLabel="Delete" error="Not deleted." onConfirm={onConfirm} />,
+    )
+    const dialog = await screen.findByRole('alertdialog')
+    const first = within(dialog).getByRole('alert')
+    const confirm = within(dialog).getByRole('button', { name: 'Delete' })
+    confirm.focus()
+    await userEvent.keyboard('{Enter}')
+    await waitFor(() => expect(within(dialog).queryByRole('alert')).not.toBeInTheDocument())
+    expect(confirm).not.toHaveAttribute('aria-describedby')
+    reject(new Error('again'))
+    const second = await within(dialog).findByRole('alert')
+    expect(second).not.toBe(first)
+    expect(confirm).toHaveFocus()
+  })
+
+  it('returns focus to the trigger by default, and to finalFocus when given', async () => {
+    function Example({ moveFocus }: { moveFocus: boolean }) {
+      const next = React.useRef<HTMLButtonElement>(null)
+      return (
+        <>
+          <button ref={next}>Next row</button>
+          <AlertDialog
+            trigger={<Button>Delete row</Button>}
+            title="Delete?"
+            description="x"
+            confirmLabel="Delete"
+            onConfirm={() => Promise.resolve()}
+            finalFocus={moveFocus ? next : undefined}
+          />
+        </>
+      )
+    }
+    const { unmount } = render(<Example moveFocus={false} />)
+    const trigger = screen.getByRole('button', { name: 'Delete row' })
+    trigger.focus()
+    await userEvent.keyboard('{Enter}')
+    await screen.findByRole('alertdialog')
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument())
+    await waitFor(() => expect(trigger).toHaveFocus())
+    unmount()
+
+    render(<Example moveFocus />)
+    screen.getByRole('button', { name: 'Delete row' }).focus()
+    await userEvent.keyboard('{Enter}')
+    const dialog = await screen.findByRole('alertdialog')
+    await userEvent.click(within(dialog).getByRole('button', { name: 'Delete' }))
+    await waitFor(() => expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument())
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Next row' })).toHaveFocus())
   })
 })

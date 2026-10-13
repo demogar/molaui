@@ -418,7 +418,7 @@
       "screenReadersByHand": false
     },
     "Components/Overlays/Dialog": {
-      "stories": 5,
+      "stories": 6,
       "unitTests": [
         "src/components/dialog/dialog.test.tsx"
       ],
