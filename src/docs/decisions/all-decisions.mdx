@@ -1,0 +1,26 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { DecisionIndex } from '../blocks/decisions'
+
+<Meta title="Decisions/All decisions" />
+
+# Decisions
+
+The foundations say what Mola UI does. These records say why. Each one is an architecture decision
+record: the situation that forced a choice, what was chosen, and what it costs. They are kept in
+the repository under `docs/adr/` and rendered here as written, so the page you are reading and the
+file a reviewer cites are the same text.
+
+Read the decision before you change what it governs. Color roles, themes, density and typography
+each rest on one, and a change that ignores it reopens an argument that was settled for a reason.
+
+<DecisionIndex />
+
+## How a decision changes
+
+A decision is not edited to say something new. When the reasons change, write a new record that
+says what it replaces, and mark the old one **Superseded**. The old reasoning stays readable,
+because the next person to question the new decision will want to know what was tried before.
+
+A new record is a file in `docs/adr/` that starts with its number and title, then its date and
+status, followed by Context, Decision and Consequences. It needs a page here too: a test fails
+until every record has one, and until every foundation it governs links back to it.

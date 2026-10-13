@@ -31,6 +31,7 @@ import ts from 'typescript'
 
 import pkg from '../package.json' with { type: 'json' }
 import { ACCESSIBILITY } from '../src/docs/usage/accessibility'
+import { ANATOMY, ROOT_PART } from '../src/docs/usage/anatomy'
 import type { Accessibility } from '../src/docs/usage/accessibility-types'
 import { builtFrom, type Composition, compositionFiles } from '../src/docs/usage/composition'
 import { USAGE, type Usage } from '../src/docs/usage/guidance'
@@ -257,6 +258,11 @@ interface Entry {
   description?: string
   usage?: Omit<Usage, 'summary'>
   accessibility?: Accessibility
+  /**
+   * The named parts and the `data-part` (or, for `root`, `data-slot`) each one
+   * carries in the DOM, so an agent can select or describe a part by name.
+   */
+  anatomy?: { slot: string; parts: { part: string; name: string; does: string; selector: string }[] }
   exports: ExportEntry[]
   stories: { name: string; id: string; url: string }[]
   /** The patterns and showcases that import it, read from their source. */
@@ -291,6 +297,19 @@ for (const info of exportsInfo) {
         ? { usage: { use: usage.use, avoid: usage.avoid, practices: usage.practices, content: usage.content, replacedBy: usage.replacedBy } }
         : {}),
       ...(ACCESSIBILITY[title] ? { accessibility: ACCESSIBILITY[title] } : {}),
+      ...(ANATOMY[title]
+        ? {
+            anatomy: {
+              slot: ANATOMY[title].slot,
+              parts: ANATOMY[title].parts.map(({ part, name, does }) => ({
+                part,
+                name,
+                does,
+                selector: part === ROOT_PART ? `[data-slot="${ANATOMY[title]!.slot}"]` : `[data-part="${part}"]`,
+              })),
+            },
+          }
+        : {}),
       exports: [],
       stories: s.stories.map((story) => ({ ...story, url: storyUrl(story.id) })),
     }
@@ -476,6 +495,7 @@ const llms = `${header}
 - [Getting started](${SITE}?path=/docs/mola-ui-getting-started--overview): install, theme, density, right-to-left, Tailwind
 - [Principles](${SITE}?path=/docs/mola-ui-principles--overview): the six rules every component obeys
 - [AI interface principles](${SITE}?path=/docs/ai-principles--overview): streaming, latency, approval, uncertainty, failure
+- [Decisions](${SITE}?path=/docs/decisions-all-decisions--overview): the architecture decision records behind colour roles, themes, density and typography
 - [Versioning](${SITE}?path=/docs/mola-ui-versioning--overview): lifecycle phases, what counts as breaking, deprecation, codemods
 - [Known gaps](${SITE}?path=/docs/mola-ui-known-gaps--overview): open limitations, and what has not been tested by hand
 - [Component manifest](https://github.com/demogar/molaui/blob/main/docs/ai/components.json): every export, prop, variant and story as JSON
@@ -519,6 +539,9 @@ function fullEntry(e: Entry) {
     const a = e.accessibility
     if (a.keyboard?.length) parts.push('Keyboard:', ...a.keyboard.map((k) => `- ${k.keys.join(' or ')}: ${k.action}`), '')
     parts.push('Mola handles:', ...a.handles.map((l) => `- ${l}`), '', 'You handle:', ...a.you.map((l) => `- ${l}`), '')
+  }
+  if (e.anatomy) {
+    parts.push('Anatomy:', ...e.anatomy.parts.map((p) => `- ${p.name} (\`${p.selector}\`): ${p.does}`), '')
   }
   for (const item of e.exports.filter((x) => x.kind !== 'type')) {
     parts.push(`#### \`${item.name}\` (${item.kind})`, '')

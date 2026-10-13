@@ -1,6 +1,7 @@
 import { Controls, Description, Primary, Stories, Subtitle, Title, useOf } from '@storybook/addon-docs/blocks'
 import type * as React from 'react'
 
+import { AnatomySection } from '../src/docs/blocks/anatomy'
 import {
   AccessibilitySection,
   EveryExampleHeading,
@@ -36,6 +37,7 @@ const RENDER: Record<SectionId, (page: PageData) => React.ReactNode> = {
     </>
   ),
   usage: (page) => <UsageFor title={page.title} />,
+  anatomy: (page) => <AnatomySection page={page} />,
   examples: () => (
     <>
       <ExamplesHeading />

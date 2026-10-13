@@ -53,6 +53,7 @@ export function TabsList({ className, children, ...props }: TabsListProps) {
   return (
     <TabsPrimitive.List
       data-slot="tabs-list"
+      data-part="list"
       className={cn(
         'scroll-cloth relative z-[1] flex items-end overflow-x-auto overflow-y-hidden',
         variant === 'underline' && 'gap-1 shadow-[inset_0_-1px_0_var(--keyline)]',
@@ -64,6 +65,7 @@ export function TabsList({ className, children, ...props }: TabsListProps) {
       {children}
       {variant === 'underline' ? (
         <TabsPrimitive.Indicator
+          data-part="indicator"
           className={cn(
             'absolute bottom-0 left-(--active-tab-left) h-[3px] w-(--active-tab-width) bg-ink forced-ink',
             'transition-[left,width] duration-(--motion-base) ease-cut',
@@ -86,6 +88,7 @@ export function TabsTab({ className, count, icon, children, ...props }: TabsTabP
   return (
     <TabsPrimitive.Tab
       data-slot="tabs-tab"
+      data-part="tab"
       className={cn(
         'group/tab relative inline-flex h-(--control-h) shrink-0 items-center gap-2 whitespace-nowrap px-(--control-px) outline-none select-none',
         'font-ui text-sm font-semibold text-ink-2',
@@ -119,7 +122,7 @@ export function TabsTab({ className, count, icon, children, ...props }: TabsTabP
       ) : null}
       {children}
       {count !== undefined ? (
-        <span className="min-w-5 bg-ink-soft px-1.5 py-0.5 text-center text-2xs tabular-nums text-ink-2 group-data-active/tab:bg-ink group-data-active/tab:text-on-ink">
+        <span data-part="count" className="min-w-5 bg-ink-soft px-1.5 py-0.5 text-center text-2xs tabular-nums text-ink-2 group-data-active/tab:bg-ink group-data-active/tab:text-on-ink">
           {count.toLocaleString('en-US')}
         </span>
       ) : null}
@@ -136,6 +139,7 @@ export function TabsPanel({ className, ...props }: TabsPanelProps) {
   return (
     <TabsPrimitive.Panel
       data-slot="tabs-panel"
+      data-part="panel"
       className={cn(
         'outline-none',
         variant === 'underline' && 'pt-5',

@@ -1,0 +1,33 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { DecisionsBehind } from '../blocks/decisions'
+import { TokenTable } from '../blocks/token-table'
+
+<Meta title="Foundations/Tokens" />
+
+# Tokens
+
+<DecisionsBehind foundation="Foundations/Tokens" />
+
+Every token in `src/styles/tokens.css`, the one file in the system allowed to hold a colour
+literal. The table is generated from that file: the values in each theme are resolved by the same
+code the contrast test runs, so a value here cannot disagree with what the test measured. The
+role is the section of the file a token sits in, and its own note where the file gives one.
+
+Copy puts `var(--name)` on the clipboard, which is how a token is used in CSS. In markup, prefer
+the Tailwind utility: `--cloth-pale` is `bg-cloth-pale`, `--ink-muted` is `text-ink-muted`.
+
+<TokenTable />
+
+## Reading the values
+
+- **A colour shows a hex in each theme.** Each one is a `light-dark()` pair, and a token that is a
+  mix of two others is resolved through OKLab to the colour it paints.
+- **A value that depends on what is underneath is shown as written.** A translucent mix (the
+  scrim, the backdrop, a keyline on ink) has no single colour, so the resolver leaves it alone
+  rather than guess.
+- **Sizes and durations are the same in both themes.** The density tokens shown here are the
+  comfortable values; [Spacing](?path=/docs/foundations-spacing--overview) shows what each density
+  sets.
+
+The same palette is published for design tools as W3C design tokens in `tokens/mola.tokens.json`,
+both themes fully resolved, and CI fails if that file falls behind `tokens.css`.

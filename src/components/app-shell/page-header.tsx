@@ -50,13 +50,13 @@ export function PageHeader({
       {breadcrumb}
       <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3">
         <div className="min-w-0 max-w-3xl">
-          <Heading level={1}>{title}</Heading>
-          {description ? <p className="mt-1.5 mb-0 text-sm text-ink-2">{description}</p> : null}
+          <Heading data-part="title" level={1}>{title}</Heading>
+          {description ? <p data-part="description" className="mt-1.5 mb-0 text-sm text-ink-2">{description}</p> : null}
         </div>
-        {actions ? <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div> : null}
+        {actions ? <div data-part="actions" className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div> : null}
       </div>
       {meta && meta.length > 0 ? (
-        <ul className="m-0 flex list-none flex-wrap items-center gap-y-1 p-0 text-xs text-ink-muted">
+        <ul data-part="meta" className="m-0 flex list-none flex-wrap items-center gap-y-1 p-0 text-xs text-ink-muted">
           {meta.map((item, i) => (
             <li key={i} className={cn('flex items-center gap-1.5', i > 0 && 'ms-3 ps-3 shadow-[inset_1px_0_0_var(--keyline)] rtl:shadow-[inset_-1px_0_0_var(--keyline)]')}>
               {item}

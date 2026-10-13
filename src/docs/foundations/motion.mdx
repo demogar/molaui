@@ -1,27 +1,85 @@
 import { Meta } from '@storybook/addon-docs/blocks'
+import { DecisionsBehind } from '../blocks/decisions'
+import { Specimen } from '../blocks/specimen'
 
 <Meta title="Foundations/Motion" />
 
 # Motion
 
-Cloth settling under a hand: fast in, no float, **no overshoot anywhere**. One easing curve, three
-durations.
+<DecisionsBehind foundation="Foundations/Motion" />
 
-| Token | Value | For |
+Cloth settling under a hand: fast in, no float, **no overshoot anywhere**. One easing curve and
+three durations, and motion is there to say what changed, never to decorate. A tool someone uses
+for eight hours a day cannot make them wait for its animations.
+
+## Durations and easing
+
+The durations are tokens in `tokens.css`; the easing is `--ease-cut` in `theme.css`, used as
+`ease-cut`. The "used by" column is read from the components, not intended use.
+
+| Token | Value | Used by |
 | --- | --- | --- |
-| `--motion-cut` | 120ms | hover, press, the band revealing |
-| `--motion-base` | 220ms | menus and popovers entering, tabs indicator |
-| `--motion-slow` | 420ms | dialogs, sheets, the sidebar |
-| `ease-cut` | `cubic-bezier(0.2, 0, 0, 1)` | everything |
+| `--motion-cut` | 120ms | Hover and press on every control: a button's colour and band, a field's edge, a checkbox, a tab's colour. Also every **exit**. |
+| `--motion-base` | 220ms | Things that enter or move: menus, popovers, dialogs, drawers and the mobile sidebar coming in, the sidebar collapsing, a switch thumb, the tabs indicator, an accordion panel, a disclosure marker turning, a progress bar filling. |
+| `--motion-slow` | 420ms | One place today: a toast sliding as the stack reflows. |
+| `ease-cut` | `cubic-bezier(0.2, 0, 0, 1)` | Everything that eases. Fast out of the start, settles without passing its mark. |
+
+**Out is faster than in.** Overlays enter at `--motion-base` and leave at `--motion-cut`. Someone
+who opened a menu wants to see where it came from; someone who closed it has already moved on.
+
+A menu, popover or dialog that enters fades in and grows from 98% of its size, from the origin
+Base UI computes, so a menu grows out of its trigger rather than out of its own centre. Only a drawer
+travels, because it belongs to an edge of the screen; nothing bounces or overshoots.
 
 ## Motion that carries meaning
 
-- **`mola-caret`** — the streaming caret. Stepped, not faded: it is a block of ink, on or off.
-- **`mola-shuttle`** — the working relleno. Indeterminate progress, a running step, a pending upload.
-- **`mola-pulse`** — a live status dot.
+A few animations are not transitions but states. Each one is a named keyframe in `theme.css`.
+
+<Specimen label="The working relleno, a live status dot, and the streaming caret">
+  <div className="grid gap-6 sm:grid-cols-3">
+    <div className="grid content-start gap-2">
+      <div className="h-2 band-oro relleno-working shadow-cut" />
+      <p className="m-0 text-sm text-ink-2"><code className="literal">mola-shuttle</code>: work of unknown size.</p>
+    </div>
+    <div className="grid content-start gap-2">
+      <p className="m-0 flex items-center gap-2 text-sm text-ink"><span aria-hidden className="size-2 rounded-full bg-oro animate-mola-pulse" /> Running</p>
+      <p className="m-0 text-sm text-ink-2"><code className="literal">mola-pulse</code>: this status is live.</p>
+    </div>
+    <div className="grid content-start gap-2">
+      <p className="m-0 font-text text-lg text-ink">The rollout is safe for Starter<span aria-hidden className="ms-[0.08em] inline-block h-[0.95em] w-[0.5em] translate-y-[0.12em] bg-ink animate-mola-caret" /></p>
+      <p className="m-0 text-sm text-ink-2"><code className="literal">mola-caret</code>: text is still arriving.</p>
+    </div>
+  </div>
+</Specimen>
+
+- **`mola-shuttle`**, the working relleno. Slits sliding past say "this is being cut": an agent
+  step running, a file uploading, a progress bar with no total. The system has no spinner.
+- **`mola-pulse`**, a live status dot, at 1.6s. Used on a badge with `pulse` and a running toast.
+- **`mola-caret`**, the streaming caret. Stepped, not faded: a block of ink, on or off, at 1.05s.
+- **`mola-shimmer`**, a sweep of raised cloth across a skeleton while a slot is still empty.
+- **`mola-in`**, a 4px settle and fade on `--motion-base`, offered as `animate-mola-in` for content
+  of your own that appears in place. No component uses it yet; overlays get the same settle from
+  their transitions.
 
 ## Reduced motion
 
-Under `prefers-reduced-motion: reduce` every animation collapses to one frame. The states are
-designed to survive that: a stilled working-relleno still reads as *in progress*, a stilled caret
-is still a caret, and streamed text still arrives — only the decoration stops.
+Under `prefers-reduced-motion: reduce`, one rule in `base.css` collapses every animation and
+transition in the document to a single frame (`0.01ms`, one iteration). Nothing is switched off
+component by component, so a new component is covered the day it is written.
+
+The states are designed to survive that, because each still says something true when it stops:
+
+- **The working relleno is stilled, not hidden.** A static band of slits still reads as
+  "in progress".
+- **The caret stops blinking and stays.** The text is still arriving.
+- **A pulsing dot stops pulsing; the dot stays**, and so does its word.
+- **The skeleton's sweep is removed outright** (`motion-reduce:after:hidden`), not slowed. The
+  placeholder is left as a still, textured slot, which still says something is coming.
+- **Menus, dialogs and accordions appear without travelling.** They still open and close; they
+  snap instead of settle. An accordion's height comes from Base UI's measurement, so snapping
+  lands on the right size.
+- **Streamed text still streams.** Reduced motion stops decoration, not information: the words
+  arrive as fast as the model sends them.
+
+Check it in Chromium with DevTools › Rendering › *Emulate CSS media feature
+prefers-reduced-motion*, or in macOS under Accessibility › Display › Reduce motion.

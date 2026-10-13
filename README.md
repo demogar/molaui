@@ -181,7 +181,7 @@ smoke tests below.
   `light-dark()`, `var()`, OKLab `color-mix()` — and asserts each promised pairing. It caught a real
   dark-theme failure during the build (muted ink on the gold wash, 4.00:1) before any screen did.
 - **No hex outside `tokens.css`**, enforced by a test.
-- **Every story is a test**: all 298 stories render through the real Storybook config and pass axe
+- **Every story is a test**: all 299 stories render through the real Storybook config and pass axe
   in the unit suite; `scripts/audit.mjs` re-runs axe *with colour contrast* in a real browser in both
   themes, and checks every story for horizontal overflow at 390px. CI runs it on every pull request
   against the static build, over every docs page as well as every story, and fails on any finding.

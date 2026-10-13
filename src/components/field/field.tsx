@@ -94,10 +94,10 @@ export function Field({
   return (
     <div data-slot="field" className={cn('flex flex-col gap-2', className)} {...props}>
       <div className="flex items-baseline justify-between gap-4">
-        <Label htmlFor={id} required={required} optional={optional && !required}>
+        <Label data-part="label" htmlFor={id} required={required} optional={optional && !required}>
           {label}
         </Label>
-        {labelAside ? <span className="text-xs text-ink-muted tabular">{labelAside}</span> : null}
+        {labelAside ? <span data-part="label-aside" className="text-xs text-ink-muted tabular">{labelAside}</span> : null}
       </div>
       {children({
         id,
@@ -106,13 +106,14 @@ export function Field({
         'aria-invalid': error ? true : undefined,
       })}
       {help ? (
-        <span id={hintId} className="block text-xs leading-snug text-ink-muted">
+        <span id={hintId} data-part="hint" className="block text-xs leading-snug text-ink-muted">
           {help}
         </span>
       ) : null}
       {error ? (
         <span
           id={errorId}
+          data-part="error"
           role="alert"
           className="flex items-start gap-2 text-xs leading-snug font-medium text-ink-danger"
         >

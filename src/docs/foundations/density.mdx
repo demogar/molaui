@@ -1,9 +1,12 @@
 import { Meta } from '@storybook/addon-docs/blocks'
+import { DecisionsBehind } from '../blocks/decisions'
 import { Specimen } from '../blocks/specimen'
 
 <Meta title="Foundations/Density" />
 
 # Density
+
+<DecisionsBehind foundation="Foundations/Density" />
 
 The one axis an internal tool needs that an editorial site does not. One attribute re-scales
 control heights, row heights, the small end of the type scale and the spacing unit — together, so a
@@ -16,6 +19,9 @@ dense table and its toolbar never disagree about what "small" means.
 | Body text | 13px | 14px | 17px |
 | Spacing unit | 3.5px | 4px | 4px |
 | Use it for | logs, run tables, traces | the product default | forms, onboarding, settings |
+
+Every value each density sets, read live from `tokens.css`, is on
+[Spacing](?path=/docs/foundations-spacing--overview).
 
 `spacious` is the original editorial metric of the system this grew from, kept so its lineage is one
 attribute away.

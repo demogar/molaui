@@ -159,14 +159,15 @@ async function audit(page, job, errors) {
   }
   for (const e of errors) {
     if (IGNORED_CONSOLE.some((re) => re.test(e))) continue
-    // The broken-image story points at a host that does not resolve, on
-    // purpose, and the avatar docs page renders that story too.
-    const brokenImage = job.id.includes('broken-image') || job.id === 'components-data-display-avatar--overview'
-    if (brokenImage && /ERR_NAME_NOT_RESOLVED/.test(e)) continue
+    if (loadsBrokenImage(job) && /ERR_NAME_NOT_RESOLVED/.test(e)) continue
     found.push(`console: ${e.slice(0, 200)}`)
   }
   return found
 }
+
+// The broken-image story points at a host that does not resolve, on purpose,
+// and the avatar docs page renders that story too.
+const loadsBrokenImage = (job) => job.id.includes('broken-image') || job.id === 'components-data-display-avatar--overview'
 
 const browser = await chromium.launch()
 const failures = []
@@ -203,6 +204,11 @@ async function worker(queue) {
     } finally {
       clearTimeout(timer)
     }
+    // The unresolvable image request can fail after the next page has
+    // started loading, and its console error then landed on that page (seen
+    // in CI as a DNS error on the callout docs page). A fresh tab keeps the
+    // error with the job that caused it.
+    if (loadsBrokenImage(job)) await fresh(job.width)
     done++
     if (done % 100 === 0) console.log(`  ${done}/${jobs.length} pages`)
   }

@@ -104,6 +104,7 @@ export function TableFooter({ className, ...props }: React.ComponentProps<'tfoot
   return (
     <tfoot
       data-slot="table-footer"
+      data-part="footer"
       className={cn(
         'font-semibold [&_td]:bg-cloth-shade [&_td]:shadow-[inset_0_1.5px_0_var(--ink)]',
         className,
@@ -128,6 +129,7 @@ export function TableRow({ selected = false, className, ...props }: TableRowProp
   return (
     <tr
       data-slot="table-row"
+      data-part="row"
       data-selected={selected || undefined}
       aria-selected={selected || undefined}
       className={cn(
@@ -173,6 +175,7 @@ export function TableHead({
   return (
     <th
       data-slot="table-head"
+      data-part="head"
       scope="col"
       aria-sort={sortable && sort !== 'none' ? sort : undefined}
       className={cn(
@@ -251,6 +254,7 @@ export function TableCaption({ className, ...props }: React.ComponentProps<'capt
   return (
     <caption
       data-slot="table-caption"
+      data-part="caption"
       className={cn('caption-bottom px-3 pt-3 text-start text-xs text-ink-muted', className)}
       {...props}
     />
