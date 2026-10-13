@@ -26,4 +26,32 @@ a mola, the keyline becomes bleached cotton, and the four layers are lifted unti
   regression the single declaration makes testable: both values sit side by side, and the test
   resolves both.
 - Custom properties keep `light-dark()` unresolved until a real property uses them, so composite
-  tokens (`--cut`, `--focus-ring`) follow the subtree's scheme without redeclaration.
+  tokens (`--cut`, `--focus-ring`) follow the subtree's scheme without redeclaration — in a browser
+  that reads `light-dark()` natively. See the amendment below for builds that rewrite it.
+
+## Amendment (2026-10-13): nested themes after Lightning CSS
+
+The subtree promise was true in source and false in every production build. Lightning CSS, which
+minifies CSS in Vite's builds (ours, Storybook's and most consumers'), lowers `light-dark(a, b)`
+for browsers before Chrome 123 / Safari 17.5 into
+`var(--lightningcss-light, a) var(--lightningcss-dark, b)`, with those two properties set beside
+every `color-scheme`. A `var()` inside a custom property is substituted on the element that
+declares the property (CSS Variables 1, computed value), so tokens declared only on `:root` froze to
+the root's scheme. Every `data-theme="dark"` example on a light docs page, and the dark half of
+every Color swatch, painted light. Story mode hid it because there the attribute is on `<html>`;
+the dev server hid it because it does not minify; axe hid it because light ink on a light ground
+has good contrast.
+
+Tailwind v4's own optimiser leaves `light-dark()` alone; the lowering comes from Vite's CSS
+minifier, which a consumer's build runs again with its own browser targets. Turning the lowering
+off in our build would therefore not reach consumers, and would take every colour away from
+Safari before 17.5. So the colour tokens are declared on `:root, [data-theme]` instead: each
+themed element resolves them again for its own scheme, in either form. Both rules sit in
+Tailwind's `theme` layer so utilities (`band-*`) and an app's own overrides still win, and lengths
+and durations stay on `:root` alone so a nested theme never resets an ancestor's density.
+
+What this narrows: the theme switch for a subtree is `data-theme`, not `color-scheme` set by hand.
+A subtree that sets `color-scheme: dark` without the attribute re-themes natively but not after
+lowering. `src/tokens/contract.test.ts` fails if a theme-dependent token is left off
+`[data-theme]`, the browser audit checks that every `data-theme` subtree paints its own ground,
+and the consumer smoke tests check the same in real Vite, Tailwind and Next builds.

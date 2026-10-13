@@ -186,6 +186,12 @@ async function check(browser, url) {
         badge: badge && { shadow: style(badge).boxShadow, background: style(badge).backgroundColor },
         buttonTransparent: button ? transparent(style(button).backgroundColor) : true,
         badgeUnstyled: badge ? transparent(style(badge).backgroundColor) && style(badge).boxShadow === 'none' : true,
+        themes: Object.fromEntries(
+          ['light', 'dark'].map((theme) => {
+            const el = document.querySelector(`[data-probe="${theme}"]`)
+            return [theme, el ? style(el).backgroundColor : undefined]
+          }),
+        ),
       }
     })
 
@@ -204,6 +210,13 @@ async function check(browser, url) {
     }
     if (!facts.badge) errors.push('no "Running" badge rendered')
     else if (facts.badgeUnstyled) errors.push('badge has neither a background nor a box-shadow: it is unstyled')
+    // The app's bundler minifies the CSS again with its own browser targets,
+    // and Lightning CSS lowers light-dark() for older browsers; a token that
+    // is only declared on :root then freezes to the root's scheme. Only a
+    // nested theme in a real consumer build shows it.
+    if (!facts.themes.light || !facts.themes.dark) errors.push('the data-theme="light"/"dark" probe sections are missing')
+    else if (facts.themes.light === facts.themes.dark)
+      errors.push(`a nested data-theme="dark" section paints the same ground as a light one (${facts.themes.dark}): nested theming is broken`)
     if (!facts.dialog) errors.push('no dialog rendered')
     else {
       if (facts.dialog.role !== 'dialog') errors.push(`dialog role is "${facts.dialog.role}"`)

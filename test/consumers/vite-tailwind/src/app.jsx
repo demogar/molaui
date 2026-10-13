@@ -1,6 +1,6 @@
 import { Badge, Button, Dialog, DialogContent, Field, Input } from '@demogar/mola-ui'
 
-// The same four things in every fixture, so the runner checks one page shape.
+// The same things in every fixture, so the runner checks one page shape.
 export function App() {
   return (
     <main>
@@ -9,6 +9,9 @@ export function App() {
         {(control) => <Input {...control} name="name" defaultValue="Ledger reconciler" />}
       </Field>
       <Button>Run agent</Button>
+      {/* A nested theme in each direction: the runner checks they paint different grounds. */}
+      <section data-theme="dark" data-probe="dark">Dark panel</section>
+      <section data-theme="light" data-probe="light">Light panel</section>
       <Dialog defaultOpen>
         <DialogContent
           title="Publish the run report?"

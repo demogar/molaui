@@ -72,6 +72,12 @@ page is one attribute.
 <section data-theme="light">…</section>
 ```
 
+Re-theme a subtree with `data-theme`, not by setting `color-scheme` on it yourself. Builds that
+minify with Lightning CSS (Vite's production build, and the compiled `styles.css`) rewrite `light-dark()` for browsers older
+than Chrome 123 and Safari 17.5, and in that form a token only changes theme where it is declared:
+on `:root` and on every `[data-theme]` element. This applies whether you use the compiled
+stylesheet or `tailwind.css` in your own Tailwind build.
+
 ## Density
 
 ```html

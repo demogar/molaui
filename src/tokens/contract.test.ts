@@ -118,3 +118,30 @@ describe('hex literals', () => {
     expect(offenders).toEqual([])
   })
 })
+
+describe('nested themes', () => {
+  /**
+   * A token whose value depends on the theme must be redeclared on
+   * [data-theme], or a build that lowers `light-dark()` (Lightning CSS does,
+   * for browsers before Chrome 123 / Safari 17.5) freezes it to the root's
+   * scheme and a nested `data-theme="dark"` subtree paints light. The browser
+   * audit proves the result; this names the token that was left out.
+   */
+  const stripped = css.replace(/\/\*[\s\S]*?\*\//g, '')
+  const themed = /:root,\s*\[data-theme\]\s*\{([^}]*)\}/.exec(stripped)?.[1] ?? ''
+  const themedNames = new Set([...themed.matchAll(/(--[a-z0-9-]+)\s*:/g)].map((m) => m[1]!))
+
+  const dependsOnTheme = (name: string, seen = new Set<string>()): boolean => {
+    const value = decls.get(name) ?? ''
+    if (value.includes('light-dark(')) return true
+    if (seen.has(name)) return false
+    seen.add(name)
+    return [...value.matchAll(/var\((--[a-z0-9-]+)/g)].some((m) => dependsOnTheme(m[1]!, seen))
+  }
+
+  it('declares every theme-dependent token on :root and [data-theme]', () => {
+    expect(themedNames.size).toBeGreaterThan(0)
+    const missing = [...decls.keys()].filter((name) => dependsOnTheme(name) && !themedNames.has(name))
+    expect(missing).toEqual([])
+  })
+})
