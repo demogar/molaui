@@ -48,7 +48,7 @@ CI also runs three browser jobs side by side with `Gates`. Each can be run local
 
 | Job | Locally | What it holds |
 |---|---|---|
-| Browser audit | `npm run build-storybook && npm run audit` | axe with colour contrast in both themes and no horizontal overflow at 390px, over every story and every docs page, plus console errors. The report lands in `reports/audit/`. |
+| Browser audit | `npm run build-storybook && npm run audit` | axe with colour contrast in both themes, every `data-theme` subtree painting its own ground, and no horizontal overflow at 390px, over every story and every docs page, plus console errors. The report lands in `reports/audit/`. |
 | Visual regression | `npm run build-storybook && npm run visual` | every story in both themes, and each component's first story in compact density, RTL and forced colours, against the Linux baselines. |
 | Consumer smoke tests | `npm run build && npm run consumers` | the packed tarball installed, built and checked in a browser in three apps: Vite on `styles.css`, Vite with its own Tailwind v4 on `tailwind.css`, and the Next.js App Router. |
 

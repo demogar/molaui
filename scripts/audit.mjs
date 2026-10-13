@@ -1,6 +1,6 @@
 // Browser audit over every story and every docs page: axe (with real colour
-// contrast) in both themes, horizontal overflow at phone width, and console
-// errors. Exits non-zero on any finding, so CI can gate on it.
+// contrast) in both themes, that every `data-theme` subtree paints its own
+// ground, horizontal overflow at phone width, and console errors. Exits non-zero on any finding, so CI can gate on it.
 //   node scripts/audit.mjs <base> [--out <dir>] [--only <id substring>] [--workers <n>]
 //   node scripts/audit.mjs --serve storybook-static [--out <dir>]   (npm run audit)
 //
@@ -146,6 +146,43 @@ async function audit(page, job, errors) {
           )
       }, job.viewMode === 'docs')),
     )
+  }
+  if (job.axe) {
+    // A `data-theme` subtree must actually re-theme. Every themed element
+    // (the document, each docs example frame, each swatch half, plus one
+    // probe per theme added here) gets a hidden child painted with `--cloth`;
+    // all of one theme must agree, and light must differ from dark. This
+    // caught tokens resolved once, on :root, by Lightning CSS's light-dark()
+    // fallback, which left every nested dark frame light. axe could not see
+    // it: light ink on a light ground has fine contrast.
+    const theming = await page.evaluate(() => {
+      const probes = ['light', 'dark'].map((theme) => {
+        const el = document.createElement('div')
+        el.dataset.theme = theme
+        el.hidden = true
+        document.body.append(el)
+        return el
+      })
+      const seen = { light: new Set(), dark: new Set() }
+      for (const host of document.querySelectorAll('[data-theme="light"], [data-theme="dark"]')) {
+        const child = document.createElement('div')
+        child.style.cssText = 'display:none;background-color:var(--cloth)'
+        ;(host === document.documentElement ? document.body : host).append(child)
+        const color = getComputedStyle(child).backgroundColor
+        child.remove()
+        seen[host.dataset.theme].add(color)
+      }
+      for (const p of probes) p.remove()
+      const found = []
+      for (const theme of ['light', 'dark'])
+        if (seen[theme].size > 1)
+          found.push(`data-theme="${theme}" subtrees disagree on --cloth: ${[...seen[theme]].join(' vs ')}`)
+      const [light] = seen.light
+      if (light && seen.dark.has(light))
+        found.push(`a data-theme="dark" subtree paints the light --cloth (${light}): nested theming is broken`)
+      return found
+    })
+    found.push(...theming)
   }
   if (job.overflow) {
     // The args table is a fixed-width grid Storybook does not lay out for a
