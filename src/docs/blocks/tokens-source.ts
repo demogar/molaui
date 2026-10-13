@@ -1,7 +1,7 @@
 import themeCss from '../../styles/theme.css?raw'
 import tokensCss from '../../styles/tokens.css?raw'
-import { parseRootDeclarations, resolveColor, type ThemeName } from '../../tokens/resolve'
-import { toHex } from '../../tokens/color'
+import { parseRootDeclarations } from '../../tokens/resolve'
+import { tokenRows as rowsOf, type TokenRow } from '../../tokens/rows'
 
 /** tokens.css as written, parsed once, for every docs page that shows a value. */
 export const decls = parseRootDeclarations(tokensCss)
@@ -65,79 +65,9 @@ export function toPx(value: string): number | null {
   return m[2] === 'rem' ? Number(m[1]) * 16 : Number(m[1])
 }
 
-export interface TokenRow {
-  name: string
-  /** The section of tokens.css it is declared in, and its own comment if it has one. */
-  group: string
-  note: string | null
-  raw: string
-  /** Resolved per theme: a hex for a colour the resolver can flatten, else the declared value. */
-  light: string
-  dark: string
-  /** True when the value is a colour the resolver flattened to a hex. */
-  isColor: boolean
-}
+export type { TokenRow }
 
-/**
- * Every custom property declared in a rule whose selector list includes :root
- * (the colour tokens sit in `:root, [data-theme]` inside `@layer theme`, the
- * rest in a plain `:root`), in file order, with the section heading it sits
- * under and its trailing comment. Reading only the first `:root {` block
- * missed every colour once the theme fix moved them, so this walks the whole
- * file and tracks which rule each line is in. The values are resolved by the
- * same resolver the contrast contract uses, so the table and the test cannot
- * disagree.
- */
+/** Every token in tokens.css, resolved per theme; the logic is in src/tokens/rows.ts. */
 export function tokenRows(css: string = tokensCss, source: Map<string, string> = decls): TokenRow[] {
-  const rows: TokenRow[] = []
-  const seen = new Set<string>()
-  // One entry per open block: whether its selector list includes :root.
-  const stack: boolean[] = []
-  let prelude = ''
-  let group = ''
-  for (const line of css.split('\n')) {
-    const heading = line.match(/\/\*\s*──\s*([^─]+?)\s*─/)
-    if (heading) group = heading[1]!.replace(/:.*$/, '').trim()
-    const decl = line.match(/^\s*(--[a-z0-9-]+)\s*:/)
-    if (decl && stack.at(-1) && source.has(decl[1]!) && !seen.has(decl[1]!)) {
-      const name = decl[1]!
-      seen.add(name)
-      const raw = source.get(name)!
-      const note = line.match(/;\s*\/\*\s*(.+?)\s*\*\//)?.[1] ?? null
-      const value = (theme: ThemeName) => {
-        try {
-          const rgb = resolveColor(raw, theme, source)
-          return rgb ? toHex(rgb) : null
-        } catch {
-          return null
-        }
-      }
-      const light = value('light')
-      const dark = value('dark')
-      rows.push({
-        name,
-        group,
-        note,
-        raw,
-        light: light ?? raw,
-        dark: dark ?? raw,
-        isColor: light !== null && dark !== null,
-      })
-    }
-    for (const ch of line.replace(/\/\*.*?\*\//g, '')) {
-      if (ch === '{') {
-        stack.push(prelude.split(',').some((sel) => sel.trim() === ':root'))
-        prelude = ''
-      } else if (ch === '}') {
-        stack.pop()
-        prelude = ''
-      } else if (ch === ';') {
-        prelude = ''
-      } else {
-        prelude += ch
-      }
-    }
-    prelude += ' '
-  }
-  return rows
+  return rowsOf(css, source)
 }
