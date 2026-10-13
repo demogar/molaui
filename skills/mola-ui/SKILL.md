@@ -11,6 +11,9 @@ the mola textile: flat layers, hard ink keylines, revealed bands, and no curves.
 
 Before you write code, look up the components you plan to use. Don't guess props.
 
+- If the `mola-ui` MCP server is connected (`npx -y --package @demogar/mola-ui mola-ui-mcp`), use
+  its `get_component`, `search` and `get_tokens` tools. They answer for the installed version.
+
 - `docs/ai/components.json` in the repository (or `llms-full.txt` at the Storybook root) lists
   every export with its props, types, defaults, cva variants and usage guidance. It is generated
   from the source, so it is current.

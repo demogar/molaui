@@ -14,6 +14,11 @@
 //   vite-tailwind  the app's own Tailwind v4 build with `tailwind.css` + @source
 //   next           App Router, the page a server component (the RSC check)
 //
+// Then the `mola-ui-mcp` bin: the tarball is unpacked with no node_modules
+// beside it and the bin is started over stdio with the MCP SDK's client, so
+// a bundle that still needs a package at run time, or a docs/ai file missing
+// from `files`, fails here rather than in a user's `npx`.
+//
 // Fixtures are copied to a temp dir before installing, so the repo tree is
 // never touched, and the library goes in as `file:<tarball>` from `npm pack`
 // rather than a workspace link: a link would resolve the library's own
@@ -22,11 +27,13 @@
 // It does not build the library; it packs whatever is in dist/, so CI runs it
 // after `npm run build`.
 import { execFileSync, spawn } from 'node:child_process'
-import { cpSync, existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { createServer } from 'node:net'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 
+import { Client } from '@modelcontextprotocol/sdk/client/index.js'
+import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 import { chromium } from 'playwright'
 
 const root = resolve(import.meta.dirname, '..')
@@ -51,7 +58,7 @@ if (unknown.length) fail(`unknown fixture(s): ${unknown.join(', ')}. Have: ${all
 const fixtures = wanted.length ? wanted : all
 for (const name of fixtures) if (!SERVE[name]) fail(`no serve command for fixture "${name}" in scripts/consumers.mjs`)
 
-if (!existsSync(join(root, 'dist/index.js')) || !existsSync(join(root, 'dist/mola-ui.css'))) {
+if (!['dist/index.js', 'dist/mola-ui.css', 'dist/mcp/mola-ui-mcp.js'].every((file) => existsSync(join(root, file)))) {
   fail('dist/ is missing or incomplete. Run `npm run build` first.')
 }
 
@@ -72,6 +79,7 @@ try {
   } finally {
     await browser.close()
   }
+  results.push(await checkMcp(tarball))
 } finally {
   if (process.env.MOLA_CONSUMERS_KEEP) log(`kept ${tmp}`)
   else rmSync(tmp, { recursive: true, force: true })
@@ -143,6 +151,49 @@ async function runFixture(name, tarball, browser) {
  * class names: a class that is present but has no CSS behind it is exactly the
  * failure this is here to catch.
  */
+async function checkMcp(tarball) {
+  const result = { name: 'mcp bin', errors: [] }
+  log('\nmcp bin')
+  const dir = join(tmp, 'mcp-bin')
+  mkdirSync(dir)
+  try {
+    result.install = time(() => run('tar', ['-xzf', tarball, '-C', dir], dir)).ms
+  } catch (error) {
+    result.errors.push(error.message)
+    return result
+  }
+  const pkg = JSON.parse(readFileSync(join(dir, 'package/package.json'), 'utf8'))
+  const bin = pkg.bin?.['mola-ui-mcp']
+  if (!bin || !existsSync(join(dir, 'package', bin))) {
+    result.errors.push(`package.json bin "mola-ui-mcp" (${bin}) is missing from the tarball`)
+    return result
+  }
+  const started = performance.now()
+  const client = new Client({ name: 'mola-consumers', version: '0.0.0' })
+  const transport = new StdioClientTransport({ command: process.execPath, args: [join(dir, 'package', bin)], cwd: dir, stderr: 'pipe' })
+  let stderr = ''
+  transport.stderr?.on('data', (chunk) => (stderr += chunk))
+  try {
+    await client.connect(transport)
+    const version = client.getServerVersion()?.version
+    if (version !== pkg.version) result.errors.push(`server says version ${version}, the package is ${pkg.version}`)
+    const { tools } = await client.listTools()
+    const names = tools.map((t) => t.name).sort().join(', ')
+    if (names !== 'get_component, get_pattern, get_rules, get_tokens, list_components, search') result.errors.push(`unexpected tools: ${names}`)
+    const button = await client.callTool({ name: 'get_component', arguments: { name: 'Button' } })
+    if (!button.content?.[0]?.text?.startsWith('# Button')) result.errors.push(`get_component Button returned: ${JSON.stringify(button).slice(0, 300)}`)
+    const tokens = await client.callTool({ name: 'get_tokens', arguments: { filter: 'oro' } })
+    if (!tokens.content?.[0]?.text?.includes('`--oro`')) result.errors.push('get_tokens "oro" did not list --oro')
+  } catch (error) {
+    result.errors.push(`${error.message}\n    server stderr:\n${indent(stderr)}`)
+  } finally {
+    await client.close()
+    result.check = Math.round(performance.now() - started)
+  }
+  log(`  checked (${result.check} ms)${result.errors.length ? '' : ': ok'}`)
+  return result
+}
+
 async function check(browser, url) {
   const page = await browser.newPage()
   const errors = []

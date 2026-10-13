@@ -63,6 +63,8 @@ Read the one you need rather than all of them. Every docs page also has a Markdo
 - [Patterns](https://demogar.github.io/molaui/llms-patterns.txt): whole screens, what each is built from, and its states
 - [Full text](https://demogar.github.io/molaui/llms-full.txt): all of the above except the tokens, in one file
 
+An MCP server with the same data ships in the package: `npx -y --package @demogar/mola-ui mola-ui-mcp`. Its tools are `list_components`, `get_component`, `search`, `get_tokens`, `get_rules` and `get_pattern`.
+
 ## Actions
 
 - [Button](https://demogar.github.io/molaui/?path=/docs/components-actions-button--overview) ([Markdown](https://demogar.github.io/molaui/md/components-actions-button--overview.md)): A cut-shape button for an action on this page, with IconButton for an action shown as an icon alone.
