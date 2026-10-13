@@ -1,0 +1,167 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { DecisionsBehind } from '../blocks/decisions'
+import { Specimen } from '../blocks/specimen'
+
+<Meta title="Foundations/Layers and elevation" />
+
+# Layers and elevation
+
+<DecisionsBehind foundation="Foundations/Layers and elevation" />
+
+Most design systems say how far something is from the page with a shadow: a card casts a small
+one, a menu a larger one, a dialog the largest. Mola UI says it with **layers of cloth and the
+edges cut through them**, the method a mola is made with. A surface is a layer; its edge is a cut,
+drawn in ink; and when something is chosen or pointed at, the cut opens to show the layer beneath.
+There is exactly one blur in the system, and only for what genuinely floats.
+
+This page borrows the method, not the motifs. Nothing on it, or anywhere in the interface, copies a
+Guna design, symbol or pattern.
+
+## The stack
+
+From the bottom up, these are every depth an interface built with Mola UI has.
+
+<Specimen label="Ground, raised, one step down, revealed and floating, in order">
+  <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+    <div className="grid content-start gap-2">
+      <div className="grid h-24 place-items-center bg-cloth text-xs text-ink-2 shadow-[inset_0_0_0_1px_var(--keyline)]">page</div>
+      <p className="m-0 rotulo text-ink-muted">Ground</p>
+      <p className="m-0 text-sm text-ink-2"><code className="literal">bg-cloth</code>. The page. No edge.</p>
+    </div>
+    <div className="grid content-start gap-2">
+      <div className="grid h-24 place-items-center bg-cloth-pale text-xs text-ink shadow-cut">card</div>
+      <p className="m-0 rotulo text-ink-muted">Raised</p>
+      <p className="m-0 text-sm text-ink-2"><code className="literal">bg-cloth-pale shadow-cut</code>. A lighter cloth bounded by ink.</p>
+    </div>
+    <div className="grid content-start gap-2">
+      <div className="grid h-24 place-items-center bg-cloth-shade text-xs text-ink-2 shadow-cut">well</div>
+      <p className="m-0 rotulo text-ink-muted">One step down</p>
+      <p className="m-0 text-sm text-ink-2"><code className="literal">bg-cloth-shade</code>. Table headers, wells, read-only fields.</p>
+    </div>
+    <div className="grid content-start gap-2">
+      <div className="grid h-24 place-items-center bg-cloth-pale text-xs text-ink cut-band band-oro">selected</div>
+      <p className="m-0 rotulo text-ink-muted">Revealed</p>
+      <p className="m-0 text-sm text-ink-2"><code className="literal">cut-band band-oro</code>. The cut opens on the layer below.</p>
+    </div>
+    <div className="grid content-start gap-2">
+      <div className="grid h-24 place-items-center bg-cloth-pale text-xs text-ink shadow-floating">menu</div>
+      <p className="m-0 rotulo text-ink-muted">Floating</p>
+      <p className="m-0 text-sm text-ink-2"><code className="literal">shadow-floating</code>. The keyline and the one blur.</p>
+    </div>
+  </div>
+</Specimen>
+
+**Raised is a colour and an edge, not a shadow.** `--cloth-pale` is lighter than the page in both
+themes, so "raised" means the same thing in light and dark, and the ink keyline says where the
+layer ends. A card, an input, a menu and a dialog are all raised cloth; what tells them apart is
+whether they float.
+
+**One step down** is `--cloth-shade`: a region pressed below the page, such as a table's header
+row or a well that holds read-only content. It is the same keyline with a darker cloth, never an
+inner shadow.
+
+## The edge: a cut, not a border
+
+Every edge a person can touch is `shadow-cut`: 1.5px of ink drawn as a `box-shadow`. A border
+would take up layout space, so the hover that grows an edge into a band would push every
+neighbour along. A shadow paints outside the box and moves nothing. `border-keyline` exists, but
+only for decorative dividers between things nobody clicks, and it measures under 3:1 on purpose so
+nobody mistakes it for a control.
+
+## The reveal: cut-band and band-\*
+
+When a control is hovered or chosen, its cut opens: ink, then a band of colour, then ink again.
+The band is concentric, never offset to one side, because the layers of a mola are stacked and
+the reveal goes all the way round. `band-*` chooses the layer underneath.
+
+<Specimen label="The same field at rest, revealed, and on each layer">
+  <div className="flex flex-wrap gap-8 p-2">
+    <div className="grid h-(--control-h) min-w-36 items-center bg-cloth-pale px-(--control-px) text-sm shadow-cut">At rest</div>
+    <div className="grid h-(--control-h) min-w-36 items-center bg-cloth-pale px-(--control-px) text-sm cut-band band-oro">Hover: oro</div>
+    <div className="grid h-(--control-h) min-w-36 items-center bg-cloth-pale px-(--control-px) text-sm cut-band band-anil">Selected: añil</div>
+    <div className="grid h-(--control-h) min-w-36 items-center bg-cloth-pale px-(--control-px) text-sm cut-band band-rojo">Danger: rojo</div>
+  </div>
+</Specimen>
+
+Gold is the default reveal: it is the band a hover shows on a button, a field, a checkbox or a
+chip. Red is revealed only on something already about danger, because a field that flashes red
+under the pointer reads, for a moment, as an error.
+
+## Floating: the one blur
+
+Menus, popovers, selects, the command palette, dialogs, drawers and toasts float above the page,
+and they are the only things with a blur. They wear `shadow-floating`, which is the keyline **and**
+`--elevation-raised` together, from one shared surface (`floatingSurface` in the popover). Tailwind
+keeps one `box-shadow` per element, so the two have to be declared as one utility; written as
+`shadow-cut shadow-raised`, one of them silently wins.
+
+The keyline is never optional on a floating surface, and the dark theme is the reason. A blur is a
+darker patch of the ground under the surface, and on a near-black ground there is almost nothing
+darker to paint. In the light theme the blur does part of the work; in the dark one it all but
+disappears, and the keyline is what still says "this is above the page". Switch the toolbar's
+theme on an overlay story, such as the [menu of row actions](?path=/story/components-overlays-menu--row-actions),
+to see it.
+
+<Specimen label="A floating menu over a card">
+  <div className="relative h-48 max-w-md">
+    <div className="h-28 bg-cloth-pale p-4 shadow-cut">
+      <p className="m-0 text-sm font-semibold text-ink">Run 4,812</p>
+      <p className="m-0 text-sm text-ink-2">Weekly digest agent</p>
+    </div>
+    <div className="absolute end-2 top-12 grid w-44 bg-cloth-pale p-1 text-sm text-ink shadow-floating">
+      <span className="px-3 py-1.5">Rename</span>
+      <span className="bg-ink-soft px-3 py-1.5">Duplicate</span>
+      <span className="px-3 py-1.5 text-rojo-deep">Delete run</span>
+    </div>
+  </div>
+</Specimen>
+
+A dialog also dims what is behind it, toward the page's own colour (`--backdrop`) rather than
+toward grey.
+
+## Seams and fillers: diente and relleno
+
+Two more devices come from the same method, and neither is depth.
+
+- **Diente**, the sawtooth seam, marks the edge where the page gives way to a filled panel. It is
+  used rarely, on major seams only (the `Divider` with `variant="diente"`). In a mola this edge is
+  the slow, expensive cut, so there are only a few.
+- **Relleno**, the filler slits, fills space that has nothing in it yet: a divider in place of a
+  hairline, an empty state's texture, and, moving, the **working** state for work whose size is
+  unknown. See [The cut](?path=/docs/foundations-the-cut--overview) for each one drawn.
+
+<Specimen ground="pale" label="A seam into a filled panel, and relleno as a working state">
+  <div className="grid gap-6">
+    <div>
+      <div className="text-ink diente" />
+      <div className="on-ink p-4 text-sm">A filled panel, cut from the page above it.</div>
+    </div>
+    <div className="grid gap-2">
+      <p className="m-0 text-sm text-ink-2">Indexing documents</p>
+      <div className="h-2 band-oro relleno-working shadow-cut" />
+    </div>
+  </div>
+</Specimen>
+
+## Which layer, when
+
+| Surface | Layer | Utilities |
+| --- | --- | --- |
+| The page | Ground | `bg-cloth` |
+| Card, input, panel | Raised | `bg-cloth-pale shadow-cut` |
+| Table header, well, disabled field | One step down | `bg-cloth-shade` |
+| Hovered or selected control | Revealed | `cut-band band-oro` (or `band-anil`, `band-rojo`) |
+| Menu, popover, select, dialog, drawer, toast | Floating | `bg-cloth-pale shadow-floating` |
+| A whole region that belongs to a status | Wash | `bg-anil-soft`, `bg-verde-soft`… (see Color) |
+| The edge between the page and a filled panel | Seam | `diente` |
+
+Two things never appear: a radius, and a shadow on something that does not float. A card with a
+soft drop shadow is a different system's costume.
+
+## In forced colours
+
+Windows High Contrast removes every `box-shadow`, so every keyline, band and blur goes at once.
+`shadow-cut`, `shadow-floating`, `cut` and `cut-band` each draw a 1px outline in the user's text
+colour in that mode, so the layers keep their edges. The bands and the blur are decoration and go
+with the mode, which is the point of it. See
+[Accessibility](?path=/docs/foundations-accessibility--overview) for the rest.

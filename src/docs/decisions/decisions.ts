@@ -40,6 +40,7 @@ const NOTES: Record<string, Notes> = {
     governs: {
       'Foundations/The cut': 'The cut, the band, relleno and diente were kept whole when the system moved into product software.',
       'Foundations/Typography': 'The 14px product base replaced the 17px editorial one, and the small end of the scale follows density.',
+      'Foundations/Layers and elevation': 'The layers, the cut and the revealed band are the identity the system kept whole, so depth is cloth, not shadow.',
     },
   },
   '0002': {
@@ -54,6 +55,7 @@ const NOTES: Record<string, Notes> = {
     decided: 'Martian Mono returns for machine literals only: ids, payloads, hashes, model names. Never a label, a heading or a number.',
     governs: {
       'Foundations/Typography': 'Martian Mono is for machine literals only, never a label, a heading or a table number.',
+      'Foundations/Content and voice': 'Three voices with three jobs: the system, the reader and the machine, told apart by typeface.',
     },
   },
   '0004': {
@@ -62,6 +64,7 @@ const NOTES: Record<string, Notes> = {
     governs: {
       'Foundations/Color': 'Both themes are declared in one token, so a colour cannot exist in one and be forgotten in the other.',
       'Foundations/Accessibility': 'Both values of every colour sit side by side, so the contrast test resolves and checks both themes.',
+      'Foundations/Tokens': 'Every colour is one light-dark() pair, which is why each row has a light and a dark value from one declaration.',
     },
   },
   '0005': {
@@ -70,6 +73,7 @@ const NOTES: Record<string, Notes> = {
     governs: {
       'Foundations/Density': 'Density is a property of the surface, not a prop on each component.',
       'Foundations/Accessibility': 'Nothing drops below 11px text or a 24px target, even in compact.',
+      'Foundations/Spacing': 'Density redefines the spacing unit on a surface, so every gap and padding in it re-scales with no component involved.',
     },
   },
   '0006': {
