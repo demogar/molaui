@@ -180,6 +180,42 @@ import '@demogar/mola-ui/tokens.css'
 </style>
 ```
 
+## Connect an AI agent (MCP)
+
+The package ships `mola-ui-mcp`, a read-only [MCP](https://modelcontextprotocol.io) server. A
+coding agent can look components up through it instead of guessing props. It answers from the
+same generated manifest as these pages, for the version installed in your project. Its tools:
+
+- `list_components` and `get_component`: props, usage, accessibility, anatomy, where it is used
+  and its examples. `get_component` takes a page name ("Date picker") or an export ("IconButton").
+- `search`: components, patterns, tokens and rules, by words.
+- `get_tokens`: every token with its role and its value in both themes, filtered by text.
+- `get_rules`: the design rules, each with its reason, and the setup.
+- `get_pattern`: a whole screen, what it is built from and its states.
+
+In Claude Code:
+
+```bash
+claude mcp add mola-ui -- npx -y --package @demogar/mola-ui mola-ui-mcp
+```
+
+Add `--scope project` to share it through `.mcp.json`. Other clients (Claude Desktop, Cursor, VS
+Code) take the same command in their JSON config:
+
+```text
+{
+  "mcpServers": {
+    "mola-ui": {
+      "command": "npx",
+      "args": ["-y", "--package", "@demogar/mola-ui", "mola-ui-mcp"]
+    }
+  }
+}
+```
+
+`npx` runs the copy in your project's `node_modules` when there is one. The MCP SDK is bundled
+into the bin, so it is not a dependency of the library and your app's bundle does not change.
+
 ## Figma
 
 `tokens/mola.tokens.json` is the same palette in the [W3C Design Tokens](https://www.designtokens.org/)
