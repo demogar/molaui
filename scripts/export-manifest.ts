@@ -7,6 +7,9 @@
  *   llms.txt                  the index an agent reads first (llmstxt.org)
  *   llms-full.txt             the same with every component's guidance and
  *                             props inline, for an agent that reads one file
+ *   docs/ai/composition.json  which components each pattern and showcase is
+ *                             built from, read from its imports; the docs
+ *                             pages render "Built from" and "Used in" from it
  *
  * Like tokens/mola.tokens.json these are derived artefacts, never edited: an
  * agent that builds UI from a stale prop list writes code that does not
@@ -19,7 +22,7 @@
  *   npm run manifest            writes all three
  *   npm run manifest:check      fails if any is stale (CI)
  */
-import { globSync, readFileSync, writeFileSync } from 'node:fs'
+import { globSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { basename, dirname, relative, resolve } from 'node:path'
 
 import { withCompilerOptions, type ComponentDoc, type PropItem } from 'react-docgen-typescript'
@@ -30,10 +33,13 @@ import pkg from '../package.json' with { type: 'json' }
 import { ACCESSIBILITY } from '../src/docs/usage/accessibility'
 import { ANATOMY, ROOT_PART } from '../src/docs/usage/anatomy'
 import type { Accessibility } from '../src/docs/usage/accessibility-types'
+import { builtFrom, type Composition, compositionFiles } from '../src/docs/usage/composition'
 import { USAGE, type Usage } from '../src/docs/usage/guidance'
 import { type Phase, phaseOf, PHASES } from '../src/docs/usage/lifecycle'
 import { docsId, storyId } from '../src/docs/usage/links'
+import { PATTERN_STATES, type PatternStateId, PATTERNS, type PatternUsage } from '../src/docs/usage/patterns'
 import { RULES } from '../src/docs/usage/rules'
+import { isPattern } from '../src/docs/usage/showcases'
 
 const root = resolve(import.meta.dirname, '..')
 const SITE = pkg.homepage.replace(/\/?$/, '/')
@@ -259,6 +265,8 @@ interface Entry {
   anatomy?: { slot: string; parts: { part: string; name: string; does: string; selector: string }[] }
   exports: ExportEntry[]
   stories: { name: string; id: string; url: string }[]
+  /** The patterns and showcases that import it, read from their source. */
+  usedIn?: string[]
 }
 
 const entries = new Map<string, Entry>()
@@ -344,10 +352,59 @@ for (const info of exportsInfo) {
 const sorted = [...entries.values()].sort((a, b) => a.title.localeCompare(b.title))
 for (const entry of sorted) entry.exports.sort((a, b) => Number(b.kind === 'component') - Number(a.kind === 'component'))
 
+/* ── composition: what each pattern and showcase is built from ──────── */
+
+/** Every exported name, to the docs page that documents it. */
+const pageOf = new Map(sorted.flatMap((e) => e.exports.map((x) => [x.name, e.title] as const)))
+
+const compositions: Record<string, Composition> = {}
+const unknownParts: string[] = []
+for (const s of stories.filter((x) => !entries.has(x.title)).sort((a, b) => a.title.localeCompare(b.title))) {
+  const kind = isPattern(s.title) ? 'pattern' : 'showcase'
+  const dir = dirname(s.file)
+  const files = compositionFiles(kind, s.file, readdirSync(resolve(root, dir)).map((name) => `${dir}/${name}`))
+  const result = builtFrom(files.map((path) => ({ path, text: readFileSync(resolve(root, path), 'utf8') })), pageOf)
+  // A composed screen imports the library only through what it exports, so
+  // a copied pattern works against the package. A name with no docs page is
+  // a private import, and fails here rather than quietly dropping out.
+  unknownParts.push(...result.unknown.map((name) => `${s.title}: ${name}`))
+  compositions[s.title] = { kind, builtFrom: result.titles }
+}
+if (unknownParts.length) {
+  console.error(`Composed screens import names that no docs page documents:\n  ${unknownParts.join('\n  ')}`)
+  process.exitCode = 1
+}
+const usedIn = (title: string) =>
+  Object.entries(compositions)
+    .filter(([, c]) => c.builtFrom.includes(title))
+    .map(([from]) => from)
+for (const entry of sorted) {
+  const where = usedIn(entry.title)
+  if (where.length) entry.usedIn = where
+}
+
+const patternGuidance = (usage: PatternUsage, title: string) => ({
+  summary: usage.summary,
+  use: usage.use,
+  avoid: usage.avoid,
+  parts: compositions[title]!.builtFrom.map((part) => ({ title: part, role: usage.parts[part] ?? '' })),
+  states: Object.fromEntries(
+    (Object.keys(PATTERN_STATES) as PatternStateId[]).map((id) => {
+      const state = usage.states[id]
+      return [id, { ...(state.story ? { story: storyUrl(storyId(title, state.story)) } : {}), note: state.note }]
+    }),
+  ),
+  accessibility: usage.accessibility,
+})
+
 const showcases = stories.filter((s) => !entries.has(s.title)).map((s) => ({
   title: s.title,
+  kind: compositions[s.title]!.kind,
   docs: docsUrl(s.title),
+  ...(PATTERNS[s.title] ? { summary: PATTERNS[s.title]!.summary } : {}),
   ...(s.description ? { description: s.description } : {}),
+  builtFrom: compositions[s.title]!.builtFrom,
+  ...(PATTERNS[s.title] ? { guidance: patternGuidance(PATTERNS[s.title]!, s.title) } : {}),
   stories: s.stories.map((story) => ({ ...story, url: storyUrl(story.id) })),
 }))
 
@@ -452,7 +509,7 @@ ${byLayer('ai').map(linkLine).join('\n')}
 
 ## Patterns
 
-${showcases.map((s) => `- [${s.title.split('/').at(-1)}](${s.docs})`).join('\n')}
+${showcases.map((s) => `- [${s.title.split('/').at(-1)}](${s.docs})${s.summary ? `: ${s.summary}` : ''}`).join('\n')}
 `
 
 function propsTable(item: ExportEntry) {
@@ -503,11 +560,47 @@ function fullEntry(e: Entry) {
   return parts.join('\n')
 }
 
+function patternEntry(p: (typeof showcases)[number]) {
+  const g = p.guidance!
+  const name = (title: string) => title.split('/').at(-1)
+  return [
+    `### ${name(p.title)}`,
+    '',
+    p.docs,
+    '',
+    g.summary,
+    '',
+    'When to use:',
+    ...g.use.map((l) => `- ${l}`),
+    '',
+    'When not to:',
+    ...g.avoid.map((a) => `- ${a.when}${a.use ? ` Use ${a.label ?? name(a.use)}.` : ''}`),
+    '',
+    'Built from (read from its imports):',
+    ...g.parts.map((part) => `- ${name(part.title)}: ${part.role}`),
+    '',
+    'States:',
+    ...(Object.keys(PATTERN_STATES) as PatternStateId[]).map((id) => {
+      const state = g.states[id]!
+      return `- ${PATTERN_STATES[id]}: ${state.note}${state.story ? ` Story: ${state.story}` : ' (No story.)'}`
+    }),
+    '',
+    'Accessibility:',
+    ...g.accessibility.map((l) => `- ${l}`),
+    '',
+  ].join('\n')
+}
+
 const full = `${header}
 ${categories.map((c) => `## ${c}\n\n${byLayer('components').filter((e) => e.category === c).map(fullEntry).join('\n')}`).join('\n')}
 ## AI interface
 
 ${byLayer('ai').map(fullEntry).join('\n')}
+## Patterns
+
+Whole Cayuco screens composed from the components above, with nothing written for them. They live in \`src/patterns/\` and are not part of the package: copy one and adapt it.
+
+${showcases.filter((s) => s.guidance).map(patternEntry).join('\n')}
 ## Utilities
 
 ${utilities.map((u) => `- \`${u.name}\` (${u.kind}, ${u.source})${u.description ? `: ${u.description}` : ''}`).join('\n')}
@@ -519,6 +612,17 @@ const outputs: [string, string][] = [
   ['docs/ai/components.json', `${JSON.stringify(manifest, null, 2)}\n`],
   ['llms.txt', llms],
   ['llms-full.txt', full],
+  [
+    'docs/ai/composition.json',
+    `${JSON.stringify(
+      {
+        $comment: 'Generated by scripts/export-manifest.ts from the imports of each pattern and showcase. Do not edit: run `npm run manifest`.',
+        compositions,
+      },
+      null,
+      2,
+    )}\n`,
+  ],
 ]
 
 /**

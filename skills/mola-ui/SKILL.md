@@ -175,5 +175,7 @@ vocabulary, where plain `tailwind-merge` would drop a token colour class.
   with `label`.
 - The checklist is clean: no `border` on an interactive edge, no `rounded-*`, no `opacity-*` on
   disabled controls, no hex, no `pl-`/`pr-`/`left-`/`right-`.
-- Patterns for whole screens are in Storybook under Patterns: Settings page, List and detail,
-  Filtered table. Start from them rather than from a blank file.
+- Patterns for whole screens are in Storybook under Patterns: Agent hand-off, Confirmation,
+  Empty states, Filtered table, List and detail, Settings page. Start from them rather than from a
+  blank file; each says what it is built from and where its empty, loading, error and
+  no-permission states are.

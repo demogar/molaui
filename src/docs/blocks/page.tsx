@@ -234,8 +234,14 @@ export function AccessibilitySection({ page }: { page: PageData }) {
   )
 }
 
+/**
+ * Related: where to go instead, who sends readers here, and where the
+ * component is used. "Used in" is read from the patterns' and showcases'
+ * imports (docs/ai/composition.json), so it lists only screens that really
+ * import the component, and gains a screen the day one starts to.
+ */
 export function RelatedSection({ page }: { page: PageData }) {
-  if (!page.alternatives.length && !page.pointingHere.length) return null
+  if (!page.alternatives.length && !page.pointingHere.length && !page.usedIn.length) return null
   return (
     <section data-related className="sb-unstyled not-prose my-10 grid gap-4 font-ui text-sm text-ink">
       <SectionHeading>Related</SectionHeading>
@@ -259,6 +265,19 @@ export function RelatedSection({ page }: { page: PageData }) {
               {page.pointingHere.map((link) => (
                 <li key={link.title}>
                   <Link link={link} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+        {page.usedIn.length ? (
+          <div data-used-in className="grid content-start gap-2">
+            <h3 className="m-0 rotulo text-ink-muted">Used in</h3>
+            <ul className="m-0 grid list-disc gap-1.5 ps-5 text-ink-2">
+              {page.usedIn.map((link) => (
+                <li key={link.title}>
+                  <Link link={link} />
+                  <span className="text-ink-muted"> · {link.title.startsWith('Patterns/') ? 'pattern' : 'showcase'}</span>
                 </li>
               ))}
             </ul>
