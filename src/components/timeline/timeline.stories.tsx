@@ -4,6 +4,7 @@ import { StepList, Timeline } from './timeline'
 
 const meta = {
   title: 'Components/Data display/Timeline',
+  tags: ['stable'],
   component: Timeline,
   parameters: {
     docs: {

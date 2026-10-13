@@ -13,6 +13,7 @@ import { Toolbar, ToolbarButton, ToolbarGroup, ToolbarSeparator } from '../toolb
 
 const meta = {
   title: 'Components/Layout/App shell',
+  tags: ['stable'],
   component: AppShell,
   parameters: {
     layout: 'fullscreen',

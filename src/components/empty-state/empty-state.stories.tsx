@@ -6,6 +6,7 @@ import { EmptyState } from './empty-state'
 
 const meta = {
   title: 'Components/Feedback/Empty state',
+  tags: ['stable'],
   component: EmptyState,
   args: {
     title: 'No saved replies yet',

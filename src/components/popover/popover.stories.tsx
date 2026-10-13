@@ -7,6 +7,7 @@ import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from './popover
 
 const meta = {
   title: 'Components/Overlays/Popover',
+  tags: ['stable'],
   component: PopoverContent,
   parameters: {
     layout: 'centered',

@@ -4,6 +4,7 @@ import { Slider } from './slider'
 
 const meta = {
   title: 'Components/Forms/Slider',
+  tags: ['stable'],
   component: Slider,
   args: {
     label: 'Temperature',

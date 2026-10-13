@@ -7,6 +7,7 @@ const STATUSES = Object.keys(RUN_STATUS_LABEL) as RunStatusValue[]
 
 const meta = {
   title: 'AI/Run status',
+  tags: ['stable'],
   component: RunStatus,
   args: { status: 'running' },
   argTypes: { status: { control: 'select', options: STATUSES } },

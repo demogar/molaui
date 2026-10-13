@@ -4,6 +4,7 @@ import { Text } from './text'
 
 const meta = {
   title: 'Components/Typography/Text',
+  tags: ['stable'],
   component: Text,
   args: { children: 'The agent retrieved 14 documents and cited 3 of them.' },
   argTypes: {

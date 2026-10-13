@@ -4,6 +4,7 @@ import { Stat, StatGroup } from './stat'
 
 const meta = {
   title: 'Components/Data display/Stat',
+  tags: ['stable'],
   component: Stat,
   args: {
     label: 'Runs today',

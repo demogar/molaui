@@ -24,6 +24,7 @@ const USAGE = { input: 18_420, output: 1_204, cached: 12_800, costUsd: 0.0731, c
 
 const meta = {
   title: 'AI/Agent run',
+  tags: ['stable'],
   component: AgentRun,
   args: {
     name: 'Cayuco research agent',

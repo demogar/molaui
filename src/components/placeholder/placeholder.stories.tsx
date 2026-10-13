@@ -4,6 +4,7 @@ import { Placeholder } from './placeholder'
 
 const meta = {
   title: 'Components/Feedback/Placeholder',
+  tags: ['stable'],
   component: Placeholder,
   args: { label: 'Chart', name: 'Tickets by plan', alt: 'No data yet: tickets by plan', className: 'h-56 w-full max-w-96' },
   argTypes: { tone: { control: 'inline-radio', options: ['default', 'deep'] } },

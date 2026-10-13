@@ -6,6 +6,7 @@ import { Tooltip, TooltipProvider } from './tooltip'
 
 const meta = {
   title: 'Components/Overlays/Tooltip',
+  tags: ['stable'],
   component: Tooltip,
   args: { content: 'Copy run id', children: <span /> },
   parameters: {

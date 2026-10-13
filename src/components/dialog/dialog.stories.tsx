@@ -8,6 +8,7 @@ import { AlertDialog, Dialog, DialogClose, DialogContent, DialogTrigger } from '
 
 const meta = {
   title: 'Components/Overlays/Dialog',
+  tags: ['stable'],
   component: DialogContent,
   parameters: {
     // Base UI's focus trap puts aria-hidden sentinel spans (tabindex=0) beside

@@ -6,6 +6,7 @@ import { SegmentedControl } from './segmented-control'
 
 const meta = {
   title: 'Components/Forms/Segmented control',
+  tags: ['stable'],
   component: SegmentedControl,
   args: {
     'aria-label': 'View',

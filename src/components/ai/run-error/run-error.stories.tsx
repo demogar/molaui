@@ -10,6 +10,7 @@ import { PartialOutput, RunError } from './run-error'
 
 const meta = {
   title: 'AI/Run error',
+  tags: ['stable'],
   component: RunError,
   args: {
     step: 'Break the result down by plan',

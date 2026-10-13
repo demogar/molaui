@@ -13,6 +13,7 @@ const cite = citationRenderer(SOURCES)
 
 const meta = {
   title: 'AI/Sources',
+  tags: ['stable'],
   component: SourceList,
   args: { sources: SOURCES },
   parameters: {

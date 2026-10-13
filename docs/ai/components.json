@@ -52,8 +52,30 @@
     {
       "rule": "Use the components for behaviour. Do not re-implement focus trapping, roving focus or typeahead; the components are built on Base UI.",
       "why": "A maintained primitive gets keyboard and screen-reader behaviour right in more cases than a local copy."
+    },
+    {
+      "rule": "Check a component’s lifecycle phase before building on it. Stable is covered by semver, Experimental may change in a minor release, and Deprecated names its replacement: use that instead.",
+      "why": "A screen built on a component that is about to change or go is built twice."
+    },
+    {
+      "rule": "Do what each component’s accessibility section leaves to you, usually an accessible name or a label. The component handles roles, focus and announcements.",
+      "why": "Axe catches a missing name only on the screens it is run on; the component cannot know what its button is for."
     }
   ],
+  "phases": {
+    "experimental": {
+      "label": "Experimental",
+      "promise": "Its API may change in a minor release, without a deprecation first."
+    },
+    "stable": {
+      "label": "Stable",
+      "promise": "Semantic versioning applies: nothing breaks without a deprecation first."
+    },
+    "deprecated": {
+      "label": "Deprecated",
+      "promise": "It still works and warns in development. It will be removed; move to its replacement."
+    }
+  },
   "counts": {
     "components": 54,
     "parts": 145,
@@ -129,6 +151,7 @@
       "layer": "ai",
       "category": "AI",
       "docs": "https://demogar.github.io/molaui/?path=/docs/ai-agent-run--overview",
+      "phase": "stable",
       "summary": "A long-running agent run as a timeline: its status and live clock, each step on one spine, and the reason it stopped.",
       "description": "A long-running agent run, as a timeline. The questions an operator brings to a run are never “what percentage” — there isn’t one. They are: **is it still working, what is it doing right now, how long has that taken, and does it need me.** The layout answers them in that order.\n\n- The header carries the run’s status with a clock that keeps counting, *Cancel run* while it is open and *Retry run* once it failed or was stopped.\n- Steps hang off one spine, as an ordered list. Each node is the step’s status glyph. The spine is **solid ink through finished work and a pale keyline through work not yet started**, so how far the run has got is a shape you see before you read anything.\n- The active step carries the working relleno and a live clock; finished steps show fixed durations in tabular figures, aligned right so they compare down the column.\n- A failed step or one waiting for approval opens itself.\n- **When it stops, the reason comes first.** `failure` puts a `RunError` between the header and the steps: the step by number and in words, a plain sentence, the error verbatim, and *Retry from step N*, *Retry run* and *Copy error details*. It takes over the header’s Retry, so the retry sits next to its reason. Nothing that already arrived is cleared.\n- The run announces its own status changes once each. Steps are not announced: forty steps would talk over the operator for a minute.",
       "usage": {
@@ -171,6 +194,39 @@
           "Name the agent as people know it, in sentence case: “Cayuco research agent”.",
           "Step titles start with a verb and name the object: “Query the run history”, not “Querying…”.",
           "Write the summary as a result: “Answered with 3 sources. One guardrail flagged for review.”"
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves through Cancel run or Retry run, Copy run id, and each step that has detail."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Activates the focused button, or opens and closes the focused step."
+          },
+          {
+            "keys": [
+              "Shift+Tab"
+            ],
+            "action": "Moves back through the same stops."
+          }
+        ],
+        "handles": [
+          "The run is a section named by its heading, and the steps are an ordered list named “Steps of” the run.",
+          "Each change of run status is announced once through a polite status region; single steps are not announced, and a failure the panel already alerts is not said twice.",
+          "When a retry removes the failure panel, focus moves to the run’s heading instead of falling to the page.",
+          "Each step’s status is a glyph, a word and a colour, and a step that needs approval or has failed opens itself."
+        ],
+        "you": [
+          "Give the run a `name` and each step a `title` in words; the tool’s literal name belongs in `detail`.",
+          "Set `headingLevel` so the run’s heading fits the page outline."
         ]
       },
       "exports": [
@@ -329,6 +385,7 @@
       "layer": "ai",
       "category": "AI",
       "docs": "https://demogar.github.io/molaui/?path=/docs/ai-change-review--overview",
+      "phase": "stable",
       "summary": "A change an agent proposes, shown as the reviewer reads it, with Approve, Request changes and Reject under it.",
       "description": "An agent proposes a change; a person reviews it and decides. The change is shown as the reviewer needs it — files as diffs, records as fields before → after — and the decision sits under it.\n\n- **Three decisions, one weight.** Approve, Request changes and Reject are the same size and variant, in one row, each a glyph and a word. A review screen that makes Approve the ink button has decided for the reviewer; on a change an agent will apply, that is a defect. Reject is not red: rejecting is the safe choice.\n- **A no needs a reason.** The agent acts on it — it revises the change or stops proposing it. With the reason empty, Reject and Request changes say what is missing in words, move focus to the field and do not call `onDecide`. The hint says so before anyone fails it.\n- **The outcome replaces the form** and takes focus, so it is heard once. It is not also a live region; that would say it twice.\n- **Diff lines are a list, not a table.** A table made a screen reader say \"row 14 of 52, column 3\" before every line. Each line has a +/− glyph, a wash and visually hidden \"Added:\"/\"Removed:\". Line numbers and glyphs are `select-none` and `aria-hidden`, so a copied hunk is code.\n- **Hunk toggles are named by their visible text.** An `aria-label` failed axe’s label-content-name-mismatch: a voice-control user says what they see.\n- **Split is a container query.** `layout=\"split\"` sets old against new once the diff itself is 48rem wide, so a diff in a side panel stays unified.\n- Paths, values and ranges are literals with `dir=\"ltr\"`. Under forced colours the frames keep a 1px inset so their outline is not painted over.",
       "usage": {
@@ -367,6 +424,40 @@
           "Title the change by what it does, “Roll the help panel out to Starter”, not by the files it touches.",
           "Name a record by its type and key, so each field change has an owner: “Feature flag help_panel_v2”.",
           "A reason for a no says what is wrong and what would make it acceptable, because the agent acts on it."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves to the Reason field, then to Approve, Request changes and Reject."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Decides with the focused button."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "On a hunk header in a diff, folds or unfolds that hunk."
+          }
+        ],
+        "handles": [
+          "Reject or Request changes with an empty reason states the error in words, marks the field invalid, moves focus to it and does not call `onDecide`.",
+          "The outcome replaces the form and takes focus once, so it is heard once; a decision that arrives already made does not take focus.",
+          "The three decisions sit in a group named “Decision”, each a glyph and a word of the same weight.",
+          "Diff lines are list items that say “Added:” or “Removed:”, line numbers and +/− glyphs are hidden from screen readers, and counts are read as “12 lines added, 3 lines removed”."
+        ],
+        "you": [
+          "Give the change a `title` that says what it does, and pass `reviewer` so the outcome says who decided.",
+          "Set `headingLevel` on the review and its diffs so the headings fit the page outline."
         ]
       },
       "exports": [
@@ -665,6 +756,7 @@
       "layer": "ai",
       "category": "AI",
       "docs": "https://demogar.github.io/molaui/?path=/docs/ai-confidence--overview",
+      "phase": "stable",
       "summary": "How sure the system is, in three levels and in words, with UncertaintyNote for a specific claim to check.",
       "description": "How uncertainty surfaces. **Three levels, never a percentage.** “87.3% confident” claims a calibration no language model has, and a precise number gets treated as a measurement. Three coarse levels say what can honestly be said; the `basis` says why, which is the part an operator can check. Segments differ in count, not only colour.\n\n`UncertaintyNote` sits in the answer next to the claim it qualifies. It is añil, the informational layer — **not** gold or red: uncertainty is not an alarm, and dressing it as one teaches people to ignore it. It says what to verify and, ideally, offers the action that verifies it.",
       "usage": {
@@ -701,6 +793,17 @@
         "content": [
           "Write the basis as a short fact in lower case, since it follows the level: “sources disagree on the segment size”.",
           "Title an UncertaintyNote with the claim, “Unverified figure”, not with “Warning” or “Note”."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "The level is said in words, “High confidence”, and the three segments are hidden from screen readers.",
+          "The segments differ in how many are filled, not only in colour, so the level reads in greyscale.",
+          "`UncertaintyNote` is an `<aside>` named by its `title`, with its icon hidden from screen readers."
+        ],
+        "you": [
+          "Pass `basis` so the reader hears what the confidence rests on.",
+          "Give each `UncertaintyNote` a specific `title`; two notes with the default share one landmark name."
         ]
       },
       "exports": [
@@ -779,6 +882,7 @@
       "layer": "ai",
       "category": "AI",
       "docs": "https://demogar.github.io/molaui/?path=/docs/ai-message--overview",
+      "phase": "stable",
       "summary": "One turn of a conversation, laid out as a ledger: who spoke, when, with which model, and what they said or did.",
       "description": "One turn of a conversation, laid out as a **ledger, not bubbles**.\n\nChat bubbles are a messaging idiom: short turns between equals, read on a phone. A transcript in an internal tool is a *record* — answers run to paragraphs, tables and code, and the operator needs who said what, when, with which model. Bubbles would give a long answer 70% of the column and push its code into horizontal scroll. So every turn takes the full measure; the role sits in a gutter in the label register, cut short by its band; a rule separates turns. On a narrow container the gutter stacks above the content.\n\nThe operator’s prompt is Archivo — an instruction, scanned like the rest of the product. The model’s reply is Alegreya — it is read. That asymmetry is what lets a reader find the answers in a long thread at a glance.\n\nCopy, regenerate and rating appear on hover or focus-within, and always on touch devices. They are hidden by opacity, never `display`, so they stay in the tab order.",
       "usage": {
@@ -819,6 +923,48 @@
           "Set author to the name people know, “Cayuco” or “M. Herrera”; the role is only the fallback.",
           "Pass the model as its identifier, “cayuco-deep-3”; it is shown as a literal.",
           "System turns state what changed in a sentence or two: “Context reset. Earlier turns are summarised.”"
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Reaches a message’s Copy, Regenerate and rating buttons, which stay in the tab order while hidden."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Activates the focused action, Retry, or Jump to latest."
+          },
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "In a `Thread`, also stops on the transcript itself, so it can be scrolled."
+          },
+          {
+            "keys": [
+              "ArrowUp",
+              "ArrowDown",
+              "PageUp",
+              "PageDown"
+            ],
+            "action": "Scrolls the focused transcript."
+          }
+        ],
+        "handles": [
+          "Each message is an article named by its speaker and time, and a failed message states the failure in an alert with the error verbatim.",
+          "The rating buttons are toggle buttons with `aria-pressed`, and a copy is confirmed in a status region.",
+          "A `Thread` is a region named by `label`, not a live region, so a streaming answer is not read token by token.",
+          "The thread follows new content only while the reader is at the bottom, and offers Jump to latest when they are not."
+        ],
+        "you": [
+          "Give `Thread` a `label` that names the conversation.",
+          "Pass `author` when the speaker is more specific than the role, so the article’s name says who."
         ]
       },
       "exports": [
@@ -959,6 +1105,7 @@
       "layer": "ai",
       "category": "AI",
       "docs": "https://demogar.github.io/molaui/?path=/docs/ai-prompt-input--overview",
+      "phase": "stable",
       "summary": "The composer: a field that grows, attachments, a toolbar, and a send button that becomes Stop while a response generates.",
       "description": "The composer. The whole composer takes the focus ring — field, attachments and send button are one object to the person using it.\n\n- **Send becomes Stop**, in the same place at the same size. Stop is the most time-critical control in an AI interface: the model is going the wrong way and every second costs tokens.\n- **The draft is sacred.** Offline does not disable the field; the operator keeps typing and is told plainly why it cannot be sent.\n- **The estimate is labelled as one**: `~120 tok`, from characters ÷ 4. It is there so you notice you pasted a log file, not to bill anyone.\n- `submitOn=\"mod-enter\"` for long-form prompts, where an accidental send costs a model run.",
       "usage": {
@@ -994,6 +1141,52 @@
           "The label names who is being addressed: “Message Cayuco”.",
           "Write the placeholder as a hint of scope, “Ask about a run, an evaluation, a document…”, never as the only label.",
           "Name attachments by file name, with type and size as the detail: “CSV · 4.1 MB”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves to the field, then to the toolbar, Send or Stop, and each attachment’s remove button."
+          },
+          {
+            "keys": [
+              "Enter"
+            ],
+            "action": "Sends the prompt; with `submitOn=\"mod-enter\"` it adds a new line instead."
+          },
+          {
+            "keys": [
+              "Shift+Enter"
+            ],
+            "action": "Adds a new line when Enter sends."
+          },
+          {
+            "keys": [
+              "Control+Enter",
+              "Meta+Enter"
+            ],
+            "action": "Sends the prompt when `submitOn` is `mod-enter`."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Activates Send, Stop or Remove."
+          }
+        ],
+        "handles": [
+          "The field is labelled by `label` in a visually hidden `<label>`, and described by the hint line, which says why it cannot send while offline.",
+          "Offline keeps the field editable and the draft kept; while generating, Send becomes Stop in the same place.",
+          "Enter does not send while an input method is still composing.",
+          "The token estimate is heard as “About 120 tokens”, and each attachment’s remove button is named “Remove” and the file name."
+        ],
+        "you": [
+          "Pass a `label` that says who the message goes to, such as “Message Cayuco”.",
+          "Give each control you put in `toolbar` its own accessible name."
         ]
       },
       "exports": [
@@ -1160,6 +1353,7 @@
       "layer": "ai",
       "category": "AI",
       "docs": "https://demogar.github.io/molaui/?path=/docs/ai-reasoning--overview",
+      "phase": "stable",
       "summary": "The model’s thinking behind a disclosure, summarised as “Thought for 12.4s” and set a step quieter than the answer.",
       "description": "The model’s thinking, behind a disclosure. Reasoning is *evidence*, not the answer: useful when the answer looks wrong, noise when it looks right. So it is closed by default and summarised in one line — “Thought for 12.4s” — the fact most readers want from it. Open it and the thought is set in the muted reading voice, a step quieter than the answer it leads to.",
       "usage": {
@@ -1190,6 +1384,31 @@
         ],
         "content": [
           "Pass startedAt and endedAt, or durationMs, so the summary states a time rather than the bare word “Reasoning”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus to the summary line."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Opens or closes the reasoning."
+          }
+        ],
+        "handles": [
+          "The summary is a button with `aria-expanded`, named by its own words: “Thinking” or “Thought for 12.4s”.",
+          "Opened while the model thinks, the text is `aria-busy` and says “Reasoning complete.” once when it ends.",
+          "The working texture is hidden from screen readers; the word “Thinking” says the same thing."
+        ],
+        "you": [
+          "Pass `startedAt` and `endedAt`, or `durationMs`, so the summary says how long the model thought."
         ]
       },
       "exports": [
@@ -1266,6 +1485,7 @@
       "layer": "ai",
       "category": "AI",
       "docs": "https://demogar.github.io/molaui/?path=/docs/ai-run-error--overview",
+      "phase": "stable",
       "summary": "Why a run stopped: the step, a plain sentence, the error verbatim, and the ways back in order of cost.",
       "description": "What stopped a run, said plainly, with the way back next to it. `AgentRun` renders one above its steps when given `failure`; it also stands alone.\n\n- **The step, a sentence, then the literal.** The headline names the step by number and in words, to match the timeline. One sentence says what happened; the error follows verbatim, `dir=\"ltr\"`, so a right-to-left page cannot reorder it. “Something went wrong” is not one of the sentences.\n- **Three ways back, in order of cost.** *Retry from step N* keeps the work before the step, so it is primary; *Retry run* starts from nothing; *Copy error details* puts run, step, tool, error and time on the clipboard as plain text and says so once.\n- **Four reasons, because the next move differs.** Failed, rate limited, timed out, cancelled. A rate limit is a reason on a failed run rather than a ninth status: it keeps the failed mark and says “Rate limited” in words.\n- **A countdown is announced at milestones, not every second.** The figure ticks in tabular numerals as ordinary text; the wait is spoken with the error, at ten seconds and at zero. Without `autoRetry` the buttons stay disabled until zero, and the sentence says why.\n- **A cancellation is not an error.** No rojo wash, no alert, nothing to copy.\n- `PartialOutput` keeps what arrived before the stop, labelled as partial with a rule where it ends, so half a paragraph is never read as the conclusion.",
       "usage": {
@@ -1306,6 +1526,33 @@
           "A custom message says what happened and what was kept: “The query was denied, so the run stopped. Steps 1–3 are kept.”",
           "Pass the error exactly as the tool returned it; do not reword, shorten or translate it.",
           "A cancellation is stated without alarm, in the past tense: “You stopped the run.”"
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves to Retry from step, Retry run and Copy error details, in that order."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Activates the focused button."
+          }
+        ],
+        "handles": [
+          "The panel is a group named by its headline, and a failure, rate limit or timeout is an alert; a cancellation is not.",
+          "A countdown is announced only with the error, at ten seconds and at zero, never every second.",
+          "While a retry must wait, the buttons are disabled and a sentence says until when; Retry from step is described by the headline.",
+          "Copy error details confirms the copy once in a status region."
+        ],
+        "you": [
+          "Pass `step` and `stepNumber` so the headline and the retry button say where the run stopped.",
+          "Used on its own rather than inside `AgentRun`, move focus somewhere sensible when a retry removes the panel."
         ]
       },
       "exports": [
@@ -1488,6 +1735,7 @@
       "layer": "ai",
       "category": "AI",
       "docs": "https://demogar.github.io/molaui/?path=/docs/ai-run-status--overview",
+      "phase": "stable",
       "summary": "The one status vocabulary for a run, a step and a tool call: a glyph, a word and a colour, with an elapsed clock.",
       "description": "One vocabulary for every unit of model work — a run, a step, a tool call — so \"Needs approval\" on a tool call and on the run that holds it are the same mark and the same word.\n\n**Glyph + word + colour, always all three.** Each status differs in *shape* as well as hue, so the set survives greyscale, colour-blindness and a screenshot pasted into a monochrome ticket.\n\n**Latency is a clock, never a percentage.** A model call has no knowable total; elapsed time is the one honest number, and the one an operator needs to decide whether to wait or cancel. It is set in tabular figures and zero-padded so it ticks in place.",
       "usage": {
@@ -1519,6 +1767,16 @@
         "content": [
           "Keep the status words as they are: “Succeeded”, “Failed”, “Needs approval”, “Timed out”.",
           "Use the same words everywhere on the page; a run is not “Errored” in a table and “Failed” in its header."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Every status is a glyph, a word and a colour; the glyphs differ in shape, and the glyph is hidden from screen readers.",
+          "The elapsed clock is plain text, so it does not announce every tick."
+        ],
+        "you": [
+          "Announce a change of status yourself where it matters; `RunStatus` is not a live region.",
+          "Use `label` to change the word, such as “Thinking”, and keep it a word a person would say."
         ]
       },
       "exports": [
@@ -1644,6 +1902,7 @@
       "layer": "ai",
       "category": "AI",
       "docs": "https://demogar.github.io/molaui/?path=/docs/ai-sources--overview",
+      "phase": "stable",
       "summary": "Inline citation markers and the numbered list of sources they point to, with a preview card on hover, focus or first tap.",
       "description": "A knowledge platform lives or dies on whether people check its sources, so checking one has to cost **no click and no context switch**.\n\n`Citation` is a cut chip the size of a lowercase letter, tabular and keylined, so a paragraph dense with citations still reads as a paragraph. Its accessible name is the source title — “[2]” alone tells a screen reader nothing.\n\n- **A card on hover and on focus.** Given its `source`, a marker opens a preview card: number, title, domain, the passage used, when it was read, and a link to the document. It is Base UI’s PreviewCard, which opens on keyboard focus as well as hover, so keyboard readers get the same card. Escape closes it.\n- **The card is never the only route.** The marker is still a link to the matching card in the list (`#source-n`), and the preview repeats what that card says, so a reader who never sees it loses nothing.\n- **Touch.** There is no hover on a phone, so the first tap opens the card instead of jumping; a second tap on the open marker follows the link, and a tap elsewhere closes it.\n- **One numbering.** `citationRenderer(sources)` builds the `renderCitation` for `StreamingText` from the same array `SourceList` renders, so marker [2] always opens source 2. A marker with no matching source stays a plain marker rather than opening an empty card.\n\n`SourceList` says what each source is, where it lives, the passage that was used (in the reading voice — it is quoted prose), and when it was read: knowledge goes stale, and the date says how stale.",
       "usage": {
@@ -1680,6 +1939,37 @@
           "Use the document’s own title as the source title, not its URL or file name.",
           "Quote the passage exactly as retrieved; do not paraphrase it.",
           "Give the domain as people know it: “docs.cayuco.internal”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves to a citation marker and opens its preview card, or to a source card in the list."
+          },
+          {
+            "keys": [
+              "Enter"
+            ],
+            "action": "Follows the focused marker to its source card, or opens the focused source in a new tab."
+          },
+          {
+            "keys": [
+              "Escape"
+            ],
+            "action": "Closes the preview card."
+          }
+        ],
+        "handles": [
+          "A marker is a link named “Source 2:” and the source’s title, not “2”.",
+          "The preview card opens on keyboard focus as well as hover, and repeats the list card, so missing it loses nothing.",
+          "Links that open a new tab say so to screen readers, and the arrow glyphs are hidden from them."
+        ],
+        "you": [
+          "Pass `source` or `title` to each `Citation`, or the marker is named only by its number.",
+          "Render the `SourceList` on the same page under a heading, so `#source-n` has somewhere to land."
         ]
       },
       "exports": [
@@ -1784,6 +2074,7 @@
       "layer": "ai",
       "category": "AI",
       "docs": "https://demogar.github.io/molaui/?path=/docs/ai-streaming-text--overview",
+      "phase": "stable",
       "summary": "A model’s answer arriving a token at a time, in the reading voice, without layout shift, and announced once when it ends.",
       "description": "Text that arrives a token at a time.\n\n- **The reading voice.** A model’s answer is set in Alegreya because it is *read* — several paragraphs, at the reader’s pace. The chrome is Archivo; anything the machine *did* (a tool, an argument, an id) is a Martian Mono literal, because it is *inspected*. A reader can tell from the letterforms alone whether they are looking at the model talking, the model acting, or the product.\n- **No layout shift.** Text only grows at its end, and the block caret is a fixed-width inline box after the last glyph, so nothing above it reflows. A block caret reads as *output being written*; a thin bar would read as a field waiting for input.\n- **Announced once.** A live region on the text would read every token aloud. Instead the text is `aria-busy` while it streams and a separate polite status says “Response complete.” at the end.\n- **Cost grows with the block, not the answer.** Finished blocks are parsed once and kept, and each is a memoised component, so a chunk re-parses and re-renders only the block still arriving. Re-parsing from the top made every token cost the length of the answer before it: in jsdom, 20,000 tokens arriving four at a time took 67 s and rendered finished citations about a million times; now it takes 8 s and about 1,400. Pass `renderCitation` as a stable function, or finished blocks render again.\n- **Reduced motion.** The caret stops blinking and stays — still true, since text is still arriving.",
       "usage": {
@@ -1818,6 +2109,17 @@
         ],
         "content": [
           "Override doneAnnouncement only with a short, complete sentence: “Summary complete.”"
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "The text is `aria-busy` while it streams, so it is not read token by token.",
+          "A polite status says “Response complete.” or “Response stopped with an error.” once, when a running stream ends, and not on mount.",
+          "The caret is hidden from screen readers, and under reduced motion it stops blinking."
+        ],
+        "you": [
+          "Set `doneAnnouncement` when “Response complete.” is not the right words for what finished.",
+          "Name the citations you render through `renderCitation`; `Citation` does this from the source’s title."
         ]
       },
       "exports": [
@@ -1946,6 +2248,7 @@
       "layer": "ai",
       "category": "AI",
       "docs": "https://demogar.github.io/molaui/?path=/docs/ai-token-usage--overview",
+      "phase": "stable",
       "summary": "What a run consumed: input, cached and output tokens, cost, and how full the context window is.",
       "description": "What a run consumed. Token counts are compact (`12.4k`) — nobody compares the third significant figure of a token count. Cost keeps four decimals, because a fraction of a cent times a million runs is a budget line.\n\n**The context meter matters more than the spend.** Past ~80% a model starts dropping the early conversation, and the failure looks like the model “forgetting”, not like a limit. So the meter turns gold at 80% and red at 95% **and says so in words**, with the 80% line cut into the track so you see it before you cross it. It is a real `role=\"meter\"`.",
       "usage": {
@@ -1972,6 +2275,16 @@
         ],
         "content": [
           "Pass raw numbers; counts are shown compact, “12.4k”, and cost in US dollars to four decimals, “$0.0731”."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "The context bar is a `role=\"meter\"` named “Context window used”, with a value text such as “84% of the context window, near the limit”.",
+          "Near and at the limit are said in words as well as in gold and red.",
+          "The full variant is a description list, so each figure is heard with its term."
+        ],
+        "you": [
+          "Say whose usage it is, with a heading or the run it sits in; the component does not."
         ]
       },
       "exports": [
@@ -2058,6 +2371,7 @@
       "layer": "ai",
       "category": "AI",
       "docs": "https://demogar.github.io/molaui/?path=/docs/ai-tool-call--overview",
+      "phase": "stable",
       "summary": "One tool invocation: the tool’s literal name, its arguments, the result or error, and an approval when a person must decide.",
       "description": "One tool invocation: what the model asked a system to do, with what, and what came back. Everything the machine did is a **literal** — operators inspect these and paste them into tickets.\n\n- **Collapsed by default, except when it needs you.** A run can make forty calls; forty open payloads is a wall. A failed call and a call waiting for approval open themselves — hiding them would hide the only thing that matters.\n- **Human in the loop.** Approval says *why* in words and gives Approve and Deny the same size and variant, as Change review does for its three decisions. A consent control that nudges is not consent; for a tool that writes to production it is a bug.\n- **Working** is a strip of relleno along the top edge and a ticking clock — no spinner, no percentage.",
       "usage": {
@@ -2095,6 +2409,42 @@
           "The title says what the call is for, “Rollout results”; the name stays exactly as the model called it.",
           "Name approval buttons by the action: “Approve rollout” and “Deny”, not “Yes” and “No”.",
           "Keep the approval reason to a sentence or two: what changes, for whom, and whether it can be undone."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves to the call’s header, then to Approve, Deny, Retry call and the payload’s buttons when open."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Opens or closes the call from its header, or activates the focused button."
+          },
+          {
+            "keys": [
+              "ArrowUp",
+              "ArrowDown",
+              "ArrowLeft",
+              "ArrowRight"
+            ],
+            "action": "Scrolls a focused arguments or result block."
+          }
+        ],
+        "handles": [
+          "The header is a button with `aria-expanded`, and a failed call or one waiting for approval opens itself.",
+          "A failure is an alert with the error verbatim, except inside an `AgentRun` that has already raised it.",
+          "Status is a glyph, a word and a colour, and Approve and Deny are buttons of the same weight.",
+          "`ToolCallGroup` is a group named “N tools in parallel”, or by its `label`."
+        ],
+        "you": [
+          "State in `approval.reason` why a person must approve, in words.",
+          "Pass a `title` in words when the tool’s name alone does not say what the call is for."
         ]
       },
       "exports": [
@@ -2253,6 +2603,7 @@
       "layer": "components",
       "category": "Actions",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-actions-button--overview",
+      "phase": "stable",
       "summary": "A cut-shape button for an action on this page, with IconButton for an action shown as an icon alone.",
       "description": "A cut shape. Hover reveals the band of the layer beneath — the edge grows outward as a `box-shadow`, so nothing around it moves. **Primary is ink, not red**: in a tool with a primary action in every panel, red has to keep meaning *this destroys something*.",
       "usage": {
@@ -2294,6 +2645,34 @@
           "Start with a verb and name the object: “Delete run”, “Start run”, not “OK”, “Yes” or “Submit”.",
           "Write labels in sentence case with no trailing period; the button sets them in capitals itself.",
           "Give IconButton a label that names the action and the object, “Copy run id”; it is also the tooltip."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus to the button, including while it is loading."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Activates it, unless it is disabled or loading."
+          }
+        ],
+        "handles": [
+          "Renders a native `<button>` through Base UI, so it is announced as a button with its label as the name.",
+          "While `loading`, sets `aria-busy`, stops accepting presses and stays focusable, so focus is not thrown back to the top of the page.",
+          "Hides the leading icon and the arrow from assistive tech, so the label alone is the name.",
+          "Gives `IconButton` its `label` as both the `aria-label` and the native tooltip."
+        ],
+        "you": [
+          "Write a label that names the action with a verb: Deploy, Save changes.",
+          "Give every `IconButton` a `label`; the icon is not a name.",
+          "Use a link styled with `buttonVariants` when the control goes somewhere rather than does something."
         ]
       },
       "exports": [
@@ -2493,6 +2872,7 @@
       "layer": "components",
       "category": "Data display",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-data-display-avatar--overview",
+      "phase": "stable",
       "summary": "A person or an agent as a square tile, with initials or a glyph on a colour picked from the name.",
       "description": "A square of cut cloth. The ground is one of the five layers, picked from the name by a stable hash — the same person is the same colour on every screen without anyone storing a colour — and every pairing is one tokens.css already measured. An image replaces the initials only once it has actually loaded.",
       "usage": {
@@ -2520,6 +2900,19 @@
         "content": [
           "Name people by full name and agents as people know them: “Support triage”.",
           "Name an AvatarGroup by role: “Reviewers”, “On call”."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Gives the tile `role=\"img\"` and the `name` as its accessible name and tooltip.",
+          "Hides the initials or icon from assistive tech, and gives the image an empty `alt`, so the name is read once.",
+          "Keeps the initials until the image has loaded, so a broken URL never shows a broken-image glyph.",
+          "Makes `AvatarGroup` a named group, and reads the overflow tile as \"3 more\" rather than \"+3\"."
+        ],
+        "you": [
+          "Pass the full name, not initials, as `name`.",
+          "Give `AvatarGroup` a `label` that says who the people are: Reviewers, On call.",
+          "Wrap the avatar in a link or button yourself if it opens a profile; it is not interactive."
         ]
       },
       "exports": [
@@ -2668,6 +3061,7 @@
       "layer": "components",
       "category": "Data display",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-data-display-code--overview",
+      "phase": "stable",
       "summary": "Machine text: Code for an inline literal, CodeBlock for a labelled block with copy and wrap.",
       "description": "Machine text — the one place the system admits a monospace (Martian Mono, narrowed on its width axis). A cut panel on raised cloth, **not a black terminal box**: code is just another kind of content on the same cloth, and in the dark theme it is dark because everything is. JSON is tokenized by value kind — strings verde, numbers añil, `true/false/null` rojo — because what an operator scans a payload for is a value; keys stay ink. Truncated JSON from a stream renders exactly as it arrived.",
       "usage": {
@@ -2707,6 +3101,42 @@
         "content": [
           "Show literals exactly as the system stores them; do not change their case or add spaces.",
           "Label a CodeBlock by its role or file name, as the reader would search for it: “arguments”, “query.sql”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus to the wrap toggle, the copy button, then the code itself."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Toggles line wrapping, or copies the code, on the focused button."
+          },
+          {
+            "keys": [
+              "ArrowUp",
+              "ArrowDown",
+              "ArrowLeft",
+              "ArrowRight"
+            ],
+            "action": "Scrolls the code while it has focus."
+          }
+        ],
+        "handles": [
+          "Makes the scrolling `<pre>` focusable and names it by the block label, so the overflow is reachable without a mouse.",
+          "Reports the wrap toggle as pressed or not pressed with `aria-pressed`.",
+          "Announces a copy through a polite status that is always mounted, as well as turning the icon into a check.",
+          "Pins the code body left to right in a right-to-left page, while the header mirrors."
+        ],
+        "you": [
+          "Give the block a `label` that says what the code is: arguments, result, query.sql.",
+          "Set `copyable={false}` for content that must not leave the page."
         ]
       },
       "exports": [
@@ -2840,6 +3270,7 @@
       "layer": "components",
       "category": "Data display",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-data-display-description-list--overview",
+      "phase": "stable",
       "summary": "Term and value pairs: the properties of a run, a document or an evaluation.",
       "description": "Term and value pairs: the properties panel of every run, document and rollout. Three layouts for three reading tasks — **inline** for a side panel scanned top to bottom, **stacked** for values long enough to wrap, **grid** for a summary closing a section. Values marked `literal` are set in the machine face so an id is never mistaken for prose.",
       "usage": {
@@ -2873,6 +3304,16 @@
         "content": [
           "Terms are short nouns in sentence case, without colons: “Model”, “Duration”.",
           "Give values their units, “41s”, “$0.2185”, and show a status as a Badge rather than a bare word."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Renders a real `<dl>` with each `<dt>` and `<dd>` pair grouped in a `<div>`, so terms and values are read together.",
+          "Sets values marked `literal` in the machine face, so an id is not mistaken for prose."
+        ],
+        "you": [
+          "Write terms as short nouns, and keep each value to the fact it names.",
+          "Put a heading above the list; it has no name of its own."
         ]
       },
       "exports": [
@@ -2930,6 +3371,7 @@
       "layer": "components",
       "category": "Data display",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-data-display-stat--overview",
+      "phase": "stable",
       "summary": "A KPI tile: a label, a figure, a change with its direction and sentiment, and an optional sparkline.",
       "description": "A KPI tile. **Direction is not sentiment**: latency going up is bad, cost going down is good — so the arrow follows `direction`, the colour follows `sentiment`, and the caller states both. Colour is never alone: a hidden sentence reads \"Up 12%, vs yesterday, an improvement\".",
       "usage": {
@@ -2963,6 +3405,18 @@
           "The label names the measure and its window: “Runs today”, “p95 duration”.",
           "Put the unit in unit, “%”, and the comparison in the delta’s period, “vs yesterday”.",
           "Group digits and keep only the precision a reader uses: “1,204”, “97.8”."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Renders each tile as a `<dt>` and `<dd>` pair, inside one `<dl>` for a `StatGroup` or its own `<dl>` when alone.",
+          "Reads the delta as one sentence, \"Up 12%, vs last week, an improvement\", and hides the arrow and the separate parts.",
+          "Carries direction in the arrow and sentiment in the colour, so neither depends on colour alone.",
+          "Hides the sparkline from assistive tech, because the figure and the delta already say what it shows."
+        ],
+        "you": [
+          "Set `sentiment` on every delta; the tile does not guess that up is good.",
+          "Give the comparison in `period` so the change has something to be measured against."
         ]
       },
       "exports": [
@@ -3068,6 +3522,7 @@
       "layer": "components",
       "category": "Data display",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-data-display-swatch--overview",
+      "phase": "stable",
       "summary": "A small decorative colour key, square or round, in one of the badge tones, placed before the word it keys.",
       "description": "A colour key: the small square that ties a label to a colour used elsewhere — map pins, a column of urgencies, a chart series. It is **always decorative** (`aria-hidden`, no label prop), so the word beside it carries the meaning and colour is never alone. Tones are the badge tones; `warn` is the darkened gold that clears 3:1 on cloth, and `accent` is the field gold with an ink keyline. **Square** by default, because the system has no radius; `round` only to key something that is itself a dot. For a state mark inside a badge, use StatusDot.",
       "usage": {
@@ -3096,6 +3551,15 @@
             "do": "Use tone=\"accent\" when the key must match a gold field exactly.",
             "dont": "Paint a swatch with bg-oro by hand; on light cloth it falls below 3:1."
           }
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Is always `aria-hidden`, so it can never be the only carrier of a meaning.",
+          "Paints itself in the system text colour in forced colours mode, so the key stays visible."
+        ],
+        "you": [
+          "Put the word the colour stands for beside the swatch."
         ]
       },
       "exports": [
@@ -3195,6 +3659,7 @@
       "layer": "components",
       "category": "Data display",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-data-display-table--overview",
+      "phase": "stable",
       "summary": "Table primitives for rows of records, and DataTable for columns as data with sorting, selection, column visibility and pages.",
       "description": "Tables are read for hours, so every choice is about the eye travelling down a column. Rows take their height from `--row-h` (switch **Density**: compact fits ~40% more runs on a laptop screen). Numbers are right-aligned in tabular figures. Row dividers are quiet `--keyline-soft`; the header rule is ink — the one structural edge, where labels stop and data starts. Header labels sit in the rótulo register so they never read as a first row of data.",
       "usage": {
@@ -3231,6 +3696,55 @@
           "Headers are short nouns in sentence case: “Run”, “Started”, “Cost”.",
           "Show a value that does not exist yet as an em dash, “—”, not as zero.",
           "Set noun so counts read naturally: “3 runs selected”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus to the sort buttons, the row checkboxes and the other controls in turn."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Sorts by the focused column header."
+          },
+          {
+            "keys": [
+              "Space"
+            ],
+            "action": "Selects or clears the focused row checkbox, or every row on the page from the header box."
+          },
+          {
+            "keys": [
+              "ArrowUp",
+              "ArrowDown",
+              "ArrowLeft",
+              "ArrowRight"
+            ],
+            "action": "Scrolls the table frame when it overflows and has focus."
+          },
+          {
+            "keys": [
+              "Escape"
+            ],
+            "action": "Closes the column menu and returns focus to the Columns button."
+          }
+        ],
+        "handles": [
+          "Puts the scrolling frame in the tab order only when the table overflows it.",
+          "Sets `aria-sort` on the sorted column only, and `aria-selected` on selected rows.",
+          "Uses native checkboxes, and announces the selection count once through a polite status.",
+          "Marks a loading `DataTable` with `aria-busy` and hides its skeleton rows from assistive tech."
+        ],
+        "you": [
+          "Name the table with `label` or `aria-label`, or a `caption`.",
+          "Give `rowLabel` so each row checkbox says which row it selects.",
+          "Mark figure columns `numeric`, on the header and the cells alike."
         ]
       },
       "exports": [
@@ -3712,6 +4226,7 @@
       "layer": "components",
       "category": "Data display",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-data-display-timeline--overview",
+      "phase": "stable",
       "summary": "Timeline for events already written down, on a spine; StepList for ordered steps a person follows.",
       "description": "A spine beside the events it connects. Always an `<ol>` — the order is the content. The connector stops at the last event, because a line running past the final stop is what makes a timeline look unfinished. Nodes are cut squares toned by outcome; the **active** node carries working relleno, the step happening now rather than merely the latest.",
       "usage": {
@@ -3744,6 +4259,18 @@
           "Timeline titles state the event in the past tense: “Review approved”, “Rollout paused”.",
           "StepList titles are instructions: “Freeze the agent version”.",
           "Use one time format down the list: “Oct 1 · 09:12”."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Renders an `<ol>` named by `label`, so a screen reader says where an event sits in the sequence.",
+          "Hides the spine and the toned nodes from assistive tech; the title and meta carry what happened.",
+          "In `StepList`, hides positional numerals, which the list already announces, and reads authored labels."
+        ],
+        "you": [
+          "Give the timeline a `label`.",
+          "Say what happened in each title, because the node colour is not read.",
+          "Set `titleAs` to a heading level that fits the page outline."
         ]
       },
       "exports": [
@@ -3870,6 +4397,7 @@
       "layer": "components",
       "category": "Feedback",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-feedback-badge--overview",
+      "phase": "stable",
       "summary": "A small status mark in one of the system’s tones; StatusDot for a square dot beside a label; RecommendationBadge for an editorial scale.",
       "description": "A status mark cut from one of the four layers: añil is info, verde success, rojo danger, gold warn and accent. There is no fifth hue for \"running\" — a colour the system does not own is a colour the reader has to learn. **Soft is the default**, because a column of fifty solid statuses is a quilt, not a column. Every pairing is measured at ≥ 4.5:1 in both themes; the ratios are in the source.",
       "usage": {
@@ -3913,6 +4441,17 @@
         "content": [
           "One or two words in sentence case, with no punctuation: “Succeeded”, “Needs review”.",
           "Use the same status words as the filters and headers around it."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Hides `StatusDot` from assistive tech when it sits beside a word, and gives it `role=\"img\"` and a name when `label` is set.",
+          "Stills the pulse under reduced motion, leaving the dot in place.",
+          "Keeps dots visible in forced colours mode by painting them in the system text colour."
+        ],
+        "you": [
+          "Put the state in words inside the badge: Failed, Running.",
+          "Give a `StatusDot` that stands alone a `label`."
         ]
       },
       "exports": [
@@ -4095,6 +4634,7 @@
       "layer": "components",
       "category": "Feedback",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-feedback-callout--overview",
+      "phase": "stable",
       "summary": "A message that belongs to a region of the page, with a tone, an optional title and actions.",
       "description": "A message that belongs to a region of the page rather than to a moment. Tone is carried by a **relleno seam** along the top — the layer colour as a field, slit with ink — instead of the thick left border every admin template wears. Below it, the layer’s wash, mixed at the percentage that keeps the whole ink ramp legal. The icon takes colour; the words never do. For a short aside beside a hero or at the head of a list, `variant=\"flat\"` drops the seam, the keyline and the icon for the wash and a square Swatch, and never stretches to the height of its row.",
       "usage": {
@@ -4137,6 +4677,34 @@
           "The title states the condition: “Token budget at 86%”, not “Warning” or “Heads up”.",
           "The body says what it means and what to do: “Switch the model in settings to keep evaluation history comparable.”",
           "Actions are verbs on the object: “Retry from 812”, “View log”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus to the dismiss button, when `onDismiss` is set."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Dismisses the callout."
+          }
+        ],
+        "handles": [
+          "Becomes a region named by its title when it has one, and stays out of the landmark list when it does not.",
+          "Renders the title as a real heading at `headingLevel`.",
+          "Hides the seam, the icon and the swatch from assistive tech; the title and body carry the tone in words.",
+          "Names the dismiss button \"Dismiss\"."
+        ],
+        "you": [
+          "Choose a `headingLevel` that fits the page outline.",
+          "Render a callout that appears in response to an action inside a live region, or use a toast.",
+          "Move focus somewhere sensible after a dismiss, because the button that had it is gone."
         ]
       },
       "exports": [
@@ -4272,6 +4840,7 @@
       "layer": "components",
       "category": "Feedback",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-feedback-empty-state--overview",
+      "phase": "stable",
       "summary": "What a panel shows when it has nothing to show, in four variants: empty, no results, error and no permission.",
       "description": "A condition, not an apology. The panel is packed with **relleno** — what a mola does with an area that has nothing in it yet — and the words sit on a raised plate above it. Four variants, because they are four different conversations: an empty filter result must never tell someone to “create your first saved reply”.",
       "usage": {
@@ -4313,6 +4882,18 @@
           "The title states the condition: “No runs match these filters”, “Traces did not load”.",
           "The description gives the cause or the count: “3 filters are hiding 1,284 runs.”",
           "An error says what happened and what happens next: “The trace store returned 503. This panel will try again in 30s.”"
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Renders the title as a real heading at `headingLevel`.",
+          "Gives the `error` variant `role=\"alert\"`, so a failed load is announced.",
+          "Hides the icon and the seam from assistive tech."
+        ],
+        "you": [
+          "Pick the variant that matches the situation, so the words fit it.",
+          "Choose a `headingLevel` that fits the page outline.",
+          "Pass the action that moves the person forward in `actions`."
         ]
       },
       "exports": [
@@ -4426,6 +5007,7 @@
       "layer": "components",
       "category": "Feedback",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-feedback-placeholder--overview",
+      "phase": "stable",
       "summary": "A slot for something that does not exist yet, such as a chart with no data, announced as one image.",
       "description": "The slot where something will go and has not yet — designed as a condition, not an apology. A blank grey box reads as a failure to load; a cut panel filled with relleno reads as a slot cut and waiting, which is what relleno is for in a real mola. Born as the photo placeholder of the editorial system this grew out of.",
       "usage": {
@@ -4450,6 +5032,15 @@
         "content": [
           "label is the kind, “Chart” or “Preview”; name is the thing, “Tickets by plan”.",
           "alt says what is missing, “No data yet: run latency by agent”, because it is announced in place of the content."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Gives the slot `role=\"img\"` and `alt` as its accessible name.",
+          "Hides the visible label and name from assistive tech, so the slot is read once."
+        ],
+        "you": [
+          "Write an `alt` that says what is missing and why: Account logo, not uploaded yet."
         ]
       },
       "exports": [
@@ -4511,6 +5102,7 @@
       "layer": "components",
       "category": "Feedback",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-feedback-progress--overview",
+      "phase": "stable",
       "summary": "Progress for work moving toward done, which may be indeterminate; Meter for a reading inside a known range, with thresholds.",
       "description": "**Progress** is work moving toward done; **Meter** is a reading inside a known range. Two components, because they are two roles (`progressbar`, `meter`) and only one of them can be indeterminate. An indeterminate progress is the **working relleno** — the same texture a loading button and a running toast carry, so one mark means “this is being cut” everywhere.",
       "usage": {
@@ -4551,6 +5143,18 @@
           "Progress labels name the work as it happens: “Embedding documents”, “Evaluating prompts”.",
           "A bar that stays on screen after the work ends says how it ended: “Failed at 67%”.",
           "Meter labels name the measure and its period: “Tokens this month”."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Gives `Progress` `role=\"progressbar\"` and `Meter` `role=\"meter\"`, with their values, through Base UI.",
+          "Names each bar by its visible `label`.",
+          "Leaves out the value while `Progress` is indeterminate, and stills the working texture under reduced motion.",
+          "Shows a meter's level as a figure and as ticks on the track, not by the fill colour alone."
+        ],
+        "you": [
+          "Give every bar a `label`, or an `aria-label` when there is no room for one.",
+          "Use `valueText` when a count says more than a percentage: 212 of 300 prompts."
         ]
       },
       "exports": [
@@ -4690,6 +5294,7 @@
       "layer": "components",
       "category": "Feedback",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-feedback-skeleton--overview",
+      "phase": "stable",
       "summary": "Bones in the shape of content that has not arrived, with SkeletonGroup to mark the region busy and say once what is loading.",
       "description": "Loading is a cut shape whose content has not arrived — it keeps the keyline and carries relleno. Without the texture the state ladder inverts: a hollow rectangle for *loading* next to a furnished placeholder for *empty* makes loading look emptier than empty.\n\nThree shapes: **block** (a card, chart or image), **text** (sized in `em`, so it follows the type around it) and **avatar** (the same square steps as `Avatar`). A band of raised cloth sweeps over every bone in reading order, mirrored in right-to-left; it replaced an opacity pulse, which faded the keyline with the fill. Under **reduced motion** the sweep is removed, not slowed. In **forced colours** the sweep goes and text bones paint in GrayText.\n\nBones are hidden from assistive tech. `SkeletonGroup` puts `aria-busy` on the region — once, not on every bone — and speaks its label through a polite status that is present from the first render.",
       "usage": {
@@ -4728,6 +5333,16 @@
         ],
         "content": [
           "The group label names what is loading: “Loading agent”, “Loading runs”."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Hides every bone from assistive tech.",
+          "In `SkeletonGroup`, marks the region `aria-busy` and says the `label` once through a polite status mounted from the first render.",
+          "Removes the sweep under reduced motion, and in forced colours draws text bones in the system grey."
+        ],
+        "you": [
+          "Wrap the bones in a `SkeletonGroup` and say what is loading in its `label`: Loading runs."
         ]
       },
       "exports": [
@@ -4903,6 +5518,7 @@
       "layer": "components",
       "category": "Feedback",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-feedback-toast--overview",
+      "phase": "stable",
       "summary": "A floating notice for something that happened elsewhere or just now; a running toast turns into its result in place.",
       "description": "Something happened somewhere other than where the operator is looking. Tone is a single cut square of the layer colour beside the title — four toasts in four washes is a fruit bowl, four cloth cards with four marks is a list. **`toast.running()`** is the case an AI platform has and a generic library does not: a toast with no timeout and a working relleno strip, which `toast.update(id, …)` turns into the result *in place*, so the outcome lands where the operator last saw the work.",
       "usage": {
@@ -4939,6 +5555,52 @@
           "The title states what happened, in the past tense: “Index rebuilt”, “Deploy failed”.",
           "The description adds the cause or the figures: “1,204 documents · 3m 41s”.",
           "The action is one verb: “Undo”, “Retry”, “View”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "F6"
+            ],
+            "action": "Moves focus to the toast region and pauses the timers."
+          },
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves through the toasts and their action and dismiss buttons."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Runs the action, or dismisses the toast, on the focused button."
+          },
+          {
+            "keys": [
+              "Escape"
+            ],
+            "action": "Closes the toast that has focus."
+          },
+          {
+            "keys": [
+              "Shift+Tab"
+            ],
+            "action": "Leaves the region from its start and returns focus to where it was."
+          }
+        ],
+        "handles": [
+          "Renders the stack in a polite live region, and announces `danger` toasts assertively.",
+          "Prefixes the title with hidden words for its tone: Success, Error, In progress.",
+          "Pauses the timers while the region has keyboard focus, and keeps a running toast until it is updated or dismissed.",
+          "Names the dismiss button \"Dismiss\"."
+        ],
+        "you": [
+          "Mount `ToastProvider` once, near the root.",
+          "Write a title that says what happened without the page around it.",
+          "Use a dialog for anything the person must answer; a toast can be missed."
         ]
       },
       "exports": [
@@ -5011,6 +5673,7 @@
       "layer": "components",
       "category": "Forms",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-forms-checkbox--overview",
+      "phase": "stable",
       "summary": "A square that turns a choice on or off, applied when the form is saved; CheckboxGroup for any number of choices from a set.",
       "description": "A square cut from the cloth. Checked, it fills with ink and the mark is cut out of it — the same inversion as a selected chip or segment, so “on” looks the same everywhere. Indeterminate is a bar, not a faded tick: “some” is a third state, not a rendering glitch.",
       "usage": {
@@ -5047,6 +5710,32 @@
           "Labels state what is turned on, in sentence case, with no trailing period.",
           "Conditions go in description, not in the label: “Up to three times, with exponential backoff.”",
           "The legend names the set: “Tools”, “Notify on”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus to the checkbox."
+          },
+          {
+            "keys": [
+              "Space"
+            ],
+            "action": "Toggles it. Enter does not, as with a native checkbox."
+          }
+        ],
+        "handles": [
+          "Base UI renders `role=\"checkbox\"` with `aria-checked`, and `aria-checked=\"mixed\"` for indeterminate.",
+          "The `label` names the control and the whole label toggles it; the `description` sits outside the label and arrives once, through `aria-describedby`.",
+          "Indeterminate is a bar, not a faded check, so the third state is a shape and not a tint.",
+          "`CheckboxGroup` is a real `<fieldset>` and `<legend>`, so each option is heard in the group’s context."
+        ],
+        "you": [
+          "Give every checkbox a `label`, or an `aria-label` when it stands alone in a table row.",
+          "Give a set of checkboxes a `CheckboxGroup` with a `legend` that names the question."
         ]
       },
       "exports": [
@@ -5159,6 +5848,7 @@
       "layer": "components",
       "category": "Forms",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-forms-chip--overview",
+      "phase": "stable",
       "summary": "A filter chip with a real checkbox or radio inside, filled with ink when on, with an optional count.",
       "description": "A filter whose state you can see. A real `<input>` sits inside the styled `<label>`, so the keyboard, radio arrow keys and form submission come from the platform. Checked fills with ink — the cut — and hovering an unchecked chip reveals the band beneath it: the same gesture, stopped halfway.",
       "usage": {
@@ -5194,6 +5884,46 @@
         "content": [
           "Use the same words as the status being filtered: “Succeeded”, “Failed”.",
           "Keep default chips to one line; use the comfortable size for labels that wrap."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus to the chip, or into a radio set at its checked chip."
+          },
+          {
+            "keys": [
+              "Space"
+            ],
+            "action": "Toggles a checkbox chip, or checks a radio chip."
+          },
+          {
+            "keys": [
+              "ArrowRight",
+              "ArrowDown"
+            ],
+            "action": "Moves to and checks the next chip in a radio set."
+          },
+          {
+            "keys": [
+              "ArrowLeft",
+              "ArrowUp"
+            ],
+            "action": "Moves to and checks the previous chip in a radio set."
+          }
+        ],
+        "handles": [
+          "Each chip is a real `<input type=\"checkbox\">` or `radio`, visually hidden but focusable, so state, keys and form submission come from the platform.",
+          "The wrapping `<label>` names the input, and `count` is joined with a real space so it is heard as “Failed 12”.",
+          "Checked is an ink fill, not a hue change, and forced colours keep it.",
+          "`ChipGroup` is a `<fieldset>` whose `legend` can be visually hidden with `hideLegend` and still be announced."
+        ],
+        "you": [
+          "Wrap a row of chips in `ChipGroup` with a `legend` that says what they filter.",
+          "Give radio chips one shared `name`, or the arrow keys will not move between them."
         ]
       },
       "exports": [
@@ -5313,6 +6043,7 @@
       "layer": "components",
       "category": "Forms",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-forms-combobox--overview",
+      "phase": "stable",
       "summary": "A select you can type into: Combobox always ends on an option from the list; Autocomplete takes free text with suggestions.",
       "description": "A select you can type into, for lists too long to scroll. **`Combobox` always ends on one of its options** — the text is a filter, and the form submits a value the list offered. **`Autocomplete` is free text with suggestions** — what you type is the value. Two components rather than a flag, because \"what happens to a half-typed word?\" is the question the name answers.\n\nThe field is cut like every other control; the popup and rows are the Select’s, so highlighted (the cursor) is the ink fill and selected (the value) a check and a wash. The popup is never silently empty: it says **Searching…** next to the working relleno while results load, and **No matches** when the filter leaves nothing. With `multiple`, each value is the system’s chip inside the field; the keyboard reaches the chips from the start of the input (ArrowLeft, ArrowRight in right-to-left), and the input’s description says so. Behaviour is Base UI’s Combobox and Autocomplete.",
       "usage": {
@@ -5354,6 +6085,57 @@
         "content": [
           "The placeholder says what to type: “Search people”, “run-4187 or eval-sweeper”.",
           "Keep a disabled option in the list, with its reason as the description: “Requires approval”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus to the input."
+          },
+          {
+            "keys": [
+              "ArrowDown",
+              "ArrowUp"
+            ],
+            "action": "Opens the list, then moves the highlight while the caret stays in the input."
+          },
+          {
+            "keys": [
+              "Enter"
+            ],
+            "action": "Chooses the highlighted option."
+          },
+          {
+            "keys": [
+              "Escape"
+            ],
+            "action": "Closes the list."
+          },
+          {
+            "keys": [
+              "ArrowLeft"
+            ],
+            "action": "With `multiple`, reaches the chips from the start of the input; ArrowRight in right-to-left."
+          },
+          {
+            "keys": [
+              "Backspace"
+            ],
+            "action": "With `multiple`, removes the focused chip, or the last one from an empty input."
+          }
+        ],
+        "handles": [
+          "Base UI renders a `combobox` input wired to a `listbox` with `aria-activedescendant`, and labelled `group`s for grouped options.",
+          "Loading and “No matches” are said in Base UI’s polite status regions, and the list carries `aria-busy` while loading.",
+          "The clear and open buttons are named (“Clear selection”), and each chip’s remove button is named “Remove <label>”.",
+          "With `multiple`, the input is described with the count and the key that reaches the chips."
+        ],
+        "you": [
+          "Name it: put it in a `Field`, or pass `label` or `aria-label`.",
+          "Translate `clearLabel`, `triggerLabel`, `removeLabel` and `emptyMessage` with the rest of the page."
         ]
       },
       "exports": [
@@ -5701,6 +6483,7 @@
       "layer": "components",
       "category": "Forms",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-forms-date-picker--overview",
+      "phase": "stable",
       "summary": "DatePicker for one date, typed or picked from a calendar; DateRangePicker for a period, with presets and two typed ends.",
       "description": "The WAI-ARIA APG **date picker dialog**: a text input you can type into, and a button that opens a calendar grid in a non-modal dialog anchored to the field. Base UI has no calendar, so the grid owns its keyboard model and keeps to the APG one exactly — arrows by day and week (mirrored in right-to-left), PageUp/PageDown by month, Shift for a year, Home/End to the edges of the week, Enter or Space to choose, Escape to close with focus back on the button.\n\nMonth and weekday names, digits, the typed order and the first day of the week all come from `Intl` for the `locale` you pass; nothing defaults to `en-US` behind your back. Typed dates commit on blur or Enter, and a refusal is a sentence that says why — try `31/02/2027`, or a day before the minimum. The range picker types too, with a start and an end input inside its popup that share the same parsing and sentences. Values are plain `Date`s at local midnight and submit as `yyyy-mm-dd`; there is no date library, because calendar days need none.",
       "usage": {
@@ -5743,6 +6526,70 @@
           "Label the field by what the date is for: “Run evaluation on”, “Report period”.",
           "Leave the placeholder to the component; it is the locale’s own pattern.",
           "Rules the picker cannot know, such as required, go to Field as an instruction: “Choose a date for the evaluation.”"
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus to the date input, then to the calendar button."
+          },
+          {
+            "keys": [
+              "Enter"
+            ],
+            "action": "In the input, reads the typed date and states why if it is refused."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "On the calendar button, opens the calendar on the chosen day; in the grid, chooses the focused day."
+          },
+          {
+            "keys": [
+              "ArrowLeft",
+              "ArrowRight",
+              "ArrowUp",
+              "ArrowDown"
+            ],
+            "action": "Moves by day and by week; left and right swap in right-to-left."
+          },
+          {
+            "keys": [
+              "PageUp",
+              "PageDown",
+              "Shift+PageUp",
+              "Shift+PageDown"
+            ],
+            "action": "Moves by month, or by year with Shift."
+          },
+          {
+            "keys": [
+              "Home",
+              "End"
+            ],
+            "action": "Moves to the first or last day of the week."
+          },
+          {
+            "keys": [
+              "Escape"
+            ],
+            "action": "Closes the calendar without changing the value and returns focus to the button."
+          }
+        ],
+        "handles": [
+          "The calendar is a `grid` named by its month heading, with one tab stop; the day carries `aria-selected`, today `aria-current=\"date\"`, and an unavailable day says so in its name.",
+          "The month heading is a polite live region, so paging is announced.",
+          "The input is described by its format (“Format: DD/MM/YYYY”), and a refused date is a sentence in a `role=\"alert\"` with a mark, not colour alone.",
+          "The calendar button is named by the value, “Change date, 6 October 2026”, and focus returns to it when the calendar closes."
+        ],
+        "you": [
+          "Name it: put it in a `Field`, or pass `aria-label`.",
+          "State rules the picker cannot know, such as “required”, through `Field`’s `error`."
         ]
       },
       "exports": [
@@ -6196,6 +7043,7 @@
       "layer": "components",
       "category": "Forms",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-forms-field--overview",
+      "phase": "stable",
       "summary": "A label, a control and a hint or error wired together; the page also covers Input, Textarea, SearchInput and Label.",
       "description": "Label, control and hint or error, wired so the caller cannot forget the half a screen reader depends on. `children` is a **render prop** rather than `cloneElement`: the `id`, `aria-describedby` and `aria-invalid` it computes are spread onto the control in plain sight, onto any control — `Input`, `Textarea`, a `Select` trigger, a native `<select>`.",
       "usage": {
@@ -6237,6 +7085,34 @@
           "Labels are short nouns in sentence case: “Run name”, “Webhook URL”.",
           "Hints explain the consequence: “Shown in the run list and in alerts.”",
           "Errors say what is wrong and how to fix it: “Must be between 1 and 900 seconds.”"
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus to the control."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "On a search field’s clear button, empties the field and returns focus to it."
+          }
+        ],
+        "handles": [
+          "`Field` links the label to the control and joins the hint and error into `aria-describedby`, in the order they are shown.",
+          "An error sets `aria-invalid`, is announced with `role=\"alert\"`, and carries a cut square so it is not colour alone.",
+          "The required asterisk is hidden from assistive technology while `required` reaches the control; “Optional” is kept as a separate word.",
+          "`SearchInput` is a `searchbox`, and its clear button is named “Clear search”."
+        ],
+        "you": [
+          "Spread the `control` props onto the control; without them it has no name and no description.",
+          "When several fields fail at once, add an error summary at the top of the form and move focus to it.",
+          "Bind the key shown by `shortcut` yourself; the key cap is display only."
         ]
       },
       "exports": [
@@ -6479,6 +7355,7 @@
       "layer": "components",
       "category": "Forms",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-forms-file-upload--overview",
+      "phase": "stable",
       "summary": "A dropzone with a real Browse button, and a list of the files put there with their status and progress.",
       "description": "A dropzone with a real button in it, and a list of what was put there. **The keyboard path is the button**: dragging has no keyboard equivalent, so the zone is not a fake button — Enter or Space on Browse opens the native picker, and pressing anywhere else in the zone does too, for the pointer. **The picker’s filter is advice**: drag and drop never applies it and every platform lets the person pick \"All files\", so every file is checked again and each rejection is a sentence that names the file and the rule. **Dragging is said, not only shown**: the gold band is revealed, the glyph changes and the headline becomes \"Drop to add 3 files\", and the same sentence goes to a polite live region. Each row states its status as glyph, word and colour, with a progress bar while it moves. Sizes are SI (1 MB = 1,000,000 bytes) because Intl’s `megabyte` is, and the limit the person reads has to be the limit the check applies.",
       "usage": {
@@ -6507,6 +7384,33 @@
         "content": [
           "When onUpload rejects, its error message is one sentence the person can act on; it is shown under the row.",
           "Pass messages to translate the copy, and keep each rule stated with its figure."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus to the browse button, then to each file’s Retry and Remove buttons."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Opens the system file picker, or runs the focused Retry or Remove."
+          }
+        ],
+        "handles": [
+          "The keyboard path is a real `<button>`; the dropzone is not a fake button.",
+          "The accepted types and size limit are part of the button’s description, ahead of `Field`’s hint.",
+          "Drag state, added files, rejections and finished uploads are said in a polite status region, and each rejection is a sentence naming the file and the rule.",
+          "Removing a row moves focus to a neighbouring Remove button, or back to the browse button, never to the page."
+        ],
+        "you": [
+          "Name it: put it in a `Field`, or pass `aria-label`; alone it is named only “Browse”.",
+          "Pass `messages` to translate every announcement and button name."
         ]
       },
       "exports": [
@@ -6731,6 +7635,7 @@
       "layer": "components",
       "category": "Forms",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-forms-number-input--overview",
+      "phase": "stable",
       "summary": "A number you can type and step, formatted for a locale, with bounds, a unit and steppers inside the field.",
       "description": "Base UI’s NumberField in the system’s cut: typed, stepped and formatted with `Intl.NumberFormat` for the `locale` you pass. ArrowUp/Down step by `step`, Shift by `largeStep`, Alt by `smallStep`, Home/End jump to the bounds, and PageUp/PageDown step by `largeStep` as the APG spinbutton pattern asks.\n\nThe − and + steppers sit inside the keyline at the end, so a number field is one shape the height of every other control; they are not tab stops, because the arrows already do their job. **The wheel is off by default** — in a long form the wheel is how people scroll, and a value that changed under the pointer is a silent edit. A `unit` suffix is added to the accessible description; for units Intl knows, a `format` puts the unit in the value itself, localised.",
       "usage": {
@@ -6767,6 +7672,47 @@
         "content": [
           "Labels name the quantity and its scope: “Token budget per run”, “Retries before halting”.",
           "Errors give the bound: “The workspace allows at most 8 concurrent runs.”"
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus to the input. The − and + buttons are not tab stops."
+          },
+          {
+            "keys": [
+              "ArrowUp",
+              "ArrowDown"
+            ],
+            "action": "Steps by `step`, with Shift by `largeStep` and with Alt by `smallStep`."
+          },
+          {
+            "keys": [
+              "PageUp",
+              "PageDown"
+            ],
+            "action": "Steps by `largeStep`, within the bounds."
+          },
+          {
+            "keys": [
+              "Home",
+              "End"
+            ],
+            "action": "Jumps to `min` or `max`."
+          }
+        ],
+        "handles": [
+          "Base UI’s NumberField formats and parses with `Intl.NumberFormat` for the `locale`, and clamps to `min` and `max`.",
+          "The steppers are named “Increase” and “Decrease”, and the one at a bound is disabled.",
+          "A `unit` is added to the input’s description, so the number is heard with it.",
+          "The wheel changes the value only when `allowWheelScrub` is set, so scrolling a form never edits it."
+        ],
+        "you": [
+          "Name it: put it in a `Field`, or pass `label` or `aria-label`.",
+          "Translate `incrementLabel` and `decrementLabel`."
         ]
       },
       "exports": [
@@ -6890,6 +7836,7 @@
       "layer": "components",
       "category": "Forms",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-forms-radio--overview",
+      "phase": "stable",
       "summary": "One choice from a small set, all visible, in a named RadioGroup; square, and told from a checkbox by its mark.",
       "description": "**Square, on purpose.** What tells a person “one of these” is the grouping, the legend and the behaviour — arrows move the choice, Tab leaves the group — not the circle; and a circle would be the only curve in a system cut with a blade. So a radio differs from a checkbox by its *mark*: a checkbox fills and has a check cut out of it, a radio keeps its cloth and has a smaller solid square set inside. Semantics are unchanged: Base UI renders `role=\"radio\"` in a named `radiogroup`.",
       "usage": {
@@ -6924,6 +7871,45 @@
         "content": [
           "Option labels are parallel and start the same way: “Retry, then continue”, “Skip the step”, “Halt the run”.",
           "The consequence goes in description: “The run is marked failed and the owner is paged.”"
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus into the group at the checked radio, and Tab again leaves the group."
+          },
+          {
+            "keys": [
+              "ArrowDown",
+              "ArrowRight"
+            ],
+            "action": "Moves to and checks the next radio, wrapping at the end."
+          },
+          {
+            "keys": [
+              "ArrowUp",
+              "ArrowLeft"
+            ],
+            "action": "Moves to and checks the previous radio."
+          },
+          {
+            "keys": [
+              "Space"
+            ],
+            "action": "Checks the focused radio. Enter does not."
+          }
+        ],
+        "handles": [
+          "Base UI renders `role=\"radio\"` inside `role=\"radiogroup\"`, so the square is still announced as a radio button.",
+          "`RadioGroup` is named by its visible `label` through `aria-labelledby`, and described by its `description`.",
+          "Each radio is named by its `label` alone, and its `description` arrives through `aria-describedby`."
+        ],
+        "you": [
+          "Give `RadioGroup` a `label` that asks the question the options answer.",
+          "Give every radio a `label`."
         ]
       },
       "exports": [
@@ -7021,6 +8007,7 @@
       "layer": "components",
       "category": "Forms",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-forms-segmented-control--overview",
+      "phase": "stable",
       "summary": "One choice from a few views or settings, all visible and switched instantly, cut from one piece.",
       "description": "Cut from **one piece**: a single keyline round the whole control, segments divided by ink slits, so the seams never double and it reads as one control with several positions rather than a toolbar of separate actions. The chosen segment fills with ink. Pressing the active segment does nothing — a view switcher with no view is not a state the screen can render.",
       "usage": {
@@ -7056,6 +8043,46 @@
         "content": [
           "Labels are one word where possible: “Table”, “Board”.",
           "Name the group with aria-label: “View”, “Density”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus into the control, and Tab again leaves it."
+          },
+          {
+            "keys": [
+              "ArrowLeft",
+              "ArrowRight"
+            ],
+            "action": "Moves focus between segments, wrapping at the ends."
+          },
+          {
+            "keys": [
+              "Home",
+              "End"
+            ],
+            "action": "Moves focus to the first or last segment."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Chooses the focused segment."
+          }
+        ],
+        "handles": [
+          "Base UI renders a group of `aria-pressed` buttons with roving focus.",
+          "The chosen segment is an ink fill, and pressing it again does not empty the control.",
+          "With `iconOnly`, each segment is named by its `label` and the icon is hidden from assistive technology."
+        ],
+        "you": [
+          "Pass `aria-label` to name the group, such as “View”.",
+          "Give `label` as a string when you use `iconOnly`, so the segment has a name."
         ]
       },
       "exports": [
@@ -7168,6 +8195,7 @@
       "layer": "components",
       "category": "Forms",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-forms-select--overview",
+      "phase": "stable",
       "summary": "A choice from a list in a popup, with an optional second line per option and labelled groups.",
       "description": "The trigger is cut like an input; the popup floats, so it takes the one blurred shadow in the system **and** keeps its keyline — in the dark theme a shadow on a near-black ground disappears. **Highlighted** (where the cursor is) is a full ink fill; **selected** (the current value) is a check and a wash. A list where the current value looks like the cursor makes an operator press Enter on the wrong row.",
       "usage": {
@@ -7203,6 +8231,62 @@
         "content": [
           "Option labels are the names people use, “Cayuco Steady 3”; the description adds the trade-off, “Balanced · default”.",
           "The placeholder says what to choose: “Choose an environment”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus to the trigger."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space",
+              "ArrowDown",
+              "ArrowUp"
+            ],
+            "action": "Opens the list."
+          },
+          {
+            "keys": [
+              "ArrowDown",
+              "ArrowUp"
+            ],
+            "action": "Moves the highlight through the options."
+          },
+          {
+            "keys": [
+              "Home",
+              "End"
+            ],
+            "action": "Highlights the first or last option."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Chooses the highlighted option and closes the list."
+          },
+          {
+            "keys": [
+              "Escape"
+            ],
+            "action": "Closes the list without changing the value."
+          }
+        ],
+        "handles": [
+          "Base UI renders the trigger as a `combobox` and the list as a `listbox` of `option`s with `aria-selected`.",
+          "Typing a letter moves to the matching option, and on a closed trigger chooses it.",
+          "The current value is a check and a wash, the highlight an ink fill, so the two are never the same mark.",
+          "`label` is wired to the trigger with a real `<label>`, and `Field` passes its description and invalid state."
+        ],
+        "you": [
+          "Name it: put it in a `Field`, or pass `label` or `aria-label`.",
+          "Give a `placeholder` that says what to choose when there is no value."
         ]
       },
       "exports": [
@@ -7473,6 +8557,7 @@
       "layer": "components",
       "category": "Forms",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-forms-slider--overview",
+      "phase": "stable",
       "summary": "A value or a range on a continuous scale, with the value always printed in tabular figures.",
       "description": "The track is a cut groove with the chosen span in ink; the thumb is a square that reveals the gold band when grabbed. The value is **always printed**, in tabular figures — a slider whose number can only be learned by dragging is a control for guessing.",
       "usage": {
@@ -7504,6 +8589,53 @@
         ],
         "content": [
           "End labels describe the effect at each end, not the number: “Precise”, “Creative”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus to the thumb, or to each thumb of a range in turn."
+          },
+          {
+            "keys": [
+              "ArrowRight",
+              "ArrowUp"
+            ],
+            "action": "Increases by `step`, with Shift by `largeStep`; ArrowLeft increases in right-to-left."
+          },
+          {
+            "keys": [
+              "ArrowLeft",
+              "ArrowDown"
+            ],
+            "action": "Decreases by `step`, with Shift by `largeStep`."
+          },
+          {
+            "keys": [
+              "PageUp",
+              "PageDown"
+            ],
+            "action": "Changes by `largeStep`."
+          },
+          {
+            "keys": [
+              "Home",
+              "End"
+            ],
+            "action": "Jumps to `min` or `max`."
+          }
+        ],
+        "handles": [
+          "Base UI renders a real `<input type=\"range\">` in each thumb, with `role=\"slider\"` and the value in `aria-valuenow` and `aria-valuetext`.",
+          "The `label` names every thumb.",
+          "The value is printed beside the label, so it is never learned only by dragging."
+        ],
+        "you": [
+          "Give it a `label`; without one the thumb has no name.",
+          "The `minLabel` and `maxLabel` are hidden from assistive technology; if they carry meaning, say it in text near the slider."
         ]
       },
       "exports": [
@@ -7588,6 +8720,7 @@
       "layer": "components",
       "category": "Forms",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-forms-switch--overview",
+      "phase": "stable",
       "summary": "A setting that takes effect the moment it is switched; on is verde, the colour of live.",
       "description": "For settings that take effect **immediately**; a choice that waits for Save is a checkbox. “On” is **verde**, not ink: ink already means *selected* everywhere in the system, and a switch is not a selection but the state of something running — verde is the layer reserved for *live*. Colour is never the only signal: the square travels end to end.",
       "usage": {
@@ -7618,6 +8751,32 @@
         "content": [
           "Label the capability, not the action: “Stream responses”, not “Turn on streaming”.",
           "The description states the effect or the cost: “Stored for 30 days; may contain user text.”"
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus to the switch."
+          },
+          {
+            "keys": [
+              "Space",
+              "Enter"
+            ],
+            "action": "Turns it on or off."
+          }
+        ],
+        "handles": [
+          "Base UI renders `role=\"switch\"` with `aria-checked`.",
+          "The `label` names the control and the whole label toggles it; the `description` arrives through `aria-describedby`.",
+          "On is stated three ways: the square moves end to end, the track turns verde, and the keyline stays."
+        ],
+        "you": [
+          "Give every switch a `label`, or an `aria-label` when it stands alone.",
+          "Use a switch only for a setting that takes effect at once; a choice that waits for Save is a checkbox."
         ]
       },
       "exports": [
@@ -7685,6 +8844,7 @@
       "layer": "components",
       "category": "Layout",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-layout-app-shell--overview",
+      "phase": "stable",
       "summary": "The frame a tool lives in: a top bar, a sidebar that collapses to a rail or becomes a sheet, and one scrolling main region.",
       "description": "The frame an internal tool lives in. Exactly the viewport tall, and only `<main>` scrolls — so the switcher, search and way back are never twenty rows away. From 920px the sidebar is in the layout and collapses to an icon rail; below it, the **same tree** renders in a modal sheet, so desktop and mobile navigation cannot drift apart. The demo is *Cayuco* — a fictional agent platform for support, docs and billing teams, named for the dugout canoe of the Panamanian isthmus.",
       "usage": {
@@ -7717,6 +8877,45 @@
           "Navigation labels are short nouns: “Runs”, “Agents”, “Evaluations”.",
           "Give a count its countLabel, “3 failed”, so the number is not read alone.",
           "Name the Sidebar landmark: “Main”, “Settings”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus to the skip link first, then the sidebar toggle, the top bar and the navigation."
+          },
+          {
+            "keys": [
+              "Enter"
+            ],
+            "action": "Follows the skip link to the main region, or the focused navigation link."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Collapses or expands the sidebar, or opens the navigation sheet on a narrow screen."
+          },
+          {
+            "keys": [
+              "Escape"
+            ],
+            "action": "Closes the navigation sheet and returns focus to the button that opened it."
+          }
+        ],
+        "handles": [
+          "Gives the page a banner, a named navigation, a main region and a skip link to it.",
+          "Reports the sidebar toggle's state with `aria-expanded` and `aria-controls`, and keeps item labels as screen-reader text when collapsed.",
+          "Opens the sidebar on a narrow screen as a modal sheet titled Navigation, which traps focus and has a visible close button.",
+          "Marks the active item with `aria-current=\"page\"` and reads its count in words: Runs, 3 failed."
+        ],
+        "you": [
+          "Give the sidebar a `label` that names the navigation.",
+          "Give each page one `h1`, usually through `PageHeader`."
         ]
       },
       "exports": [
@@ -7919,6 +9118,7 @@
       "layer": "components",
       "category": "Layout",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-layout-container--overview",
+      "phase": "stable",
       "summary": "The page column, in prose, page, wide and full widths; Section and SectionHeader set the rhythm down the page.",
       "description": "`page` is the editorial width the system was born at; `wide` is for tools, where a twelve-column table deserves the screen; `prose` is the reading measure and never widens. Gutters move with density.",
       "usage": {
@@ -7944,6 +9144,15 @@
         ],
         "content": [
           "A SectionHeader label goes under the heading and says what kind of section it is: “Evaluation suite”."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Renders a plain `<div>` with no role, so it adds nothing to what a screen reader hears.",
+          "Keeps a side gutter at every width, so content never touches the screen edge."
+        ],
+        "you": [
+          "Add the landmark yourself, such as `<main>`, when the container holds one."
         ]
       },
       "exports": [
@@ -8072,6 +9281,7 @@
       "layer": "components",
       "category": "Layout",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-layout-divider--overview",
+      "phase": "stable",
       "summary": "Three dividers in rising weight and rarity: a keyline, a relleno seam and the sawtooth diente.",
       "description": "Three dividers, in rising order of weight and rarity. **Keyline** between rows. **Relleno** — fine ink slits cut into a field of colour — for a seam between parts of a page. **Diente**, the sawtooth, only where the page gives way to a filled panel: in a real mola it is the slow, expensive cut, so there are only a few. Relleno between every card turns the texture into wallpaper.",
       "usage": {
@@ -8099,6 +9309,15 @@
         ],
         "content": [
           "A divider carries no words; when a division needs a name, give it a heading instead."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Is `role=\"none\"` by default, so a screen reader does not announce a separator between every pair of rows.",
+          "Sets `aria-orientation` when you pass `role=\"separator\"`."
+        ],
+        "you": [
+          "Pass `role=\"separator\"` only when the division itself means something."
         ]
       },
       "exports": [
@@ -8176,6 +9395,7 @@
       "layer": "components",
       "category": "Layout",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-layout-grid--overview",
+      "phase": "stable",
       "summary": "Column patterns that reflow; auto fits as many columns of at least minItem as there is room for.",
       "description": "`auto` is the one tools reach for: as many columns of at least `minItem` as fit — never a breakpoint. `seamless` cuts all the cells from one panel, so neighbours share a single keyline instead of doubling it.",
       "usage": {
@@ -8200,6 +9420,16 @@
         ],
         "content": [
           "Keep tiles in a grid parallel: the same fields, in the same order, with the same units."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Renders a plain `<div>` and never reorders its children, so reading order is source order.",
+          "Collapses to fewer columns on narrow screens, so a page does not scroll sideways."
+        ],
+        "you": [
+          "Put children in the order they should be read.",
+          "Pass `role=\"list\"`, and `role=\"listitem\"` on each cell, when the cells are a list of like things."
         ]
       },
       "exports": [
@@ -8278,6 +9508,7 @@
       "layer": "components",
       "category": "Layout",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-layout-page-header--overview",
+      "phase": "stable",
       "summary": "The top of a page inside the shell: a breadcrumb, the title, a description, actions, a row of facts and optional tabs.",
       "description": "Where am I, what is this, what can I do. Breadcrumbs sit above the title because they are navigation you can click back along — not an eyebrow pre-announcing the heading. Actions wrap below the title on a narrow screen rather than hiding in an overflow menu: the primary action of a page is the last thing that should cost an extra click.",
       "usage": {
@@ -8307,6 +9538,16 @@
           "The title is the object’s name or the collection’s: “Runs”, “Support triage”.",
           "The description says what the page holds in one sentence.",
           "Meta items are short facts, not sentences: “Updated 12s ago”, “Retention 30 days”."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Renders the title as the page's `h1`.",
+          "Renders `meta` as a list, so a screen reader says how many facts there are."
+        ],
+        "you": [
+          "Use one page header per page, so the page has one `h1`.",
+          "Pass a breadcrumb that is its own named navigation."
         ]
       },
       "exports": [
@@ -8374,6 +9615,7 @@
       "layer": "components",
       "category": "Layout",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-layout-panel--overview",
+      "phase": "stable",
       "summary": "A cut surface: a region of one ground bounded by an edge, where the tone decides the ink.",
       "description": "The cut surface. **Tone is a ground, and the ground decides the ink**: a layer panel redefines the whole ink ramp, because a child’s own `text-ink-muted` beats an inherited colour and would render dark-on-dark. On rojo, añil and verde only one ink clears 4.5:1, so on a layer panel hierarchy is size and weight, not lightness. Colour owns regions — it never tints the reading column.",
       "usage": {
@@ -8408,6 +9650,16 @@
         ],
         "content": [
           "Title a panel by what it holds, “Weekly digest agent”, not “Details” or “Info”."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Renders a `<div>` by default, or a `section`, `article` or `aside` through `as`.",
+          "On a filled tone, redefines the whole ink ramp, so secondary text inside still clears contrast.",
+          "Draws its edge as an outline in forced colours mode, so the panel keeps its shape."
+        ],
+        "you": [
+          "Name a `section` or `aside` with `aria-labelledby` pointing at its heading."
         ]
       },
       "exports": [
@@ -8528,6 +9780,7 @@
       "layer": "components",
       "category": "Layout",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-layout-stack--overview",
+      "phase": "stable",
       "summary": "Stack for a column with one gap, Inline for a row that wraps, and RowBetween for one thing at each end.",
       "description": "Seven gaps, named by role. Every step is a spacing multiple, so it scales with density. A layout that needs an eighth needs a divider, not another number. `Inline` wraps by default: a row of controls that cannot wrap is what forced a 508px document onto a 390px phone in the product this system came from.",
       "usage": {
@@ -8558,6 +9811,15 @@
         ],
         "content": [
           "In a RowBetween header, pair a noun title with a verb action: “Run history” and “Export CSV”."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Renders a plain `<div>` with no role, so reading order is source order.",
+          "Lets `Inline` wrap by default, so a row of controls does not force the page wider than a phone."
+        ],
+        "you": [
+          "Put children in the order they should be read."
         ]
       },
       "exports": [
@@ -8710,6 +9972,7 @@
       "layer": "components",
       "category": "Layout",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-layout-toolbar--overview",
+      "phase": "stable",
       "summary": "A row of related controls with one tab stop and arrow-key movement, with toggles, a field and an overflow menu.",
       "description": "One tab stop for the whole row: Tab enters, arrow keys move, Tab leaves. A table header in a dense tool can carry ten controls, and ten tab stops between the title and the first row is a keyboard user’s afternoon. Groups are divided by a keyline — space alone between identical ghost buttons reads as uneven spacing, not as grouping.\n\n**Toggles** are pressed by the ink fill, the same cut the checked chip and the current page make, with `aria-pressed` from Base UI. A `ToolbarToggleGroup` joins the toolbar’s roving focus rather than adding a second arrow-key scope. **`ToolbarInput`** is a stop too: the arrows move the caret and only leave the field at its edges. **`ToolbarOverflow`** folds actions into a “More” menu when the row runs out of room. Folded items are unmounted, not hidden — a `display: none` button would still be a stop the arrows stall on — and widths come from a measuring copy, so the fold follows real label widths in the current density. In right-to-left the arrow keys mirror (switch **Direction**).",
       "usage": {
@@ -8746,6 +10009,47 @@
         "content": [
           "Name the toolbar with aria-label: “Run actions”, “Filter runs”.",
           "Buttons are verbs; toggles name what they show: “Wrap lines”, “Tool calls”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus into the toolbar, onto one control."
+          },
+          {
+            "keys": [
+              "ArrowRight",
+              "ArrowLeft"
+            ],
+            "action": "Moves between controls, wrapping at either end; mirrored in right-to-left."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Activates the focused button, or presses the focused toggle."
+          },
+          {
+            "keys": [
+              "Shift+Tab"
+            ],
+            "action": "Leaves the toolbar; it is one tab stop."
+          }
+        ],
+        "handles": [
+          "Renders `role=\"toolbar\"` with roving focus from Base UI, so ten controls are one tab stop.",
+          "Reports toggles as pressed with `aria-pressed`.",
+          "In a text field, lets the arrow keys move the caret and leave only at its edges.",
+          "Removes overflowed actions from the row and puts them in a More menu, so the arrows never stall on a hidden control."
+        ],
+        "you": [
+          "Name the toolbar with `aria-label`, and each toggle group too.",
+          "Give a `ToolbarInput` an `aria-label`; the placeholder is not a name.",
+          "Give icon-only buttons an `aria-label`."
         ]
       },
       "exports": [
@@ -9098,6 +10402,7 @@
       "layer": "components",
       "category": "Navigation",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-navigation-accordion--overview",
+      "phase": "stable",
       "summary": "Sections of one document that open one or several at a time; Collapsible for a single disclosure.",
       "description": "Sections of one document, opened one or several at a time. Ink rules close the list and decorative keylines separate rows — the heavy-top, light-rows rhythm inherited from the editorial step list. The marker is a **plus that turns into a cross**: a chevron says “this goes somewhere”, a plus says “there is more of this here”. Panels are `hiddenUntilFound`, so find-in-page opens the section that contains the match.",
       "usage": {
@@ -9134,6 +10439,33 @@
         "content": [
           "Triggers are questions in an FAQ, “What counts as a run?”, and nouns in settings, “Limits”.",
           "Meta is a short fact: “6 tools”, “Defaults”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus from one trigger to the next, through any open panel’s content."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Opens or closes the focused section."
+          }
+        ],
+        "handles": [
+          "Each trigger is a `<button>` inside an `<h3>`, with `aria-expanded` and `aria-controls`.",
+          "Each open panel is a `region` named by its trigger.",
+          "Closed panels are hidden until found, so find-in-page opens the section that holds the match.",
+          "The plus and cross marker is hidden from assistive technology; the state is in `aria-expanded`."
+        ],
+        "you": [
+          "Place it under an `<h2>`, so the `<h3>` triggers sit in the page outline.",
+          "Use `Collapsible` for a single disclosure inside something else; it has no heading."
         ]
       },
       "exports": [
@@ -9300,6 +10632,7 @@
       "layer": "components",
       "category": "Navigation",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-navigation-breadcrumb--overview",
+      "phase": "stable",
       "summary": "Where a page sits, as links back up the path, with the current page as plain text.",
       "description": "A named `<nav>` around an ordered list. The current page is text with `aria-current=\"page\"` — a link to where you already are does nothing. Separators are drawn in CSS so a screen reader reads places, not slashes. Long ids are cut in the middle with `middleTruncate`, keeping both ends — the parts people compare.",
       "usage": {
@@ -9330,6 +10663,31 @@
         "content": [
           "Use each page’s own title as its crumb, so the trail matches the headings.",
           "Shorten ids in the middle, keeping both ends: “run_8f3a…c21e”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus from one link to the next."
+          },
+          {
+            "keys": [
+              "Enter"
+            ],
+            "action": "Follows the focused link."
+          }
+        ],
+        "handles": [
+          "It is a `<nav>` named “Breadcrumb” holding an ordered list.",
+          "The last item is plain text with `aria-current=\"page\"`, not a link to where you already are.",
+          "The slashes are drawn with CSS, so they are not read out."
+        ],
+        "you": [
+          "Leave `href` off the last item.",
+          "When you shorten a label with `middleTruncate`, make sure the full id is on the page it leads to."
         ]
       },
       "exports": [
@@ -9387,6 +10745,7 @@
       "layer": "components",
       "category": "Navigation",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-navigation-pagination--overview",
+      "phase": "stable",
       "summary": "Moving through a long ordered result, as numbered pages or as a compact range with two arrows.",
       "description": "**Pages** for results where the page is a place people come back to; **compact** — “51–100 of 1,284” — for dense tables where the question is how much is left. The range always has the same number of slots, so the control never changes width as you page and the next-arrow never moves out from under the pointer.",
       "usage": {
@@ -9418,6 +10777,32 @@
         ],
         "content": [
           "Give the compact variant pageSize and total, so it states the range rather than “Page 2 of 26”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus through Previous, the page buttons and Next."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Goes to the focused page."
+          }
+        ],
+        "handles": [
+          "It is a `<nav>` named “Pagination”, with page buttons named “Page 5” and the current one marked `aria-current=\"page\"`.",
+          "Previous and Next are named buttons, disabled at the ends.",
+          "The ellipses are hidden from assistive technology, and the compact range text is a polite live region."
+        ],
+        "you": [
+          "Pass a distinct `aria-label` when a page has more than one pagination.",
+          "After a page change, move focus to the results or say what loaded; the page buttons do not announce it."
         ]
       },
       "exports": [
@@ -9510,6 +10895,7 @@
       "layer": "components",
       "category": "Navigation",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-navigation-tabs--overview",
+      "phase": "stable",
       "summary": "Switching between views of one thing: underline for views, panel for tabs that are containers.",
       "description": "**Underline** switches views of one thing: a 3px ink bar slides to the selected tab — one element moving, not one per tab appearing. **Panel** is for tabs that are containers: the selected tab is a cut tab joined to the panel, its bottom overlapping the panel’s keyline by exactly the keyline width so they read as one shape, with a gold band revealed along its top. Labels are sentence case in the UI voice; a row of capitalised, expanded labels reads as buttons.",
       "usage": {
@@ -9541,6 +10927,46 @@
         "content": [
           "Labels are one or two nouns: “Trace”, “Output”, “Cost”.",
           "Let a long list scroll rather than shortening labels until they stop meaning anything."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus to the selected tab, and from there to its panel."
+          },
+          {
+            "keys": [
+              "ArrowLeft",
+              "ArrowRight"
+            ],
+            "action": "Moves focus between tabs, wrapping at the ends; swapped in right-to-left."
+          },
+          {
+            "keys": [
+              "Home",
+              "End"
+            ],
+            "action": "Moves focus to the first or last tab."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Selects the focused tab."
+          }
+        ],
+        "handles": [
+          "Base UI renders `tablist`, `tab` with `aria-selected`, and a `tabpanel` named by its tab and reachable with Tab.",
+          "Focus does not select a tab unless `activateOnFocus` is set, so passing over a tab never starts loading it.",
+          "A tab’s `icon` is hidden from assistive technology, and its `count` is part of its name."
+        ],
+        "you": [
+          "Give every tab a text label, even when it has an icon.",
+          "Set `activateOnFocus` only when every panel is cheap to show."
         ]
       },
       "exports": [
@@ -9667,6 +11093,7 @@
       "layer": "components",
       "category": "Overlays",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-overlays-command-palette--overview",
+      "phase": "stable",
       "summary": "The keyboard’s front door: a searchable list of commands and destinations, opened with ⌘K or Ctrl+K.",
       "description": "The keyboard’s front door. The input is a `combobox` that never loses focus; results are a `listbox` of `option`s in labelled `group`s; the highlight moves via `aria-activedescendant` so typing never has to re-focus. The highlight is the **ink fill**, as in Menu, and wraps at both ends. It opens in the top third so results grow downward instead of the box jumping with each keystroke. Matching is plain substring on every word — deliberately not fuzzy: a matcher that offers “Delete agent” for “dagent” is a liability.",
       "usage": {
@@ -9703,6 +11130,46 @@
         "content": [
           "Commands start with a verb, “Start a new run”; destinations are nouns, “Settings”.",
           "Descriptions add the reason or the context: “Owners only”, “Answers from the help centre”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Control+K",
+              "Meta+K"
+            ],
+            "action": "Opens the palette, when the page calls `useCommandShortcut`."
+          },
+          {
+            "keys": [
+              "ArrowDown",
+              "ArrowUp"
+            ],
+            "action": "Moves the highlight, skipping disabled commands and wrapping at the ends."
+          },
+          {
+            "keys": [
+              "Enter"
+            ],
+            "action": "Runs the highlighted command and closes the palette."
+          },
+          {
+            "keys": [
+              "Escape"
+            ],
+            "action": "Closes the palette."
+          }
+        ],
+        "handles": [
+          "It is a modal Base UI Dialog, titled by `label`, with focus held in the search input.",
+          "The input is a `combobox` controlling a `listbox`; the highlight is conveyed with `aria-activedescendant`, so the caret never leaves the input.",
+          "Commands sit in `group`s named by their headings, and disabled ones carry `aria-disabled`.",
+          "Icons and the key hints in the footer are hidden from assistive technology."
+        ],
+        "you": [
+          "Call `useCommandShortcut` to bind ⌘K and Ctrl-K; the shortcuts shown on items are display only.",
+          "Write command labels as actions, “Start a new run”, and add `keywords` for the other words people use."
         ]
       },
       "exports": [
@@ -9800,6 +11267,7 @@
       "layer": "components",
       "category": "Overlays",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-overlays-dialog--overview",
+      "phase": "stable",
       "summary": "Dialog for a short modal task; AlertDialog to confirm an action that destroys something.",
       "description": "A panel cut out of the page and laid on top of it. The top seam is the full **relleno** — the layer colour slit with ink — which is how a mola marks where one layer ends; it says “you are inside something” without a title bar or a tint. The backdrop recedes toward the page’s own cloth rather than toward grey. Focus trap, scroll lock, Escape and the inert page come from Base UI; the corner close is always present, because a touch screen-reader user has no Escape key. The action row stacks full width, the confirm on top, when it is narrower than 24rem — so a small alert dialog never strands its confirm on a second line.",
       "usage": {
@@ -9841,6 +11309,47 @@
           "Titles name the task or ask the question: “Rename agent”, “Delete this run?”.",
           "The confirm button repeats the verb and object: “Delete run”, never “OK” or “Yes”.",
           "The footer holds a ghost Cancel and one primary action."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "On the trigger, opens the dialog and moves focus into it."
+          },
+          {
+            "keys": [
+              "Tab",
+              "Shift+Tab"
+            ],
+            "action": "Moves through the dialog’s controls; focus stays inside."
+          },
+          {
+            "keys": [
+              "Escape"
+            ],
+            "action": "Closes the dialog and returns focus to the trigger."
+          },
+          {
+            "keys": [
+              "Enter"
+            ],
+            "action": "In an alert dialog’s confirmation field, confirms once the text matches."
+          }
+        ],
+        "handles": [
+          "Base UI traps focus, locks scroll, makes the page inert and returns focus on close.",
+          "The dialog is named by `title` and described by `description`, and a named Close button is always rendered unless `hideClose` is set.",
+          "`AlertDialog` is a `role=\"alertdialog\"` that an outside click does not dismiss, and it focuses Cancel first.",
+          "While an async confirm is pending, both buttons stop taking presses and the dialog cannot be closed."
+        ],
+        "you": [
+          "Write a `title` that names the task; it is the dialog’s name.",
+          "Set `hideClose` only when the footer has its own way out.",
+          "Give the confirm button the verb, “Delete run”, never “OK”."
         ]
       },
       "exports": [
@@ -10038,6 +11547,7 @@
       "layer": "components",
       "category": "Overlays",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-overlays-drawer--overview",
+      "phase": "stable",
       "summary": "A panel that slides in from an edge: details beside a list, filters, or quick actions in a bottom sheet.",
       "description": "A Dialog that slides in from an edge: run details beside a table, filters for a list, quick actions on a phone. Built on Base UI **Drawer**, which is Dialog underneath — focus trap, scroll lock, Escape, the inert page — plus **swipe to dismiss**, the gesture a phone user reaches for first. It speaks Dialog’s language: the relleno seam along the top, the same title and description, a backdrop that recedes toward cloth, and a close button that is always there because a touch screen-reader user has no Escape key. `side` is logical (`start`, `end`, `bottom`), so start and end swap in right-to-left and the dismiss swipe follows. Side widths are a cap that always leaves a strip of page on a phone — the obvious place to tap to go back. Only the body scrolls; the footer is pinned behind a keyline so the way out is never scrolled away. A bottom sheet adds a grab handle (a picture of the gesture, hidden from assistive tech) and the device’s safe-area inset under its last row. Stories open on their own in the canvas so they can be screenshotted; in these docs they wait for their trigger.",
       "usage": {
@@ -10069,6 +11579,40 @@
         "content": [
           "Titles name what is inside: “Run details”, “Filter runs”.",
           "An apply button states the result: “Show 42 runs”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "On the trigger, opens the drawer and moves focus into it."
+          },
+          {
+            "keys": [
+              "Tab",
+              "Shift+Tab"
+            ],
+            "action": "Moves through the drawer’s controls; focus stays inside."
+          },
+          {
+            "keys": [
+              "Escape"
+            ],
+            "action": "Closes the drawer and returns focus to the trigger."
+          }
+        ],
+        "handles": [
+          "It is a Base UI Dialog underneath: focus trap, scroll lock, the inert page and focus return.",
+          "The drawer is named by `title` and described by `description`, with a named Close button unless `hideClose` is set.",
+          "The swipe to dismiss is an extra; Escape and the Close button do the same without a gesture.",
+          "The side is logical, so an end drawer opens from the left in right-to-left, and the swipe follows."
+        ],
+        "you": [
+          "Write a `title` that names what the drawer holds.",
+          "Set `hideClose` only when the footer has its own way out."
         ]
       },
       "exports": [
@@ -10207,6 +11751,7 @@
       "layer": "components",
       "category": "Overlays",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-overlays-menu--overview",
+      "phase": "stable",
       "summary": "Actions on a thing that do not each deserve a button, with checkbox and radio items, submenus and shortcuts.",
       "description": "Actions on a thing that do not each deserve a button. The highlighted row fills with **ink** — the top layer cut out around the one row you are on — rather than a pale tint that vanishes in sunlight. A destructive item highlights in **rojo**, so red arrives at the moment of choosing and a menu at rest does not shout. Typeahead, arrow keys, submenus and focus return come from Base UI.",
       "usage": {
@@ -10243,6 +11788,62 @@
           "Items are verbs on the object: “Rename”, “Duplicate”, “Delete run”.",
           "Submenu items name the format or the target: “Trace as JSON”.",
           "Group labels are short nouns: “Columns”, “Sort by”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Enter",
+              "Space",
+              "ArrowDown"
+            ],
+            "action": "On the trigger, opens the menu and focuses an item."
+          },
+          {
+            "keys": [
+              "ArrowDown",
+              "ArrowUp"
+            ],
+            "action": "Moves between items, wrapping at the ends."
+          },
+          {
+            "keys": [
+              "Home",
+              "End"
+            ],
+            "action": "Moves to the first or last item."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Runs the focused item, or toggles a checkbox or radio item."
+          },
+          {
+            "keys": [
+              "ArrowRight",
+              "ArrowLeft"
+            ],
+            "action": "Opens or closes a submenu; swapped in right-to-left."
+          },
+          {
+            "keys": [
+              "Escape"
+            ],
+            "action": "Closes the menu and returns focus to the trigger."
+          }
+        ],
+        "handles": [
+          "Base UI renders `menu`, `menuitem`, `menuitemcheckbox` and `menuitemradio`, with typeahead and focus return.",
+          "The highlight is an ink fill, rojo on a destructive item, so the current row is a shape and not a tint.",
+          "Icons, check marks and the submenu chevron are hidden from assistive technology.",
+          "Checkbox and radio items keep the menu open, so several can be set in one visit."
+        ],
+        "you": [
+          "Give the trigger an accessible name; an icon-only trigger needs an `IconButton` with a `label`.",
+          "Bind the keys shown by `shortcut` yourself; they are display only."
         ]
       },
       "exports": [
@@ -10494,6 +12095,7 @@
       "layer": "components",
       "category": "Overlays",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-overlays-popover--overview",
+      "phase": "stable",
       "summary": "A non-modal panel anchored to the control that opened it.",
       "description": "A non-modal panel anchored to the control that opened it. The plainest floating surface: raised cloth, the ink keyline, the one blur. **No arrow** — the transform origin already says where it came from, and a zero-radius panel with a triangle bolted on reads as a speech bubble. When given, `title` names the popover and `description` describes it.",
       "usage": {
@@ -10530,6 +12132,38 @@
         "content": [
           "The title says what the popover does: “Filter by status”.",
           "The description says how it applies: “Runs matching any checked status are shown.”"
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "On the trigger, opens the popover and moves focus into it."
+          },
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves through the popover’s controls, then on to the page after the trigger."
+          },
+          {
+            "keys": [
+              "Escape"
+            ],
+            "action": "Closes the popover and returns focus to the trigger."
+          }
+        ],
+        "handles": [
+          "Base UI renders the popup as a non-modal `dialog`, with `aria-expanded` on the trigger.",
+          "A `title` names the popover and a `description` describes it.",
+          "An outside press closes it, and the page behind stays usable."
+        ],
+        "you": [
+          "Pass a `title`, or label the popup yourself; without one it is announced only as “dialog”.",
+          "Use a Dialog instead when the content must be answered before going on."
         ]
       },
       "exports": [
@@ -10636,6 +12270,7 @@
       "layer": "components",
       "category": "Overlays",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-overlays-tooltip--overview",
+      "phase": "stable",
       "summary": "A short label on hover or focus, with an optional keyboard shortcut.",
       "description": "The inverse panel at its smallest: ink ground, cloth type, no blur. A tooltip is a label, not a place — it should never look like something you can move into and click. The `shortcut` slot exists because, after the name, the most useful thing a tooltip in a tool can say is how to do it without the pointer. Never the only home for information: it does not exist on touch.",
       "usage": {
@@ -10666,6 +12301,32 @@
         "content": [
           "A verb phrase in sentence case, with no trailing period: “Copy run id”.",
           "Write keys as they appear on the keyboard: ⌘, ⇧, R."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Focusing the trigger shows the tooltip, not only hovering it."
+          },
+          {
+            "keys": [
+              "Escape"
+            ],
+            "action": "Hides the tooltip."
+          }
+        ],
+        "handles": [
+          "It opens on keyboard focus as well as on hover.",
+          "`shortcut` keys are rendered as `<kbd>` elements.",
+          "Inside a `TooltipProvider`, moving along a toolbar shows the next tooltip at once, after the first delay."
+        ],
+        "you": [
+          "Give the trigger its own accessible name, such as an `IconButton` `label`; the tooltip is not wired to it as a name or description.",
+          "Never put information only in a tooltip; it does not exist on touch.",
+          "Pass a focusable element as the child."
         ]
       },
       "exports": [
@@ -10771,6 +12432,7 @@
       "layer": "components",
       "category": "Typography",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-typography-display--overview",
+      "phase": "stable",
       "summary": "Archivo Bold set wide, for the one title that is the point of a screen.",
       "description": "Archivo Bold at `wdth` 118. A heading here is a shape cut to fill its panel; the width, not a colour, is what keeps it out of the generic tight-grotesque register. One per screen at most — page titles in a working view are `Heading level={1}`.",
       "usage": {
@@ -10796,6 +12458,14 @@
         ],
         "content": [
           "Keep it to a few words; it is set at up to 76px."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Renders an `h1` by default, or an `h2` or `p` through `as`, without changing the look."
+        ],
+        "you": [
+          "Use `as` so the element matches the outline: at most one `h1` per page."
         ]
       },
       "exports": [
@@ -10839,6 +12509,7 @@
       "layer": "components",
       "category": "Typography",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-typography-heading--overview",
+      "phase": "stable",
       "summary": "Four heading levels for wayfinding in a tool, with size to separate the look from the outline.",
       "description": "Four levels. The scale is steep at the top and flat at the bottom: in a dense tool a group label cannot spend 20px, so level 4 is distinguished by weight and width rather than size. `size` decouples the look from the outline — never skip a level to get a smaller heading.",
       "usage": {
@@ -10869,6 +12540,15 @@
         "content": [
           "Sentence case, with no trailing period: “Run history”, “Tool calls in this step”.",
           "Name the content, not the action: “Arguments”, not “View the arguments”."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Renders the element its `level` names, `h1` to `h4`.",
+          "Lets `size` change the look without changing the outline."
+        ],
+        "you": [
+          "Pick `level` from the page outline and never skip one; change `size` for a smaller look."
         ]
       },
       "exports": [
@@ -10936,6 +12616,7 @@
       "layer": "components",
       "category": "Typography",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-typography-kbd--overview",
+      "phase": "stable",
       "summary": "A key as a cut shape, with KbdChord for keys pressed together.",
       "description": "A key as a cut shape with a heavier foot — the one honest solid offset in the system, because a keycap really is a block that moves down. Set in Archivo, not mono: `⌘K` labels a physical object, it is not a machine literal.",
       "usage": {
@@ -10956,6 +12637,14 @@
         "content": [
           "Use the key’s symbol or its printed name: ⌘, ⇧, ↵, Esc.",
           "When a shortcut differs between platforms, show both, or bind both as the command palette does with ⌘K and Ctrl+K."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Renders a `<kbd>`, and nests a chord's keys inside one outer `<kbd>`, as the HTML spec describes."
+        ],
+        "you": [
+          "Write key names a screen reader can say, or add the spoken name nearby: Command K for ⌘K."
         ]
       },
       "exports": [
@@ -11004,6 +12693,7 @@
       "layer": "components",
       "category": "Typography",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-typography-lead--overview",
+      "phase": "stable",
       "summary": "The paragraph under a page title that says what the screen is for, in the reading voice.",
       "description": "The one place a tool speaks in prose: the paragraph under a page title that explains what this screen is for. Alegreya — the reading voice — because it is read once, properly, not scanned.",
       "usage": {
@@ -11023,6 +12713,14 @@
         ],
         "content": [
           "Say what the screen is for and what the reader can do there, in plain sentences."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Renders a `<p>` held to the reading measure."
+        ],
+        "you": [
+          "Use it once, under the page title; it is not a heading."
         ]
       },
       "exports": [
@@ -11048,6 +12746,7 @@
       "layer": "components",
       "category": "Typography",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-typography-meta--overview",
+      "phase": "stable",
       "summary": "Small facts compared down a column, such as duration, cost, count and time, in tabular figures.",
       "description": "Duration, cost, count, timestamp — facts compared down a column, so they carry tabular figures. This is the job a monospace usually does in tool UIs, minus the costume.",
       "usage": {
@@ -11074,6 +12773,14 @@
           "Keep each fact to a figure and its unit; no sentences."
         ]
       },
+      "accessibility": {
+        "handles": [
+          "Renders a `<p>` in tabular figures, so facts line up down a column."
+        ],
+        "you": [
+          "Write the unit in words or a standard symbol, so the figure means something when read aloud."
+        ]
+      },
       "exports": [
         {
           "name": "Meta",
@@ -11097,6 +12804,7 @@
       "layer": "components",
       "category": "Typography",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-typography-prose--overview",
+      "phase": "stable",
       "summary": "The reading voice for long-form markup, such as a document, a run summary or a model’s answer.",
       "description": "The reading voice for long-form markup — an article, a run summary, **a model’s answer**. An assistant reply is read, not scanned; set in the UI grotesque it looks like a settings panel and gets skimmed like one. The text face tells the reader to slow down, and the boundary between what the model *said* and what the system *did* is drawn by the typeface itself. Reading size does not shrink with density: a compact table is dense in its rows, not in the paragraphs someone has to read.",
       "usage": {
@@ -11127,6 +12835,16 @@
         ],
         "content": [
           "Headings inside prose use the same sentence case as the rest of the interface."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Styles the markup inside it without changing its elements, so headings, lists and quotes keep their meaning.",
+          "Underlines links, so they are not marked by colour alone.",
+          "Holds text to the reading measure unless `fluid` is set."
+        ],
+        "you": [
+          "Supply markup with real headings in order, lists and link text that makes sense on its own."
         ]
       },
       "exports": [
@@ -11177,6 +12895,7 @@
       "layer": "components",
       "category": "Typography",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-typography-pullquote--overview",
+      "phase": "stable",
       "summary": "A voice interrupting the prose: a quotation in the reading face, under a relleno band, with its source.",
       "description": "A voice interrupting the prose. It keeps the reading face and takes a relleno band above it instead of a hairline: the filler slit is this system’s divider, and a pull quote is the seam it was made for.",
       "usage": {
@@ -11196,6 +12915,15 @@
         ],
         "content": [
           "Quote exactly, and give cite as who said it and where: “Evaluation lead, research interview 7”."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Renders a `figure` with the quote in a `blockquote` and the attribution in a `figcaption` outside it.",
+          "Hides the relleno band from assistive tech."
+        ],
+        "you": [
+          "Pass `cite` so the quote says who said it."
         ]
       },
       "exports": [
@@ -11238,6 +12966,7 @@
       "layer": "components",
       "category": "Typography",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-typography-rotulo--overview",
+      "phase": "stable",
       "summary": "The label register, cut short by a band, set under the block it belongs to.",
       "description": "The label register: Archivo at `wdth` 116, in caps, cut short by a band of the layer beneath. It replaces the eyebrow, and it goes **under** the block it belongs to — read as attribution, not as a pre-announcement of what the heading is about to say better.",
       "usage": {
@@ -11272,6 +13001,14 @@
         ],
         "content": [
           "Two or three words in sentence case; the register sets them in capitals."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Renders a `<p>`; the band before it is drawn in CSS and is not read."
+        ],
+        "you": [
+          "Place it under the block it labels, not above a heading as an eyebrow."
         ]
       },
       "exports": [
@@ -11332,6 +13069,7 @@
       "layer": "components",
       "category": "Typography",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-typography-text--overview",
+      "phase": "stable",
       "summary": "Running interface text in the system voice, in three inks: ink, ink-2 and muted.",
       "description": "Running UI text. Three inks and no more — ink for what the reader came for, ink-2 for what explains it, muted for what they can skip. A fourth grey would be one nobody can tell from its neighbours.",
       "usage": {
@@ -11362,6 +13100,16 @@
         ],
         "content": [
           "Sentence case throughout; full sentences end with a full stop, labels do not."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Renders a `p`, `span` or `div` only, so body text cannot sit on a heading element.",
+          "Inherits the ink of the ground it sits on by default, so it stays legible on a filled panel."
+        ],
+        "you": [
+          "Use `Heading` for headings; `Text` never carries the outline.",
+          "Say a danger or success state in words; the tone alone is colour."
         ]
       },
       "exports": [

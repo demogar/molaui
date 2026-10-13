@@ -8,6 +8,7 @@ import { Skeleton, SkeletonGroup, SkeletonText } from './skeleton'
 
 const meta = {
   title: 'Components/Feedback/Skeleton',
+  tags: ['stable'],
   component: Skeleton,
   argTypes: {
     shape: { control: 'inline-radio', options: ['block', 'text', 'avatar'] },

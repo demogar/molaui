@@ -6,6 +6,7 @@ import { Button, IconButton } from './button'
 
 const meta = {
   title: 'Components/Actions/Button',
+  tags: ['stable'],
   component: Button,
   args: { children: 'Run agent', onClick: fn() },
   argTypes: {

@@ -5,6 +5,7 @@ import { DescriptionList } from './description-list'
 
 const meta = {
   title: 'Components/Data display/Description list',
+  tags: ['stable'],
   component: DescriptionList,
   parameters: {
     docs: {

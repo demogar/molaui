@@ -6,6 +6,7 @@ import { FileUpload, type FileUploadItem, type UploadContext } from './file-uplo
 
 const meta = {
   title: 'Components/Forms/File upload',
+  tags: ['stable'],
   component: FileUpload,
   parameters: {
     docs: {

@@ -58,4 +58,12 @@ export const RULES: Rule[] = [
     rule: 'Use the components for behaviour. Do not re-implement focus trapping, roving focus or typeahead; the components are built on Base UI.',
     why: 'A maintained primitive gets keyboard and screen-reader behaviour right in more cases than a local copy.',
   },
+  {
+    rule: 'Check a component’s lifecycle phase before building on it. Stable is covered by semver, Experimental may change in a minor release, and Deprecated names its replacement: use that instead.',
+    why: 'A screen built on a component that is about to change or go is built twice.',
+  },
+  {
+    rule: 'Do what each component’s accessibility section leaves to you, usually an accessible name or a label. The component handles roles, focus and announcements.',
+    why: 'Axe catches a missing name only on the screens it is run on; the component cannot know what its button is for.',
+  },
 ]

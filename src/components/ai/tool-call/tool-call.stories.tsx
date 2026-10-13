@@ -8,6 +8,7 @@ import { ToolCall, ToolCallGroup } from './tool-call'
 
 const meta = {
   title: 'AI/Tool call',
+  tags: ['stable'],
   component: ToolCall,
   args: { name: 'query_rollout', title: 'Rollout results', status: 'succeeded', durationMs: 1840, args: QUERY_ARGS, result: QUERY_RESULT },
   decorators: [(Story) => <div className="max-w-2xl">{Story()}</div>],

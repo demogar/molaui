@@ -8,6 +8,7 @@ import { Reasoning } from './reasoning'
 
 const meta = {
   title: 'AI/Reasoning',
+  tags: ['stable'],
   component: Reasoning,
   args: { text: REASONING, status: 'done', durationMs: 12_400 },
   decorators: [(Story) => <div className="max-w-2xl">{Story()}</div>],

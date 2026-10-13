@@ -6,6 +6,7 @@ import { Confidence, UncertaintyNote } from './confidence'
 
 const meta = {
   title: 'AI/Confidence',
+  tags: ['stable'],
   component: Confidence,
   args: { level: 'high', basis: '3 sources agree' },
   parameters: {

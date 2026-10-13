@@ -5,6 +5,7 @@ import { Checkbox, CheckboxGroup } from './checkbox'
 
 const meta = {
   title: 'Components/Forms/Checkbox',
+  tags: ['stable'],
   component: Checkbox,
   args: { label: 'Stream partial output', defaultChecked: true },
   parameters: {

@@ -71,6 +71,12 @@ because keyboard direction is read from context.
    `ChangeReview`. Each choice gets equal visual weight.
 10. **Don't rebuild behaviour.** Use the component (built on Base UI) for focus trapping, roving
     focus, typeahead and dismissal. Don't hand-roll a dialog or a listbox.
+11. **Check the lifecycle phase** (`phase` in the manifest) before building on a component.
+    Stable is covered by semver, Experimental may change in a minor release, and Deprecated
+    names its replacement (`usage.replacedBy`): use that instead.
+12. **Do what the accessibility section leaves to you** (`accessibility.you` in the manifest),
+    usually an accessible name or a label. The component already handles roles, focus and
+    announcements; don't add your own on top.
 
 ## Picking a component
 

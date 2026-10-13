@@ -5,6 +5,7 @@ import { Tabs, TabsList, TabsPanel, TabsTab } from './tabs'
 
 const meta = {
   title: 'Components/Navigation/Tabs',
+  tags: ['stable'],
   component: Tabs,
   parameters: {
     docs: {

@@ -6,6 +6,7 @@ import { Button } from '../button'
 
 const meta = {
   title: 'Components/Layout/Container',
+  tags: ['stable'],
   component: Container,
   args: { size: 'page' },
   argTypes: { size: { control: 'inline-radio', options: ['prose', 'page', 'wide', 'full'] } },

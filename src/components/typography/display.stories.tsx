@@ -4,6 +4,7 @@ import { Display } from './display'
 
 const meta = {
   title: 'Components/Typography/Display',
+  tags: ['stable'],
   component: Display,
   args: { children: 'Not everything. Just what matters.' },
   parameters: {

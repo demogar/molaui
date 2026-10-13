@@ -22,6 +22,29 @@ Releases follow [semver](https://semver.org): `major.minor.patch`.
 `0.x → 0.(x+1)`, never in a patch, and a deprecation still gets at least one minor of warning
 before its removal. Pin `~0.2.0` rather than `^0.2.0` while the version starts with zero.
 
+## Lifecycle phases
+
+Every component page carries one of three phases, shown as a badge under its summary. The phase
+says how far the promise above applies to that component.
+
+| Phase | The promise | When a component is in it |
+| --- | --- | --- |
+| **Experimental** | Its API may change in a minor release, without a deprecation first. Patches never break it. From 1.0.0, pin it to the minor (`~1.2.0`) if you use it. | It is new, and the screens that need it have not settled what it should do. |
+| **Stable** | Semantic versioning applies, as described on this page: nothing breaks without a deprecation and a minor of warning. | The default. Every component starts here unless there is a stated reason not to. |
+| **Deprecated** | It keeps working and warns in development until it is removed. Its page names the replacement. | A replacement has shipped, and the component is following the [deprecation](#deprecation) steps below. |
+
+A component moves from Experimental to Stable in a `feat` release that says so in its notes.
+Stable never goes back to Experimental: that would take back a promise people built on.
+
+**Deprecated applies to a whole component.** A deprecated prop, such as `shape="line"` on
+Skeleton, doesn't make its component Deprecated: the prop gets the JSDoc `@deprecated` tag and the
+`deprecate()` warning described below, and the component stays Stable.
+
+The phase lives in one place: the Storybook `tags` on each stories file (`tags: ['stable']`).
+The sidebar's tag filter can show one phase at a time, and the same tag reaches the docs badge and
+the agent manifest (`docs/ai/components.json`, `llms.txt`). A test fails if a component page has
+no phase or more than one, and if a Deprecated page doesn't name its replacement.
+
 ## What counts as a breaking change
 
 The public API is wider than the exported names. A consumer can depend on anything they can see,
@@ -48,7 +71,9 @@ tokens and the `data-*` hooks. A selector such as `div > span:first-child` will 
 ## Deprecation
 
 Nothing public is removed without first being deprecated in a minor release that ships the
-replacement. Deprecation has four parts, and a change needs all four:
+replacement. Deprecation has four parts, and a change needs all four. When the whole component is
+going, its stories also change their tag from `stable` to `deprecated` and its guidance names the
+replacement (`replacedBy` in `src/docs/usage/guidance.ts`), so its page says so at the top.
 
 1. **Mark it.** A JSDoc `@deprecated` tag that says since when, what to use and when it goes, so
    editors strike it through at the call site:

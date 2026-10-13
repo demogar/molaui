@@ -16,6 +16,7 @@ const cite = citationRenderer(SOURCES)
 
 const meta = {
   title: 'AI/Message',
+  tags: ['stable'],
   component: Message,
   args: { role: 'assistant', timestamp: '2026-10-05T14:02:00Z' },
   parameters: {

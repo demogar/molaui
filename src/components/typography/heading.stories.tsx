@@ -4,6 +4,7 @@ import { Heading } from './heading'
 
 const meta = {
   title: 'Components/Typography/Heading',
+  tags: ['stable'],
   component: Heading,
   args: { level: 2, children: 'Rollout results' },
   argTypes: {

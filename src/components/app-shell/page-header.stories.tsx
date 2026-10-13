@@ -8,6 +8,7 @@ import { PageHeader } from './page-header'
 
 const meta = {
   title: 'Components/Layout/Page header',
+  tags: ['stable'],
   component: PageHeader,
   parameters: {
     layout: 'fullscreen',

@@ -5,6 +5,7 @@ import { Avatar, AvatarGroup } from './avatar'
 
 const meta = {
   title: 'Components/Data display/Avatar',
+  tags: ['stable'],
   component: Avatar,
   args: { name: 'Ana Pérez', size: 'lg' },
   parameters: {

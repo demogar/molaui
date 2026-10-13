@@ -11,6 +11,7 @@ import { FileDiff } from './file-diff'
 
 const meta = {
   title: 'AI/Change review',
+  tags: ['stable'],
   component: ChangeReview,
   args: {
     title: 'Roll the help panel out to Starter',

@@ -6,6 +6,7 @@ import { Rotulo } from './rotulo'
 
 const meta = {
   title: 'Components/Typography/Rotulo',
+  tags: ['stable'],
   component: Rotulo,
   args: { children: 'Support platform', band: 'rojo' },
   argTypes: { band: { control: 'inline-radio', options: ['rojo', 'anil', 'verde', 'oro', 'cloth'] } },
