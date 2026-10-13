@@ -76,12 +76,25 @@ export function Table({
   )
 }
 
+/**
+ * Whether the frame scrolls, and, as `--table-viewport` on the frame, the
+ * inline size of what is visible through it. TableEmpty sizes its message to
+ * that. CSS alone cannot give it: a percentage inside the table resolves
+ * against the table, which is the full scrolled width. Container query units
+ * would need `container-type` on the frame, and inline-size containment
+ * collapses a frame whose parent sizes to its content. The property is
+ * written straight onto the element rather than through state, so a resize
+ * restyles one cell instead of re-rendering every row.
+ */
 function useOverflows(ref: React.RefObject<HTMLElement | null>) {
   const [overflows, setOverflows] = React.useState(false)
   React.useEffect(() => {
     const el = ref.current
     if (!el || typeof ResizeObserver === 'undefined') return
-    const measure = () => setOverflows(el.scrollWidth > el.clientWidth || el.scrollHeight > el.clientHeight)
+    const measure = () => {
+      el.style.setProperty('--table-viewport', `${el.clientWidth}px`)
+      setOverflows(el.scrollWidth > el.clientWidth || el.scrollHeight > el.clientHeight)
+    }
     const observer = new ResizeObserver(measure)
     observer.observe(el)
     // The table inside grows with its rows without the frame resizing.
@@ -269,6 +282,18 @@ export function TableCaption({ className, ...props }: React.ComponentProps<'capt
  * no permission) and the same relleno slot — drawn without its own keyline,
  * because the table frame is already the edge, and a second cut inside it
  * reads as a box in a box.
+ *
+ * ── centred on what is visible, not on the table ──
+ * The cell spans every column, so on a phone, where a wide table scrolls
+ * sideways, centring in the cell put the message in the middle of a table
+ * three screens wide: half of it off the frame, and its action out of reach
+ * until the reader scrolled to find it. The message is wrapped in a block as
+ * wide as the frame's visible area (`--table-viewport`, measured by `Table`)
+ * and stuck to the inline start, so it is centred in what the reader sees
+ * and stays there while the headers scroll past above it. `start-0` is
+ * `inset-inline-start`, so in right-to-left it sticks to the right edge,
+ * where that table's scroll begins. Before the frame is measured (server
+ * render, no ResizeObserver) the block is the cell's width, as it was.
  */
 export function TableEmpty({
   colSpan,
@@ -287,14 +312,16 @@ export function TableEmpty({
   return (
     <tr data-slot="table-empty">
       <td colSpan={colSpan} className="p-0">
-        <EmptyState
-          size="sm"
-          variant={variant}
-          title={title}
-          description={children}
-          actions={actions}
-          className="shadow-none forced-colors:outline-none"
-        />
+        <div className="sticky start-0 w-[var(--table-viewport,100%)] max-w-full">
+          <EmptyState
+            size="sm"
+            variant={variant}
+            title={title}
+            description={children}
+            actions={actions}
+            className="shadow-none forced-colors:outline-none"
+          />
+        </div>
       </td>
     </tr>
   )
