@@ -1,5 +1,7 @@
 import evidenceFile from '../../../docs/accessibility/evidence.json'
 import { type Anatomy, ANATOMY } from './anatomy'
+import { RELEASES } from './changelog-source'
+import { type ChangeEntry, changesFor } from './changes'
 import { ACCESSIBILITY, NON_INTERACTIVE } from './accessibility'
 import type { Accessibility } from './accessibility-types'
 import { usedIn } from './composition-data'
@@ -20,6 +22,8 @@ import { type Phase, phasesIn } from './lifecycle'
  *   6. Related              the components this page sends readers to, the
  *                           ones that send readers here, and the patterns
  *                           and showcases it is used in
+ *   7. Changes (optional)   what changed in it, release by release, read
+ *                           from CHANGELOG.md by commit scope (changes.ts)
  *
  * Usage comes before the examples on purpose: "should I use this at all?" is
  * the first question, and a reader who scrolls past forty stories to find out
@@ -32,9 +36,16 @@ import { type Phase, phasesIn } from './lifecycle'
  * the reader meets each word with a picture. Before Usage it would be detail
  * for someone who may be on the wrong page.
  *
- * Anatomy is the one optional section: only components with real parts have
- * it (anatomy.ts says which and why). It renders nothing when a page has no
- * entry, and its check only holds an entry that exists to the contract.
+ * Anatomy is optional: only components with real parts have it (anatomy.ts
+ * says which and why). It renders nothing when a page has no entry, and its
+ * check only holds an entry that exists to the contract.
+ *
+ * Changes is optional too, and last. A component nobody has touched since
+ * 0.1.0 has nothing to list, and an empty "no changes" heading would only
+ * push Related further from the examples. It comes after Related because it
+ * answers a later question: not "what should I use?" but "what moved since
+ * the version I am on?", which a reader asks while upgrading, with the page
+ * already chosen.
  *
  * The docs page (.storybook/docs-page.tsx) renders SECTIONS in this order,
  * and usage.test.ts runs each section's `missing` against every component
@@ -71,6 +82,8 @@ export interface PageData {
   pointingHere: RelatedLink[]
   /** Patterns and showcases that import it, read from their source (composition.ts). */
   usedIn: RelatedLink[]
+  /** Its entries in CHANGELOG.md, newest first; empty when it has none. */
+  changes: ChangeEntry[]
 }
 
 export function pageData(title: string, tags: readonly string[] | undefined): PageData {
@@ -93,6 +106,7 @@ export function pageData(title: string, tags: readonly string[] | undefined): Pa
     alternatives,
     pointingHere,
     usedIn: usedIn(title).map((from) => ({ title: from })),
+    changes: changesFor(title, RELEASES),
   }
 }
 
@@ -100,7 +114,7 @@ function dedupe(links: RelatedLink[]) {
   return links.filter((link, i) => links.findIndex((other) => other.title === link.title) === i)
 }
 
-export type SectionId = 'summary' | 'usage' | 'anatomy' | 'examples' | 'accessibility' | 'related'
+export type SectionId = 'summary' | 'usage' | 'anatomy' | 'examples' | 'accessibility' | 'related' | 'changes'
 
 export interface Section {
   id: SectionId
@@ -173,5 +187,13 @@ export const SECTIONS: Section[] = [
     heading: 'Related',
     missing: (page) =>
       page.alternatives.length + page.pointingHere.length + page.usedIn.length ? [] : ['at least one related component or pattern'],
+  },
+  {
+    id: 'changes',
+    heading: 'Changes',
+    // Optional: no entries, no section. An entry it does show must say which
+    // release it came in and when, or the list cannot answer "since when?".
+    missing: (page) =>
+      page.changes.flatMap((change) => (change.version && change.date ? [] : [`a version and a date for "${change.subject}"`])),
   },
 ]
