@@ -59,7 +59,11 @@ const representative: Mode[] = [
 const NOW = new Date('2026-05-04T10:30:00Z')
 
 async function open(page: Page, id: string, mode: Mode) {
-  await page.clock.install({ time: NOW })
+  // Installed a minute early, then paused at NOW: the installed clock runs
+  // in real time until it is paused, so `install({ time: NOW })` followed by
+  // `pauseAt(NOW)` failed with "Cannot fast-forward to the past" whenever a
+  // busy machine let a millisecond pass between the two calls.
+  await page.clock.install({ time: NOW.getTime() - 60_000 })
   await page.clock.pauseAt(NOW)
   if (mode.forced) await page.emulateMedia({ forcedColors: 'active', colorScheme: mode.theme })
   const globals = [`theme:${mode.theme}`, `density:${mode.density ?? 'comfortable'}`]
@@ -99,6 +103,16 @@ async function open(page: Page, id: string, mode: Mode) {
  * stream got depended on the machine's speed. Stepping 100ms at a time and
  * letting React's queued tasks run between steps makes every run take the
  * same path.
+ *
+ * "Stopped changing" compares the whole markup, not its length. Lengths were
+ * tried first and let a scripted run be photographed mid-flight: while a step
+ * runs, the only thing moving is an elapsed counter, and "1.2s" becoming
+ * "1.3s" keeps every length the same, so a second of ticking counters read
+ * as settled. Whether a status word changed inside that second depended on
+ * how fast the runner committed renders, so the same story was captured at
+ * 1.2s on one run and 3.4s on another. Compared in full, a running counter
+ * keeps the loop going until the run reaches its end state, or until the
+ * 15 seconds are up for a story that never stops.
  */
 async function settle(page: Page) {
   const flush = () =>
@@ -112,7 +126,7 @@ async function settle(page: Page) {
           channel.port2.postMessage(null)
         })
       }
-      return document.body.innerHTML.length + ':' + document.body.innerText.length
+      return document.body.innerHTML
     })
   let last = await flush()
   let quiet = 0
