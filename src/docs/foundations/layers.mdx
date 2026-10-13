@@ -119,6 +119,37 @@ to see it.
 A dialog also dims what is behind it, toward the page's own colour (`--backdrop`) rather than
 toward grey.
 
+## In both themes
+
+The same layers, once inside a `data-theme="light"` subtree and once inside a `data-theme="dark"`
+one, whatever the toolbar is set to. Raised is lighter than the ground in both, the well is darker
+in both, and on the dark ground the menu's blur all but vanishes while its keyline still holds the
+edge.
+
+<Specimen label="The same stack in the light theme and the dark theme">
+  <div className="grid gap-4 sm:grid-cols-2">
+    {['light', 'dark'].map((theme) => (
+      <div key={theme} data-theme={theme} className="grid gap-3 p-4 shadow-[inset_0_0_0_1px_var(--keyline)]">
+        <p className="m-0 rotulo text-ink-muted">{theme === 'light' ? 'Light' : 'Dark'}</p>
+        <div className="relative h-40">
+          <div className="grid h-full content-start gap-3 bg-cloth-pale p-3 shadow-cut">
+            <div>
+              <p className="m-0 text-sm font-semibold text-ink">Run 4,812</p>
+              <p className="m-0 text-sm text-ink-2">Weekly digest agent</p>
+            </div>
+            <div className="w-28 bg-cloth-shade px-3 py-1.5 text-xs text-ink-2 shadow-cut">well</div>
+            <div className="w-28 bg-cloth-pale px-3 py-1.5 text-xs text-ink cut-band band-oro">selected</div>
+          </div>
+          <div className="absolute end-3 top-16 grid w-32 bg-cloth-pale p-1 text-sm text-ink shadow-floating">
+            <span className="px-3 py-1.5">Rename</span>
+            <span className="bg-ink-soft px-3 py-1.5">Duplicate</span>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</Specimen>
+
 ## Seams and fillers: diente and relleno
 
 Two more devices come from the same method, and neither is depth.

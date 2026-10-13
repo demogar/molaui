@@ -106,5 +106,5 @@ The colour tokens are declared on `:root` and again on every `[data-theme]` elem
 that reads `light-dark()` natively doesn't need the second one. A production build does: Lightning
 CSS rewrites `light-dark()` for older browsers into custom properties, and those resolve where the
 token is declared, not where it is used. With the tokens on `:root` alone, a dark panel inside a
-light page painted light. The browser audit now checks that every `data-theme` subtree paints its
-own ground.
+light page would paint light. The browser audit checks that every `data-theme` subtree paints its
+own ground, and the light and dark halves of the swatches on this page are two such subtrees.
