@@ -12,7 +12,14 @@
 //
 //   vite-react     the precompiled `styles.css`, no Tailwind in the app
 //   vite-tailwind  the app's own Tailwind v4 build with `tailwind.css` + @source
-//   next           App Router, the page a server component (the RSC check)
+//   next           App Router, the page a server component (the RSC check);
+//                  its root layout and the components it renders beside the
+//                  page are Getting started's own code blocks, so the docs
+//                  compile against the tarball (scripts/doc-snippets.mjs).
+//                  It loads the faces from Fontsource and starts with a
+//                  stored Dark theme, to prove the no-flash script.
+//   vite-existing  `components.css`, the entry for an app that already has
+//                  its own page styles: the host page must keep them
 //   node-require   no bundler: `require()` from plain Node, and one Base UI
 //                  copy shared by the app and the package
 //
@@ -41,6 +48,8 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js'
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 import { chromium } from 'playwright'
 
+import { docSnippets } from './doc-snippets.mjs'
+
 const root = resolve(import.meta.dirname, '..')
 const fixturesDir = join(root, 'test/consumers')
 const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm'
@@ -51,6 +60,7 @@ const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm'
 const SERVE = {
   'vite-react': (dir, port) => ['node', [join(root, 'scripts/serve-static.mjs'), join(dir, 'dist'), String(port)]],
   'vite-tailwind': (dir, port) => ['node', [join(root, 'scripts/serve-static.mjs'), join(dir, 'dist'), String(port)]],
+  'vite-existing': (dir, port) => ['node', [join(root, 'scripts/serve-static.mjs'), join(dir, 'dist'), String(port)]],
   next: (dir, port) => [join(dir, 'node_modules/.bin/next'), ['start', '-p', String(port)]],
 }
 
@@ -66,7 +76,7 @@ for (const name of fixtures) {
   if (!SERVE[name] && !scriptOnly(name)) fail(`fixture "${name}" has neither a serve command in scripts/consumers.mjs nor a check script`)
 }
 
-if (!['dist/index.js', 'dist/mola-ui.css', 'dist/mcp/mola-ui-mcp.js'].every((file) => existsSync(join(root, file)))) {
+if (!['dist/index.js', 'dist/mola-ui.css', 'dist/mola-ui-components.css', 'dist/mcp/mola-ui-mcp.js'].every((file) => existsSync(join(root, file)))) {
   fail('dist/ is missing or incomplete. Run `npm run build` first.')
 }
 
@@ -118,6 +128,17 @@ async function runFixture(name, tarball, browser) {
     recursive: true,
     filter: (src) => !/[/\\](node_modules|dist|\.next)$/.test(src),
   })
+  if (name === 'next') {
+    for (const snippet of docSnippets()) {
+      const target = join(dir, snippet.path)
+      if (!snippet.path.startsWith('app/') && existsSync(target)) {
+        result.errors.push(`Getting started block at line ${snippet.line} would overwrite the fixture's own ${snippet.path}`)
+        return result
+      }
+      mkdirSync(join(target, '..'), { recursive: true })
+      writeFileSync(target, `// From src/docs/getting-started.mdx, line ${snippet.line}.\n${snippet.code}`)
+    }
+  }
   const pkgPath = join(dir, 'package.json')
   const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'))
   pkg.dependencies = { ...pkg.dependencies, '@demogar/mola-ui': `file:${tarball}` }
@@ -148,7 +169,7 @@ async function runFixture(name, tarball, browser) {
   const checkStarted = performance.now()
   try {
     await waitForHttp(`http://localhost:${port}/`, 30_000)
-    result.errors.push(...(await check(browser, `http://localhost:${port}/`)))
+    result.errors.push(...(await check(browser, `http://localhost:${port}/`, name)))
   } catch (error) {
     result.errors.push(`${error.message}\n    server output:\n${indent(serverOutput)}`)
   } finally {
@@ -209,9 +230,13 @@ async function checkMcp(tarball) {
   return result
 }
 
-async function check(browser, url) {
+async function check(browser, url, name) {
   const page = await browser.newPage()
   const errors = []
+  // A returning visitor who chose Dark. Only the inline script in the
+  // documented root layout reads it, so a dark <html> after load proves the
+  // script ran, and a hydration mismatch it caused would be a console error.
+  if (name === 'next') await page.addInitScript(() => localStorage.setItem('theme', 'dark'))
   page.on('console', (message) => {
     if (message.type() === 'error') errors.push(`console error: ${message.text()}`)
   })
@@ -290,11 +315,55 @@ async function check(browser, url) {
       if (facts.dialog.transparentBackground) errors.push(`dialog background is transparent (${facts.dialog.background})`)
       if (facts.dialog.width < 200) errors.push(`dialog is ${facts.dialog.width}px wide: its size utilities have no CSS`)
     }
+    if (name === 'next') errors.push(...(await checkNext(page)))
+    if (name === 'vite-existing') errors.push(...(await checkExisting(page)))
   } catch (error) {
     errors.push(error.message)
   } finally {
     await page.close()
   }
+  return errors
+}
+
+/** The Next fixture renders Getting started's root layout and theme switcher. */
+async function checkNext(page) {
+  const errors = []
+  const facts = await page.evaluate(async () => {
+    await document.fonts.ready
+    const loaded = [...document.fonts].filter((f) => f.status === 'loaded').map((f) => f.family.replace(/["']/g, ''))
+    const pressed = document.querySelector('[data-slot="segmented-control"] [aria-pressed="true"]')
+    return {
+      theme: document.documentElement.dataset.theme,
+      density: document.documentElement.dataset.density,
+      loaded,
+      pressed: pressed?.textContent ?? null,
+    }
+  })
+  if (facts.theme !== 'dark') errors.push(`<html data-theme> is "${facts.theme}" with "dark" stored: the no-flash theme script did not run`)
+  if (facts.density !== 'comfortable') errors.push(`<html data-density> is "${facts.density}": the documented root layout did not render`)
+  if (facts.pressed !== 'Dark') errors.push(`the theme switcher shows "${facts.pressed}" pressed with "dark" stored`)
+  if (!facts.loaded.includes('Archivo Variable')) errors.push(`Archivo Variable did not load (loaded: ${facts.loaded.join(', ') || 'none'})`)
+  return errors
+}
+
+/** components.css must style the components and leave the host page's own styles alone. */
+async function checkExisting(page) {
+  const errors = []
+  const facts = await page.evaluate(() => {
+    const body = getComputedStyle(document.body)
+    return {
+      background: body.backgroundColor,
+      font: body.fontFamily,
+      h1Margin: getComputedStyle(document.querySelector('h1')).marginBlockStart,
+      hostButtonFont: getComputedStyle(document.querySelector('button.host')).fontFamily,
+      boxSizing: getComputedStyle(document.querySelector('.host-box')).boxSizing,
+    }
+  })
+  if (facts.background !== 'rgb(250, 245, 235)') errors.push(`the host body background became ${facts.background}: components.css styled <body>`)
+  if (/Archivo/.test(facts.font)) errors.push(`the host body font became ${facts.font}`)
+  if (facts.h1Margin === '0px') errors.push('the host <h1> lost its margin: components.css carries a global reset')
+  if (/Archivo/.test(facts.hostButtonFont)) errors.push("a host <button> inherits Mola's font: the reset is not scoped")
+  if (facts.boxSizing !== 'content-box') errors.push(`a host element is ${facts.boxSizing}: the reset is not scoped`)
   return errors
 }
 
