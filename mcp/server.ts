@@ -1,14 +1,17 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
 
+import { checkCode, contextFrom } from './check'
 import type { Component, Data, Pattern } from './data'
-import { componentLine, componentMarkdown, patternMarkdown, rulesMarkdown, tokensMarkdown } from './format'
+import { checkMarkdown, componentLine, componentMarkdown, patternMarkdown, rulesMarkdown, tokensMarkdown } from './format'
 
 /**
  * A read-only MCP server over the generated agent docs.
  *
  * Every tool answers from `Data` (docs/ai/components.json and tokens.json),
- * so it can never describe a prop the package does not have. Nothing writes,
+ * so it can never describe a prop the package does not have. `check_code`
+ * reviews code it is given and returns findings; it reads the same data for
+ * token and export names, and writes nothing. Nothing writes,
  * nothing reaches the network, and every tool is annotated read-only, so a
  * client can allow them without asking each time.
  *
@@ -129,6 +132,7 @@ export function createServer(data: Data) {
         `Docs for ${manifest.name} ${data.version}, the design system installed in this project, read from its generated manifest.`,
         'Call get_rules before writing UI, then get_component for each component you use: never guess a prop.',
         'Use search when you know the job but not the component, get_tokens for colours and sizes, and get_pattern for whole screens.',
+        'Before handing UI code back, run it through check_code and fix what it finds.',
       ].join(' '),
     },
   )
@@ -244,6 +248,23 @@ export function createServer(data: Data) {
       }
       return text(patternMarkdown(pattern))
     },
+  )
+
+  const checkContext = contextFrom(data)
+
+  server.registerTool(
+    'check_code',
+    {
+      title: 'Check code against the rules',
+      description:
+        'Review UI code you wrote (TSX, JSX or CSS) against the design rules before handing it back: borders on controls, radius, faded disabled states, colour literals and names that are not tokens, physical left/right, spinners, hand-rolled dialogs and menus, other UI libraries and imports the package does not export. Returns each finding with its line, the rule it breaks and the fix, or "No findings". Deterministic, and it changes nothing.',
+      inputSchema: {
+        code: z.string().min(1).describe('The source to check: a component, a screen, or a stylesheet.'),
+        filename: z.string().optional().describe('Its file name, for the language: "settings.tsx", "app.css". Without one, CSS is recognised by its shape.'),
+      },
+      annotations: READ_ONLY,
+    },
+    async ({ code, filename }) => text(checkMarkdown(checkCode(code, checkContext, { filename }), data, code.split('\n').length)),
   )
 
   return server

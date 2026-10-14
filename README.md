@@ -172,8 +172,13 @@ Mola UI documents itself for coding agents as well as for people, from the same 
   `.claude/skills/` in your project.
 - **`mola-ui-mcp`**, an [MCP](https://modelcontextprotocol.io) server that ships in the package.
   It is read-only and answers from the generated manifest for the version you have installed. Its
-  tools are `list_components`, `get_component`, `search`, `get_tokens`, `get_rules` and
-  `get_pattern`.
+  tools are `list_components`, `get_component`, `search`, `get_tokens`, `get_rules`,
+  `get_pattern` and `check_code`. `check_code` closes the loop: an agent passes it the screen it
+  just wrote and gets back each place it breaks a design rule (a border on a control, a radius, a
+  faded disabled state, a hex or a colour that is not a token, `pl-`/`left-`, a spinner, a
+  hand-rolled dialog, another UI library, an export that does not exist), with the line, the rule
+  and the fix. The check is deterministic and runs over the library's own source in CI, so it
+  cannot drift from what the components do.
 
 ### Connect the MCP server
 

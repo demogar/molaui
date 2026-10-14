@@ -43,9 +43,9 @@ describe('mola-ui MCP server', () => {
     expect(client.getInstructions()).toMatch(/get_rules/)
   })
 
-  it('offers six read-only tools', async () => {
+  it('offers seven read-only tools', async () => {
     const { tools } = await client.listTools()
-    expect(tools.map((t) => t.name).sort()).toEqual(['get_component', 'get_pattern', 'get_rules', 'get_tokens', 'list_components', 'search'])
+    expect(tools.map((t) => t.name).sort()).toEqual(['check_code', 'get_component', 'get_pattern', 'get_rules', 'get_tokens', 'list_components', 'search'])
     for (const tool of tools) expect(tool.annotations).toMatchObject({ readOnlyHint: true, openWorldHint: false })
   })
 
@@ -129,6 +129,36 @@ describe('mola-ui MCP server', () => {
     const { text } = await call('get_rules')
     for (const r of data.manifest.rules) expect(text).toContain(r.rule)
     expect(text).toContain(data.manifest.install)
+  })
+
+  it('check_code reports each finding with its line, rule and fix, and cites the rules', async () => {
+    const code = [
+      "import { Button } from '@demogar/mola-ui'",
+      '',
+      'export const Save = ({ busy }: { busy: boolean }) => (',
+      '  <Button disabled={busy} className="border border-ink rounded-lg opacity-50 bg-[#c00] pl-4">',
+      '    Save',
+      '  </Button>',
+      ')',
+    ].join('\n')
+    const { text, isError } = await call('check_code', { code, filename: 'save.tsx' })
+    expect(isError).toBe(false)
+    expect(text).toMatch(/^# 4 errors, 1 warning/)
+    expect(text).toContain('- **Line 4**, rule 1: `border` `border-ink` on <Button>')
+    expect(text).toContain('Fix: Use `ps-4`.')
+    expect(text).toContain('## Rules cited')
+    for (const n of [1, 2, 4, 5, 7]) expect(text).toContain(`${n}. ${data.manifest.rules[n - 1]!.rule}`)
+  })
+
+  it('check_code says so when the code is clean, and names what it cannot check', async () => {
+    const { text } = await call('check_code', { code: '<Button variant="ghost">Cancel run</Button>' })
+    expect(text).toMatch(/^# No findings\n\n1 line checked/)
+    expect(text).toContain('Not checkable from code: rule 3 (State is never colour alone)')
+  })
+
+  it('check_code checks CSS by file name', async () => {
+    const { text } = await call('check_code', { code: '.panel { border-radius: 6px; }', filename: 'panel.css' })
+    expect(text).toContain('rule 2: `border-radius: 6px`')
   })
 
   it('get_pattern returns a pattern’s guidance, and a showcase’s parts', async () => {

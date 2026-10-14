@@ -537,7 +537,7 @@ Read the one you need rather than all of them. Every docs page also has a Markdo
 - [Patterns](${SITE}llms-patterns.txt): whole screens, what each is built from, and its states
 - [Full text](${SITE}llms-full.txt): all of the above except the tokens, in one file
 
-An MCP server with the same data ships in the package: \`npx -y --package ${pkg.name} mola-ui-mcp\`. Its tools are \`list_components\`, \`get_component\`, \`search\`, \`get_tokens\`, \`get_rules\` and \`get_pattern\`.
+An MCP server with the same data ships in the package: \`npx -y --package ${pkg.name} mola-ui-mcp\`. Its tools are \`list_components\`, \`get_component\`, \`search\`, \`get_tokens\`, \`get_rules\`, \`get_pattern\` and \`check_code\`, which reviews code you wrote against the design rules and returns each finding with its line, rule and fix.
 
 ${categories.map((c) => `## ${c}\n\n${byLayer('components').filter((e) => e.category === c).map(linkLine).join('\n')}`).join('\n\n')}
 

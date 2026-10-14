@@ -13,6 +13,8 @@ Before you write code, look up the components you plan to use. Don't guess props
 
 - If the `mola-ui` MCP server is connected (`npx -y --package @demogar/mola-ui mola-ui-mcp`), use
   its `get_component`, `search` and `get_tokens` tools. They answer for the installed version.
+  Before you hand UI code back, pass each file you wrote to its `check_code` tool and fix every
+  error it reports (see "Before you call it done").
 
 - `docs/ai/components.json` in the repository (or `llms-full.txt` at the Storybook root) lists
   every export with its props, types, defaults, cva variants and usage guidance. It is generated
@@ -185,6 +187,10 @@ vocabulary, where plain `tailwind-merge` would drop a token colour class.
   with `label`.
 - The checklist is clean: no `border` on an interactive edge, no `rounded-*`, no `opacity-*` on
   disabled controls, no hex, no `pl-`/`pr-`/`left-`/`right-`.
+- With the MCP server connected, `check_code` has run on every file you wrote (`code`, plus
+  `filename` so CSS is read as CSS) and reports no errors. Fix each warning too, or say why it
+  stays. Its rule numbers are `get_rules`' numbering, not this file's. It cannot judge state in
+  glyph, word and colour, label wording or approval before writes: check those yourself.
 - Patterns for whole screens are in Storybook under Patterns: Agent hand-off, Confirmation,
   Empty states, Filtered table, List and detail, Settings page. Start from them rather than from a
   blank file; each says what it is built from and where its empty, loading, error and

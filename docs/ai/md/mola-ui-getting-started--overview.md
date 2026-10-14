@@ -192,6 +192,14 @@ same generated manifest as these pages, for the version installed in your projec
 - `get_tokens`: every token with its role and its value in both themes, filtered by text.
 - `get_rules`: the design rules, each with its reason, and the setup.
 - `get_pattern`: a whole screen, what it is built from and its states.
+- `check_code`: reviews code the agent wrote (TSX, JSX or CSS) against the design rules and
+  returns each finding with its line, the rule it breaks and the fix. It covers what code can
+  show: a border on a control, a radius, `opacity-*` on a disabled control, hex and colour names
+  that are not tokens, physical `pl-`/`left-` classes, spinners, hand-rolled dialogs and menus,
+  other UI libraries and imports the package does not export. An error breaks a rule; a warning is
+  probably wrong but needs a reason to keep. Rules that need a reading (state in glyph, word and
+  colour; label wording; approval before writes) are left to review. The library's own source is
+  checked by the same code in CI.
 
 In Claude Code:
 
