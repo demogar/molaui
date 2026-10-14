@@ -49,6 +49,21 @@ export const PAIRS: Pair[] = [
   ['--on-ink-accent', '--ink', 4.5],
   // A tinted label.
   ['--rojo-on-shade', '--cloth-shade', 4.5],
+  // The deepest cloth carries text too: a hovered tab, a disabled checked box.
+  // It was never measured until scopes.test.ts read it off the components.
+  // --ink-muted is NOT promised here: 4.29 in light, so anything disabled on
+  // --cloth-deep steps up to --ink-2.
+  ['--ink', '--cloth-deep', 4.5],
+  ['--ink-2', '--cloth-deep', 4.5],
+  // A layer's own colour as text on its wash: the soft Badge. The 3:1 swatch
+  // pairings below are the weaker promise for the same two tokens.
+  ['--anil', '--anil-soft', 4.5],
+  ['--verde', '--verde-soft', 4.5],
+  ['--rojo-deep', '--rojo-soft', 4.5],
+  // Status ink on the neutral wash: a pressed feedback button in Message.
+  // --ink-warn is not promised here (4.24 in light) and nothing uses it.
+  ['--ink-success', '--ink-soft', 4.5],
+  ['--ink-danger', '--ink-soft', 4.5],
   // Swatch keys are graphics (3:1) on every ground, and a flat callout's
   // swatch sits on its own tone's wash. --oro is absent on purpose: the
   // accent swatch carries an ink keyline because gold on light cloth fails.
@@ -62,6 +77,31 @@ export const PAIRS: Pair[] = [
   ['--rojo', '--rojo-soft', 3],
   // The keyline bounds every control: a UI boundary owes 3:1.
   ...grounds.map((g): Pair => ['--ink', g, 3]),
+]
+
+/**
+ * Text over a translucent overlay, which has no colour of its own until it is
+ * composited onto whatever is beneath it. The scrim exists for a photograph
+ * or a video frame, the one ground the system cannot know, so it is measured
+ * at the bounds of what can be beneath: pure white and pure black (`white`,
+ * `black`), and every cloth in both themes (`--cloth-pale` in light is the
+ * lightest cloth, `--cloth-shade` in dark the darkest). The overlay is
+ * composited onto each with `over()`, then the foreground, translucent or
+ * not, onto that, as the browser paints them. A pairing in PAIRS cannot say
+ * this, because its ground is one token.
+ */
+export interface Overlaid {
+  fg: string
+  overlay: string
+  under: string[]
+  min: number
+}
+
+const anything = ['white', 'black', '--cloth', '--cloth-pale', '--cloth-shade', '--cloth-deep']
+
+export const OVERLAID: Overlaid[] = [
+  { fg: '--on-scrim', overlay: '--scrim', under: anything, min: 4.5 },
+  { fg: '--on-scrim-muted', overlay: '--scrim', under: anything, min: 4.5 },
 ]
 
 /** A pairing as an agent reads it from one side: the other token, the ratio, and the themes it holds in. */
@@ -98,5 +138,8 @@ export function pairingsOf(name: string): { on: Pairing[]; under: Pairing[] } {
     promised
       .filter((pair) => pair[mine] === name)
       .map(([fg, bg, min, themes]) => ({ token: mine === 0 ? bg : fg, min, ...(themes ? { themes } : {}) }))
-  return { on: side(0), under: side(1) }
+  return {
+    on: [...side(0), ...OVERLAID.filter((o) => o.fg === name).map((o) => ({ token: o.overlay, min: o.min }))],
+    under: [...side(1), ...OVERLAID.filter((o) => o.overlay === name).map((o) => ({ token: o.fg, min: o.min }))],
+  }
 }

@@ -1,7 +1,7 @@
-import { DirectionProvider } from '@base-ui/react/direction-provider'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 
+import { DirectionProvider } from '../../lib/direction'
 import { Field } from '../field/field'
 import { NumberInput } from './number-input'
 

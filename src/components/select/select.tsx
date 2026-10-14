@@ -129,6 +129,9 @@ export const optionClasses = [
   // top of it would draw a second, competing one inside the popup.
   'focus-visible:shadow-none',
   'data-disabled:text-ink-muted data-disabled:cursor-not-allowed',
+  // Highlighted and disabled at once: muted ink on the ink fill is 2.99:1, so
+  // the pair is named rather than left to variant order. See Menu.
+  'data-disabled:data-highlighted:text-on-ink-muted',
 ] as const
 
 /**

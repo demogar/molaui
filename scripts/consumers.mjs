@@ -179,11 +179,13 @@ async function checkMcp(tarball) {
     if (version !== pkg.version) result.errors.push(`server says version ${version}, the package is ${pkg.version}`)
     const { tools } = await client.listTools()
     const names = tools.map((t) => t.name).sort().join(', ')
-    if (names !== 'get_component, get_pattern, get_rules, get_tokens, list_components, search') result.errors.push(`unexpected tools: ${names}`)
+    if (names !== 'check_code, get_component, get_pattern, get_rules, get_tokens, list_components, search') result.errors.push(`unexpected tools: ${names}`)
     const button = await client.callTool({ name: 'get_component', arguments: { name: 'Button' } })
     if (!button.content?.[0]?.text?.startsWith('# Button')) result.errors.push(`get_component Button returned: ${JSON.stringify(button).slice(0, 300)}`)
     const tokens = await client.callTool({ name: 'get_tokens', arguments: { filter: 'oro' } })
     if (!tokens.content?.[0]?.text?.includes('`--oro`')) result.errors.push('get_tokens "oro" did not list --oro')
+    const checked = await client.callTool({ name: 'check_code', arguments: { code: '<button className="border rounded-lg">Save</button>', filename: 'save.tsx' } })
+    if (!checked.content?.[0]?.text?.includes('rule 1:')) result.errors.push(`check_code did not report the border: ${JSON.stringify(checked).slice(0, 300)}`)
   } catch (error) {
     result.errors.push(`${error.message}\n    server stderr:\n${indent(stderr)}`)
   } finally {

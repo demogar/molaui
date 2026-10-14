@@ -15,7 +15,7 @@ The inverse panel at its smallest: ink ground, cloth type, no blur. A tooltip is
 ### When to use
 
 - Naming an icon-only button, and its shortcut.
-- A row of icon buttons inside TooltipProvider, so each next label appears without a delay.
+- A `Toolbar` of icon buttons inside TooltipProvider, so each next label appears without a delay and the arrow keys move between them.
 
 ### When not to
 
@@ -77,7 +77,7 @@ Types: `TooltipProps`
 
 - It opens on keyboard focus as well as on hover.
 - `shortcut` keys are rendered as `<kbd>` elements.
-- Inside a `TooltipProvider`, moving along a toolbar shows the next tooltip at once, after the first delay.
+- Inside a `TooltipProvider`, moving along a `Toolbar` shows the next tooltip at once, after the first delay.
 
 ### You handle
 

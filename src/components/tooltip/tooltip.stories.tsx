@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Copy, GitBranch, Pause, Play, RotateCcw, Square } from 'lucide-react'
 
 import { Button, IconButton } from '../button'
+import { Toolbar, ToolbarButton } from '../toolbar'
 import { Tooltip, TooltipProvider } from './tooltip'
 
 const meta = {
@@ -50,35 +51,27 @@ export const WithShortcut: Story = {
 export const ToolbarGroup: Story = {
   render: () => (
     <TooltipProvider>
-      <div className="flex gap-1 bg-cloth-pale p-1 shadow-cut" role="toolbar" aria-label="Run controls">
+      <Toolbar variant="panel" aria-label="Run controls">
         <Tooltip content="Start" shortcut={['R']}>
-          <IconButton label="Start" variant="ghost" size="sm">
-            <Play />
-          </IconButton>
+          <ToolbarButton aria-label="Start" icon={<Play />} className="w-(--control-h-sm) px-0" />
         </Tooltip>
         <Tooltip content="Pause after this step" shortcut={['P']}>
-          <IconButton label="Pause after this step" variant="ghost" size="sm">
-            <Pause />
-          </IconButton>
+          <ToolbarButton aria-label="Pause after this step" icon={<Pause />} className="w-(--control-h-sm) px-0" />
         </Tooltip>
         <Tooltip content="Stop run" shortcut={['⌘', '.']}>
-          <IconButton label="Stop run" variant="ghost" size="sm">
-            <Square />
-          </IconButton>
+          <ToolbarButton aria-label="Stop run" icon={<Square />} className="w-(--control-h-sm) px-0" />
         </Tooltip>
         <Tooltip content="Fork from here">
-          <IconButton label="Fork from here" variant="ghost" size="sm">
-            <GitBranch />
-          </IconButton>
+          <ToolbarButton aria-label="Fork from here" icon={<GitBranch />} className="w-(--control-h-sm) px-0" />
         </Tooltip>
-      </div>
+      </Toolbar>
     </TooltipProvider>
   ),
   parameters: {
     docs: {
       description: {
         story:
-          'Inside a `TooltipProvider`, the delay applies to the first hover only. Sweep the pointer along the toolbar: each next label appears immediately, with no animation, so it never lags the pointer.',
+          'Inside a `TooltipProvider`, the delay applies to the first hover only. Sweep the pointer along the toolbar: each next label appears immediately, with no animation, so it never lags the pointer. The row is a `Toolbar` of `ToolbarButton`s, not a `div` of buttons: one tab stop, and the arrow keys move between the controls, showing each label as focus arrives.',
       },
     },
   },

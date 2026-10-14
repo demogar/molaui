@@ -33,7 +33,7 @@ import { type Phase, PHASES } from '../src/docs/usage/lifecycle'
 import { docsId } from '../src/docs/usage/links'
 import { PATTERN_STATES, type PatternStateId } from '../src/docs/usage/patterns'
 import { contrast } from '../src/tokens/color'
-import { pairingsOf, type Pairing, promisedPairs } from '../src/tokens/pairings'
+import { OVERLAID, pairingsOf, type Pairing, promisedPairs } from '../src/tokens/pairings'
 import { parseRootDeclarations, resolveColor, type ThemeName } from '../src/tokens/resolve'
 import { tokenRows } from '../src/tokens/rows'
 import { COLOR_SCOPES, SCOPES, type Scope, utilitiesOf } from '../src/tokens/scopes'
@@ -365,6 +365,8 @@ function pairingsTable() {
     '| Foreground | Ground | At least | Themes |',
     '| --- | --- | --- | --- |',
     ...rows.map(([fg, bg, min, themes]) => `| \`${fg}\` | \`${bg}\` | ${min} | ${themes ? themes.join(', ') : 'both'} |`),
+    // A translucent overlay is measured composited onto white, black and every cloth.
+    ...OVERLAID.map(({ fg, overlay, min }) => `| \`${fg}\` | \`${overlay}\` over any image (measured over white, black and every cloth) | ${min} | both |`),
   ].join('\n')
 }
 
