@@ -766,7 +766,7 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
     handles: [
       'It is a `<nav>` named “Breadcrumb” holding an ordered list.',
       'The last item is plain text with `aria-current="page"`, not a link to where you already are.',
-      'The slashes are drawn with CSS, so they are not read out.',
+      'The separators are empty CSS rules, not slash characters, so they are not read out.',
     ],
     you: [
       'Leave `href` off the last item.',

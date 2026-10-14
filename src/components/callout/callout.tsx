@@ -83,7 +83,7 @@ const ICON_INK: Record<CalloutTone, string> = {
   neutral: 'text-ink-2',
   info: 'text-anil',
   success: 'text-verde',
-  warn: 'text-warn',
+  warn: 'text-ink-warn',
   danger: 'text-rojo-on-shade',
 }
 

@@ -18,7 +18,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A named `<nav>` around an ordered list. The current page is text with `aria-current="page"` — a link to where you already are does nothing. Separators are drawn in CSS so a screen reader reads places, not slashes. Long ids are cut in the middle with `middleTruncate`, keeping both ends — the parts people compare.',
+          'A named `<nav>` around an ordered list. The current page is text with `aria-current="page"` — a link to where you already are does nothing. Separators are slanted keyline rules drawn in CSS, with no text, so a screen reader reads places, not slashes. Long ids are cut in the middle with `middleTruncate`, keeping both ends — the parts people compare.',
       },
     },
   },

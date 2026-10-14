@@ -27,8 +27,8 @@ export const RULES: Rule[] = [
     why: 'Opacity fades the keyline and the label to about 2:1, a failure axe does not report because disabled controls are exempt.',
   },
   {
-    rule: 'Colours come from tokens. No hex, rgb or arbitrary colour values outside `tokens.css`.',
-    why: 'Every token pairing has a measured contrast ratio in both themes; a colour outside the token file was never measured.',
+    rule: 'Colours come from tokens, each through a utility its scope allows (surface `bg-`, text `text-`, edge `border-`/`decoration-`, mark `bg-`/`fill-`). No hex, rgb or arbitrary colour values outside `tokens.css`.',
+    why: 'Every token pairing has a measured contrast ratio in both themes; a colour outside the token file, or a token outside its scope (`text-cloth-pale` compiles), was never measured.',
   },
   {
     rule: 'Theme and density are attributes (`data-theme`, `data-density`) on `<html>` or a subtree, not props or React context.',

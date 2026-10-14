@@ -98,12 +98,31 @@ describe('mola-ui MCP server', () => {
     const all = await call('get_tokens')
     expect(all.text).toContain(`${data.tokens.tokens.length} of ${data.tokens.tokens.length} tokens`)
     const ink = data.tokens.tokens.find((t) => t.name === '--ink')!
-    expect(all.text).toContain(`| \`--ink\` | ink | \`${ink.light}\` | \`${ink.dark}\` |`)
+    expect(all.text).toContain(`| \`--ink\` | ink | \`${ink.light}\` | \`${ink.dark}\` | text, edge, surface, mark: `)
     const oro = await call('get_tokens', { filter: 'oro' })
     expect(oro.text).toContain('`--oro`')
-    expect(oro.text).not.toContain('`--cloth`')
+    expect(oro.text).not.toContain('| `--cloth` |')
     expect((await call('get_tokens', { filter: 'control-h' })).text).toMatch(/`compact`: `--control-h: /)
     expect((await call('get_tokens', { filter: 'no-such-token' })).isError).toBe(true)
+  })
+
+  it('get_tokens scopes each colour to its utilities and lists the pairings it is promised', async () => {
+    const { text } = await call('get_tokens', { filter: 'cloth-pale' })
+    expect(text).toMatch(/\| `--cloth-pale` \|[^\n]*\| surface: `bg-cloth-pale` \|/)
+    expect(text.split('\n').find((l) => l.startsWith('| `--cloth-pale`'))).not.toContain('text-cloth-pale')
+    expect(text).toMatch(/- `--cloth-pale` carries `--ink` ≥ 4\.5, /)
+    expect(text).toContain('## Scopes')
+    // Gold is never text on light cloth, so it has no text utility, and its one text pairing is dark-only.
+    const oro = data.tokens.tokens.find((t) => t.name === '--oro')!
+    expect(oro.scopes).not.toContain('text')
+    expect(oro.utilities).not.toContain('text-oro')
+    expect(oro.on).toContainEqual({ token: '--cloth', min: 4.5, themes: ['dark'] })
+    // A non-colour has neither.
+    expect(data.tokens.tokens.find((t) => t.name === '--motion-base')!.scopes).toBeUndefined()
+  })
+
+  it('search finds a token by its scope', async () => {
+    expect((await call('search', { query: 'overlay' })).text).toContain('token **--scrim**')
   })
 
   it('get_rules returns every design rule with its reason', async () => {

@@ -1,4 +1,4 @@
-import type { Component, Data, Pattern, Token } from './data'
+import type { Component, Data, Pairing, Pattern, Scope, Token } from './data'
 
 /**
  * Markdown for the tool results. A model reads Markdown more reliably than a
@@ -115,12 +115,50 @@ export function patternMarkdown(p: Pattern) {
   return join(out)
 }
 
-export function tokensMarkdown(rows: Token[], density: Record<string, Record<string, string>> | null) {
+const useAs = (t: Token) =>
+  t.scopes ? `${t.scopes.join(', ')}${t.utilities?.length ? `: ${t.utilities.map((u) => `\`${u}\``).join(' ')}` : ''}` : ''
+
+const pairing = (p: Pairing) => `\`${p.token}\` ≥ ${p.min}${p.themes ? ` (${p.themes.join(', ')} only)` : ''}`
+
+/**
+ * The token table, then for each colour row its promised pairings. The scopes
+ * and the pairings are the point: Tailwind compiles every colour utility for
+ * every token, so without them an agent cannot tell `text-cloth-pale` (wrong)
+ * from `bg-cloth-pale`, or a measured pairing from a guess.
+ */
+export function tokensMarkdown(rows: Token[], density: Record<string, Record<string, string>> | null, scopes?: Record<string, Scope>) {
   const out = [
-    '| Token | Role | Light | Dark |',
-    '| --- | --- | --- | --- |',
-    ...rows.map((t) => `| \`${t.name}\` | ${cell([t.group, t.note].filter(Boolean).join(': '))} | \`${cell(t.light)}\` | \`${cell(t.dark)}\` |`),
+    '| Token | Role | Light | Dark | Use as |',
+    '| --- | --- | --- | --- | --- |',
+    ...rows.map((t) => `| \`${t.name}\` | ${cell([t.group, t.note].filter(Boolean).join(': '))} | \`${cell(t.light)}\` | \`${cell(t.dark)}\` | ${useAs(t)} |`),
   ]
+  const paired = rows.filter((t) => t.on?.length || t.under?.length)
+  if (paired.length) {
+    out.push(
+      '',
+      '## Promised pairings',
+      '',
+      'Measured in both themes by the contrast test: 4.5 for text, 3 for a boundary or a mark. A pairing not listed was never measured.',
+      '',
+      ...paired.map((t) =>
+        [
+          `- \`${t.name}\``,
+          t.on?.length ? ` reads on ${t.on.map(pairing).join(', ')}` : '',
+          t.on?.length && t.under?.length ? ';' : '',
+          t.under?.length ? ` carries ${t.under.map(pairing).join(', ')}` : '',
+          '.',
+        ].join(''),
+      ),
+    )
+  }
+  if (scopes && rows.some((t) => t.scopes)) {
+    out.push(
+      '',
+      '## Scopes',
+      '',
+      ...Object.entries(scopes).map(([name, s]) => `- \`${name}\`: ${s.meaning} Tailwind: ${s.tailwind.map((p) => `\`${p}-\``).join(' ')}.`),
+    )
+  }
   if (density) {
     out.push(
       '',

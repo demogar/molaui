@@ -10,9 +10,15 @@ import { cn } from '../../lib/cn'
  * is where you are, and a link to where you already are is a control that
  * does nothing.
  *
- * The separator is a slash in keyline ink, drawn with CSS rather than written
+ * The separator is a slanted keyline rule, drawn with CSS rather than written
  * into the list, so a screen reader reads four places and not four places and
- * three slashes. Links are ink-2 and underline on hover — in a system where
+ * three slashes. It was a `/` glyph in `content`, coloured `text-keyline`, and
+ * that was wrong twice: generated text is in the accessibility tree, so
+ * browsers did read the slashes, and it set the decorative keyline (1.43:1)
+ * as a text colour, outside its scope (src/tokens/scopes.ts). An empty box
+ * filled with the keyline is a rule in both senses; `forced-ink` keeps it
+ * visible in forced colours, where a background would otherwise be dropped.
+ * Links are ink-2 and underline on hover — in a system where
  * colour is a field rather than an accent, a crumb that only changes hue would
  * be invisible to a third of the people who can't tell rojo from ink-2.
  *
@@ -47,7 +53,7 @@ export function Breadcrumb({ items, renderLink, className, ...props }: Breadcrum
               key={i}
               className={cn(
                 'flex min-w-0 items-center gap-2',
-                i > 0 && "before:text-keyline before:content-['/'] before:select-none",
+                i > 0 && "before:h-[0.9em] before:w-px before:shrink-0 before:rotate-[20deg] before:bg-keyline before:forced-ink before:content-['']",
               )}
             >
               {item.href && !last ? (
