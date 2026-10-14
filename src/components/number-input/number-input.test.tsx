@@ -1,6 +1,7 @@
 import { DirectionProvider } from '@base-ui/react/direction-provider'
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { createRef } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 
 import { Field } from '../field/field'
@@ -130,5 +131,37 @@ describe('NumberInput', () => {
     screen.getByRole('textbox').focus()
     await userEvent.keyboard('{PageUp}')
     expect(onValueChange).not.toHaveBeenCalled()
+  })
+})
+
+describe('NumberInput input props', () => {
+  it('sends ref, autoFocus, onKeyDown and onBlur to the input, not the root', async () => {
+    const ref = createRef<HTMLInputElement>()
+    const onKeyDown = vi.fn()
+    const onBlur = vi.fn()
+    const onValueChange = vi.fn()
+    render(
+      <NumberInput
+        aria-label="Timeout"
+        ref={ref}
+        autoFocus
+        onKeyDown={onKeyDown}
+        onBlur={onBlur}
+        defaultValue={10}
+        largeStep={10}
+        onValueChange={onValueChange}
+      />,
+    )
+    const input = screen.getByRole('textbox', { name: 'Timeout' })
+    expect(ref.current).toBe(input)
+    expect(input).toHaveFocus()
+    await userEvent.keyboard('{PageUp}')
+    expect(onKeyDown).toHaveBeenCalled()
+    expect(onKeyDown.mock.calls[0]?.[0].target).toBe(input)
+    // The consumer's handler is merged with the component's, not swapped for it.
+    expect(onValueChange).toHaveBeenLastCalledWith(20)
+    await userEvent.tab()
+    expect(onBlur).toHaveBeenCalled()
+    expect(onBlur.mock.calls[0]?.[0].target).toBe(input)
   })
 })

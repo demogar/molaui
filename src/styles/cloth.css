@@ -15,8 +15,25 @@
 
 /* ── the cut ──────────────────────────────────────────────────────── */
 
+/* Focus is additive. The ring, the keyline and every state variant all draw
+ * with `box-shadow`, and one element has one box-shadow, so whichever rule
+ * wins the cascade replaces the others. The base layer's `:focus-visible`
+ * ring loses to every utility, and a dozen focusable elements carrying the
+ * cut — source cards, citation markers, a focusable scroll box, a tab panel,
+ * a loading button (`data-disabled:shadow-cut`) — showed no focus at all:
+ * focused and unfocused were the same pixels. So each shadow that carries the
+ * cut also carries its own focused form. `--focus-ring` already starts with
+ * the keyline (ink at --cut-w), so on a plain cut the ring *is* the cut plus
+ * focus. A component that draws focus itself (an inset ring in a clipping
+ * list, an input that hands its ring to the field) still wins: its
+ * `focus-visible:` utility is a variant, and variants come after this.
+ * scripts/focus-scan.mjs, run by the browser audit, fails any tab stop whose
+ * focused paint equals its resting paint. */
 @utility cut {
   box-shadow: var(--cut);
+  &:focus-visible {
+    box-shadow: var(--focus-ring);
+  }
   @media (forced-colors: active) {
     outline: 1px solid CanvasText !important;
     outline-offset: -1px !important;
@@ -25,16 +42,40 @@
 
 /* A shape, the blade edge, the colour beneath it, and the blade edge again.
  * Concentric, never offset: the layers of a mola are stacked, so the reveal
- * goes all the way around a shape rather than falling to one side of it. */
+ * goes all the way around a shape rather than falling to one side of it.
+ *
+ * Focused, the band stays and the ring is drawn inside the shape. The band
+ * can be the state — rojo on an invalid field — and the plain ring used to
+ * replace it, so the field being corrected was the one field that no longer
+ * looked invalid. The ring went round the band first; at 11px out it painted
+ * over the field's label above and its error message below (screenshots, both
+ * themes), because a field's label sits closer than that. Inside, the focused
+ * shape is exactly as large as the unfocused one, and the ring is the shared
+ * inset pair that tabs and framed rows already use. The stack is a property
+ * declared here, on the element, so `--band` and `--cut-reveal` resolve where
+ * they are set (see the note on --cut in tokens.css). */
 @utility cut-band {
-  box-shadow:
-    0 0 0 var(--cut-w) var(--ink),
-    0 0 0 calc(var(--cut-w) + var(--cut-reveal)) var(--band),
+  --cut-band:
+    0 0 0 var(--cut-w) var(--ink), 0 0 0 calc(var(--cut-w) + var(--cut-reveal)) var(--band),
     0 0 0 calc(var(--cut-w) * 2 + var(--cut-reveal)) var(--ink);
+  box-shadow: var(--cut-band);
+  &:focus-visible {
+    box-shadow: var(--focus-ring-inset), var(--cut-band);
+  }
   @media (forced-colors: active) {
     outline: 1px solid CanvasText !important;
     outline-offset: -1px !important;
   }
+}
+
+/* The same focused band for a wrapper whose focus is inside it — a field
+ * whose input takes focus. `focus-within:cut-band` alone would not do: the
+ * wrapper itself is never `:focus-visible`. */
+@utility cut-band-focus {
+  --cut-band:
+    0 0 0 var(--cut-w) var(--ink), 0 0 0 calc(var(--cut-w) + var(--cut-reveal)) var(--band),
+    0 0 0 calc(var(--cut-w) * 2 + var(--cut-reveal)) var(--ink);
+  box-shadow: var(--focus-ring-inset), var(--cut-band);
 }
 
 @utility band-oro {
@@ -100,6 +141,10 @@
  * which is the point of the mode. State still reads, because state was never
  * colour alone: the glyph and the word survive. */
 @utility shadow-cut {
+  /* Focus is additive here too; see `cut` above. */
+  &:focus-visible {
+    box-shadow: var(--focus-ring);
+  }
   @media (forced-colors: active) {
     outline: 1px solid CanvasText !important;
     outline-offset: -1px !important;

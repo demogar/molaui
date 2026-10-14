@@ -6,6 +6,7 @@ import { Check, Minus } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { joinIds } from '../../lib/merge-props'
 import { ChoiceField } from './choice-field'
 
 /**
@@ -57,9 +58,11 @@ export function Checkbox({ className, label, description, ...props }: CheckboxPr
   const box = (
     <CheckboxPrimitive.Root
       data-slot="checkbox"
-      aria-describedby={descriptionId}
       className={cn(checkboxBoxClasses, !label && className)}
       {...props}
+      // Joined, not replaced: Field passes its hint and error here, and the
+      // control's own description comes first because it is drawn first.
+      aria-describedby={joinIds(descriptionId, props['aria-describedby'])}
     >
       <CheckboxPrimitive.Indicator
         className="flex data-unchecked:hidden [&_svg]:size-3"

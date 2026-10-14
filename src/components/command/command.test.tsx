@@ -38,7 +38,35 @@ function Harness({ onSelect }: { onSelect: () => void }) {
   return <CommandPalette open={open} onOpenChange={setOpen} groups={make(onSelect)} />
 }
 
+// The palette has no trigger of its own; apps open it from a button as well as
+// from ⌘K, and the keystroke that pressed the button must not also dismiss it.
+function ButtonHarness() {
+  const [open, setOpen] = useState(false)
+  return (
+    <>
+      <button type="button" aria-expanded={open} onClick={() => setOpen(true)}>
+        Commands
+      </button>
+      <CommandPalette open={open} onOpenChange={setOpen} groups={make()} />
+    </>
+  )
+}
+
 describe('CommandPalette', () => {
+  it.each([
+    ['Enter', '{Enter}'],
+    ['Space', ' '],
+  ])('opens from a button pressed with %s and stays open', async (_name, key) => {
+    render(<ButtonHarness />)
+    screen.getByRole('button', { name: 'Commands' }).focus()
+    await userEvent.keyboard(key)
+    const dialog = await screen.findByRole('dialog', { name: 'Command palette' })
+    // Past the keystroke, so a popup that opened and was dismissed by the same key would show.
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    expect(dialog).toBeInTheDocument()
+    await waitFor(() => expect(screen.getByRole('combobox')).toHaveFocus())
+  })
+
   it('wires the combobox to the listbox and highlights the first match', async () => {
     render(<Harness onSelect={() => {}} />)
     const input = await screen.findByRole('combobox')

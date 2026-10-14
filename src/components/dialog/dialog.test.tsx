@@ -18,6 +18,21 @@ function Example() {
 }
 
 describe('Dialog', () => {
+  it.each([
+    ['Enter', '{Enter}'],
+    ['Space', ' '],
+  ])('opens from its trigger with %s and stays open', async (_name, key) => {
+    render(<Example />)
+    const trigger = screen.getByRole('button', { name: 'Open' })
+    trigger.focus()
+    await userEvent.keyboard(key)
+    const dialog = await screen.findByRole('dialog', { name: 'Rename' })
+    // Past the keystroke, so a popup that opened and was dismissed by the same key would show.
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    expect(dialog).toBeInTheDocument()
+    expect(trigger).toHaveAttribute('aria-expanded', 'true')
+  })
+
   it('opens from its trigger, named by its title and described by its description', async () => {
     render(<Example />)
     await userEvent.click(screen.getByRole('button', { name: 'Open' }))
@@ -65,6 +80,29 @@ describe('Dialog', () => {
 })
 
 describe('AlertDialog', () => {
+  it.each([
+    ['Enter', '{Enter}'],
+    ['Space', ' '],
+  ])('opens from its trigger with %s and stays open', async (_name, key) => {
+    render(
+      <AlertDialog
+        trigger={<Button>Delete run</Button>}
+        title="Delete?"
+        description="Gone for good"
+        confirmLabel="Delete"
+        onConfirm={() => {}}
+      />,
+    )
+    const trigger = screen.getByRole('button', { name: 'Delete run' })
+    trigger.focus()
+    await userEvent.keyboard(key)
+    const dialog = await screen.findByRole('alertdialog', { name: 'Delete?' })
+    // Past the keystroke, so a popup that opened and was dismissed by the same key would show.
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    expect(dialog).toBeInTheDocument()
+    expect(trigger).toHaveAttribute('aria-expanded', 'true')
+  })
+
   it('is an alertdialog that focuses Cancel first', async () => {
     render(
       <AlertDialog defaultOpen title="Delete?" description="Gone for good" confirmLabel="Delete" onConfirm={() => {}} />,

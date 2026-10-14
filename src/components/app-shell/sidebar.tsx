@@ -109,10 +109,6 @@ export function NavItem({
         data-slot="nav-item"
         aria-current={active ? 'page' : undefined}
         title={collapsed ? children : undefined}
-        onClick={(event) => {
-          onClick?.(event)
-          onNavigate()
-        }}
         className={cn(
           'relative flex h-(--control-h) items-center gap-2.5 px-3 text-sm text-ink-2 no-underline',
           'transition-colors',
@@ -121,11 +117,21 @@ export function NavItem({
           'aria-[current=page]:shadow-[inset_3px_0_0_var(--ink)] rtl:aria-[current=page]:shadow-[inset_-3px_0_0_var(--ink)]',
           'aria-[current=page]:forced-selected',
           'focus-visible:shadow-[var(--focus-ring)]',
+          // The current item's bar is a state variant, which comes after
+          // `focus-visible:` and used to replace the ring: the focused current
+          // item was pixel-identical to the unfocused one. The pair keeps both.
+          'aria-[current=page]:focus-visible:shadow-[var(--focus-ring),inset_3px_0_0_var(--ink)]',
+          'rtl:aria-[current=page]:focus-visible:shadow-[var(--focus-ring),inset_-3px_0_0_var(--ink)]',
           '[&_svg]:size-4 [&_svg]:shrink-0',
           collapsed && 'justify-center px-0',
           className,
         )}
         {...props}
+        // The consumer's onClick runs, then the sidebar closes on a phone.
+        onClick={(event) => {
+          onClick?.(event)
+          onNavigate()
+        }}
       >
         {icon ? <span aria-hidden className="relative flex">{icon}
           {collapsed && hasCount ? (

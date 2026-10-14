@@ -109,6 +109,10 @@ export function TabsTab({ className, count, icon, children, ...props }: TabsTabP
           'mb-[3px] bg-cloth-shade band-oro hover:bg-cloth-deep',
           'data-active:mb-0 data-active:bg-cloth-pale data-active:forced-selected',
           'data-active:shadow-[-1.5px_0_0_0_var(--ink),1.5px_0_0_0_var(--ink),0_-1.5px_0_0_var(--ink)]',
+          // The active tab's edges are a state variant, which comes after
+          // `focus-visible:` and used to replace the ring: a focused active
+          // tab looked exactly like an unfocused one. The pair carries both.
+          'data-active:focus-visible:shadow-[var(--focus-ring-inset),-1.5px_0_0_0_var(--ink),1.5px_0_0_0_var(--ink),0_-1.5px_0_0_var(--ink)]',
           "data-active:before:absolute data-active:before:inset-x-0 data-active:before:-top-[6.5px] data-active:before:h-[5px] data-active:before:bg-(--band) data-active:before:shadow-[0_-1.5px_0_0_var(--ink),-1.5px_0_0_0_var(--ink),1.5px_0_0_0_var(--ink)] data-active:before:content-['']",
         ],
         className,

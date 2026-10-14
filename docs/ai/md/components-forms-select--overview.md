@@ -140,7 +140,7 @@ Types: `SelectContentProps`, `SelectItemProps`, `SelectOption`, `SelectOptionGro
 
 - Automated, jsdom: each of its 5 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
-- Keyboard in unit tests: not yet.
+- Keyboard in unit tests: yes.
 - Screen readers: not yet tested by hand.
 
 ## Related

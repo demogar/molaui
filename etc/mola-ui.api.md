@@ -1112,7 +1112,7 @@ export interface FieldChangesProps extends Omit<React_2.ComponentProps<'section'
 }
 
 // @public
-export const fieldControlClasses: readonly ["w-full min-w-0 rounded-none border-0 bg-cloth-pale", "font-ui text-ink", "shadow-cut band-oro [--cut-reveal:3px]", "placeholder:text-ink-muted", "transition-[box-shadow,background-color]", "hover:cut-band", "focus:outline-none focus:shadow-[var(--focus-ring)]", "aria-invalid:band-rojo aria-invalid:cut-band", "aria-invalid:focus:shadow-[var(--focus-ring)]", "disabled:cursor-not-allowed disabled:bg-cloth-shade disabled:text-ink-muted disabled:hover:shadow-cut", "[&:is(input,textarea):read-only]:bg-cloth-shade"];
+export const fieldControlClasses: readonly ["w-full min-w-0 rounded-none border-0 bg-cloth-pale", "font-ui text-ink", "shadow-cut band-oro [--cut-reveal:3px]", "placeholder:text-ink-muted", "transition-[box-shadow,background-color]", "hover:cut-band", "focus:outline-none focus:shadow-[var(--focus-ring)]", "aria-invalid:band-rojo aria-invalid:cut-band", "aria-invalid:focus:cut-band-focus", "disabled:cursor-not-allowed disabled:bg-cloth-shade disabled:text-ink-muted disabled:hover:shadow-cut", "[&:is(input,textarea):read-only]:bg-cloth-shade"];
 
 // @public
 export interface FieldControlProps {
@@ -1596,7 +1596,7 @@ export function NavSection(input: {
 export function NumberInput(input: NumberInputProps): React_2.JSX.Element;
 
 // @public
-export interface NumberInputProps extends Omit<NumberField.Root.Props, 'className' | 'children' | 'render' | 'onValueChange'> {
+export interface NumberInputProps extends Omit<NumberField.Root.Props, 'className' | 'children' | 'render' | 'onValueChange' | 'ref' | 'autoFocus' | 'autoComplete' | 'enterKeyHint' | 'onKeyDown' | 'onKeyUp' | 'onFocus' | 'onBlur' | 'onBeforeInput' | 'onInput' | 'onPaste' | 'onCopy' | 'onCut' | 'onSelect'>, Pick<React_2.ComponentProps<'input'>, 'autoFocus' | 'autoComplete' | 'enterKeyHint' | 'onKeyDown' | 'onKeyUp' | 'onFocus' | 'onBlur' | 'onBeforeInput' | 'onInput' | 'onPaste' | 'onCopy' | 'onCut' | 'onSelect'> {
     // (undocumented)
     'aria-describedby'?: string;
     // (undocumented)
@@ -1613,6 +1613,7 @@ export interface NumberInputProps extends Omit<NumberField.Root.Props, 'classNam
     onValueChange?: (value: number | null) => void;
     // (undocumented)
     placeholder?: string;
+    ref?: React_2.Ref<HTMLInputElement>;
     // (undocumented)
     size?: FieldControlSize;
     unit?: string;

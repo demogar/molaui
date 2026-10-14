@@ -67,11 +67,6 @@ export function SegmentedControl<V extends string = string>({
       data-slot="segmented-control"
       value={value === undefined ? undefined : [value]}
       defaultValue={defaultValue === undefined ? undefined : [defaultValue]}
-      onValueChange={(next) => {
-        // Pressing the active segment would empty the group; ignore it.
-        const chosen = next[0] as V | undefined
-        if (chosen !== undefined) onValueChange?.(chosen)
-      }}
       disabled={disabled}
       className={cn(
         'inline-flex items-stretch bg-cloth-pale shadow-cut',
@@ -80,6 +75,11 @@ export function SegmentedControl<V extends string = string>({
         className,
       )}
       {...aria}
+      onValueChange={(next) => {
+        // Pressing the active segment would empty the group; ignore it.
+        const chosen = next[0] as V | undefined
+        if (chosen !== undefined) onValueChange?.(chosen)
+      }}
     >
       {options.map((option) => (
         <Toggle

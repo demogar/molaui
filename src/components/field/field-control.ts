@@ -32,10 +32,13 @@ export const fieldControlClasses = [
   'hover:cut-band',
   'focus:outline-none focus:shadow-[var(--focus-ring)]',
   'aria-invalid:band-rojo aria-invalid:cut-band',
-  // Focus still wins over invalid: when focus is sent to the first broken
-  // field, the person has to see that the caret landed there. The invalid
-  // state is still carried by the message under it.
-  'aria-invalid:focus:shadow-[var(--focus-ring)]',
+  // Focus is added to invalid, not swapped for it: when focus is sent to the
+  // first broken field, the person has to see that the caret landed there,
+  // and also that this is the field to fix. The plain ring used to replace
+  // the rojo band, so the field being corrected was the only one that no
+  // longer looked invalid. Now the band stays and the ring is drawn inside
+  // it (`cut-band` in cloth.css says why not outside).
+  'aria-invalid:focus:cut-band-focus',
   // Stated, not faded: fading would take the keyline with it.
   'disabled:cursor-not-allowed disabled:bg-cloth-shade disabled:text-ink-muted disabled:hover:shadow-cut',
   // `:read-only` also matches every div and button, so it is scoped to the

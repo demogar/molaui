@@ -1,9 +1,10 @@
 import { render, screen, within } from '@testing-library/react'
+import { createRef } from 'react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
 import { DataTable, type DataTableColumn } from './data-table'
-import { Table, TableBody, TableCell, TableEmpty, TableHead, TableHeader, TableRow } from './table'
+import { Table, TableBody, TableCell, TableCheckbox, TableEmpty, TableHead, TableHeader, TableRow } from './table'
 
 interface Row {
   id: string
@@ -382,5 +383,15 @@ describe('DataTable — paging, server data, bulk actions and columns', () => {
     render(<DataTable label="Runs" columns={columns} rows={[]} getRowId={(r) => r.id} loading pageSize={5} />)
     expect(screen.getByRole('table', { name: 'Runs' })).toHaveAttribute('aria-busy', 'true')
     expect(screen.getAllByRole('row')).toHaveLength(1)
+  })
+})
+
+describe('TableCheckbox with a consumer ref', () => {
+  it('is still indeterminate: the consumer ref does not replace the internal one', () => {
+    const ref = createRef<HTMLInputElement>()
+    render(<TableCheckbox aria-label="Select all runs" indeterminate ref={ref} />)
+    const box = screen.getByRole('checkbox', { name: 'Select all runs' })
+    expect(ref.current).toBe(box)
+    expect((box as HTMLInputElement).indeterminate).toBe(true)
   })
 })

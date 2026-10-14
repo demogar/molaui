@@ -36,15 +36,22 @@ npm run dev        # Storybook on :6006
 
 ## The gates
 
-A change is ready when all of these pass — CI runs the same list in its `Gates` job:
+A change is ready when `npm run check:all` passes. It runs every job the ruleset requires, in
+order, and `scripts/check-all.test.ts` fails if a required job ever runs a script it does not:
 
 ```bash
-npm run check   # lint · typecheck · test · tokens:check · manifest:check · evidence:check · build · api:check · size · build-storybook
+npm run check           # lint · typecheck · test · tokens:check · manifest:check · evidence:check · build · api:check · size · build-storybook  (the Gates job)
+npm run check:browser   # build-storybook · audit · visual  (Browser audit, Visual regression)
+npm run check:all       # check · check:browser · consumers  (every required job)
 ```
+
+On macOS, `visual` fails by design: the baselines are rendered on Linux only (see "Visual
+baselines"), and font rasterisation differs. There, run `check`, `npm run audit` and
+`npm run consumers` locally and let CI's `Visual regression` job decide.
 
 Never weaken a gate to get green. If a gate is wrong, fix it in its own commit and say why.
 
-CI also runs three browser jobs side by side with `Gates`. Each can be run locally:
+CI runs the three browser jobs side by side with `Gates`. Each can also be run on its own:
 
 | Job | Locally | What it holds |
 |---|---|---|
@@ -223,9 +230,23 @@ Releases are automated with [release-please](https://github.com/googleapis/relea
 1. Every merge to `main` updates an open **release PR** (`chore(main): release x.y.z`) that bumps
    the version in `package.json` and writes `CHANGELOG.md` from the commit history.
 2. Merging that PR tags `vx.y.z` and publishes a GitHub Release.
-3. The same workflow then tests and builds the tagged commit and publishes
+3. The same workflow then waits for `ci.yml`'s run on the tagged commit and stops unless it
+   passed (`scripts/require-ci.ts`, up to 40 minutes), so a commit that skipped the required
+   checks is never published. If it stops, make that run green (re-run its failed jobs, or fix
+   `main`) and re-run the `Publish package` job. It then tests and builds the tagged commit and publishes
    [`@demogar/mola-ui`](https://www.npmjs.com/package/@demogar/mola-ui) to npm, with provenance,
    and to GitHub Packages.
+
+### The release PR needs `RELEASE_PLEASE_TOKEN`
+
+release-please pushes the release PR's commits with the workflow's token. Pushes made with the
+default `GITHUB_TOKEN` start no workflows, so without the `RELEASE_PLEASE_TOKEN` secret the
+release PR shows no checks and can only be merged through the ruleset bypass (0.5.0 and 0.6.0
+were). An owner sets it once: a fine-grained personal access token limited to this repository
+with **Contents** and **Pull requests** read and write (or a GitHub App token with the same
+permissions), saved with `gh secret set RELEASE_PLEASE_TOKEN`. Until then, approve the pending
+run on the release PR, or push an empty commit to its branch, instead of bypassing. The publish
+gate above holds either way.
 
 ### Publishing to npm with trusted publishing
 

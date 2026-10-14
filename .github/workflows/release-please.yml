@@ -79,8 +79,12 @@ jobs:
           git commit -m 'chore: regenerate agent docs for the release'
           git push origin "HEAD:refs/heads/${BRANCH}"
 
-  # Runs only when merging a release PR has just cut a release. The package is
-  # rebuilt and tested from the tagged commit, then published twice: to
+  # Runs only when merging a release PR has just cut a release. It first waits
+  # for ci.yml's own run on the tagged commit and refuses to go on unless that
+  # run passed (scripts/require-ci.ts says why: the release PR's pushes do not
+  # start CI without RELEASE_PLEASE_TOKEN, so this commit may never have been
+  # checked). The package is then rebuilt and tested from the tagged commit,
+  # and published twice: to
   # npmjs.com, where people install it from, and to GitHub Packages, so it is
   # listed on the repository page.
   #
@@ -98,6 +102,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      # scripts/require-ci.ts lists ci.yml's runs for the tagged commit.
+      actions: read
       packages: write
       # Trusted publishing and provenance both need the OIDC token.
       id-token: write
@@ -110,6 +116,11 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+      - name: Require a green ci.yml run for the tagged commit
+        timeout-minutes: 50
+        run: npx tsx scripts/require-ci.ts "$(git rev-parse HEAD)"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
       - run: npm test
       - run: npm run build
 

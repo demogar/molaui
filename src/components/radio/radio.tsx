@@ -5,6 +5,7 @@ import { RadioGroup as RadioGroupPrimitive } from '@base-ui/react/radio-group'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { joinIds } from '../../lib/merge-props'
 import { ChoiceField } from '../checkbox/choice-field'
 
 /**
@@ -50,9 +51,11 @@ export function Radio({ className, label, description, ...props }: RadioProps) {
   const control = (
     <RadioPrimitive.Root
       data-slot="radio"
-      aria-describedby={descriptionId}
       className={cn(radioClasses, !label && className)}
       {...props}
+      // Joined, not replaced: Field passes its hint and error here, and the
+      // control's own description comes first because it is drawn first.
+      aria-describedby={joinIds(descriptionId, props['aria-describedby'])}
     >
       <RadioPrimitive.Indicator className="size-2 bg-ink forced-ink data-unchecked:hidden data-disabled:bg-ink-muted" />
     </RadioPrimitive.Root>
@@ -109,12 +112,12 @@ export function RadioGroup({
       ) : null}
       <RadioGroupPrimitive
         aria-labelledby={labelId}
-        aria-describedby={descriptionId}
         className={cn(
           'flex',
           orientation === 'vertical' ? 'flex-col gap-3' : 'flex-row flex-wrap gap-x-6 gap-y-3',
         )}
         {...props}
+        aria-describedby={joinIds(descriptionId, props['aria-describedby'])}
       >
         {children}
       </RadioGroupPrimitive>

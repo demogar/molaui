@@ -284,7 +284,7 @@ export function Combobox(props: ComboboxProps) {
     'flex items-center gap-1 cursor-text pe-1.5',
     'focus-within:shadow-[var(--focus-ring)] focus-within:hover:shadow-[var(--focus-ring)]',
     'has-[[aria-invalid=true]]:band-rojo has-[[aria-invalid=true]]:cut-band',
-    'has-[[aria-invalid=true]]:focus-within:shadow-[var(--focus-ring)]',
+    'has-[[aria-invalid=true]]:focus-within:cut-band-focus',
     'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
     label ? undefined : className,
   )

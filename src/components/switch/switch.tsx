@@ -4,6 +4,7 @@ import { Switch as SwitchPrimitive } from '@base-ui/react/switch'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { joinIds } from '../../lib/merge-props'
 import { ChoiceField } from '../checkbox/choice-field'
 
 /**
@@ -43,7 +44,6 @@ export function Switch({
   const control = (
     <SwitchPrimitive.Root
       data-slot="switch"
-      aria-describedby={descriptionId}
       className={cn(
         'group/switch relative inline-flex h-5 w-9 shrink-0 items-center rounded-none p-[3px]',
         'bg-cloth-shade shadow-cut band-oro [--cut-reveal:2px]',
@@ -54,6 +54,9 @@ export function Switch({
         !label && className,
       )}
       {...props}
+      // Joined, not replaced: Field passes its hint and error here, and the
+      // control's own description comes first because it is drawn first.
+      aria-describedby={joinIds(descriptionId, props['aria-describedby'])}
     >
       <SwitchPrimitive.Thumb
         className={cn(

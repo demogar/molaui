@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { useState } from 'react'
+import { createRef, useState } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 
 import { Field } from './field'
@@ -124,5 +124,17 @@ describe('SearchInput', () => {
     expect(screen.getByRole('status')).toHaveTextContent('empty')
     expect(screen.getByRole('searchbox')).toHaveFocus()
     expect(onClear).toHaveBeenCalledOnce()
+  })
+})
+
+describe('SearchInput with a consumer ref', () => {
+  it('still clears: the consumer ref and the internal one both reach the input', async () => {
+    const ref = createRef<HTMLInputElement>()
+    render(<SearchInput aria-label="Search runs" defaultValue="timeout" ref={ref} />)
+    const input = screen.getByRole('searchbox', { name: 'Search runs' })
+    expect(ref.current).toBe(input)
+    await userEvent.click(screen.getByRole('button', { name: 'Clear search' }))
+    expect(input).toHaveValue('')
+    expect(input).toHaveFocus()
   })
 })

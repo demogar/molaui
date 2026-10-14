@@ -36,3 +36,23 @@ describe('RadioGroup', () => {
     expect(screen.getByRole('radio', { name: 'Halt' })).toBeChecked()
   })
 })
+
+describe('Radio with a consumer aria-describedby', () => {
+  it('adds the consumer description to its own instead of replacing it', () => {
+    render(
+      <>
+        <RadioGroup label="On failure" description="Applies to every tool." aria-describedby="policy-note">
+          <Radio value="retry" label="Retry" description="Up to three times." aria-describedby="retry-note" />
+        </RadioGroup>
+        <p id="retry-note">Counts against the budget.</p>
+        <p id="policy-note">Set by the workspace owner.</p>
+      </>,
+    )
+    expect(screen.getByRole('radio', { name: 'Retry' })).toHaveAccessibleDescription(
+      'Up to three times. Counts against the budget.',
+    )
+    expect(screen.getByRole('radiogroup', { name: 'On failure' })).toHaveAccessibleDescription(
+      'Applies to every tool. Set by the workspace owner.',
+    )
+  })
+})
