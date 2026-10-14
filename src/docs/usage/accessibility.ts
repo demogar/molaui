@@ -906,7 +906,7 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
     handles: [
       'It opens on keyboard focus as well as on hover.',
       '`shortcut` keys are rendered as `<kbd>` elements.',
-      'Inside a `TooltipProvider`, moving along a toolbar shows the next tooltip at once, after the first delay.',
+      'Inside a `TooltipProvider`, moving along a `Toolbar` shows the next tooltip at once, after the first delay.',
     ],
     you: [
       'Give the trigger its own accessible name, such as an `IconButton` `label`; the tooltip is not wired to it as a name or description.',

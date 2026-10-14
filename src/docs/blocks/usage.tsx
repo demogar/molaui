@@ -59,13 +59,13 @@ export function UsageGuide({ usage }: { usage: Usage }) {
           {usage.practices.map((pair) => (
             <div key={pair.do} className="grid gap-3 md:grid-cols-2">
               <p className="m-0 flex gap-2 bg-cloth-pale p-3 border-t-[3px] border-success">
-                <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-success" strokeWidth={2.5} />
+                <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-ink-success" strokeWidth={2.5} />
                 <span>
                   <strong className="font-semibold">Do.</strong> {pair.do}
                 </span>
               </p>
               <p className="m-0 flex gap-2 bg-cloth-pale p-3 border-t-[3px] border-danger">
-                <X aria-hidden className="mt-0.5 size-4 shrink-0 text-danger" strokeWidth={2.5} />
+                <X aria-hidden className="mt-0.5 size-4 shrink-0 text-ink-danger" strokeWidth={2.5} />
                 <span>
                   <strong className="font-semibold">Don’t.</strong> {pair.dont}
                 </span>
