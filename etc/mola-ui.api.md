@@ -1422,7 +1422,7 @@ export function matchesAccept(file: {
 }, accept: string | undefined): boolean;
 
 // @public
-export const Menu: <Payload>(props: Menu_2.Root.Props<Payload>) => React_2.JSX.Element;
+export const Menu: typeof Menu_2.Root;
 
 // @public
 export function MenuCheckboxItem(input: MenuCheckboxItemProps): React_2.JSX.Element;
