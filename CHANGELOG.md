@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.6.0](https://github.com/demogar/molaui/compare/v0.5.0...v0.6.0) (2026-10-14)
+
+
+### Features
+
+* **mcp:** add a check_code tool that reviews generated ui against the design rules ([#50](https://github.com/demogar/molaui/issues/50)) ([bef0861](https://github.com/demogar/molaui/commit/bef08615fdfb8cdb79fad650558baab75b87810c))
+* **tokens:** scope colour tokens and publish the pairings they promise ([#49](https://github.com/demogar/molaui/issues/49)) ([47b1ff4](https://github.com/demogar/molaui/commit/47b1ff49977aa52290a07557761c237c0278428a))
+
+
+### Bug Fixes
+
+* **tokens:** measure every surface that carries text and fix the disabled states that failed ([f0538d5](https://github.com/demogar/molaui/commit/f0538d50ecacd3eb5c55796b8eecc36134fe934e))
+
 ## [0.5.0](https://github.com/demogar/molaui/compare/v0.4.0...v0.5.0) (2026-10-14)
 
 
