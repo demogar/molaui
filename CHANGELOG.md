@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.5.0](https://github.com/demogar/molaui/compare/v0.4.0...v0.5.0) (2026-10-14)
+
+
+### Features
+
+* **dialog:** add an error slot and finalFocus to alert dialog ([#34](https://github.com/demogar/molaui/issues/34)) ([2bda349](https://github.com/demogar/molaui/commit/2bda3494f5dab6d8c9d8a902d751635333189e8f))
+* **docs:** add per-component changes and curated what's new pages ([#36](https://github.com/demogar/molaui/issues/36)) ([816e177](https://github.com/demogar/molaui/commit/816e1778c1ba26bb25b785845a062a3665fb7a5e))
+* **mcp:** ship a read-only mola-ui-mcp server over the agent docs ([#44](https://github.com/demogar/molaui/issues/44)) ([918e428](https://github.com/demogar/molaui/commit/918e428f5450050fa1ae10d7467106cae237bde1))
+
+
+### Bug Fixes
+
+* **docs:** declare the new changelog scopes that are not components ([#48](https://github.com/demogar/molaui/issues/48)) ([b8d055a](https://github.com/demogar/molaui/commit/b8d055a9924946634313624a9f6a841bac4cbe3d))
+* **docs:** regenerate agent docs after the table fix ([#43](https://github.com/demogar/molaui/issues/43)) ([0550401](https://github.com/demogar/molaui/commit/05504013aec90083b1dde0d5608e6f9da2c01358))
+* **storybook:** reload once when a deploy removed the story chunk ([#37](https://github.com/demogar/molaui/issues/37)) ([739d9e9](https://github.com/demogar/molaui/commit/739d9e932727129c81bc0e4b06ed46612e180c58))
+* **table:** centre the empty row on the visible frame, not the whole table ([#39](https://github.com/demogar/molaui/issues/39)) ([54f9aca](https://github.com/demogar/molaui/commit/54f9aca160de9a1176eee2840f1e1dfc0dde6cec))
+
+
+### Documentation
+
+* **ai:** split llms files by topic, add markdown twins and copy for llm ([#35](https://github.com/demogar/molaui/issues/35)) ([6bc05a0](https://github.com/demogar/molaui/commit/6bc05a073c49cd3ec7a885bae09832c9ae90b8b5))
+* **foundations:** show layers side by side in both themes ([#33](https://github.com/demogar/molaui/issues/33)) ([4dac4c5](https://github.com/demogar/molaui/commit/4dac4c54456f1d9a95972855aafdc2ba37812d9e))
+* **known-gaps:** drop gaps closed by the foundations, anatomy and changes work ([#46](https://github.com/demogar/molaui/issues/46)) ([8c06fa8](https://github.com/demogar/molaui/commit/8c06fa8d98378b7f6dd6f55c25acaef5283e3635))
+
 ## [0.4.0](https://github.com/demogar/molaui/compare/v0.3.0...v0.4.0) (2026-10-13)
 
 
