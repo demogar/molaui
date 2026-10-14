@@ -61,20 +61,13 @@ a different reading size, that is a new decision with its own reasons.
 
 ## Documentation
 
-### No anatomy, no states matrix, no per-component changelog
+### No states matrix, and anatomy for some components only
 
-**Status: open.** Component pages have usage, examples, accessibility and related components, in
-the order described in [Getting started](https://demogar.github.io/molaui/?path=/docs/mola-ui-getting-started--overview). They
-don't yet have an anatomy diagram naming each part, a matrix of every state side by side, or a
-history of changes to that one component. The [changelog](https://demogar.github.io/molaui/?path=/docs/mola-ui-changelog--overview)
-covers the whole package.
-
-### Foundations are uneven
-
-**Status: open.** There are no Spacing or Elevation pages yet; their tokens are in `tokens.css`
-and the type scale is on [Typography](https://demogar.github.io/molaui/?path=/docs/foundations-typography--overview).
-[Motion](https://demogar.github.io/molaui/?path=/docs/foundations-motion--overview) and
-[Iconography](https://demogar.github.io/molaui/?path=/docs/foundations-iconography--overview) are a few paragraphs each.
+**Status: open.** Component pages don't yet show every state side by side; states are spread
+across the stories. Anatomy diagrams cover eleven components with parts worth naming, such as
+[Field](https://demogar.github.io/molaui/?path=/docs/components-forms-field--overview) and
+[Tool call](https://demogar.github.io/molaui/?path=/docs/ai-tool-call--overview). The rest have none: either they are a single
+part, or, like Dialog and Toast, their content opens outside the example frame.
 
 ## Design tools
 
