@@ -150,3 +150,9 @@ Types: `AlertDialogProps`, `DialogContentProps`
 
 - [Confirmation](https://demogar.github.io/molaui/md/patterns-confirmation--overview.md) (pattern)
 - [Settings page](https://demogar.github.io/molaui/md/patterns-settings-page--overview.md) (pattern)
+
+## Changes
+
+From CHANGELOG.md, newest first.
+
+- 0.5.0 (2026-10-14), feature: add an error slot and finalFocus to alert dialog [#34](https://github.com/demogar/molaui/issues/34)
