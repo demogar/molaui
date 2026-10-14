@@ -343,7 +343,16 @@
           "bg-cloth-deep"
         ],
         "on": [],
-        "under": []
+        "under": [
+          {
+            "token": "--ink",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-2",
+            "min": 4.5
+          }
+        ]
       },
       {
         "token": "--ink",
@@ -392,6 +401,10 @@
           },
           {
             "token": "--ink-soft",
+            "min": 4.5
+          },
+          {
+            "token": "--cloth-deep",
             "min": 4.5
           }
         ],
@@ -456,6 +469,10 @@
           },
           {
             "token": "--ink-soft",
+            "min": 4.5
+          },
+          {
+            "token": "--cloth-deep",
             "min": 4.5
           }
         ],
@@ -600,6 +617,10 @@
           {
             "token": "--cloth-pale",
             "min": 4.5
+          },
+          {
+            "token": "--rojo-soft",
+            "min": 4.5
           }
         ],
         "under": [
@@ -635,11 +656,11 @@
             "min": 4.5
           },
           {
-            "token": "--cloth-shade",
-            "min": 3
+            "token": "--anil-soft",
+            "min": 4.5
           },
           {
-            "token": "--anil-soft",
+            "token": "--cloth-shade",
             "min": 3
           }
         ],
@@ -676,11 +697,11 @@
             "min": 4.5
           },
           {
-            "token": "--cloth-shade",
-            "min": 3
+            "token": "--verde-soft",
+            "min": 4.5
           },
           {
-            "token": "--verde-soft",
+            "token": "--cloth-shade",
             "min": 3
           }
         ],
@@ -892,7 +913,12 @@
         "utilities": [
           "text-ink-danger"
         ],
-        "on": [],
+        "on": [
+          {
+            "token": "--ink-soft",
+            "min": 4.5
+          }
+        ],
         "under": []
       },
       {
@@ -903,7 +929,12 @@
         "utilities": [
           "text-ink-success"
         ],
-        "on": [],
+        "on": [
+          {
+            "token": "--ink-soft",
+            "min": 4.5
+          }
+        ],
         "under": []
       },
       {
@@ -951,6 +982,10 @@
             "min": 4.5
           },
           {
+            "token": "--rojo-deep",
+            "min": 4.5
+          },
+          {
             "token": "--rojo",
             "min": 3
           }
@@ -980,7 +1015,7 @@
           },
           {
             "token": "--anil",
-            "min": 3
+            "min": 4.5
           }
         ]
       },
@@ -1008,7 +1043,7 @@
           },
           {
             "token": "--verde",
-            "min": 3
+            "min": 4.5
           }
         ]
       },
@@ -1060,6 +1095,14 @@
           },
           {
             "token": "--ink-muted",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-success",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-danger",
             "min": 4.5
           }
         ]
@@ -1176,7 +1219,16 @@
           "bg-scrim"
         ],
         "on": [],
-        "under": []
+        "under": [
+          {
+            "token": "--on-scrim",
+            "min": 4.5
+          },
+          {
+            "token": "--on-scrim-muted",
+            "min": 4.5
+          }
+        ]
       },
       {
         "token": "--on-scrim",
@@ -1186,7 +1238,12 @@
         "utilities": [
           "text-on-scrim"
         ],
-        "on": [],
+        "on": [
+          {
+            "token": "--scrim",
+            "min": 4.5
+          }
+        ],
         "under": []
       },
       {
@@ -1197,7 +1254,12 @@
         "utilities": [
           "text-on-scrim-muted"
         ],
-        "on": [],
+        "on": [
+          {
+            "token": "--scrim",
+            "min": 4.5
+          }
+        ],
         "under": []
       },
       {

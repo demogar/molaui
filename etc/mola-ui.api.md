@@ -444,7 +444,7 @@ export interface ChangeReviewProps extends Omit<React_2.ComponentProps<'section'
 export function Checkbox(input: CheckboxProps): React_2.JSX.Element;
 
 // @public
-export const checkboxBoxClasses: readonly ["relative inline-grid size-4 shrink-0 place-items-center rounded-none", "bg-cloth-pale text-on-ink shadow-cut band-oro [--cut-reveal:2px]", "transition-[background-color,box-shadow] duration-(--motion-cut) ease-cut", "hover:cut-band", "focus-visible:shadow-[var(--focus-ring)]", "data-checked:bg-ink data-indeterminate:bg-ink", "data-invalid:band-rojo data-invalid:cut-band aria-invalid:band-rojo aria-invalid:cut-band", "data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut", "data-disabled:data-checked:bg-cloth-deep"];
+export const checkboxBoxClasses: readonly ["relative inline-grid size-4 shrink-0 place-items-center rounded-none", "bg-cloth-pale shadow-cut band-oro [--cut-reveal:2px]", "transition-[background-color,box-shadow] duration-(--motion-cut) ease-cut", "hover:cut-band", "focus-visible:shadow-[var(--focus-ring)]", "data-checked:bg-ink data-checked:text-on-ink data-indeterminate:bg-ink data-indeterminate:text-on-ink", "data-invalid:band-rojo data-invalid:cut-band aria-invalid:band-rojo aria-invalid:cut-band", "data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut", "data-disabled:data-checked:bg-cloth-deep data-disabled:data-checked:text-ink-2", "data-disabled:data-indeterminate:bg-cloth-deep data-disabled:data-indeterminate:text-ink-2"];
 
 // @public
 export function CheckboxGroup(input: CheckboxGroupProps): React_2.JSX.Element;
