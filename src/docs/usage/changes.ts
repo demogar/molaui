@@ -259,6 +259,11 @@ export const NON_COMPONENT_SCOPES: Record<string, string> = {
   ci: 'continuous integration',
   visual: 'visual regression baselines',
   release: 'the release process',
+  mcp: 'the mola-ui-mcp server, which serves the docs rather than rendering a component',
+  storybook: 'the Storybook site itself, such as its loading and theming',
+  'known-gaps': 'the Known gaps page',
+  'whats-new': "the What's new pages",
+  audit: 'the browser audit script',
 }
 
 /**
