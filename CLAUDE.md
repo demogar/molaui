@@ -102,6 +102,7 @@ Storybook docs pages (introduction, principles, foundations, changelog) are MDX 
 
 ### Things that drift
 - The README and introduction counts (components = non-AI docs pages, parts = exported React components, stories) are checked by `npm run manifest:check`; update the wording it names when it fails. Other prose claims are not checked.
+- The agent docs (`docs/ai/components.json`, the Markdown twins, the llms files) embed each component's `changes`, parsed from CHANGELOG.md, which only release-please writes. So the release PR regenerates them itself: the `agent-docs` job in `release-please.yml` runs `npm run manifest` on the release branch and pushes the result, and main's `manifest:check` still holds after a release. If that job fails, run `npm run manifest` on the release branch and push before merging it.
 - Composed demos live under AI/Agent console, Components/Layout/App shell, Components/Forms/Form example and Patterns/*.
 
 ## Design rules (enforced in review)

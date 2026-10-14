@@ -21,6 +21,8 @@ jobs:
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
+      # The release PR it opened or updated in this run, as JSON; empty when none.
+      pr: ${{ steps.release.outputs.pr }}
     steps:
       - id: release
         uses: googleapis/release-please-action@v5
@@ -32,6 +34,50 @@ jobs:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN || github.token }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+
+  # The release PR rewrites CHANGELOG.md, and the agent docs are generated
+  # partly from it: each component's `changes` in docs/ai/components.json, its
+  # Markdown twin and the llms files. manifest:check gates those files, so a
+  # release PR that changed only the changelog merged a stale manifest and
+  # main's Gates failed straight after (0.4.0 did). This job regenerates them
+  # on the release PR's branch each time release-please opens or updates it,
+  # so the release commit is consistent when it lands.
+  #
+  # No loop: this workflow runs on pushes to main only, and this push goes to
+  # the release branch. When release-please rewrites the branch on a later
+  # run, this job runs after it again. With RELEASE_PLEASE_TOKEN the push also
+  # starts CI on the release PR; with the default token it does not (see above).
+  agent-docs:
+    name: Regenerate agent docs on the release PR
+    needs: release-please
+    if: needs.release-please.outputs.pr != '' && needs.release-please.outputs.release_created != 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    # A newer release-please run supersedes an older one's regeneration.
+    concurrency:
+      group: release-agent-docs
+      cancel-in-progress: true
+    env:
+      BRANCH: ${{ fromJSON(needs.release-please.outputs.pr).headBranchName }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ env.BRANCH }}
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN || github.token }}
+      - uses: ./.github/actions/setup
+      - run: npm run manifest
+      - name: Commit the regenerated files to the release PR
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "The agent docs already match CHANGELOG.md."
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'chore: regenerate agent docs for the release'
+          git push origin "HEAD:refs/heads/${BRANCH}"
 
   # Runs only when merging a release PR has just cut a release. The package is
   # rebuilt and tested from the tagged commit, then published twice: to
