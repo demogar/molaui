@@ -31,6 +31,9 @@ npm install @demogar/mola-ui @base-ui/react \
   @fontsource-variable/archivo @fontsource-variable/alegreya @fontsource-variable/martian-mono
 ```
 
+`@base-ui/react` is a peer dependency: always install it beside the package, so the app and Mola
+share one copy. The package is ESM only; `require()` works on Node 22.12 or later.
+
 ```tsx
 // once, at the app entry
 import '@fontsource-variable/archivo/wdth.css' // the width axis is required

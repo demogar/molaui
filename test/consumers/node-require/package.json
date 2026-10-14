@@ -1,0 +1,12 @@
+{
+  "name": "mola-consumer-node-require",
+  "private": true,
+  "scripts": {
+    "check": "node check.cjs"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.9.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  }
+}

@@ -1,0 +1,136 @@
+name: Dependabot API report
+
+# A Dependabot bump of a dependency whose types Mola re-exports (Base UI,
+# mostly) changes the text of etc/mola-ui.api.md, so `api:check` in Gates
+# fails and the bot cannot fix it: someone had to check out the branch, run
+# `npm run build && npm run api` and push (#54). This workflow does that on
+# Dependabot's own branches, and nothing more:
+#
+#   - It commits the API report and only the API report. If building and
+#     regenerating changes any other tracked file, it fails and a person
+#     looks. `api:check` stays a required step of Gates: the report change is
+#     a reviewed diff in the pull request, not a skipped check.
+#   - The build runs in a job whose token can only read. Dependabot is
+#     installing new third-party code, so the job that writes to the branch
+#     runs none of it: it takes the regenerated file as an artifact,
+#     checks it is the only change, and pushes.
+#
+# Starting CI again. A push made with GITHUB_TOKEN starts no workflows, so the
+# required checks would never run on the new commit. Two ways round it:
+#
+#   - With a DEPENDABOT_PUSH_TOKEN *Dependabot* secret (Settings > Secrets
+#     and variables > Dependabot; a workflow Dependabot starts cannot read
+#     Actions secrets): a fine-grained token for this repository with
+#     Contents: read and write. The push then starts CI and the PR title
+#     check like any other push.
+#   - Without it, the push uses GITHUB_TOKEN and the workflow comments on the
+#     pull request: close and reopen it to run the checks.
+#
+# Dependabot stops rebasing a branch that has someone else's commit on it. If
+# the pull request falls behind or conflicts, comment `@dependabot recreate`;
+# the new branch triggers this workflow again.
+#
+# No loop: the job runs only when Dependabot pushed, and its own push is made
+# by someone else.
+on:
+  push:
+    branches: ['dependabot/npm_and_yarn/**']
+
+permissions: {}
+
+concurrency:
+  group: dependabot-api-report-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  regenerate:
+    name: Regenerate the API report
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      changed: ${{ steps.diff.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+      - run: npm run build
+      - run: npm run api
+      - id: diff
+        name: Allow only the API report to change
+        run: |
+          changes="$(git status --porcelain)"
+          if [ -z "$changes" ]; then
+            echo "The API report already matches."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ "$changes" != " M etc/mola-ui.api.md" ]; then
+            echo "::error::Regenerating changed more than etc/mola-ui.api.md; a person must look:"
+            echo "$changes"
+            exit 1
+          fi
+          git diff
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v7
+        if: steps.diff.outputs.changed == 'true'
+        with:
+          name: api-report
+          path: etc/mola-ui.api.md
+          if-no-files-found: error
+
+  commit:
+    name: Commit the API report
+    needs: regenerate
+    if: needs.regenerate.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      BRANCH: ${{ github.ref_name }}
+      HAS_PUSH_TOKEN: ${{ secrets.DEPENDABOT_PUSH_TOKEN != '' }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.ref_name }}
+          token: ${{ secrets.DEPENDABOT_PUSH_TOKEN || github.token }}
+      - id: head
+        name: Skip if Dependabot pushed again
+        run: |
+          if [ "$(git rev-parse HEAD)" != "${{ github.sha }}" ]; then
+            echo "The branch moved on; the run for the newer push regenerates the report."
+            echo "current=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "current=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/download-artifact@v8
+        if: steps.head.outputs.current == 'true'
+        with:
+          name: api-report
+          path: ${{ runner.temp }}/api-report
+      - name: Commit and push the report alone
+        if: steps.head.outputs.current == 'true'
+        run: |
+          cp "$RUNNER_TEMP/api-report/mola-ui.api.md" etc/mola-ui.api.md
+          if [ "$(git status --porcelain)" != " M etc/mola-ui.api.md" ]; then
+            echo "::error::Expected exactly one changed file, etc/mola-ui.api.md:"
+            git status --porcelain
+            exit 1
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add etc/mola-ui.api.md
+          git commit -m 'build(deps): regenerate the api report'
+          git push origin "HEAD:refs/heads/${BRANCH}"
+      - name: Ask for a reopen when the push cannot start CI
+        if: steps.head.outputs.current == 'true' && env.HAS_PUSH_TOKEN != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          pr="$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$BRANCH" --json number --jq '.[0].number')"
+          if [ -z "$pr" ]; then
+            echo "No open pull request for $BRANCH."
+            exit 0
+          fi
+          gh pr comment "$pr" --repo "$GITHUB_REPOSITORY" --body "The bump changed re-exported types, so etc/mola-ui.api.md was regenerated and committed. A push with the default token does not start CI: close and reopen this pull request to run the checks. A \`DEPENDABOT_PUSH_TOKEN\` Dependabot secret makes this automatic (see .github/workflows/dependabot-api-report.yml)."

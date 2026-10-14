@@ -68,11 +68,19 @@ npm run build && npm run api
 The diff of that file is the API change a reviewer signs off. A removed or changed signature is
 a breaking change (see [Versioning](#versioning-and-deprecation)).
 
+Dependabot bumps change the report too, when a re-exported Base UI type changes. The
+`Dependabot API report` workflow regenerates it on Dependabot's branch and commits that file
+alone; anything else that changes fails it for a person to look at. Its push starts CI only if
+the repository has a `DEPENDABOT_PUSH_TOKEN` **Dependabot** secret (a fine-grained token with
+Contents read and write on this repository); without one, it comments on the pull request, and
+closing and reopening the pull request runs the checks. Review the report diff like any other
+API change before merging the bump.
+
 ### Bundle budgets
 
 `npm run size` measures the built package with [size-limit](https://github.com/ai/size-limit):
 the whole library, a typical tree-shaken import (`Button` + `Field`) and `styles.css`, minified
-and brotli-compressed. The budgets live in `.size-limit.json`, set from measurements with about
+and brotli-compressed. The budgets live in `.size-limit.js`, set from measurements with about
 10% headroom. If a change goes over, first check that it should cost that much (a new dependency,
 or something that breaks tree-shaking, are the usual causes). Raise a budget only in its own
 commit that says why.

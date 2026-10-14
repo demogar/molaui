@@ -12,6 +12,10 @@ npm install @demogar/mola-ui @base-ui/react
 npm install @fontsource-variable/archivo @fontsource-variable/alegreya @fontsource-variable/martian-mono
 ```
 
+`@base-ui/react` is a peer dependency: install it beside the package, as above, so your app and
+Mola share one copy (Mola re-exports Base UI's `DirectionProvider`, which only works with one).
+The package is ESM only; `require()` works too, on Node 22.12 or later.
+
 ## Import the stylesheet and the faces once
 
 ```tsx

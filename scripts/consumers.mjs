@@ -13,6 +13,11 @@
 //   vite-react     the precompiled `styles.css`, no Tailwind in the app
 //   vite-tailwind  the app's own Tailwind v4 build with `tailwind.css` + @source
 //   next           App Router, the page a server component (the RSC check)
+//   node-require   no bundler: `require()` from plain Node, and one Base UI
+//                  copy shared by the app and the package
+//
+// A fixture with a `check` script and no entry in SERVE is not built or
+// opened in a browser: its check script is the whole test.
 //
 // Then the `mola-ui-mcp` bin: the tarball is unpacked with no node_modules
 // beside it and the bin is started over stdio with the MCP SDK's client, so
@@ -56,7 +61,10 @@ const wanted = process.argv.slice(2)
 const unknown = wanted.filter((name) => !all.includes(name))
 if (unknown.length) fail(`unknown fixture(s): ${unknown.join(', ')}. Have: ${all.join(', ')}`)
 const fixtures = wanted.length ? wanted : all
-for (const name of fixtures) if (!SERVE[name]) fail(`no serve command for fixture "${name}" in scripts/consumers.mjs`)
+const scriptOnly = (name) => Boolean(JSON.parse(readFileSync(join(fixturesDir, name, 'package.json'), 'utf8')).scripts?.check)
+for (const name of fixtures) {
+  if (!SERVE[name] && !scriptOnly(name)) fail(`fixture "${name}" has neither a serve command in scripts/consumers.mjs nor a check script`)
+}
 
 if (!['dist/index.js', 'dist/mola-ui.css', 'dist/mcp/mola-ui-mcp.js'].every((file) => existsSync(join(root, file)))) {
   fail('dist/ is missing or incomplete. Run `npm run build` first.')
@@ -118,6 +126,11 @@ async function runFixture(name, tarball, browser) {
   try {
     result.install = time(() => run(npm, ['install', '--no-audit', '--no-fund', '--loglevel=error'], dir)).ms
     log(`  installed (${result.install} ms)`)
+    if (!SERVE[name]) {
+      result.check = time(() => run(npm, ['run', 'check'], dir)).ms
+      log(`  checked (${result.check} ms): ok`)
+      return result
+    }
     result.build = time(() => run(npm, ['run', 'build'], dir)).ms
     log(`  built (${result.build} ms)`)
   } catch (error) {
