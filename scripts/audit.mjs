@@ -72,7 +72,7 @@ async function audit(page, job, errors) {
   const url = `${base}/iframe.html?id=${job.id}&viewMode=${job.viewMode}&globals=theme:${job.theme}`
   await page.goto(url, { waitUntil: 'load', timeout: PAGE_TIMEOUT })
   // Storybook marks <body> once the story or docs page has rendered (or
-  // failed to). That, plus the fonts, is what "ready" means here.
+  // failed to).
   await page.waitForFunction(
     () => /sb-show-(main|errordisplay|nopreview)/.test(document.body.className),
     undefined,
@@ -80,13 +80,52 @@ async function audit(page, job, errors) {
   )
   const shown = await page.evaluate(() => document.body.className)
   if (!shown.includes('sb-show-main')) return [`did not render (${shown.trim()})`]
+  // `sb-show-main` arrives before React commits the story, and the theme is
+  // applied by the decorator's effect after that commit. Waiting on the class
+  // alone, a loaded runner sometimes ran axe on an empty #storybook-root (a
+  // clean result that checked nothing), or just after the theme flipped:
+  // the hunk headers in ai-change-review--diff-only were measured with their
+  // `transition-colors` background still at the light value under text that
+  // had already switched to dark ink. The transitions the wait below exists
+  // for had not started yet when it looked for them. So "ready" is the story
+  // on screen in the requested theme, as in the visual tests: the root (or a
+  // portal) holds something and <html> carries the theme. A docs page sets
+  // the theme on each example's frame instead, so it waits for every inline
+  // example to have its frame.
+  const ready = await page
+    .waitForFunction(
+      ({ docs, theme }) => {
+        if (docs) {
+          const root = document.getElementById('storybook-docs')
+          if (!root || root.childElementCount === 0) return false
+          // An example rendered in its own iframe (a full-screen pattern) is
+          // outside this document; axe cannot reach it and its story page
+          // audits it.
+          return [...root.querySelectorAll('.docs-story')].every(
+            (s) => s.querySelector('iframe') || s.querySelector(`[data-theme="${theme}"]`),
+          )
+        }
+        return (
+          document.documentElement.dataset.theme === theme &&
+          ((document.getElementById('storybook-root')?.childElementCount ?? 0) > 0 ||
+            // A story that is only a portaled dialog leaves the root empty.
+            [...document.body.children].some((el) => el.hasAttribute('data-base-ui-portal') || el.querySelector('[role="dialog"]')))
+        )
+      },
+      { docs: job.viewMode === 'docs', theme: job.theme },
+      { timeout: PAGE_TIMEOUT },
+    )
+    .then(
+      () => true,
+      () => false,
+    )
+  if (!ready) return [`did not render in the ${job.theme} theme`]
   await page.evaluate(() => document.fonts.ready)
   await page.waitForTimeout(250)
-  // The theme is applied by an effect after the first paint, and colours
-  // ease between themes. A fixed 250ms was enough locally, but on a slower
-  // CI runner axe once measured the app shell mid-transition: light-theme
-  // ink on the dark ground, 1.12:1. So every finite transition and animation
-  // is awaited (spinners and other infinite ones are left running).
+  // Colours ease between themes, so every finite transition and animation
+  // is awaited (spinners and other infinite ones are left running). On a
+  // slower CI runner axe once measured the app shell mid-transition:
+  // light-theme ink on the dark ground, 1.12:1.
   await page.evaluate(() =>
     Promise.race([
       Promise.all(

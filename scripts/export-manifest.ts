@@ -11,6 +11,8 @@
  *   llms-tokens.txt,          every docs page in docs/ai/md/ (see
  *   llms-patterns.txt,        scripts/agent-docs.ts)
  *   docs/ai/md/<id>.md
+ *   docs/ai/tokens.json       every token with its role and both theme values,
+ *                             for the MCP server (mcp/)
  *   docs/ai/composition.json  which components each pattern and showcase is
  *                             built from, read from its imports; the docs
  *                             pages render "Built from" and "Used in" from it
@@ -34,7 +36,7 @@ import { isExportStory } from 'storybook/internal/csf'
 import ts from 'typescript'
 
 import pkg from '../package.json' with { type: 'json' }
-import { changeLine, componentTwin, mdxPages, mdxTwin, screenTwin, SERVED_AS_IS, tokensText, twinPath, twinUrl } from './agent-docs'
+import { changeLine, componentTwin, mdxPages, mdxTwin, screenTwin, SERVED_AS_IS, tokensJson, tokensText, twinPath, twinUrl } from './agent-docs'
 import { ACCESSIBILITY } from '../src/docs/usage/accessibility'
 import { ANATOMY, ROOT_PART } from '../src/docs/usage/anatomy'
 import type { Accessibility } from '../src/docs/usage/accessibility-types'
@@ -523,6 +525,8 @@ Read the one you need rather than all of them. Every docs page also has a Markdo
 - [Patterns](${SITE}llms-patterns.txt): whole screens, what each is built from, and its states
 - [Full text](${SITE}llms-full.txt): all of the above except the tokens, in one file
 
+An MCP server with the same data ships in the package: \`npx -y --package ${pkg.name} mola-ui-mcp\`. Its tools are \`list_components\`, \`get_component\`, \`search\`, \`get_tokens\`, \`get_rules\` and \`get_pattern\`.
+
 ${categories.map((c) => `## ${c}\n\n${byLayer('components').filter((e) => e.category === c).map(linkLine).join('\n')}`).join('\n\n')}
 
 ## AI interface
@@ -662,6 +666,7 @@ const outputs: [string, string][] = [
   ['llms-components.txt', componentsText],
   ['llms-tokens.txt', tokensText(topicHeader('tokens', 'Every design token in `src/styles/tokens.css`, with its role and its value in each theme.'))],
   ['llms-patterns.txt', patternsText],
+  ['docs/ai/tokens.json', `${JSON.stringify(tokensJson(), null, 2)}\n`],
   ...twins,
   [
     'docs/ai/composition.json',
