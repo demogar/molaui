@@ -68,6 +68,14 @@ npm run build && npm run api
 The diff of that file is the API change a reviewer signs off. A removed or changed signature is
 a breaking change (see [Versioning](#versioning-and-deprecation)).
 
+Dependabot bumps change the report too, when a re-exported Base UI type changes. The
+`Dependabot API report` workflow regenerates it on Dependabot's branch and commits that file
+alone; anything else that changes fails it for a person to look at. Its push starts CI only if
+the repository has a `DEPENDABOT_PUSH_TOKEN` **Dependabot** secret (a fine-grained token with
+Contents read and write on this repository); without one, it comments on the pull request, and
+closing and reopening the pull request runs the checks. Review the report diff like any other
+API change before merging the bump.
+
 ### Bundle budgets
 
 `npm run size` measures the built package with [size-limit](https://github.com/ai/size-limit):
