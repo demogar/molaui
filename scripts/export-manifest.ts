@@ -539,7 +539,23 @@ import '${pkg.name}/styles.css'
 import { Button } from '${pkg.name}'
 \`\`\`
 
-Theme and density are attributes, not props: \`<html data-theme="dark" data-density="compact">\`. Already on Tailwind v4? Import \`${pkg.name}/tailwind.css\` into your own build instead of \`styles.css\`. For right-to-left, set \`dir="rtl"\` on \`<html>\` and wrap the app in \`DirectionProvider\`.
+Mount the providers once, at the app root (in Next.js, \`app/layout.tsx\`):
+
+\`\`\`tsx
+import { DirectionProvider, ToastProvider, TooltipProvider } from '${pkg.name}'
+
+<DirectionProvider direction="ltr">
+  <ToastProvider>
+    <TooltipProvider>
+      <App />
+    </TooltipProvider>
+  </ToastProvider>
+</DirectionProvider>
+\`\`\`
+
+\`ToastProvider\` is required: \`useToast()\` throws without it. \`DirectionProvider\` gives Base UI the keyboard direction; for right-to-left, set \`dir="rtl"\` on \`<html>\` and \`direction="rtl"\` on the provider. \`TooltipProvider\` is optional.
+
+Theme and density are attributes, not props: \`<html data-theme="dark" data-density="compact">\`. Leave \`data-theme\` off to follow the OS; a stored choice is set by an inline \`<head>\` script before the first paint. \`styles.css\` includes Tailwind's preflight and styles \`body\`; in an existing app, import \`${pkg.name}/components.css\` instead, which scopes the reset to the components. Already on Tailwind v4? Import \`${pkg.name}/tailwind.css\` into your own build instead of \`styles.css\`.
 
 ## Rules
 
@@ -556,7 +572,7 @@ const llms = `${header}
 ## Docs
 
 - [Choosing a component](${SITE}?path=/docs/mola-ui-choosing-a-component--overview): which component for which job, and what to use instead
-- [Getting started](${SITE}?path=/docs/mola-ui-getting-started--overview): install, theme, density, right-to-left, Tailwind
+- [Getting started](${SITE}?path=/docs/mola-ui-getting-started--overview): install, the app root and its providers, existing apps, theme switching without a flash, density, right-to-left, Tailwind, Next.js
 - [Principles](${SITE}?path=/docs/mola-ui-principles--overview): the six rules every component obeys
 - [AI interface principles](${SITE}?path=/docs/ai-principles--overview): streaming, latency, approval, uncertainty, failure
 - [Decisions](${SITE}?path=/docs/decisions-all-decisions--overview): the architecture decision records behind colour roles, themes, density and typography

@@ -1,0 +1,156 @@
+/* src/styles/scoped-base.css
+ *
+ * The reset and base styles of `components.css`, the entry for an app that
+ * already has its own page styles. `styles.css` carries Tailwind's preflight
+ * and base.css, and both apply to the whole document: dropped into an
+ * existing app, they changed its body background and font, removed every
+ * heading margin and restyled every native button. Nobody had said so, and
+ * the only way out was not to use the compiled stylesheet at all.
+ *
+ * Here the same rules apply only inside Mola's components: any element with
+ * a `data-slot`, and everything in it. Every component that draws a control
+ * or a surface carries one on its root, portaled popups included, which is
+ * what makes `data-slot` the boundary rather than a wrapper class: a dialog
+ * renders into <body>, outside any wrapper the app could put around its
+ * tree. The layout and typography components render plain elements with no
+ * slot, so they keep the host's element defaults; Getting started says so.
+ *
+ * What is left out on purpose, because it is document-wide by nature: the
+ * selection colour, list markers, accent and caret colour, the scrollbar,
+ * and `text-wrap` on the host's own paragraphs and headings.
+ *
+ * Everything is in `@layer base` and inside `:where()`, so it has no
+ * specificity to fight: the components' own utilities win, and so does any
+ * CSS of the app's that is not in a layer. */
+@layer base {
+  /* The parts of Tailwind's preflight the components were drawn against. */
+  :where([data-slot], [data-slot] *, [data-slot]::before, [data-slot]::after, [data-slot] *::before, [data-slot] *::after) {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+  }
+
+  :where([data-slot] :is(h1, h2, h3, h4, h5, h6), [data-slot]:is(h1, h2, h3, h4, h5, h6)) {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+
+  :where([data-slot] :is(ol, ul, menu), [data-slot]:is(ol, ul, menu)) {
+    list-style: none;
+  }
+
+  :where([data-slot] a, a[data-slot]) {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
+  :where([data-slot] :is(b, strong)) {
+    font-weight: bolder;
+  }
+
+  :where([data-slot] :is(code, kbd, samp, pre), :is(code, kbd, samp, pre)[data-slot]) {
+    font-size: 1em;
+  }
+
+  :where([data-slot] table, table[data-slot]) {
+    text-indent: 0;
+    border-color: inherit;
+    border-collapse: collapse;
+  }
+
+  :where([data-slot] :is(img, svg, video, canvas, audio, iframe, embed, object), :is(img, svg, video, canvas, audio, iframe, embed, object)[data-slot]) {
+    display: block;
+    vertical-align: middle;
+  }
+
+  :where([data-slot] :is(img, video), :is(img, video)[data-slot]) {
+    max-width: 100%;
+    height: auto;
+  }
+
+  :where(
+      [data-slot] :is(button, input, select, optgroup, textarea),
+      :is(button, input, select, optgroup, textarea)[data-slot],
+      [data-slot] ::file-selector-button
+    ) {
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    border-radius: 0;
+    background-color: transparent;
+    opacity: 1;
+  }
+
+  :where([data-slot] textarea, textarea[data-slot]) {
+    resize: vertical;
+  }
+
+  :where([data-slot] :is(button, input:is([type='button'], [type='reset'], [type='submit'])), button[data-slot]) {
+    appearance: button;
+  }
+
+  :where([data-slot] hr, hr[data-slot]) {
+    height: 0;
+    color: inherit;
+    border-block-start-width: 1px;
+  }
+
+  :where([data-slot] [hidden]:not([hidden='until-found']), [data-slot][hidden]:not([hidden='until-found'])) {
+    display: none !important;
+  }
+
+  /* What base.css gives <body>, given to the outermost component instead, so
+   * a component sets its own voice on a page whose body has another. A nested
+   * component inherits from its parent as it does in styles.css. */
+  :where([data-slot]):not([data-slot] *) {
+    color: var(--ink);
+    font-family: var(--font-ui);
+    font-size: var(--text-base);
+    font-variation-settings: 'wdth' var(--wdth-body);
+    line-height: var(--leading-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* As in base.css: a re-themed subtree re-grounds itself. The app sets
+   * data-theme on purpose, so this one is not scoped to components. */
+  [data-theme] {
+    background-color: var(--cloth);
+    color: var(--ink);
+  }
+
+  /* The focus ring and its forced-colours fallback, from base.css; see the
+   * reasons there, including why the fallback is important. */
+  :where([data-slot], [data-slot] *):focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  @media (forced-colors: active) {
+    :where([data-slot], [data-slot] *):focus-visible {
+      outline: 2px solid CanvasText !important;
+      outline-offset: 2px !important;
+    }
+
+    :where([data-slot] [role='tab']):focus-visible {
+      outline-offset: -2px !important;
+    }
+
+    :where([data-slot], [data-slot] *):is(:disabled, [data-disabled], [aria-disabled='true']) {
+      color: GrayText !important;
+      outline-color: GrayText !important;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :where([data-slot], [data-slot] *, [data-slot]::before, [data-slot]::after, [data-slot] *::before, [data-slot] *::after) {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

@@ -19,20 +19,93 @@ The package is ESM only; `require()` works too, on Node 22.12 or later.
 ## Import the stylesheet and the faces once
 
 ```tsx
-// app entry
+// styles.tsx: import it once, from your app entry
 import '@fontsource-variable/archivo/wdth.css' // the width axis is load-bearing
 import '@fontsource-variable/alegreya/wght.css'
 import '@fontsource-variable/martian-mono/wdth.css'
 import '@demogar/mola-ui/styles.css'
 ```
 
-`@demogar/mola-ui/styles.css` is pre-compiled: it contains exactly the utilities the components use, and
-nothing from the stories. Archivo must be the **`wdth`** build — labels and headings are set on
-the width axis, and the static build falls back to a normal-width face.
+Archivo must be the **`wdth`** build. Labels and headings are set on the width axis, and the
+static build falls back to a normal-width face.
+
+### What `styles.css` does to your page
+
+`@demogar/mola-ui/styles.css` is pre-compiled. Of the utilities, it holds only the ones the
+components use, and nothing from the stories. It also holds two things that apply to the **whole
+document**, not only to Mola's components:
+
+- **Tailwind's preflight**, a reset. Every element loses its margins, headings and lists lose
+  their default styles, every box is `border-box`, and native buttons and inputs inherit the font.
+- **Mola's base styles.** `body` gets the cloth background, the ink colour, Archivo and the body
+  size. Text selection, the focus ring, list markers and the scrollbar take Mola's colours.
+
+In a new app that is what you want. Everything is inside CSS `@layer`s, so any CSS of yours that
+is not in a layer wins over it, with no `!important`.
+
+**Adding Mola to an existing app?** Import `components.css` instead of `styles.css`:
+
+```tsx
+// existing-app.tsx: in place of styles.css
+import '@demogar/mola-ui/components.css'
+```
+
+It has the same tokens and utilities, without the preflight and the document-wide base. The reset,
+the focus ring and the reduced-motion rules apply only inside Mola's components (any element with
+a `data-slot` attribute, and what is inside it), and the outermost component sets its own font,
+size and colour. Your `body`, your headings and your native controls stay as they were. One
+difference to know: the layout and typography components (Stack, Grid, Heading, Text and the
+rest) render plain elements with no `data-slot`, so they keep your page's defaults. A `Heading`
+keeps the margin your CSS gives an `h2`.
+
+## Set up the app root
+
+Three attributes on `<html>` and up to three providers around the app, once. Mola reads nothing
+else from the root.
+
+```html
+<html lang="en" dir="ltr" data-density="comfortable">
+```
+
+```tsx
+// main.tsx
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { DirectionProvider, ToastProvider, TooltipProvider } from '@demogar/mola-ui'
+
+import { App } from './app'
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <DirectionProvider direction="ltr">
+      <ToastProvider>
+        <TooltipProvider>
+          <App />
+        </TooltipProvider>
+      </ToastProvider>
+    </DirectionProvider>
+  </StrictMode>,
+)
+```
+
+Why each one is there:
+
+- **Attributes on `<html>`, not on a wrapper.** Theme, density and direction are attributes, not
+  React context or props. Menus, dialogs and toasts portal to `<body>`, and an attribute on
+  `<html>` is the only place they inherit from. Leave `data-theme` off to follow the operating
+  system, or see [Theme](#theme) to let people choose.
+- **`DirectionProvider`.** `dir` mirrors the layout, but Base UI reads keyboard direction from
+  React context: arrow keys in a slider, tabs or a menu, and the side a submenu opens on. Give it
+  the same value as `dir`.
+- **`ToastProvider`.** It renders the toast viewport, and `useToast()` reads it. Without it,
+  the first `toast.success()` throws "useToastManager must be used within `<Toast.Provider>`".
+- **`TooltipProvider`** (optional). Tooltips under one provider share their delay, so moving
+  along a toolbar shows the next tooltip at once instead of waiting again.
 
 ## Use a component
 
 ```tsx
+// rename-agent.tsx
 import { Button, Field, Input } from '@demogar/mola-ui'
 
 export function RenameAgent() {
@@ -86,6 +159,83 @@ than Chrome 123 and Safari 17.5, and in that form a token only changes theme whe
 on `:root` and on every `[data-theme]` element. This applies whether you use the compiled
 stylesheet or `tailwind.css` in your own Tailwind build.
 
+### Let people choose a theme
+
+Offer three choices: System, Light and Dark. Store only an explicit choice, and for System remove
+the attribute, so the page goes back to following the operating system.
+
+```tsx
+// theme-switcher.tsx
+'use client'
+
+import { useEffect, useState } from 'react'
+import { SegmentedControl } from '@demogar/mola-ui'
+
+type Theme = 'system' | 'light' | 'dark'
+
+const storageKey = 'theme'
+
+function storedTheme(): Theme {
+  try {
+    const value = localStorage.getItem(storageKey)
+    return value === 'light' || value === 'dark' ? value : 'system'
+  } catch {
+    return 'system' // storage can be blocked; the page still follows the OS
+  }
+}
+
+export function ThemeSwitcher() {
+  const [theme, setTheme] = useState<Theme>('system')
+  // Read after the first render: the server cannot know the choice, and
+  // rendering it on the first pass would not match the server's HTML.
+  useEffect(() => setTheme(storedTheme()), [])
+
+  function choose(next: Theme) {
+    setTheme(next)
+    const root = document.documentElement
+    if (next === 'system') delete root.dataset.theme
+    else root.dataset.theme = next
+    try {
+      if (next === 'system') localStorage.removeItem(storageKey)
+      else localStorage.setItem(storageKey, next)
+    } catch {
+      // the choice lasts for this page only
+    }
+  }
+
+  return (
+    <SegmentedControl
+      aria-label="Theme"
+      size="sm"
+      value={theme}
+      onValueChange={choose}
+      options={[
+        { value: 'system', label: 'System' },
+        { value: 'light', label: 'Light' },
+        { value: 'dark', label: 'Dark' },
+      ]}
+    />
+  )
+}
+```
+
+**No flash on load.** A stored Dark must be on `<html>` before the first paint. If React sets it,
+the page paints in the system theme first and then flips. Put a small script inline in `<head>`,
+before any stylesheet, so it runs while the HTML is still being parsed:
+
+```html
+<script>
+  try {
+    var theme = localStorage.getItem('theme')
+    if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme
+  } catch (e) {}
+</script>
+```
+
+System needs no script: with no attribute, the CSS follows the operating system before any script
+runs, so only an explicit choice can flash. A server-rendered app needs the same script, and React
+needs to be told that `<html>` changed before it hydrated; see [Next.js](#nextjs) below.
+
 ## Density
 
 ```html
@@ -103,16 +253,11 @@ unit together. No component takes a density prop.
 
 Layout follows `dir`, because every component is written in logical properties. Keyboard direction
 does not: Base UI reads it from React context, so arrow keys in a slider, tabs or a menu, and the
-side a submenu opens on, need the provider too. Set both, once, at the root:
+side a submenu opens on, need the provider too. Set both, once, at the root: `dir="rtl"` on
+`<html>`, and `direction="rtl"` on the `DirectionProvider` in [the app root](#set-up-the-app-root).
 
-```tsx
-import { DirectionProvider } from '@demogar/mola-ui'
-
-document.documentElement.dir = 'rtl'
-
-<DirectionProvider direction="rtl">
-  <App />
-</DirectionProvider>
+```html
+<html lang="ar" dir="rtl" data-density="comfortable">
 ```
 
 `dir` belongs on `<html>`, not on a wrapper, for the same reason as the theme: menus and dialogs
@@ -152,6 +297,7 @@ the props that take a function: `Field`'s children (the control is a render prop
 `cell`, `Slider`'s `formatValue`. Put those in a file of your own that starts with `'use client'`:
 
 ```tsx
+// agent-name-field.tsx
 'use client'
 
 import { Field, Input } from '@demogar/mola-ui'
@@ -162,6 +308,72 @@ export function AgentNameField() {
       {(control) => <Input {...control} name="name" />}
     </Field>
   )
+}
+```
+
+## Next.js
+
+In the App Router, the root layout is the app root: the faces, the stylesheet, the attributes, the
+providers and the no-flash theme script all go in `app/layout.tsx`. The providers are client
+components, and a server layout can render them around its children.
+
+```tsx
+// app/layout.tsx
+import '@fontsource-variable/archivo/wdth.css'
+import '@fontsource-variable/alegreya/wght.css'
+import '@fontsource-variable/martian-mono/wdth.css'
+import '@demogar/mola-ui/styles.css'
+
+import type { ReactNode } from 'react'
+import { DirectionProvider, ToastProvider, TooltipProvider } from '@demogar/mola-ui'
+
+// Runs before the first paint; see "Let people choose a theme".
+const themeScript = `try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}`
+
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    // The script may set data-theme before React hydrates; this tells React that is expected.
+    <html lang="en" dir="ltr" data-density="comfortable" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
+      <body>
+        <DirectionProvider direction="ltr">
+          <ToastProvider>
+            <TooltipProvider>{children}</TooltipProvider>
+          </ToastProvider>
+        </DirectionProvider>
+      </body>
+    </html>
+  )
+}
+```
+
+**Fonts with `next/font`.** The Fontsource imports above work as they are. If you would rather have
+Next.js self-host and preload the faces, load them with `next/font/google`, keep the width axes,
+and point Mola's font tokens at the variables it creates. The tokens name the families
+(`'Archivo Variable'`), and `next/font` renames them, so without that last step the components fall
+back to system fonts.
+
+```tsx
+// app/fonts.ts
+import { Alegreya, Archivo, Martian_Mono } from 'next/font/google'
+
+const archivo = Archivo({ subsets: ['latin'], axes: ['wdth'], variable: '--font-archivo' })
+const alegreya = Alegreya({ subsets: ['latin'], variable: '--font-alegreya' })
+const martianMono = Martian_Mono({ subsets: ['latin'], axes: ['wdth'], variable: '--font-martian-mono' })
+
+/** Put this on `<html className={fonts}>`, in place of the three Fontsource imports. */
+export const fonts = [archivo.variable, alegreya.variable, martianMono.variable].join(' ')
+```
+
+```css
+/* app/globals.css, imported after the Mola stylesheet */
+:root {
+  --font-ui: var(--font-archivo);
+  --font-display: var(--font-archivo);
+  --font-text: var(--font-alegreya);
+  --font-mono: var(--font-martian-mono);
 }
 ```
 

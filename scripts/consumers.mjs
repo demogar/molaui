@@ -359,7 +359,7 @@ async function checkExisting(page) {
       boxSizing: getComputedStyle(document.querySelector('.host-box')).boxSizing,
     }
   })
-  if (facts.background !== 'rgb(250, 245, 235)') errors.push(`the host body background became ${facts.background}: components.css styled <body>`)
+  if (facts.background !== 'rgba(0, 0, 0, 0)') errors.push(`the host body background became ${facts.background}: components.css styled <body>`)
   if (/Archivo/.test(facts.font)) errors.push(`the host body font became ${facts.font}`)
   if (facts.h1Margin === '0px') errors.push('the host <h1> lost its margin: components.css carries a global reset')
   if (/Archivo/.test(facts.hostButtonFont)) errors.push("a host <button> inherits Mola's font: the reset is not scoped")

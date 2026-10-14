@@ -45,6 +45,7 @@
       "default": "./dist/index.js"
     },
     "./styles.css": "./dist/mola-ui.css",
+    "./components.css": "./dist/mola-ui-components.css",
     "./tailwind.css": "./dist/tailwind/mola.css",
     "./tokens.css": "./dist/tailwind/tokens.css",
     "./package.json": "./package.json"
@@ -56,7 +57,7 @@
     "dev": "storybook dev -p 6006",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build -o storybook-static",
-    "build": "vite build && vite build -c vite.mcp.config.ts",
+    "build": "vite build && vite build -c vite.css.config.ts && vite build -c vite.mcp.config.ts",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",

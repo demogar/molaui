@@ -173,11 +173,11 @@ import { SegmentedControl } from '@demogar/mola-ui'
 
 type Theme = 'system' | 'light' | 'dark'
 
-const KEY = 'theme'
+const storageKey = 'theme'
 
 function storedTheme(): Theme {
   try {
-    const value = localStorage.getItem(KEY)
+    const value = localStorage.getItem(storageKey)
     return value === 'light' || value === 'dark' ? value : 'system'
   } catch {
     return 'system' // storage can be blocked; the page still follows the OS
@@ -196,8 +196,8 @@ export function ThemeSwitcher() {
     if (next === 'system') delete root.dataset.theme
     else root.dataset.theme = next
     try {
-      if (next === 'system') localStorage.removeItem(KEY)
-      else localStorage.setItem(KEY, next)
+      if (next === 'system') localStorage.removeItem(storageKey)
+      else localStorage.setItem(storageKey, next)
     } catch {
       // the choice lasts for this page only
     }
