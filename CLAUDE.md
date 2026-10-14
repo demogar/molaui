@@ -29,6 +29,8 @@ npm run api              # regenerate etc/mola-ui.api.md from dist/ (API Extract
 npm run api:check        # fail if the public API changed without the report
 npm run size             # size-limit budgets in .size-limit.js (needs build)
 npm run check            # all gates, same list CI's Gates job runs
+npm run check:browser    # build-storybook, then audit and visual (the two browser jobs)
+npm run check:all        # check + check:browser + consumers: every job the ruleset requires
 npm run audit            # browser audit of storybook-static/ (needs build-storybook); report in reports/audit/
 npm run visual           # visual regression vs Linux baselines (needs build-storybook)
 npm run visual:update    # rewrite changed baselines for this OS (only linux/ is committed)
@@ -37,7 +39,7 @@ npm run consumers        # npm pack, install into test/consumers/* apps, build, 
 
 CI (`.github/workflows/ci.yml`) runs `Gates`, `Browser audit`, `Visual regression` and `Consumer smoke tests` in parallel; all four are required by the ruleset. `Browser audit` and `Visual regression` are each a matrix of four shards (`audit.mjs --shard i/n`, Playwright `--shard`) plus a small job with the required name that passes only if every shard did, so changing the shard count does not touch the ruleset. The whole run should stay within three to four minutes. Visual baselines must be rendered on Linux: label the PR `update-visual-baselines` (workflow `visual-baselines.yml`) rather than committing baselines from macOS, then push again so CI reruns. Shared CI setup (Node, `node_modules` cached on the lockfile with `npm ci` only on a miss, cached Playwright Chromium) is the composite action `.github/actions/setup`.
 
-A change is ready only when `npm run check` passes. Never weaken a gate to get green; if a gate is wrong, fix it in its own commit and say why.
+A change is ready only when `npm run check:all` passes, which runs every job the ruleset requires (`scripts/check-all.test.ts` fails if it stops covering one). `npm run check` alone is only the `Gates` job. On macOS `visual` fails by design, because baselines are Linux-only: there, treat `Visual regression` in CI as the authority and use `check` plus `audit` and `consumers` locally. Never weaken a gate to get green; if a gate is wrong, fix it in its own commit and say why.
 
 Browser scripts (need a running Storybook, use Playwright):
 - `node scripts/audit.mjs http://localhost:6006 [--only <id fragment>] [--shard i/n]` — axe *with* color contrast in both themes, 390px horizontal-overflow check (the light page, narrowed after axe, not a third load), console errors, over every story and every docs page; exits non-zero on findings. Prefer the static build (`npm run audit`): the dev server stalls it.

@@ -28,7 +28,10 @@ gh api -X PATCH repos/demogar/molaui/pulls/<n> -f title="feat: …"
 
 ## Before you open a pull request
 
-- Run `npm run check` and make it green. Never weaken a gate to pass.
+- Run `npm run check:all` and make it green; it runs every job the ruleset
+  requires (`check` is only `Gates`). Never weaken a gate to pass. On macOS the
+  `visual` step fails by design (baselines are Linux-only); there, rely on CI's
+  `Visual regression` job for that one.
 - Prove visual changes in a real browser, not only in jsdom: run Storybook and
   `node scripts/audit.mjs http://localhost:6006`, and screenshot the affected
   stories in both themes with `node scripts/shoot.mjs`.

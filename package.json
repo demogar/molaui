@@ -62,6 +62,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check": "npm run lint && npm run typecheck && npm test && npm run tokens:check && npm run manifest:check && npm run evidence:check && npm run build && npm run api:check && npm run size && npm run build-storybook",
+    "check:browser": "npm run build-storybook && npm run audit && npm run visual",
+    "check:all": "npm run check && npm run check:browser && npm run consumers",
     "tokens": "tsx scripts/export-tokens.ts",
     "tokens:check": "tsx scripts/export-tokens.ts --check",
     "manifest": "tsx scripts/export-manifest.ts",
