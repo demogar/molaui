@@ -3451,7 +3451,7 @@ Phase: Stable. Semantic versioning applies: nothing breaks without a deprecation
 
 When to use:
 - Naming an icon-only button, and its shortcut.
-- A row of icon buttons inside TooltipProvider, so each next label appears without a delay.
+- A `Toolbar` of icon buttons inside TooltipProvider, so each next label appears without a delay and the arrow keys move between them.
 
 When not to:
 - Information people need to finish the task; a tooltip does not exist on touch. Use Popover.
@@ -3472,7 +3472,7 @@ Keyboard:
 Mola handles:
 - It opens on keyboard focus as well as on hover.
 - `shortcut` keys are rendered as `<kbd>` elements.
-- Inside a `TooltipProvider`, moving along a toolbar shows the next tooltip at once, after the first delay.
+- Inside a `TooltipProvider`, moving along a `Toolbar` shows the next tooltip at once, after the first delay.
 
 You handle:
 - Give the trigger its own accessible name, such as an `IconButton` `label`; the tooltip is not wired to it as a name or description.

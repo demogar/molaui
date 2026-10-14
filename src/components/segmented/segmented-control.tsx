@@ -103,9 +103,13 @@ export function SegmentedControl<V extends string = string>({
             'not-first:shadow-[inset_1.5px_0_0_var(--ink)] rtl:not-first:shadow-[inset_-1.5px_0_0_var(--ink)]',
             'transition-[background-color,color] duration-(--motion-cut) ease-cut',
             'hover:bg-ink-soft hover:text-ink',
-            'data-pressed:bg-ink data-pressed:text-on-ink data-pressed:hover:bg-ink data-pressed:forced-selected',
+            'data-pressed:bg-ink data-pressed:text-on-ink data-pressed:hover:bg-ink data-pressed:hover:text-on-ink data-pressed:forced-selected',
             'focus-visible:z-10 focus-visible:shadow-[var(--focus-ring)]',
             'data-disabled:cursor-not-allowed data-disabled:text-ink-muted data-disabled:hover:bg-transparent',
+            // A disabled control keeps its pressed segment. Muted ink on that ink
+            // fill is 2.99:1, and the hover reset above would strip the fill
+            // under on-ink text, so the pressed segment names both.
+            'data-disabled:data-pressed:text-on-ink-muted data-disabled:data-pressed:hover:bg-ink',
             '[&_svg]:size-4 [&_svg]:shrink-0',
           )}
         >

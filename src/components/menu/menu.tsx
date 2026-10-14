@@ -42,6 +42,10 @@ const itemClasses = [
   // top of it would double the mark and spill past the menu's edge.
   'focus-visible:shadow-none',
   'data-disabled:pointer-events-none data-disabled:text-ink-muted',
+  // Base UI keeps a disabled item reachable by the arrow keys, so it can be
+  // highlighted: --ink-muted on the ink fill measures 2.99:1. Named here, the
+  // pair is inverse muted ink (8.36 / 6.56) instead of a variant-order guess.
+  'data-disabled:data-highlighted:text-on-ink-muted',
   '[&_svg]:size-4 [&_svg]:shrink-0',
 ]
 

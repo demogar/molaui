@@ -1,3 +1,4 @@
+import type { Finding } from './check'
 import type { Component, Data, Pairing, Pattern, Scope, Token } from './data'
 
 /**
@@ -198,5 +199,41 @@ export function rulesMarkdown(data: Data) {
     list(Object.values(m.phases).map((p) => `${p.label}: ${p.promise}`)),
     '',
     `Docs: ${m.storybook}`,
+  ])
+}
+
+/** A code span that survives backticks inside it. */
+const span = (s: string) => (s.includes('`') ? `\`\` ${s} \`\`` : `\`${s}\``)
+
+/** The rules check_code cannot decide from the code alone, so a clean result does not claim them. */
+export const UNCHECKED_RULES = [3, 9, 11, 14]
+
+export function checkMarkdown(findings: Finding[], data: Data, lines: number) {
+  const rules = data.manifest.rules
+  const unchecked = `Not checkable from code: ${UNCHECKED_RULES.map((n) => `rule ${n} (${rules[n - 1]?.rule.split(/[.:;,(]/)[0]})`).join(', ')}. Review those by reading.`
+  if (!findings.length) {
+    return join(['# No findings', '', `${lines} ${lines === 1 ? 'line' : 'lines'} checked against the design rules (get_rules): nothing to change.`, '', unchecked])
+  }
+  const errors = findings.filter((f) => f.severity === 'error').length
+  const warnings = findings.length - errors
+  const count = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`
+  const section = (severity: Finding['severity'], title: string, note: string) => {
+    const items = findings.filter((f) => f.severity === severity)
+    if (!items.length) return []
+    return [`## ${title}`, '', note, '', ...items.map((f) => `- **Line ${f.line}**, ${f.rule ? `rule ${f.rule}` : 'check_code directive'}: ${f.message}\n  ${span(f.excerpt)}\n  Fix: ${f.fix}`), '']
+  }
+  const cited = [...new Set(findings.map((f) => f.rule))].filter(Boolean).sort((a, b) => a - b)
+  return join([
+    `# ${count(errors, 'error')}, ${count(warnings, 'warning')}`,
+    '',
+    ...section('error', 'Errors', 'Each breaks a design rule. Fix them before handing the code back.'),
+    ...section('warn', 'Warnings', 'Probably wrong, but the code alone cannot prove it. Fix each, or keep it for a reason you can state.'),
+    '## Rules cited',
+    '',
+    ...cited.map((n) => `${n}. ${rules[n - 1]?.rule ?? ''}`),
+    '',
+    unchecked,
+    '',
+    'To keep code that breaks a rule on purpose (a "don’t" example), put `// check_code: allow rule N — the reason` on the line above it, or `{/* check_code: allow rule N — the reason */}` in JSX. The reason is required: an allow without one is an error and excuses nothing.',
   ])
 }

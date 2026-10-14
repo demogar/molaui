@@ -25,14 +25,21 @@ import { ChoiceField } from './choice-field'
  */
 export const checkboxBoxClasses = [
   'relative inline-grid size-4 shrink-0 place-items-center rounded-none',
-  'bg-cloth-pale text-on-ink shadow-cut band-oro [--cut-reveal:2px]',
+  'bg-cloth-pale shadow-cut band-oro [--cut-reveal:2px]',
   'transition-[background-color,box-shadow] duration-(--motion-cut) ease-cut',
   'hover:cut-band',
   'focus-visible:shadow-[var(--focus-ring)]',
-  'data-checked:bg-ink data-indeterminate:bg-ink',
+  'data-checked:bg-ink data-checked:text-on-ink data-indeterminate:bg-ink data-indeterminate:text-on-ink',
   'data-invalid:band-rojo data-invalid:cut-band aria-invalid:band-rojo aria-invalid:cut-band',
   'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
-  'data-disabled:data-checked:bg-cloth-deep',
+  // A disabled box that is still checked keeps a deeper ground than an
+  // unchecked one, so the state survives. --ink-muted, the disabled ink
+  // everywhere else, measures 4.29:1 on --cloth-deep in light, so the mark
+  // takes --ink-2 there (7.28 / 8.02). The pair is named for both checked
+  // states: with only `data-disabled:` and `data-indeterminate:` competing,
+  // which won was left to Tailwind's variant order.
+  'data-disabled:data-checked:bg-cloth-deep data-disabled:data-checked:text-ink-2',
+  'data-disabled:data-indeterminate:bg-cloth-deep data-disabled:data-indeterminate:text-ink-2',
 ] as const
 
 export interface CheckboxProps extends Omit<CheckboxPrimitive.Root.Props, 'className'> {
