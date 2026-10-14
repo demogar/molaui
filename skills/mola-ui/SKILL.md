@@ -60,8 +60,12 @@ because keyboard direction is read from context.
    or `Callout`, which already do this, rather than a coloured `<span>`.
 4. **Disabled is stated, not faded.** Never put `opacity-*` on a disabled control. Pass
    `disabled` and let the component draw it.
-5. **Colours only from tokens.** No hex, `rgb()` or arbitrary colour values. Use the utilities
-   below.
+5. **Colours only from tokens, each in its scope.** No hex, `rgb()` or arbitrary colour values.
+   Every colour token is scoped to the jobs it does (surface `bg-`, text `text-`, edge
+   `border-`/`decoration-`, mark `bg-`/`fill-`, overlay `bg-`), and only those utilities are
+   right: Tailwind compiles `text-cloth-pale`, but cloth is a surface and was never measured as
+   text. Each token's utilities and promised pairings are in `tokens.colors` in the manifest and
+   in `get_tokens`.
 6. **Logical properties only**: `ps-`/`pe-`, `ms-`/`me-`, `inset-s-`/`inset-e-`, `text-start`/
    `text-end`, `border-s`. Never `pl-`, `mr-`, `left-`, `text-left`. Wrap mixed-direction
    literals (dates, ranges, ids) in `dir="ltr"` or `dir="auto"`.
@@ -140,7 +144,8 @@ Each of these is legal on every ground and every wash.
 
 Status colours:
 
-- **Tone:** `danger`, `success`, `warn`, `info`. Use these for marks and fills.
+- **Tone:** `danger`, `success`, `warn`, `info`. Use these for marks and edges (a dot, a
+  swatch, a ring), never for words.
 - **Text:** `text-ink-danger`, `text-ink-success`, `text-ink-warn`, `text-ink-info`. Use these
   when the tone has to colour words.
 - **Layers:** `rojo`, `anil`, `verde`, `oro`. These are fields and marks, never body text.

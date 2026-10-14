@@ -108,8 +108,10 @@ export function search(data: Data, query: string, limit = 10): Hit[] {
       [t.name, 6],
       [t.note, 3],
       [t.group, 2],
+      [[...(t.scopes ?? []), ...(t.utilities ?? [])].join(' '), 2],
     ])
-    if (s) hits.push({ kind: 'token', name: t.name, line: `${[t.group, t.note].filter(Boolean).join(': ')}; light ${t.light}, dark ${t.dark}`, score: s })
+    const scoped = t.scopes ? `; ${t.scopes.join(', ')}${t.utilities?.length ? `: ${t.utilities.join(' ')}` : ''}` : ''
+    if (s) hits.push({ kind: 'token', name: t.name, line: `${[t.group, t.note].filter(Boolean).join(': ')}; light ${t.light}, dark ${t.dark}${scoped}`, score: s })
   }
   data.manifest.rules.forEach((r, i) => {
     const s = score([[`${r.rule} ${r.why}`, 2]])
@@ -192,7 +194,7 @@ export function createServer(data: Data) {
     {
       title: 'Get design tokens',
       description:
-        'Design tokens from tokens.css with their role and resolved value in the light and the dark theme, plus what each density redefines. Filter by name, section, note or value.',
+        'Design tokens from tokens.css with their role and resolved value in the light and the dark theme, plus what each density redefines. A colour also gets its scopes (surface, text, edge, mark, overlay), the only Tailwind utilities valid for it, and the contrast pairings it is promised. Filter by name, section, note, value, scope or utility.',
       inputSchema: {
         filter: z.string().optional().describe('Text to match, e.g. "oro", "ink", "motion", "control-h". Leave out for every token.'),
       },
@@ -200,15 +202,19 @@ export function createServer(data: Data) {
     },
     async ({ filter }) => {
       const f = filter?.trim().toLowerCase() ?? ''
-      const rows = data.tokens.tokens.filter((t) => !f || [t.name, t.group, t.note ?? '', t.light, t.dark].some((v) => v.toLowerCase().includes(f)))
+      const rows = data.tokens.tokens.filter(
+        (t) => !f || [t.name, t.group, t.note ?? '', t.light, t.dark, ...(t.scopes ?? []), ...(t.utilities ?? [])].some((v) => v.toLowerCase().includes(f)),
+      )
       const density = Object.fromEntries(
         Object.entries(data.tokens.density)
           .map(([d, values]) => [d, Object.fromEntries(Object.entries(values).filter(([n]) => !f || n.includes(f) || 'density'.includes(f)))] as const)
           .filter(([, values]) => Object.keys(values).length),
       )
       if (!rows.length && !Object.keys(density).length) return miss(`No token matches "${filter}".`)
-      const utilities = `In markup, use the Tailwind utility rather than the variable: \`--cloth-pale\` is \`bg-cloth-pale\`, \`--ink-muted\` is \`text-ink-muted\`. Never write a hex value outside tokens.css.`
-      return text(`${rows.length} of ${data.tokens.tokens.length} tokens. ${utilities}\n\n${tokensMarkdown(rows, Object.keys(density).length ? density : null)}`)
+      const utilities = `In markup, use a utility from the "Use as" column rather than the variable, and no other: Tailwind compiles \`text-cloth-pale\`, but \`--cloth-pale\` is a surface, so only \`bg-cloth-pale\` is right. Never write a hex value outside tokens.css.`
+      return text(
+        `${rows.length} of ${data.tokens.tokens.length} tokens. ${utilities}\n\n${tokensMarkdown(rows, Object.keys(density).length ? density : null, data.tokens.scopes)}`,
+      )
     },
   )
 

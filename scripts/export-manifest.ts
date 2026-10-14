@@ -12,6 +12,7 @@
  *   llms-patterns.txt,        scripts/agent-docs.ts)
  *   docs/ai/md/<id>.md
  *   docs/ai/tokens.json       every token with its role and both theme values,
+ *                             and each colour's scopes and promised pairings,
  *                             for the MCP server (mcp/)
  *   docs/ai/composition.json  which components each pattern and showcase is
  *                             built from, read from its imports; the docs
@@ -36,7 +37,7 @@ import { isExportStory } from 'storybook/internal/csf'
 import ts from 'typescript'
 
 import pkg from '../package.json' with { type: 'json' }
-import { changeLine, componentTwin, mdxPages, mdxTwin, screenTwin, SERVED_AS_IS, tokensJson, tokensText, twinPath, twinUrl } from './agent-docs'
+import { changeLine, colorInfo, componentTwin, mdxPages, mdxTwin, screenTwin, SERVED_AS_IS, TOKEN_ROWS, tokensJson, tokensText, twinPath, twinUrl } from './agent-docs'
 import { ACCESSIBILITY } from '../src/docs/usage/accessibility'
 import { ANATOMY, ROOT_PART } from '../src/docs/usage/anatomy'
 import type { Accessibility } from '../src/docs/usage/accessibility-types'
@@ -48,6 +49,7 @@ import { docsId, storyId } from '../src/docs/usage/links'
 import { PATTERN_STATES, type PatternStateId, PATTERNS, type PatternUsage } from '../src/docs/usage/patterns'
 import { RULES } from '../src/docs/usage/rules'
 import { isPattern } from '../src/docs/usage/showcases'
+import { SCOPES } from '../src/tokens/scopes'
 
 const root = resolve(import.meta.dirname, '..')
 const SITE = pkg.homepage.replace(/\/?$/, '/')
@@ -439,7 +441,16 @@ const counts = {
   stories: stories.reduce((n, s) => n + s.stories.length, 0),
 }
 
-const colorUtilities = [...readFileSync(resolve(root, 'src/styles/theme.css'), 'utf8').matchAll(/--color-([a-z0-9-]+):/g)].map((m) => m[1]!)
+/**
+ * Each colour token with the utilities its scopes allow and the pairings it is
+ * promised. This replaced a flat `bg-X / text-X` for every token, which told an
+ * agent that every token was both a fill and a text colour; see
+ * src/tokens/scopes.ts.
+ */
+const colors = TOKEN_ROWS.flatMap((r) => {
+  const info = colorInfo(r.name)
+  return info ? [{ token: r.name, ...info }] : []
+})
 
 const install = `npm install ${pkg.name} @base-ui/react @fontsource-variable/archivo @fontsource-variable/alegreya @fontsource-variable/martian-mono`
 
@@ -455,7 +466,8 @@ const manifest = {
   tokens: {
     source: 'src/styles/tokens.css',
     dtcg: 'tokens/mola.tokens.json',
-    colorUtilities: colorUtilities.map((c) => `bg-${c} / text-${c}`),
+    scopes: SCOPES,
+    colors,
     attributes: { 'data-theme': ['light', 'dark'], 'data-density': ['compact', 'comfortable', 'spacious'], dir: ['ltr', 'rtl'] },
   },
   components: sorted,
@@ -521,7 +533,7 @@ const llms = `${header}
 Read the one you need rather than all of them. Every docs page also has a Markdown version: \`?path=/docs/<id>\` is \`${SITE}md/<id>.md\`, linked as "Markdown" below.
 
 - [Components](${SITE}llms-components.txt): every component's usage, props, accessibility, anatomy and where it is used
-- [Tokens](${SITE}llms-tokens.txt): every design token with its role and its value in the light and the dark theme
+- [Tokens](${SITE}llms-tokens.txt): every design token with its role and its value in the light and the dark theme; each colour's scopes and the only utilities valid for it; every promised contrast pairing
 - [Patterns](${SITE}llms-patterns.txt): whole screens, what each is built from, and its states
 - [Full text](${SITE}llms-full.txt): all of the above except the tokens, in one file
 
@@ -664,7 +676,7 @@ const outputs: [string, string][] = [
   ['llms.txt', llms],
   ['llms-full.txt', full],
   ['llms-components.txt', componentsText],
-  ['llms-tokens.txt', tokensText(topicHeader('tokens', 'Every design token in `src/styles/tokens.css`, with its role and its value in each theme.'))],
+  ['llms-tokens.txt', tokensText(topicHeader('tokens', 'Every design token in `src/styles/tokens.css`, with its role, its value in each theme, and for a colour its scopes, its utilities and the pairings it is promised.'))],
   ['llms-patterns.txt', patternsText],
   ['docs/ai/tokens.json', `${JSON.stringify(tokensJson(), null, 2)}\n`],
   ...twins,

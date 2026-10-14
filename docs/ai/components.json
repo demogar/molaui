@@ -22,8 +22,8 @@
       "why": "Opacity fades the keyline and the label to about 2:1, a failure axe does not report because disabled controls are exempt."
     },
     {
-      "rule": "Colours come from tokens. No hex, rgb or arbitrary colour values outside `tokens.css`.",
-      "why": "Every token pairing has a measured contrast ratio in both themes; a colour outside the token file was never measured."
+      "rule": "Colours come from tokens, each through a utility its scope allows (surface `bg-`, text `text-`, edge `border-`/`decoration-`, mark `bg-`/`fill-`). No hex, rgb or arbitrary colour values outside `tokens.css`.",
+      "why": "Every token pairing has a measured contrast ratio in both themes; a colour outside the token file, or a token outside its scope (`text-cloth-pale` compiles), was never measured."
     },
     {
       "rule": "Theme and density are attributes (`data-theme`, `data-density`) on `<html>` or a subtree, not props or React context.",
@@ -86,47 +86,1142 @@
   "tokens": {
     "source": "src/styles/tokens.css",
     "dtcg": "tokens/mola.tokens.json",
-    "colorUtilities": [
-      "bg-cloth / text-cloth",
-      "bg-cloth-pale / text-cloth-pale",
-      "bg-cloth-shade / text-cloth-shade",
-      "bg-cloth-deep / text-cloth-deep",
-      "bg-ink / text-ink",
-      "bg-ink-2 / text-ink-2",
-      "bg-ink-muted / text-ink-muted",
-      "bg-ink-soft / text-ink-soft",
-      "bg-ink-on-tint / text-ink-on-tint",
-      "bg-keyline / text-keyline",
-      "bg-keyline-soft / text-keyline-soft",
-      "bg-rojo / text-rojo",
-      "bg-rojo-deep / text-rojo-deep",
-      "bg-rojo-soft / text-rojo-soft",
-      "bg-rojo-rule / text-rojo-rule",
-      "bg-rojo-on-shade / text-rojo-on-shade",
-      "bg-anil / text-anil",
-      "bg-anil-soft / text-anil-soft",
-      "bg-verde / text-verde",
-      "bg-verde-soft / text-verde-soft",
-      "bg-oro / text-oro",
-      "bg-oro-soft / text-oro-soft",
-      "bg-on-layer / text-on-layer",
-      "bg-on-oro / text-on-oro",
-      "bg-danger / text-danger",
-      "bg-success / text-success",
-      "bg-warn / text-warn",
-      "bg-info / text-info",
-      "bg-ink-danger / text-ink-danger",
-      "bg-ink-success / text-ink-success",
-      "bg-ink-warn / text-ink-warn",
-      "bg-ink-info / text-ink-info",
-      "bg-on-ink / text-on-ink",
-      "bg-on-ink-muted / text-on-ink-muted",
-      "bg-on-ink-accent / text-on-ink-accent",
-      "bg-keyline-on-ink / text-keyline-on-ink",
-      "bg-scrim / text-scrim",
-      "bg-on-scrim / text-on-scrim",
-      "bg-on-scrim-muted / text-on-scrim-muted",
-      "bg-backdrop / text-backdrop"
+    "scopes": {
+      "surface": {
+        "meaning": "A ground that carries content: a page, a panel, a card, a wash, a filled layer.",
+        "tailwind": [
+          "bg"
+        ],
+        "publish": [
+          "bg"
+        ],
+        "figma": [
+          "FRAME_FILL",
+          "SHAPE_FILL"
+        ]
+      },
+      "text": {
+        "meaning": "The colour of words, and of icons that inherit `currentColor`.",
+        "tailwind": [
+          "text",
+          "placeholder",
+          "caret"
+        ],
+        "publish": [
+          "text"
+        ],
+        "figma": [
+          "TEXT_FILL"
+        ]
+      },
+      "edge": {
+        "meaning": "A line: a keyline, a divider, an underline, a current-item bar, the revealed band of a cut. Mola draws most edges with `box-shadow`.",
+        "tailwind": [
+          "border",
+          "border-x",
+          "border-y",
+          "border-t",
+          "border-b",
+          "border-s",
+          "border-e",
+          "border-l",
+          "border-r",
+          "divide",
+          "outline",
+          "ring",
+          "decoration",
+          "stroke"
+        ],
+        "publish": [
+          "border",
+          "decoration"
+        ],
+        "figma": [
+          "STROKE_COLOR",
+          "EFFECT_COLOR"
+        ]
+      },
+      "mark": {
+        "meaning": "A small filled graphic that is not a region: a status dot, a swatch key, a switch thumb, a rule drawn as a 1px box.",
+        "tailwind": [
+          "bg",
+          "fill",
+          "stroke"
+        ],
+        "publish": [
+          "bg",
+          "fill"
+        ],
+        "figma": [
+          "SHAPE_FILL"
+        ]
+      },
+      "overlay": {
+        "meaning": "A translucent fill over content the system cannot know: a scrim over an image, the backdrop behind a modal.",
+        "tailwind": [
+          "bg"
+        ],
+        "publish": [
+          "bg"
+        ],
+        "figma": [
+          "FRAME_FILL",
+          "SHAPE_FILL"
+        ]
+      }
+    },
+    "colors": [
+      {
+        "token": "--cloth",
+        "scopes": [
+          "surface"
+        ],
+        "utilities": [
+          "bg-cloth"
+        ],
+        "on": [],
+        "under": [
+          {
+            "token": "--ink",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-2",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-muted",
+            "min": 4.5
+          },
+          {
+            "token": "--rojo",
+            "min": 4.5
+          },
+          {
+            "token": "--rojo-deep",
+            "min": 4.5
+          },
+          {
+            "token": "--anil",
+            "min": 4.5
+          },
+          {
+            "token": "--verde",
+            "min": 4.5
+          },
+          {
+            "token": "--warn",
+            "min": 4.5
+          },
+          {
+            "token": "--danger",
+            "min": 4.5
+          },
+          {
+            "token": "--success",
+            "min": 4.5
+          },
+          {
+            "token": "--info",
+            "min": 4.5
+          },
+          {
+            "token": "--oro",
+            "min": 4.5,
+            "themes": [
+              "dark"
+            ]
+          }
+        ]
+      },
+      {
+        "token": "--cloth-pale",
+        "scopes": [
+          "surface"
+        ],
+        "utilities": [
+          "bg-cloth-pale"
+        ],
+        "on": [],
+        "under": [
+          {
+            "token": "--ink",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-2",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-muted",
+            "min": 4.5
+          },
+          {
+            "token": "--rojo",
+            "min": 4.5
+          },
+          {
+            "token": "--rojo-deep",
+            "min": 4.5
+          },
+          {
+            "token": "--anil",
+            "min": 4.5
+          },
+          {
+            "token": "--verde",
+            "min": 4.5
+          },
+          {
+            "token": "--warn",
+            "min": 4.5
+          },
+          {
+            "token": "--danger",
+            "min": 4.5
+          },
+          {
+            "token": "--success",
+            "min": 4.5
+          },
+          {
+            "token": "--info",
+            "min": 4.5
+          }
+        ]
+      },
+      {
+        "token": "--cloth-shade",
+        "scopes": [
+          "surface"
+        ],
+        "utilities": [
+          "bg-cloth-shade"
+        ],
+        "on": [],
+        "under": [
+          {
+            "token": "--ink",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-2",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-muted",
+            "min": 4.5
+          },
+          {
+            "token": "--rojo-on-shade",
+            "min": 4.5
+          },
+          {
+            "token": "--anil",
+            "min": 3
+          },
+          {
+            "token": "--verde",
+            "min": 3
+          },
+          {
+            "token": "--warn",
+            "min": 3
+          },
+          {
+            "token": "--rojo",
+            "min": 3
+          }
+        ]
+      },
+      {
+        "token": "--cloth-deep",
+        "scopes": [
+          "surface"
+        ],
+        "utilities": [
+          "bg-cloth-deep"
+        ],
+        "on": [],
+        "under": []
+      },
+      {
+        "token": "--ink",
+        "scopes": [
+          "text",
+          "edge",
+          "surface",
+          "mark"
+        ],
+        "why": "The top layer is body ink, every interactive keyline, the inverse panel that carries --on-ink, and the today dot and switch thumb.",
+        "utilities": [
+          "text-ink",
+          "border-ink",
+          "decoration-ink",
+          "bg-ink",
+          "fill-ink"
+        ],
+        "on": [
+          {
+            "token": "--cloth",
+            "min": 4.5
+          },
+          {
+            "token": "--cloth-pale",
+            "min": 4.5
+          },
+          {
+            "token": "--cloth-shade",
+            "min": 4.5
+          },
+          {
+            "token": "--rojo-soft",
+            "min": 4.5
+          },
+          {
+            "token": "--anil-soft",
+            "min": 4.5
+          },
+          {
+            "token": "--verde-soft",
+            "min": 4.5
+          },
+          {
+            "token": "--oro-soft",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-soft",
+            "min": 4.5
+          }
+        ],
+        "under": [
+          {
+            "token": "--on-ink",
+            "min": 4.5
+          },
+          {
+            "token": "--on-ink-muted",
+            "min": 4.5
+          },
+          {
+            "token": "--oro",
+            "min": 4.5,
+            "themes": [
+              "light"
+            ]
+          },
+          {
+            "token": "--on-ink-accent",
+            "min": 4.5
+          }
+        ]
+      },
+      {
+        "token": "--ink-2",
+        "scopes": [
+          "text"
+        ],
+        "utilities": [
+          "text-ink-2"
+        ],
+        "on": [
+          {
+            "token": "--cloth",
+            "min": 4.5
+          },
+          {
+            "token": "--cloth-pale",
+            "min": 4.5
+          },
+          {
+            "token": "--cloth-shade",
+            "min": 4.5
+          },
+          {
+            "token": "--rojo-soft",
+            "min": 4.5
+          },
+          {
+            "token": "--anil-soft",
+            "min": 4.5
+          },
+          {
+            "token": "--verde-soft",
+            "min": 4.5
+          },
+          {
+            "token": "--oro-soft",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-soft",
+            "min": 4.5
+          }
+        ],
+        "under": []
+      },
+      {
+        "token": "--ink-muted",
+        "scopes": [
+          "text",
+          "mark",
+          "edge"
+        ],
+        "why": "The floor of the text ramp, and the neutral swatch key and disabled thumb, promised at 3:1 as a graphic.",
+        "utilities": [
+          "text-ink-muted",
+          "bg-ink-muted",
+          "fill-ink-muted",
+          "border-ink-muted",
+          "decoration-ink-muted"
+        ],
+        "on": [
+          {
+            "token": "--cloth",
+            "min": 4.5
+          },
+          {
+            "token": "--cloth-pale",
+            "min": 4.5
+          },
+          {
+            "token": "--cloth-shade",
+            "min": 4.5
+          },
+          {
+            "token": "--rojo-soft",
+            "min": 4.5
+          },
+          {
+            "token": "--anil-soft",
+            "min": 4.5
+          },
+          {
+            "token": "--verde-soft",
+            "min": 4.5
+          },
+          {
+            "token": "--oro-soft",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-soft",
+            "min": 4.5
+          }
+        ],
+        "under": []
+      },
+      {
+        "token": "--keyline",
+        "scopes": [
+          "edge",
+          "mark"
+        ],
+        "why": "Decorative dividers. A divider drawn as a 1px box (Divider, menu and toolbar separators, <hr>) is a background in CSS and a rule in meaning.",
+        "utilities": [
+          "border-keyline",
+          "decoration-keyline",
+          "bg-keyline",
+          "fill-keyline"
+        ],
+        "on": [],
+        "under": []
+      },
+      {
+        "token": "--keyline-soft",
+        "scopes": [
+          "edge"
+        ],
+        "utilities": [
+          "border-keyline-soft",
+          "decoration-keyline-soft"
+        ],
+        "on": [],
+        "under": []
+      },
+      {
+        "token": "--rojo",
+        "scopes": [
+          "surface",
+          "text",
+          "mark",
+          "edge"
+        ],
+        "why": "A layer fills a panel (carrying --on-layer), reads as text on cloth, keys a swatch and is a cut band.",
+        "utilities": [
+          "bg-rojo",
+          "text-rojo",
+          "fill-rojo",
+          "border-rojo",
+          "decoration-rojo"
+        ],
+        "on": [
+          {
+            "token": "--cloth",
+            "min": 4.5
+          },
+          {
+            "token": "--cloth-pale",
+            "min": 4.5
+          },
+          {
+            "token": "--cloth-shade",
+            "min": 3
+          },
+          {
+            "token": "--rojo-soft",
+            "min": 3
+          }
+        ],
+        "under": [
+          {
+            "token": "--on-layer",
+            "min": 4.5
+          }
+        ]
+      },
+      {
+        "token": "--rojo-deep",
+        "scopes": [
+          "surface",
+          "text"
+        ],
+        "why": "The pressed danger button carries --on-layer; links in prose read at 4.5.",
+        "utilities": [
+          "bg-rojo-deep",
+          "text-rojo-deep"
+        ],
+        "on": [
+          {
+            "token": "--cloth",
+            "min": 4.5
+          },
+          {
+            "token": "--cloth-pale",
+            "min": 4.5
+          }
+        ],
+        "under": [
+          {
+            "token": "--on-layer",
+            "min": 4.5
+          }
+        ]
+      },
+      {
+        "token": "--anil",
+        "scopes": [
+          "surface",
+          "text",
+          "mark",
+          "edge"
+        ],
+        "why": "As --rojo.",
+        "utilities": [
+          "bg-anil",
+          "text-anil",
+          "fill-anil",
+          "border-anil",
+          "decoration-anil"
+        ],
+        "on": [
+          {
+            "token": "--cloth",
+            "min": 4.5
+          },
+          {
+            "token": "--cloth-pale",
+            "min": 4.5
+          },
+          {
+            "token": "--cloth-shade",
+            "min": 3
+          },
+          {
+            "token": "--anil-soft",
+            "min": 3
+          }
+        ],
+        "under": [
+          {
+            "token": "--on-layer",
+            "min": 4.5
+          }
+        ]
+      },
+      {
+        "token": "--verde",
+        "scopes": [
+          "surface",
+          "text",
+          "mark",
+          "edge"
+        ],
+        "why": "As --rojo.",
+        "utilities": [
+          "bg-verde",
+          "text-verde",
+          "fill-verde",
+          "border-verde",
+          "decoration-verde"
+        ],
+        "on": [
+          {
+            "token": "--cloth",
+            "min": 4.5
+          },
+          {
+            "token": "--cloth-pale",
+            "min": 4.5
+          },
+          {
+            "token": "--cloth-shade",
+            "min": 3
+          },
+          {
+            "token": "--verde-soft",
+            "min": 3
+          }
+        ],
+        "under": [
+          {
+            "token": "--on-layer",
+            "min": 4.5
+          }
+        ]
+      },
+      {
+        "token": "--oro",
+        "scopes": [
+          "surface",
+          "mark",
+          "edge"
+        ],
+        "why": "Gold is a field and a mark, never text: it fails on light cloth. It reads only on the light ink panel and on dark cloth, so it is not text-scoped.",
+        "utilities": [
+          "bg-oro",
+          "fill-oro",
+          "border-oro",
+          "decoration-oro"
+        ],
+        "on": [
+          {
+            "token": "--cloth",
+            "min": 4.5,
+            "themes": [
+              "dark"
+            ]
+          },
+          {
+            "token": "--ink",
+            "min": 4.5,
+            "themes": [
+              "light"
+            ]
+          }
+        ],
+        "under": [
+          {
+            "token": "--on-oro",
+            "min": 4.5
+          }
+        ]
+      },
+      {
+        "token": "--on-layer",
+        "scopes": [
+          "text",
+          "mark"
+        ],
+        "why": "Ink on a filled layer, and the thumb of a checked switch on verde.",
+        "utilities": [
+          "text-on-layer",
+          "bg-on-layer",
+          "fill-on-layer"
+        ],
+        "on": [
+          {
+            "token": "--rojo",
+            "min": 4.5
+          },
+          {
+            "token": "--rojo-deep",
+            "min": 4.5
+          },
+          {
+            "token": "--anil",
+            "min": 4.5
+          },
+          {
+            "token": "--verde",
+            "min": 4.5
+          }
+        ],
+        "under": []
+      },
+      {
+        "token": "--on-oro",
+        "scopes": [
+          "text"
+        ],
+        "utilities": [
+          "text-on-oro"
+        ],
+        "on": [
+          {
+            "token": "--oro",
+            "min": 4.5
+          }
+        ],
+        "under": []
+      },
+      {
+        "token": "--danger",
+        "scopes": [
+          "mark",
+          "edge"
+        ],
+        "why": "The status tone, for a dot, a swatch key, a bar or a ring. Words in a status take --ink-danger, which on-layer collapses on a filled panel where no status hue survives; the contract measures the tone on cloth at 4.5 because --ink-danger resolves to it.",
+        "utilities": [
+          "bg-danger",
+          "fill-danger",
+          "border-danger",
+          "decoration-danger"
+        ],
+        "on": [
+          {
+            "token": "--cloth",
+            "min": 4.5
+          },
+          {
+            "token": "--cloth-pale",
+            "min": 4.5
+          }
+        ],
+        "under": []
+      },
+      {
+        "token": "--success",
+        "scopes": [
+          "mark",
+          "edge"
+        ],
+        "why": "As --danger: words take --ink-success.",
+        "utilities": [
+          "bg-success",
+          "fill-success",
+          "border-success",
+          "decoration-success"
+        ],
+        "on": [
+          {
+            "token": "--cloth",
+            "min": 4.5
+          },
+          {
+            "token": "--cloth-pale",
+            "min": 4.5
+          }
+        ],
+        "under": []
+      },
+      {
+        "token": "--warn",
+        "scopes": [
+          "mark",
+          "edge"
+        ],
+        "why": "As --danger: words take --ink-warn.",
+        "utilities": [
+          "bg-warn",
+          "fill-warn",
+          "border-warn",
+          "decoration-warn"
+        ],
+        "on": [
+          {
+            "token": "--cloth",
+            "min": 4.5
+          },
+          {
+            "token": "--cloth-pale",
+            "min": 4.5
+          },
+          {
+            "token": "--cloth-shade",
+            "min": 3
+          },
+          {
+            "token": "--oro-soft",
+            "min": 3
+          }
+        ],
+        "under": []
+      },
+      {
+        "token": "--info",
+        "scopes": [
+          "mark",
+          "edge"
+        ],
+        "why": "As --danger: words take --ink-info.",
+        "utilities": [
+          "bg-info",
+          "fill-info",
+          "border-info",
+          "decoration-info"
+        ],
+        "on": [
+          {
+            "token": "--cloth",
+            "min": 4.5
+          },
+          {
+            "token": "--cloth-pale",
+            "min": 4.5
+          }
+        ],
+        "under": []
+      },
+      {
+        "token": "--ink-danger",
+        "scopes": [
+          "text"
+        ],
+        "utilities": [
+          "text-ink-danger"
+        ],
+        "on": [],
+        "under": []
+      },
+      {
+        "token": "--ink-success",
+        "scopes": [
+          "text"
+        ],
+        "utilities": [
+          "text-ink-success"
+        ],
+        "on": [],
+        "under": []
+      },
+      {
+        "token": "--ink-warn",
+        "scopes": [
+          "text"
+        ],
+        "utilities": [
+          "text-ink-warn"
+        ],
+        "on": [],
+        "under": []
+      },
+      {
+        "token": "--ink-info",
+        "scopes": [
+          "text"
+        ],
+        "utilities": [
+          "text-ink-info"
+        ],
+        "on": [],
+        "under": []
+      },
+      {
+        "token": "--rojo-soft",
+        "scopes": [
+          "surface"
+        ],
+        "utilities": [
+          "bg-rojo-soft"
+        ],
+        "on": [],
+        "under": [
+          {
+            "token": "--ink",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-2",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-muted",
+            "min": 4.5
+          },
+          {
+            "token": "--rojo",
+            "min": 3
+          }
+        ]
+      },
+      {
+        "token": "--anil-soft",
+        "scopes": [
+          "surface"
+        ],
+        "utilities": [
+          "bg-anil-soft"
+        ],
+        "on": [],
+        "under": [
+          {
+            "token": "--ink",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-2",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-muted",
+            "min": 4.5
+          },
+          {
+            "token": "--anil",
+            "min": 3
+          }
+        ]
+      },
+      {
+        "token": "--verde-soft",
+        "scopes": [
+          "surface"
+        ],
+        "utilities": [
+          "bg-verde-soft"
+        ],
+        "on": [],
+        "under": [
+          {
+            "token": "--ink",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-2",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-muted",
+            "min": 4.5
+          },
+          {
+            "token": "--verde",
+            "min": 3
+          }
+        ]
+      },
+      {
+        "token": "--oro-soft",
+        "scopes": [
+          "surface"
+        ],
+        "utilities": [
+          "bg-oro-soft"
+        ],
+        "on": [],
+        "under": [
+          {
+            "token": "--ink",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-2",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-muted",
+            "min": 4.5
+          },
+          {
+            "token": "--warn",
+            "min": 3
+          }
+        ]
+      },
+      {
+        "token": "--ink-soft",
+        "scopes": [
+          "surface"
+        ],
+        "utilities": [
+          "bg-ink-soft"
+        ],
+        "on": [],
+        "under": [
+          {
+            "token": "--ink",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-2",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-muted",
+            "min": 4.5
+          }
+        ]
+      },
+      {
+        "token": "--ink-on-tint",
+        "scopes": [
+          "text"
+        ],
+        "utilities": [
+          "text-ink-on-tint"
+        ],
+        "on": [],
+        "under": []
+      },
+      {
+        "token": "--rojo-on-shade",
+        "scopes": [
+          "text"
+        ],
+        "utilities": [
+          "text-rojo-on-shade"
+        ],
+        "on": [
+          {
+            "token": "--cloth-shade",
+            "min": 4.5
+          }
+        ],
+        "under": []
+      },
+      {
+        "token": "--rojo-rule",
+        "scopes": [
+          "edge"
+        ],
+        "utilities": [
+          "border-rojo-rule",
+          "decoration-rojo-rule"
+        ],
+        "on": [],
+        "under": []
+      },
+      {
+        "token": "--on-ink",
+        "scopes": [
+          "text",
+          "mark"
+        ],
+        "why": "Words on the ink panel, and the today dot on an ink range endpoint.",
+        "utilities": [
+          "text-on-ink",
+          "bg-on-ink",
+          "fill-on-ink"
+        ],
+        "on": [
+          {
+            "token": "--ink",
+            "min": 4.5
+          }
+        ],
+        "under": []
+      },
+      {
+        "token": "--on-ink-muted",
+        "scopes": [
+          "text"
+        ],
+        "utilities": [
+          "text-on-ink-muted"
+        ],
+        "on": [
+          {
+            "token": "--ink",
+            "min": 4.5
+          }
+        ],
+        "under": []
+      },
+      {
+        "token": "--on-ink-accent",
+        "scopes": [
+          "text"
+        ],
+        "utilities": [
+          "text-on-ink-accent"
+        ],
+        "on": [
+          {
+            "token": "--ink",
+            "min": 4.5
+          }
+        ],
+        "under": []
+      },
+      {
+        "token": "--keyline-on-ink",
+        "scopes": [
+          "edge"
+        ],
+        "utilities": [
+          "border-keyline-on-ink",
+          "decoration-keyline-on-ink"
+        ],
+        "on": [],
+        "under": []
+      },
+      {
+        "token": "--scrim",
+        "scopes": [
+          "overlay"
+        ],
+        "utilities": [
+          "bg-scrim"
+        ],
+        "on": [],
+        "under": []
+      },
+      {
+        "token": "--on-scrim",
+        "scopes": [
+          "text"
+        ],
+        "utilities": [
+          "text-on-scrim"
+        ],
+        "on": [],
+        "under": []
+      },
+      {
+        "token": "--on-scrim-muted",
+        "scopes": [
+          "text"
+        ],
+        "utilities": [
+          "text-on-scrim-muted"
+        ],
+        "on": [],
+        "under": []
+      },
+      {
+        "token": "--backdrop",
+        "scopes": [
+          "overlay"
+        ],
+        "utilities": [
+          "bg-backdrop"
+        ],
+        "on": [],
+        "under": []
+      },
+      {
+        "token": "--band",
+        "scopes": [
+          "edge",
+          "mark"
+        ],
+        "why": "The revealed colour of a cut, set per element with band-*: the middle ring of cut-band, and the fill of relleno.",
+        "utilities": [],
+        "on": [],
+        "under": []
+      }
     ],
     "attributes": {
       "data-theme": [
@@ -11474,7 +12569,7 @@
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-navigation-breadcrumb--overview",
       "phase": "stable",
       "summary": "Where a page sits, as links back up the path, with the current page as plain text.",
-      "description": "A named `<nav>` around an ordered list. The current page is text with `aria-current=\"page\"` — a link to where you already are does nothing. Separators are drawn in CSS so a screen reader reads places, not slashes. Long ids are cut in the middle with `middleTruncate`, keeping both ends — the parts people compare.",
+      "description": "A named `<nav>` around an ordered list. The current page is text with `aria-current=\"page\"` — a link to where you already are does nothing. Separators are slanted keyline rules drawn in CSS, with no text, so a screen reader reads places, not slashes. Long ids are cut in the middle with `middleTruncate`, keeping both ends — the parts people compare.",
       "usage": {
         "use": [
           "Pages nested two or more levels deep: Workspace / Agents / knowledge-agent / Run #4182.",
@@ -11523,7 +12618,7 @@
         "handles": [
           "It is a `<nav>` named “Breadcrumb” holding an ordered list.",
           "The last item is plain text with `aria-current=\"page\"`, not a link to where you already are.",
-          "The slashes are drawn with CSS, so they are not read out."
+          "The separators are empty CSS rules, not slash characters, so they are not read out."
         ],
         "you": [
           "Leave `href` off the last item.",

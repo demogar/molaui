@@ -24,7 +24,7 @@ Theme and density are attributes, not props: `<html data-theme="dark" data-densi
 - Radius is zero. `rounded-full` only for something that is genuinely a dot. The system is cut cloth: nothing in it is rounded.
 - State is never colour alone: glyph, word and colour, in that order of importance. It has to survive colour blindness, a greyscale screenshot and forced colours.
 - Disabled is stated, not faded. No `opacity-*` on a disabled control. Opacity fades the keyline and the label to about 2:1, a failure axe does not report because disabled controls are exempt.
-- Colours come from tokens. No hex, rgb or arbitrary colour values outside `tokens.css`. Every token pairing has a measured contrast ratio in both themes; a colour outside the token file was never measured.
+- Colours come from tokens, each through a utility its scope allows (surface `bg-`, text `text-`, edge `border-`/`decoration-`, mark `bg-`/`fill-`). No hex, rgb or arbitrary colour values outside `tokens.css`. Every token pairing has a measured contrast ratio in both themes; a colour outside the token file, or a token outside its scope (`text-cloth-pale` compiles), was never measured.
 - Theme and density are attributes (`data-theme`, `data-density`) on `<html>` or a subtree, not props or React context. Dialogs and menus portal to `<body>` and must inherit them. No component takes a density prop.
 - Lay out with logical properties: `ps-`/`pe-`, `ms-`/`me-`, `inset-s-`/`inset-e-`, `text-start`/`text-end`. `dir="rtl"` then mirrors the layout with no second set of classes.
 - Typefaces have roles: Archivo (`font-ui`) for the interface, Alegreya (`font-text`) for prose from a person or a model, Martian Mono (`literal`) only for machine literals. A reader can tell from the letterforms whether the product, a person or the machine is speaking.
@@ -59,7 +59,7 @@ Every component has one phase. Stable unless the index says otherwise.
 Read the one you need rather than all of them. Every docs page also has a Markdown version: `?path=/docs/<id>` is `https://demogar.github.io/molaui/md/<id>.md`, linked as "Markdown" below.
 
 - [Components](https://demogar.github.io/molaui/llms-components.txt): every component's usage, props, accessibility, anatomy and where it is used
-- [Tokens](https://demogar.github.io/molaui/llms-tokens.txt): every design token with its role and its value in the light and the dark theme
+- [Tokens](https://demogar.github.io/molaui/llms-tokens.txt): every design token with its role and its value in the light and the dark theme; each colour's scopes and the only utilities valid for it; every promised contrast pairing
 - [Patterns](https://demogar.github.io/molaui/llms-patterns.txt): whole screens, what each is built from, and its states
 - [Full text](https://demogar.github.io/molaui/llms-full.txt): all of the above except the tokens, in one file
 

@@ -4,14 +4,17 @@ import { join, relative, resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 
 import { contrast } from './color'
+import { PAIRS } from './pairings'
 import { parseRootDeclarations, token, type ThemeName } from './resolve'
 
 /**
  * The contrast contract.
  *
- * Every pairing the system promises is listed here with the ratio it owes, and
- * checked in both themes against tokens.css as written — including every
- * `color-mix()`, resolved in OKLab the way the browser resolves it. Changing a
+ * Every pairing the system promises is listed in ./pairings.ts with the ratio
+ * it owes (shared with the agent docs, so what is published is what is
+ * measured), and checked here in both themes against tokens.css as written —
+ * including every `color-mix()`, resolved in OKLab the way the browser
+ * resolves it. Changing a
  * hex value that silently drops a pairing below its bar fails this test, which
  * is the only reason the ratios quoted in tokens.css can be trusted.
  *
@@ -21,54 +24,6 @@ import { parseRootDeclarations, token, type ThemeName } from './resolve'
 const css = readFileSync(resolve(import.meta.dirname, '../styles/tokens.css'), 'utf8')
 const decls = parseRootDeclarations(css)
 const THEMES: ThemeName[] = ['light', 'dark']
-
-type Pair = [fg: string, bg: string, min: number, themes?: ThemeName[]]
-
-const grounds = ['--cloth', '--cloth-pale', '--cloth-shade']
-const inks = ['--ink', '--ink-2', '--ink-muted']
-const washes = ['--rojo-soft', '--anil-soft', '--verde-soft', '--oro-soft', '--ink-soft']
-
-const PAIRS: Pair[] = [
-  // The ink ramp on every cloth ground.
-  ...grounds.flatMap((g) => inks.map((i): Pair => [i, g, 4.5])),
-  // The ink ramp on every wash.
-  ...washes.flatMap((w) => inks.map((i): Pair => [i, w, 4.5])),
-  // Layer and status colours as text on the page and on raised cloth.
-  ...['--cloth', '--cloth-pale'].flatMap((g) =>
-    ['--rojo', '--rojo-deep', '--anil', '--verde', '--warn', '--danger', '--success', '--info'].map(
-      (c): Pair => [c, g, 4.5],
-    ),
-  ),
-  // Gold carries text only in the dark theme; on light cloth it is a field.
-  ['--oro', '--cloth', 4.5, ['dark']],
-  ['--oro', '--cloth', 1, ['light']],
-  // Ink on filled layers.
-  ['--on-layer', '--rojo', 4.5],
-  ['--on-layer', '--rojo-deep', 4.5],
-  ['--on-layer', '--anil', 4.5],
-  ['--on-layer', '--verde', 4.5],
-  ['--on-oro', '--oro', 4.5],
-  // The inverse panel.
-  ['--on-ink', '--ink', 4.5],
-  ['--on-ink-muted', '--ink', 4.5],
-  ['--oro', '--ink', 4.5, ['light']],
-  ['--on-ink-accent', '--ink', 4.5],
-  // A tinted label.
-  ['--rojo-on-shade', '--cloth-shade', 4.5],
-  // Swatch keys are graphics (3:1) on every ground, and a flat callout's
-  // swatch sits on its own tone's wash. --oro is absent on purpose: the
-  // accent swatch carries an ink keyline because gold on light cloth fails.
-  ...grounds.flatMap((g) =>
-    ['--ink-muted', '--anil', '--verde', '--warn', '--rojo'].map((c): Pair => [c, g, 3]),
-  ),
-  ['--ink-muted', '--ink-soft', 3],
-  ['--anil', '--anil-soft', 3],
-  ['--verde', '--verde-soft', 3],
-  ['--warn', '--oro-soft', 3],
-  ['--rojo', '--rojo-soft', 3],
-  // The keyline bounds every control: a UI boundary owes 3:1.
-  ...grounds.map((g): Pair => ['--ink', g, 3]),
-]
 
 describe('contrast contract', () => {
   for (const theme of THEMES) {

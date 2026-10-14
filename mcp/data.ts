@@ -88,13 +88,36 @@ export interface Manifest {
   install: string
   rules: { rule: string; why: string }[]
   phases: Record<string, { label: string; promise: string }>
-  tokens: { colorUtilities: string[]; attributes: Record<string, string[]> }
+  tokens: { scopes: Record<string, Scope>; colors: ({ token: string } & ColorInfo)[]; attributes: Record<string, string[]> }
   components: Component[]
   patterns: Pattern[]
   utilities: { name: string; kind: string; source: string; description?: string }[]
 }
 
-export interface Token {
+/** One of the closed set of colour scopes (src/tokens/scopes.ts). */
+export interface Scope {
+  meaning: string
+  tailwind: string[]
+  publish: string[]
+  figma: string[]
+}
+
+export interface Pairing {
+  token: string
+  min: number
+  themes?: string[]
+}
+
+/** What a colour token may be used for, and the contrast it is promised from each side. */
+export interface ColorInfo {
+  scopes: string[]
+  why?: string
+  utilities: string[]
+  on: Pairing[]
+  under: Pairing[]
+}
+
+export interface Token extends Partial<ColorInfo> {
   name: string
   group: string
   note?: string
@@ -105,6 +128,7 @@ export interface Token {
 }
 
 export interface Tokens {
+  scopes: Record<string, Scope>
   tokens: Token[]
   density: Record<string, Record<string, string>>
 }

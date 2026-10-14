@@ -14,7 +14,9 @@ code the contrast test runs, so a value here cannot disagree with what the test 
 role is the section of the file a token sits in, and its own note where the file gives one.
 
 Copy puts `var(--name)` on the clipboard, which is how a token is used in CSS. In markup, prefer
-the Tailwind utility: `--cloth-pale` is `bg-cloth-pale`, `--ink-muted` is `text-ink-muted`.
+the Tailwind utility its scope allows: `--cloth-pale` is a surface, so `bg-cloth-pale`;
+`--ink-muted` is text, so `text-ink-muted`. [Color](?path=/docs/foundations-color--overview)
+lists the scopes.
 
 <TokenTable />
 

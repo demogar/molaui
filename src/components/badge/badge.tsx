@@ -80,7 +80,7 @@ export const badgeVariants = cva(
       { variant: 'outline', tone: 'info', class: 'text-anil shadow-[0_0_0_1.5px_var(--anil)]' },
       { variant: 'outline', tone: 'success', class: 'text-verde shadow-[0_0_0_1.5px_var(--verde)]' },
       { variant: 'outline', tone: 'danger', class: 'text-rojo-deep shadow-[0_0_0_1.5px_var(--rojo)]' },
-      { variant: 'outline', tone: 'warn', class: 'text-warn shadow-[0_0_0_1.5px_var(--warn)]' },
+      { variant: 'outline', tone: 'warn', class: 'text-ink-warn shadow-[0_0_0_1.5px_var(--warn)]' },
       {
         variant: 'outline',
         tone: 'accent',

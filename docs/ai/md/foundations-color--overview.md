@@ -81,6 +81,35 @@ Contrast ratios, computed from tokens.css:
 | `--on-ink-muted` | `--ink` | 8.36 | 6.56 |
 | `--on-ink-accent` | `--ink` | 9.34 | 5.67 |
 
+Those are a sample. The full list, every pairing the contract test measures, is published with
+each token in the agent docs (`llms-tokens.txt`, `get_tokens` on the MCP server) as the grounds it
+reads `on` and the foregrounds it carries `under`. A pairing not on that list was never measured.
+
+## Scopes: what each colour is for
+
+Tailwind generates every colour utility for every token, so `text-cloth-pale` compiles as readily
+as `bg-cloth-pale`. Only one of them was measured. Each colour token is therefore scoped to the jobs
+it does, from five: a **surface** carries content, **text** colours words, an **edge** is a line, a
+**mark** is a small graphic that is not a region, and an **overlay** sits over content the system
+cannot know. A token can have several: rojo fills a panel, reads as text on cloth, keys a swatch
+and is a cut band. Gold has no text scope, because it fails on light cloth; the status tones have
+none either, because words in a status take `--ink-danger` and its kin, which `on-layer` collapses
+on a filled panel.
+
+| Scope | What it is | Tailwind | Figma |
+| --- | --- | --- | --- |
+| `surface` | A ground that carries content: a page, a panel, a card, a wash, a filled layer. | `bg-` | `FRAME_FILL` `SHAPE_FILL` |
+| `text` | The colour of words, and of icons that inherit `currentColor`. | `text-` `placeholder-` `caret-` | `TEXT_FILL` |
+| `edge` | A line: a keyline, a divider, an underline, a current-item bar, the revealed band of a cut. Mola draws most edges with `box-shadow`. | `border-` `border-x-` `border-y-` `border-t-` `border-b-` `border-s-` `border-e-` `border-l-` `border-r-` `divide-` `outline-` `ring-` `decoration-` `stroke-` | `STROKE_COLOR` `EFFECT_COLOR` |
+| `mark` | A small filled graphic that is not a region: a status dot, a swatch key, a switch thumb, a rule drawn as a 1px box. | `bg-` `fill-` `stroke-` | `SHAPE_FILL` |
+| `overlay` | A translucent fill over content the system cannot know: a scrim over an image, the backdrop behind a modal. | `bg-` | `FRAME_FILL` `SHAPE_FILL` |
+
+A test reads every component and pattern and fails on a colour utility outside its token's scope,
+and fails if a promised pairing puts a token in a role its scope does not allow. The agent docs list
+each token's valid utilities, and `tokens/mola.tokens.json` carries the same scopes as Figma
+variable scopes (`com.figma.scopes`) with the CSS variable as code syntax, so a Figma kit built from
+it offers a surface only as a fill.
+
 ## Two themes, one declaration
 
 ```css

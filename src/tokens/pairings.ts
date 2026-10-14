@@ -1,0 +1,102 @@
+import type { ThemeName } from './resolve'
+
+/**
+ * Every foreground/ground pairing the system promises, with the contrast it
+ * owes. 4.5 is text (WCAG 1.4.3). 3 is a UI boundary or graphic mark (1.4.11).
+ *
+ * This list lived inside src/tokens/contract.test.ts, where it was the only
+ * place the knowledge existed, so an agent reading the published docs could
+ * not tell `--ink-muted` on `--anil-soft` (measured, promised) from
+ * `--ink-muted` on `--cloth-deep` (never measured). It is a module now so the
+ * contract test, the agent docs (scripts/export-manifest.ts) and the scope
+ * test (scopes.test.ts) read one list: a pairing can only be published if the
+ * test is measuring it, and it can only be measured between tokens whose
+ * scopes say they can meet that way.
+ *
+ * A pairing with `themes` holds only in those themes. A minimum under 3 is a
+ * measurement the contract records, not a promise, and is never published.
+ */
+export type Pair = [fg: string, bg: string, min: number, themes?: ThemeName[]]
+
+const grounds = ['--cloth', '--cloth-pale', '--cloth-shade']
+const inks = ['--ink', '--ink-2', '--ink-muted']
+const washes = ['--rojo-soft', '--anil-soft', '--verde-soft', '--oro-soft', '--ink-soft']
+
+export const PAIRS: Pair[] = [
+  // The ink ramp on every cloth ground.
+  ...grounds.flatMap((g) => inks.map((i): Pair => [i, g, 4.5])),
+  // The ink ramp on every wash.
+  ...washes.flatMap((w) => inks.map((i): Pair => [i, w, 4.5])),
+  // Layer and status colours as text on the page and on raised cloth.
+  ...['--cloth', '--cloth-pale'].flatMap((g) =>
+    ['--rojo', '--rojo-deep', '--anil', '--verde', '--warn', '--danger', '--success', '--info'].map(
+      (c): Pair => [c, g, 4.5],
+    ),
+  ),
+  // Gold carries text only in the dark theme; on light cloth it is a field.
+  ['--oro', '--cloth', 4.5, ['dark']],
+  ['--oro', '--cloth', 1, ['light']],
+  // Ink on filled layers.
+  ['--on-layer', '--rojo', 4.5],
+  ['--on-layer', '--rojo-deep', 4.5],
+  ['--on-layer', '--anil', 4.5],
+  ['--on-layer', '--verde', 4.5],
+  ['--on-oro', '--oro', 4.5],
+  // The inverse panel.
+  ['--on-ink', '--ink', 4.5],
+  ['--on-ink-muted', '--ink', 4.5],
+  ['--oro', '--ink', 4.5, ['light']],
+  ['--on-ink-accent', '--ink', 4.5],
+  // A tinted label.
+  ['--rojo-on-shade', '--cloth-shade', 4.5],
+  // Swatch keys are graphics (3:1) on every ground, and a flat callout's
+  // swatch sits on its own tone's wash. --oro is absent on purpose: the
+  // accent swatch carries an ink keyline because gold on light cloth fails.
+  ...grounds.flatMap((g) =>
+    ['--ink-muted', '--anil', '--verde', '--warn', '--rojo'].map((c): Pair => [c, g, 3]),
+  ),
+  ['--ink-muted', '--ink-soft', 3],
+  ['--anil', '--anil-soft', 3],
+  ['--verde', '--verde-soft', 3],
+  ['--warn', '--oro-soft', 3],
+  ['--rojo', '--rojo-soft', 3],
+  // The keyline bounds every control: a UI boundary owes 3:1.
+  ...grounds.map((g): Pair => ['--ink', g, 3]),
+]
+
+/** A pairing as an agent reads it from one side: the other token, the ratio, and the themes it holds in. */
+export interface Pairing {
+  token: string
+  min: number
+  themes?: ThemeName[]
+}
+
+/**
+ * The pairings that are promises: a minimum of 3 or more, and where the same
+ * two tokens are promised at 4.5 and at 3 in the same themes, only the
+ * stronger, since it implies the other. This is what the agent docs publish.
+ */
+export function promisedPairs(): Pair[] {
+  const out: Pair[] = []
+  for (const pair of PAIRS) {
+    const [fg, bg, min, themes] = pair
+    if (min < 3) continue
+    const same = out.find(([f, b, , t]) => f === fg && b === bg && String(t) === String(themes))
+    if (same) same[2] = Math.max(same[2], min)
+    else out.push([fg, bg, min, ...(themes ? [themes] : [])] as Pair)
+  }
+  return out
+}
+
+/**
+ * The published pairings of one token, from each side: `on` is the grounds it
+ * reads on as a foreground, `under` is the foregrounds it carries as a ground.
+ */
+export function pairingsOf(name: string): { on: Pairing[]; under: Pairing[] } {
+  const promised = promisedPairs()
+  const side = (mine: 0 | 1): Pairing[] =>
+    promised
+      .filter((pair) => pair[mine] === name)
+      .map(([fg, bg, min, themes]) => ({ token: mine === 0 ? bg : fg, min, ...(themes ? { themes } : {}) }))
+  return { on: side(0), under: side(1) }
+}

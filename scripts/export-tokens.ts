@@ -20,14 +20,30 @@ import { resolve } from 'node:path'
 
 import { toHex } from '../src/tokens/color'
 import { parseRootDeclarations, resolveColor, type ThemeName } from '../src/tokens/resolve'
+import { figmaScopesOf } from '../src/tokens/scopes'
 
 const root = resolve(import.meta.dirname, '..')
 const tokensCss = readFileSync(resolve(root, 'src/styles/tokens.css'), 'utf8')
 const themeCss = readFileSync(resolve(root, 'src/styles/theme.css'), 'utf8')
 const decls = parseRootDeclarations(tokensCss)
 
-type Token = { $type: string; $value: string | number; $description?: string }
+type Token = { $type: string; $value: string | number; $description?: string; $extensions?: Record<string, unknown> }
 type Group = { [key: string]: Token | Group }
+
+/**
+ * What a Figma import needs beyond the value: the VariableScopes the token may
+ * be applied to (from src/tokens/scopes.ts, so a surface cannot be picked as a
+ * text fill in the file any more than in the code) and its code syntax, so
+ * Dev Mode shows `var(--cloth-pale)` rather than a hex. Extensions are the
+ * DTCG's place for tool-specific data; a reader that does not know them
+ * ignores them, so this is additive.
+ */
+function figma(name: string) {
+  return {
+    'com.figma.scopes': figmaScopesOf(name),
+    'com.figma.codeSyntax': { WEB: `var(${name})` },
+  }
+}
 
 function colours(theme: ThemeName): Group {
   const out: Group = {}
@@ -39,7 +55,7 @@ function colours(theme: ThemeName): Group {
         return null
       }
     })()
-    if (rgb) out[name.slice(2)] = { $type: 'color', $value: toHex(rgb) }
+    if (rgb) out[name.slice(2)] = { $type: 'color', $value: toHex(rgb), $extensions: figma(name) }
   }
   return out
 }

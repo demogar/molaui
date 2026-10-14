@@ -8,7 +8,7 @@ Where a page sits, as links back up the path, with the current page as plain tex
 
 Status: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
 
-A named `<nav>` around an ordered list. The current page is text with `aria-current="page"` — a link to where you already are does nothing. Separators are drawn in CSS so a screen reader reads places, not slashes. Long ids are cut in the middle with `middleTruncate`, keeping both ends — the parts people compare.
+A named `<nav>` around an ordered list. The current page is text with `aria-current="page"` — a link to where you already are does nothing. Separators are slanted keyline rules drawn in CSS, with no text, so a screen reader reads places, not slashes. Long ids are cut in the middle with `middleTruncate`, keeping both ends — the parts people compare.
 
 ## Usage
 
@@ -68,7 +68,7 @@ Types: `BreadcrumbItem`, `BreadcrumbProps`
 
 - It is a `<nav>` named “Breadcrumb” holding an ordered list.
 - The last item is plain text with `aria-current="page"`, not a link to where you already are.
-- The slashes are drawn with CSS, so they are not read out.
+- The separators are empty CSS rules, not slash characters, so they are not read out.
 
 ### You handle
 

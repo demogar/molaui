@@ -12,65 +12,67 @@ code the contrast test runs, so a value here cannot disagree with what the test 
 role is the section of the file a token sits in, and its own note where the file gives one.
 
 Copy puts `var(--name)` on the clipboard, which is how a token is used in CSS. In markup, prefer
-the Tailwind utility: `--cloth-pale` is `bg-cloth-pale`, `--ink-muted` is `text-ink-muted`.
+the Tailwind utility its scope allows: `--cloth-pale` is a surface, so `bg-cloth-pale`;
+`--ink-muted` is text, so `text-ink-muted`. [Color](https://demogar.github.io/molaui/?path=/docs/foundations-color--overview)
+lists the scopes.
 
-| Token | Role | Light | Dark |
-| --- | --- | --- | --- |
-| `--cloth` | cloth: the page | `#edeee8` | `#16181c` |
-| `--cloth-pale` | cloth: raised: cards, inputs, sheets | `#f6f7f2` | `#1e2126` |
-| `--cloth-shade` | cloth: one step down from the page | `#e4e7dc` | `#111316` |
-| `--cloth-deep` | cloth: the deepest cloth before a layer takes over | `#d7dbcb` | `#2a2e34` |
-| `--ink` | ink | `#14161a` | `#eceee6` |
-| `--ink-2` | ink | `#3d4147` | `#c4c8bd` |
-| `--ink-muted` | ink | `#5e636a` | `#9a9f97` |
-| `--keyline` | keylines | `#c6cabc` | `#3a3f46` |
-| `--keyline-soft` | keylines | `#dcdfd3` | `#2a2d33` |
-| `--rojo` | the four layers | `#c0272d` | `#f2685c` |
-| `--rojo-deep` | the four layers: hover / pressed: one step further from the ground | `#9e1e24` | `#ff8a7e` |
-| `--anil` | the four layers | `#1b4b8f` | `#86a8ee` |
-| `--verde` | the four layers | `#0b6b4b` | `#4cc493` |
-| `--oro` | the four layers | `#edb01f` | `#f0bc3a` |
-| `--on-layer` | the four layers | `#f6f7f2` | `#1e2126` |
-| `--on-oro` | the four layers | `#14161a` | `#1e2126` |
-| `--danger` | status | `#9e1e24` | `#ff8a7e` |
-| `--success` | status | `#0b6b4b` | `#4cc493` |
-| `--warn` | status | `#8a6410` | `#e0b45a` |
-| `--info` | status | `#1b4b8f` | `#86a8ee` |
-| `--ink-danger` | status | `#9e1e24` | `#ff8a7e` |
-| `--ink-success` | status | `#0b6b4b` | `#4cc493` |
-| `--ink-warn` | status | `#8a6410` | `#e0b45a` |
-| `--ink-info` | status | `#1b4b8f` | `#86a8ee` |
-| `--rojo-soft` | washes | `#f3e0d9` | `#352a2d` |
-| `--anil-soft` | washes | `#dae2e7` | `#292f3b` |
-| `--verde-soft` | washes | `#dce6dc` | `#253232` |
-| `--oro-soft` | washes | `#f5ead0` | `#302f2c` |
-| `--ink-soft` | washes | `#e4e5e1` | `#2a2d31` |
-| `--ink-on-tint` | washes | `#3d4147` | `#c4c8bd` |
-| `--rojo-on-shade` | washes | `#9e1e24` | `#ff8a7e` |
-| `--rojo-rule` | washes | `color-mix(in oklab, var(--rojo) 45%, transparent)` | `color-mix(in oklab, var(--rojo) 45%, transparent)` |
-| `--on-ink` | on an ink panel | `#f6f7f2` | `#1e2126` |
-| `--on-ink-muted` | on an ink panel | `#afb1af` | `#515456` |
-| `--on-ink-accent` | on an ink panel | `#edb01f` | `#7a560a` |
-| `--keyline-on-ink` | on an ink panel | `color-mix(in oklab, var(--cloth-pale) 22%, transparent)` | `color-mix(in oklab, var(--cloth-pale) 22%, transparent)` |
-| `--scrim` | over arbitrary pixels | `color-mix(in oklab, #14161a 74%, transparent)` | `color-mix(in oklab, #14161a 74%, transparent)` |
-| `--on-scrim` | over arbitrary pixels | `#f6f7f2` | `#f6f7f2` |
-| `--on-scrim-muted` | over arbitrary pixels | `color-mix(in oklab, #f6f7f2 78%, transparent)` | `color-mix(in oklab, #f6f7f2 78%, transparent)` |
-| `--backdrop` | over arbitrary pixels | `color-mix(in oklab, var(--cloth) 82%, transparent)` | `color-mix(in oklab, var(--cloth) 82%, transparent)` |
-| `--band` | the cut | `#edb01f` | `#f0bc3a` |
-| `--cut` | the cut | `0 0 0 var(--cut-w) var(--ink)` | `0 0 0 var(--cut-w) var(--ink)` |
-| `--focus-ring` | the cut | `0 0 0 var(--cut-w) var(--ink), 0 0 0 calc(var(--cut-w) + 2px) var(--cloth-pale), 0 0 0 calc(var(--cut-w) + 5px) var(--ink)` | `0 0 0 var(--cut-w) var(--ink), 0 0 0 calc(var(--cut-w) + 2px) var(--cloth-pale), 0 0 0 calc(var(--cut-w) + 5px) var(--ink)` |
-| `--focus-ring-inset` | the cut | `inset 0 0 0 2px var(--ink), inset 0 0 0 3.5px var(--cloth-pale)` | `inset 0 0 0 2px var(--ink), inset 0 0 0 3.5px var(--cloth-pale)` |
-| `--elevation-raised` | elevation | `0 14px 34px -10px light-dark( color-mix(in oklab, #14161a 34%, transparent), color-mix(in oklab, #0b0c0e 80%, transparent) )` | `0 14px 34px -10px light-dark( color-mix(in oklab, #14161a 34%, transparent), color-mix(in oklab, #0b0c0e 80%, transparent) )` |
-| `--cut-w` | elevation | `1.5px` | `1.5px` |
-| `--cut-reveal` | elevation | `5px` | `5px` |
-| `--motion-cut` | motion | `120ms` | `120ms` |
-| `--motion-base` | motion | `220ms` | `220ms` |
-| `--motion-slow` | motion | `420ms` | `420ms` |
-| `--control-h` | density | `36px` | `36px` |
-| `--control-h-sm` | density | `28px` | `28px` |
-| `--control-h-lg` | density | `44px` | `44px` |
-| `--control-px` | density | `14px` | `14px` |
-| `--row-h` | density | `40px` | `40px` |
+| Token | Role | Light | Dark | Use as |
+| --- | --- | --- | --- | --- |
+| `--cloth` | cloth: the page | `#edeee8` | `#16181c` | surface: `bg-cloth` |
+| `--cloth-pale` | cloth: raised: cards, inputs, sheets | `#f6f7f2` | `#1e2126` | surface: `bg-cloth-pale` |
+| `--cloth-shade` | cloth: one step down from the page | `#e4e7dc` | `#111316` | surface: `bg-cloth-shade` |
+| `--cloth-deep` | cloth: the deepest cloth before a layer takes over | `#d7dbcb` | `#2a2e34` | surface: `bg-cloth-deep` |
+| `--ink` | ink | `#14161a` | `#eceee6` | text, edge, surface, mark: `text-ink` `border-ink` `decoration-ink` `bg-ink` `fill-ink` |
+| `--ink-2` | ink | `#3d4147` | `#c4c8bd` | text: `text-ink-2` |
+| `--ink-muted` | ink | `#5e636a` | `#9a9f97` | text, mark, edge: `text-ink-muted` `bg-ink-muted` `fill-ink-muted` `border-ink-muted` `decoration-ink-muted` |
+| `--keyline` | keylines | `#c6cabc` | `#3a3f46` | edge, mark: `border-keyline` `decoration-keyline` `bg-keyline` `fill-keyline` |
+| `--keyline-soft` | keylines | `#dcdfd3` | `#2a2d33` | edge: `border-keyline-soft` `decoration-keyline-soft` |
+| `--rojo` | the four layers | `#c0272d` | `#f2685c` | surface, text, mark, edge: `bg-rojo` `text-rojo` `fill-rojo` `border-rojo` `decoration-rojo` |
+| `--rojo-deep` | the four layers: hover / pressed: one step further from the ground | `#9e1e24` | `#ff8a7e` | surface, text: `bg-rojo-deep` `text-rojo-deep` |
+| `--anil` | the four layers | `#1b4b8f` | `#86a8ee` | surface, text, mark, edge: `bg-anil` `text-anil` `fill-anil` `border-anil` `decoration-anil` |
+| `--verde` | the four layers | `#0b6b4b` | `#4cc493` | surface, text, mark, edge: `bg-verde` `text-verde` `fill-verde` `border-verde` `decoration-verde` |
+| `--oro` | the four layers | `#edb01f` | `#f0bc3a` | surface, mark, edge: `bg-oro` `fill-oro` `border-oro` `decoration-oro` |
+| `--on-layer` | the four layers | `#f6f7f2` | `#1e2126` | text, mark: `text-on-layer` `bg-on-layer` `fill-on-layer` |
+| `--on-oro` | the four layers | `#14161a` | `#1e2126` | text: `text-on-oro` |
+| `--danger` | status | `#9e1e24` | `#ff8a7e` | mark, edge: `bg-danger` `fill-danger` `border-danger` `decoration-danger` |
+| `--success` | status | `#0b6b4b` | `#4cc493` | mark, edge: `bg-success` `fill-success` `border-success` `decoration-success` |
+| `--warn` | status | `#8a6410` | `#e0b45a` | mark, edge: `bg-warn` `fill-warn` `border-warn` `decoration-warn` |
+| `--info` | status | `#1b4b8f` | `#86a8ee` | mark, edge: `bg-info` `fill-info` `border-info` `decoration-info` |
+| `--ink-danger` | status | `#9e1e24` | `#ff8a7e` | text: `text-ink-danger` |
+| `--ink-success` | status | `#0b6b4b` | `#4cc493` | text: `text-ink-success` |
+| `--ink-warn` | status | `#8a6410` | `#e0b45a` | text: `text-ink-warn` |
+| `--ink-info` | status | `#1b4b8f` | `#86a8ee` | text: `text-ink-info` |
+| `--rojo-soft` | washes | `#f3e0d9` | `#352a2d` | surface: `bg-rojo-soft` |
+| `--anil-soft` | washes | `#dae2e7` | `#292f3b` | surface: `bg-anil-soft` |
+| `--verde-soft` | washes | `#dce6dc` | `#253232` | surface: `bg-verde-soft` |
+| `--oro-soft` | washes | `#f5ead0` | `#302f2c` | surface: `bg-oro-soft` |
+| `--ink-soft` | washes | `#e4e5e1` | `#2a2d31` | surface: `bg-ink-soft` |
+| `--ink-on-tint` | washes | `#3d4147` | `#c4c8bd` | text: `text-ink-on-tint` |
+| `--rojo-on-shade` | washes | `#9e1e24` | `#ff8a7e` | text: `text-rojo-on-shade` |
+| `--rojo-rule` | washes | `color-mix(in oklab, var(--rojo) 45%, transparent)` | `color-mix(in oklab, var(--rojo) 45%, transparent)` | edge: `border-rojo-rule` `decoration-rojo-rule` |
+| `--on-ink` | on an ink panel | `#f6f7f2` | `#1e2126` | text, mark: `text-on-ink` `bg-on-ink` `fill-on-ink` |
+| `--on-ink-muted` | on an ink panel | `#afb1af` | `#515456` | text: `text-on-ink-muted` |
+| `--on-ink-accent` | on an ink panel | `#edb01f` | `#7a560a` | text: `text-on-ink-accent` |
+| `--keyline-on-ink` | on an ink panel | `color-mix(in oklab, var(--cloth-pale) 22%, transparent)` | `color-mix(in oklab, var(--cloth-pale) 22%, transparent)` | edge: `border-keyline-on-ink` `decoration-keyline-on-ink` |
+| `--scrim` | over arbitrary pixels | `color-mix(in oklab, #14161a 74%, transparent)` | `color-mix(in oklab, #14161a 74%, transparent)` | overlay: `bg-scrim` |
+| `--on-scrim` | over arbitrary pixels | `#f6f7f2` | `#f6f7f2` | text: `text-on-scrim` |
+| `--on-scrim-muted` | over arbitrary pixels | `color-mix(in oklab, #f6f7f2 78%, transparent)` | `color-mix(in oklab, #f6f7f2 78%, transparent)` | text: `text-on-scrim-muted` |
+| `--backdrop` | over arbitrary pixels | `color-mix(in oklab, var(--cloth) 82%, transparent)` | `color-mix(in oklab, var(--cloth) 82%, transparent)` | overlay: `bg-backdrop` |
+| `--band` | the cut | `#edb01f` | `#f0bc3a` | edge, mark: set with `band-*` |
+| `--cut` | the cut | `0 0 0 var(--cut-w) var(--ink)` | `0 0 0 var(--cut-w) var(--ink)` |  |
+| `--focus-ring` | the cut | `0 0 0 var(--cut-w) var(--ink), 0 0 0 calc(var(--cut-w) + 2px) var(--cloth-pale), 0 0 0 calc(var(--cut-w) + 5px) var(--ink)` | `0 0 0 var(--cut-w) var(--ink), 0 0 0 calc(var(--cut-w) + 2px) var(--cloth-pale), 0 0 0 calc(var(--cut-w) + 5px) var(--ink)` |  |
+| `--focus-ring-inset` | the cut | `inset 0 0 0 2px var(--ink), inset 0 0 0 3.5px var(--cloth-pale)` | `inset 0 0 0 2px var(--ink), inset 0 0 0 3.5px var(--cloth-pale)` |  |
+| `--elevation-raised` | elevation | `0 14px 34px -10px light-dark( color-mix(in oklab, #14161a 34%, transparent), color-mix(in oklab, #0b0c0e 80%, transparent) )` | `0 14px 34px -10px light-dark( color-mix(in oklab, #14161a 34%, transparent), color-mix(in oklab, #0b0c0e 80%, transparent) )` |  |
+| `--cut-w` | elevation | `1.5px` | `1.5px` |  |
+| `--cut-reveal` | elevation | `5px` | `5px` |  |
+| `--motion-cut` | motion | `120ms` | `120ms` |  |
+| `--motion-base` | motion | `220ms` | `220ms` |  |
+| `--motion-slow` | motion | `420ms` | `420ms` |  |
+| `--control-h` | density | `36px` | `36px` |  |
+| `--control-h-sm` | density | `28px` | `28px` |  |
+| `--control-h-lg` | density | `44px` | `44px` |  |
+| `--control-px` | density | `14px` | `14px` |  |
+| `--row-h` | density | `40px` | `40px` |  |
 
 ## Reading the values
 
