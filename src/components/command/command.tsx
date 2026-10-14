@@ -31,6 +31,11 @@ import { Kbd } from '../typography'
  * ranked first. It is deliberately not fuzzy: in an admin tool the commands
  * are known by name, and a fuzzy matcher that offers "Delete agent" for
  * "dagent" is a liability, not a convenience.
+ *
+ * The result count is spoken from a polite status region, debounced, so a
+ * screen-reader user hears "3 results" or "No matches" once they pause rather
+ * than a count per keystroke. The visible count in the footer stays
+ * `aria-hidden`: the status region is its spoken twin.
  */
 
 export interface CommandItem {
@@ -91,6 +96,12 @@ export function useCommandShortcut(onTrigger: () => void, { key = 'k' }: { key?:
   }, [key])
 }
 
+/**
+ * How long typing must pause before the count is announced. Long enough that a
+ * word typed at speed is one announcement, short enough to feel like an answer.
+ */
+const ANNOUNCE_DELAY_MS = 350
+
 export interface CommandPaletteProps {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -120,6 +131,7 @@ export function CommandPalette({
 
   const filtered = React.useMemo(() => filterCommands(groups, query), [groups, query])
   const flat = React.useMemo(() => filtered.flatMap((g) => g.items), [filtered])
+  const hasResults = filtered.length > 0
   const enabledIndexes = React.useMemo(
     () => flat.map((item, i) => (item.disabled ? -1 : i)).filter((i) => i >= 0),
     [flat],
@@ -128,6 +140,16 @@ export function CommandPalette({
   const activeIndex = heldIndex >= 0 ? heldIndex : (enabledIndexes[0] ?? -1)
   const active = flat[activeIndex]
   const optionId = (i: number) => `${uid}-option-${i}`
+
+  // What the status region says. Set after a pause, never on open (an empty
+  // query is not a search), and cleared when the palette closes.
+  const [announcement, setAnnouncement] = React.useState('')
+  const trimmed = query.trim()
+  const spoken = trimmed === '' ? '' : flat.length === 0 ? `No matches for “${trimmed}”.` : `${flat.length} ${flat.length === 1 ? 'result' : 'results'}`
+  React.useEffect(() => {
+    const timer = window.setTimeout(() => setAnnouncement(spoken), ANNOUNCE_DELAY_MS)
+    return () => window.clearTimeout(timer)
+  }, [spoken])
 
   React.useEffect(() => {
     if (activeIndex < 0) return
@@ -171,6 +193,7 @@ export function CommandPalette({
         if (!isOpen) {
           setQuery('')
           setActiveId(null)
+          setAnnouncement('')
         }
       }}
     >
@@ -190,8 +213,8 @@ export function CommandPalette({
             <Search aria-hidden className="size-[18px] shrink-0 text-ink-muted" />
             <input
               role="combobox"
-              aria-expanded="true"
-              aria-controls={listId}
+              aria-expanded={hasResults}
+              aria-controls={hasResults ? listId : undefined}
               aria-autocomplete="list"
               aria-activedescendant={active && !active.disabled ? optionId(activeIndex) : undefined}
               aria-label={label}
@@ -209,9 +232,19 @@ export function CommandPalette({
             />
             <Kbd>esc</Kbd>
           </div>
-          <div ref={listRef} id={listId} role="listbox" aria-label="Commands" className="scroll-cloth min-h-0 flex-1 overflow-y-auto py-2">
-            {filtered.length === 0 ? (
-              <div role="presentation" className="px-4 py-10 text-center text-sm text-ink-2">
+          {/* With nothing to list there is no listbox: an empty one is an
+              ARIA error, and text inside it is presentational. The combobox
+              reports itself collapsed, the sentence is plain text, and the
+              status region below says it. */}
+          <div
+            ref={listRef}
+            id={hasResults ? listId : undefined}
+            role={hasResults ? 'listbox' : undefined}
+            aria-label={hasResults ? 'Commands' : undefined}
+            className="scroll-cloth min-h-0 flex-1 overflow-y-auto py-2"
+          >
+            {!hasResults ? (
+              <div className="px-4 py-10 text-center text-sm text-ink-2">
                 {renderEmpty ? (
                   renderEmpty(query)
                 ) : (
@@ -222,8 +255,11 @@ export function CommandPalette({
                 )}
               </div>
             ) : (
-              filtered.map((group) => {
-                const headingId = `${uid}-group-${group.heading}`
+              filtered.map((group, groupIndex) => {
+                // From the position, never the heading text: an id is one
+                // token, so a heading with a space ("Go to") split into two
+                // unresolvable references and left the group nameless.
+                const headingId = `${uid}-group-${groupIndex}`
                 return (
                   <div key={group.heading} role="group" aria-labelledby={headingId} className="pb-1">
                     <div id={headingId} role="presentation" className="px-4 pt-2.5 pb-1.5 rotulo text-ink-muted">
@@ -280,6 +316,11 @@ export function CommandPalette({
                 )
               })
             )}
+          </div>
+          {/* Mounted with the popup and filled later: a region that mounts
+              with its text is never announced. */}
+          <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+            {announcement}
           </div>
           <div aria-hidden className="flex items-center gap-4 bg-cloth-shade px-4 py-2 text-xs text-ink-muted shadow-[inset_0_1px_0_var(--keyline)]">
             <span className="flex items-center gap-1.5">

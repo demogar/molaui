@@ -13200,9 +13200,10 @@
         ],
         "handles": [
           "It is a modal Base UI Dialog, titled by `label`, with focus held in the search input.",
-          "The input is a `combobox` controlling a `listbox`; the highlight is conveyed with `aria-activedescendant`, so the caret never leaves the input.",
+          "The input is a `combobox` controlling a `listbox`, and reports itself collapsed, with no empty listbox, when nothing matches; the highlight is conveyed with `aria-activedescendant`, so the caret never leaves the input.",
           "Commands sit in `group`s named by their headings, and disabled ones carry `aria-disabled`.",
-          "Icons and the key hints in the footer are hidden from assistive technology."
+          "Once typing pauses, a polite status says the result count, or “No matches for …” when nothing matches; nothing is announced for the empty query.",
+          "Icons and the key hints in the footer are hidden from assistive technology; the status region speaks the count instead."
         ],
         "you": [
           "Call `useCommandShortcut` to bind ⌘K and Ctrl-K; the shortcuts shown on items are display only.",
