@@ -177,8 +177,10 @@ Mola UI documents itself for coding agents as well as for people, from the same 
   just wrote and gets back each place it breaks a design rule (a border on a control, a radius, a
   faded disabled state, a hex or a colour that is not a token, `pl-`/`left-`, a spinner, a
   hand-rolled dialog, another UI library, an export that does not exist), with the line, the rule
-  and the fix. The check is deterministic and runs over the library's own source in CI, so it
-  cannot drift from what the components do.
+  and the fix. The check is deterministic, and CI runs it over the library's own source, every
+  story and the docs pages, so it cannot drift from what the components do and the examples you
+  copy meet the same bar. A deliberate exception takes `// check_code: allow rule N — the reason`;
+  without a reason it is an error.
 
 ### Connect the MCP server
 

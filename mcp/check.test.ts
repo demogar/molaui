@@ -204,6 +204,62 @@ describe('rule 12: use the components', () => {
   })
 })
 
+describe('composite roles anywhere', () => {
+  it('flags a composite role on a layout component and a hand-built grid', () => {
+    expect(only('<Inline role="toolbar" aria-label="Run controls"><Button>Run</Button></Inline>', 12)[0]?.fix).toContain('`Toolbar`')
+    expect(only('<div role="grid" aria-label="Runs">x</div>', 12)[0]?.fix).toContain('`DataTable`')
+    expect(only('<div role="tablist"><button role="tab">A</button></div>', 12)).toHaveLength(2)
+  })
+
+  it('points a Base UI import Mola re-exports at the package', () => {
+    expect(only("import { DirectionProvider } from '@base-ui/react/direction-provider'", 12)[0]?.fix).toBe('Import `DirectionProvider` from @demogar/mola-ui.')
+  })
+})
+
+describe('check_code: allow', () => {
+  const dont = (allow: string) => `export const Dont = () => (\n  <>\n    ${allow}\n    <div className="pl-4">x</div>\n  </>\n)`
+
+  it('honours an allow with a rule and a reason, on its own line and the next', () => {
+    expect(check(dont('{/* check_code: allow rule 7 — the "don’t" half of a do/don’t pair */}'))).toEqual([])
+    expect(check('const x = cn(\'pl-4\') // check_code: allow rule 7 - shows the physical class on purpose')).toEqual([])
+  })
+
+  it('rejects a bare allow: it is an error and excuses nothing', () => {
+    for (const bare of ['{/* check_code: allow rule 7 */}', '{/* check_code: allow */}', '{/* check_code: allow rule 7 — ok */}']) {
+      const found = check(dont(bare))
+      expect(found.find((f) => f.line === 4)).toMatchObject({ rule: 7, severity: 'error' })
+      expect(found.find((f) => f.line === 3)).toMatchObject({ severity: 'error', message: expect.stringContaining('without a rule number and a reason') })
+    }
+  })
+
+  it('is not fooled by the syntax quoted in docs', () => {
+    expect(check('Write `// check_code: allow rule N — the reason` above it.', 'page.mdx')).toEqual([])
+  })
+
+  it('excuses only the rule it names, and warns when it excuses nothing', () => {
+    expect(rules(dont('{/* check_code: allow rule 2 — wrong rule named for this line */}'))).toEqual(['2 warn', '7 error'])
+  })
+})
+
+describe('MDX', () => {
+  it('checks live JSX, and skips prose, inline code and fenced blocks', () => {
+    const page = [
+      "import { Meta } from '@storybook/addon-docs/blocks'",
+      '',
+      "Don't write `<div role=\"dialog\">` or `bg-[#fff]` by hand.",
+      '',
+      '```tsx',
+      '<button className="border rounded-lg">Bad</button>',
+      '```',
+      '',
+      '<Specimen>',
+      '  <div className="grid text-right">1,204</div>',
+      '</Specimen>',
+    ].join('\n')
+    expect(check(page, 'page.mdx').map((f) => `${f.line} ${f.rule}`)).toEqual(['10 7'])
+  })
+})
+
 describe('the scanner', () => {
   it('is not thrown by apostrophes in JSX text, generics, regex literals or comparisons', () => {
     const code = [

@@ -147,6 +147,7 @@ describe('mola-ui MCP server', () => {
     expect(text).toContain('- **Line 4**, rule 1: `border` `border-ink` on <Button>')
     expect(text).toContain('Fix: Use `ps-4`.')
     expect(text).toContain('## Rules cited')
+    expect(text).toContain('`// check_code: allow rule N — the reason`')
     for (const n of [1, 2, 4, 5, 7]) expect(text).toContain(`${n}. ${data.manifest.rules[n - 1]!.rule}`)
   })
 

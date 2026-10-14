@@ -191,6 +191,11 @@ vocabulary, where plain `tailwind-merge` would drop a token colour class.
   `filename` so CSS is read as CSS) and reports no errors. Fix each warning too, or say why it
   stays. Its rule numbers are `get_rules`' numbering, not this file's. It cannot judge state in
   glyph, word and colour, label wording or approval before writes: check those yourself.
+  Code that breaks a rule on purpose (the "don't" half of an example) takes
+  `// check_code: allow rule N — the reason` on the line above it, or
+  `{/* check_code: allow rule N — the reason */}` in JSX. The reason is required: an allow without
+  one is reported as an error and excuses nothing, and an allow that excuses nothing is a warning.
+  Never add one to get a clean result.
 - Patterns for whole screens are in Storybook under Patterns: Agent hand-off, Confirmation,
   Empty states, Filtered table, List and detail, Settings page. Start from them rather than from a
   blank file; each says what it is built from and where its empty, loading, error and

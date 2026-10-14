@@ -35,7 +35,7 @@ import type { Data } from './data'
 export type Severity = 'error' | 'warn'
 
 export interface Finding {
-  /** The rule's number in `get_rules` (src/docs/usage/rules.ts), 1-based. */
+  /** The rule's number in `get_rules` (src/docs/usage/rules.ts), 1-based; 0 for a malformed `check_code: allow`. */
   rule: number
   severity: Severity
   line: number
@@ -109,7 +109,7 @@ interface Scan {
 const JSX_AFTER_WORD = new Set(['return', 'yield', 'await', 'case', 'default', 'else', 'do', 'in', 'of'])
 const REGEX_AFTER_WORD = new Set([...JSX_AFTER_WORD, 'typeof', 'void', 'delete', 'instanceof', 'new', 'throw'])
 
-function scan(src: string): Scan {
+function scan(src: string, mdx = false): Scan {
   const n = src.length
   const strings: Str[] = []
   const elements: Element[] = []
@@ -340,7 +340,10 @@ function scan(src: string): Scan {
     }
   }
 
-  while (i < n) code(null)
+  if (mdx) {
+    // Markdown is the children of an implicit fragment; a stray `</…>` closes nothing.
+    while (i < n) children()
+  } else while (i < n) code(null)
 
   const chars = src.split('')
   for (const [a, b] of blanks) for (let k = a; k < b; k++) if (chars[k] !== '\n') chars[k] = ' '
@@ -456,6 +459,8 @@ const COMPOSITE_ROLES: Record<string, string[]> = {
   switch: ['Switch'],
   radiogroup: ['RadioGroup'],
   toolbar: ['Toolbar'],
+  grid: ['DataTable', 'Calendar'],
+  gridcell: ['DataTable', 'Calendar'],
 }
 
 /** Native elements with a Mola component, when they are styled by hand. Keyed by tag, or tag:type for inputs. */
@@ -511,11 +516,74 @@ const tick = (s: string) => `\`${s}\``
 const list = (names: string[]) => names.map(tick).join(' or ')
 
 export interface CheckOptions {
-  /** A file name, for the language: `.css` is checked as CSS, anything else as TSX/JSX/HTML. */
+  /**
+   * A file name, for the language: `.css` is checked as CSS, `.mdx` as
+   * Markdown with live JSX (fenced code blocks are quotations and are
+   * skipped), anything else as TSX/JSX/HTML.
+   */
   filename?: string
 }
 
+/**
+ * An inline exception, for code that breaks a rule on purpose (a "don't"
+ * example in a story):
+ *
+ *   // check_code: allow rule 7 — measured viewport pixels, physical in either direction
+ *   {/* check_code: allow rule 12 — a static specimen of the focus band *\/}
+ *
+ * It covers its own line and the next one. The reason is required: an allow
+ * without one, or one that names no rule, is itself an error and suppresses
+ * nothing, and an allow that matches no finding is a warning, so exceptions
+ * stay few, explained and current.
+ */
+// Not when quoted: docs that show the syntax in `code` or a string are not directives.
+const DIRECTIVE = /(?<![`'"])(?:\/\/|\/\*)\s*check_code:\s*allow\b([^\n]*)/g
+const DIRECTIVE_BODY = /^\s+rules?\s+(\d+(?:\s*,\s*\d+)*)\s*(?:—|–|--|-|:)\s*(.*?)\s*(?:\*\/\s*\}?\s*)?$/
+/** A reason is a sentence fragment, not a token: at least three words. */
+const REASON = /\S+\s+\S+\s+\S+/
+
 export function checkCode(source: string, ctx: CheckContext, options: CheckOptions = {}): Finding[] {
+  const findings = findAll(source, ctx, options)
+  const lines = source.split('\n')
+  const allows: { line: number; rules: number[]; used: boolean }[] = []
+  const problems: Finding[] = []
+  for (const m of source.matchAll(DIRECTIVE)) {
+    const line = source.slice(0, m.index).split('\n').length
+    const excerpt = lines[line - 1]!.trim()
+    const body = DIRECTIVE_BODY.exec(m[1] ?? '')
+    const rules = body ? body[1]!.split(',').map((n) => Number(n.trim())) : []
+    if (!body || !REASON.test(body[2] ?? '') || rules.some((n) => n < 1 || n > 14)) {
+      problems.push({
+        rule: rules[0] && rules[0] <= 14 ? rules[0] : 0,
+        severity: 'error',
+        line,
+        excerpt,
+        message: 'A `check_code: allow` without a rule number and a reason is ignored: an exception has to say why.',
+        fix: 'Write `// check_code: allow rule N — why this breaks the rule on purpose`, or fix the finding instead.',
+      })
+      continue
+    }
+    allows.push({ line, rules, used: false })
+  }
+  const kept = findings.filter((f) => {
+    const allow = allows.find((a) => (f.line === a.line || f.line === a.line + 1) && a.rules.includes(f.rule))
+    if (allow) allow.used = true
+    return !allow
+  })
+  for (const a of allows.filter((x) => !x.used)) {
+    problems.push({
+      rule: a.rules[0]!,
+      severity: 'warn',
+      line: a.line,
+      excerpt: lines[a.line - 1]!.trim(),
+      message: `\`check_code: allow rule ${a.rules.join(', ')}\` matches no finding on this line or the next.`,
+      fix: 'Remove it, or move it to the line just above the code it excuses.',
+    })
+  }
+  return sorted([...kept, ...problems])
+}
+
+function findAll(source: string, ctx: CheckContext, options: CheckOptions = {}): Finding[] {
   const lines = source.split('\n')
   const starts: number[] = [0]
   for (let k = 0; k < source.length; k++) if (source[k] === '\n') starts.push(k + 1)
@@ -547,7 +615,11 @@ export function checkCode(source: string, ctx: CheckContext, options: CheckOptio
     return sorted(findings)
   }
 
-  const { strings, elements, mask } = scan(source)
+  // MDX: the prose is JSX children; fenced blocks and inline code spans quote code rather than render it.
+  const mdx = /\.mdx$/i.test(options.filename ?? '')
+  const blankOut = (s: string) => s.replace(/[^\n]/g, ' ')
+  const scanned = mdx ? source.replace(/^(```|~~~)[^\n]*\n[\s\S]*?^\1[^\n]*$/gm, blankOut).replace(/`[^`\n]+`/g, blankOut) : source
+  const { strings, elements, mask } = scan(scanned, mdx)
 
   /* Which strings are class lists, and on which element. */
   const classOf = new Map<Str, Element | null>()
@@ -745,14 +817,18 @@ export function checkCode(source: string, ctx: CheckContext, options: CheckOptio
     else once.set(k, { pos, count: 1, severity, message, fix })
   }
   for (const el of elements) {
+    // Rule 12: behaviour a component owns. A composite role on a layout
+    // component (`<Inline role="toolbar">`) is as hand-rolled as on a div; a
+    // component whose own `role` prop means something else (`Message`'s
+    // author) is not an ARIA role.
+    const role = ctx.exports.get(el.name)?.props.has('role') ? undefined : literal(el, 'role')
+    const owner = el.name === 'dialog' ? ['Dialog', 'AlertDialog'] : role ? COMPOSITE_ROLES[role] : undefined
+    if (owner && known(owner).length) {
+      const what = el.name === 'dialog' ? '`<dialog>`' : `\`role="${role}"\``
+      group(what, el.start, 'error', `${what} re-implements behaviour a Mola component owns (focus, keyboard, dismissal).`, `Use ${list(known(owner))} from ${ctx.packageName}.`)
+    }
     if (isIntrinsic(el)) {
-      // Rule 12: behaviour a component owns.
-      const role = literal(el, 'role')
-      const owner = el.name === 'dialog' ? ['Dialog', 'AlertDialog'] : role ? COMPOSITE_ROLES[role] : undefined
-      if (owner && known(owner).length) {
-        const what = el.name === 'dialog' ? '`<dialog>`' : `\`role="${role}"\``
-        group(what, el.start, 'error', `${what} re-implements behaviour a Mola component owns (focus, keyboard, dismissal).`, `Use ${list(known(owner))} from ${ctx.packageName}.`)
-      } else if (attr(el, 'aria-modal')) {
+      if (!owner && attr(el, 'aria-modal')) {
         report(el.start, 12, 'error', '`aria-modal` on a hand-built element re-implements a dialog (focus trap, dismissal).', `Use ${list(known(['Dialog', 'AlertDialog', 'Drawer']))}.`)
       }
       // A native control styled by hand, where a component exists: a suggestion.
@@ -817,6 +893,9 @@ export function checkCode(source: string, ctx: CheckContext, options: CheckOptio
       }
     } else if (OTHER_UI.test(spec)) {
       report(at, 12, 'error', `\`${spec}\` is another UI library: its components bring another look and their own behaviour beside Mola's.`, 'Use the Mola component for the job: search or list_components finds it.')
+    } else if (/^@base-ui(?:-components)?\/react(?:\/|$)/.test(spec) && names.length && names.every((x) => ctx.exports.has(x))) {
+      // DirectionProvider and friends: re-exported by the package, so the import has a home there.
+      report(at, 12, 'warn', `${names.map(tick).join(', ')} from \`${spec}\`: ${ctx.packageName} exports ${names.length > 1 ? 'these' : 'it'} itself.`, `Import ${names.map(tick).join(', ')} from ${ctx.packageName}.`)
     } else if (/^@base-ui(?:-components)?\/react(?:\/|$)/.test(spec)) {
       report(at, 12, 'warn', `\`${spec}\` directly: Mola's components are built on Base UI and already style and wire it.`, 'Use the Mola component, and reach for Base UI only for a behaviour Mola has no component for.')
     } else if (/^@\/components\/ui(?:\/|$)/.test(spec)) {
@@ -895,7 +974,7 @@ function checkCss(source: string, ctx: CheckContext, report: (pos: number, rule:
     }
     for (const a of body.matchAll(/@apply\s+([^;]+)/g)) {
       const at = bodyAt + a.index + a[0].length - a[1]!.length
-      const sub = checkCode(`<x className="${a[1]}" />`, ctx)
+      const sub = findAll(`<x className="${a[1]}" />`, ctx)
       for (const f of sub) report(at, f.rule, f.severity, f.message, f.fix)
     }
   }

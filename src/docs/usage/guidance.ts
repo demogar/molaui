@@ -1443,7 +1443,7 @@ export const USAGE: Record<string, Usage> = {
     summary: 'A short label on hover or focus, with an optional keyboard shortcut.',
     use: [
       'Naming an icon-only button, and its shortcut.',
-      'A row of icon buttons inside TooltipProvider, so each next label appears without a delay.',
+      'A `Toolbar` of icon buttons inside TooltipProvider, so each next label appears without a delay and the arrow keys move between them.',
     ],
     avoid: [
       { when: 'Information people need to finish the task; a tooltip does not exist on touch.', use: 'Components/Overlays/Popover' },

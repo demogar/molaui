@@ -220,9 +220,9 @@ export function checkMarkdown(findings: Finding[], data: Data, lines: number) {
   const section = (severity: Finding['severity'], title: string, note: string) => {
     const items = findings.filter((f) => f.severity === severity)
     if (!items.length) return []
-    return [`## ${title}`, '', note, '', ...items.map((f) => `- **Line ${f.line}**, rule ${f.rule}: ${f.message}\n  ${span(f.excerpt)}\n  Fix: ${f.fix}`), '']
+    return [`## ${title}`, '', note, '', ...items.map((f) => `- **Line ${f.line}**, ${f.rule ? `rule ${f.rule}` : 'check_code directive'}: ${f.message}\n  ${span(f.excerpt)}\n  Fix: ${f.fix}`), '']
   }
-  const cited = [...new Set(findings.map((f) => f.rule))].sort((a, b) => a - b)
+  const cited = [...new Set(findings.map((f) => f.rule))].filter(Boolean).sort((a, b) => a - b)
   return join([
     `# ${count(errors, 'error')}, ${count(warnings, 'warning')}`,
     '',
@@ -233,5 +233,7 @@ export function checkMarkdown(findings: Finding[], data: Data, lines: number) {
     ...cited.map((n) => `${n}. ${rules[n - 1]?.rule ?? ''}`),
     '',
     unchecked,
+    '',
+    'To keep code that breaks a rule on purpose (a "don’t" example), put `// check_code: allow rule N — the reason` on the line above it, or `{/* check_code: allow rule N — the reason */}` in JSX. The reason is required: an allow without one is an error and excuses nothing.',
   ])
 }

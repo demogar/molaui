@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { CircleAlert, CircleCheck, LoaderCircle } from 'lucide-react'
 
+import { RunStatusGlyph } from '../ai/run-status'
 import { Chip, ChipGroup } from './chip'
 
 const meta = {
@@ -27,19 +27,27 @@ export const StatusFilters: Story = {
   render: () => (
     <ChipGroup legend="Status">
       <Chip defaultChecked count={1284}>
-        <CircleCheck aria-hidden /> Succeeded
+        <RunStatusGlyph status="succeeded" /> Succeeded
       </Chip>
       <Chip count={37}>
-        <LoaderCircle aria-hidden /> Running
+        <RunStatusGlyph status="running" /> Running
       </Chip>
       <Chip defaultChecked count={12}>
-        <CircleAlert aria-hidden /> Failed
+        <RunStatusGlyph status="failed" /> Failed
       </Chip>
       <Chip disabled count={0}>
-        Cancelled
+        <RunStatusGlyph status="cancelled" /> Cancelled
       </Chip>
     </ChipGroup>
   ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A status filter wears the same glyph as the status it filters: `RunStatusGlyph`, so "Running" is the relleno working state that `RunStatus` shows in the table below it, not a spinner icon.',
+      },
+    },
+  },
 }
 
 export const SingleChoice: Story = {
