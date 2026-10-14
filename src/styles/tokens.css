@@ -182,7 +182,10 @@
 
     /* ── over arbitrary pixels ────────────────────────────────────────
      * A photograph, a chart, a video frame: the one ground this system cannot
-     * know. The scrim is sized for the worst case, a pure-white image. */
+     * know. The scrim is sized for the worst case, a pure-white image:
+     *   --on-scrim 7.20   --on-scrim-muted 5.15   over white, either theme
+     * (OVERLAID in src/tokens/pairings.ts: composited over white, black and
+     * every cloth, and measured by the contract test). */
     --scrim: color-mix(in oklab, #14161a 74%, transparent);
     --on-scrim: #f6f7f2;
     --on-scrim-muted: color-mix(in oklab, #f6f7f2 78%, transparent);

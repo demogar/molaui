@@ -3,9 +3,9 @@ import { join, relative, resolve } from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
-import { contrast } from './color'
-import { PAIRS } from './pairings'
-import { parseRootDeclarations, token, type ThemeName } from './resolve'
+import { contrast, over, type RGB } from './color'
+import { OVERLAID, PAIRS } from './pairings'
+import { parseRootDeclarations, resolveLayer, token, type ThemeName } from './resolve'
 
 /**
  * The contrast contract.
@@ -35,6 +35,21 @@ describe('contrast contract', () => {
       })
     })
   }
+
+  describe('over a translucent overlay', () => {
+    const PIXELS = { white: [255, 255, 255], black: [0, 0, 0] } as const satisfies Record<string, RGB>
+    const cases = OVERLAID.flatMap(({ fg, overlay, under, min }) =>
+      THEMES.flatMap((theme) => under.map((u) => [fg, overlay, u, theme, min] as const)),
+    )
+    it.each(cases)('%s on %s over %s (%s) ≥ %s', (fg, overlay, under, theme, min) => {
+      const beneath = under in PIXELS ? PIXELS[under as keyof typeof PIXELS] : token(under, theme, decls)
+      const o = resolveLayer(overlay, theme, decls)
+      const ground = over(o.rgb, o.alpha, beneath)
+      const f = resolveLayer(fg, theme, decls)
+      const ratio = contrast(over(f.rgb, f.alpha, ground), ground)
+      expect(ratio, `${fg} on ${overlay} over ${under} (${theme}) = ${ratio.toFixed(2)}`).toBeGreaterThanOrEqual(min)
+    })
+  })
 
   it('keeps --keyline decorative: under 3:1, so it can never be mistaken for a control edge', () => {
     for (const theme of THEMES) {

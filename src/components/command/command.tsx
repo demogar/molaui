@@ -247,6 +247,8 @@ export function CommandPalette({
                             'font-ui text-sm text-ink [&_svg]:size-4 [&_svg]:shrink-0',
                             'aria-selected:bg-ink aria-selected:text-on-ink aria-selected:forced-selected',
                             'aria-disabled:cursor-default aria-disabled:text-ink-muted',
+                            // Selected and disabled at once: muted ink on the ink fill is 2.99:1. See Menu.
+                            'aria-disabled:aria-selected:text-on-ink-muted',
                           )}
                         >
                           {item.icon ? (

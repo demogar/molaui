@@ -190,14 +190,21 @@ Every foreground and ground the system promises, with the contrast it owes: 4.5 
 | `--oro` | `--ink` | 4.5 | light |
 | `--on-ink-accent` | `--ink` | 4.5 | both |
 | `--rojo-on-shade` | `--cloth-shade` | 4.5 | both |
+| `--ink` | `--cloth-deep` | 4.5 | both |
+| `--ink-2` | `--cloth-deep` | 4.5 | both |
+| `--anil` | `--anil-soft` | 4.5 | both |
+| `--verde` | `--verde-soft` | 4.5 | both |
+| `--rojo-deep` | `--rojo-soft` | 4.5 | both |
+| `--ink-success` | `--ink-soft` | 4.5 | both |
+| `--ink-danger` | `--ink-soft` | 4.5 | both |
 | `--anil` | `--cloth-shade` | 3 | both |
 | `--verde` | `--cloth-shade` | 3 | both |
 | `--warn` | `--cloth-shade` | 3 | both |
 | `--rojo` | `--cloth-shade` | 3 | both |
-| `--anil` | `--anil-soft` | 3 | both |
-| `--verde` | `--verde-soft` | 3 | both |
 | `--warn` | `--oro-soft` | 3 | both |
 | `--rojo` | `--rojo-soft` | 3 | both |
+| `--on-scrim` | `--scrim` over any image (measured over white, black and every cloth) | 4.5 | both |
+| `--on-scrim-muted` | `--scrim` over any image (measured over white, black and every cloth) | 4.5 | both |
 
 ## Density
 

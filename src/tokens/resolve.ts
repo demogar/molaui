@@ -102,6 +102,27 @@ export function resolveColor(
   return null
 }
 
+/**
+ * A token that may be translucent, as a colour and an alpha: what
+ * `resolveColor` refuses, because it cannot know the ground. Only the one
+ * translucent form tokens.css writes is understood,
+ * `color-mix(in oklab, <colour> p%, transparent)`, which the browser paints as
+ * the colour at p% alpha (the mix is premultiplied, so the hue is untouched).
+ * The caller composites it with `over()` onto a ground it chooses.
+ */
+export function resolveLayer(name: string, theme: ThemeName, decls: Map<string, string>): { rgb: RGB; alpha: number } {
+  const raw = decls.get(name)
+  if (!raw) throw new Error(`Unknown token ${name}`)
+  const opaque = resolveColor(raw, theme, decls)
+  if (opaque) return { rgb: opaque, alpha: 1 }
+  const mix = inner(raw.trim(), 'color-mix')
+  const [space, a, b] = mix === null ? [] : splitArgs(mix)
+  const m = a ? /^(.*)\s+([\d.]+)%$/.exec(a) : null
+  const rgb = m ? resolveColor(m[1]!, theme, decls) : null
+  if (space !== 'in oklab' || b !== 'transparent' || !m || !rgb) throw new Error(`Token ${name} is not a colour mixed toward transparent`)
+  return { rgb, alpha: Number(m[2]) / 100 }
+}
+
 /** Resolve a token by name, in one theme. */
 export function token(name: string, theme: ThemeName, decls: Map<string, string>): RGB {
   const raw = decls.get(name)
