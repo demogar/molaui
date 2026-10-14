@@ -69,6 +69,32 @@ describe('CommandPalette', () => {
     await userEvent.type(input, 'zzz')
     expect(screen.queryAllByRole('option')).toHaveLength(0)
     expect(screen.getByText(/No matches for/)).toBeInTheDocument()
+    // No empty listbox: the combobox reports itself collapsed instead.
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
+    expect(input).toHaveAttribute('aria-expanded', 'false')
+    expect(input).not.toHaveAttribute('aria-controls')
+  })
+
+  it('names each group by its heading, including headings with spaces', async () => {
+    render(<Harness onSelect={() => {}} />)
+    await screen.findByRole('combobox')
+    expect(screen.getByRole('group', { name: 'Actions' })).toBeInTheDocument()
+    expect(screen.getByRole('group', { name: 'Go to' })).toBeInTheDocument()
+  })
+
+  it('announces the result count, and no matches, in a polite status after typing pauses', async () => {
+    render(<Harness onSelect={() => {}} />)
+    const input = await screen.findByRole('combobox')
+    const status = screen.getByRole('status')
+    expect(status).toHaveAttribute('aria-live', 'polite')
+    // Nothing is said on open: an empty query is not a search.
+    expect(status).toHaveTextContent(/^$/)
+    await userEvent.type(input, 't')
+    await waitFor(() => expect(status).toHaveTextContent('3 results'))
+    await userEvent.type(input, 'heme')
+    await waitFor(() => expect(status).toHaveTextContent(/^1 result$/))
+    await userEvent.type(input, 'zzz')
+    await waitFor(() => expect(status).toHaveTextContent('No matches for “themezzz”.'))
   })
 })
 
