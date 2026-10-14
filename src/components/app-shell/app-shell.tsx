@@ -116,7 +116,7 @@ export function AppShell({
             className={cn(
               'hidden shrink-0 flex-col overflow-hidden bg-cloth-pale nav:flex',
               'shadow-[inset_-1px_0_0_var(--keyline)] rtl:shadow-[inset_1px_0_0_var(--keyline)]',
-              'w-60 transition-[width] duration-(--motion-base) ease-cut data-collapsed:w-14',
+              'w-60 transition-[width] duration-(--motion-base) data-collapsed:w-14',
             )}
           >
             <SidebarContext.Provider value={{ collapsed, onNavigate: () => {} }}>{sidebar}</SidebarContext.Provider>
@@ -131,14 +131,14 @@ export function AppShell({
             <DialogPrimitive.Backdrop
               className={cn(
                 'fixed inset-0 z-40 bg-backdrop nav:hidden',
-                'transition-opacity duration-(--motion-base) ease-cut data-ending-style:opacity-0 data-starting-style:opacity-0',
+                'transition-opacity duration-(--motion-base) data-ending-style:opacity-0 data-starting-style:opacity-0',
               )}
             />
             <DialogPrimitive.Popup
               className={cn(
                 'fixed inset-y-0 inset-s-0 z-50 flex w-72 max-w-[85vw] flex-col bg-cloth-pale text-ink nav:hidden',
                 'shadow-floating',
-                'transition-transform duration-(--motion-base) ease-cut',
+                'transition-transform duration-(--motion-base)',
                 'data-ending-style:-translate-x-full data-starting-style:-translate-x-full',
                 'rtl:data-ending-style:translate-x-full rtl:data-starting-style:translate-x-full',
               )}

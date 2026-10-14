@@ -182,7 +182,7 @@ export function RunsAdminScreen() {
             setOpenRun(run)
             setDrawerOpen(true)
           }}
-          className="literal cursor-pointer text-ink underline decoration-keyline underline-offset-4 transition-colors duration-(--motion-cut) hover:decoration-ink"
+          className="literal cursor-pointer text-ink underline decoration-keyline underline-offset-4 transition-colors hover:decoration-ink"
         >
           {run.id}
         </button>

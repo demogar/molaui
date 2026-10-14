@@ -74,7 +74,7 @@ export function Tooltip({
             className={cn(
               'on-ink flex max-w-xs items-center gap-2 rounded-none px-2 py-1.5',
               'font-ui text-xs leading-snug font-medium',
-              'origin-(--transform-origin) transition-[opacity,transform] duration-(--motion-cut) ease-cut',
+              'origin-(--transform-origin) transition-[opacity,transform]',
               'data-starting-style:opacity-0 data-starting-style:scale-[0.97]',
               'data-ending-style:opacity-0',
               // Moving from one trigger to the next inside a provider swaps

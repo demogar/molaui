@@ -339,7 +339,7 @@ export function DateRangePicker({
                       onClick={() => commit(range)}
                       className={cn(
                         'flex h-(--control-h-sm) items-center gap-2 pe-3 ps-2 text-start font-ui text-sm text-ink whitespace-nowrap',
-                        'transition-colors duration-(--motion-cut) hover:bg-ink-soft',
+                        'transition-colors hover:bg-ink-soft',
                         'focus-visible:outline-none focus-visible:shadow-[var(--focus-ring)]',
                         'aria-pressed:bg-ink-soft aria-pressed:font-semibold',
                         'disabled:cursor-not-allowed disabled:text-ink-muted disabled:line-through disabled:hover:bg-transparent',

@@ -25,7 +25,7 @@ export const floatingSurface = [
   'bg-cloth-pale text-ink rounded-none outline-none',
   'shadow-floating',
   'origin-(--transform-origin)',
-  'transition-[opacity,transform] duration-(--motion-base) ease-cut',
+  'transition-[opacity,transform] duration-(--motion-base)',
   'data-starting-style:opacity-0 data-starting-style:scale-[0.98]',
   'data-ending-style:opacity-0 data-ending-style:scale-[0.98] data-ending-style:duration-(--motion-cut)',
 ] as const

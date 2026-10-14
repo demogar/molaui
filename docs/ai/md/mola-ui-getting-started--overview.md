@@ -135,6 +135,13 @@ JavaScript: without it Tailwind never sees the classes the components use, and t
 Every token is then a utility in your app too: `bg-cloth-pale`, `text-ink-muted`, `shadow-cut`,
 `relleno`, `cut-band band-rojo`.
 
+The import also closes Tailwind's own scales where Mola has an answer: the default colour palette,
+radii, shadows, blurs, easings, animations, line heights, letter spacing, font families and the
+container steps above `5xl` stop compiling, so `bg-red-500` or `shadow-lg` in your app produces no
+CSS. That is the point of adopting the system: one scale, not two. Spacing, font weights, the
+`text-*` sizes and the `sm:` … `2xl:` breakpoints stay as Tailwind has them. An app that needs the
+defaults back can import only `@demogar/mola-ui/tokens.css` and bridge the names it wants.
+
 ## React Server Components
 
 Components can be rendered from a server component (the Next.js App Router, for example). Every
@@ -233,8 +240,9 @@ into the bin, so it is not a dependency of the library and your app's bundle doe
 
 ## Figma
 
-`tokens/mola.tokens.json` is the same palette in the [W3C Design Tokens](https://www.designtokens.org/)
-format, both themes fully resolved — including every OKLab `color-mix()`. Load it with Tokens
+`tokens/mola.tokens.json` is the same token set in the [W3C Design Tokens](https://www.designtokens.org/tr/2025.10/format/)
+format (2025.10), both themes fully resolved — including every OKLab `color-mix()` and the
+translucent colours, with their alpha. Load it with Tokens
 Studio to get Figma variables that match the browser to the hex. It is generated from
 `tokens.css` (`npm run tokens`) and CI fails if it is stale, so the design file cannot drift from
 the code.

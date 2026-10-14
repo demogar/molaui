@@ -292,7 +292,7 @@ export function Calendar({
                     className={cn(
                       'relative size-(--control-h) p-0 text-center align-middle font-ui text-sm tabular-nums text-ink',
                       'cursor-default outline-none select-none',
-                      'transition-[background-color,color] duration-(--motion-cut) ease-cut',
+                      'transition-[background-color,color]',
                       'hover:bg-ink-soft',
                       isToday && 'font-bold',
                       isInside && 'bg-ink-soft forced-selected',

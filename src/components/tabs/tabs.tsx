@@ -68,7 +68,7 @@ export function TabsList({ className, children, ...props }: TabsListProps) {
           data-part="indicator"
           className={cn(
             'absolute bottom-0 left-(--active-tab-left) h-[3px] w-(--active-tab-width) bg-ink forced-ink',
-            'transition-[left,width] duration-(--motion-base) ease-cut',
+            'transition-[left,width] duration-(--motion-base)',
           )}
         />
       ) : null}
@@ -92,7 +92,7 @@ export function TabsTab({ className, count, icon, children, ...props }: TabsTabP
       className={cn(
         'group/tab relative inline-flex h-(--control-h) shrink-0 items-center gap-2 whitespace-nowrap px-(--control-px) outline-none select-none',
         'font-ui text-sm font-semibold text-ink-2',
-        'transition-[color,background-color,box-shadow] duration-(--motion-cut) ease-cut',
+        'transition-[color,background-color,box-shadow]',
         'hover:text-ink data-active:text-ink',
         // Disabled steps down to the floor of the text ramp, as in Segmented and
         // Menu; it was a 60% fade of that floor, which drops below 3:1.

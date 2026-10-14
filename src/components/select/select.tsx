@@ -96,7 +96,7 @@ export function SelectContent({ className, sideOffset = 6, children, ...props }:
           className={cn(
             'min-w-(--anchor-width) max-h-[min(var(--available-height),22rem)] overflow-y-auto scroll-cloth',
             'bg-cloth-pale p-1 text-ink shadow-floating outline-none',
-            'origin-(--transform-origin) transition-[opacity,transform] duration-(--motion-cut) ease-cut',
+            'origin-(--transform-origin) transition-[opacity,transform]',
             'data-starting-style:-translate-y-1 data-starting-style:opacity-0',
             'data-ending-style:opacity-0',
             className,

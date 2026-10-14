@@ -20,7 +20,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-const body = 'max-w-prose text-sm text-ink-2'
+const body = 'max-w-reading text-sm text-ink-2'
 
 export const Underline: Story = {
   render: () => (

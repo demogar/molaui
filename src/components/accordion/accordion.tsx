@@ -63,13 +63,13 @@ export function AccordionItem({ className, ...props }: AccordionItemProps) {
 const triggerClasses = [
   'group/trigger flex w-full cursor-pointer items-center gap-3 px-2 py-3.5 text-start outline-none',
   'font-ui text-base font-semibold text-ink',
-  'transition-colors duration-(--motion-cut) ease-cut hover:bg-ink-soft',
+  'transition-colors hover:bg-ink-soft',
   'focus-visible:shadow-[var(--focus-ring)]',
   'data-disabled:cursor-default data-disabled:text-ink-muted data-disabled:hover:bg-transparent',
 ]
 
 const markerClasses =
-  'ms-auto size-4 shrink-0 text-ink-2 transition-transform duration-(--motion-base) ease-cut group-data-panel-open/trigger:rotate-45'
+  'ms-auto size-4 shrink-0 text-ink-2 transition-transform duration-(--motion-base) group-data-panel-open/trigger:rotate-45'
 
 export interface AccordionTriggerProps extends Omit<AccordionPrimitive.Trigger.Props, 'className'> {
   className?: string
@@ -96,7 +96,7 @@ export function AccordionTrigger({ className, meta, children, ...props }: Accord
 
 const panelClasses = [
   'h-(--accordion-panel-height) overflow-hidden text-sm text-ink-2',
-  'transition-[height] duration-(--motion-base) ease-cut',
+  'transition-[height] duration-(--motion-base)',
   'data-starting-style:h-0 data-ending-style:h-0',
 ]
 
@@ -128,7 +128,7 @@ export function CollapsibleTrigger({ className, children, ...props }: Collapsibl
       data-slot="collapsible-trigger"
       className={cn(
         'group/trigger -mx-1.5 inline-flex cursor-pointer items-center gap-1.5 px-1.5 py-1 font-ui text-sm font-semibold text-ink outline-none',
-        'transition-colors duration-(--motion-cut) ease-cut hover:bg-ink-soft',
+        'transition-colors hover:bg-ink-soft',
         'focus-visible:shadow-[var(--focus-ring)]',
         className,
       )}
@@ -136,7 +136,7 @@ export function CollapsibleTrigger({ className, children, ...props }: Collapsibl
     >
       <Plus
         aria-hidden
-        className="size-3.5 shrink-0 text-ink-2 transition-transform duration-(--motion-base) ease-cut group-data-panel-open/trigger:rotate-45"
+        className="size-3.5 shrink-0 text-ink-2 transition-transform duration-(--motion-base) group-data-panel-open/trigger:rotate-45"
       />
       {children}
     </CollapsiblePrimitive.Trigger>
@@ -152,7 +152,7 @@ export function CollapsiblePanel({ className, children, ...props }: CollapsibleP
     <CollapsiblePrimitive.Panel
       data-slot="collapsible-panel"
       className={cn(
-        'h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-(--motion-base) ease-cut',
+        'h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-(--motion-base)',
         'data-starting-style:h-0 data-ending-style:h-0',
       )}
       {...props}

@@ -151,9 +151,10 @@ import { ToolCall } from '@demogar/mola-ui'
 Mola share one copy (Mola re-exports Base UI's `DirectionProvider`, which only works with one).
 The package is ESM only; `require()` works too, on Node 22.12 or later.
 
-Already on Tailwind v4? Import `@demogar/mola-ui/tailwind.css` into your own build instead. Not on React?
+Already on Tailwind v4? Import `@demogar/mola-ui/tailwind.css` into your own build instead. It closes
+Tailwind's default palette, radii, shadows, easings and other scales Mola replaces (see Getting started). Not on React?
 `@demogar/mola-ui/tokens.css` is plain custom properties — both themes and all densities work anywhere.
-Designing in Figma? Load [`tokens/mola.tokens.json`](tokens/mola.tokens.json) with Tokens Studio.
+Designing in Figma? [`tokens/mola.tokens.json`](tokens/mola.tokens.json) is every token in the W3C Design Tokens format (2025.10).
 
 ## For AI agents
 

@@ -77,7 +77,7 @@ export function Slider({
             index={index}
             className={cn(
               'size-4 rounded-none bg-cloth-pale shadow-cut band-oro [--cut-reveal:3px]',
-              'transition-[box-shadow] duration-(--motion-cut) ease-cut',
+              'transition-[box-shadow]',
               'hover:cut-band data-dragging:cut-band',
               'has-focus-visible:shadow-[var(--focus-ring)] has-focus-visible:forced-focus',
               'data-disabled:bg-cloth-shade data-disabled:hover:shadow-cut',

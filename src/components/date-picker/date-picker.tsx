@@ -92,7 +92,7 @@ export function DateError({ id, children }: { id: string; children: React.ReactN
 /** The trailing button that opens a calendar. */
 export const calendarButtonClasses = cn(
   '-me-1 grid size-7 shrink-0 place-items-center text-ink-muted',
-  'transition-colors duration-(--motion-cut) hover:bg-ink-soft hover:text-ink',
+  'transition-colors hover:bg-ink-soft hover:text-ink',
   'focus-visible:outline-none focus-visible:shadow-[var(--focus-ring)] data-popup-open:bg-ink-soft data-popup-open:text-ink',
   'disabled:cursor-not-allowed disabled:hover:bg-transparent [&_svg]:size-4',
 )

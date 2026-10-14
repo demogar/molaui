@@ -150,7 +150,7 @@ export function ChangeReview({
             </span>
           ) : null}
         </p>
-        {summary ? <div className="mt-1 max-w-prose font-text text-base leading-body text-ink">{summary}</div> : null}
+        {summary ? <div className="mt-1 max-w-reading font-text text-base leading-body text-ink">{summary}</div> : null}
       </header>
 
       {children ? <div className="flex flex-col gap-3 p-4">{children}</div> : null}
@@ -232,7 +232,7 @@ function Outcome({
           {reviewer ? <span className="font-normal text-ink-2"> by {reviewer}</span> : null}
         </p>
         {decision.reason ? (
-          <p className="m-0 max-w-prose font-text text-base leading-body text-ink">{decision.reason}</p>
+          <p className="m-0 max-w-reading font-text text-base leading-body text-ink">{decision.reason}</p>
         ) : null}
       </div>
     </div>

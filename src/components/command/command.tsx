@@ -198,13 +198,13 @@ export function CommandPalette({
       }}
     >
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-backdrop transition-opacity duration-(--motion-base) ease-cut data-starting-style:opacity-0 data-ending-style:opacity-0" />
+        <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-backdrop transition-opacity duration-(--motion-base) data-starting-style:opacity-0 data-ending-style:opacity-0" />
         <DialogPrimitive.Popup
           data-slot="command-palette"
           className={cn(
             'fixed top-[12dvh] left-1/2 z-50 flex max-h-[min(34rem,76dvh)] w-[calc(100vw-2rem)] max-w-xl -translate-x-1/2 flex-col',
             'bg-cloth-pale text-ink rounded-none outline-none shadow-floating',
-            'transition-[opacity,scale] duration-(--motion-base) ease-cut',
+            'transition-[opacity,scale] duration-(--motion-base)',
             'data-starting-style:scale-[0.98] data-starting-style:opacity-0 data-ending-style:opacity-0 data-ending-style:duration-(--motion-cut)',
           )}
         >

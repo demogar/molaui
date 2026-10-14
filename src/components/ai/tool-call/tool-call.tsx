@@ -110,14 +110,14 @@ export function ToolCall({
           disabled={!hasBody || forcedOpen}
           className={cn(
             'group/trigger flex w-full min-h-(--control-h) items-center gap-2.5 px-3 py-2 text-start',
-            'transition-colors duration-(--motion-cut) ease-cut enabled:hover:bg-ink-soft',
+            'transition-colors enabled:hover:bg-ink-soft',
             'focus-visible:shadow-[var(--focus-ring-inset)] disabled:cursor-default',
           )}
         >
           <Plus
             aria-hidden
             className={cn(
-              'size-3.5 shrink-0 text-ink-muted transition-transform duration-(--motion-base) ease-cut group-data-[panel-open]/trigger:rotate-45',
+              'size-3.5 shrink-0 text-ink-muted transition-transform duration-(--motion-base) group-data-[panel-open]/trigger:rotate-45',
               (!hasBody || forcedOpen) && 'invisible',
             )}
           />

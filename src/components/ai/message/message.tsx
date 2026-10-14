@@ -192,7 +192,7 @@ function MessageActions({
       data-part="actions"
       className={cn(
         '-ms-1.5 mt-3 flex items-center gap-1',
-        'transition-opacity duration-(--motion-cut) ease-cut',
+        'transition-opacity',
         '[@media(hover:hover)]:opacity-0 group-hover/message:opacity-100 group-focus-within/message:opacity-100',
       )}
     >

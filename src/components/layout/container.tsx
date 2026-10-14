@@ -15,7 +15,7 @@ export const containerVariants = cva('mx-auto w-full px-4 sm:px-6 lg:px-9', {
     size: {
       page: 'max-w-page',
       wide: 'max-w-wide',
-      prose: 'max-w-prose',
+      prose: 'max-w-reading',
       full: 'max-w-none',
     },
   },

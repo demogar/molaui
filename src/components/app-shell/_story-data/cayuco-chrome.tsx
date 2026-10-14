@@ -29,7 +29,7 @@ function SearchTrigger() {
   return (
     <button
       type="button"
-      className="flex h-(--control-h-sm) w-full max-w-md items-center gap-2 bg-cloth px-2.5 text-sm text-ink-muted shadow-cut transition-shadow duration-(--motion-cut) hover:cut-band band-oro [--cut-reveal:3px]"
+      className="flex h-(--control-h-sm) w-full max-w-md items-center gap-2 bg-cloth px-2.5 text-sm text-ink-muted shadow-cut transition-shadow hover:cut-band band-oro [--cut-reveal:3px]"
     >
       <Search aria-hidden className="size-4 shrink-0" />
       <span className="flex-1 truncate text-start">Search runs, agents, documents…</span>

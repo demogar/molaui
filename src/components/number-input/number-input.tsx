@@ -65,7 +65,7 @@ export interface NumberInputProps
 
 const stepperClasses = [
   'grid h-full aspect-square shrink-0 place-items-center text-ink-2 select-none',
-  'transition-colors duration-(--motion-cut) ease-cut',
+  'transition-colors',
   'hover:bg-ink-soft hover:text-ink active:bg-ink active:text-on-ink',
   'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:bg-cloth-shade data-disabled:active:bg-cloth-shade data-disabled:active:text-ink-muted',
   '[&_svg]:size-3.5',

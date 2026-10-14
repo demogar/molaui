@@ -398,7 +398,7 @@ export function FileUpload({
         className={cn(
           'relative flex flex-wrap items-center gap-x-4 gap-y-3 p-(--control-px) py-5',
           'bg-cloth-pale relleno-field text-ink shadow-cut band-oro [--cut-reveal:3px] cursor-pointer',
-          'transition-[box-shadow,background-color] duration-(--motion-cut) ease-cut',
+          'transition-[box-shadow,background-color]',
           'hover:cut-band',
           // Dragging: the band is revealed wider than a hover, and the field
           // takes the gold wash, so the target reads from across the screen.

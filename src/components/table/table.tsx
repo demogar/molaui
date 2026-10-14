@@ -146,7 +146,7 @@ export function TableRow({ selected = false, className, ...props }: TableRowProp
       data-selected={selected || undefined}
       aria-selected={selected || undefined}
       className={cn(
-        'transition-colors duration-(--motion-cut) ease-cut',
+        'transition-colors',
         '[&>td]:shadow-[inset_0_-1px_0_var(--keyline-soft)]',
         'hover:[&>td]:bg-ink-soft',
         'data-selected:[&>td]:bg-oro-soft data-selected:[&>td]:forced-selected',
@@ -216,7 +216,7 @@ export function TableHead({
           <Glyph
             aria-hidden
             className={cn(
-              'size-3 shrink-0 transition-colors duration-(--motion-cut)',
+              'size-3 shrink-0 transition-colors',
               sort === 'none' ? 'text-ink-muted group-hover/sort:text-ink' : 'text-ink',
             )}
           />
@@ -379,7 +379,7 @@ export function TableCheckbox({ indeterminate = false, className, ...props }: Ta
         type="checkbox"
         className={cn(
           'peer absolute inset-0 m-0 size-full cursor-pointer appearance-none rounded-none',
-          'bg-cloth-pale shadow-cut transition-colors duration-(--motion-cut)',
+          'bg-cloth-pale shadow-cut transition-colors',
           'checked:bg-ink indeterminate:bg-ink',
           'focus-visible:shadow-[var(--focus-ring)]',
           'disabled:cursor-not-allowed disabled:bg-cloth-shade',

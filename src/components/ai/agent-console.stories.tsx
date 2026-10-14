@@ -192,7 +192,7 @@ function AgentConsole() {
                       key={s}
                       type="button"
                       onClick={() => ask(s)}
-                      className="group flex w-full items-start gap-3 bg-cloth-pale p-3 text-start font-ui text-sm text-ink shadow-cut band-oro [--cut-reveal:3px] transition-shadow duration-(--motion-cut) ease-cut hover:cut-band"
+                      className="group flex w-full items-start gap-3 bg-cloth-pale p-3 text-start font-ui text-sm text-ink shadow-cut band-oro [--cut-reveal:3px] transition-shadow hover:cut-band"
                     >
                       <span className="flex-1">{s}</span>
                       <ArrowRight aria-hidden className="mt-0.5 size-4 shrink-0 text-ink-muted group-hover:text-ink rtl:-scale-x-100" />

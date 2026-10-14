@@ -113,13 +113,46 @@ export function resolveColor(
 export function resolveLayer(name: string, theme: ThemeName, decls: Map<string, string>): { rgb: RGB; alpha: number } {
   const raw = decls.get(name)
   if (!raw) throw new Error(`Unknown token ${name}`)
-  const opaque = resolveColor(raw, theme, decls)
+  const layer = resolveTranslucent(raw, theme, decls)
+  if (!layer) throw new Error(`Token ${name} is not a colour mixed toward transparent`)
+  return layer
+}
+
+/**
+ * `resolveLayer` for a value rather than a token name, so a colour written
+ * inside another token (the shadow colour in `--elevation-raised`) resolves
+ * too. Follows `light-dark()` and `var()` down to an opaque colour or to the
+ * one translucent form; anything else is `null`.
+ */
+export function resolveTranslucent(
+  value: string,
+  theme: ThemeName,
+  decls: Map<string, string>,
+  seen: Set<string> = new Set(),
+): { rgb: RGB; alpha: number } | null {
+  const v = value.trim()
+  const opaque = resolveColor(v, theme, decls)
   if (opaque) return { rgb: opaque, alpha: 1 }
-  const mix = inner(raw.trim(), 'color-mix')
+
+  const ld = inner(v, 'light-dark')
+  if (ld !== null) {
+    const [light, dark] = splitArgs(ld)
+    return resolveTranslucent(theme === 'light' ? light! : dark!, theme, decls, seen)
+  }
+
+  const ref = inner(v, 'var')
+  if (ref !== null) {
+    const name = splitArgs(ref)[0]!
+    if (seen.has(name)) throw new Error(`Cycle at ${name}`)
+    const target = decls.get(name)
+    return target ? resolveTranslucent(target, theme, decls, new Set([...seen, name])) : null
+  }
+
+  const mix = inner(v, 'color-mix')
   const [space, a, b] = mix === null ? [] : splitArgs(mix)
   const m = a ? /^(.*)\s+([\d.]+)%$/.exec(a) : null
   const rgb = m ? resolveColor(m[1]!, theme, decls) : null
-  if (space !== 'in oklab' || b !== 'transparent' || !m || !rgb) throw new Error(`Token ${name} is not a colour mixed toward transparent`)
+  if (space !== 'in oklab' || b !== 'transparent' || !m || !rgb) return null
   return { rgb, alpha: Number(m[2]) / 100 }
 }
 

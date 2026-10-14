@@ -31,5 +31,8 @@ lists the scopes.
   comfortable values; [Spacing](?path=/docs/foundations-spacing--overview) shows what each density
   sets.
 
-The same palette is published for design tools as W3C design tokens in `tokens/mola.tokens.json`,
-both themes fully resolved, and CI fails if that file falls behind `tokens.css`.
+The same tokens are published for design tools in `tokens/mola.tokens.json`, in the W3C Design
+Tokens format (DTCG 2025.10): both themes fully resolved, translucent colours with their alpha, the
+cut, focus rings and elevation as shadows, and one value per density mode for every
+density-dependent token. CI fails if the file falls behind `tokens.css`, if any declaration has no
+place in it, or if it breaks the format.

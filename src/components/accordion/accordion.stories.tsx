@@ -33,7 +33,7 @@ export const Default: Story = {
         <AccordionItem key={q} value={`q${i}`}>
           <AccordionTrigger>{q}</AccordionTrigger>
           <AccordionPanel>
-            <p className="m-0 max-w-prose">{a}</p>
+            <p className="m-0 max-w-reading">{a}</p>
           </AccordionPanel>
         </AccordionItem>
       ))}
