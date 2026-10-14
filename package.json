@@ -41,7 +41,8 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./styles.css": "./dist/mola-ui.css",
     "./tailwind.css": "./dist/tailwind/mola.css",
@@ -49,7 +50,7 @@
     "./package.json": "./package.json"
   },
   "engines": {
-    "node": ">=22.23.1"
+    "node": ">=22.12.0"
   },
   "scripts": {
     "dev": "storybook dev -p 6006",
@@ -76,17 +77,18 @@
     "consumers": "node scripts/consumers.mjs"
   },
   "peerDependencies": {
+    "@base-ui/react": "^1.9.0",
     "react": ">=19",
     "react-dom": ">=19"
   },
   "dependencies": {
-    "@base-ui/react": "1.9.0",
-    "class-variance-authority": "0.7.1",
-    "clsx": "2.1.1",
-    "lucide-react": "1.55.0",
-    "tailwind-merge": "3.7.0"
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.55.0",
+    "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {
+    "@base-ui/react": "1.9.0",
     "@eslint/js": "9.39.5",
     "@fontsource-variable/alegreya": "5.3.0",
     "@fontsource-variable/archivo": "5.3.0",

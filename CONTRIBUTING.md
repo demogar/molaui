@@ -72,7 +72,7 @@ a breaking change (see [Versioning](#versioning-and-deprecation)).
 
 `npm run size` measures the built package with [size-limit](https://github.com/ai/size-limit):
 the whole library, a typical tree-shaken import (`Button` + `Field`) and `styles.css`, minified
-and brotli-compressed. The budgets live in `.size-limit.json`, set from measurements with about
+and brotli-compressed. The budgets live in `.size-limit.js`, set from measurements with about
 10% headroom. If a change goes over, first check that it should cost that much (a new dependency,
 or something that breaks tree-shaking, are the usual causes). Raise a budget only in its own
 commit that says why.

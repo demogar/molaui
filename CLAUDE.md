@@ -27,7 +27,7 @@ npm run build            # library build to dist/, then the mola-ui-mcp bin to d
 npm run build-storybook  # static Storybook to storybook-static/
 npm run api              # regenerate etc/mola-ui.api.md from dist/ (API Extractor; needs build)
 npm run api:check        # fail if the public API changed without the report
-npm run size             # size-limit budgets in .size-limit.json (needs build)
+npm run size             # size-limit budgets in .size-limit.js (needs build)
 npm run check            # all gates, same list CI's Gates job runs
 npm run audit            # browser audit of storybook-static/ (needs build-storybook); report in reports/audit/
 npm run visual           # visual regression vs Linux baselines (needs build-storybook)

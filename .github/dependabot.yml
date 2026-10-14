@@ -5,6 +5,11 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    # Exact pins (devDependencies, and Base UI's pin there) are bumped as before;
+    # the ranges an app sees (dependencies, peerDependencies) keep their floor
+    # while a new version still satisfies them, so only the lockfile moves and
+    # apps are not forced onto the newest release by a weekly bump.
+    versioning-strategy: increase-if-necessary
     commit-message:
       prefix: build
       include: scope

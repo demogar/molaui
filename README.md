@@ -147,6 +147,10 @@ import { ToolCall } from '@demogar/mola-ui'
 </main>
 ```
 
+`@base-ui/react` is a peer dependency: install it beside the package, as above, so your app and
+Mola share one copy (Mola re-exports Base UI's `DirectionProvider`, which only works with one).
+The package is ESM only; `require()` works too, on Node 22.12 or later.
+
 Already on Tailwind v4? Import `@demogar/mola-ui/tailwind.css` into your own build instead. Not on React?
 `@demogar/mola-ui/tokens.css` is plain custom properties — both themes and all densities work anywhere.
 Designing in Figma? Load [`tokens/mola.tokens.json`](tokens/mola.tokens.json) with Tokens Studio.

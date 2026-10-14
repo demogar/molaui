@@ -22,5 +22,11 @@ export default tseslint.config(
     files: ['scripts/**/*.mjs'],
     languageOptions: { globals: { ...globals.node, ...globals.browser } },
   },
+  {
+    // A consumer fixture that exists to prove `require()` works.
+    files: ['test/consumers/**/*.cjs'],
+    languageOptions: { sourceType: 'commonjs', globals: globals.node },
+    rules: { '@typescript-eslint/no-require-imports': 'off' },
+  },
   ...storybook.configs['flat/recommended'],
 )
