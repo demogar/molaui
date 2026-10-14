@@ -133,10 +133,6 @@ export function PromptInput({
     <form
       data-slot="prompt-input"
       data-status={status}
-      onSubmit={(event) => {
-        event.preventDefault()
-        send()
-      }}
       className={cn(
         'flex flex-col bg-cloth-pale shadow-cut transition-shadow',
         'focus-within:shadow-[var(--focus-ring)]',
@@ -144,6 +140,12 @@ export function PromptInput({
         className,
       )}
       {...props}
+      // After the spread: `onSubmit` is PromptInput's own prop (it receives
+      // the text, not the event), so the form's handler is always this one.
+      onSubmit={(event) => {
+        event.preventDefault()
+        send()
+      }}
     >
       {attachments ? <div data-part="attachments" className="flex flex-wrap gap-2 px-3 pt-3">{attachments}</div> : null}
       <label htmlFor={fieldId} className="sr-only">

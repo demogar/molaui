@@ -109,10 +109,6 @@ export function NavItem({
         data-slot="nav-item"
         aria-current={active ? 'page' : undefined}
         title={collapsed ? children : undefined}
-        onClick={(event) => {
-          onClick?.(event)
-          onNavigate()
-        }}
         className={cn(
           'relative flex h-(--control-h) items-center gap-2.5 px-3 text-sm text-ink-2 no-underline',
           'transition-colors',
@@ -126,6 +122,11 @@ export function NavItem({
           className,
         )}
         {...props}
+        // The consumer's onClick runs, then the sidebar closes on a phone.
+        onClick={(event) => {
+          onClick?.(event)
+          onNavigate()
+        }}
       >
         {icon ? <span aria-hidden className="relative flex">{icon}
           {collapsed && hasCount ? (

@@ -64,6 +64,7 @@ Each story is a live example in Storybook.
 | `label` | `ReactNode` |  | Visible label above the field. Omit inside `Field`, which renders its own. |
 | `onValueChange` | `((value: number \| null) => void)` |  |  |
 | `placeholder` | `string` |  |  |
+| `ref` | `Ref<HTMLInputElement>` |  | The text input, not the wrapper: the element that takes focus and the value. |
 | `size` | `"sm" \| "lg" \| "md"` | `md` |  |
 | `unit` | `string` |  | Short unit suffix inside the cut: "tokens", "ms", "%". Also added to the accessible description. |
 

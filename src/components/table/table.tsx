@@ -4,6 +4,7 @@ import { ArrowDown, ArrowUp, ArrowUpDown, Check, Minus } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { useMergedRefs } from '../../lib/merge-props'
 import { EmptyState, type EmptyStateProps } from '../empty-state'
 import { skeletonShimmer } from '../skeleton/skeleton'
 
@@ -366,8 +367,11 @@ export interface TableCheckboxProps extends Omit<React.ComponentProps<'input'>, 
  * visible square is a sibling painted from the input's own `:checked` and
  * `:indeterminate` state.
  */
-export function TableCheckbox({ indeterminate = false, className, ...props }: TableCheckboxProps) {
+export function TableCheckbox({ indeterminate = false, className, ref: refProp, ...props }: TableCheckboxProps) {
+  // Merged with the consumer's ref rather than replaced by it: when a passed
+  // ref won, this one was never attached and `indeterminate` silently stopped.
   const ref = React.useRef<HTMLInputElement>(null)
+  const mergedRef = useMergedRefs(ref, refProp)
   React.useEffect(() => {
     if (ref.current) ref.current.indeterminate = indeterminate
   }, [indeterminate])
@@ -375,7 +379,6 @@ export function TableCheckbox({ indeterminate = false, className, ...props }: Ta
   return (
     <span className={cn('relative inline-grid size-4 shrink-0 place-items-center align-middle', className)}>
       <input
-        ref={ref}
         type="checkbox"
         className={cn(
           'peer absolute inset-0 m-0 size-full cursor-pointer appearance-none rounded-none',
@@ -385,6 +388,7 @@ export function TableCheckbox({ indeterminate = false, className, ...props }: Ta
           'disabled:cursor-not-allowed disabled:bg-cloth-shade',
         )}
         {...props}
+        ref={mergedRef}
       />
       <Check
         aria-hidden

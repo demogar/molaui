@@ -4,6 +4,7 @@ import { Search, X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { useMergedRefs } from '../../lib/merge-props'
 import { Input, type InputProps } from './input'
 
 export interface SearchInputProps extends Omit<InputProps, 'leading' | 'trailing' | 'type'> {
@@ -41,9 +42,14 @@ export function SearchInput({
   onChange,
   className,
   placeholder = 'Search',
+  ref: refProp,
   ...props
 }: SearchInputProps) {
+  // The clear button needs the input, and so may the consumer (to focus it
+  // from a shortcut). Both refs are attached; one replacing the other is how
+  // the clear button used to stop working when a ref was passed.
   const inputRef = React.useRef<HTMLInputElement>(null)
+  const ref = useMergedRefs(inputRef, refProp)
   const isControlled = value !== undefined
   const [inner, setInner] = React.useState(String(defaultValue ?? ''))
   const current = isControlled ? String(value ?? '') : inner
@@ -63,15 +69,10 @@ export function SearchInput({
 
   return (
     <Input
-      ref={inputRef}
       type="search"
       role="searchbox"
       placeholder={placeholder}
       value={isControlled ? value : inner}
-      onChange={(event) => {
-        if (!isControlled) setInner(event.target.value)
-        onChange?.(event)
-      }}
       className={cn('[&_input::-webkit-search-cancel-button]:appearance-none', className)}
       leading={<Search />}
       trailing={
@@ -94,6 +95,11 @@ export function SearchInput({
         ) : null
       }
       {...props}
+      ref={ref}
+      onChange={(event) => {
+        if (!isControlled) setInner(event.target.value)
+        onChange?.(event)
+      }}
     />
   )
 }

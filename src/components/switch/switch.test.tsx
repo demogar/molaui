@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
+import { Field } from '../field/field'
 import { Switch } from './switch'
 
 describe('Switch', () => {
@@ -26,5 +27,18 @@ describe('Switch', () => {
     render(<Switch label="Locked" disabled />)
     await userEvent.click(screen.getByText('Locked'))
     expect(screen.getByRole('switch')).not.toBeChecked()
+  })
+})
+
+describe('Switch inside Field', () => {
+  it("adds Field's hint to its own description instead of replacing it", () => {
+    render(
+      <Field label="Output" hint="Off for batch runs.">
+        {(control) => <Switch {...control} label="Stream responses" description="Tokens as they arrive." />}
+      </Field>,
+    )
+    expect(screen.getByRole('switch', { name: 'Output' })).toHaveAccessibleDescription(
+      'Tokens as they arrive. Off for batch runs.',
+    )
   })
 })

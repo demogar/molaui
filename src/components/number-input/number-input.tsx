@@ -5,6 +5,7 @@ import { Minus, Plus } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { mergeProps } from '../../lib/merge-props'
 import { type FieldControlSize, fieldControlClasses, fieldControlSizes } from '../field/field-control'
 import { Label } from '../field/label'
 
@@ -43,10 +44,60 @@ import { Label } from '../field/label'
  * the input's accessible description, so "Timeout, 30" is heard as "30, ms".
  * For units Intl knows, prefer `format={{ style: 'unit', unit: 'millisecond' }}`
  * or a currency format: the unit is then in the value itself, localised.
+ *
+ * ── props that belong to the text go to the input ──
+ * The rest of the props land on Base UI's Root, a `<div>`. That used to
+ * include `ref`, `autoFocus`, `onKeyDown` and `onBlur`, so a ref held the
+ * wrapper, autofocus did nothing and a key handler saw the div as its
+ * target. Those, and the other focus, key and clipboard props in
+ * `INPUT_PROPS`, are routed to the `<input>` instead, typed for it, and a
+ * consumer's `onKeyDown` is merged with the PageUp/PageDown handler rather
+ * than replacing it.
  */
 
+// The input-owned keys are spelled out twice, in the Omit and the Pick,
+// rather than through a shared alias, so the published declaration names
+// them instead of pointing at a type the package does not export.
 export interface NumberInputProps
-  extends Omit<NumberFieldPrimitive.Root.Props, 'className' | 'children' | 'render' | 'onValueChange'> {
+  extends Omit<
+      NumberFieldPrimitive.Root.Props,
+      | 'className'
+      | 'children'
+      | 'render'
+      | 'onValueChange'
+      | 'ref'
+      | 'autoFocus'
+      | 'autoComplete'
+      | 'enterKeyHint'
+      | 'onKeyDown'
+      | 'onKeyUp'
+      | 'onFocus'
+      | 'onBlur'
+      | 'onBeforeInput'
+      | 'onInput'
+      | 'onPaste'
+      | 'onCopy'
+      | 'onCut'
+      | 'onSelect'
+    >,
+    Pick<
+      React.ComponentProps<'input'>,
+      | 'autoFocus'
+      | 'autoComplete'
+      | 'enterKeyHint'
+      | 'onKeyDown'
+      | 'onKeyUp'
+      | 'onFocus'
+      | 'onBlur'
+      | 'onBeforeInput'
+      | 'onInput'
+      | 'onPaste'
+      | 'onCopy'
+      | 'onCut'
+      | 'onSelect'
+    > {
+  /** The text input, not the wrapper: the element that takes focus and the value. */
+  ref?: React.Ref<HTMLInputElement>
   /** Visible label above the field. Omit inside `Field`, which renders its own. */
   label?: React.ReactNode
   size?: FieldControlSize
@@ -62,6 +113,29 @@ export interface NumberInputProps
   'aria-describedby'?: string
   'aria-invalid'?: boolean | 'true' | 'false'
 }
+
+/**
+ * Props that mean something only on the text input, not on the wrapper: the
+ * same keys as the Omit and Pick above, kept in step by hand. A key added
+ * here but not to the Pick would still be typed for the div.
+ */
+const INPUT_PROPS = {
+  autoFocus: true,
+  autoComplete: true,
+  enterKeyHint: true,
+  onKeyDown: true,
+  onKeyUp: true,
+  onFocus: true,
+  onBlur: true,
+  onBeforeInput: true,
+  onInput: true,
+  onPaste: true,
+  onCopy: true,
+  onCut: true,
+  onSelect: true,
+} as const satisfies Partial<Record<keyof React.ComponentProps<'input'>, true>>
+
+type InputOwnedProps = Pick<NumberInputProps, keyof typeof INPUT_PROPS>
 
 const stepperClasses = [
   'grid h-full aspect-square shrink-0 place-items-center text-ink-2 select-none',
@@ -93,8 +167,10 @@ export function NumberInput({
   required,
   disabled,
   readOnly,
-  ...props
+  ref,
+  ...rest
 }: NumberInputProps) {
+  const { inputOwned, props } = partitionInputProps(rest)
   const uid = React.useId()
   const inputId = id ?? `${uid}-input`
   const unitId = `${uid}-unit`
@@ -140,11 +216,14 @@ export function NumberInput({
       )}
     >
       <NumberFieldPrimitive.Input
+        // The consumer's handlers sit to the right, so they run first and
+        // can call event.preventBaseUIHandler() to stop PageUp/PageDown.
+        {...mergeProps<'input'>({ onKeyDown }, inputOwned)}
+        ref={ref}
         placeholder={placeholder}
         aria-label={ariaLabel}
         aria-describedby={describedBy}
         aria-invalid={ariaInvalid}
-        onKeyDown={onKeyDown}
         className="h-full min-w-0 flex-1 border-0 bg-transparent p-0 [font-size:inherit] text-ink tabular-nums outline-none placeholder:text-ink-muted focus:shadow-none focus-visible:shadow-none disabled:cursor-not-allowed disabled:text-ink-muted"
       />
       {unit ? (
@@ -190,6 +269,16 @@ export function NumberInput({
       {field}
     </NumberFieldPrimitive.Root>
   )
+}
+
+function partitionInputProps<P extends InputOwnedProps>(all: P) {
+  const inputOwned: Record<string, unknown> = {}
+  const props: Record<string, unknown> = {}
+  for (const [key, value] of Object.entries(all)) {
+    if (Object.hasOwn(INPUT_PROPS, key)) inputOwned[key] = value
+    else props[key] = value
+  }
+  return { inputOwned: inputOwned as InputOwnedProps, props: props as Omit<P, keyof InputOwnedProps> }
 }
 
 function decimalPlaces(n: number) {

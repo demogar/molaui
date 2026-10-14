@@ -9663,6 +9663,12 @@
               "required": false
             },
             {
+              "name": "ref",
+              "type": "Ref<HTMLInputElement>",
+              "required": false,
+              "description": "The text input, not the wrapper: the element that takes focus and the value."
+            },
+            {
               "name": "size",
               "type": "\"sm\" | \"lg\" | \"md\"",
               "required": false,

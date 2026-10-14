@@ -1596,7 +1596,7 @@ export function NavSection(input: {
 export function NumberInput(input: NumberInputProps): React_2.JSX.Element;
 
 // @public
-export interface NumberInputProps extends Omit<NumberField.Root.Props, 'className' | 'children' | 'render' | 'onValueChange'> {
+export interface NumberInputProps extends Omit<NumberField.Root.Props, 'className' | 'children' | 'render' | 'onValueChange' | 'ref' | 'autoFocus' | 'autoComplete' | 'enterKeyHint' | 'onKeyDown' | 'onKeyUp' | 'onFocus' | 'onBlur' | 'onBeforeInput' | 'onInput' | 'onPaste' | 'onCopy' | 'onCut' | 'onSelect'>, Pick<React_2.ComponentProps<'input'>, 'autoFocus' | 'autoComplete' | 'enterKeyHint' | 'onKeyDown' | 'onKeyUp' | 'onFocus' | 'onBlur' | 'onBeforeInput' | 'onInput' | 'onPaste' | 'onCopy' | 'onCut' | 'onSelect'> {
     // (undocumented)
     'aria-describedby'?: string;
     // (undocumented)
@@ -1613,6 +1613,7 @@ export interface NumberInputProps extends Omit<NumberField.Root.Props, 'classNam
     onValueChange?: (value: number | null) => void;
     // (undocumented)
     placeholder?: string;
+    ref?: React_2.Ref<HTMLInputElement>;
     // (undocumented)
     size?: FieldControlSize;
     unit?: string;

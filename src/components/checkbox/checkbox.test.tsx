@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
+import { Field } from '../field/field'
 import { Checkbox, CheckboxGroup } from './checkbox'
 
 describe('Checkbox', () => {
@@ -40,5 +41,23 @@ describe('CheckboxGroup', () => {
     expect(screen.getByRole('group', { name: 'Tools' })).toBeInTheDocument()
     await userEvent.click(screen.getByRole('checkbox', { name: 'Beta' }))
     expect(onValueChange).toHaveBeenLastCalledWith(['a', 'b'], expect.anything())
+  })
+})
+
+describe('Checkbox inside Field', () => {
+  it("adds Field's hint to its own description instead of replacing it", () => {
+    render(
+      <Field label="Policy" hint="Applies to every tool.">
+        {(control) => <Checkbox {...control} label="Retry" description="Up to three times." />}
+      </Field>,
+    )
+    expect(screen.getByRole('checkbox', { name: 'Policy' })).toHaveAccessibleDescription(
+      'Up to three times. Applies to every tool.',
+    )
+  })
+
+  it('keeps its own description when Field has no hint to add', () => {
+    render(<Field label="Policy">{(control) => <Checkbox {...control} label="Retry" description="Up to three times." />}</Field>)
+    expect(screen.getByRole('checkbox', { name: 'Policy' })).toHaveAccessibleDescription('Up to three times.')
   })
 })
