@@ -2,6 +2,8 @@
 
 import * as React from 'react'
 
+import { useHydrated } from '../../../lib/use-hydrated'
+
 /**
  * Milliseconds since `startedAt`, ticking while the work is still open.
  *
@@ -15,6 +17,12 @@ import * as React from 'react'
  * Ticks every 100ms while open (one decimal place is the resolution shown
  * under a minute), and stops the moment `endedAt` arrives so a finished step
  * reads a fixed duration rather than drifting.
+ *
+ * An open clock is `undefined` on the server and while hydrating, and starts
+ * on the first render after: the server's "now" is not the browser's, so any
+ * figure rendered there would be wrong by the time it arrived and would make
+ * React discard the server HTML. A closed one (`endedAt` known) needs no
+ * clock and renders everywhere.
  */
 export function useElapsed(
   startedAt: number | Date | undefined,
@@ -23,6 +31,7 @@ export function useElapsed(
 ): number | undefined {
   const start = startedAt === undefined ? undefined : +startedAt
   const end = endedAt === undefined ? undefined : +endedAt
+  const hydrated = useHydrated()
   const [now, setNow] = React.useState(() => Date.now())
 
   React.useEffect(() => {
@@ -39,7 +48,9 @@ export function useElapsed(
   }, [start, end, intervalMs])
 
   if (start === undefined) return undefined
-  return Math.max(0, (end ?? now) - start)
+  if (end !== undefined) return Math.max(0, end - start)
+  if (!hydrated) return undefined
+  return Math.max(0, now - start)
 }
 
 /**

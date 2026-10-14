@@ -76,6 +76,7 @@ The sources an answer drew on, as an ordered list whose numbers match the inline
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `sources` (required) | `readonly Source[]` |  |  |
+| `timeZone` | `string` |  | IANA zone the read times are shown in, such as `"UTC"`. Without it they are the reader's own and appear only after hydration, because the server cannot know the reader's zone. |
 
 ### `citationRenderer` (function)
 

@@ -49,7 +49,9 @@ Browser scripts (need a running Storybook, use Playwright):
 
 `audit.mjs` deliberately ignores Base UI focus-guard nodes (an `aria-hidden-focus` false positive) and the intentional unresolvable image request in the `broken-image` story. On docs pages it skips Storybook's args table and the landmark-uniqueness/heading-order rules (a docs page stacks several complete examples); each story is audited for those on its own page.
 
-The visual tests (`test/visual/`) freeze time with Playwright's clock and run 15s of fake time before the screenshot, so simulated streams and countdowns finish deterministically. A story is screenshotted cropped to its content (root plus portals).
+The visual tests (`test/visual/`) freeze time with Playwright's clock and run 15s of fake time before the screenshot, so simulated streams and countdowns finish deterministically. A story is screenshotted cropped to its content (root plus portals). Behaviour that needs real layout and cannot be screenshotted stably (Thread's stick-to-bottom) is a `*.behaviour.ts` Playwright test in the same folder, run by the same config and CI job on the real clock.
+
+Clocks and reader-local times render after hydration (`useHydrated` in `src/lib/use-hydrated.ts`); `src/test/ssr.test.tsx` server-renders and hydrates each clock-bearing component with the browser in a different zone and a moment later, and fails on any mismatch.
 
 ### Dependency gotchas
 - `npm install` of many packages in one command has crashed with `Cannot read properties of null (reading 'edgesOut')`; install in smaller groups.

@@ -72,7 +72,12 @@ export interface CalendarProps {
    * person has paged away.
    */
   visibleDate?: Date | null
-  /** Inject "now" for stable stories and tests. */
+  /**
+   * Inject "now" for stable stories and tests. Pass it when server rendering
+   * too: today's date, and with it the starting month, depends on the zone it
+   * is computed in, and the grid cannot wait for hydration without arriving
+   * blank. The server's date, passed down, keeps both renders on one day.
+   */
   today?: Date
   min?: Date | null
   max?: Date | null

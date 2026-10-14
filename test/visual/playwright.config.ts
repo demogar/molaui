@@ -14,7 +14,9 @@ const port = Number(process.env.VISUAL_PORT ?? 6008)
 
 export default defineConfig({
   testDir: '.',
-  testMatch: '*.visual.ts',
+  // Behaviour tests that need real layout and the built Storybook, and so
+  // run here rather than in jsdom: `*.behaviour.ts`.
+  testMatch: ['*.visual.ts', '*.behaviour.ts'],
   snapshotPathTemplate: '{testDir}/__screenshots__/{platform}/{arg}{ext}',
   outputDir: '../../test-results/visual',
   fullyParallel: true,

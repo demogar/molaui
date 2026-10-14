@@ -156,15 +156,34 @@ export function RunError({
   const counting = remaining !== undefined && remaining > 0
   const alarm = kind !== 'cancelled'
 
-  // Announced once with the error itself, frozen at mount: the alert must not
-  // change while it is being read.
-  const [startFigure] = React.useState(() => (remaining !== undefined ? spokenCountdown(remaining) : undefined))
-  const milestone = remaining === undefined ? 'none' : remaining <= 0 ? 'zero' : remaining <= 10_000 ? 'ten' : 'start'
+  // Announced once with the error itself, frozen at the first figure known:
+  // the alert must not change while it is being read. That is the first
+  // render on a client-only mount; after server rendering the countdown is
+  // unknown until hydration ends (see `useCountdown`), so the figure is
+  // captured on the render after.
+  const [startFigure, setStartFigure] = React.useState(() =>
+    remaining !== undefined ? spokenCountdown(remaining) : undefined,
+  )
+  if (startFigure === undefined && remaining !== undefined) setStartFigure(spokenCountdown(remaining))
+  // 'pending': there is a target but no clock yet. Leaving it is the figure
+  // arriving, not a milestone passing, so it announces nothing.
+  const milestone =
+    remaining === undefined
+      ? retryAt === undefined
+        ? 'none'
+        : 'pending'
+      : remaining <= 0
+        ? 'zero'
+        : remaining <= 10_000
+          ? 'ten'
+          : 'start'
   const [prevMilestone, setPrevMilestone] = React.useState(milestone)
   const [announcement, setAnnouncement] = React.useState('')
   if (milestone !== prevMilestone) {
     setPrevMilestone(milestone)
-    if (milestone === 'ten') setAnnouncement(autoRetry ? 'Retrying in 10 seconds.' : 'You can retry in 10 seconds.')
+    if (prevMilestone === 'pending') {
+      // The first figure, already said by the alert.
+    } else if (milestone === 'ten') setAnnouncement(autoRetry ? 'Retrying in 10 seconds.' : 'You can retry in 10 seconds.')
     else if (milestone === 'zero') setAnnouncement(autoRetry ? 'Retrying now.' : 'You can retry now.')
   }
 
@@ -184,7 +203,9 @@ export function RunError({
       : undefined
   // The status line above already says why, so the headline says where.
   const headline = where || step ? `Stopped at ${where ?? ''}${where && step ? ': ' : ''}${step ?? ''}.` : `The run ${LABEL[kind].toLowerCase()}.`
-  const blocked = counting && !autoRetry
+  // Until the clock is known the wait is assumed to be on: an enabled Retry
+  // in server HTML that turns disabled on hydration would be a promise taken back.
+  const blocked = (counting || milestone === 'pending') && !autoRetry
 
   const body = (
     <>
@@ -234,6 +255,11 @@ export function RunError({
         </div>
       )}
 
+      {milestone === 'pending' ? (
+        <p className="m-0 font-ui text-sm text-ink">
+          {autoRetry ? 'Retrying automatically after the wait.' : 'You can retry after the wait.'}
+        </p>
+      ) : null}
       {remaining !== undefined ? (
         <p className="m-0 font-ui text-sm text-ink">
           {counting ? (

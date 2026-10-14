@@ -894,7 +894,6 @@ export interface DateRangePickerProps {
     required?: boolean;
     // (undocumented)
     size?: FieldControlSize;
-    // (undocumented)
     today?: Date;
     typedEntry?: boolean;
     // (undocumented)
@@ -1528,6 +1527,7 @@ export interface MessageProps extends Omit<React_2.ComponentProps<'article'>, 'r
     status?: 'streaming' | 'done' | 'error';
     // (undocumented)
     timestamp?: Date | string;
+    timeZone?: string;
 }
 
 // @public (undocumented)
@@ -2199,6 +2199,7 @@ export function SourceList(input: SourceListProps): React_2.JSX.Element;
 export interface SourceListProps extends Omit<React_2.ComponentProps<'ol'>, 'children'> {
     // (undocumented)
     sources: readonly Source[];
+    timeZone?: string;
 }
 
 // @public

@@ -2283,6 +2283,12 @@
               "name": "timestamp",
               "type": "string | Date",
               "required": false
+            },
+            {
+              "name": "timeZone",
+              "type": "string",
+              "required": false,
+              "description": "IANA zone the time is shown in, such as `\"UTC\"` or `\"America/Panama\"`. Without it the time is the reader's own and appears only after hydration, because the server cannot know the reader's zone; pass one to have the time in the server HTML."
             }
           ]
         },
@@ -3370,6 +3376,12 @@
               "name": "sources",
               "type": "readonly Source[]",
               "required": true
+            },
+            {
+              "name": "timeZone",
+              "type": "string",
+              "required": false,
+              "description": "IANA zone the read times are shown in, such as `\"UTC\"`. Without it they are the reader's own and appear only after hydration, because the server cannot know the reader's zone."
             }
           ]
         },
@@ -8473,7 +8485,7 @@
               "name": "today",
               "type": "Date",
               "required": false,
-              "description": "Inject \"now\" for stable stories and tests."
+              "description": "Inject \"now\" for stable stories and tests. Pass it when server rendering too: today's date, and with it the starting month, depends on the zone it is computed in, and the grid cannot wait for hydration without arriving blank. The server's date, passed down, keeps both renders on one day."
             },
             {
               "name": "visibleDate",
@@ -8590,7 +8602,7 @@
               "name": "today",
               "type": "Date",
               "required": false,
-              "description": "Inject \"now\" for stable stories and tests."
+              "description": "Inject \"now\" for stable stories and tests. Pass it when server rendering too: today's date, and with it the starting month, depends on the zone it is computed in, and the grid cannot wait for hydration without arriving blank. The server's date, passed down, keeps both renders on one day."
             },
             {
               "name": "value",
@@ -8711,7 +8723,8 @@
             {
               "name": "today",
               "type": "Date",
-              "required": false
+              "required": false,
+              "description": "Inject \"now\" for stable stories and tests. Pass it when server rendering too: today's date, and with it the starting month, depends on the zone it is computed in, and the grid cannot wait for hydration without arriving blank. The server's date, passed down, keeps both renders on one day."
             },
             {
               "name": "typedEntry",

@@ -5,6 +5,7 @@ import { Check, Copy, RotateCcw, ThumbsDown, ThumbsUp } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { useHydrated } from '../../../lib/use-hydrated'
 import { Button, IconButton } from '../../button'
 
 export type MessageRole = 'user' | 'assistant' | 'system' | 'tool'
@@ -39,6 +40,13 @@ export interface MessageProps extends Omit<React.ComponentProps<'article'>, 'rol
   /** The model that produced it. A machine identifier, so it is set as a literal. */
   model?: string
   timestamp?: Date | string
+  /**
+   * IANA zone the time is shown in, such as `"UTC"` or `"America/Panama"`.
+   * Without it the time is the reader's own and appears only after
+   * hydration, because the server cannot know the reader's zone; pass one to
+   * have the time in the server HTML.
+   */
+  timeZone?: string
   /** `error`: the message failed partway. Content so far stays; the error is stated under it. */
   status?: 'streaming' | 'done' | 'error'
   /** The error, verbatim from the system. Shown as a literal — operators paste it into tickets. */
@@ -83,6 +91,7 @@ export function Message({
   author,
   model,
   timestamp,
+  timeZone,
   status = 'done',
   error,
   copyText,
@@ -95,6 +104,8 @@ export function Message({
 }: MessageProps) {
   const name = author ?? ROLE_LABEL[role]
   const time = timestamp ? new Date(timestamp) : undefined
+  const hydrated = useHydrated()
+  const shownTime = time && (timeZone !== undefined || hydrated) ? formatTime(time, timeZone) : undefined
   // On error, Retry moves into the error block, so retry alone leaves the
   // action row with nothing in it: an empty row and a margin under the error.
   const hasActions =
@@ -105,7 +116,7 @@ export function Message({
       data-slot="message"
       data-role={role}
       data-status={status}
-      aria-label={`${name}${time ? `, ${formatTime(time)}` : ''}`}
+      aria-label={`${name}${shownTime ? `, ${shownTime}` : ''}`}
       className={cn('group/message @container border-t border-keyline py-5 first:border-t-0', className)}
       {...props}
     >
@@ -128,9 +139,9 @@ export function Message({
                 than mid-word. */}
             {role === 'tool' ? name.replace(/_/g, '_\u200b') : name}
           </span>
-          {time ? (
+          {time && shownTime ? (
             <time data-part="time" dateTime={time.toISOString()} className="font-ui text-xs tabular text-ink-muted">
-              {formatTime(time)}
+              {shownTime}
             </time>
           ) : null}
           {model ? <span data-part="model" className="literal text-2xs text-ink-muted">{model}</span> : null}
@@ -246,7 +257,8 @@ function MessageActions({
 }
 
 // 'en-US' for the same reason as PromptInput's estimate: the runtime default
-// differs between server and browser. The time zone stays the reader's own.
-function formatTime(date: Date) {
-  return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+// differs between server and browser. The time zone is the reader's own
+// unless one is passed, and a reader's own zone is known only in the browser.
+function formatTime(date: Date, timeZone?: string) {
+  return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZone })
 }
