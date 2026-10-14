@@ -1,0 +1,46 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+import { ReleaseChanges, ReleaseStatus } from '../blocks/changes'
+
+<Meta title="Mola UI/What's new/0.5" />
+
+# What's new in 0.5
+
+<ReleaseStatus version="0.5.0" />
+
+0.5 is about reading Mola UI from somewhere other than this site: a coding agent can now ask the
+package itself, every page has a plain Markdown version, and every component page lists what
+changed in it. AlertDialog also gains a place to say why a confirm failed. The full list is under
+*Everything in 0.5.0* at the end of this page, and on the [Changelog](?path=/docs/mola-ui-changelog--overview).
+
+## An MCP server in the package
+
+The package ships `mola-ui-mcp`, a read-only [MCP](https://modelcontextprotocol.io) server. A coding
+agent looks up a component's props, usage, accessibility and examples through it instead of
+guessing, and the answers come from the version installed in your project, not from whatever the
+agent remembers. [Getting started](?path=/docs/mola-ui-getting-started--overview) has the one-line
+setup for Claude Code and the JSON for other clients. The MCP SDK is bundled into the bin, so your
+app gains no dependency.
+
+## Docs an agent can read
+
+The agent files are split by topic, so an agent reads only what it needs: `llms-components.txt`,
+`llms-tokens.txt` and `llms-patterns.txt`, with `llms.txt` as the index. Every docs page also has
+a Markdown version, and a *Copy for LLM* button copies it.
+
+## An error slot for AlertDialog
+
+An [AlertDialog](?path=/docs/components-overlays-dialog--overview) stays open when its confirm
+fails, and now has somewhere to say why. `error` is shown over the buttons, drawn like a Field
+error, announced as it appears and announced again on a second failure. `finalFocus` chooses where
+focus goes when the dialog closes, so a row whose action removed its own button can send focus to
+the next one. The [Confirmation](?path=/docs/patterns-confirmation--overview) pattern uses both.
+
+## What changed, on each component page
+
+A component page ends with *Changes*: its entries from the changelog, release by release, with the
+pull request and the commit. These What's new pages, one per minor release, give the highlights.
+
+## Everything in 0.5.0
+
+<ReleaseChanges version="0.5.0" />

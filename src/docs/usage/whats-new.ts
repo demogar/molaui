@@ -9,9 +9,12 @@ import { minorOf } from './changes'
  *
  * changes.test.ts checks that every version here has a page with the matching
  * title, that the sidebar lists them in this order, and that every released
- * one is in CHANGELOG.md.
+ * one is in CHANGELOG.md. It also fails when CHANGELOG.md has a minor release
+ * with no page here, because the readable layer fell a release behind once
+ * (it stopped at 0.4 while 0.5 shipped). Write the page in the release pull
+ * request, before it merges; until then it says "Unreleased".
  */
-export const WHATS_NEW = ['0.4.0', '0.3.0', '0.2.0'] as const
+export const WHATS_NEW = ['0.6.0', '0.5.0', '0.4.0', '0.3.0', '0.2.0'] as const
 
 /** The stories title of a What's new page. MDX needs it as a literal, so the test compares the two. */
 export const whatsNewTitle = (version: string) => `Mola UI/What's new/${minorOf(version)}`

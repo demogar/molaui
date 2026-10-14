@@ -18,7 +18,7 @@ admin consoles, knowledge bases, agent run monitors — documented in a standalo
   accessibility, and styled with Tailwind v4. Every one has a docs page in the same order: what it
   is for and its lifecycle phase, when to use it and what to use instead, examples, the keys it
   answers to and how it is tested, and related components.
-- **An AI interface layer.** Streaming text, message threads, a composer whose send button becomes
+- **An AI interface layer: 12 more components.** Streaming text, message threads, a composer whose send button becomes
   stop, tool-call cards with human approval, change review with diffs and a decision that needs a
   reason to say no, long-running agent run timelines with live elapsed time, run failure and
   recovery that keeps partial output, reasoning disclosure, citations that preview their source on

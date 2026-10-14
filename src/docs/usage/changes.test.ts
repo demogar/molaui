@@ -194,6 +194,13 @@ describe("What's new", () => {
     expect(missing).toEqual([])
   })
 
+  it('has a page for every minor release in CHANGELOG.md', () => {
+    // 0.1.0 is the first release: there was nothing before it to be new against.
+    const minors = [...new Set(releases.map((r) => minorOf(r.version)))].filter((m) => m !== '0.1')
+    const missing = minors.filter((m) => !WHATS_NEW.some((v) => minorOf(v) === m))
+    expect(missing, 'Write src/docs/whats-new/<minor>.mdx and list it in WHATS_NEW').toEqual([])
+  })
+
   it('reads released from the version, so a draft flips when the release lands', () => {
     expect(isReleased('0.4.0', '0.3.0')).toBe(false)
     expect(isReleased('0.4.0', '0.4.0')).toBe(true)

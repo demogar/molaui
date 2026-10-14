@@ -81,7 +81,9 @@
     "parts": 145,
     "aiComponents": 12,
     "aiParts": 23,
-    "stories": 301
+    "pages": 66,
+    "stories": 301,
+    "summary": "54 components and 12 AI components (66 documented pages)"
   },
   "tokens": {
     "source": "src/styles/tokens.css",

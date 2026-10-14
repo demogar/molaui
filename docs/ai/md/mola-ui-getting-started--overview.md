@@ -61,7 +61,7 @@ Every component page has the same sections in the same order, so you always know
 5. **Related.** The components this page sends you to, and the ones that send readers here.
 6. **Changes.** What changed in the component, release by release, with the pull request and the
    commit. It is read from the changelog by each commit's scope, so it appears only on components
-   that have changed. [What's new](https://demogar.github.io/molaui/?path=/docs/mola-ui-what-s-new-0-4--overview) has the
+   that have changed. [What's new](https://demogar.github.io/molaui/?path=/docs/mola-ui-what-s-new-0-6--overview) has the
    highlights of each release.
 
 Usage comes before the examples on purpose. "Should I use this at all?" is the first question,

@@ -2,6 +2,8 @@
 
 > A design system cut like a mola: flat layers, hard keylines, revealed bands. React components for dense internal tools and AI-native interfaces. Published as `@demogar/mola-ui`: React 19, Base UI for behaviour, Tailwind v4 for styling, design tokens as CSS custom properties.
 
+54 components and 12 AI components (66 documented pages).
+
 Install and set up:
 
 ```bash
