@@ -225,4 +225,5 @@ Types: `TableCellProps`, `TableCheckboxProps`, `TableHeadProps`, `TableProps`, `
 
 From CHANGELOG.md, newest first.
 
+- 0.5.0 (2026-10-14), fix: centre the empty row on the visible frame, not the whole table [#39](https://github.com/demogar/molaui/issues/39)
 - 0.2.0 (2026-10-06), feature: add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features [#11](https://github.com/demogar/molaui/issues/11)

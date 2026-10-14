@@ -600,6 +600,7 @@ Types: `TableCellProps`, `TableCheckboxProps`, `TableHeadProps`, `TableProps`, `
 Used in: Confirmation, Empty states, Filtered table, List and detail
 
 Changes:
+- 0.5.0 (2026-10-14), fix: centre the empty row on the visible frame, not the whole table [#39](https://github.com/demogar/molaui/issues/39)
 - 0.2.0 (2026-10-06), feature: add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features [#11](https://github.com/demogar/molaui/issues/11)
 
 ### Timeline
@@ -3176,6 +3177,9 @@ Also accepts the props of `DialogPopupProps`.
 Types: `AlertDialogProps`, `DialogContentProps`
 
 Used in: Confirmation, Settings page
+
+Changes:
+- 0.5.0 (2026-10-14), feature: add an error slot and finalFocus to alert dialog [#34](https://github.com/demogar/molaui/issues/34)
 
 ### Drawer
 
