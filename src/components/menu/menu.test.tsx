@@ -6,6 +6,28 @@ import { Button } from '../button'
 import { Menu, MenuCheckboxItem, MenuContent, MenuItem, MenuTrigger } from './menu'
 
 describe('Menu', () => {
+  it.each([
+    ['Enter', '{Enter}'],
+    ['Space', ' '],
+  ])('opens from its trigger with %s and stays open', async (_name, key) => {
+    render(
+      <Menu>
+        <MenuTrigger render={<Button>Actions</Button>} />
+        <MenuContent>
+          <MenuItem>Rename</MenuItem>
+        </MenuContent>
+      </Menu>,
+    )
+    const trigger = screen.getByRole('button', { name: 'Actions' })
+    trigger.focus()
+    await userEvent.keyboard(key)
+    const menu = await screen.findByRole('menu')
+    // Past the keystroke, so a popup that opened and was dismissed by the same key would show.
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    expect(menu).toBeInTheDocument()
+    expect(trigger).toHaveAttribute('aria-expanded', 'true')
+  })
+
   it('opens from the keyboard and moves through items with the arrow keys', async () => {
     const onRename = vi.fn()
     render(

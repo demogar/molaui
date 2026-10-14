@@ -14,6 +14,21 @@ const reviewers = [
 ]
 
 describe('Combobox', () => {
+  it.each([
+    ['Enter', '{Enter}'],
+    ['Space', ' '],
+  ])('opens from its options button with %s and stays open', async (_name, key) => {
+    render(<Combobox label="Reviewer" items={reviewers} />)
+    const button = screen.getByRole('button', { name: 'Show options' })
+    button.focus()
+    await userEvent.keyboard(key)
+    const listbox = await screen.findByRole('listbox')
+    // Past the keystroke, so a popup that opened and was dismissed by the same key would show.
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    expect(listbox).toBeInTheDocument()
+    expect(screen.getByRole('combobox')).toHaveAttribute('aria-expanded', 'true')
+  })
+
   it('is named by Field and takes its description and invalid state', () => {
     render(
       <Field label="Reviewer" hint="They approve the run." error="Choose a reviewer.">

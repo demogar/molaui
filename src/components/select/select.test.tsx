@@ -12,6 +12,21 @@ const items = [
 ]
 
 describe('Select', () => {
+  it.each([
+    ['Enter', '{Enter}'],
+    ['Space', ' '],
+  ])('opens from its trigger with %s and stays open', async (_name, key) => {
+    render(<Select label="Environment" items={items} />)
+    const trigger = screen.getByRole('combobox', { name: /Environment/ })
+    trigger.focus()
+    await userEvent.keyboard(key)
+    const listbox = await screen.findByRole('listbox')
+    // Past the keystroke, so a popup that opened and was dismissed by the same key would show.
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    expect(listbox).toBeInTheDocument()
+    expect(trigger).toHaveAttribute('aria-expanded', 'true')
+  })
+
   it('is named by its visible label and shows the current value', () => {
     render(<Select label="Environment" items={items} defaultValue="staging" />)
     const trigger = screen.getByRole('combobox', { name: /Environment/ })

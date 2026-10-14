@@ -22,6 +22,26 @@ function Example({ side, defaultOpen }: { side?: DrawerSide; defaultOpen?: boole
 }
 
 describe('Drawer', () => {
+  // The 2026-10-14 audit reported that Enter opened the drawer and closed it
+  // again in the same keystroke. It could not be reproduced: the canvas
+  // stories open their drawer by default, so a trigger focused behind the open
+  // modal toggles it shut on either key. These keep both keys covered anyway,
+  // and wait past the keystroke so an open-then-dismiss would show.
+  it.each([
+    ['Enter', '{Enter}'],
+    ['Space', ' '],
+  ])('opens from its trigger with %s and stays open', async (_name, key) => {
+    render(<Example />)
+    const trigger = screen.getByRole('button', { name: 'Open details' })
+    trigger.focus()
+    await userEvent.keyboard(key)
+    const drawer = await screen.findByRole('dialog', { name: 'Run details' })
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    expect(drawer).toBeInTheDocument()
+    expect(drawer).not.toHaveAttribute('data-ending-style')
+    expect(trigger).toHaveAttribute('aria-expanded', 'true')
+  })
+
   it('opens from its trigger, named by its title and described by its description', async () => {
     render(<Example />)
     await userEvent.click(screen.getByRole('button', { name: 'Open details' }))

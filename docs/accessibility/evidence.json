@@ -294,7 +294,7 @@
       "unitTests": [
         "src/components/select/select.test.tsx"
       ],
-      "keyboardInUnitTests": false,
+      "keyboardInUnitTests": true,
       "screenReadersByHand": false
     },
     "Components/Forms/Slider": {

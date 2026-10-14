@@ -149,6 +149,21 @@ describe('DatePicker', () => {
     expect(input).toHaveAccessibleDescription('Format: DD/MM/YYYY Runs at 02:00 UTC.')
   })
 
+  it.each([
+    ['Enter', '{Enter}'],
+    ['Space', ' '],
+  ])('opens the calendar from its button with %s and stays open', async (_name, key) => {
+    render(<DatePicker aria-label="Evaluation date" locale="en-GB" today={TODAY} />)
+    const button = screen.getByRole('button', { name: 'Choose date' })
+    button.focus()
+    await userEvent.keyboard(key)
+    const dialog = await screen.findByRole('dialog', { name: 'October 2026' })
+    // Past the keystroke, so a popup that opened and was dismissed by the same key would show.
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    expect(dialog).toBeInTheDocument()
+    expect(button).toHaveAttribute('aria-expanded', 'true')
+  })
+
   it('opens a calendar dialog on the chosen day, selects with Enter and returns focus to the button', async () => {
     const onValueChange = vi.fn()
     render(<DatePicker aria-label="Evaluation date" locale="en-GB" today={TODAY} onValueChange={onValueChange} />)
