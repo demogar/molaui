@@ -1112,7 +1112,7 @@ export interface FieldChangesProps extends Omit<React_2.ComponentProps<'section'
 }
 
 // @public
-export const fieldControlClasses: readonly ["w-full min-w-0 rounded-none border-0 bg-cloth-pale", "font-ui text-ink", "shadow-cut band-oro [--cut-reveal:3px]", "placeholder:text-ink-muted", "transition-[box-shadow,background-color]", "hover:cut-band", "focus:outline-none focus:shadow-[var(--focus-ring)]", "aria-invalid:band-rojo aria-invalid:cut-band", "aria-invalid:focus:shadow-[var(--focus-ring)]", "disabled:cursor-not-allowed disabled:bg-cloth-shade disabled:text-ink-muted disabled:hover:shadow-cut", "[&:is(input,textarea):read-only]:bg-cloth-shade"];
+export const fieldControlClasses: readonly ["w-full min-w-0 rounded-none border-0 bg-cloth-pale", "font-ui text-ink", "shadow-cut band-oro [--cut-reveal:3px]", "placeholder:text-ink-muted", "transition-[box-shadow,background-color]", "hover:cut-band", "focus:outline-none focus:shadow-[var(--focus-ring)]", "aria-invalid:band-rojo aria-invalid:cut-band", "aria-invalid:focus:cut-band-focus", "disabled:cursor-not-allowed disabled:bg-cloth-shade disabled:text-ink-muted disabled:hover:shadow-cut", "[&:is(input,textarea):read-only]:bg-cloth-shade"];
 
 // @public
 export interface FieldControlProps {
