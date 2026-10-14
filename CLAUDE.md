@@ -23,7 +23,7 @@ npm run manifest         # regenerate docs/ai/components.json, llms*.txt and the
 npm run manifest:check   # fail if those are stale or the README/introduction counts are wrong
 npm run evidence         # regenerate docs/accessibility/evidence.json (testing status on each component page)
 npm run evidence:check   # fail if it is stale
-npm run build            # library build to dist/
+npm run build            # library build to dist/, then the mola-ui-mcp bin to dist/mcp/
 npm run build-storybook  # static Storybook to storybook-static/
 npm run api              # regenerate etc/mola-ui.api.md from dist/ (API Extractor; needs build)
 npm run api:check        # fail if the public API changed without the report
@@ -77,6 +77,8 @@ Theme and density are document/element **attributes, not React context** (portal
 ### Components
 One folder per component in `src/components/<name>/`: `<name>.tsx` (cva variants + `cn()`), `<name>.stories.tsx`, `<name>.test.tsx` (query by role/accessible name, keyboard included), `index.ts` barrel. New components must also be exported from `src/index.ts`. AI-layer stories share fixtures and a simulated agent in `src/components/ai/_story-data/`.
 
+The MCP server (`mcp/`) is a read-only server over `docs/ai/components.json` and `docs/ai/tokens.json`. `vite.mcp.config.ts` bundles it, SDK and zod included, into `dist/mcp/mola-ui-mcp.js`, the package's `mola-ui-mcp` bin. The SDK stays a devDependency, so the library gains no runtime dependency. `mcp/server.test.ts` drives it through the SDK client over an in-memory transport, and `npm run consumers` starts the packed bin over stdio with no `node_modules`.
+
 Library build (`vite.config.ts`): ESM with `preserveModules` for file-level tree-shaking, all deps/peers external, a single CSS file `dist/mola-ui.css`, plus raw CSS layers copied to `dist/tailwind/`. Stories, tests, `src/docs/` and `src/patterns/` are excluded from the build and from type declarations. `@/` aliases `src/`.
 
 Storybook docs pages (introduction, principles, foundations, changelog) are MDX in `src/docs/`. Doc blocks in `src/docs/blocks/` import `tokens.css?raw` and resolve values with `src/tokens/resolve.ts`, so swatches show exactly what the contract test checks.
@@ -102,6 +104,7 @@ Storybook docs pages (introduction, principles, foundations, changelog) are MDX 
 
 ### Things that drift
 - The README and introduction counts (components = non-AI docs pages, parts = exported React components, stories) are checked by `npm run manifest:check`; update the wording it names when it fails. Other prose claims are not checked.
+- The agent docs (`docs/ai/components.json`, the Markdown twins, the llms files) embed each component's `changes`, parsed from CHANGELOG.md, which only release-please writes. So the release PR regenerates them itself: the `agent-docs` job in `release-please.yml` runs `npm run manifest` on the release branch and pushes the result, and main's `manifest:check` still holds after a release. If that job fails, run `npm run manifest` on the release branch and push before merging it.
 - Composed demos live under AI/Agent console, Components/Layout/App shell, Components/Forms/Form example and Patterns/*.
 
 ## Design rules (enforced in review)
