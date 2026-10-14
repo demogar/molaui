@@ -1,0 +1,141 @@
+import { existsSync, readFileSync } from 'node:fs'
+import { dirname, join, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+/**
+ * The generated agent docs the server answers from: docs/ai/components.json
+ * and docs/ai/tokens.json, written by scripts/export-manifest.ts and shipped
+ * in the package (`files` in package.json). The server never parses the
+ * source itself: the manifest is already what the compiler and Storybook
+ * see, and manifest:check keeps it current, so reading it is how the server
+ * stays in sync. Installed from npm, it answers for exactly the version
+ * installed beside it.
+ *
+ * The shapes below are the subset the server reads, not a second schema.
+ */
+
+export interface Prop {
+  name: string
+  type: string
+  required: boolean
+  default?: string
+  description?: string
+}
+
+export interface Export {
+  name: string
+  kind: string
+  source: string
+  description?: string
+  props?: Prop[]
+  inherits?: string[]
+  variants?: Record<string, { values: string[]; default?: string }>
+}
+
+export interface Alternative {
+  when: string
+  use: string | null
+  label?: string
+}
+
+export interface Component {
+  title: string
+  name: string
+  layer: 'components' | 'ai'
+  category: string
+  docs: string
+  phase?: string
+  summary?: string
+  description?: string
+  usage?: {
+    use: string[]
+    avoid: Alternative[]
+    practices?: { do: string; dont: string }[]
+    content?: string[]
+    replacedBy?: string
+  }
+  accessibility?: { keyboard?: { keys: string[]; action: string }[]; handles: string[]; you: string[] }
+  anatomy?: { slot: string; parts: { part: string; name: string; does: string; selector: string }[] }
+  exports: Export[]
+  stories: { name: string; id: string; url: string }[]
+  usedIn?: string[]
+  /** Its entries in CHANGELOG.md, newest first. */
+  changes?: { version: string; date?: string; type: string; breaking: boolean; subject: string; pr?: { number: number; url: string } }[]
+}
+
+export interface Pattern {
+  title: string
+  kind: 'pattern' | 'showcase'
+  docs: string
+  summary?: string
+  description?: string
+  builtFrom: string[]
+  guidance?: {
+    summary: string
+    use: string[]
+    avoid: Alternative[]
+    parts: { title: string; role: string }[]
+    states: Record<string, { story?: string; note: string }>
+    accessibility: string[]
+  }
+  stories: { name: string; id: string; url: string }[]
+}
+
+export interface Manifest {
+  name: string
+  description: string
+  storybook: string
+  install: string
+  rules: { rule: string; why: string }[]
+  phases: Record<string, { label: string; promise: string }>
+  tokens: { colorUtilities: string[]; attributes: Record<string, string[]> }
+  components: Component[]
+  patterns: Pattern[]
+  utilities: { name: string; kind: string; source: string; description?: string }[]
+}
+
+export interface Token {
+  name: string
+  group: string
+  note?: string
+  raw: string
+  light: string
+  dark: string
+  isColor: boolean
+}
+
+export interface Tokens {
+  tokens: Token[]
+  density: Record<string, Record<string, string>>
+}
+
+export interface Data {
+  version: string
+  manifest: Manifest
+  tokens: Tokens
+}
+
+/**
+ * The package root: the nearest directory above `from` that holds
+ * docs/ai/components.json. The source (mcp/) and the build
+ * (dist/mcp/mola-ui-mcp.js) sit at different depths, so the root is found
+ * rather than assumed.
+ */
+export function findRoot(from: string = dirname(fileURLToPath(import.meta.url))): string {
+  let dir = resolve(from)
+  for (;;) {
+    if (existsSync(join(dir, 'docs/ai/components.json'))) return dir
+    const up = dirname(dir)
+    if (up === dir) throw new Error(`docs/ai/components.json not found above ${from}`)
+    dir = up
+  }
+}
+
+export function loadData(root: string = findRoot()): Data {
+  const json = <T>(path: string) => JSON.parse(readFileSync(join(root, path), 'utf8')) as T
+  return {
+    version: json<{ version: string }>('package.json').version,
+    manifest: json<Manifest>('docs/ai/components.json'),
+    tokens: json<Tokens>('docs/ai/tokens.json'),
+  }
+}
