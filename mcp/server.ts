@@ -257,7 +257,7 @@ export function createServer(data: Data) {
     {
       title: 'Check code against the rules',
       description:
-        'Review UI code you wrote (TSX, JSX or CSS) against the design rules before handing it back: borders on controls, radius, faded disabled states, colour literals and names that are not tokens, physical left/right, spinners, hand-rolled dialogs and menus, other UI libraries and imports the package does not export. Returns each finding with its line, the rule it breaks and the fix, or "No findings". Deterministic, and it changes nothing.',
+        'Review UI code you wrote (TSX, JSX or CSS) against the design rules before handing it back: borders on controls, radius, faded disabled states, colour literals, names that are not tokens and tokens used outside their scope, physical left/right, spinners, hand-rolled dialogs and menus, other UI libraries and imports the package does not export. Returns each finding with its line, the rule it breaks and the fix, or "No findings". Deterministic, and it changes nothing.',
       inputSchema: {
         code: z.string().min(1).describe('The source to check: a component, a screen, or a stylesheet.'),
         filename: z.string().optional().describe('Its file name, for the language: "settings.tsx", "app.css". Without one, CSS is recognised by its shape.'),

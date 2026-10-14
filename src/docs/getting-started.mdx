@@ -195,7 +195,7 @@ same generated manifest as these pages, for the version installed in your projec
 - `check_code`: reviews code the agent wrote (TSX, JSX or CSS) against the design rules and
   returns each finding with its line, the rule it breaks and the fix. It covers what code can
   show: a border on a control, a radius, `opacity-*` on a disabled control, hex and colour names
-  that are not tokens, physical `pl-`/`left-` classes, spinners, hand-rolled dialogs and menus,
+  that are not tokens, a token outside its scope (`text-oro`), physical `pl-`/`left-` classes, spinners, hand-rolled dialogs and menus,
   other UI libraries and imports the package does not export. An error breaks a rule; a warning is
   probably wrong but needs a reason to keep. Rules that need a reading (state in glyph, word and
   colour; label wording; approval before writes) are left to review. Code that breaks a rule on

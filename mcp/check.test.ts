@@ -119,6 +119,27 @@ describe('rule 5: colours come from tokens', () => {
   })
 })
 
+describe('rule 5: each colour token only within its scopes', () => {
+  it('flags a token used for a job it is not scoped for', () => {
+    const [oro] = only('<p className="text-oro">Gold words</p>', 5)
+    expect(oro).toMatchObject({ severity: 'error' })
+    expect(oro?.message).toContain('scoped surface, mark, edge')
+    expect(oro?.fix).toContain('`bg-oro`')
+    expect(rules('<div className="bg-ink-2" />')).toEqual(['5 error'])
+    expect(rules('<div className="border-cloth-pale" />')).toEqual(['5 error'])
+    expect(rules('<div className="shadow-ink" />')).toEqual(['5 error'])
+    // The close icon is `X`: a one-letter component is still an element.
+    expect(only('<X aria-hidden className="size-4 text-danger" />', 5)[0]?.fix).toContain('`text-ink-danger`')
+  })
+
+  it('allows every utility the scopes publish, and the ones they also accept', () => {
+    const published = data.manifest.tokens.colors.flatMap((c) => c.utilities)
+    expect(published.length).toBeGreaterThan(80)
+    expect(check(`<div className="${published.join(' ')}" />`)).toEqual([])
+    expect(check('<input className="placeholder:text-ink-muted caret-ink outline-ink ring-ink divide-keyline stroke-ink" />').filter((f) => f.rule === 5)).toEqual([])
+  })
+})
+
 describe('rule 6: theme and density are attributes', () => {
   it('flags a density prop on a Mola component', () => {
     expect(rules('<Table density="compact" />')).toEqual(['6 error'])

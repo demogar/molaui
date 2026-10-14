@@ -85,6 +85,7 @@ const ALLOWED: Record<string, Allowed[]> = {
   'src/docs/blocks/decisions.tsx': [{ rule: 12, match: /hand-styled `<table>`/, why: TABLE_IN_DOCS }],
   'src/docs/blocks/page.tsx': [{ rule: 12, match: /hand-styled `<table>`/, why: TABLE_IN_DOCS }],
   'src/docs/blocks/pattern.tsx': [{ rule: 12, match: /hand-styled `<table>`/, why: TABLE_IN_DOCS }],
+  'src/docs/blocks/scopes.tsx': [{ rule: 12, match: /hand-styled `<table>`/, why: TABLE_IN_DOCS }],
   'src/docs/blocks/spacing.tsx': [{ rule: 12, match: /hand-styled `<table>`/, why: TABLE_IN_DOCS }],
   'src/docs/blocks/swatches.tsx': [{ rule: 12, match: /hand-styled `<table>`/, why: TABLE_IN_DOCS }],
   'src/docs/blocks/token-table.tsx': [{ rule: 12, match: /hand-styled `<table>`/, why: TABLE_IN_DOCS }],

@@ -175,7 +175,7 @@ Mola UI documents itself for coding agents as well as for people, from the same 
   tools are `list_components`, `get_component`, `search`, `get_tokens`, `get_rules`,
   `get_pattern` and `check_code`. `check_code` closes the loop: an agent passes it the screen it
   just wrote and gets back each place it breaks a design rule (a border on a control, a radius, a
-  faded disabled state, a hex or a colour that is not a token, `pl-`/`left-`, a spinner, a
+  faded disabled state, a hex, a colour that is not a token or a token outside its scope, `pl-`/`left-`, a spinner, a
   hand-rolled dialog, another UI library, an export that does not exist), with the line, the rule
   and the fix. The check is deterministic, and CI runs it over the library's own source, every
   story and the docs pages, so it cannot drift from what the components do and the examples you

@@ -49,6 +49,12 @@ export interface CheckContext {
   packageName: string
   /** Colour names with a utility: `ink` for `text-ink`, `bg-ink`, `border-ink`. */
   colors: Set<string>
+  /**
+   * Each colour's scopes and the Tailwind prefixes they allow, from the
+   * manifest's `tokens.colors[].scopes` and `tokens.scopes[].tailwind`
+   * (src/tokens/scopes.ts): `oro` allows `bg-` and `border-`, never `text-`.
+   */
+  scopes: Map<string, { scopes: string[]; prefixes: Set<string>; utilities: string[] }>
   /** Every export of the package, with what a check needs to know about it. */
   exports: Map<string, { page: string; phase?: string; replacedBy?: string; props: Set<string> }>
   /** Exported components whose className lands on an interactive element. */
@@ -65,7 +71,15 @@ const NOT_INTERACTIVE_EXPORT = new Set(['AccordionItem'])
 
 export function contextFrom(data: Data): CheckContext {
   const { manifest } = data
-  const colors = new Set(manifest.tokens.colorUtilities.map((u) => u.split(' / ')[0]!.replace(/^bg-/, '')))
+  // A token with no utility (`--band`) has no Tailwind colour, so a class naming it is an unknown name.
+  const bridged = manifest.tokens.colors.filter((c) => c.utilities.length)
+  const colors = new Set(bridged.map((c) => c.token.replace(/^--/, '')))
+  const scopes: CheckContext['scopes'] = new Map(
+    bridged.map((c) => [
+      c.token.replace(/^--/, ''),
+      { scopes: c.scopes, prefixes: new Set(c.scopes.flatMap((s) => manifest.tokens.scopes[s]?.tailwind ?? [])), utilities: c.utilities },
+    ]),
+  )
   const exports: CheckContext['exports'] = new Map()
   const interactive = new Set<string>()
   for (const c of manifest.components) {
@@ -75,7 +89,7 @@ export function contextFrom(data: Data): CheckContext {
     }
   }
   for (const u of manifest.utilities) exports.set(u.name, { page: u.source, props: new Set() })
-  return { packageName: manifest.name, colors, exports, interactive }
+  return { packageName: manifest.name, colors, scopes, exports, interactive }
 }
 
 /* ── the scanner ────────────────────────────────────────────────────── */
@@ -263,8 +277,9 @@ function scan(src: string, mdx = false): Scan {
       return true
     }
     const name = /^[A-Za-z_$][\w$.:-]*/.exec(src.slice(i, i + 128))?.[0]
-    // A lone capital is a type parameter (`<T,>(x: T) =>`), not a component.
-    if (!name || /^[A-Z]$/.test(name)) return false
+    // A type parameter (`<T,>(x: T) =>`, `<T extends X>`) fails below, on its comma or `extends`.
+    // A lone capital alone is not enough: lucide names its close icon `X`.
+    if (!name) return false
     i += name.length
     if (!/[\s/>{]/.test(src[i] ?? '')) return false
     const el: Element = { name, start, attrs: [] }
@@ -420,8 +435,12 @@ const NOT_COLOR: Record<string, RegExp> = {
   caret: /^auto$/,
   placeholder: /^shown$/,
   shadow: /^(?:\d?xs|sm|md|lg|\d?xl|inner|cut|raised|floating)$/,
+  'text-shadow': /^(?:\d?xs|sm|md|lg|\d?xl|none)$/,
+  'drop-shadow': /^(?:\d?xs|sm|md|lg|\d?xl|none)$/,
+  'inset-shadow': /^(?:\d?xs|sm|none)$/,
+  'inset-ring': /^(?:\d+|px)$/,
 }
-const COLOR_UTILITY = /^(bg|text|border(?:-[xytbselr])?|ring-offset|ring|outline|fill|stroke|decoration|divide|from|via|to|accent|caret|placeholder|shadow)-(.+?)(?:\/(?:\d+|\[.*\]|\(.*\)))?$/
+const COLOR_UTILITY = /^(bg|text-shadow|drop-shadow|inset-shadow|inset-ring|text|border(?:-[xytbselr])?|ring-offset|ring|outline|fill|stroke|decoration|divide|from|via|to|accent|caret|placeholder|shadow)-(.+?)(?:\/(?:\d+|\[.*\]|\(.*\)))?$/
 
 const COLOR_LITERAL = /#[0-9a-fA-F]{3,8}(?![\w-])|\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch)\(\s*[-+\d.]/
 const HEX_ONLY = /^\s*#(?:[0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\s*$/
@@ -765,7 +784,18 @@ function findAll(source: string, ctx: CheckContext, options: CheckOptions = {}):
           const prefix = c[1]!
           const name = c[2]!
           const base = prefix.startsWith('border-') ? 'border' : prefix
-          if (!/^[[(]/.test(name) && !ctx.colors.has(name) && !KEYWORD_COLOR.has(name) && !NOT_COLOR[base]?.test(name)) {
+          const scoped = ctx.scopes.get(name)
+          if (scoped && !scoped.prefixes.has(prefix)) {
+            // A token used for a job it is not scoped for: `text-oro` (gold is never text on light cloth).
+            const fit = [...ctx.scopes].filter(([, s]) => s.prefixes.has(prefix)).map(([n]) => n)
+            report(
+              t.at,
+              5,
+              'error',
+              `${tick(raw)} uses \`--${name}\` outside its scope: it is scoped ${scoped.scopes.join(', ')}, which ${prefix}- is not, so no contrast was promised for it there.`,
+              `${scoped.utilities.length ? `\`--${name}\` is ${scoped.utilities.map(tick).join(', ')}. ` : ''}${fit.length ? `For a ${prefix}- colour, use a token scoped for it: ${list(near(fit, name).map((x) => `${prefix}-${x}`))}. ` : `No token is scoped for ${prefix}-: use a Mola utility instead (get_tokens). `}get_tokens lists each token's scopes.`,
+            )
+          } else if (!/^[[(]/.test(name) && !ctx.colors.has(name) && !KEYWORD_COLOR.has(name) && !NOT_COLOR[base]?.test(name)) {
             if (PALETTE.test(name)) {
               report(t.at, 5, 'error', `${tick(raw)} is Tailwind's palette, not a Mola token: its contrast was never measured against Mola's grounds.`, `Use a token: ${list(near(ctx.colors, name.replace(/-\d+$/, '')).map((x) => `${prefix}-${x}`))}, or get_tokens.`)
             } else if (base !== 'text' || !/^\d/.test(name)) {
