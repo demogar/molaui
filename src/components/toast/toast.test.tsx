@@ -1,7 +1,7 @@
-import { act, render, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useEffect } from 'react'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { ToastProvider, useToast } from './toast'
 
@@ -62,5 +62,74 @@ describe('Toast', () => {
     expect(undone).toBe(true)
     await userEvent.click(screen.getByRole('button', { name: 'Dismiss' }))
     await waitFor(() => expect(screen.queryByText('Archived')).not.toBeInTheDocument())
+  })
+
+  /**
+   * The timers, on a fake clock. Each is a promise the doc comment makes —
+   * a running toast does not time out, a result starts its timeout, pause on
+   * hover, three at once — and none of them shows in a screenshot.
+   */
+  describe('timers', () => {
+    afterEach(() => {
+      vi.useRealTimers()
+    })
+
+    // Inside act, so the timeout's close and the exit after it are both
+    // committed before the next assertion.
+    const advance = (ms: number) =>
+      act(() => {
+        vi.advanceTimersByTime(ms)
+      })
+    const stackOf = (title: string) => screen.getByText(title).closest('[data-slot="toast"]')!.parentElement!
+
+    it('never times out a running toast', () => {
+      vi.useFakeTimers()
+      setup()
+      act(() => {
+        api.running({ title: 'Re-indexing 1,204 documents' })
+      })
+      advance(10 * 60_000)
+      expect(screen.getByText('Re-indexing 1,204 documents')).toBeInTheDocument()
+    })
+
+    it('starts the 5s timeout when a running toast becomes a result', () => {
+      vi.useFakeTimers()
+      setup()
+      let id = ''
+      act(() => {
+        id = api.running({ title: 'Re-indexing' })
+      })
+      advance(60_000)
+      act(() => api.update(id, { tone: 'success', title: 'Index rebuilt' }))
+      advance(4_900)
+      expect(screen.getByText('Index rebuilt')).toBeInTheDocument()
+      advance(1_000)
+      expect(screen.queryByText('Index rebuilt')).not.toBeInTheDocument()
+    })
+
+    it('pauses the timeout while the pointer is over the stack', () => {
+      vi.useFakeTimers()
+      setup()
+      act(() => {
+        api.show({ title: 'Settings saved' })
+      })
+      fireEvent.mouseEnter(stackOf('Settings saved'))
+      advance(20_000)
+      expect(screen.getByText('Settings saved')).toBeInTheDocument()
+      fireEvent.mouseLeave(stackOf('Settings saved'))
+      advance(6_000)
+      expect(screen.queryByText('Settings saved')).not.toBeInTheDocument()
+    })
+
+    it('keeps three toasts in view and folds the oldest away', () => {
+      vi.useFakeTimers()
+      setup()
+      act(() => {
+        for (const n of [1, 2, 3, 4]) api.show({ title: `Run ${n} finished`, timeout: 0 })
+      })
+      const limited = (n: number) =>
+        screen.getByText(`Run ${n} finished`).closest('[data-slot="toast"]')!.hasAttribute('data-limited')
+      expect([1, 2, 3, 4].map(limited)).toEqual([true, false, false, false])
+    })
   })
 })
