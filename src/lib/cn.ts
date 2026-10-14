@@ -55,6 +55,8 @@ const twMerge = extendTailwindMerge({
       tracking: [{ tracking: ['display', 'label'] }],
       shadow: [{ shadow: ['cut', 'raised', 'floating'] }],
       ease: [{ ease: ['cut'] }],
+      // The named columns; without them `cn('max-w-page', 'max-w-reading')` keeps both.
+      'max-w': [{ 'max-w': ['page', 'wide', 'reading'] }],
     },
   },
 })

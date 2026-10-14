@@ -18,6 +18,7 @@ each rest on one, and a change that ignores it reopens an argument that was sett
 - [0004 — Two themes in one declaration, with `light-dark()`](https://demogar.github.io/molaui/md/decisions-0004-themes-with-light-dark--overview.md)
 - [0005 — Density is a property of the surface, not the component](https://demogar.github.io/molaui/md/decisions-0005-density-is-a-surface--overview.md)
 - [0006 — One disclosure marker: a plus that turns into a cross](https://demogar.github.io/molaui/md/decisions-0006-one-disclosure-marker--overview.md)
+- [0007 — The Tailwind bridge is closed](https://demogar.github.io/molaui/md/decisions-0007-a-closed-bridge--overview.md)
 
 ## How a decision changes
 

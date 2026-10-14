@@ -39,7 +39,7 @@ export function Prose({ size = 'base', fluid = false, className, ...props }: Pro
       className={cn(
         'font-text',
         size === 'sm' ? 'text-[15px] leading-[1.55]' : 'text-[17px] leading-[1.6]',
-        !fluid && 'max-w-prose',
+        !fluid && 'max-w-reading',
         // rhythm: one line of space between blocks, none before the first
         '[&>*]:mt-0 [&>*]:mb-0 [&>*+*]:mt-[0.85em]',
         // headings return to the system voice: they are wayfinding, not speech

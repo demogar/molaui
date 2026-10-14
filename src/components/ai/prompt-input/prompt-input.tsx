@@ -138,7 +138,7 @@ export function PromptInput({
         send()
       }}
       className={cn(
-        'flex flex-col bg-cloth-pale shadow-cut transition-shadow duration-(--motion-cut) ease-cut',
+        'flex flex-col bg-cloth-pale shadow-cut transition-shadow',
         'focus-within:shadow-[var(--focus-ring)]',
         disabled && 'bg-cloth-shade',
         className,

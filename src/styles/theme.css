@@ -13,9 +13,44 @@
  *   @theme inline COLOURS, as var() references to tokens.css. `inline` makes
  *                 a utility write `var(--rojo)` rather than `var(--color-rojo)`,
  *                 so `light-dark()` resolves on the element that uses it.
+ *
+ * The bridge is CLOSED. Each namespace Mola has an answer for is reset to
+ * `initial` before Mola declares its own names, so Tailwind's defaults stop
+ * compiling: `bg-red-500`, `rounded-3xl`, `shadow-lg`, `ease-in`,
+ * `animate-spin`, `leading-relaxed`, `font-sans` produce no CSS at all. An
+ * open namespace let components drift onto Tailwind's values without anyone
+ * deciding to (seven default containers and `leading-relaxed` had crept in),
+ * and the no-hex and scope tests could not see it, because a default
+ * colour has no hex in this repo and no Mola token behind it. This reaches a
+ * consumer who imports `tailwind.css` into their own build too: adopting the
+ * system means adopting its scale. `src/styles/bridge.test.ts` compiles this
+ * file and holds both halves: the defaults are gone, and every utility the
+ * components and stories write still has a Mola token behind it.
+ * See docs/adr/0007-a-closed-bridge.md.
+ *
+ * Left open on purpose: `--text-*` (the defaults carry line-height companions
+ * every component's rhythm was tuned against; closing it is its own change)
+ * and `--font-weight-*` (weights are the typeface's, not the system's).
  */
 
 @theme {
+  --color-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+  --inset-shadow-*: initial;
+  --drop-shadow-*: initial;
+  --text-shadow-*: initial;
+  --blur-*: initial;
+  --ease-*: initial;
+  --animate-*: initial;
+  --leading-*: initial;
+  --tracking-*: initial;
+  --container-*: initial;
+  --breakpoint-*: initial;
+  --font-*: initial;
+  --perspective-*: initial;
+  --aspect-*: initial;
+
   /* ── voices ───────────────────────────────────────────────────────
    * Archivo is the system voice: navigation, labels, figures, buttons,
    * headings. It has a real `wdth` axis, so the label register is genuinely
@@ -33,6 +68,9 @@
   --font-ui: 'Archivo Variable', 'Archivo', system-ui, 'Helvetica Neue', sans-serif;
   --font-text: 'Alegreya Variable', 'Alegreya', 'Iowan Old Style', Georgia, serif;
   --font-mono: 'Martian Mono Variable', 'Martian Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  /* Preflight sets `html` in --font-sans, which the reset above removed; the
+   * page's own fallback face is the system voice. */
+  --default-font-family: var(--font-ui);
 
   /* ── type scale ───────────────────────────────────────────────────
    * The comfortable (product) scale. tokens.css re-declares the small end per
@@ -54,6 +92,9 @@
 
   --tracking-display: -0.02em;
   --tracking-label: 0.14em;
+  /* The way back out of the label register: a duration or a tool name inside
+   * a rótulo row is read as a value, not as lettering. */
+  --tracking-normal: 0em;
 
   /* Archivo's width axis, exercised at all three registers. Running text at
    * the drawn width; display wide (118 of 62–125), because a heading here is
@@ -83,6 +124,15 @@
   /* ── motion ───────────────────────────────────────────────────────
    * Cloth settling under a hand. No overshoot anywhere in this system. */
   --ease-cut: cubic-bezier(0.2, 0, 0, 1);
+
+  /* What a bare `transition-*` utility runs on. Tailwind's own default is
+   * 150ms on an ease-in-out curve, and every transition that forgot to say
+   * `duration-(--motion-cut) ease-cut` (at least thirteen did) quietly ran on
+   * it. --motion-cut, not --motion-base, because most transitions here are a
+   * hover or a press on a control: the cut answers the hand. A transition that
+   * should be slower says so with `duration-(--motion-base)`. */
+  --default-transition-duration: var(--motion-cut);
+  --default-transition-timing-function: var(--ease-cut);
 
   --animate-mola-pulse: mola-pulse 1.6s var(--ease-cut) infinite;
   --animate-mola-caret: mola-caret 1.05s steps(1) infinite;
@@ -138,16 +188,50 @@
   }
 
   /* ── layout ───────────────────────────────────────────────────────
-   * --container-* is what `max-w-*` resolves against: `max-w-page`,
-   * `max-w-prose`. The prose measure is ~70 characters of Alegreya and does
-   * not change with viewport. */
+   * The spacing unit, declared rather than inherited from Tailwind so the
+   * comfortable value is a Mola token like the compact one in tokens.css. */
+  --spacing: 0.25rem;
+
+  /* --container-* is what `max-w-*` resolves against, and what the `@sm` …
+   * `@5xl` container queries break at: one namespace, two jobs.
+   *
+   * `reading` is the measure for prose, counted in the text's own characters
+   * so it follows the type size: a 15px chat column is narrower than a 17px
+   * document. It was `--container-prose: 38rem` until 2026-10, but Tailwind
+   * ships a static `max-w-prose` (65ch) that outranks a theme key of the same
+   * name, so that token never reached an element and every prose block was
+   * set at 65ch. 65ch is kept, because it is the measure the system has
+   * actually been read at. 38rem would have widened the chat column from
+   * about 89 to 104 characters. Alegreya's zero is wide, so 65ch holds about
+   * 89 average characters (measured in Chromium at 15, 16 and 17px), not the
+   * 70 the old comment claimed.
+   *
+   * xs … 5xl keep Tailwind's values, now declared here: dialogs, the drawer,
+   * the tooltip and the pattern screens' container queries are built on them,
+   * and the steps above 5xl were never used. */
   --container-page: 1180px;
   --container-wide: 1440px;
-  --container-prose: 38rem;
+  --container-reading: 65ch;
+  --container-xs: 20rem;
+  --container-sm: 24rem;
+  --container-md: 28rem;
+  --container-lg: 32rem;
+  --container-xl: 36rem;
+  --container-2xl: 42rem;
+  --container-3xl: 48rem;
+  --container-4xl: 56rem;
+  --container-5xl: 64rem;
 
-  /* The one non-default breakpoint: where the application shell's sidebar
-   * becomes a sheet. Consumed as `nav:`. */
-  --breakpoint-nav: 920px;
+  /* Viewport breakpoints, all in rem: Tailwind sorts `@media` rules by value
+   * and cannot order mixed units, so `nav:` at 920px used to be emitted before
+   * `sm:` and a `nav:` + `md:` pair on one property let `md:` win on wide
+   * screens. `nav` is where the application shell's sidebar becomes a sheet. */
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-nav: 57.5rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+  --breakpoint-2xl: 96rem;
 }
 
 @theme inline {

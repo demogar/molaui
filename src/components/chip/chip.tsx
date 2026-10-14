@@ -27,7 +27,7 @@ export const chipVariants = cva(
     'group/chip relative inline-flex items-center gap-1.5 cursor-pointer select-none',
     'rounded-none shadow-cut band-oro [--cut-reveal:3px]',
     'font-ui text-sm text-ink-2 bg-cloth-pale',
-    'transition-[background-color,box-shadow,color] duration-(--motion-cut) ease-cut',
+    'transition-[background-color,box-shadow,color]',
     // Hover is scoped to the unchecked state: a checked chip is cloth on ink,
     // and revealing a band around it would fight the fill it just took.
     'hover:not-has-checked:cut-band hover:not-has-checked:text-ink',

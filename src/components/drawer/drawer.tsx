@@ -96,7 +96,7 @@ const drawerPopupVariants = cva(
     // Two properties, so a release mid-drag slides on from where it was let go
     // instead of snapping back to zero first.
     '[transform:translate3d(var(--drawer-swipe-movement-x,0px),var(--drawer-swipe-movement-y,0px),0)]',
-    'transition-[translate,transform] duration-(--motion-base) ease-cut',
+    'transition-[translate,transform] duration-(--motion-base)',
     'data-swiping:duration-0 data-swiping:select-none',
     'data-ending-style:duration-(--motion-cut)',
   ],
@@ -133,7 +133,7 @@ const backdropClasses = [
   'fixed inset-0 z-50 bg-backdrop',
   // Fades as the drawer is dragged away, so the page comes back with the finger.
   'opacity-[calc(1-var(--drawer-swipe-progress,0))]',
-  'transition-opacity duration-(--motion-base) ease-cut',
+  'transition-opacity duration-(--motion-base)',
   'data-swiping:duration-0 data-starting-style:opacity-0 data-ending-style:opacity-0',
 ]
 

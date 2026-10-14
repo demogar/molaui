@@ -50,5 +50,6 @@ the comfortable and spacious spacing unit is Tailwind's default, which Mola does
   going smaller, the layout is the problem.
 
 The page widths are tokens too: `max-w-page` (1180px) for an application page, `max-w-wide`
-(1440px) for a dashboard, and `max-w-prose` (38rem, about 70 characters of Alegreya) for reading.
-The prose measure does not change with the viewport or the density.
+(1440px) for a dashboard, and `max-w-reading` (65ch) for reading. The prose measure is counted in
+the text's own characters, so it follows the type size rather than the viewport: a 15px chat column
+is narrower than a 17px document, and both hold about 89 characters of Alegreya.

@@ -103,7 +103,7 @@ const BARE: Source = {
 
 export const LongSnippet: Story = {
   render: () => (
-    <p className="m-0 max-w-prose font-text text-lg text-ink">
+    <p className="m-0 max-w-reading font-text text-lg text-ink">
       Tickets are counted in UTC and merged workspaces count once
       <Citation n={4} source={LONG} />, so the drop is not an artefact of reopened threads.
     </p>
@@ -119,7 +119,7 @@ export const LongSnippet: Story = {
 
 export const WithoutSnippet: Story = {
   render: () => (
-    <p className="m-0 max-w-prose font-text text-lg text-ink">
+    <p className="m-0 max-w-reading font-text text-lg text-ink">
       The guardrail is on the dashboard
       <Citation n={5} source={BARE} /> for the next two weeks.
     </p>

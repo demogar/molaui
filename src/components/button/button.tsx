@@ -33,7 +33,7 @@ export const buttonVariants = cva(
     'group/button relative isolate inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap',
     'rounded-none [--cut-reveal:3px] select-none',
     'font-ui font-semibold uppercase leading-none tracking-label wdth-label',
-    'transition-[background-color,box-shadow,color] duration-(--motion-cut) ease-cut',
+    'transition-[background-color,box-shadow,color]',
     'focus-visible:shadow-[var(--focus-ring)]',
     '[&_svg]:pointer-events-none [&_svg]:shrink-0',
     // Not `opacity-50`: fading a cut shape fades its keyline with it, and its
@@ -134,7 +134,7 @@ export function ButtonArrow() {
   return (
     <ArrowRight
       aria-hidden
-      className="transition-transform duration-(--motion-cut) ease-cut group-hover/button:translate-x-[3px] rtl:-scale-x-100 rtl:group-hover/button:-translate-x-[3px]"
+      className="transition-transform group-hover/button:translate-x-[3px] rtl:-scale-x-100 rtl:group-hover/button:-translate-x-[3px]"
     />
   )
 }

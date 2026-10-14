@@ -85,7 +85,7 @@ function flatten(items: Items): ComboboxOption[] {
 const popupClasses = [
   'w-(--anchor-width) max-w-(--available-width) max-h-[min(var(--available-height),22rem)] overflow-y-auto scroll-cloth',
   'bg-cloth-pale p-1 text-ink shadow-floating outline-none',
-  'origin-(--transform-origin) transition-[opacity,transform] duration-(--motion-cut) ease-cut',
+  'origin-(--transform-origin) transition-[opacity,transform]',
   'data-starting-style:-translate-y-1 data-starting-style:opacity-0',
   'data-ending-style:opacity-0',
 ] as const
@@ -94,7 +94,7 @@ const popupClasses = [
 // them out of the order): the keyboard opens the list with ArrowDown and
 // clears with Backspace, so the buttons are for the pointer.
 const endButtonClasses =
-  'grid size-6 shrink-0 place-items-center text-ink-muted transition-colors duration-(--motion-cut) hover:bg-ink-soft hover:text-ink data-disabled:pointer-events-none [&_svg]:size-4'
+  'grid size-6 shrink-0 place-items-center text-ink-muted transition-colors hover:bg-ink-soft hover:text-ink data-disabled:pointer-events-none [&_svg]:size-4'
 
 const statusRowClasses = 'flex items-center gap-2.5 px-2 py-2 text-sm text-ink-muted'
 
@@ -357,7 +357,7 @@ export function Combobox(props: ComboboxProps) {
                   {disabled || readOnly ? null : (
                     <ComboboxPrimitive.ChipRemove
                       aria-label={removeLabel(option.label)}
-                      className="grid size-5 place-items-center text-current transition-colors duration-(--motion-cut) hover:bg-ink-soft"
+                      className="grid size-5 place-items-center text-current transition-colors hover:bg-ink-soft"
                     >
                       <X aria-hidden />
                     </ComboboxPrimitive.ChipRemove>

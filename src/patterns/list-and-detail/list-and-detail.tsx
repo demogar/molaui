@@ -219,7 +219,7 @@ export function AgentsScreen({ agents = AGENTS, defaultSelectedId, defaultView =
                     onClick={() => open(agent.id)}
                     className={cn(
                       'group/agent flex w-full cursor-pointer flex-col gap-1.5 px-4 py-3 text-start sm:px-5',
-                      'bg-transparent text-ink transition-colors duration-(--motion-cut) ease-cut',
+                      'bg-transparent text-ink transition-colors',
                       'hover:bg-ink-soft focus-visible:shadow-[var(--focus-ring)] focus-visible:outline-none',
                       'aria-[current=true]:bg-ink-soft aria-[current=true]:forced-selected',
                       'aria-[current=true]:shadow-[inset_3px_0_0_var(--ink)] rtl:aria-[current=true]:shadow-[inset_-3px_0_0_var(--ink)]',
@@ -317,7 +317,7 @@ function AgentDetail({ agent, headingRef }: { agent: Agent; headingRef: React.Re
       ) : null}
 
       <figure className="m-0 flex flex-col gap-2">
-        <blockquote className="m-0 max-w-prose font-text text-lg leading-body text-ink">{agent.purpose}</blockquote>
+        <blockquote className="m-0 max-w-reading font-text text-lg leading-body text-ink">{agent.purpose}</blockquote>
         <figcaption className="text-xs text-ink-muted">Purpose, written by {agent.owner}</figcaption>
       </figure>
 

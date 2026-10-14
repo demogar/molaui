@@ -84,6 +84,16 @@ const NOTES: Record<string, Notes> = {
       'Foundations/Motion': 'The disclosure marker turns at --motion-base, the same duration as the panel it opens.',
     },
   },
+  '0007': {
+    name: 'A closed bridge',
+    decided:
+      "Tailwind's default palette, radii, shadows, easings and other scales Mola replaces stop compiling. Every utility left has a Mola token behind it.",
+    governs: {
+      'Foundations/Tokens': "Tailwind's defaults are closed, so every utility you can write resolves to a token on this page.",
+      'Foundations/Spacing': 'The page widths and the reading measure are Mola tokens, and the breakpoints are all in rem so they sort by width.',
+      'Foundations/Motion': 'A bare transition runs on --motion-cut and the cut curve, not on Tailwind’s 150ms default.',
+    },
+  },
 }
 
 export interface Decision extends Notes {

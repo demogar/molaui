@@ -28,7 +28,7 @@ export const fieldControlClasses = [
   'font-ui text-ink',
   'shadow-cut band-oro [--cut-reveal:3px]',
   'placeholder:text-ink-muted',
-  'transition-[box-shadow,background-color] duration-(--motion-cut) ease-cut',
+  'transition-[box-shadow,background-color]',
   'hover:cut-band',
   'focus:outline-none focus:shadow-[var(--focus-ring)]',
   'aria-invalid:band-rojo aria-invalid:cut-band',

@@ -50,12 +50,12 @@ export function Reasoning({
       <Collapsible.Trigger
         className={cn(
           'group/trigger -mx-1.5 flex w-fit items-center gap-2 px-1.5 py-1 font-ui text-sm text-ink-muted',
-          'transition-colors duration-(--motion-cut) ease-cut hover:bg-ink-soft hover:text-ink',
+          'transition-colors hover:bg-ink-soft hover:text-ink',
         )}
       >
         <Plus
           aria-hidden
-          className="size-3.5 shrink-0 transition-transform duration-(--motion-base) ease-cut group-data-[panel-open]/trigger:rotate-45"
+          className="size-3.5 shrink-0 transition-transform duration-(--motion-base) group-data-[panel-open]/trigger:rotate-45"
         />
         {thinking ? <span aria-hidden className="inline-block h-[9px] w-5 band-oro relleno-working shadow-cut" /> : null}
         <span>

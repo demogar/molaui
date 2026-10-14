@@ -271,13 +271,13 @@ function StepRow({ step, last, nextStarted }: { step: AgentStep; last: boolean; 
               disabled={forcedOpen}
               className={cn(
                 'group/step -mx-2 -my-1 flex w-[calc(100%+1rem)] items-start gap-2 px-2 py-1 text-start',
-                'transition-colors duration-(--motion-cut) ease-cut enabled:hover:bg-ink-soft disabled:cursor-default',
+                'transition-colors enabled:hover:bg-ink-soft disabled:cursor-default',
               )}
             >
               <Plus
                 aria-hidden
                 className={cn(
-                  'mt-[15px] size-3.5 shrink-0 text-ink-muted transition-transform duration-(--motion-base) ease-cut group-data-[panel-open]/step:rotate-45',
+                  'mt-[15px] size-3.5 shrink-0 text-ink-muted transition-transform duration-(--motion-base) group-data-[panel-open]/step:rotate-45',
                   forcedOpen && 'invisible',
                 )}
               />

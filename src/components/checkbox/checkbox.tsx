@@ -26,7 +26,7 @@ import { ChoiceField } from './choice-field'
 export const checkboxBoxClasses = [
   'relative inline-grid size-4 shrink-0 place-items-center rounded-none',
   'bg-cloth-pale shadow-cut band-oro [--cut-reveal:2px]',
-  'transition-[background-color,box-shadow] duration-(--motion-cut) ease-cut',
+  'transition-[background-color,box-shadow]',
   'hover:cut-band',
   'focus-visible:shadow-[var(--focus-ring)]',
   'data-checked:bg-ink data-checked:text-on-ink data-indeterminate:bg-ink data-indeterminate:text-on-ink',

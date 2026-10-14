@@ -182,13 +182,13 @@ function Hunk({ hunk, layout, defaultOpen, first }: { hunk: DiffHunk; layout: 'u
       <Collapsible.Trigger
         className={cn(
           'group/hunk flex w-full min-h-(--control-h-sm) items-center gap-2 bg-cloth-shade px-3 py-1 text-start',
-          'transition-colors duration-(--motion-cut) ease-cut hover:bg-ink-soft',
+          'transition-colors hover:bg-ink-soft',
           'focus-visible:shadow-[var(--focus-ring-inset)]',
         )}
       >
         <Plus
           aria-hidden
-          className="size-3.5 shrink-0 text-ink-muted transition-transform duration-(--motion-base) ease-cut group-data-[panel-open]/hunk:rotate-45"
+          className="size-3.5 shrink-0 text-ink-muted transition-transform duration-(--motion-base) group-data-[panel-open]/hunk:rotate-45"
         />
         <span dir="ltr" className="shrink-0 whitespace-nowrap literal text-xs text-ink-2">
           @@ -{hunk.oldStart},{oldCount} +{hunk.newStart},{newCount} @@
@@ -232,7 +232,7 @@ function Code({ line }: { line: DiffLine }) {
 
 function UnifiedLines({ lines, className }: { lines: readonly DiffLine[]; className?: string }) {
   return (
-    <ol className={cn('m-0 list-none py-1 ps-0 literal text-xs leading-relaxed', className)}>
+    <ol className={cn('m-0 list-none py-1 ps-0 literal text-xs leading-body', className)}>
       {lines.map((line, i) => (
         <li
           key={i}
@@ -282,7 +282,7 @@ function SplitCell({ line, side, hidden }: { line?: DiffLine; side: 'old' | 'new
 
 function SplitLines({ lines, className }: { lines: readonly DiffLine[]; className?: string }) {
   return (
-    <ol className={cn('m-0 list-none py-1 ps-0 literal text-xs leading-relaxed', className)}>
+    <ol className={cn('m-0 list-none py-1 ps-0 literal text-xs leading-body', className)}>
       {pairLines(lines).map((row, i) => (
         <li key={i} className="grid grid-cols-2">
           <SplitCell line={row.old} side="old" />

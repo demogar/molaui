@@ -115,7 +115,7 @@ export function NavItem({
         }}
         className={cn(
           'relative flex h-(--control-h) items-center gap-2.5 px-3 text-sm text-ink-2 no-underline',
-          'transition-colors duration-(--motion-cut) ease-cut',
+          'transition-colors',
           'hover:bg-ink-soft hover:text-ink',
           'aria-[current=page]:bg-ink-soft aria-[current=page]:font-semibold aria-[current=page]:text-ink',
           'aria-[current=page]:shadow-[inset_3px_0_0_var(--ink)] rtl:aria-[current=page]:shadow-[inset_-3px_0_0_var(--ink)]',

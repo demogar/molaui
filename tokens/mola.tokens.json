@@ -1,10 +1,18 @@
 {
-  "$description": "Mola UI design tokens, generated from src/styles/tokens.css by scripts/export-tokens.ts. Do not edit by hand.",
+  "$description": "Mola UI design tokens (DTCG 2025.10), generated from src/styles/tokens.css and theme.css by scripts/export-tokens.ts. Do not edit by hand.",
   "color": {
     "light": {
       "cloth": {
         "$type": "color",
-        "$value": "#edeee8",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9294,
+            0.9333,
+            0.9098
+          ],
+          "hex": "#edeee8"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -17,7 +25,15 @@
       },
       "cloth-pale": {
         "$type": "color",
-        "$value": "#f6f7f2",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9647,
+            0.9686,
+            0.949
+          ],
+          "hex": "#f6f7f2"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -30,7 +46,15 @@
       },
       "cloth-shade": {
         "$type": "color",
-        "$value": "#e4e7dc",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8941,
+            0.9059,
+            0.8627
+          ],
+          "hex": "#e4e7dc"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -43,7 +67,15 @@
       },
       "cloth-deep": {
         "$type": "color",
-        "$value": "#d7dbcb",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8431,
+            0.8588,
+            0.7961
+          ],
+          "hex": "#d7dbcb"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -56,7 +88,15 @@
       },
       "ink": {
         "$type": "color",
-        "$value": "#14161a",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0784,
+            0.0863,
+            0.102
+          ],
+          "hex": "#14161a"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL",
@@ -72,7 +112,15 @@
       },
       "ink-2": {
         "$type": "color",
-        "$value": "#3d4147",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2392,
+            0.2549,
+            0.2784
+          ],
+          "hex": "#3d4147"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL"
@@ -84,7 +132,15 @@
       },
       "ink-muted": {
         "$type": "color",
-        "$value": "#5e636a",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.3686,
+            0.3882,
+            0.4157
+          ],
+          "hex": "#5e636a"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL",
@@ -99,7 +155,15 @@
       },
       "keyline": {
         "$type": "color",
-        "$value": "#c6cabc",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7765,
+            0.7922,
+            0.7373
+          ],
+          "hex": "#c6cabc"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "STROKE_COLOR",
@@ -113,7 +177,15 @@
       },
       "keyline-soft": {
         "$type": "color",
-        "$value": "#dcdfd3",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8627,
+            0.8745,
+            0.8275
+          ],
+          "hex": "#dcdfd3"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "STROKE_COLOR",
@@ -126,7 +198,15 @@
       },
       "rojo": {
         "$type": "color",
-        "$value": "#c0272d",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7529,
+            0.1529,
+            0.1765
+          ],
+          "hex": "#c0272d"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -142,7 +222,15 @@
       },
       "rojo-deep": {
         "$type": "color",
-        "$value": "#9e1e24",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.6196,
+            0.1176,
+            0.1412
+          ],
+          "hex": "#9e1e24"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -156,7 +244,15 @@
       },
       "anil": {
         "$type": "color",
-        "$value": "#1b4b8f",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1059,
+            0.2941,
+            0.5608
+          ],
+          "hex": "#1b4b8f"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -172,7 +268,15 @@
       },
       "verde": {
         "$type": "color",
-        "$value": "#0b6b4b",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0431,
+            0.4196,
+            0.2941
+          ],
+          "hex": "#0b6b4b"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -188,7 +292,15 @@
       },
       "oro": {
         "$type": "color",
-        "$value": "#edb01f",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9294,
+            0.6902,
+            0.1216
+          ],
+          "hex": "#edb01f"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -203,7 +315,15 @@
       },
       "on-layer": {
         "$type": "color",
-        "$value": "#f6f7f2",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9647,
+            0.9686,
+            0.949
+          ],
+          "hex": "#f6f7f2"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL",
@@ -216,7 +336,15 @@
       },
       "on-oro": {
         "$type": "color",
-        "$value": "#14161a",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0784,
+            0.0863,
+            0.102
+          ],
+          "hex": "#14161a"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL"
@@ -228,7 +356,15 @@
       },
       "danger": {
         "$type": "color",
-        "$value": "#9e1e24",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.6196,
+            0.1176,
+            0.1412
+          ],
+          "hex": "#9e1e24"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "SHAPE_FILL",
@@ -242,7 +378,15 @@
       },
       "success": {
         "$type": "color",
-        "$value": "#0b6b4b",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0431,
+            0.4196,
+            0.2941
+          ],
+          "hex": "#0b6b4b"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "SHAPE_FILL",
@@ -256,7 +400,15 @@
       },
       "warn": {
         "$type": "color",
-        "$value": "#8a6410",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.5412,
+            0.3922,
+            0.0627
+          ],
+          "hex": "#8a6410"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "SHAPE_FILL",
@@ -270,7 +422,15 @@
       },
       "info": {
         "$type": "color",
-        "$value": "#1b4b8f",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1059,
+            0.2941,
+            0.5608
+          ],
+          "hex": "#1b4b8f"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "SHAPE_FILL",
@@ -284,7 +444,15 @@
       },
       "ink-danger": {
         "$type": "color",
-        "$value": "#9e1e24",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.6196,
+            0.1176,
+            0.1412
+          ],
+          "hex": "#9e1e24"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL"
@@ -296,7 +464,15 @@
       },
       "ink-success": {
         "$type": "color",
-        "$value": "#0b6b4b",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0431,
+            0.4196,
+            0.2941
+          ],
+          "hex": "#0b6b4b"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL"
@@ -308,7 +484,15 @@
       },
       "ink-warn": {
         "$type": "color",
-        "$value": "#8a6410",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.5412,
+            0.3922,
+            0.0627
+          ],
+          "hex": "#8a6410"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL"
@@ -320,7 +504,15 @@
       },
       "ink-info": {
         "$type": "color",
-        "$value": "#1b4b8f",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1059,
+            0.2941,
+            0.5608
+          ],
+          "hex": "#1b4b8f"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL"
@@ -332,7 +524,15 @@
       },
       "rojo-soft": {
         "$type": "color",
-        "$value": "#f3e0d9",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9529,
+            0.8784,
+            0.851
+          ],
+          "hex": "#f3e0d9"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -345,7 +545,15 @@
       },
       "anil-soft": {
         "$type": "color",
-        "$value": "#dae2e7",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8549,
+            0.8863,
+            0.9059
+          ],
+          "hex": "#dae2e7"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -358,7 +566,15 @@
       },
       "verde-soft": {
         "$type": "color",
-        "$value": "#dce6dc",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8627,
+            0.902,
+            0.8627
+          ],
+          "hex": "#dce6dc"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -371,7 +587,15 @@
       },
       "oro-soft": {
         "$type": "color",
-        "$value": "#f5ead0",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9608,
+            0.9176,
+            0.8157
+          ],
+          "hex": "#f5ead0"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -384,7 +608,15 @@
       },
       "ink-soft": {
         "$type": "color",
-        "$value": "#e4e5e1",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8941,
+            0.898,
+            0.8824
+          ],
+          "hex": "#e4e5e1"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -397,7 +629,15 @@
       },
       "ink-on-tint": {
         "$type": "color",
-        "$value": "#3d4147",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2392,
+            0.2549,
+            0.2784
+          ],
+          "hex": "#3d4147"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL"
@@ -409,7 +649,15 @@
       },
       "rojo-on-shade": {
         "$type": "color",
-        "$value": "#9e1e24",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.6196,
+            0.1176,
+            0.1412
+          ],
+          "hex": "#9e1e24"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL"
@@ -419,9 +667,39 @@
           }
         }
       },
+      "rojo-rule": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7529,
+            0.1529,
+            0.1765
+          ],
+          "alpha": 0.45,
+          "hex": "#c0272d"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "STROKE_COLOR",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--rojo-rule)"
+          }
+        }
+      },
       "on-ink": {
         "$type": "color",
-        "$value": "#f6f7f2",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9647,
+            0.9686,
+            0.949
+          ],
+          "hex": "#f6f7f2"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL",
@@ -434,7 +712,15 @@
       },
       "on-ink-muted": {
         "$type": "color",
-        "$value": "#afb1af",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.6863,
+            0.6941,
+            0.6863
+          ],
+          "hex": "#afb1af"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL"
@@ -446,7 +732,15 @@
       },
       "on-ink-accent": {
         "$type": "color",
-        "$value": "#edb01f",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9294,
+            0.6902,
+            0.1216
+          ],
+          "hex": "#edb01f"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL"
@@ -456,9 +750,61 @@
           }
         }
       },
+      "keyline-on-ink": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9647,
+            0.9686,
+            0.949
+          ],
+          "alpha": 0.22,
+          "hex": "#f6f7f2"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "STROKE_COLOR",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--keyline-on-ink)"
+          }
+        }
+      },
+      "scrim": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0784,
+            0.0863,
+            0.102
+          ],
+          "alpha": 0.74,
+          "hex": "#14161a"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--scrim)"
+          }
+        }
+      },
       "on-scrim": {
         "$type": "color",
-        "$value": "#f6f7f2",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9647,
+            0.9686,
+            0.949
+          ],
+          "hex": "#f6f7f2"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL"
@@ -468,9 +814,60 @@
           }
         }
       },
+      "on-scrim-muted": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9647,
+            0.9686,
+            0.949
+          ],
+          "alpha": 0.78,
+          "hex": "#f6f7f2"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "TEXT_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--on-scrim-muted)"
+          }
+        }
+      },
+      "backdrop": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9294,
+            0.9333,
+            0.9098
+          ],
+          "alpha": 0.82,
+          "hex": "#edeee8"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--backdrop)"
+          }
+        }
+      },
       "band": {
         "$type": "color",
-        "$value": "#edb01f",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9294,
+            0.6902,
+            0.1216
+          ],
+          "hex": "#edb01f"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "STROKE_COLOR",
@@ -486,7 +883,15 @@
     "dark": {
       "cloth": {
         "$type": "color",
-        "$value": "#16181c",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0863,
+            0.0941,
+            0.1098
+          ],
+          "hex": "#16181c"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -499,7 +904,15 @@
       },
       "cloth-pale": {
         "$type": "color",
-        "$value": "#1e2126",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1176,
+            0.1294,
+            0.149
+          ],
+          "hex": "#1e2126"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -512,7 +925,15 @@
       },
       "cloth-shade": {
         "$type": "color",
-        "$value": "#111316",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0667,
+            0.0745,
+            0.0863
+          ],
+          "hex": "#111316"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -525,7 +946,15 @@
       },
       "cloth-deep": {
         "$type": "color",
-        "$value": "#2a2e34",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1647,
+            0.1804,
+            0.2039
+          ],
+          "hex": "#2a2e34"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -538,7 +967,15 @@
       },
       "ink": {
         "$type": "color",
-        "$value": "#eceee6",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9255,
+            0.9333,
+            0.902
+          ],
+          "hex": "#eceee6"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL",
@@ -554,7 +991,15 @@
       },
       "ink-2": {
         "$type": "color",
-        "$value": "#c4c8bd",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7686,
+            0.7843,
+            0.7412
+          ],
+          "hex": "#c4c8bd"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL"
@@ -566,7 +1011,15 @@
       },
       "ink-muted": {
         "$type": "color",
-        "$value": "#9a9f97",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.6039,
+            0.6235,
+            0.5922
+          ],
+          "hex": "#9a9f97"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL",
@@ -581,7 +1034,15 @@
       },
       "keyline": {
         "$type": "color",
-        "$value": "#3a3f46",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2275,
+            0.2471,
+            0.2745
+          ],
+          "hex": "#3a3f46"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "STROKE_COLOR",
@@ -595,7 +1056,15 @@
       },
       "keyline-soft": {
         "$type": "color",
-        "$value": "#2a2d33",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1647,
+            0.1765,
+            0.2
+          ],
+          "hex": "#2a2d33"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "STROKE_COLOR",
@@ -608,7 +1077,15 @@
       },
       "rojo": {
         "$type": "color",
-        "$value": "#f2685c",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.949,
+            0.4078,
+            0.3608
+          ],
+          "hex": "#f2685c"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -624,7 +1101,15 @@
       },
       "rojo-deep": {
         "$type": "color",
-        "$value": "#ff8a7e",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.5412,
+            0.4941
+          ],
+          "hex": "#ff8a7e"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -638,7 +1123,15 @@
       },
       "anil": {
         "$type": "color",
-        "$value": "#86a8ee",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.5255,
+            0.6588,
+            0.9333
+          ],
+          "hex": "#86a8ee"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -654,7 +1147,15 @@
       },
       "verde": {
         "$type": "color",
-        "$value": "#4cc493",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.298,
+            0.7686,
+            0.5765
+          ],
+          "hex": "#4cc493"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -670,7 +1171,15 @@
       },
       "oro": {
         "$type": "color",
-        "$value": "#f0bc3a",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9412,
+            0.7373,
+            0.2275
+          ],
+          "hex": "#f0bc3a"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -685,7 +1194,15 @@
       },
       "on-layer": {
         "$type": "color",
-        "$value": "#1e2126",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1176,
+            0.1294,
+            0.149
+          ],
+          "hex": "#1e2126"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL",
@@ -698,7 +1215,15 @@
       },
       "on-oro": {
         "$type": "color",
-        "$value": "#1e2126",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1176,
+            0.1294,
+            0.149
+          ],
+          "hex": "#1e2126"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL"
@@ -710,7 +1235,15 @@
       },
       "danger": {
         "$type": "color",
-        "$value": "#ff8a7e",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.5412,
+            0.4941
+          ],
+          "hex": "#ff8a7e"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "SHAPE_FILL",
@@ -724,7 +1257,15 @@
       },
       "success": {
         "$type": "color",
-        "$value": "#4cc493",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.298,
+            0.7686,
+            0.5765
+          ],
+          "hex": "#4cc493"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "SHAPE_FILL",
@@ -738,7 +1279,15 @@
       },
       "warn": {
         "$type": "color",
-        "$value": "#e0b45a",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8784,
+            0.7059,
+            0.3529
+          ],
+          "hex": "#e0b45a"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "SHAPE_FILL",
@@ -752,7 +1301,15 @@
       },
       "info": {
         "$type": "color",
-        "$value": "#86a8ee",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.5255,
+            0.6588,
+            0.9333
+          ],
+          "hex": "#86a8ee"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "SHAPE_FILL",
@@ -766,7 +1323,15 @@
       },
       "ink-danger": {
         "$type": "color",
-        "$value": "#ff8a7e",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.5412,
+            0.4941
+          ],
+          "hex": "#ff8a7e"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL"
@@ -778,7 +1343,15 @@
       },
       "ink-success": {
         "$type": "color",
-        "$value": "#4cc493",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.298,
+            0.7686,
+            0.5765
+          ],
+          "hex": "#4cc493"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL"
@@ -790,7 +1363,15 @@
       },
       "ink-warn": {
         "$type": "color",
-        "$value": "#e0b45a",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8784,
+            0.7059,
+            0.3529
+          ],
+          "hex": "#e0b45a"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL"
@@ -802,7 +1383,15 @@
       },
       "ink-info": {
         "$type": "color",
-        "$value": "#86a8ee",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.5255,
+            0.6588,
+            0.9333
+          ],
+          "hex": "#86a8ee"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL"
@@ -814,7 +1403,15 @@
       },
       "rojo-soft": {
         "$type": "color",
-        "$value": "#352a2d",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2078,
+            0.1647,
+            0.1765
+          ],
+          "hex": "#352a2d"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -827,7 +1424,15 @@
       },
       "anil-soft": {
         "$type": "color",
-        "$value": "#292f3b",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1608,
+            0.1843,
+            0.2314
+          ],
+          "hex": "#292f3b"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -840,7 +1445,15 @@
       },
       "verde-soft": {
         "$type": "color",
-        "$value": "#253232",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1451,
+            0.1961,
+            0.1961
+          ],
+          "hex": "#253232"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -853,7 +1466,15 @@
       },
       "oro-soft": {
         "$type": "color",
-        "$value": "#302f2c",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1882,
+            0.1843,
+            0.1725
+          ],
+          "hex": "#302f2c"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -866,7 +1487,15 @@
       },
       "ink-soft": {
         "$type": "color",
-        "$value": "#2a2d31",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1647,
+            0.1765,
+            0.1922
+          ],
+          "hex": "#2a2d31"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "FRAME_FILL",
@@ -879,7 +1508,15 @@
       },
       "ink-on-tint": {
         "$type": "color",
-        "$value": "#c4c8bd",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7686,
+            0.7843,
+            0.7412
+          ],
+          "hex": "#c4c8bd"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL"
@@ -891,7 +1528,15 @@
       },
       "rojo-on-shade": {
         "$type": "color",
-        "$value": "#ff8a7e",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            0.5412,
+            0.4941
+          ],
+          "hex": "#ff8a7e"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL"
@@ -901,9 +1546,39 @@
           }
         }
       },
+      "rojo-rule": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.949,
+            0.4078,
+            0.3608
+          ],
+          "alpha": 0.45,
+          "hex": "#f2685c"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "STROKE_COLOR",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--rojo-rule)"
+          }
+        }
+      },
       "on-ink": {
         "$type": "color",
-        "$value": "#1e2126",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1176,
+            0.1294,
+            0.149
+          ],
+          "hex": "#1e2126"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL",
@@ -916,7 +1591,15 @@
       },
       "on-ink-muted": {
         "$type": "color",
-        "$value": "#515456",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.3176,
+            0.3294,
+            0.3373
+          ],
+          "hex": "#515456"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL"
@@ -928,7 +1611,15 @@
       },
       "on-ink-accent": {
         "$type": "color",
-        "$value": "#7a560a",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.4784,
+            0.3373,
+            0.0392
+          ],
+          "hex": "#7a560a"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL"
@@ -938,9 +1629,61 @@
           }
         }
       },
+      "keyline-on-ink": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1176,
+            0.1294,
+            0.149
+          ],
+          "alpha": 0.22,
+          "hex": "#1e2126"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "STROKE_COLOR",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--keyline-on-ink)"
+          }
+        }
+      },
+      "scrim": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0784,
+            0.0863,
+            0.102
+          ],
+          "alpha": 0.74,
+          "hex": "#14161a"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--scrim)"
+          }
+        }
+      },
       "on-scrim": {
         "$type": "color",
-        "$value": "#f6f7f2",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9647,
+            0.9686,
+            0.949
+          ],
+          "hex": "#f6f7f2"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "TEXT_FILL"
@@ -950,9 +1693,60 @@
           }
         }
       },
+      "on-scrim-muted": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9647,
+            0.9686,
+            0.949
+          ],
+          "alpha": 0.78,
+          "hex": "#f6f7f2"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "TEXT_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--on-scrim-muted)"
+          }
+        }
+      },
+      "backdrop": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0863,
+            0.0941,
+            0.1098
+          ],
+          "alpha": 0.82,
+          "hex": "#16181c"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--backdrop)"
+          }
+        }
+      },
       "band": {
         "$type": "color",
-        "$value": "#f0bc3a",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9412,
+            0.7373,
+            0.2275
+          ],
+          "hex": "#f0bc3a"
+        },
         "$extensions": {
           "com.figma.scopes": [
             "STROKE_COLOR",
@@ -966,265 +1760,1081 @@
       }
     }
   },
+  "shadow": {
+    "$description": "The cut (keyline), the focus rings and the one elevation, resolved per theme.",
+    "light": {
+      "cut": {
+        "$type": "shadow",
+        "$value": {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0784,
+              0.0863,
+              0.102
+            ],
+            "hex": "#14161a"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 0,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 0,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 1.5,
+            "unit": "px"
+          }
+        }
+      },
+      "focus-ring": {
+        "$type": "shadow",
+        "$value": [
+          {
+            "color": {
+              "colorSpace": "srgb",
+              "components": [
+                0.0784,
+                0.0863,
+                0.102
+              ],
+              "hex": "#14161a"
+            },
+            "offsetX": {
+              "value": 0,
+              "unit": "px"
+            },
+            "offsetY": {
+              "value": 0,
+              "unit": "px"
+            },
+            "blur": {
+              "value": 0,
+              "unit": "px"
+            },
+            "spread": {
+              "value": 1.5,
+              "unit": "px"
+            }
+          },
+          {
+            "color": {
+              "colorSpace": "srgb",
+              "components": [
+                0.9647,
+                0.9686,
+                0.949
+              ],
+              "hex": "#f6f7f2"
+            },
+            "offsetX": {
+              "value": 0,
+              "unit": "px"
+            },
+            "offsetY": {
+              "value": 0,
+              "unit": "px"
+            },
+            "blur": {
+              "value": 0,
+              "unit": "px"
+            },
+            "spread": {
+              "value": 3.5,
+              "unit": "px"
+            }
+          },
+          {
+            "color": {
+              "colorSpace": "srgb",
+              "components": [
+                0.0784,
+                0.0863,
+                0.102
+              ],
+              "hex": "#14161a"
+            },
+            "offsetX": {
+              "value": 0,
+              "unit": "px"
+            },
+            "offsetY": {
+              "value": 0,
+              "unit": "px"
+            },
+            "blur": {
+              "value": 0,
+              "unit": "px"
+            },
+            "spread": {
+              "value": 6.5,
+              "unit": "px"
+            }
+          }
+        ]
+      },
+      "focus-ring-inset": {
+        "$type": "shadow",
+        "$value": [
+          {
+            "color": {
+              "colorSpace": "srgb",
+              "components": [
+                0.0784,
+                0.0863,
+                0.102
+              ],
+              "hex": "#14161a"
+            },
+            "offsetX": {
+              "value": 0,
+              "unit": "px"
+            },
+            "offsetY": {
+              "value": 0,
+              "unit": "px"
+            },
+            "blur": {
+              "value": 0,
+              "unit": "px"
+            },
+            "spread": {
+              "value": 2,
+              "unit": "px"
+            },
+            "inset": true
+          },
+          {
+            "color": {
+              "colorSpace": "srgb",
+              "components": [
+                0.9647,
+                0.9686,
+                0.949
+              ],
+              "hex": "#f6f7f2"
+            },
+            "offsetX": {
+              "value": 0,
+              "unit": "px"
+            },
+            "offsetY": {
+              "value": 0,
+              "unit": "px"
+            },
+            "blur": {
+              "value": 0,
+              "unit": "px"
+            },
+            "spread": {
+              "value": 3.5,
+              "unit": "px"
+            },
+            "inset": true
+          }
+        ]
+      },
+      "elevation-raised": {
+        "$type": "shadow",
+        "$value": {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0784,
+              0.0863,
+              0.102
+            ],
+            "alpha": 0.34,
+            "hex": "#14161a"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 14,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 34,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -10,
+            "unit": "px"
+          }
+        }
+      }
+    },
+    "dark": {
+      "cut": {
+        "$type": "shadow",
+        "$value": {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0.9255,
+              0.9333,
+              0.902
+            ],
+            "hex": "#eceee6"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 0,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 0,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 1.5,
+            "unit": "px"
+          }
+        }
+      },
+      "focus-ring": {
+        "$type": "shadow",
+        "$value": [
+          {
+            "color": {
+              "colorSpace": "srgb",
+              "components": [
+                0.9255,
+                0.9333,
+                0.902
+              ],
+              "hex": "#eceee6"
+            },
+            "offsetX": {
+              "value": 0,
+              "unit": "px"
+            },
+            "offsetY": {
+              "value": 0,
+              "unit": "px"
+            },
+            "blur": {
+              "value": 0,
+              "unit": "px"
+            },
+            "spread": {
+              "value": 1.5,
+              "unit": "px"
+            }
+          },
+          {
+            "color": {
+              "colorSpace": "srgb",
+              "components": [
+                0.1176,
+                0.1294,
+                0.149
+              ],
+              "hex": "#1e2126"
+            },
+            "offsetX": {
+              "value": 0,
+              "unit": "px"
+            },
+            "offsetY": {
+              "value": 0,
+              "unit": "px"
+            },
+            "blur": {
+              "value": 0,
+              "unit": "px"
+            },
+            "spread": {
+              "value": 3.5,
+              "unit": "px"
+            }
+          },
+          {
+            "color": {
+              "colorSpace": "srgb",
+              "components": [
+                0.9255,
+                0.9333,
+                0.902
+              ],
+              "hex": "#eceee6"
+            },
+            "offsetX": {
+              "value": 0,
+              "unit": "px"
+            },
+            "offsetY": {
+              "value": 0,
+              "unit": "px"
+            },
+            "blur": {
+              "value": 0,
+              "unit": "px"
+            },
+            "spread": {
+              "value": 6.5,
+              "unit": "px"
+            }
+          }
+        ]
+      },
+      "focus-ring-inset": {
+        "$type": "shadow",
+        "$value": [
+          {
+            "color": {
+              "colorSpace": "srgb",
+              "components": [
+                0.9255,
+                0.9333,
+                0.902
+              ],
+              "hex": "#eceee6"
+            },
+            "offsetX": {
+              "value": 0,
+              "unit": "px"
+            },
+            "offsetY": {
+              "value": 0,
+              "unit": "px"
+            },
+            "blur": {
+              "value": 0,
+              "unit": "px"
+            },
+            "spread": {
+              "value": 2,
+              "unit": "px"
+            },
+            "inset": true
+          },
+          {
+            "color": {
+              "colorSpace": "srgb",
+              "components": [
+                0.1176,
+                0.1294,
+                0.149
+              ],
+              "hex": "#1e2126"
+            },
+            "offsetX": {
+              "value": 0,
+              "unit": "px"
+            },
+            "offsetY": {
+              "value": 0,
+              "unit": "px"
+            },
+            "blur": {
+              "value": 0,
+              "unit": "px"
+            },
+            "spread": {
+              "value": 3.5,
+              "unit": "px"
+            },
+            "inset": true
+          }
+        ]
+      },
+      "elevation-raised": {
+        "$type": "shadow",
+        "$value": {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0431,
+              0.0471,
+              0.0549
+            ],
+            "alpha": 0.8,
+            "hex": "#0b0c0e"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 14,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 34,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -10,
+            "unit": "px"
+          }
+        }
+      }
+    }
+  },
   "font": {
     "display": {
       "$type": "fontFamily",
-      "$value": "'Archivo Variable', 'Archivo', system-ui, 'Helvetica Neue', sans-serif"
+      "$value": [
+        "Archivo Variable",
+        "Archivo",
+        "system-ui",
+        "Helvetica Neue",
+        "sans-serif"
+      ]
     },
     "ui": {
       "$type": "fontFamily",
-      "$value": "'Archivo Variable', 'Archivo', system-ui, 'Helvetica Neue', sans-serif"
+      "$value": [
+        "Archivo Variable",
+        "Archivo",
+        "system-ui",
+        "Helvetica Neue",
+        "sans-serif"
+      ]
     },
     "text": {
       "$type": "fontFamily",
-      "$value": "'Alegreya Variable', 'Alegreya', 'Iowan Old Style', Georgia, serif"
+      "$value": [
+        "Alegreya Variable",
+        "Alegreya",
+        "Iowan Old Style",
+        "Georgia",
+        "serif"
+      ]
     },
     "mono": {
       "$type": "fontFamily",
-      "$value": "'Martian Mono Variable', 'Martian Mono', ui-monospace, 'SF Mono', Menlo, monospace"
+      "$value": [
+        "Martian Mono Variable",
+        "Martian Mono",
+        "ui-monospace",
+        "SF Mono",
+        "Menlo",
+        "monospace"
+      ]
     }
   },
   "text": {
+    "$description": "The comfortable type scale; density modes re-scale 2xs to xl.",
     "2xs": {
       "$type": "dimension",
-      "$value": "11px"
+      "$value": {
+        "value": 11,
+        "unit": "px"
+      }
     },
     "xs": {
       "$type": "dimension",
-      "$value": "12px"
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      }
     },
     "sm": {
       "$type": "dimension",
-      "$value": "13px"
+      "$value": {
+        "value": 13,
+        "unit": "px"
+      }
     },
     "base": {
       "$type": "dimension",
-      "$value": "14px"
+      "$value": {
+        "value": 14,
+        "unit": "px"
+      }
     },
     "lg": {
       "$type": "dimension",
-      "$value": "16px"
+      "$value": {
+        "value": 16,
+        "unit": "px"
+      }
     },
     "xl": {
       "$type": "dimension",
-      "$value": "20px"
+      "$value": {
+        "value": 20,
+        "unit": "px"
+      }
     },
     "2xl": {
       "$type": "dimension",
-      "$value": "26px"
+      "$value": {
+        "value": 26,
+        "unit": "px"
+      }
     },
     "3xl": {
       "$type": "dimension",
-      "$value": "36px"
+      "$value": {
+        "value": 36,
+        "unit": "px"
+      }
     },
     "4xl": {
       "$type": "dimension",
-      "$value": "52px"
+      "$value": {
+        "value": 52,
+        "unit": "px"
+      }
     },
     "5xl": {
       "$type": "dimension",
-      "$value": "76px"
+      "$value": {
+        "value": 76,
+        "unit": "px"
+      }
     }
   },
   "leading": {
+    "$description": "Line height, as a multiple of the font size.",
     "body": {
       "$type": "number",
-      "$value": "1.55"
+      "$value": 1.55
     },
     "snug": {
       "$type": "number",
-      "$value": "1.25"
+      "$value": 1.25
     },
     "tight": {
       "$type": "number",
-      "$value": "1.04"
+      "$value": 1.04
     }
   },
   "tracking": {
+    "$description": "Letter spacing as a multiple of the font size (CSS em). DTCG dimensions are px or rem only, and tracking must scale with the type.",
     "display": {
-      "$type": "dimension",
-      "$value": "-0.02em"
+      "$type": "number",
+      "$value": -0.02
     },
     "label": {
-      "$type": "dimension",
-      "$value": "0.14em"
+      "$type": "number",
+      "$value": 0.14
+    },
+    "normal": {
+      "$type": "number",
+      "$value": 0
     }
   },
   "wdth": {
+    "$description": "Archivo's and Martian Mono's width axis (font-variation-settings 'wdth').",
     "body": {
       "$type": "number",
-      "$value": "100"
+      "$value": 100
     },
     "display": {
       "$type": "number",
-      "$value": "118"
+      "$value": 118
     },
     "label": {
       "$type": "number",
-      "$value": "116"
+      "$value": 116
     },
     "mono": {
       "$type": "number",
-      "$value": "87.5"
+      "$value": 87.5
     }
   },
   "radius": {
+    "default": {
+      "$type": "dimension",
+      "$value": {
+        "value": 0,
+        "unit": "px"
+      }
+    },
     "xs": {
       "$type": "dimension",
-      "$value": "0px"
+      "$value": {
+        "value": 0,
+        "unit": "px"
+      }
     },
     "sm": {
       "$type": "dimension",
-      "$value": "0px"
+      "$value": {
+        "value": 0,
+        "unit": "px"
+      }
     },
     "md": {
       "$type": "dimension",
-      "$value": "0px"
+      "$value": {
+        "value": 0,
+        "unit": "px"
+      }
     },
     "lg": {
       "$type": "dimension",
-      "$value": "0px"
+      "$value": {
+        "value": 0,
+        "unit": "px"
+      }
     },
     "xl": {
       "$type": "dimension",
-      "$value": "0px"
+      "$value": {
+        "value": 0,
+        "unit": "px"
+      }
     },
     "2xl": {
       "$type": "dimension",
-      "$value": "0px"
+      "$value": {
+        "value": 0,
+        "unit": "px"
+      }
+    }
+  },
+  "size": {
+    "cut-w": {
+      "$type": "dimension",
+      "$value": {
+        "value": 1.5,
+        "unit": "px"
+      }
+    },
+    "cut-reveal": {
+      "$type": "dimension",
+      "$value": {
+        "value": 5,
+        "unit": "px"
+      }
     }
   },
   "motion": {
     "cut": {
       "$type": "duration",
-      "$value": "120ms"
+      "$value": {
+        "value": 120,
+        "unit": "ms"
+      }
     },
     "base": {
       "$type": "duration",
-      "$value": "220ms"
+      "$value": {
+        "value": 220,
+        "unit": "ms"
+      }
     },
     "slow": {
       "$type": "duration",
-      "$value": "420ms"
+      "$value": {
+        "value": 420,
+        "unit": "ms"
+      }
     },
     "ease-cut": {
       "$type": "cubicBezier",
-      "$value": "0.2, 0, 0, 1"
+      "$value": [
+        0.2,
+        0,
+        0,
+        1
+      ]
+    }
+  },
+  "container": {
+    "$description": "Max widths (max-w-*) and container-query steps (@sm …).",
+    "page": {
+      "$type": "dimension",
+      "$value": {
+        "value": 1180,
+        "unit": "px"
+      }
+    },
+    "wide": {
+      "$type": "dimension",
+      "$value": {
+        "value": 1440,
+        "unit": "px"
+      }
+    },
+    "xs": {
+      "$type": "dimension",
+      "$value": {
+        "value": 20,
+        "unit": "rem"
+      }
+    },
+    "sm": {
+      "$type": "dimension",
+      "$value": {
+        "value": 24,
+        "unit": "rem"
+      }
+    },
+    "md": {
+      "$type": "dimension",
+      "$value": {
+        "value": 28,
+        "unit": "rem"
+      }
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": {
+        "value": 32,
+        "unit": "rem"
+      }
+    },
+    "xl": {
+      "$type": "dimension",
+      "$value": {
+        "value": 36,
+        "unit": "rem"
+      }
+    },
+    "2xl": {
+      "$type": "dimension",
+      "$value": {
+        "value": 42,
+        "unit": "rem"
+      }
+    },
+    "3xl": {
+      "$type": "dimension",
+      "$value": {
+        "value": 48,
+        "unit": "rem"
+      }
+    },
+    "4xl": {
+      "$type": "dimension",
+      "$value": {
+        "value": 56,
+        "unit": "rem"
+      }
+    },
+    "5xl": {
+      "$type": "dimension",
+      "$value": {
+        "value": 64,
+        "unit": "rem"
+      }
+    },
+    "reading": {
+      "$type": "number",
+      "$value": 65,
+      "$description": "The prose measure, in ch (characters of the element’s own font): max-w-reading."
+    }
+  },
+  "breakpoint": {
+    "$description": "Viewport min-widths (sm: … 2xl:).",
+    "sm": {
+      "$type": "dimension",
+      "$value": {
+        "value": 40,
+        "unit": "rem"
+      }
+    },
+    "md": {
+      "$type": "dimension",
+      "$value": {
+        "value": 48,
+        "unit": "rem"
+      }
+    },
+    "nav": {
+      "$type": "dimension",
+      "$value": {
+        "value": 57.5,
+        "unit": "rem"
+      }
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": {
+        "value": 64,
+        "unit": "rem"
+      }
+    },
+    "xl": {
+      "$type": "dimension",
+      "$value": {
+        "value": 80,
+        "unit": "rem"
+      }
+    },
+    "2xl": {
+      "$type": "dimension",
+      "$value": {
+        "value": 96,
+        "unit": "rem"
+      }
     }
   },
   "density": {
+    "$description": "Set by data-density on any element. Each mode lists every density-dependent token; comfortable is the product default.",
     "comfortable": {
+      "spacing": {
+        "$type": "dimension",
+        "$value": {
+          "value": 0.25,
+          "unit": "rem"
+        }
+      },
+      "text-2xs": {
+        "$type": "dimension",
+        "$value": {
+          "value": 11,
+          "unit": "px"
+        }
+      },
+      "text-xs": {
+        "$type": "dimension",
+        "$value": {
+          "value": 12,
+          "unit": "px"
+        }
+      },
+      "text-sm": {
+        "$type": "dimension",
+        "$value": {
+          "value": 13,
+          "unit": "px"
+        }
+      },
+      "text-base": {
+        "$type": "dimension",
+        "$value": {
+          "value": 14,
+          "unit": "px"
+        }
+      },
+      "text-lg": {
+        "$type": "dimension",
+        "$value": {
+          "value": 16,
+          "unit": "px"
+        }
+      },
+      "text-xl": {
+        "$type": "dimension",
+        "$value": {
+          "value": 20,
+          "unit": "px"
+        }
+      },
       "control-h": {
         "$type": "dimension",
-        "$value": "36px"
+        "$value": {
+          "value": 36,
+          "unit": "px"
+        }
       },
       "control-h-sm": {
         "$type": "dimension",
-        "$value": "28px"
+        "$value": {
+          "value": 28,
+          "unit": "px"
+        }
       },
       "control-h-lg": {
         "$type": "dimension",
-        "$value": "44px"
+        "$value": {
+          "value": 44,
+          "unit": "px"
+        }
       },
       "control-px": {
         "$type": "dimension",
-        "$value": "14px"
+        "$value": {
+          "value": 14,
+          "unit": "px"
+        }
       },
       "row-h": {
         "$type": "dimension",
-        "$value": "40px"
+        "$value": {
+          "value": 40,
+          "unit": "px"
+        }
       }
     },
     "compact": {
       "spacing": {
         "$type": "dimension",
-        "$value": "0.21875rem"
+        "$value": {
+          "value": 0.21875,
+          "unit": "rem"
+        }
       },
       "text-2xs": {
         "$type": "dimension",
-        "$value": "11px"
+        "$value": {
+          "value": 11,
+          "unit": "px"
+        }
       },
       "text-xs": {
         "$type": "dimension",
-        "$value": "11.5px"
+        "$value": {
+          "value": 11.5,
+          "unit": "px"
+        }
       },
       "text-sm": {
         "$type": "dimension",
-        "$value": "12.5px"
+        "$value": {
+          "value": 12.5,
+          "unit": "px"
+        }
       },
       "text-base": {
         "$type": "dimension",
-        "$value": "13px"
+        "$value": {
+          "value": 13,
+          "unit": "px"
+        }
       },
       "text-lg": {
         "$type": "dimension",
-        "$value": "15px"
+        "$value": {
+          "value": 15,
+          "unit": "px"
+        }
       },
       "text-xl": {
         "$type": "dimension",
-        "$value": "18px"
+        "$value": {
+          "value": 18,
+          "unit": "px"
+        }
       },
       "control-h": {
         "$type": "dimension",
-        "$value": "28px"
+        "$value": {
+          "value": 28,
+          "unit": "px"
+        }
       },
       "control-h-sm": {
         "$type": "dimension",
-        "$value": "24px"
+        "$value": {
+          "value": 24,
+          "unit": "px"
+        }
       },
       "control-h-lg": {
         "$type": "dimension",
-        "$value": "36px"
+        "$value": {
+          "value": 36,
+          "unit": "px"
+        }
       },
       "control-px": {
         "$type": "dimension",
-        "$value": "10px"
+        "$value": {
+          "value": 10,
+          "unit": "px"
+        }
       },
       "row-h": {
         "$type": "dimension",
-        "$value": "30px"
+        "$value": {
+          "value": 30,
+          "unit": "px"
+        }
       }
     },
     "spacious": {
+      "spacing": {
+        "$type": "dimension",
+        "$value": {
+          "value": 0.25,
+          "unit": "rem"
+        }
+      },
+      "text-2xs": {
+        "$type": "dimension",
+        "$value": {
+          "value": 11,
+          "unit": "px"
+        }
+      },
       "text-xs": {
         "$type": "dimension",
-        "$value": "13px"
+        "$value": {
+          "value": 13,
+          "unit": "px"
+        }
       },
       "text-sm": {
         "$type": "dimension",
-        "$value": "15px"
+        "$value": {
+          "value": 15,
+          "unit": "px"
+        }
       },
       "text-base": {
         "$type": "dimension",
-        "$value": "17px"
+        "$value": {
+          "value": 17,
+          "unit": "px"
+        }
       },
       "text-lg": {
         "$type": "dimension",
-        "$value": "20px"
+        "$value": {
+          "value": 20,
+          "unit": "px"
+        }
       },
       "text-xl": {
         "$type": "dimension",
-        "$value": "26px"
+        "$value": {
+          "value": 26,
+          "unit": "px"
+        }
       },
       "control-h": {
         "$type": "dimension",
-        "$value": "48px"
+        "$value": {
+          "value": 48,
+          "unit": "px"
+        }
       },
       "control-h-sm": {
         "$type": "dimension",
-        "$value": "36px"
+        "$value": {
+          "value": 36,
+          "unit": "px"
+        }
       },
       "control-h-lg": {
         "$type": "dimension",
-        "$value": "56px"
+        "$value": {
+          "value": 56,
+          "unit": "px"
+        }
       },
       "control-px": {
         "$type": "dimension",
-        "$value": "22px"
+        "$value": {
+          "value": 22,
+          "unit": "px"
+        }
       },
       "row-h": {
         "$type": "dimension",
-        "$value": "52px"
+        "$value": {
+          "value": 52,
+          "unit": "px"
+        }
       }
     }
   }

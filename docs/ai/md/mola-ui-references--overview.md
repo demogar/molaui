@@ -43,6 +43,6 @@ The account of the mola in the [Introduction](https://demogar.github.io/molaui/?
 | Standard | Used for |
 | --- | --- |
 | [WCAG 2.2](https://www.w3.org/TR/WCAG22/), level AA | The contrast contract test and the axe checks every story runs. See [Accessibility](https://demogar.github.io/molaui/?path=/docs/foundations-accessibility--overview). |
-| [W3C Design Tokens Format](https://www.designtokens.org/tr/drafts/format/) (Community Group draft) | The format of `tokens/mola.tokens.json`, loaded into Figma through Tokens Studio. |
+| [W3C Design Tokens Format 2025.10](https://www.designtokens.org/tr/2025.10/format/) | The format of `tokens/mola.tokens.json`, checked by `npm run tokens:check` against the spec's rules for each type. |
 | [Conventional Commits](https://www.conventionalcommits.org/) | Pull request titles, from which versions and the changelog are generated. |
 | [Contributor Covenant 2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct/) | The [code of conduct](https://github.com/demogar/molaui/blob/main/CODE_OF_CONDUCT.md). |

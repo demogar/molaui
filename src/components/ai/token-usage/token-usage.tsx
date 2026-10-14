@@ -124,7 +124,7 @@ function ContextMeter({ ratio, level, className }: { ratio: number; level: 'ok' 
     >
       <div
         className={cn(
-          'absolute inset-y-0 inset-s-0 transition-[width] duration-(--motion-base) ease-cut',
+          'absolute inset-y-0 inset-s-0 transition-[width] duration-(--motion-base)',
           level === 'danger' ? 'bg-rojo' : level === 'warn' ? 'bg-oro' : 'bg-ink',
         )}
         style={{ width: `${pct}%` }}

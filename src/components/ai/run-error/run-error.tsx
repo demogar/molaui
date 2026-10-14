@@ -193,7 +193,7 @@ export function RunError({
       </p>
       <p className="m-0 font-ui text-sm leading-snug text-ink-2">{message ?? plainSentence(kind, tool)}</p>
       {error ? (
-        <p className="m-0 literal text-xs leading-relaxed text-ink [overflow-wrap:anywhere]">
+        <p className="m-0 literal text-xs leading-body text-ink [overflow-wrap:anywhere]">
           <span dir="ltr">{error}</span>
         </p>
       ) : null}

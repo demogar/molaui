@@ -444,7 +444,7 @@ export interface ChangeReviewProps extends Omit<React_2.ComponentProps<'section'
 export function Checkbox(input: CheckboxProps): React_2.JSX.Element;
 
 // @public
-export const checkboxBoxClasses: readonly ["relative inline-grid size-4 shrink-0 place-items-center rounded-none", "bg-cloth-pale shadow-cut band-oro [--cut-reveal:2px]", "transition-[background-color,box-shadow] duration-(--motion-cut) ease-cut", "hover:cut-band", "focus-visible:shadow-[var(--focus-ring)]", "data-checked:bg-ink data-checked:text-on-ink data-indeterminate:bg-ink data-indeterminate:text-on-ink", "data-invalid:band-rojo data-invalid:cut-band aria-invalid:band-rojo aria-invalid:cut-band", "data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut", "data-disabled:data-checked:bg-cloth-deep data-disabled:data-checked:text-ink-2", "data-disabled:data-indeterminate:bg-cloth-deep data-disabled:data-indeterminate:text-ink-2"];
+export const checkboxBoxClasses: readonly ["relative inline-grid size-4 shrink-0 place-items-center rounded-none", "bg-cloth-pale shadow-cut band-oro [--cut-reveal:2px]", "transition-[background-color,box-shadow]", "hover:cut-band", "focus-visible:shadow-[var(--focus-ring)]", "data-checked:bg-ink data-checked:text-on-ink data-indeterminate:bg-ink data-indeterminate:text-on-ink", "data-invalid:band-rojo data-invalid:cut-band aria-invalid:band-rojo aria-invalid:cut-band", "data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut", "data-disabled:data-checked:bg-cloth-deep data-disabled:data-checked:text-ink-2", "data-disabled:data-indeterminate:bg-cloth-deep data-disabled:data-indeterminate:text-ink-2"];
 
 // @public
 export function CheckboxGroup(input: CheckboxGroupProps): React_2.JSX.Element;
@@ -668,7 +668,7 @@ export interface ContainerProps extends React_2.ComponentProps<'div'>, VariantPr
 
 // @public
 export const containerVariants: (props?: ({
-    size?: "page" | "prose" | "wide" | "full" | null | undefined;
+    size?: "page" | "wide" | "prose" | "full" | null | undefined;
 } & ClassProp) | undefined) => string;
 
 // @public (undocumented)
@@ -1112,7 +1112,7 @@ export interface FieldChangesProps extends Omit<React_2.ComponentProps<'section'
 }
 
 // @public
-export const fieldControlClasses: readonly ["w-full min-w-0 rounded-none border-0 bg-cloth-pale", "font-ui text-ink", "shadow-cut band-oro [--cut-reveal:3px]", "placeholder:text-ink-muted", "transition-[box-shadow,background-color] duration-(--motion-cut) ease-cut", "hover:cut-band", "focus:outline-none focus:shadow-[var(--focus-ring)]", "aria-invalid:band-rojo aria-invalid:cut-band", "aria-invalid:focus:shadow-[var(--focus-ring)]", "disabled:cursor-not-allowed disabled:bg-cloth-shade disabled:text-ink-muted disabled:hover:shadow-cut", "[&:is(input,textarea):read-only]:bg-cloth-shade"];
+export const fieldControlClasses: readonly ["w-full min-w-0 rounded-none border-0 bg-cloth-pale", "font-ui text-ink", "shadow-cut band-oro [--cut-reveal:3px]", "placeholder:text-ink-muted", "transition-[box-shadow,background-color]", "hover:cut-band", "focus:outline-none focus:shadow-[var(--focus-ring)]", "aria-invalid:band-rojo aria-invalid:cut-band", "aria-invalid:focus:shadow-[var(--focus-ring)]", "disabled:cursor-not-allowed disabled:bg-cloth-shade disabled:text-ink-muted disabled:hover:shadow-cut", "[&:is(input,textarea):read-only]:bg-cloth-shade"];
 
 // @public
 export interface FieldControlProps {
@@ -1265,7 +1265,7 @@ export type FileUploadStatus = 'attached' | 'queued' | 'uploading' | 'done' | 'f
 export function filterCommands(groups: CommandGroup[], query: string): CommandGroup[];
 
 // @public
-export const floatingSurface: readonly ["bg-cloth-pale text-ink rounded-none outline-none", "shadow-floating", "origin-(--transform-origin)", "transition-[opacity,transform] duration-(--motion-base) ease-cut", "data-starting-style:opacity-0 data-starting-style:scale-[0.98]", "data-ending-style:opacity-0 data-ending-style:scale-[0.98] data-ending-style:duration-(--motion-cut)"];
+export const floatingSurface: readonly ["bg-cloth-pale text-ink rounded-none outline-none", "shadow-floating", "origin-(--transform-origin)", "transition-[opacity,transform] duration-(--motion-base)", "data-starting-style:opacity-0 data-starting-style:scale-[0.98]", "data-ending-style:opacity-0 data-ending-style:scale-[0.98] data-ending-style:duration-(--motion-cut)"];
 
 // @public
 export function formatCountdown(ms: number): string;
@@ -1304,7 +1304,7 @@ export interface GridProps extends React_2.ComponentProps<'div'>, VariantProps<t
 // @public
 export const gridVariants: (props?: ({
     cols?: "auto" | "halves" | "thirds" | "quarters" | "fifths" | null | undefined;
-    gap?: "tight" | "default" | "wide" | "seamless" | null | undefined;
+    gap?: "tight" | "wide" | "default" | "seamless" | null | undefined;
 } & ClassProp) | undefined) => string;
 
 // @public (undocumented)

@@ -38,7 +38,7 @@ export const Complete: Story = {}
 function Live() {
   const stream = useSimulatedStream(ANSWER, { autoStart: true })
   return (
-    <div className="flex max-w-prose flex-col gap-5">
+    <div className="flex max-w-reading flex-col gap-5">
       <div className="flex gap-2">
         <Button size="sm" onClick={stream.start}>
           Replay
@@ -117,7 +117,7 @@ function LongStream() {
   const stream = useFirehose(LONG)
   const done = stream.count >= stream.total
   return (
-    <div className="flex max-w-prose flex-col gap-4">
+    <div className="flex max-w-reading flex-col gap-4">
       <div className="flex items-center gap-3">
         <Button size="sm" onClick={stream.restart}>
           Replay

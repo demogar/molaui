@@ -25,6 +25,11 @@ describe('cn', () => {
     expect(cn('shadow-cut', 'shadow-raised')).toBe('shadow-raised')
   })
 
+  it('treats the named columns as one max-width group', () => {
+    expect(cn('max-w-reading', 'max-w-page')).toBe('max-w-page')
+    expect(cn('max-w-page', 'max-w-none')).toBe('max-w-none')
+  })
+
   it('treats the four voices as one font-family group', () => {
     expect(cn('font-ui', 'font-mono')).toBe('font-mono')
   })
