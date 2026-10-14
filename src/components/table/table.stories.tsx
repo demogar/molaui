@@ -413,6 +413,42 @@ export const NoResults: Story = {
   },
 }
 
+export const NoResultsOnAPhone: Story = {
+  name: 'No results on a phone',
+  render: () => (
+    // A phone's width (390px), so the visual test and the audit, which run at
+    // 1280px, both see a table wider than its frame.
+    <div className="max-w-[24.375rem]">
+      <DataTable
+        label="Agent runs"
+        columns={columns}
+        rows={[]}
+        getRowId={(run) => run.id}
+        framed
+        className="min-w-[52rem]"
+        empty={{
+          variant: 'no-results',
+          title: 'No runs match these filters',
+          description: 'Try another agent, a wider date range, or clear the filters to see every run.',
+          actions: (
+            <Button size="sm" variant="secondary">
+              Clear filters
+            </Button>
+          ),
+        }}
+      />
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The same empty row in a table wider than its frame, as every wide table is on a phone. The message is centred on what is visible through the frame, not on the whole table, and it is stuck to the inline start, so it stays in view while the headers scroll sideways above it. In right-to-left it sticks to the right, where the scroll begins.',
+      },
+    },
+  },
+}
+
 const ROW_COUNT = 10_000
 const OVERSCAN = 8
 const bigRuns = makeAgentRuns(ROW_COUNT, 3)

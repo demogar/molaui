@@ -2,6 +2,8 @@ import { Controls, Description, Primary, Stories, Subtitle, Title, useOf } from 
 import type * as React from 'react'
 
 import { AnatomySection } from '../src/docs/blocks/anatomy'
+import { ChangesSection } from '../src/docs/blocks/changes'
+import { CopyForLlm } from '../src/docs/blocks/copy-for-llm'
 import {
   AccessibilitySection,
   EveryExampleHeading,
@@ -33,6 +35,7 @@ const RENDER: Record<SectionId, (page: PageData) => React.ReactNode> = {
   summary: (page) => (
     <>
       <SummaryStatus page={page} />
+      <CopyForLlm title={page.title} />
       <Description />
     </>
   ),
@@ -48,6 +51,7 @@ const RENDER: Record<SectionId, (page: PageData) => React.ReactNode> = {
   ),
   accessibility: (page) => <AccessibilitySection page={page} />,
   related: (page) => <RelatedSection page={page} />,
+  changes: (page) => <ChangesSection page={page} />,
 }
 
 export function DocsPage() {

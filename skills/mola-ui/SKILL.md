@@ -15,7 +15,9 @@ Before you write code, look up the components you plan to use. Don't guess props
   every export with its props, types, defaults, cva variants and usage guidance. It is generated
   from the source, so it is current.
 - `https://demogar.github.io/molaui/?path=/docs/<id>` is each component's docs page. The manifest
-  gives the URL.
+  gives the URL. The same page as Markdown is `https://demogar.github.io/molaui/md/<id>.md`, and
+  `llms-components.txt`, `llms-tokens.txt` and `llms-patterns.txt` at the Storybook root hold one
+  topic each.
 
 ## Setup
 

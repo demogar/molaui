@@ -13,6 +13,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
+  TableEmpty,
   TableRow,
   TableSkeletonRows,
 } from '../../components/table'
@@ -33,13 +34,15 @@ import { ADMINS, type KnowledgeSource, SOURCES, type SyncState } from './_data'
  *   no results     sources exist, the search hides them all. The count ("5
  *                  sources") and the search field stay, so the reader can see
  *                  the list is still there and only the question is wrong;
- *                  the empty state takes the table's place and its action
- *                  clears the search. It never says "connect your first
- *                  source": that would be a lie told to someone with five.
- *                  It was first a TableEmpty row inside the table, headers
- *                  kept. On a phone the five-column table scrolls sideways,
- *                  and TableEmpty centres on the table, not on what is
- *                  visible, so the message sat half off-screen.
+ *                  the empty state is a TableEmpty row under the headers,
+ *                  so the reader still sees what would have been listed,
+ *                  and its action clears the search. It never says "connect
+ *                  your first source": that would be a lie told to someone
+ *                  with five. For a while it replaced the table instead,
+ *                  because TableEmpty centred on the whole table and on a
+ *                  phone, where the table scrolls sideways, the message
+ *                  sat half off-screen. TableEmpty now centres on what the
+ *                  frame shows.
  *   error          the list could not be loaded. Said once, as an alert, with
  *                  what is still true ("your sources are still connected")
  *                  and Retry. The header's Connect stays: connecting does not
@@ -213,51 +216,49 @@ export function SourcesScreen({
                 Loading knowledge sources
               </p>
             ) : null}
-            {status === 'ready' && visible.length === 0 ? (
-              <EmptyState
-                variant="no-results"
-                size="sm"
-                headingLevel={3}
-                title={`No sources match “${query.trim()}”`}
-                description={`Search looks at each source’s name and type. Clear it to see all ${integer.format(sources.length)}.`}
-                actions={
-                  <Button size="sm" variant="secondary" icon={<RotateCcw />} onClick={clearSearch}>
-                    Show all sources
-                  </Button>
-                }
-              />
-            ) : (
-              <Table framed aria-labelledby={headingId} aria-busy={status === 'loading' || undefined} className="min-w-[40rem]">
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Source</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead numeric>Documents</TableHead>
-                    <TableHead>Last synced</TableHead>
-                    <TableHead>Status</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {status === 'loading' ? (
-                    <TableSkeletonRows columns={COLUMNS} rows={4} />
-                  ) : (
-                    visible.map((source) => (
-                      <TableRow key={source.id}>
-                        <TableCell className="font-medium">{source.name}</TableCell>
-                        <TableCell className="text-ink-2">{source.kind}</TableCell>
-                        <TableCell numeric>{integer.format(source.documents)}</TableCell>
-                        <TableCell className="text-ink-muted">{ago(source.syncedMinutesAgo)}</TableCell>
-                        <TableCell>
-                          <Badge tone={SYNC[source.state].tone} dot>
-                            {SYNC[source.state].label}
-                          </Badge>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            )}
+            <Table framed aria-labelledby={headingId} aria-busy={status === 'loading' || undefined} className="min-w-[40rem]">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Source</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead numeric>Documents</TableHead>
+                  <TableHead>Last synced</TableHead>
+                  <TableHead>Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {status === 'loading' ? (
+                  <TableSkeletonRows columns={COLUMNS} rows={4} />
+                ) : visible.length === 0 ? (
+                  <TableEmpty
+                    colSpan={COLUMNS}
+                    variant="no-results"
+                    title={`No sources match “${query.trim()}”`}
+                    actions={
+                      <Button size="sm" variant="secondary" icon={<RotateCcw />} onClick={clearSearch}>
+                        Show all sources
+                      </Button>
+                    }
+                  >
+                    {`Search looks at each source’s name and type. Clear it to see all ${integer.format(sources.length)}.`}
+                  </TableEmpty>
+                ) : (
+                  visible.map((source) => (
+                    <TableRow key={source.id}>
+                      <TableCell className="font-medium">{source.name}</TableCell>
+                      <TableCell className="text-ink-2">{source.kind}</TableCell>
+                      <TableCell numeric>{integer.format(source.documents)}</TableCell>
+                      <TableCell className="text-ink-muted">{ago(source.syncedMinutesAgo)}</TableCell>
+                      <TableCell>
+                        <Badge tone={SYNC[source.state].tone} dot>
+                          {SYNC[source.state].label}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
           </section>
         )}
       </div>

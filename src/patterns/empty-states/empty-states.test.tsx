@@ -28,6 +28,10 @@ describe('SourcesScreen', () => {
     expect(screen.getByRole('heading', { level: 2, name: '5 sources' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'No sources match “onboarding”' })).toBeInTheDocument()
     expect(screen.queryByText('No knowledge sources yet')).not.toBeInTheDocument()
+    // The headers stay, so the reader still sees what would have been listed.
+    const table = screen.getByRole('table', { name: '5 sources' })
+    expect(within(table).getByRole('columnheader', { name: 'Source' })).toBeInTheDocument()
+    expect(within(table).getByRole('heading', { level: 3, name: 'No sources match “onboarding”' })).toBeInTheDocument()
 
     // From the keyboard: Tab from the field reaches Show all sources, Enter clears.
     await user.tab() // the field's own clear button

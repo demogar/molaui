@@ -165,7 +165,7 @@ export const PATTERNS: Record<string, PatternUsage> = {
     parts: {
       'Components/Actions/Button': 'Connect source, Show all sources, Retry and Ask for access: one way forward per condition.',
       'Components/Data display/Table':
-        'The list, which keeps its headers while it loads, over TableSkeletonRows.',
+        'The list, which keeps its headers while it loads, over TableSkeletonRows, and when a search matches nothing, over a TableEmpty row.',
       'Components/Feedback/Badge': 'Each source’s sync state, as a dot, a word and a tone.',
       'Components/Feedback/Empty state': 'First run, no results, error and no permission, each its own variant with its own action.',
       'Components/Forms/Field': 'The labelled search field, a SearchInput, shown only when there is something to search.',
@@ -194,7 +194,7 @@ export const PATTERNS: Record<string, PatternUsage> = {
       'Show all sources returns focus to the search field; it is not called “Clear search” because the field’s own clear button already has that name.',
       'After Retry, focus moves to the heading of the list that loaded, since the Retry button has gone.',
       'The error is announced once, as an alert; loading is announced once, as a status, not row by row.',
-      'Every empty state heading is a level 2 heading, so it is in the page outline where the table would be.',
+      'First run, error and no permission headings are level 2, in the page outline where the list would be; the no-results heading is level 3, under the list’s own heading.',
     ],
   },
   'Patterns/Filtered table': {

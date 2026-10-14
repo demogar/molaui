@@ -1,0 +1,57 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+import { ReleaseChanges, ReleaseStatus } from '../blocks/changes'
+
+<Meta title="Mola UI/What's new/0.4" />
+
+# What's new in 0.4
+
+<ReleaseStatus version="0.4.0" />
+
+0.4 is mostly about the documentation: every component page now reads the same way, and many show
+their parts on the live component. It also adds a flat Callout and fixes nested themes in built
+CSS, which matters if you put a dark panel inside a light page. The full list is under
+*Everything in 0.4.0* at the end of this page, and on the [Changelog](?path=/docs/mola-ui-changelog--overview).
+
+## Nested themes work in your build
+
+`data-theme="dark"` on a panel inside a light page is meant to re-theme that panel. On the
+development server it did, but in built CSS, yours and the published Storybook's, it painted
+light: the minifier Vite uses rewrites `light-dark()` in a way that froze every colour token to
+the theme of the root. The colour tokens are now declared on every `[data-theme]` element as well
+as on `:root`, so each themed subtree resolves its own colours. The browser audit and the consumer
+smoke tests now check nested light and dark sections. See
+[decision 0004](?path=/docs/decisions-0004-themes-with-light-dark--overview) for the details.
+
+## A flat Callout, and a colour key
+
+[Callout](?path=/docs/components-feedback-callout--overview) gains `variant="flat"`: the tone's
+wash and a square colour key before the title, without the seam, the keyline or the icon. It
+keeps its own height beside a taller column in a grid. The key is the new
+[Swatch](?path=/docs/components-data-display-swatch--overview), a decorative mark for legends,
+group headings and filter labels. It is always hidden from assistive technology, because the
+word next to it carries the meaning.
+
+## Component pages you can read the same way every time
+
+Each component page now has the same sections in the same order: a summary with a lifecycle
+status, usage, examples, accessibility and related pages.
+
+- **Anatomy.** Eleven components show their parts on the live component, with a numbered pin
+  measured onto each part and a legend of what each part does and the classes it is made of.
+- **Accessibility.** A keyboard table, what Mola handles and what you still have to do, and a
+  testing status that says plainly what has not been tested by hand. The gaps are collected on
+  [Known gaps](?path=/docs/mola-ui-known-gaps--overview).
+
+Around the component pages, Foundations gained [Spacing](?path=/docs/foundations-spacing--overview),
+[Layers and elevation](?path=/docs/foundations-layers-and-elevation--overview),
+[Content and voice](?path=/docs/foundations-content-and-voice--overview) and a searchable table of
+every [token](?path=/docs/foundations-tokens--overview). The architecture decisions are pages
+under [Decisions](?path=/docs/decisions-all-decisions--overview). Every pattern has guidance, and
+there are three new ones: [Empty states](?path=/docs/patterns-empty-states--overview),
+[Confirmation](?path=/docs/patterns-confirmation--overview) and
+[Agent hand-off](?path=/docs/patterns-agent-hand-off--overview).
+
+## Everything in 0.4.0
+
+<ReleaseChanges version="0.4.0" />

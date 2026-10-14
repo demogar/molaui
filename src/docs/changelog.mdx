@@ -4,6 +4,13 @@ import changelog from '../../CHANGELOG.md?raw'
 
 <Meta title="Mola UI/Changelog" />
 
-{/* CHANGELOG.md is written by release-please; this page renders it rather than keeping a copy. */}
+{/* CHANGELOG.md is written by release-please; this page renders it rather than keeping a copy.
+    Its own "# Changelog" heading is dropped so the introduction can sit under the page's title. */}
 
-<Markdown>{changelog}</Markdown>
+# Changelog
+
+Every change, generated from each pull request's title. For the few that matter in each release,
+written for a reader, start with [What's new](?path=/docs/mola-ui-what-s-new-0-4--overview). Each
+component page lists its own entries under **Changes**.
+
+<Markdown>{changelog.replace(/^# Changelog\s*/, '')}</Markdown>

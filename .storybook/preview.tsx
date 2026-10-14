@@ -136,7 +136,19 @@ const preview: Preview = {
       storySort: {
         order: [
           'Mola UI',
-          ['Introduction', 'Getting started', 'Choosing a component', 'Principles', 'Versioning', 'Known gaps', 'References', 'Changelog'],
+          [
+            'Introduction',
+            'Getting started',
+            'Choosing a component',
+            'Principles',
+            'Versioning',
+            'Known gaps',
+            'References',
+            // Newest first, as WHATS_NEW in src/docs/usage/whats-new.ts; changes.test.ts holds the two together.
+            "What's new",
+            ['0.4', '0.3', '0.2'],
+            'Changelog',
+          ],
           'Foundations',
           ['Color', 'Typography', 'Spacing', 'Density', 'The cut', 'Layers and elevation', 'Motion', 'Iconography', 'Content and voice', 'Accessibility', 'Tokens'],
           'Decisions',

@@ -133,6 +133,8 @@ A button is a cut shape, so its edge is a `box-shadow` keyline rather than a `bo
 
 Types: `ButtonProps`, `IconButtonProps`
 
+Used in: Agent console, Form example, Agent hand-off, Confirmation, Empty states, Filtered table, List and detail, Settings page
+
 ## Data display
 
 ### Avatar
@@ -268,6 +270,8 @@ A block of machine text — a tool call's arguments, a query, a log tail.
 
 Types: `CodeBlockProps`, `CodeLanguage`, `JsonToken`, `JsonTokenKind`
 
+Used in: Confirmation
+
 ### Description list
 
 https://demogar.github.io/molaui/?path=/docs/components-data-display-description-list--overview
@@ -310,6 +314,8 @@ You handle:
 | `layout` | `"grid" \| "inline" \| "stacked" \| null` | `inline` |  |
 
 Types: `DescriptionItem`, `DescriptionListProps`
+
+Used in: Filtered table, List and detail
 
 ### Stat
 
@@ -381,6 +387,8 @@ Tiles cut from one panel rather than four floating cards: one ink keyline around
 
 Types: `StatDelta`, `StatGroupProps`, `StatProps`
 
+Used in: List and detail
+
 ### Swatch
 
 https://demogar.github.io/molaui/?path=/docs/components-data-display-swatch--overview
@@ -429,6 +437,9 @@ Decorative by contract: a swatch is always hidden from assistive technology, so 
 A colour key: the small square before a legend entry, a filter chip's label or a flat callout's title, that ties the words to a colour used elsewhere — map pins, a column of urgencies, a chart series.
 
 Types: `SwatchProps`, `SwatchTone`
+
+Changes:
+- 0.4.0 (2026-10-13), feature: add a flat variant and a swatch colour key [#20](https://github.com/demogar/molaui/issues/20)
 
 ### Table
 
@@ -586,6 +597,11 @@ Which columns show. Toggling does not close the menu, because columns are chosen
 
 Types: `TableCellProps`, `TableCheckboxProps`, `TableHeadProps`, `TableProps`, `TableRowProps`, `DataTableBulkContext`, `DataTableColumn`, `DataTableColumnMenuProps`, `DataTableEmpty`, `DataTableProps`, `DataTableSort`, `SortValue`
 
+Used in: Confirmation, Empty states, Filtered table, List and detail
+
+Changes:
+- 0.2.0 (2026-10-06), feature: add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features [#11](https://github.com/demogar/molaui/issues/11)
+
 ### Timeline
 
 https://demogar.github.io/molaui/?path=/docs/components-data-display-timeline--overview
@@ -728,6 +744,8 @@ The editorial recommendation scale of the editorial system this grew out of — 
 
 Types: `BadgeProps`, `BadgeTone`, `RecommendationBadgeProps`, `RecommendationLevel`, `StatusDotProps`
 
+Used in: Agent hand-off, Confirmation, Empty states, Filtered table, List and detail
+
 ### Callout
 
 https://demogar.github.io/molaui/?path=/docs/components-feedback-callout--overview
@@ -803,6 +821,11 @@ A message that belongs to a region of the page — "this agent is using a deprec
 
 Types: `CalloutProps`, `CalloutTone`, `CalloutVariant`
 
+Used in: Agent hand-off, Confirmation, List and detail
+
+Changes:
+- 0.4.0 (2026-10-13), feature: add a flat variant and a swatch colour key [#20](https://github.com/demogar/molaui/issues/20)
+
 ### Empty state
 
 https://demogar.github.io/molaui/?path=/docs/components-feedback-empty-state--overview
@@ -872,6 +895,8 @@ Anatomy:
 The state a panel is in when it has nothing to show — designed as a condition rather than as an apology.
 
 Types: `EmptyStateProps`
+
+Used in: Agent hand-off, Confirmation, Empty states, List and detail
 
 ### Placeholder
 
@@ -1058,6 +1083,9 @@ Lines of text that have not arrived. The last line is short, because a paragraph
 
 Types: `SkeletonGroupProps`, `SkeletonProps`, `SkeletonTextProps`
 
+Changes:
+- 0.2.0 (2026-10-06), feature: add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features [#11](https://github.com/demogar/molaui/issues/11)
+
 ### Toast
 
 https://demogar.github.io/molaui/?path=/docs/components-feedback-toast--overview
@@ -1117,6 +1145,8 @@ Mount once near the root. Renders the viewport, bottom-right, into a portal.
 The toast API. Call from anywhere inside a `ToastProvider`.
 
 Types: `ToastOptions`, `ToastProviderProps`, `ToastTone`
+
+Used in: Confirmation, Settings page
 
 ## Forms
 
@@ -1189,6 +1219,8 @@ Also accepts the props of `CheckboxGroupProps`.
 A square cut from the cloth. Unchecked, it is raised cloth inside an ink keyline; checked, the square is filled with ink and the mark is cut out of it in cloth — the same inversion a selected chip and a selected segment make, so "on" looks the same wherever it appears.
 
 Types: `CheckboxGroupProps`, `CheckboxProps`
+
+Used in: Form example
 
 ### Chip
 
@@ -1368,6 +1400,11 @@ Free text with suggestions: a run label, a tag, a search. The typed text is the 
 
 Types: `AutocompleteProps`, `ComboboxMultipleProps`, `ComboboxOption`, `ComboboxOptionGroup`, `ComboboxProps`, `ComboboxSingleProps`
 
+Used in: Form example, Filtered table
+
+Changes:
+- 0.2.0 (2026-10-06), feature: add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features [#11](https://github.com/demogar/molaui/issues/11)
+
 ### Date picker
 
 https://demogar.github.io/molaui/?path=/docs/components-forms-date-picker--overview
@@ -1502,6 +1539,11 @@ The typed format for a locale, read from `formatToParts` rather than from a tabl
 
 Types: `CalendarProps`, `DatePickerProps`, `DateRangePickerProps`, `DateLocale`, `DatePattern`, `DateRange`, `DateRangePreset`
 
+Used in: Form example, Filtered table
+
+Changes:
+- 0.2.0 (2026-10-06), feature: add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features [#11](https://github.com/demogar/molaui/issues/11)
+
 ### Field
 
 https://demogar.github.io/molaui/?path=/docs/components-forms-field--overview
@@ -1611,6 +1653,8 @@ Height, padding and type per size. Every value is a density token, so the same `
 
 Types: `LabelProps`, `FieldControlProps`, `FieldProps`, `FieldControlSize`, `InputProps`, `TextareaProps`, `SearchInputProps`
 
+Used in: Form example, Agent hand-off, Empty states, Filtered table, Settings page
+
 ### File upload
 
 https://demogar.github.io/molaui/?path=/docs/components-forms-file-upload--overview
@@ -1693,6 +1737,11 @@ Splits a batch into the files that pass and the ones that do not, each with the 
 
 Types: `FileUploadItem`, `FileUploadMessages`, `FileUploadProps`, `FileUploadStatus`, `UploadContext`, `FileRejection`, `FileRejectionReason`
 
+Used in: Form example
+
+Changes:
+- 0.2.0 (2026-10-06), feature: add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features [#11](https://github.com/demogar/molaui/issues/11)
+
 ### Number input
 
 https://demogar.github.io/molaui/?path=/docs/components-forms-number-input--overview
@@ -1755,6 +1804,11 @@ You handle:
 Also accepts the props of `NumberFieldRootProps`.
 
 Types: `NumberInputProps`
+
+Used in: Form example, Settings page
+
+Changes:
+- 0.2.0 (2026-10-06), feature: add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features [#11](https://github.com/demogar/molaui/issues/11)
 
 ### Radio
 
@@ -1820,6 +1874,8 @@ The group, named by a visible label in the rótulo register via `aria-labelledby
 Also accepts the props of `RadioGroupProps`.
 
 Types: `RadioGroupProps`, `RadioProps`
+
+Used in: Form example, Settings page
 
 ### Segmented control
 
@@ -1987,6 +2043,8 @@ Also accepts the props of `NativeButtonProps`, `SelectTriggerProps`.
 
 Types: `SelectContentProps`, `SelectItemProps`, `SelectOption`, `SelectOptionGroup`, `SelectProps`, `SelectTriggerProps`
 
+Used in: Form example, Settings page
+
 ### Slider
 
 https://demogar.github.io/molaui/?path=/docs/components-forms-slider--overview
@@ -2042,6 +2100,8 @@ Also accepts the props of `SliderRootProps`.
 
 Types: `SliderProps`
 
+Used in: Form example
+
 ### Switch
 
 https://demogar.github.io/molaui/?path=/docs/components-forms-switch--overview
@@ -2091,6 +2151,8 @@ You handle:
 Also accepts the props of `NativeButtonProps`, `SwitchRootProps`.
 
 Types: `SwitchProps`
+
+Used in: Form example, Settings page
 
 ## Layout
 
@@ -2188,6 +2250,8 @@ A titled group of items. The title is in the rótulo register; collapsed to a ra
 #### `SidebarContext` (constant)
 
 Types: `AppShellProps`, `SidebarContextValue`, `TopbarProps`, `NavItemProps`, `SidebarProps`
+
+Used in: Settings page
 
 ### Container
 
@@ -2391,6 +2455,8 @@ Anatomy:
 | `tabs` | `ReactNode` |  | A Tabs list. Sits on the header's bottom edge so the active tab cuts into it. |
 
 Types: `PageHeaderProps`
+
+Used in: Agent hand-off, Confirmation, Empty states, Filtered table, List and detail, Settings page
 
 ### Panel
 
@@ -2654,6 +2720,11 @@ Also accepts the props of `ToggleGroupProps`.
 
 Types: `ToolbarButtonProps`, `ToolbarInputProps`, `ToolbarOverflowItem`, `ToolbarOverflowProps`, `ToolbarProps`, `ToolbarToggleGroupProps`, `ToolbarToggleProps`
 
+Used in: Filtered table
+
+Changes:
+- 0.2.0 (2026-10-06), feature: add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features [#11](https://github.com/demogar/molaui/issues/11)
+
 ## Navigation
 
 ### Accordion
@@ -2800,6 +2871,8 @@ You handle:
 `run_8f3a2b91c21e` → `run_8f3a…c21e`. Both ends survive; the middle is what nobody reads.
 
 Types: `BreadcrumbItem`, `BreadcrumbProps`
+
+Used in: Agent hand-off, Confirmation, Empty states
 
 ### Pagination
 
@@ -3102,6 +3175,8 @@ Also accepts the props of `DialogPopupProps`.
 
 Types: `AlertDialogProps`, `DialogContentProps`
 
+Used in: Confirmation, Settings page
+
 ### Drawer
 
 https://demogar.github.io/molaui/?path=/docs/components-overlays-drawer--overview
@@ -3169,6 +3244,11 @@ Also accepts the props of `DrawerPopupProps`.
 #### `DrawerTrigger` (component)
 
 Types: `DrawerContentProps`, `DrawerProps`, `DrawerSide`
+
+Used in: Filtered table
+
+Changes:
+- 0.2.0 (2026-10-06), feature: add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features [#11](https://github.com/demogar/molaui/issues/11)
 
 ### Menu
 
@@ -3499,6 +3579,8 @@ You handle:
 Four levels, and the visual size follows the level unless told otherwise.
 
 Types: `HeadingLevel`, `HeadingProps`
+
+Used in: List and detail, Settings page
 
 ### Kbd
 
@@ -3843,6 +3925,11 @@ A long-running agent run, as a timeline.
 
 Types: `AgentRunFailure`, `AgentRunProps`, `AgentStep`, `AgentStepKind`
 
+Used in: Agent console, Agent hand-off
+
+Changes:
+- 0.3.0 (2026-10-06), feature: add change approval, citation cards and run recovery [#13](https://github.com/demogar/molaui/issues/13)
+
 ### Change review
 
 https://demogar.github.io/molaui/?path=/docs/ai-change-review--overview
@@ -3947,6 +4034,9 @@ Parse the hunks of one file's unified diff. File headers (`diff --git`, `index`,
 
 Types: `ChangeCountProps`, `ChangeDecision`, `ChangeDecisionStatus`, `ChangeReviewProps`, `FieldChange`, `FieldChangesProps`, `FileChangeKind`, `FileDiffProps`, `DiffHunk`, `DiffHunkInput`, `DiffLine`, `DiffLineKind`
 
+Changes:
+- 0.3.0 (2026-10-06), feature: add change approval, citation cards and run recovery [#13](https://github.com/demogar/molaui/issues/13)
+
 ### Confidence
 
 https://demogar.github.io/molaui/?path=/docs/ai-confidence--overview
@@ -4002,6 +4092,8 @@ Where the model flags its own doubt, in the answer, next to the claim.
 | `title` | `string` | `The model is unsure` | The short claim — "Unverified figure". Defaults to "The model is unsure". |
 
 Types: `ConfidenceLevel`, `ConfidenceProps`, `UncertaintyNoteProps`
+
+Used in: Agent console, Agent hand-off
 
 ### Message
 
@@ -4084,6 +4176,8 @@ The scrolling transcript.
 | `stickThreshold` | `number` | `48` | Distance from the bottom, in px, that still counts as "at the bottom". |
 
 Types: `MessageProps`, `MessageRole`, `ThreadProps`
+
+Used in: Agent console, Agent hand-off
 
 ### Prompt input
 
@@ -4171,6 +4265,8 @@ The composer.
 
 Types: `AttachmentChipProps`, `PromptInputProps`
 
+Used in: Agent console
+
 ### Reasoning
 
 https://demogar.github.io/molaui/?path=/docs/ai-reasoning--overview
@@ -4220,6 +4316,8 @@ The model's thinking, behind a disclosure.
 | `status` | `"streaming" \| "done"` | `done` | `streaming` while the model is still thinking. |
 
 Types: `ReasoningProps`
+
+Used in: Agent console
 
 ### Run error
 
@@ -4307,6 +4405,9 @@ Milliseconds left until `until`, ticking while there is time left and stopping a
 
 Types: `PartialOutputProps`, `RunErrorKind`, `RunErrorProps`
 
+Changes:
+- 0.3.0 (2026-10-06), feature: add change approval, citation cards and run recovery [#13](https://github.com/demogar/molaui/issues/13)
+
 ### Run status
 
 https://demogar.github.io/molaui/?path=/docs/ai-run-status--overview
@@ -4386,6 +4487,8 @@ Milliseconds since `startedAt`, ticking while the work is still open.
 
 Types: `RunStatusProps`, `RunStatusValue`
 
+Used in: Agent hand-off
+
 ### Sources
 
 https://demogar.github.io/molaui/?path=/docs/ai-sources--overview
@@ -4453,6 +4556,11 @@ A `renderCitation` for `StreamingText`, built from the same array the `SourceLis
 
 Types: `CitationProps`, `Source`, `SourceListProps`
 
+Used in: Agent console
+
+Changes:
+- 0.3.0 (2026-10-06), feature: add change approval, citation cards and run recovery [#13](https://github.com/demogar/molaui/issues/13)
+
 ### Streaming text
 
 https://demogar.github.io/molaui/?path=/docs/ai-streaming-text--overview
@@ -4511,6 +4619,8 @@ Text that arrives a token at a time.
 
 Types: `StreamStatus`, `StreamingTextProps`, `Block`, `InlineRun`
 
+Used in: Agent console
+
 ### Token usage
 
 https://demogar.github.io/molaui/?path=/docs/ai-token-usage--overview
@@ -4557,6 +4667,8 @@ What a run consumed.
 #### `contextLevel` (function)
 
 Types: `TokenUsageProps`
+
+Used in: Agent console
 
 ### Tool call
 
@@ -4641,6 +4753,8 @@ Calls the model made at the same time. Drawn as a bracket on the left — one in
 | `label` | `string` |  | Defaults to "N tools in parallel". |
 
 Types: `ToolCallApproval`, `ToolCallGroupProps`, `ToolCallProps`
+
+Used in: Agent console, Agent hand-off
 
 ## Patterns
 
@@ -4747,7 +4861,7 @@ When not to:
 
 Built from (read from its imports):
 - Button: Connect source, Show all sources, Retry and Ask for access: one way forward per condition.
-- Table: The list, which keeps its headers while it loads, over TableSkeletonRows.
+- Table: The list, which keeps its headers while it loads, over TableSkeletonRows, and when a search matches nothing, over a TableEmpty row.
 - Badge: Each source’s sync state, as a dot, a word and a tone.
 - Empty state: First run, no results, error and no permission, each its own variant with its own action.
 - Field: The labelled search field, a SearchInput, shown only when there is something to search.
@@ -4764,7 +4878,7 @@ Accessibility:
 - Show all sources returns focus to the search field; it is not called “Clear search” because the field’s own clear button already has that name.
 - After Retry, focus moves to the heading of the list that loaded, since the Retry button has gone.
 - The error is announced once, as an alert; loading is announced once, as a status, not row by row.
-- Every empty state heading is a level 2 heading, so it is in the page outline where the table would be.
+- First run, error and no permission headings are level 2, in the page outline where the list would be; the no-results heading is level 3, under the list’s own heading.
 
 ### Filtered table
 

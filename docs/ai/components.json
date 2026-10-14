@@ -81,7 +81,7 @@
     "parts": 145,
     "aiComponents": 12,
     "aiParts": 23,
-    "stories": 300
+    "stories": 301
   },
   "tokens": {
     "source": "src/styles/tokens.css",
@@ -381,6 +381,26 @@
       "usedIn": [
         "AI/Agent console",
         "Patterns/Agent hand-off"
+      ],
+      "changes": [
+        {
+          "version": "0.3.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "ai"
+          ],
+          "subject": "add change approval, citation cards and run recovery",
+          "pr": {
+            "number": 13,
+            "url": "https://github.com/demogar/molaui/issues/13"
+          },
+          "commit": {
+            "sha": "a15d16e",
+            "url": "https://github.com/demogar/molaui/commit/a15d16e46239c37691aeb14d513077958ecae62f"
+          }
+        }
       ]
     },
     {
@@ -751,6 +771,26 @@
           "name": "TryIt",
           "id": "ai-change-review--try-it",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-change-review--try-it"
+        }
+      ],
+      "changes": [
+        {
+          "version": "0.3.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "ai"
+          ],
+          "subject": "add change approval, citation cards and run recovery",
+          "pr": {
+            "number": 13,
+            "url": "https://github.com/demogar/molaui/issues/13"
+          },
+          "commit": {
+            "sha": "a15d16e",
+            "url": "https://github.com/demogar/molaui/commit/a15d16e46239c37691aeb14d513077958ecae62f"
+          }
         }
       ]
     },
@@ -1839,6 +1879,26 @@
           "id": "ai-run-error--without-a-step",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-run-error--without-a-step"
         }
+      ],
+      "changes": [
+        {
+          "version": "0.3.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "ai"
+          ],
+          "subject": "add change approval, citation cards and run recovery",
+          "pr": {
+            "number": 13,
+            "url": "https://github.com/demogar/molaui/issues/13"
+          },
+          "commit": {
+            "sha": "a15d16e",
+            "url": "https://github.com/demogar/molaui/commit/a15d16e46239c37691aeb14d513077958ecae62f"
+          }
+        }
       ]
     },
     {
@@ -2207,6 +2267,26 @@
       ],
       "usedIn": [
         "AI/Agent console"
+      ],
+      "changes": [
+        {
+          "version": "0.3.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "ai"
+          ],
+          "subject": "add change approval, citation cards and run recovery",
+          "pr": {
+            "number": 13,
+            "url": "https://github.com/demogar/molaui/issues/13"
+          },
+          "commit": {
+            "sha": "a15d16e",
+            "url": "https://github.com/demogar/molaui/commit/a15d16e46239c37691aeb14d513077958ecae62f"
+          }
+        }
       ]
     },
     {
@@ -3928,6 +4008,26 @@
           "id": "components-data-display-swatch--tones",
           "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-swatch--tones"
         }
+      ],
+      "changes": [
+        {
+          "version": "0.4.0",
+          "date": "2026-10-13",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "callout"
+          ],
+          "subject": "add a flat variant and a swatch colour key",
+          "pr": {
+            "number": 20,
+            "url": "https://github.com/demogar/molaui/issues/20"
+          },
+          "commit": {
+            "sha": "fc8a390",
+            "url": "https://github.com/demogar/molaui/commit/fc8a390ee8206dcd1d059e30fc90c5c2bd4c2447"
+          }
+        }
       ]
     },
     {
@@ -4506,6 +4606,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-table--no-results"
         },
         {
+          "name": "NoResultsOnAPhone",
+          "id": "components-data-display-table--no-results-on-a-phone",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-table--no-results-on-a-phone"
+        },
+        {
           "name": "Paginated",
           "id": "components-data-display-table--paginated",
           "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-table--paginated"
@@ -4536,6 +4641,26 @@
         "Patterns/Empty states",
         "Patterns/Filtered table",
         "Patterns/List and detail"
+      ],
+      "changes": [
+        {
+          "version": "0.2.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "components"
+          ],
+          "subject": "add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features",
+          "pr": {
+            "number": 11,
+            "url": "https://github.com/demogar/molaui/issues/11"
+          },
+          "commit": {
+            "sha": "aeacb52",
+            "url": "https://github.com/demogar/molaui/commit/aeacb52f1b4212e472d3f4cc9aa984bfd760528a"
+          }
+        }
       ]
     },
     {
@@ -5209,6 +5334,26 @@
         "Patterns/Agent hand-off",
         "Patterns/Confirmation",
         "Patterns/List and detail"
+      ],
+      "changes": [
+        {
+          "version": "0.4.0",
+          "date": "2026-10-13",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "callout"
+          ],
+          "subject": "add a flat variant and a swatch colour key",
+          "pr": {
+            "number": 20,
+            "url": "https://github.com/demogar/molaui/issues/20"
+          },
+          "commit": {
+            "sha": "fc8a390",
+            "url": "https://github.com/demogar/molaui/commit/fc8a390ee8206dcd1d059e30fc90c5c2bd4c2447"
+          }
+        }
       ]
     },
     {
@@ -5939,6 +6084,26 @@
           "name": "Shapes",
           "id": "components-feedback-skeleton--shapes",
           "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-skeleton--shapes"
+        }
+      ],
+      "changes": [
+        {
+          "version": "0.2.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "components"
+          ],
+          "subject": "add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features",
+          "pr": {
+            "number": 11,
+            "url": "https://github.com/demogar/molaui/issues/11"
+          },
+          "commit": {
+            "sha": "aeacb52",
+            "url": "https://github.com/demogar/molaui/commit/aeacb52f1b4212e472d3f4cc9aa984bfd760528a"
+          }
         }
       ]
     },
@@ -6916,6 +7081,26 @@
       "usedIn": [
         "Components/Forms/Form example",
         "Patterns/Filtered table"
+      ],
+      "changes": [
+        {
+          "version": "0.2.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "components"
+          ],
+          "subject": "add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features",
+          "pr": {
+            "number": 11,
+            "url": "https://github.com/demogar/molaui/issues/11"
+          },
+          "commit": {
+            "sha": "aeacb52",
+            "url": "https://github.com/demogar/molaui/commit/aeacb52f1b4212e472d3f4cc9aa984bfd760528a"
+          }
+        }
       ]
     },
     {
@@ -7480,6 +7665,26 @@
       "usedIn": [
         "Components/Forms/Form example",
         "Patterns/Filtered table"
+      ],
+      "changes": [
+        {
+          "version": "0.2.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "components"
+          ],
+          "subject": "add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features",
+          "pr": {
+            "number": 11,
+            "url": "https://github.com/demogar/molaui/issues/11"
+          },
+          "commit": {
+            "sha": "aeacb52",
+            "url": "https://github.com/demogar/molaui/commit/aeacb52f1b4212e472d3f4cc9aa984bfd760528a"
+          }
+        }
       ]
     },
     {
@@ -8116,6 +8321,26 @@
       ],
       "usedIn": [
         "Components/Forms/Form example"
+      ],
+      "changes": [
+        {
+          "version": "0.2.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "components"
+          ],
+          "subject": "add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features",
+          "pr": {
+            "number": 11,
+            "url": "https://github.com/demogar/molaui/issues/11"
+          },
+          "commit": {
+            "sha": "aeacb52",
+            "url": "https://github.com/demogar/molaui/commit/aeacb52f1b4212e472d3f4cc9aa984bfd760528a"
+          }
+        }
       ]
     },
     {
@@ -8321,6 +8546,26 @@
       "usedIn": [
         "Components/Forms/Form example",
         "Patterns/Settings page"
+      ],
+      "changes": [
+        {
+          "version": "0.2.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "components"
+          ],
+          "subject": "add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features",
+          "pr": {
+            "number": 11,
+            "url": "https://github.com/demogar/molaui/issues/11"
+          },
+          "commit": {
+            "sha": "aeacb52",
+            "url": "https://github.com/demogar/molaui/commit/aeacb52f1b4212e472d3f4cc9aa984bfd760528a"
+          }
+        }
       ]
     },
     {
@@ -10951,6 +11196,26 @@
       ],
       "usedIn": [
         "Patterns/Filtered table"
+      ],
+      "changes": [
+        {
+          "version": "0.2.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "components"
+          ],
+          "subject": "add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features",
+          "pr": {
+            "number": 11,
+            "url": "https://github.com/demogar/molaui/issues/11"
+          },
+          "commit": {
+            "sha": "aeacb52",
+            "url": "https://github.com/demogar/molaui/commit/aeacb52f1b4212e472d3f4cc9aa984bfd760528a"
+          }
+        }
       ]
     },
     {
@@ -12376,6 +12641,26 @@
       ],
       "usedIn": [
         "Patterns/Filtered table"
+      ],
+      "changes": [
+        {
+          "version": "0.2.0",
+          "date": "2026-10-06",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "components"
+          ],
+          "subject": "add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features",
+          "pr": {
+            "number": 11,
+            "url": "https://github.com/demogar/molaui/issues/11"
+          },
+          "commit": {
+            "sha": "aeacb52",
+            "url": "https://github.com/demogar/molaui/commit/aeacb52f1b4212e472d3f4cc9aa984bfd760528a"
+          }
+        }
       ]
     },
     {
@@ -14204,7 +14489,7 @@
       "kind": "pattern",
       "docs": "https://demogar.github.io/molaui/?path=/docs/patterns-empty-states--overview",
       "summary": "One screen, every way a list can have nothing to show: first run, no results, loading, error and no permission, each saying something different.",
-      "description": "The knowledge sources of a Cayuco workspace: a header, a search field and a table. Composed from `PageHeader`, `Breadcrumb`, `Field`, `SearchInput`, `Table` and `EmptyState`, with nothing written for it. The screen is ordinary on purpose; what it demonstrates is every condition in which there is no list to show.\n\n**Decisions.** *First run* takes the whole body and its action connects the first source; the search field is not drawn, because a search over nothing can only fail. *No results* keeps the count and the search field, puts the empty state in the table’s place and offers **Show all sources**, which clears the search and returns focus to the field. (Not “Clear search”: the field’s own clear button already has that name, and two controls with one name are one too many to a screen reader.) It never says “connect your first source” to someone who has five. *Error* says what is still true (the sources are still connected) and offers **Retry**; once the rows are back, focus moves to their heading. *No permission* names the two people who can grant access, and the header drops **Connect source**, because offering an action the reader cannot take is a second refusal. *Loading* is the table’s own shape with skeleton rows, `aria-busy`, and one polite “Loading knowledge sources”.",
+      "description": "The knowledge sources of a Cayuco workspace: a header, a search field and a table. Composed from `PageHeader`, `Breadcrumb`, `Field`, `SearchInput`, `Table` and `EmptyState`, with nothing written for it. The screen is ordinary on purpose; what it demonstrates is every condition in which there is no list to show.\n\n**Decisions.** *First run* takes the whole body and its action connects the first source; the search field is not drawn, because a search over nothing can only fail. *No results* keeps the count, the search field and the table’s headers, puts the empty state in a `TableEmpty` row under them, and offers **Show all sources**, which clears the search and returns focus to the field. (Not “Clear search”: the field’s own clear button already has that name, and two controls with one name are one too many to a screen reader.) It never says “connect your first source” to someone who has five. *Error* says what is still true (the sources are still connected) and offers **Retry**; once the rows are back, focus moves to their heading. *No permission* names the two people who can grant access, and the header drops **Connect source**, because offering an action the reader cannot take is a second refusal. *Loading* is the table’s own shape with skeleton rows, `aria-busy`, and one polite “Loading knowledge sources”.",
       "builtFrom": [
         "Components/Actions/Button",
         "Components/Data display/Table",
@@ -14242,7 +14527,7 @@
           },
           {
             "title": "Components/Data display/Table",
-            "role": "The list, which keeps its headers while it loads, over TableSkeletonRows."
+            "role": "The list, which keeps its headers while it loads, over TableSkeletonRows, and when a search matches nothing, over a TableEmpty row."
           },
           {
             "title": "Components/Feedback/Badge",
@@ -14287,7 +14572,7 @@
           "Show all sources returns focus to the search field; it is not called “Clear search” because the field’s own clear button already has that name.",
           "After Retry, focus moves to the heading of the list that loaded, since the Retry button has gone.",
           "The error is announced once, as an alert; loading is announced once, as a status, not row by row.",
-          "Every empty state heading is a level 2 heading, so it is in the page outline where the table would be."
+          "First run, error and no permission headings are level 2, in the page outline where the list would be; the no-results heading is level 3, under the list’s own heading."
         ]
       },
       "stories": [
