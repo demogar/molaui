@@ -87,6 +87,12 @@ export interface DateRangePickerProps {
   min?: Date | null
   max?: Date | null
   isDateDisabled?: (date: Date) => boolean
+  /**
+   * Inject "now" for stable stories and tests. Pass it when server rendering
+   * too: today's date, and with it the starting month, depends on the zone it
+   * is computed in, and the grid cannot wait for hydration without arriving
+   * blank. The server's date, passed down, keeps both renders on one day.
+   */
   today?: Date
   /**
    * Start and end inputs above the calendar. On by default: typing is the

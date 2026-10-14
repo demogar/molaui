@@ -72,7 +72,7 @@ Each story is a live example in Storybook.
 | `onSelect` | `((date: Date) => void)` |  | Called with the day a person chose. Range logic belongs to the caller. |
 | `renderHeading` | `((props: { id: string; className: string; children: ReactNode; }) => ReactNode)` |  | Render the heading as the popup's title instead of a plain element. |
 | `selected` | `DateRange` |  | The selected day, or the range. A single date is a range whose ends match. |
-| `today` | `Date` |  | Inject "now" for stable stories and tests. |
+| `today` | `Date` |  | Inject "now" for stable stories and tests. Pass it when server rendering too: today's date, and with it the starting month, depends on the zone it is computed in, and the grid cannot wait for hydration without arriving blank. The server's date, passed down, keeps both renders on one day. |
 | `visibleDate` | `Date \| null` |  | Show this day's month and move the tab stop to it, without moving focus — for a date typed elsewhere that the grid should follow. Compared by identity, so a new `Date` for the same day shows it again after the person has paged away. |
 | `weekStartsOn` | `number` |  | 0 = Sunday … 6 = Saturday. Overrides the locale's first day of the week. |
 
@@ -97,7 +97,7 @@ Each story is a live example in Storybook.
 | `placeholder` | `string` |  | Defaults to the locale's format, e.g. `DD/MM/YYYY`. |
 | `required` | `boolean` |  |  |
 | `size` | `"sm" \| "lg" \| "md"` | `md` |  |
-| `today` | `Date` |  | Inject "now" for stable stories and tests. |
+| `today` | `Date` |  | Inject "now" for stable stories and tests. Pass it when server rendering too: today's date, and with it the starting month, depends on the zone it is computed in, and the grid cannot wait for hydration without arriving blank. The server's date, passed down, keeps both renders on one day. |
 | `value` | `Date \| null` |  |  |
 | `weekStartsOn` | `number` |  | 0 = Sunday … 6 = Saturday. Overrides the locale's first day of the week. |
 
@@ -123,7 +123,7 @@ Each story is a live example in Storybook.
 | `presets` | `DateRangePreset[]` | `[   { label: 'Last 7 days', range: (t) => ({ start: addDays(t, -6), end: t }) },   { label: 'Last 30 days', range: (t) => ({ start: addDays(t, -29), end: t }) },   { label: 'Last 90 days', range: (t) => ({ start: addDays(t, -89), end: t }) },   { label: 'This month', range: (t) => ({ start: startOfMonth(t), end: t }) },   {     label: 'Last month',     range: (t) => {       const previous = addMonths(startOfMonth(t), -1)       return { start: previous, end: endOfMonth(previous) }     },   }, ]` | Pass `[]` for none. |
 | `required` | `boolean` |  |  |
 | `size` | `"sm" \| "lg" \| "md"` | `md` |  |
-| `today` | `Date` |  |  |
+| `today` | `Date` |  | Inject "now" for stable stories and tests. Pass it when server rendering too: today's date, and with it the starting month, depends on the zone it is computed in, and the grid cannot wait for hydration without arriving blank. The server's date, passed down, keeps both renders on one day. |
 | `typedEntry` | `boolean` | `true` | Start and end inputs above the calendar. On by default: typing is the accessible path into a date, not an extra, and the single picker always has it. Turn it off only where presets and the grid cover every case. |
 | `value` | `DateRange` |  |  |
 | `weekStartsOn` | `number` |  |  |

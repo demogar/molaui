@@ -84,6 +84,7 @@ One turn of a conversation.
 | `onRetry` | `(() => void)` |  |  |
 | `status` | `"error" \| "streaming" \| "done"` | `done` | `error`: the message failed partway. Content so far stays; the error is stated under it. |
 | `timestamp` | `string \| Date` |  |  |
+| `timeZone` | `string` |  | IANA zone the time is shown in, such as `"UTC"` or `"America/Panama"`. Without it the time is the reader's own and appears only after hydration, because the server cannot know the reader's zone; pass one to have the time in the server HTML. |
 
 ### `Thread` (component)
 

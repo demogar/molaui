@@ -2,6 +2,8 @@
 
 import * as React from 'react'
 
+import { useHydrated } from '../../../lib/use-hydrated'
+
 /**
  * Milliseconds left until `until`, ticking while there is time left and
  * stopping at zero. `undefined` without a target.
@@ -9,9 +11,14 @@ import * as React from 'react'
  * Ticks four times a second rather than once: a 1 s interval started at an
  * arbitrary moment shows each second up to a second late, so "0s" and the
  * retry it promises would visibly disagree.
+ *
+ * Also `undefined` on the server and while hydrating, for the reason
+ * `useElapsed` is: the time left depends on a "now" the server and the
+ * browser do not share.
  */
 export function useCountdown(until: number | Date | undefined, { intervalMs = 250 }: { intervalMs?: number } = {}) {
   const target = until === undefined ? undefined : +until
+  const hydrated = useHydrated()
   const [now, setNow] = React.useState(() => Date.now())
 
   React.useEffect(() => {
@@ -29,7 +36,7 @@ export function useCountdown(until: number | Date | undefined, { intervalMs = 25
     }
   }, [target, intervalMs])
 
-  if (target === undefined) return undefined
+  if (target === undefined || !hydrated) return undefined
   return Math.max(0, target - now)
 }
 

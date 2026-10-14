@@ -5,6 +5,7 @@ import { ArrowUpRight } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { useHydrated } from '../../../lib/use-hydrated'
 import { floatingSurface } from '../../popover/surface'
 
 export interface Source {
@@ -180,17 +181,23 @@ function SourceNumber({ id, className }: { id: number; className?: string }) {
   )
 }
 
-/** Domain and read time: what a reader judges a source by before opening it. */
-function SourceMeta({ source }: { source: Source }) {
+/**
+ * Domain and read time: what a reader judges a source by before opening it.
+ * The time is in the reader's zone unless one is given, so without one it
+ * waits for hydration: the server would write its own zone's time and the
+ * browser would disagree.
+ */
+function SourceMeta({ source, timeZone }: { source: Source; timeZone?: string }) {
   const retrieved = source.retrievedAt ? new Date(source.retrievedAt) : undefined
+  const hydrated = useHydrated()
   return (
     <span className="flex flex-wrap gap-x-2 font-ui text-xs text-ink-muted">
       <span dir="ltr">{source.domain}</span>
-      {retrieved ? (
+      {retrieved && (timeZone !== undefined || hydrated) ? (
         <time dateTime={retrieved.toISOString()} className="tabular">
           read{' '}
           <span dir="ltr">
-            {retrieved.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+            {retrieved.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZone })}
           </span>
         </time>
       ) : null}
@@ -216,6 +223,12 @@ export function citationRenderer(sources: readonly Source[]): (n: number) => Rea
 
 export interface SourceListProps extends Omit<React.ComponentProps<'ol'>, 'children'> {
   sources: readonly Source[]
+  /**
+   * IANA zone the read times are shown in, such as `"UTC"`. Without it they
+   * are the reader's own and appear only after hydration, because the server
+   * cannot know the reader's zone.
+   */
+  timeZone?: string
 }
 
 /**
@@ -224,7 +237,7 @@ export interface SourceListProps extends Omit<React.ComponentProps<'ol'>, 'child
  * (domain), what was used (the snippet, in the reading voice — it is quoted
  * prose) and when it was read.
  */
-export function SourceList({ sources, className, ...props }: SourceListProps) {
+export function SourceList({ sources, timeZone, className, ...props }: SourceListProps) {
   return (
     <ol data-slot="source-list" className={cn('m-0 grid list-none gap-2 p-0 sm:grid-cols-2', className)} {...props}>
       {sources.map((source) => (
@@ -243,7 +256,7 @@ export function SourceList({ sources, className, ...props }: SourceListProps) {
               <span className="font-ui text-sm font-semibold leading-snug">{source.title}</span>
               <ArrowUpRight aria-hidden className="size-3.5 shrink-0 text-ink-muted group-hover/source:text-ink" />
             </span>
-            <SourceMeta source={source} />
+            <SourceMeta source={source} timeZone={timeZone} />
             {source.snippet ? (
               <span className="font-text text-sm leading-[1.45] text-ink-2 [overflow-wrap:anywhere]">“{source.snippet}”</span>
             ) : null}
