@@ -1,6 +1,6 @@
 // Browser audit over every story and every docs page: axe (with real colour
 // contrast) in both themes, that every `data-theme` subtree paints its own
-// ground, horizontal overflow at phone width, and console errors. Exits non-zero on any finding, so CI can gate on it.
+// ground, a visible focus indicator on every tab stop, horizontal overflow at phone width, and console errors. Exits non-zero on any finding, so CI can gate on it.
 //   node scripts/audit.mjs <base> [--out <dir>] [--only <id substring>] [--workers <n>] [--shard <i>/<n>]
 //   node scripts/audit.mjs --serve storybook-static [--out <dir>]   (npm run audit)
 //
@@ -17,6 +17,7 @@ import { join } from 'node:path'
 
 import { chromium } from 'playwright'
 
+import { focusScan } from './focus-scan.mjs'
 import { serve } from './serve-static.mjs'
 
 const args = process.argv.slice(2)
@@ -227,6 +228,9 @@ async function audit(page, job, errors) {
     return found
   })
   found.push(...theming)
+  // Every tab stop must look different focused (scripts/focus-scan.mjs). On
+  // story pages only: a docs page repeats its stories' examples.
+  if (job.viewMode === 'story') found.push(...(await focusScan(page)))
   if (job.overflow) {
     // Last, because it changes the page. The args table is a fixed-width grid
     // Storybook does not lay out for a phone, so it is set aside for the

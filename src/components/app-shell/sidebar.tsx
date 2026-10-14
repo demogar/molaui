@@ -117,6 +117,11 @@ export function NavItem({
           'aria-[current=page]:shadow-[inset_3px_0_0_var(--ink)] rtl:aria-[current=page]:shadow-[inset_-3px_0_0_var(--ink)]',
           'aria-[current=page]:forced-selected',
           'focus-visible:shadow-[var(--focus-ring)]',
+          // The current item's bar is a state variant, which comes after
+          // `focus-visible:` and used to replace the ring: the focused current
+          // item was pixel-identical to the unfocused one. The pair keeps both.
+          'aria-[current=page]:focus-visible:shadow-[var(--focus-ring),inset_3px_0_0_var(--ink)]',
+          'rtl:aria-[current=page]:focus-visible:shadow-[var(--focus-ring),inset_-3px_0_0_var(--ink)]',
           '[&_svg]:size-4 [&_svg]:shrink-0',
           collapsed && 'justify-center px-0',
           className,
