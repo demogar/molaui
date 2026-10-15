@@ -211,7 +211,7 @@ function AnatomyContent({ anatomy, story, title }: { anatomy: Anatomy; story: un
   const { boxRef, stageRef, layout } = useMeasuredLayout(anatomy)
   return (
     <section data-anatomy className="sb-unstyled not-prose my-10 grid grid-cols-[minmax(0,1fr)] gap-4 font-ui text-sm text-ink">
-      <h2 className="m-0 text-xl font-bold text-ink">Anatomy</h2>
+      <h2 id="anatomy" className="m-0 text-xl font-bold text-ink">Anatomy</h2>
       <p className="m-0 max-w-reading text-ink-2">
         Measured from the live example: each pin sits on the element marked <Code>data-part</Code>, so the diagram
         moves when the component does. The classes under each part are read from the same elements.

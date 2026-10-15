@@ -105,6 +105,7 @@ Storybook docs pages (introduction, principles, foundations, migration, changelo
 ### Storybook and token gotchas
 - MDX-only pages never run decorators, so `.storybook/preview.css` pins `:root:not([data-theme])` to light (Storybook only) to stop docs following the OS dark scheme.
 - Storybook's docs styles are unlayered and beat every Tailwind `@layer` utility; custom doc blocks need the `sb-unstyled` class.
+- The docs table of contents (tocbot, configured in `.storybook/toc.ts`) links each entry to its heading's id, and Storybook ids only its own headings: a section heading written in a doc block needs an explicit `id` (the fallback in `toc.ts` ids the rest from their text). Rótulo `h3`s are labels and stay out of the contents. `test/visual/docs-toc.behaviour.ts` clicks every entry on a component and a pattern page.
 - `docs.defaultName` is `'Overview'`, so docs page ids end in `--overview` (e.g. `?path=/docs/ai-principles--overview`).
 - `light-dark()` accepts only colors, so a mixed token is written as `light-dark(color-mix(...), color-mix(...))`.
 - A `@theme inline` entry with the same name as its `var()` target self-references and resolves to nothing — hence `--elevation-raised` in `tokens.css` mapped to `shadow-raised`/`shadow-floating` in `theme.css`.

@@ -33,8 +33,19 @@ function Link({ link }: { link: RelatedLink }) {
   )
 }
 
-function SectionHeading({ children }: { children: React.ReactNode }) {
-  return <h2 className="m-0 text-xl font-bold text-ink">{children}</h2>
+/**
+ * A section of the page, with the id the table of contents links to. Storybook
+ * gives ids only to the headings it renders itself (MDX, story titles); a
+ * heading written here had none, so its contents entry was `href="#"` and a
+ * click did nothing. The id is written out rather than slugged from the text,
+ * so a link to `#accessibility` survives a reworded heading.
+ */
+function SectionHeading({ id, children }: { id: string; children: React.ReactNode }) {
+  return (
+    <h2 id={id} className="m-0 text-xl font-bold text-ink">
+      {children}
+    </h2>
+  )
 }
 
 /**
@@ -81,7 +92,7 @@ export function SummaryStatus({ page }: { page: PageData }) {
 export function ExamplesHeading() {
   return (
     <div className="sb-unstyled not-prose mt-10 mb-2 font-ui">
-      <SectionHeading>Examples</SectionHeading>
+      <SectionHeading id="examples">Examples</SectionHeading>
     </div>
   )
 }
@@ -162,7 +173,7 @@ export function AccessibilitySection({ page }: { page: PageData }) {
   const interactive = Boolean(a11y.keyboard?.length)
   return (
     <section data-a11y className="sb-unstyled not-prose my-10 grid gap-6 font-ui text-sm text-ink">
-      <SectionHeading>Accessibility</SectionHeading>
+      <SectionHeading id="accessibility">Accessibility</SectionHeading>
       {a11y.keyboard?.length ? (
         <div className="grid gap-2">
           <h3 className="m-0 rotulo text-ink-muted">Keyboard</h3>
@@ -244,7 +255,7 @@ export function RelatedSection({ page }: { page: PageData }) {
   if (!page.alternatives.length && !page.pointingHere.length && !page.usedIn.length) return null
   return (
     <section data-related className="sb-unstyled not-prose my-10 grid gap-4 font-ui text-sm text-ink">
-      <SectionHeading>Related</SectionHeading>
+      <SectionHeading id="related">Related</SectionHeading>
       <div className="grid gap-6 md:grid-cols-2">
         {page.alternatives.length ? (
           <div className="grid content-start gap-2">

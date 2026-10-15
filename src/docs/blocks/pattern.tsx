@@ -22,8 +22,13 @@ import { titleName } from './usage'
 const linkClass = 'font-semibold text-ink underline underline-offset-2'
 const cell = 'border-b border-keyline px-3 py-2 align-top text-start'
 
-function Heading({ children }: { children: React.ReactNode }) {
-  return <h2 className="m-0 text-xl font-bold text-ink">{children}</h2>
+/** A section, with the id its table-of-contents entry links to (see SectionHeading in page.tsx). */
+function Heading({ id, children }: { id: string; children: React.ReactNode }) {
+  return (
+    <h2 id={id} className="m-0 text-xl font-bold text-ink">
+      {children}
+    </h2>
+  )
 }
 
 function Bullets({ items }: { items: React.ReactNode[] }) {
@@ -46,7 +51,7 @@ export function PatternGuide({ title }: { title: string }) {
       <p className="my-6 font-text text-lg leading-snug text-ink">{pattern.summary}</p>
 
       <section className="my-8 grid gap-6">
-        <Heading>Usage</Heading>
+        <Heading id="usage">Usage</Heading>
         <div className="grid gap-6 md:grid-cols-2">
           <div className="grid content-start gap-2">
             <h3 className="m-0 rotulo text-ink-muted">When to use</h3>
@@ -76,7 +81,7 @@ export function PatternGuide({ title }: { title: string }) {
       </section>
 
       <section data-built-from className="my-10 grid gap-3">
-        <Heading>Built from</Heading>
+        <Heading id="built-from">Built from</Heading>
         <p className="m-0 text-ink-2">
           Read from the screen’s imports, so the list cannot fall behind the code. Nothing in it was written for this
           screen.
@@ -108,7 +113,7 @@ export function PatternGuide({ title }: { title: string }) {
       </section>
 
       <section data-states className="my-10 grid gap-3">
-        <Heading>States</Heading>
+        <Heading id="states">States</Heading>
         <table className="w-full border-collapse">
           <thead>
             <tr>
@@ -163,7 +168,7 @@ export function PatternAccessibility({ title }: { title: string }) {
   if (!pattern) return null
   return (
     <section data-pattern-a11y className="sb-unstyled not-prose my-10 grid gap-3 font-ui text-sm text-ink">
-      <Heading>Accessibility</Heading>
+      <Heading id="accessibility">Accessibility</Heading>
       <p className="m-0 text-ink-2">
         What the screen does on top of its parts. Each part’s own keyboard and screen-reader behaviour is on its page.
       </p>

@@ -9,6 +9,7 @@ import type { Preview } from '@storybook/react-vite'
 import { DocsPage } from './docs-page'
 import { ThemedDocsContainer } from './docs-theme'
 import { initialGlobals, withMolaContext } from './mola-context'
+import { TOC_IGNORE, withHeadingId } from './toc'
 
 const preview: Preview = {
   // Every component gets a docs page: its decisions, its usage guidance, its
@@ -62,14 +63,13 @@ const preview: Preview = {
     docs: {
       container: ThemedDocsContainer,
       page: DocsPage,
-      // The table of contents lists the page's own sections. Headings inside
-      // a rendered example (`.sb-story`, in an example's frame or the
-      // anatomy diagram: an empty state's title, a settings section) belong
-      // to the example, and listed beside the page's they read as sections
-      // of the documentation.
+      // The table of contents lists the page's own sections, and every entry
+      // scrolls to its heading. toc.ts says what is left out and why every
+      // heading needs an id.
       toc: {
         headingSelector: 'h2, h3',
-        ignoreSelector: '[data-usage] h3, [data-a11y] h3, [data-related] h3, .sb-story h2, .sb-story h3',
+        ignoreSelector: TOC_IGNORE,
+        unsafeTocbotOptions: { headingObjectCallback: withHeadingId },
       },
     },
     a11y: { test: 'error' },
