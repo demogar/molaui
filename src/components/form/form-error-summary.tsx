@@ -126,7 +126,10 @@ export function FormErrorSummary({
                   if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey) return
                   if (focusEntry(entry.id)) event.preventDefault()
                 }}
-                className="min-w-0 text-ink underline decoration-ink-muted underline-offset-2 hover:decoration-ink focus-visible:focus-ring focus-visible:outline-none"
+                // At least 24px tall, the WCAG 2.5.8 floor: one line of text
+                // is 16px, and the links are stacked 6px apart, too close for
+                // the spacing exception.
+                className="min-h-[24px] min-w-0 text-ink underline decoration-ink-muted underline-offset-2 hover:decoration-ink focus-visible:focus-ring focus-visible:outline-none"
               >
                 <span className="font-semibold">{entry.label}</span>: {entry.message}
               </a>

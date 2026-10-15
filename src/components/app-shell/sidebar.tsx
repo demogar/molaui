@@ -158,7 +158,10 @@ export function NavItem({
     // item shows both. As one box-shadow string each, the bar (a state
     // variant, emitted after `focus-visible:`) replaced the ring, and a
     // pair of combined strings per direction had to put it back.
-    'focus-visible:focus-ring',
+    // Drawn inside the item. Nav items sit in scrolling lists (the sidebar's,
+    // the settings page's sub-nav), and a scroll box clips what is painted
+    // outside it: the outer ring lost its start and top edges on every item.
+    'focus-visible:focus-ring-inset',
     '[&_svg]:size-(--icon) [&_svg]:shrink-0',
     collapsed && 'justify-center px-0',
     className,

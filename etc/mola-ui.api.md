@@ -2141,6 +2141,8 @@ export interface MolaMessages {
     // (undocumented)
     toolCallGroup: ToolCallGroupMessages;
     // (undocumented)
+    tooltip: TooltipMessages;
+    // (undocumented)
     uncertaintyNote: UncertaintyNoteMessages;
 }
 
@@ -3761,6 +3763,11 @@ export interface ToolCallProps extends Omit<React_2.ComponentProps<'div'>, 'chil
 // @public
 export function Tooltip(input: TooltipProps): React_2.JSX.Element;
 
+// @public
+export interface TooltipMessages {
+    keys: Record<string, string>;
+}
+
 // @public (undocumented)
 export interface TooltipProps extends Omit<React_2.ComponentProps<'div'>, 'children' | 'content' | 'role'> {
     align?: Tooltip_2.Positioner.Props['align'];
@@ -3769,6 +3776,7 @@ export interface TooltipProps extends Omit<React_2.ComponentProps<'div'>, 'child
     defaultOpen?: boolean;
     delay?: number;
     disabled?: boolean;
+    messages?: MessagesOverride<TooltipMessages>;
     onOpenChange?: Tooltip_2.Root.Props['onOpenChange'];
     open?: boolean;
     shortcut?: string[];

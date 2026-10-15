@@ -1,6 +1,7 @@
 // Browser audit over every story and every docs page: axe (with real colour
 // contrast) in both themes, that every `data-theme` subtree paints its own
-// ground, a visible focus indicator on every tab stop, horizontal overflow at
+// ground, a visible and unclipped focus indicator on every tab stop, pointer
+// targets of at least 24px at compact density, horizontal overflow at
 // 390px, reflow at 320px (clipped or overlapping text, squeezed numbers,
 // sideways scrolling without the scroll-edge cue; every story again at
 // spacious density, the composed screens at 1024 and 768 too), console errors, and runtime cost (layout transitions,
@@ -25,6 +26,7 @@ import { chromium } from 'playwright'
 import { focusScan } from './focus-scan.mjs'
 import { BUDGETS, longTaskScan, runtimeScan } from './runtime-scan.mjs'
 import { serve } from './serve-static.mjs'
+import { targetSize } from './target-size.mjs'
 
 const args = process.argv.slice(2)
 const flag = (name, fallback) => {
@@ -469,6 +471,9 @@ async function audit(page, job, errors) {
   // the focus scan, which switches transitions off to read settled paint.
   if (job.viewMode === 'story' && job.theme === 'light') found.push(...(await runtimeScan(page, job.id)))
   if (job.viewMode === 'story') found.push(...(await focusScan(page)))
+  // Pointer targets of at least 24px (scripts/target-size.mjs). Size does not
+  // change with the theme, so once per story, on the light page.
+  if (job.viewMode === 'story' && job.theme === 'light') found.push(...(await targetSize(page)))
   if (job.overflow) {
     // Last, because it changes the page. The args table is a fixed-width grid
     // Storybook does not lay out for a phone, so it is set aside for the

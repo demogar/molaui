@@ -39,6 +39,23 @@ describe('Toast', () => {
     expect(screen.getAllByText('Timed out').length).toBeGreaterThan(0)
   })
 
+  // The polite viewport read a danger toast as it was added, and Base UI's
+  // hidden alert read it again. A card is live through exactly one region.
+  it('announces a danger toast once, through the alert, and others through the polite region', async () => {
+    setup()
+    act(() => {
+      api.error({ title: 'Deploy failed' })
+      api.success({ title: 'Index rebuilt' })
+    })
+    const live = async (title: RegExp) => {
+      const card = (await screen.findAllByText(title)).find((el) => el.closest('[data-slot="toast"]'))
+      return card?.closest('[aria-live]')?.getAttribute('aria-live')
+    }
+    expect(await live(/Deploy failed/)).toBe('off')
+    expect(await live(/Index rebuilt/)).toBe('polite')
+    expect(screen.getByRole('alert')).toHaveTextContent('Deploy failed')
+  })
+
   it('updates a running toast in place', async () => {
     setup()
     let id = ''

@@ -27,6 +27,7 @@ each rest on one, and a change that ignores it reopens an argument that was sett
 - [0013 — Three kinds of notice, one of them spoken, and one registry of keys](https://demogar.github.io/molaui/md/decisions-0013-notices-and-shortcuts--overview.md)
 - [0014 — Built-in words come from one messages table, through an optional provider](https://demogar.github.io/molaui/md/decisions-0014-one-messages-table--overview.md)
 - [0015 — Pressed is ink, disabled is a ground of its own](https://demogar.github.io/molaui/md/decisions-0015-pressed-is-ink--overview.md)
+- [0016 — A shape for every status tone](https://demogar.github.io/molaui/md/decisions-0016-a-shape-for-every-tone--overview.md)
 
 ## How a decision changes
 

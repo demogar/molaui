@@ -50,7 +50,8 @@ export function CayucoTopbar({ end, search }: { end?: React.ReactNode; search?: 
     <Topbar
       start={
         <>
-          <a href="#overview" className="flex items-center gap-2 px-1 text-ink no-underline">
+          {/* 24px tall at least: the 22px mark was the whole height at compact density (WCAG 2.5.8). */}
+          <a href="#overview" className="flex min-h-[24px] items-center gap-2 px-1 text-ink no-underline">
             <CayucoMark />
             <span className="font-display text-base font-bold tracking-display wdth-display">Cayuco</span>
           </a>

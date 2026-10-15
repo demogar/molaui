@@ -103,6 +103,7 @@ import {
 } from '../components/time-picker/messages'
 import { type ToastMessages, toastMessages } from '../components/toast/messages'
 import { type ToolbarOverflowMessages, toolbarOverflowMessages } from '../components/toolbar/messages'
+import { type TooltipMessages, tooltipMessages } from '../components/tooltip/messages'
 
 /** Each component's table type, so a translation can be typed one component at a time. */
 export type {
@@ -164,6 +165,7 @@ export type {
   ToolCallGroupMessages,
   ToolCallMessages,
   ToolbarOverflowMessages,
+  TooltipMessages,
   UncertaintyNoteMessages,
 }
 
@@ -229,6 +231,7 @@ export interface MolaMessages {
   toolCall: ToolCallMessages
   toolCallGroup: ToolCallGroupMessages
   toolbarOverflow: ToolbarOverflowMessages
+  tooltip: TooltipMessages
   uncertaintyNote: UncertaintyNoteMessages
 }
 
@@ -291,5 +294,6 @@ export const defaultMessages: MolaMessages = {
   toolCall: toolCallMessages,
   toolCallGroup: toolCallGroupMessages,
   toolbarOverflow: toolbarOverflowMessages,
+  tooltip: tooltipMessages,
   uncertaintyNote: uncertaintyNoteMessages,
 }

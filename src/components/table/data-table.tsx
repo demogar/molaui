@@ -675,7 +675,10 @@ export function DataTable<Row>({
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
         className={cn(
-          'group/resize absolute inset-y-0 end-0 z-(--z-lift) w-3 cursor-col-resize touch-none select-none outline-none',
+          // 24px wide (WCAG 2.5.8), centred on the column's edge: 12px it
+          // was, beside the next column's sort button. The grip stays a 2px
+          // line on the edge.
+          'group/resize absolute inset-y-0 -end-3 z-(--z-lift) w-[24px] cursor-col-resize touch-none select-none outline-none',
           // Inset: the header row is the top of a scrolling frame, which
           // clipped an outer ring to its lower half.
           'focus-visible:focus-ring-inset',
@@ -688,7 +691,7 @@ export function DataTable<Row>({
             handle stays hovered for the length of it. */}
         <span
           aria-hidden
-          className="absolute inset-y-2 end-0 w-0.5 bg-ink-muted transition-colors group-hover/resize:bg-ink group-focus-visible/resize:bg-ink"
+          className="absolute inset-y-2 end-[11px] w-0.5 bg-ink-muted transition-colors group-hover/resize:bg-ink group-focus-visible/resize:bg-ink"
         />
       </div>
     )

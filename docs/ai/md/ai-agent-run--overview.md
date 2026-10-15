@@ -94,14 +94,14 @@ Types: `AgentRunMessages`, `AgentRunFailure`, `AgentRunProps`, `AgentStep`, `Age
 
 | Key | What happens |
 | --- | --- |
-| Tab | Moves through Cancel run or Retry run, Copy run id, and each step that has detail. |
+| Tab | Moves through Cancel run or Retry run, Copy run id, and each step that has detail, including a step held open because it failed or waits for approval. |
 | Enter or Space | Activates the focused button, or opens and closes the focused step. |
 | Shift+Tab | Moves back through the same stops. |
 
 ### Mola handles
 
 - The run is a section named by its heading, and the steps are an ordered list named “Steps of” the run.
-- Each change of run status is announced once through a polite status region; single steps are not announced, and a failure the panel already alerts is not said twice.
+- Each change of run status is announced once through a polite status region; single steps are not announced, a failure the panel already alerts is not said twice, and a streamed answer inside the run leaves “Response complete.” to the run’s own “Run succeeded.”.
 - When a retry removes the failure panel, focus moves to the run’s heading instead of falling to the page.
 - Each step’s status is a glyph, a word and a colour, and a step that needs approval or has failed opens itself.
 

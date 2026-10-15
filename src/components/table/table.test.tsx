@@ -54,6 +54,8 @@ describe('Table primitives', () => {
       await userEvent.tab()
       const frame = screen.getByRole('table', { name: 'Runs' }).parentElement!
       expect(frame).toHaveFocus()
+      // A stop says what it is: the frame is a group named as the table is.
+      expect(screen.getByRole('group', { name: 'Runs' })).toBe(frame)
 
       // jsdom does not scroll, so this checks what the browser needs to: the
       // focused frame receives the arrow keys and nothing cancels them, which
@@ -72,8 +74,9 @@ describe('Table primitives', () => {
       expect(frame).toHaveFocus()
 
       scroll.mockReturnValue(390)
+      // A sticky header used to make the frame a stop whether or not it scrolled.
       const { container } = render(
-        <Table aria-label="Fits">
+        <Table aria-label="Fits" stickyHeader>
           <TableBody>
             <TableRow>
               <TableCell>run_2</TableCell>
@@ -82,6 +85,7 @@ describe('Table primitives', () => {
         </Table>,
       )
       expect(container.querySelector('[data-slot=table-frame]')).not.toHaveAttribute('tabindex')
+      expect(container.querySelector('[data-slot=table-frame]')).not.toHaveAttribute('role')
     } finally {
       scroll.mockRestore()
       client.mockRestore()

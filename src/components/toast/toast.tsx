@@ -219,6 +219,11 @@ function ToastList({ messages }: { messages: MessagesOverride<ToastMessages> | u
         key={toast.id}
         toast={toast}
         swipeDirection={swipeDirection}
+        // A danger toast is high priority, and Base UI announces it with a
+        // hidden `role="alert"` of its own — while the viewport, a polite live
+        // region, read the same card again as it was added. Opting the card out
+        // of the viewport's region leaves one announcement, the assertive one.
+        aria-live={toast.priority === 'high' ? 'off' : undefined}
         data-slot="toast"
         // The toast itself is a tab stop (Base UI), and it showed no focus:
         // the floating shadow was its only edge. Found by the hard-states story.

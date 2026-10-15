@@ -28,6 +28,24 @@ describe('ToolCall', () => {
     expect(onRetry).toHaveBeenCalledOnce()
   })
 
+  // The header was `disabled` while forced open, so Tab skipped the call's
+  // name and status and landed on Retry or Approve.
+  it.each([
+    ['failed', {}],
+    ['waiting', { approval: { reason: 'Writes to production.', onApprove: () => {}, onDeny: () => {} } }],
+  ] as const)('keeps the header a tab stop while %s holds it open', async (status, extra) => {
+    const user = userEvent.setup()
+    render(<ToolCall name="update_flag" status={status} error="PermissionDenied" {...extra} />)
+    await user.tab()
+    const header = screen.getByRole('button', { name: /update_flag/ })
+    expect(header).toHaveFocus()
+    expect(header).toHaveAttribute('aria-expanded', 'true')
+    expect(header).toHaveAttribute('aria-disabled', 'true')
+    // It does not close.
+    await user.keyboard('{Enter}')
+    expect(header).toHaveAttribute('aria-expanded', 'true')
+  })
+
   it('holds for approval with equal Approve and Deny', async () => {
     const onApprove = vi.fn()
     const onDeny = vi.fn()
@@ -84,6 +102,9 @@ describe('ToolCall', () => {
     render(
       <ToolCall name="update_flag" status="waiting" approval={{ reason: 'Writes to production.', onApprove, onDeny }} />,
     )
+    // The held-open header is the first stop, then the decision.
+    await userEvent.tab()
+    expect(screen.getByRole('button', { name: /update_flag/ })).toHaveFocus()
     await userEvent.tab()
     expect(screen.getByRole('button', { name: 'Approve' })).toHaveFocus()
     await userEvent.keyboard('{Enter}')

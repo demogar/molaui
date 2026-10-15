@@ -35,6 +35,17 @@ import { type AlertDialogMessages, type DialogMessages, alertDialogMessages, dia
  * user has no Escape key, and Base UI's own guidance is that a modal without
  * a `Close` inside it cannot be left.
  *
+ * The popup is `aria-modal="true"`. Base UI hides the page from assistive
+ * technology by setting `aria-hidden` on its siblings, which works, but it
+ * never says the dialog is modal, and VoiceOver handles a modal dialog
+ * better when told. A `Dialog` opened with `modal={false}` should pass
+ * `aria-modal={false}` to its content, which wins.
+ *
+ * A body long enough to scroll is a tab stop, named by the title, while it
+ * scrolls and only then. Chromium makes any scrolling box keyboard-focusable
+ * on its own; Firefox and Safari do not, and there the overflow of a long
+ * dialog could only be reached with a wheel.
+ *
  * `DialogContent` passes every Base UI `Popup` prop through, `initialFocus`
  * and `finalFocus` included, so where focus lands on close is Base UI's own
  * contract rather than one restated here. AlertDialog builds its popup
@@ -113,13 +124,25 @@ export function DialogContent({
   ...props
 }: DialogContentProps) {
   const [t] = useMessages('dialog', dialogMessages, messages)
+
+  const titleId = React.useId()
   return (
     <DialogPrimitive.Portal>
       <DialogPrimitive.Backdrop className={cn(backdropClasses)} />
-      <DialogPrimitive.Popup data-slot="dialog" className={cn(dialogContentVariants({ size }), className)} {...props}>
+      <DialogPrimitive.Popup
+        data-slot="dialog"
+        aria-modal
+        className={cn(dialogContentVariants({ size }), className)}
+        {...props}
+      >
         <DialogFrame
           band={band}
-          title={<DialogPrimitive.Title className={titleClasses}>{title}</DialogPrimitive.Title>}
+          titleId={titleId}
+          title={
+            <DialogPrimitive.Title id={titleId} className={titleClasses}>
+              {title}
+            </DialogPrimitive.Title>
+          }
           description={
             description ? (
               <DialogPrimitive.Description className={descriptionClasses}>{description}</DialogPrimitive.Description>
@@ -161,8 +184,26 @@ export const actionRowClasses = [
 const titleClasses = 'm-0 font-display text-xl font-bold leading-snug tracking-display wdth-display'
 const descriptionClasses = 'mt-1.5 mb-0 text-sm text-ink-2'
 
+/** Whether a box scrolls: its content is taller than it is. */
+function useScrolls(ref: React.RefObject<HTMLElement | null>) {
+  const [scrolls, setScrolls] = React.useState(false)
+  React.useEffect(() => {
+    const el = ref.current
+    if (!el || typeof ResizeObserver === 'undefined') return
+    const measure = () => setScrolls(el.scrollHeight > el.clientHeight + 1)
+    const observer = new ResizeObserver(measure)
+    observer.observe(el)
+    // The content grows without the box resizing.
+    for (const child of el.children) observer.observe(child)
+    measure()
+    return () => observer.disconnect()
+  }, [ref])
+  return scrolls
+}
+
 function DialogFrame({
   band,
+  titleId,
   title,
   description,
   close,
@@ -171,6 +212,7 @@ function DialogFrame({
   children,
 }: {
   band: DialogBand
+  titleId: string
   title: React.ReactNode
   description: React.ReactNode
   close: React.ReactNode
@@ -178,6 +220,8 @@ function DialogFrame({
   error?: React.ReactNode
   children: React.ReactNode
 }) {
+  const bodyRef = React.useRef<HTMLDivElement>(null)
+  const scrolls = useScrolls(bodyRef)
   return (
     <>
       <div aria-hidden className={cn('relleno shrink-0', bandClass[band])} />
@@ -188,7 +232,17 @@ function DialogFrame({
         </div>
         {close ? <div className="-mt-1 -me-2">{close}</div> : null}
       </div>
-      {children ? <div className="scroll-cloth min-h-0 flex-1 overflow-y-auto px-6 pt-4 pb-2 text-sm">{children}</div> : null}
+      {children ? (
+        <div
+          ref={bodyRef}
+          tabIndex={scrolls ? 0 : undefined}
+          role={scrolls ? 'group' : undefined}
+          aria-labelledby={scrolls ? titleId : undefined}
+          className="scroll-cloth min-h-0 flex-1 overflow-y-auto px-6 pt-4 pb-2 text-sm outline-none focus-visible:focus-ring-inset"
+        >
+          {children}
+        </div>
+      ) : null}
       {error ? <div className="shrink-0 px-6 pt-4">{error}</div> : null}
       {footer ? (
         <div className="@container mt-6 px-6 pb-6">
@@ -307,6 +361,7 @@ export function AlertDialog({
   const cancelRef = React.useRef<HTMLButtonElement>(null)
   const inputId = React.useId()
   const errorId = React.useId()
+  const titleId = React.useId()
   const showError = error !== undefined && error !== null && error !== false && !pending
 
   const setOpen = (next: boolean) => {
@@ -337,13 +392,19 @@ export function AlertDialog({
         <AlertDialogPrimitive.Popup
           {...props}
           data-slot="alert-dialog"
+          aria-modal
           initialFocus={cancelRef}
           finalFocus={finalFocus}
           className={cn(dialogContentVariants({ size: 'sm' }), className)}
         >
           <DialogFrame
             band={tone === 'danger' ? 'rojo' : 'oro'}
-            title={<AlertDialogPrimitive.Title className={titleClasses}>{title}</AlertDialogPrimitive.Title>}
+            titleId={titleId}
+            title={
+              <AlertDialogPrimitive.Title id={titleId} className={titleClasses}>
+                {title}
+              </AlertDialogPrimitive.Title>
+            }
             description={
               <AlertDialogPrimitive.Description className={descriptionClasses}>{description}</AlertDialogPrimitive.Description>
             }

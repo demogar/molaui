@@ -3,6 +3,7 @@ import { render, screen } from '@/test/render'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
+import { StreamingText } from '../streaming-text'
 import { ToolCall } from '../tool-call'
 import { AgentRun, type AgentStep } from './agent-run'
 import * as stories from './agent-run.stories'
@@ -103,6 +104,55 @@ describe('AgentRun', () => {
     expect(status()).toBeUndefined()
     rerender(<AgentRun name="Agent" runId="run_1" status="succeeded" steps={steps} />)
     expect(status()).toHaveTextContent('Run succeeded.')
+  })
+
+  // "Response complete." from the stream and "Run succeeded." from the run
+  // landed in two polite regions in the same tick.
+  it('says a success once, when a streamed answer inside it finishes', () => {
+    const run = (status: 'running' | 'succeeded') => (
+      <AgentRun
+        name="Agent"
+        runId="run_1"
+        status={status}
+        steps={[
+          {
+            id: 'c',
+            kind: 'message',
+            title: 'Answer',
+            status,
+            defaultOpen: true,
+            detail: <StreamingText text="Done." status={status === 'running' ? 'streaming' : 'done'} />,
+          },
+        ]}
+      />
+    )
+    const { rerender } = render(run('running'))
+    rerender(run('succeeded'))
+    const said = screen
+      .getAllByRole('status')
+      .map((el) => el.textContent?.trim())
+      .filter(Boolean)
+    expect(said).toEqual(['Run succeeded.'])
+  })
+
+  // A failed step's header was `disabled`, so Tab skipped the one step that
+  // most needed reading.
+  it('keeps a step that is held open a tab stop', async () => {
+    const user = userEvent.setup()
+    render(
+      <AgentRun
+        name="Agent"
+        runId="run_1"
+        status="failed"
+        steps={[{ id: 'b', kind: 'tool', title: 'Query', status: 'failed', detail: <p>PermissionDenied</p> }]}
+      />,
+    )
+    const header = screen.getByRole('button', { name: /Query/ })
+    // Past Copy run id and whatever else comes first; a disabled header is never reached.
+    for (let i = 0; i < 10 && document.activeElement !== header; i++) await user.tab()
+    expect(header).toHaveFocus()
+    expect(header).toHaveAttribute('aria-disabled', 'true')
+    expect(header).toHaveAttribute('aria-expanded', 'true')
   })
 
   it('shows the run id as a literal', () => {

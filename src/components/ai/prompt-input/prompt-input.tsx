@@ -263,7 +263,9 @@ export function AttachmentChip({ name, detail, onRemove, messages, className, ..
           type="button"
           aria-label={f.format(t.remove, { name })}
           onClick={onRemove}
-          className="grid size-5 place-items-center text-ink-2 hover:bg-ink-soft hover:text-ink"
+          // 24px, the WCAG 2.5.8 floor; the negative margin keeps the chip the
+          // height it was when the button was 20px.
+          className="-my-0.5 grid size-[24px] place-items-center text-ink-2 hover:bg-ink-soft hover:text-ink"
         >
           <svg aria-hidden viewBox="0 0 10 10" className="size-2.5">
             <path d="M2 2l6 6M8 2l-6 6" stroke="currentColor" strokeWidth="1.5" />

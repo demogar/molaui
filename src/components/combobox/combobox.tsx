@@ -96,9 +96,13 @@ const popupClasses = [
 
 // The two icon buttons at the end of the field. Not tab stops (Base UI keeps
 // them out of the order): the keyboard opens the list with ArrowDown and
-// clears with Backspace, so the buttons are for the pointer.
+// clears with Backspace, so the buttons are for the pointer — and a pointer
+// target owes 24 by 24 (WCAG 2.5.8). They are sized in px, not `size-6`: the
+// compact density scales the rem, and at 1.5rem the two buttons measured 21px
+// and touching, too small for the size and too close for the spacing
+// exception.
 const endButtonClasses =
-  'grid size-6 shrink-0 place-items-center text-ink-muted transition-colors hover:bg-ink-soft hover:text-ink data-disabled:pointer-events-none [&_svg]:size-(--icon)'
+  'grid size-[24px] shrink-0 place-items-center text-ink-muted transition-colors hover:bg-ink-soft hover:text-ink data-disabled:pointer-events-none [&_svg]:size-(--icon)'
 
 const statusRowClasses = 'flex items-center gap-2.5 px-2 py-2 text-sm text-ink-muted'
 
@@ -419,7 +423,7 @@ export function Combobox(props: ComboboxProps) {
                   {disabled || readOnly ? null : (
                     <ComboboxPrimitive.ChipRemove
                       aria-label={removeLabel(option.label)}
-                      className="grid size-5 place-items-center text-current transition-colors hover:bg-ink-soft"
+                      className="grid size-[24px] place-items-center text-current transition-colors hover:bg-ink-soft"
                     >
                       <X aria-hidden />
                     </ComboboxPrimitive.ChipRemove>

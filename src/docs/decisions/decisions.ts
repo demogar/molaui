@@ -174,6 +174,15 @@ const NOTES: Record<string, Notes> = {
         'Hover, pressed and disabled are one vocabulary: the band revealed, the band closed with ink, and the disabled ground with the keyline kept.',
     },
   },
+  '0016': {
+    name: 'A shape for every tone',
+    decided:
+      'Each status tone is its own shape (hollow, striped, filled, half, crossed, diamond), the RunStatus set, so a badge never tells two states apart by hue alone.',
+    governs: {
+      'Foundations/Color': 'Status colour is never alone: every tone also has its own shape, on a solid badge as well.',
+      'Foundations/Iconography': 'Status marks differ in shape, not only in colour: the RunStatus set, shared by StatusDot.',
+    },
+  },
 }
 
 export interface Decision extends Notes {

@@ -132,7 +132,7 @@ Types: `AutocompleteMessages`, `ComboboxMessages`, `AutocompleteProps`, `Combobo
 
 - Base UI renders a `combobox` input wired to a `listbox` with `aria-activedescendant`, and labelled `group`s for grouped options.
 - Loading and “No matches” are said in Base UI’s polite status regions, and the list carries `aria-busy` while loading.
-- The clear and open buttons are named (“Clear selection”), and each chip’s remove button is named “Remove <label>”.
+- The clear and open buttons are named (“Clear selection”), and each chip’s remove button is named “Remove <label>”; all three are 24px targets at every density.
 - With `multiple`, the input is described with the count and the key that reaches the chips.
 
 ### You handle

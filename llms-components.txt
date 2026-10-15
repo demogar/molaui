@@ -597,9 +597,9 @@ Keyboard:
 - Home or End: On a column resize handle, makes the column its narrowest or its widest.
 
 Mola handles:
-- Puts the scrolling frame in the tab order only when the table overflows it.
+- Puts the scrolling frame in the tab order only when the table overflows it, and then makes it a group named as the table is.
 - Sets `aria-sort` on the sorted column only, and `aria-selected` on selected rows.
-- Uses native checkboxes, and announces the selection count once through a polite status.
+- Uses native checkboxes with a 24px hit area around the drawn square, and announces the selection count once through a polite status.
 - Marks a loading `DataTable` with `aria-busy` and hides its skeleton rows from assistive tech.
 - With `virtualize`, sets `aria-rowcount` and `aria-rowindex` so the full count is heard, and keeps the focused row rendered while it is scrolled away.
 - Makes each column resize handle a focusable separator with its width as `aria-valuenow`, so it can be found and moved without a pointer.
@@ -650,7 +650,7 @@ Anatomy:
 
 #### `TableCheckbox` (component)
 
-A native checkbox, drawn as a cut square. Native, so space toggles it, forms submit it and screen readers announce it with no ARIA to keep in sync; the visible square is a sibling painted from the input's own `:checked` and `:indeterminate` state.
+A native checkbox, drawn as a cut square. Native, so space toggles it, forms submit it and screen readers announce it with no ARIA to keep in sync.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -888,11 +888,12 @@ Content:
 
 Mola handles:
 - Hides `StatusDot` from assistive tech when it sits beside a word, and gives it `role="img"` and a name when `label` is set.
+- Cuts each tone as its own shape — hollow, striped, filled, half, crossed, diamond — so a state never rests on colour alone, even on a solid badge.
 - Stills the pulse under reduced motion, leaving the dot in place.
-- Keeps dots visible in forced colours mode by painting them in the system text colour.
+- Keeps dots visible in forced colours mode by painting their shapes in the system colours.
 
 You handle:
-- Put the state in words inside the badge: Failed, Running.
+- Put the state in words inside the badge: Failed, Running; pass `dot` so the word has its shape beside it.
 - Give a `StatusDot` that stands alone a `label`.
 
 #### `Badge` (component)
@@ -922,7 +923,7 @@ You handle:
 
 #### `StatusDot` (component)
 
-A square, not a circle. It is a scrap of cut cloth, and a round dot is the one shape a blade cannot make. Gold dots carry an ink keyline because gold on light cloth is 1.66:1 — under the 3:1 a graphic mark needs to be seen.
+A square, not a circle. It is a scrap of cut cloth, and a round dot is the one shape a blade cannot make. Each tone is cut as its own shape (see STATUS_GLYPH), and every shape carries an ink keyline, because gold on light cloth is 1.66:1 — under the 3:1 a graphic mark needs to be seen.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -1505,7 +1506,7 @@ Keyboard:
 - Shift+Tab: Leaves the region from its start and returns focus to where it was.
 
 Mola handles:
-- Renders the stack in a polite live region, and announces `danger` toasts assertively.
+- Renders the stack in a polite live region, and announces `danger` toasts assertively, once: the card opts out of the polite region so the alert is the only reading.
 - Prefixes the title with hidden words for its tone: Success, Error, In progress.
 - Pauses the timers while the region has keyboard focus, and keeps a running toast until it is updated or dismissed.
 - Names the dismiss button "Dismiss".
@@ -1732,7 +1733,7 @@ Keyboard:
 Mola handles:
 - Base UI renders a `combobox` input wired to a `listbox` with `aria-activedescendant`, and labelled `group`s for grouped options.
 - Loading and “No matches” are said in Base UI’s polite status regions, and the list carries `aria-busy` while loading.
-- The clear and open buttons are named (“Clear selection”), and each chip’s remove button is named “Remove <label>”.
+- The clear and open buttons are named (“Clear selection”), and each chip’s remove button is named “Remove <label>”; all three are 24px targets at every density.
 - With `multiple`, the input is described with the count and the key that reaches the chips.
 
 You handle:
@@ -4267,8 +4268,9 @@ Keyboard:
 - Enter: In an alert dialog’s confirmation field, confirms once the text matches.
 
 Mola handles:
-- Base UI traps focus, locks scroll, makes the page inert and returns focus on close.
+- Base UI traps focus, locks scroll, makes the page inert and returns focus on close; the popup says `aria-modal="true"`.
 - The dialog is named by `title` and described by `description`, and a named Close button is always rendered unless `hideClose` is set.
+- A body long enough to scroll is a tab stop named by the title, in every browser, and only while it scrolls.
 - `AlertDialog` is a `role="alertdialog"` that an outside click does not dismiss, and it focuses Cancel first.
 - While an async confirm is pending, both buttons stop taking presses and the dialog cannot be closed.
 - An AlertDialog `error` is a `role="alert"`, announced once when it appears and again after each failed retry, and it is the confirm button’s description.
@@ -4782,11 +4784,12 @@ Keyboard:
 
 Mola handles:
 - It opens on keyboard focus as well as on hover.
-- `shortcut` keys are rendered as `<kbd>` elements.
+- The popup is `role="tooltip"`, and while it is open the trigger is `aria-describedby` it, joined with any description the trigger already has.
+- `shortcut` keys are drawn as `<kbd>` elements and read as words: “Command Shift R”.
 - Inside a `TooltipProvider`, moving along a `Toolbar` shows the next tooltip at once, after the first delay.
 
 You handle:
-- Give the trigger its own accessible name, such as an `IconButton` `label`; the tooltip is not wired to it as a name or description.
+- Give the trigger its own accessible name, such as an `IconButton` `label`; the tooltip is its description, not its name.
 - Never put information only in a tooltip; it does not exist on touch.
 - Pass a focusable element as the child.
 
@@ -4802,6 +4805,7 @@ You handle:
 | `defaultOpen` | `boolean` |  | Shows it on first render without controlling it afterwards. |
 | `delay` | `number` |  | Overrides the provider's delay for this tooltip. |
 | `disabled` | `boolean` |  | Never open: for a trigger whose label is already visible in this state. |
+| `messages` | `MessagesOverride<TooltipMessages>` |  | Overrides the words the tooltip says on its own: the spoken names of shortcut keys. |
 | `onOpenChange` | `((open: boolean, eventDetails: TooltipRootChangeEventDetails) => void)` |  | Called when hover, focus or Escape would open or close it, with the next state. |
 | `open` | `boolean` |  | Whether it is showing, when you control it. Rarely needed: hover and focus open it already. |
 | `shortcut` | `string[]` |  | Keys, in order: `['⌘', 'K']`. |
@@ -4815,7 +4819,7 @@ A tooltip is the inverse panel at its smallest: ink ground, cloth type. It is th
 
 Renders no element of its own, so it takes no `className` or `ref`.
 
-Types: `TooltipProps`
+Types: `TooltipMessages`, `TooltipProps`
 
 ## Typography
 
@@ -5233,13 +5237,13 @@ Content:
 - Write the summary as a result: “Answered with 3 sources. One guardrail flagged for review.”
 
 Keyboard:
-- Tab: Moves through Cancel run or Retry run, Copy run id, and each step that has detail.
+- Tab: Moves through Cancel run or Retry run, Copy run id, and each step that has detail, including a step held open because it failed or waits for approval.
 - Enter or Space: Activates the focused button, or opens and closes the focused step.
 - Shift+Tab: Moves back through the same stops.
 
 Mola handles:
 - The run is a section named by its heading, and the steps are an ordered list named “Steps of” the run.
-- Each change of run status is announced once through a polite status region; single steps are not announced, and a failure the panel already alerts is not said twice.
+- Each change of run status is announced once through a polite status region; single steps are not announced, a failure the panel already alerts is not said twice, and a streamed answer inside the run leaves “Response complete.” to the run’s own “Run succeeded.”.
 - When a retry removes the failure panel, focus moves to the run’s heading instead of falling to the page.
 - Each step’s status is a glyph, a word and a colour, and a step that needs approval or has failed opens itself.
 
@@ -6132,7 +6136,7 @@ Content:
 
 Mola handles:
 - The text is `aria-busy` while it streams, so it is not read token by token.
-- A polite status says “Response complete.” or “Response stopped with an error.” once, when a running stream ends, and not on mount.
+- A polite status says “Response complete.” or “Response stopped with an error.” once, when a running stream ends, and not on mount; inside an `AgentRun` the run announces the outcome instead.
 - The caret is hidden from screen readers, and under reduced motion it stops blinking.
 
 You handle:
@@ -6249,12 +6253,12 @@ Content:
 - Keep the approval reason to a sentence or two: what changes, for whom, and whether it can be undone.
 
 Keyboard:
-- Tab: Moves to the call’s header, then to Approve, Deny, Retry call and the payload’s buttons when open. A call that waits for approval or has failed is held open, so its header is not a stop.
+- Tab: Moves to the call’s header, then to Approve, Deny, Retry call and the payload’s buttons when open; the header is a stop even while the call is held open.
 - Enter or Space: Opens or closes the call from its header, or activates the focused button.
 - ArrowUp or ArrowDown or ArrowLeft or ArrowRight: Scrolls a focused arguments or result block.
 
 Mola handles:
-- The header is a button with `aria-expanded`, and a failed call or one waiting for approval opens itself.
+- The header is a button with `aria-expanded`, and a failed call or one waiting for approval opens itself; held open, the header stays focusable and is `aria-disabled`, so its name and status are still a stop.
 - A failure is an alert with the error verbatim, except inside an `AgentRun` that has already raised it.
 - Status is a glyph, a word and a colour, and Approve and Deny are buttons of the same weight.
 - `ToolCallGroup` is a group named “N tools in parallel”, or by its `label`.

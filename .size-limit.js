@@ -17,12 +17,14 @@ export default [
   // when Listbox, Tag group, Tree and the time pickers had landed, and the
   // form primitives and the Markdown renderer each crossed it alone. The two
   // small entries below are what a consumer pays and the real guard on bloat;
-  // they do not move with this one.
+  // they do not move with this one. 182 kB (#133): the shape glyphs of six
+  // status tones, the tooltip's spoken key names and the held-open headers
+  // took the library from under 180 kB to 180.36 kB.
   {
     name: 'Everything (import *)',
     path: 'dist/index.js',
     import: '*',
-    limit: '180 kB',
+    limit: '182 kB',
     modifyRolldownConfig: reactOnly,
   },
   {

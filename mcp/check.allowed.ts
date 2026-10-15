@@ -45,6 +45,13 @@ export const ALLOWED: Record<string, Allowed[]> = {
       why: 'This file is CommandPalette: the input stays focused and the highlight moves by aria-activedescendant, a pattern Combobox does not have (see its doc comment).',
     },
   ],
+  'src/components/tooltip/tooltip.tsx': [
+    {
+      rule: 12,
+      match: /role="tooltip"/,
+      why: 'This file is Tooltip: Base UI renders its popup with no role, so the component names it a tooltip itself and links it to the trigger while it is open.',
+    },
+  ],
   'src/components/listbox/listbox.tsx': [
     {
       rule: 12,

@@ -71,6 +71,47 @@ describe('Dialog', () => {
     await waitFor(() => expect(screen.getByRole('button', { name: 'Next row' })).toHaveFocus())
   })
 
+  // Base UI hides the page with aria-hidden but never said the dialog was modal.
+  it('says it is modal', async () => {
+    render(<Example />)
+    await userEvent.click(screen.getByRole('button', { name: 'Open' }))
+    expect(await screen.findByRole('dialog', { name: 'Rename' })).toHaveAttribute('aria-modal', 'true')
+  })
+
+  // Only Chromium makes a scrolling box focusable by itself; elsewhere the
+  // overflow of a long dialog was out of the keyboard's reach.
+  it('makes a scrolling body a named tab stop, and only while it scrolls', async () => {
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        observe() {}
+        disconnect() {}
+      },
+    )
+    // jsdom has no layout: 900px of content in a 300px body.
+    const scroll = vi.spyOn(HTMLElement.prototype, 'scrollHeight', 'get').mockReturnValue(900)
+    const client = vi.spyOn(HTMLElement.prototype, 'clientHeight', 'get').mockReturnValue(300)
+    try {
+      render(<Example />)
+      await userEvent.click(screen.getByRole('button', { name: 'Open' }))
+      const body = await screen.findByRole('group', { name: 'Rename' })
+      expect(body).toHaveAttribute('tabindex', '0')
+      expect(body).toContainElement(screen.getByRole('textbox', { name: 'Name' }))
+    } finally {
+      scroll.mockRestore()
+      client.mockRestore()
+      vi.unstubAllGlobals()
+    }
+  })
+
+  it('leaves a body that fits out of the tab order', async () => {
+    render(<Example />)
+    await userEvent.click(screen.getByRole('button', { name: 'Open' }))
+    const dialog = await screen.findByRole('dialog', { name: 'Rename' })
+    expect(within(dialog).queryByRole('group')).toBeNull()
+    expect(screen.getByRole('textbox', { name: 'Name' }).parentElement).not.toHaveAttribute('tabindex')
+  })
+
   it('always renders a named close button', async () => {
     render(<Example />)
     await userEvent.click(screen.getByRole('button', { name: 'Open' }))
