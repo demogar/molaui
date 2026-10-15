@@ -31,7 +31,7 @@ component manifest. It writes the variables, with their scopes and code syntax, 
 core components, named after their code exports, with the prop names as variant axes and the
 code's exact values (`danger`, `sm`). It has been tested against a fake of Figma's API. It has
 not been run in a real file yet, and there is no published library. Two things are left: run it
-once in Mola's own Figma file and publish that file as a library, then draw the components
+once in Mola's own Figma file and, on a paid Figma plan, publish that file as a library; then draw the components
 `figma/component-map.json` lists as `pending`, starting with the overlays and the AI layer.
 
 ### 1.0.0

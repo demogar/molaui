@@ -504,7 +504,7 @@ DTCG tool. It is generated from `tokens.css` (`npm run tokens`).
 **The kit.** `figma/plugin/` is a Figma plugin that draws the kit into your file. Import
 `figma/plugin/manifest.json` in the Figma desktop app (**Plugins → Development → Import plugin
 from manifest…**) and run it. It writes the variables, with `light` and `dark` modes and the
-three densities, scopes, and `var(--token)` code syntax for Dev Mode. It also writes the shadow
+three densities (on Figma's free Starter plan, which allows one mode, as separate collections), scopes, and `var(--token)` code syntax for Dev Mode. It also writes the shadow
 effect styles and the core components. Each component is named after its export, with the prop
 names as variant axes and padding, gap and colour bound to variables. Run it again after an
 upgrade and it updates the kit in place. `figma/README.md` covers the fonts it needs, what it

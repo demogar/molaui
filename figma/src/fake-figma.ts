@@ -74,11 +74,16 @@ export class FakeCollection {
     return this.fake.variables.filter((v) => v.variableCollectionId === this.id).map((v) => v.id)
   }
   addMode(name: string) {
-    // Figma's Professional plan allows four modes per collection.
-    if (this.modes.length >= 4) throw new Error('Too many modes')
+    // Professional allows four modes per collection; Starter one, with the
+    // error Figma throws there.
+    if (this.modes.length >= this.fake.modeLimit) throw new Error(`in addMode: Limited to ${this.fake.modeLimit} modes only`)
     const mode = { modeId: nextId('mode'), name }
     this.modes = [...this.modes, mode]
     return mode.modeId
+  }
+  remove() {
+    for (const v of this.fake.variables.filter((x) => x.variableCollectionId === this.id)) v.remove()
+    this.fake.collections.splice(this.fake.collections.indexOf(this), 1)
   }
   renameMode(modeId: string, name: string) {
     this.modes = this.modes.map((m) => (m.modeId === modeId ? { ...m, name } : m))
@@ -274,6 +279,10 @@ export class FakeFigma {
   pages: FakeNode[] = []
   loaded = new Set<string>()
   closed: string | undefined
+  /** Modes a collection may have: 4 on Professional, 1 on Starter. Change it between runs to upgrade. */
+  modeLimit = 4
+  /** The menu command the next run starts from (figma.command). */
+  command = 'run'
   notices: string[] = []
   readonly variableFamilies: Set<string>
 
@@ -303,12 +312,17 @@ export class FakeFigma {
   }
 
   api(): FigmaApi {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias -- the command getter reads it at call time
+    const self = this
     const bind = <T extends { boundVariables?: Record<string, VariableAlias> }>(thing: T, field: string, v: FakeVariable | null): T => ({
       ...thing,
       boundVariables: { ...(thing.boundVariables ?? {}), ...(v ? { [field]: { type: 'VARIABLE_ALIAS', id: v.id } } : {}) },
     })
     const api = {
       root: { children: this.pages },
+      get command() {
+        return self.command
+      },
       variables: {
         getLocalVariableCollectionsAsync: async () => [...this.collections],
         getLocalVariablesAsync: async () => [...this.variables],

@@ -36,6 +36,13 @@ describe('the committed plugin', () => {
     expect(manifestJson.networkAccess).toEqual({ allowedDomains: ['none'] })
   })
 
+  it('offers a menu command for every mode, for the single-mode path', () => {
+    const menu = (JSON.parse(read('figma/plugin/manifest.json')) as { menu: { command?: string }[] }).menu
+    const commands = menu.flatMap((item) => (item.command ? [item.command] : []))
+    const modes = kit.data.collections.filter((c) => c.modes.length > 1).flatMap((c) => c.modes)
+    expect(commands.sort()).toEqual(['run', ...modes].sort())
+  })
+
   it('is plain script for the plugin sandbox: no imports, no module syntax', () => {
     expect(code).not.toMatch(/^\s*(import|export)\s/m)
     expect(code).not.toMatch(/\brequire\(/)

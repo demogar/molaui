@@ -7,5 +7,15 @@
   "documentAccess": "dynamic-page",
   "networkAccess": {
     "allowedDomains": ["none"]
-  }
+  },
+  "menu": [
+    { "name": "Draw or update the kit", "command": "run" },
+    { "separator": true },
+    { "name": "Show light (Starter plan)", "command": "light" },
+    { "name": "Show dark (Starter plan)", "command": "dark" },
+    { "separator": true },
+    { "name": "Show comfortable (Starter plan)", "command": "comfortable" },
+    { "name": "Show compact (Starter plan)", "command": "compact" },
+    { "name": "Show spacious (Starter plan)", "command": "spacious" }
+  ]
 }
