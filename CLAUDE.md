@@ -23,7 +23,7 @@ npm run manifest         # regenerate docs/ai/components.json, llms*.txt and the
 npm run manifest:check   # fail if those are stale or the README/introduction counts are wrong
 npm run evidence         # regenerate docs/accessibility/evidence.json (testing status on each component page)
 npm run evidence:check   # fail if it is stale
-npm run build            # library build to dist/, then the mola-ui-mcp bin to dist/mcp/
+npm run build            # library build to dist/, then dist/mola-ui-components.css (vite.css.config.ts), then the mola-ui-mcp bin to dist/mcp/
 npm run build-storybook  # static Storybook to storybook-static/
 npm run api              # regenerate etc/mola-ui.api.md from dist/ (API Extractor; needs build)
 npm run api:check        # fail if the public API changed without the report
@@ -83,7 +83,7 @@ One folder per component in `src/components/<name>/`: `<name>.tsx` (cva variants
 
 The MCP server (`mcp/`) is a read-only server over `docs/ai/components.json` and `docs/ai/tokens.json`. `vite.mcp.config.ts` bundles it, SDK and zod included, into `dist/mcp/mola-ui-mcp.js`, the package's `mola-ui-mcp` bin. The SDK stays a devDependency, so the library gains no runtime dependency. `mcp/server.test.ts` drives it through the SDK client over an in-memory transport, and `npm run consumers` starts the packed bin over stdio with no `node_modules`.
 
-Library build (`vite.config.ts`): ESM with `preserveModules` for file-level tree-shaking, all deps/peers external, a single CSS file `dist/mola-ui.css`, plus raw CSS layers copied to `dist/tailwind/`. Stories, tests, `src/docs/` and `src/patterns/` are excluded from the build and from type declarations. `@/` aliases `src/`.
+Library build (`vite.config.ts`): ESM with `preserveModules` for file-level tree-shaking, all deps/peers external, a single CSS file `dist/mola-ui.css`, plus raw CSS layers copied to `dist/tailwind/`; a second pass (`vite.css.config.ts`) then builds `dist/mola-ui-components.css`, the `components.css` entry for apps that already have page styles (no preflight or base). Stories, tests, `src/docs/` and `src/patterns/` are excluded from the build and from type declarations. `@/` aliases `src/`.
 
 Storybook docs pages (introduction, principles, foundations, changelog) are MDX in `src/docs/`. Doc blocks in `src/docs/blocks/` import `tokens.css?raw` and resolve values with `src/tokens/resolve.ts`, so swatches show exactly what the contract test checks.
 

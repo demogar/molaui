@@ -12,7 +12,6 @@ runs:
     - uses: actions/setup-node@v7
       with:
         node-version-file: .nvmrc
-        cache: npm
     # npm ci took 20 to 45 seconds in every job even with npm's download
     # cache warm; most of it is unpacking. The installed tree is cached whole,
     # keyed on everything that decides it, and npm ci runs only on a miss.
@@ -21,6 +20,15 @@ runs:
       with:
         path: node_modules
         key: node-modules-${{ runner.os }}-${{ hashFiles('.nvmrc', 'package-lock.json') }}
+    # npm's download cache matters only to npm ci, so it is restored only on
+    # a miss. setup-node's `cache: npm` restored it in every job, about eight
+    # seconds of each one, for a tree the step above had already unpacked.
+    - if: steps.modules.outputs.cache-hit != 'true'
+      uses: actions/cache@v6
+      with:
+        path: ~/.npm
+        key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+        restore-keys: npm-${{ runner.os }}-
     - if: steps.modules.outputs.cache-hit != 'true'
       run: npm ci
       shell: bash
