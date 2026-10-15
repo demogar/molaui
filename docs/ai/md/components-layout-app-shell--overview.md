@@ -51,10 +51,10 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `sidebar` (required) | `ReactNode` |  |  |
-| `topbar` (required) | `ReactNode` |  |  |
-| `defaultSidebarCollapsed` | `boolean` | `false` |  |
-| `onSidebarCollapsedChange` | `((collapsed: boolean) => void)` |  |  |
+| `sidebar` (required) | `ReactNode` |  | The navigation, usually a `Sidebar`. The same tree is drawn in the layout from 920px and in a modal sheet below it, so desktop and mobile navigation cannot drift. |
+| `topbar` (required) | `ReactNode` |  | The bar across the top, usually a `Topbar`. It stays put while `<main>` scrolls, so the switcher and search are never lost. |
+| `defaultSidebarCollapsed` | `boolean` | `false` | Start with the desktop sidebar collapsed to its icon rail. Defaults to `false`; ignored below 920px, where the sidebar is a sheet. |
+| `onSidebarCollapsedChange` | `((collapsed: boolean) => void)` |  | Called when the desktop sidebar collapses or expands — to remember the choice between visits. |
 | `sidebarCollapsed` | `boolean` |  | Controlled collapse of the desktop sidebar. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="app-shell">`.
@@ -88,7 +88,7 @@ One destination. Active is an ink bar on the leading edge plus a washed ground a
 | `count` | `number` |  | A count beside the label: open items, failures. |
 | `countLabel` | `string` |  | Read with the count: "3 failed". Without it the number is read alone. |
 | `countTone` | `"neutral" \| "danger" \| "attention"` | `neutral` | `danger` fills the count in the danger colour — for failures that need a person, not for totals. `attention` is deprecated since 0.7.0 and removed in 1.0.0: use `danger`, the same fill under the status word every `tone` uses. |
-| `icon` | `ReactNode` |  |  |
+| `icon` | `ReactNode` |  | A leading icon. Needed for the collapsed rail, where the icon is all that shows and the label becomes its tooltip. |
 
 `className`, `ref`, `id` and the other DOM props go to `<a data-slot="nav-item">`.
 
@@ -105,8 +105,8 @@ One destination. Active is an ink bar on the leading edge plus a washed ground a
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `label` (required) | `string` |  | Names the navigation landmark: "Main", "Settings". |
-| `footer` | `ReactNode` |  |  |
-| `header` | `ReactNode` |  |  |
+| `footer` | `ReactNode` |  | Pinned below the navigation behind a keyline — the signed-in account, help, settings. |
+| `header` | `ReactNode` |  | Pinned above the navigation and outside its scroll — a workspace switcher or the product's name. |
 
 `className`, `ref`, `id` and the other DOM props go to `<nav data-slot="sidebar-nav">`.
 

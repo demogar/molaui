@@ -79,15 +79,36 @@ import {
 
 export interface DateRangePickerProps
   extends Omit<React.ComponentProps<'button'>, 'value' | 'defaultValue' | 'onChange' | 'children' | 'type' | 'name'> {
+  /**
+   * The chosen range, controlled: `{ start, end }`, each a day at local midnight or
+   * `null`. The half-chosen range between two presses lives only in the popup and is
+   * never the value.
+   */
   value?: DateRange
+  /** The range on first render, uncontrolled. Omitted, both ends start `null`. */
   defaultValue?: DateRange
+  /**
+   * Called with the whole range once both ends are chosen, pressed or typed, when a
+   * preset is picked, and with both ends `null` when both typed dates are cleared.
+   */
   onValueChange?: (value: DateRange) => void
   /** Pass `[]` for none. */
   presets?: DateRangePreset[]
+  /**
+   * BCP 47 tag for names, digits, typed order, week start and how the period is
+   * written on the trigger. `undefined` uses the runtime's locale.
+   */
   locale?: DateLocale
+  /** 0 = Sunday … 6 = Saturday. Overrides the locale's first day of the week. */
   weekStartsOn?: number
+  /** The earliest day either end can be, inclusive. Earlier days are disabled in the grid and refused when typed. */
   min?: Date | null
+  /** The latest day either end can be, inclusive. Later days are disabled in the grid and refused when typed. */
   max?: Date | null
+  /**
+   * Days inside `min`–`max` that cannot be an end of the range: public holidays, a
+   * freeze. Disabled in the grid and refused when typed.
+   */
   isDateDisabled?: (date: Date) => boolean
   /**
    * Inject "now" for stable stories and tests. Pass it when server rendering
@@ -106,12 +127,24 @@ export interface DateRangePickerProps
   open?: boolean
   /** Open the calendar on first render. */
   defaultOpen?: boolean
+  /**
+   * Called when the popup opens or closes. A range pressed on the grid or a preset
+   * closes it; a range completed by typing leaves it open, so the person sees it
+   * drawn.
+   */
   onOpenChange?: (open: boolean) => void
   /** Submitted as `<name>-start` and `<name>-end`, `yyyy-mm-dd`. */
   name?: string
+  /**
+   * Trigger height, shared with Input and Select so the picker lines up in a form
+   * row. Defaults to `md`; density rescales every size.
+   */
   size?: FieldControlSize
+  /** Stated, not faded: the trigger goes to the shaded cloth and the popup cannot open. */
   disabled?: boolean
+  /** Marks the trigger `aria-required`. Inside `Field`, the label carries the required mark. */
   required?: boolean
+  /** The trigger's text while no range is chosen. Defaults to "Choose a period". */
   placeholder?: string
   /** Classes for the outer element that holds the trigger. `className` styles the trigger itself. */
   wrapperClassName?: string

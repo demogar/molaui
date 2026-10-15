@@ -11,8 +11,17 @@ export interface PromptInputProps
   extends Omit<React.ComponentProps<'form'>, 'onSubmit' | 'onChange' | 'children'> {
   /** The visible-to-assistive-tech name of the field — "Message Cayuco". */
   label: string
+  /**
+   * The draft, when the page owns it — to restore a draft or clear it from
+   * outside. Pair with `onValueChange`.
+   */
   value?: string
+  /**
+   * The starting draft when the composer owns it. Defaults to empty; the field
+   * clears itself after a send.
+   */
   defaultValue?: string
+  /** Called on every keystroke with the whole draft, untrimmed. */
   onValueChange?: (value: string) => void
   /** Called with the trimmed prompt. The field clears itself when uncontrolled. */
   onSubmit: (value: string) => void
@@ -30,6 +39,10 @@ export interface PromptInputProps
    * where an accidental send costs a model run.
    */
   submitOn?: 'enter' | 'mod-enter'
+  /**
+   * Defaults to "Ask anything…". It is a hint, never the name: `label` is what
+   * assistive tech announces.
+   */
   placeholder?: string
   /** Rows before the field scrolls instead of growing. */
   maxRows?: number
@@ -39,6 +52,11 @@ export interface PromptInputProps
   toolbar?: React.ReactNode
   /** Show the rough token estimate. */
   showEstimate?: boolean
+  /**
+   * Locks the composer, for a conversation the reader may not write to. To stop
+   * sending for a while, use `status="offline"` instead, which keeps the draft
+   * editable and says why.
+   */
   disabled?: boolean
 }
 
@@ -202,9 +220,17 @@ export function PromptInput({
 }
 
 export interface AttachmentChipProps extends React.ComponentProps<'span'> {
+  /**
+   * The file or item's name, set as a literal and used in the remove button's name
+   * ("Remove report.csv").
+   */
   name: string
   /** e.g. "CSV · 48 KB". */
   detail?: string
+  /**
+   * Takes the attachment off the next prompt. Shows a remove button; omit for an
+   * attachment that cannot be removed.
+   */
   onRemove?: () => void
 }
 

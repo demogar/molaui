@@ -58,11 +58,11 @@ Renders no element of its own, so it takes no `className` or `ref`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `align` | `Align` | `start` |  |
-| `className` | `string` |  |  |
-| `description` | `ReactNode` |  |  |
-| `side` | `Side` | `bottom` |  |
-| `sideOffset` | `number` | `8` |  |
+| `align` | `Align` | `start` | How the popover lines up along that side, `start` by default. |
+| `className` | `string` |  | Classes for the popup (`w-72` and `p-4` by default), merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute. |
+| `description` | `ReactNode` |  | A line under the title, wired as the popover's accessible description. |
+| `side` | `Side` | `bottom` | Which side of the trigger the popover opens on, `bottom` by default. Base UI flips it when there is no room. |
+| `sideOffset` | `number` | `8` | The gap between trigger and popover in pixels, 8 by default. |
 | `title` | `ReactNode` |  | Heading, wired as the popover's accessible name. |
 
 Also accepts the props of `PopoverPopupProps`.

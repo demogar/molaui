@@ -79,7 +79,9 @@ export interface CalendarProps extends Omit<React.ComponentProps<'div'>, 'onSele
    * blank. The server's date, passed down, keeps both renders on one day.
    */
   today?: Date
+  /** The earliest day that can be chosen, inclusive. Earlier days are disabled, and focus never moves before it. */
   min?: Date | null
+  /** The latest day that can be chosen, inclusive. Later days are disabled, and focus never moves past it. */
   max?: Date | null
   /** Days that exist but cannot be chosen: weekends in a freeze, public holidays. */
   isDateDisabled?: (date: Date) => boolean

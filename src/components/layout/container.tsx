@@ -17,6 +17,11 @@ import { type Variants } from '../../lib/variants'
  */
 export const containerVariants = cva('mx-auto w-full px-4 sm:px-6 lg:px-9', {
   variants: {
+    /**
+     * The column's measure: `page` (default), `wide` for tools whose tables
+     * want the screen, `prose` for reading, `full` for no limit. The gutters
+     * stay either way.
+     */
     width: {
       page: 'max-w-page',
       wide: 'max-w-wide',

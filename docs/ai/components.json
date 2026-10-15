@@ -1632,12 +1632,14 @@
             {
               "name": "runId",
               "type": "string",
-              "required": true
+              "required": true,
+              "description": "The run's identifier, set as a literal with a copy button beside it, because it is what an operator pastes into a ticket or a log search."
             },
             {
               "name": "status",
               "type": "RunStatusValue",
               "required": true,
+              "description": "The state of the run as a whole. It drives the header's glyph, word and clock, which actions are offered (Cancel while active, Retry once failed, timed out or cancelled), and the one polite announcement made per change.",
               "values": [
                 "queued",
                 "running",
@@ -1652,12 +1654,14 @@
             {
               "name": "steps",
               "type": "readonly AgentStep[]",
-              "required": true
+              "required": true,
+              "description": "The timeline, in order: the order is the content, so the steps render as an ordered list. A step waiting for approval or failed opens itself."
             },
             {
               "name": "endedAt",
               "type": "number | Date",
-              "required": false
+              "required": false,
+              "description": "When the run ended. Freezes the header clock; omit while the run is still going."
             },
             {
               "name": "failure",
@@ -1669,7 +1673,8 @@
               "name": "headingLevel",
               "type": "2 | 3",
               "required": false,
-              "default": "3"
+              "default": "3",
+              "description": "Heading level for the run's name. Defaults to 3; use 2 when the run is the page's main subject."
             },
             {
               "name": "model",
@@ -1680,12 +1685,14 @@
             {
               "name": "onCancel",
               "type": "(() => void)",
-              "required": false
+              "required": false,
+              "description": "Stops the run. Shows a Cancel run button while the run is active; omit to offer no way to stop it from here."
             },
             {
               "name": "onRetry",
               "type": "(() => void)",
-              "required": false
+              "required": false,
+              "description": "Runs it again from the start. Shows Retry run once the run has failed, timed out or been cancelled; when `failure` is set the retry moves into the failure panel, next to the reason."
             },
             {
               "name": "onRetryFromStep",
@@ -1696,7 +1703,8 @@
             {
               "name": "startedAt",
               "type": "number | Date",
-              "required": false
+              "required": false,
+              "description": "When the run started. With it, the header shows an elapsed clock that keeps counting while the run is active."
             },
             {
               "name": "summary",
@@ -1707,7 +1715,8 @@
             {
               "name": "usage",
               "type": "Pick<TokenUsageProps, \"input\" | \"output\" | \"cached\" | \"costUsd\" | \"contextWindow\">",
-              "required": false
+              "required": false,
+              "description": "Token counts and cost for the run, shown inline in the header. Omit when the provider does not report them rather than passing zeros."
             }
           ],
           "forwards": {
@@ -1894,12 +1903,14 @@
             {
               "name": "added",
               "type": "number",
-              "required": true
+              "required": true,
+              "description": "Lines added. Shown as \"+n\" and said as \"n lines added\"."
             },
             {
               "name": "removed",
               "type": "number",
-              "required": true
+              "required": true,
+              "description": "Lines removed. Shown as \"−n\" and said as \"n lines removed\"."
             }
           ],
           "forwards": {
@@ -1947,7 +1958,8 @@
               "name": "headingLevel",
               "type": "2 | 3",
               "required": false,
-              "default": "3"
+              "default": "3",
+              "description": "Heading level for the proposal's title. Defaults to 3; use 2 when the review is the page's main subject."
             },
             {
               "name": "model",
@@ -1987,7 +1999,8 @@
             {
               "name": "changes",
               "type": "readonly FieldChange[]",
-              "required": true
+              "required": true,
+              "description": "The fields that changed, each as before → after. Leave out the fields that did not change: the list is the change, not the record."
             },
             {
               "name": "title",
@@ -1999,7 +2012,8 @@
               "name": "headingLevel",
               "type": "3 | 4 | 5",
               "required": false,
-              "default": "4"
+              "default": "4",
+              "description": "Heading level for the record's title. Defaults to 4, under a `ChangeReview` heading."
             }
           ],
           "forwards": {
@@ -2049,6 +2063,7 @@
               "type": "FileChangeKind",
               "required": false,
               "default": "modified",
+              "description": "What happened to the file, shown as a mark and a word in the header. Defaults to `modified`; a `renamed` file with no hunks says so instead of showing an empty diff.",
               "values": [
                 "added",
                 "modified",
@@ -2279,6 +2294,7 @@
               "name": "level",
               "type": "ConfidenceLevel",
               "required": true,
+              "description": "How strong the support is: three coarse steps, shown as filled segments and a word, never a percentage the model cannot honestly claim.",
               "values": [
                 "medium",
                 "high",
@@ -2502,6 +2518,7 @@
               "name": "role",
               "type": "MessageRole",
               "required": true,
+              "description": "Who the turn belongs to. Sets the gutter label and its band; the content's typeface comes from what you pass in (`StreamingText` for a model's reply).",
               "values": [
                 "user",
                 "assistant",
@@ -2548,7 +2565,8 @@
             {
               "name": "onRetry",
               "type": "(() => void)",
-              "required": false
+              "required": false,
+              "description": "Regenerates the turn. Shows Retry among the actions, or in the error block when `status` is `error`; omit to hide it."
             },
             {
               "name": "status",
@@ -2560,7 +2578,8 @@
             {
               "name": "timestamp",
               "type": "string | Date",
-              "required": false
+              "required": false,
+              "description": "When the turn was sent. Shown in the gutter and in the turn's accessible name; see `timeZone` for when it renders."
             },
             {
               "name": "timeZone",
@@ -2792,7 +2811,8 @@
             {
               "name": "name",
               "type": "string",
-              "required": true
+              "required": true,
+              "description": "The file or item's name, set as a literal and used in the remove button's name (\"Remove report.csv\")."
             },
             {
               "name": "detail",
@@ -2803,7 +2823,8 @@
             {
               "name": "onRemove",
               "type": "(() => void)",
-              "required": false
+              "required": false,
+              "description": "Takes the attachment off the next prompt. Shows a remove button; omit for an attachment that cannot be removed."
             }
           ],
           "forwards": {
@@ -2838,13 +2859,15 @@
               "name": "defaultValue",
               "type": "string",
               "required": false,
-              "default": ""
+              "default": "",
+              "description": "The starting draft when the composer owns it. Defaults to empty; the field clears itself after a send."
             },
             {
               "name": "disabled",
               "type": "boolean",
               "required": false,
-              "default": "false"
+              "default": "false",
+              "description": "Locks the composer, for a conversation the reader may not write to. To stop sending for a while, use `status=\"offline\"` instead, which keeps the draft editable and says why."
             },
             {
               "name": "maxRows",
@@ -2862,13 +2885,15 @@
             {
               "name": "onValueChange",
               "type": "((value: string) => void)",
-              "required": false
+              "required": false,
+              "description": "Called on every keystroke with the whole draft, untrimmed."
             },
             {
               "name": "placeholder",
               "type": "string",
               "required": false,
-              "default": "Ask anything…"
+              "default": "Ask anything…",
+              "description": "Defaults to \"Ask anything…\". It is a hint, never the name: `label` is what assistive tech announces."
             },
             {
               "name": "showEstimate",
@@ -2900,7 +2925,8 @@
             {
               "name": "value",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "The draft, when the page owns it — to restore a draft or clear it from outside. Pair with `onValueChange`."
             }
           ],
           "forwards": {
@@ -3030,7 +3056,8 @@
               "name": "defaultOpen",
               "type": "boolean",
               "required": false,
-              "default": "false"
+              "default": "false",
+              "description": "Start with the reasoning shown. Closed by default, because reasoning is evidence for when the answer looks wrong, not the answer."
             },
             {
               "name": "durationMs",
@@ -3041,12 +3068,14 @@
             {
               "name": "endedAt",
               "type": "number | Date",
-              "required": false
+              "required": false,
+              "description": "When the thinking ended. Freezes the clock; omit while the model is still thinking."
             },
             {
               "name": "startedAt",
               "type": "number | Date",
-              "required": false
+              "required": false,
+              "description": "When the thinking started. Gives the summary line its clock: live while streaming, \"Thought for 12.4s\" once done."
             },
             {
               "name": "status",
@@ -3218,6 +3247,7 @@
               "type": "RunErrorKind",
               "required": false,
               "default": "failed",
+              "description": "Why the run stopped, which sets the headline, the plain sentence and the glyph. Defaults to `failed`; `cancelled` is not an error, so it offers no copy action.",
               "values": [
                 "failed",
                 "cancelled",
@@ -3234,12 +3264,14 @@
             {
               "name": "onRetry",
               "type": "(() => void)",
-              "required": false
+              "required": false,
+              "description": "Runs the whole run again from the start. Shows *Retry run*, disabled until `retryAt` passes."
             },
             {
               "name": "onRetryFromStep",
               "type": "(() => void)",
-              "required": false
+              "required": false,
+              "description": "Re-runs from the step that stopped, keeping the work before it, so it takes the stronger button when both retries are offered. Disabled until `retryAt` passes."
             },
             {
               "name": "retryAt",
@@ -3262,7 +3294,8 @@
             {
               "name": "stepCount",
               "type": "number",
-              "required": false
+              "required": false,
+              "description": "How many steps the run has, so the position reads \"step 4 of 5\". Only used with `stepNumber`."
             },
             {
               "name": "stepNumber",
@@ -3453,6 +3486,7 @@
               "name": "status",
               "type": "RunStatusValue",
               "required": true,
+              "description": "The state shown: it picks the glyph, the word (unless `label` overrides it) and its colour, and whether the clock keeps running.",
               "values": [
                 "queued",
                 "running",
@@ -3510,6 +3544,7 @@
               "name": "status",
               "type": "RunStatusValue",
               "required": true,
+              "description": "Which mark to draw. Each status has its own shape, not only its own hue, so the glyph survives greyscale. Decorative: pair it with the word, as `RunStatus` does.",
               "values": [
                 "queued",
                 "running",
@@ -3686,7 +3721,8 @@
             {
               "name": "n",
               "type": "number",
-              "required": true
+              "required": true,
+              "description": "The source's number, matching its place in the `SourceList`. Shown as \"[n]\"; the link defaults to `#source-n`."
             },
             {
               "name": "cardSide",
@@ -3727,7 +3763,8 @@
             {
               "name": "sources",
               "type": "readonly Source[]",
-              "required": true
+              "required": true,
+              "description": "The sources the answer drew on, in citation order, so each card's number matches its inline marker."
             },
             {
               "name": "timeZone",
@@ -3914,6 +3951,7 @@
               "type": "StreamStatus",
               "required": false,
               "default": "done",
+              "description": "Where the stream is. `streaming` shows the caret and sets `aria-busy`; the move from `streaming` to `done` or `error` is announced once. Defaults to `done`.",
               "values": [
                 "error",
                 "streaming",
@@ -4067,12 +4105,14 @@
             {
               "name": "input",
               "type": "number",
-              "required": true
+              "required": true,
+              "description": "Tokens sent to the model, cached ones included."
             },
             {
               "name": "output",
               "type": "number",
-              "required": true
+              "required": true,
+              "description": "Tokens the model produced. With `input`, the total measured against `contextWindow`."
             },
             {
               "name": "cached",
@@ -4299,6 +4339,7 @@
               "name": "status",
               "type": "RunStatusValue",
               "required": true,
+              "description": "The call's state. `waiting` and `failed` keep the details open, because the decision or the error is the content.",
               "values": [
                 "queued",
                 "running",
@@ -4332,12 +4373,14 @@
             {
               "name": "durationMs",
               "type": "number",
-              "required": false
+              "required": false,
+              "description": "A known duration, for a finished call that has no timestamps."
             },
             {
               "name": "endedAt",
               "type": "number | Date",
-              "required": false
+              "required": false,
+              "description": "When the call ended. Freezes the clock; omit while the call is open."
             },
             {
               "name": "error",
@@ -4348,12 +4391,14 @@
             {
               "name": "onOpenChange",
               "type": "((open: boolean) => void)",
-              "required": false
+              "required": false,
+              "description": "Called when the reader opens or closes the details."
             },
             {
               "name": "onRetry",
               "type": "(() => void)",
-              "required": false
+              "required": false,
+              "description": "Calls the tool again. Shows Retry beside the error once the call has failed; omit when the run, not the call, owns retrying."
             },
             {
               "name": "open",
@@ -4370,7 +4415,8 @@
             {
               "name": "startedAt",
               "type": "number | Date",
-              "required": false
+              "required": false,
+              "description": "When the call started. With it, the header shows a clock that counts while the call is active."
             },
             {
               "name": "title",
@@ -4392,7 +4438,8 @@
             {
               "name": "count",
               "type": "number",
-              "required": true
+              "required": true,
+              "description": "How many calls ran together. Used for the default label, \"N tools in parallel\"."
             },
             {
               "name": "label",
@@ -4569,7 +4616,8 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the button, merged with `cn()` so yours win a conflict. A string, not Base UI's function of state: style a state with its `data-*` attribute (`data-disabled:`)."
             },
             {
               "name": "icon",
@@ -4587,12 +4635,14 @@
             {
               "name": "size",
               "type": "\"sm\" | \"md\" | \"lg\"",
-              "required": false
+              "required": false,
+              "description": "The control height. Density already re-scales every size, so reach for a different one only to set a button apart from its neighbours, not to make a whole screen compact."
             },
             {
               "name": "variant",
               "type": "\"primary\" | \"secondary\" | \"danger\" | \"ghost\"",
-              "required": false
+              "required": false,
+              "description": "The weight of the action: `primary` (ink) for the panel's main action, `secondary` beside it, `danger` only for what destroys something, `ghost` for low-stakes actions in dense rows."
             },
             {
               "name": "withArrow",
@@ -4637,7 +4687,8 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the button, merged with `cn()` so yours win a conflict. A string, not Base UI's function of state: style a state with its `data-*` attribute (`data-disabled:`)."
             },
             {
               "name": "loading",
@@ -4648,12 +4699,14 @@
             {
               "name": "size",
               "type": "\"sm\" | \"md\" | \"lg\"",
-              "required": false
+              "required": false,
+              "description": "The control height. Density already re-scales every size, so reach for a different one only to set a button apart from its neighbours, not to make a whole screen compact."
             },
             {
               "name": "variant",
               "type": "\"secondary\" | \"danger\" | \"primary\" | \"ghost\"",
-              "required": false
+              "required": false,
+              "description": "The weight of the action: `primary` (ink) for the panel's main action, `secondary` beside it, `danger` only for what destroys something, `ghost` for low-stakes actions in dense rows."
             }
           ],
           "inherits": [
@@ -4822,12 +4875,14 @@
             {
               "name": "size",
               "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
-              "required": false
+              "required": false,
+              "description": "The square's side, on the spacing scale so density re-scales it: `md` for a table row or a message, `xs`/`sm` inline with text, `lg`/`xl` for a profile header."
             },
             {
               "name": "src",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "An image URL. The initials stay until it has loaded, and stay for good if it fails, so a broken URL never shows a broken-image glyph."
             }
           ],
           "forwards": {
@@ -4857,7 +4912,8 @@
               "name": "size",
               "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
               "required": false,
-              "default": "md"
+              "default": "md",
+              "description": "Every tile's size, the \"+n\" tile's included; it overrides the size set on each child, so the row stays even."
             }
           ],
           "forwards": {
@@ -5033,7 +5089,8 @@
             {
               "name": "code",
               "type": "string",
-              "required": true
+              "required": true,
+              "description": "The text, exactly as it should be copied. Rendered verbatim; format JSON before passing it."
             },
             {
               "name": "copyable",
@@ -5068,7 +5125,8 @@
               "name": "lineNumbers",
               "type": "boolean",
               "required": false,
-              "default": "false"
+              "default": "false",
+              "description": "A gutter of line numbers that stays put as the code scrolls sideways. Hidden from assistive tech and never copied. Off by default; turn it on when someone will cite a line."
             },
             {
               "name": "maxHeight",
@@ -5227,13 +5285,15 @@
             {
               "name": "items",
               "type": "DescriptionItem[]",
-              "required": true
+              "required": true,
+              "description": "The term and value pairs, in reading order. Mark ids and hashes `literal`."
             },
             {
               "name": "layout",
               "type": "\"inline\" | \"stacked\" | \"grid\"",
               "required": false,
-              "default": "inline"
+              "default": "inline",
+              "description": "`inline` (default): term left, value right, for a side panel scanned top to bottom. `stacked`: term above value, for values long enough to wrap. `grid`: two columns under an ink rule, for a summary closing a section."
             }
           ],
           "forwards": {
@@ -5389,19 +5449,22 @@
             {
               "name": "values",
               "type": "number[]",
-              "required": true
+              "required": true,
+              "description": "The series, oldest first, scaled to its own minimum and maximum. The latest point is cut out in the accent. Empty draws nothing. Decorative: say the figure in text beside it."
             },
             {
               "name": "height",
               "type": "number",
               "required": false,
-              "default": "24"
+              "default": "24",
+              "description": "Drawn height in pixels, 24 by default."
             },
             {
               "name": "width",
               "type": "number",
               "required": false,
-              "default": "72"
+              "default": "72",
+              "description": "Drawn width in pixels, 72 by default."
             }
           ],
           "forwards": {
@@ -5416,17 +5479,20 @@
             {
               "name": "label",
               "type": "ReactNode",
-              "required": true
+              "required": true,
+              "description": "What the figure measures, set in the label register: \"p95 latency\", \"Runs today\". It is the tile's term."
             },
             {
               "name": "value",
               "type": "ReactNode",
-              "required": true
+              "required": true,
+              "description": "The figure itself, already formatted: \"1,284\", \"97.8\". Put the unit in `unit` rather than in the string."
             },
             {
               "name": "delta",
               "type": "StatDelta",
-              "required": false
+              "required": false,
+              "description": "The change since a reference period. State both which way it moved (`direction`, the glyph) and whether that is good (`sentiment`, the colour): up is not always good news."
             },
             {
               "name": "hint",
@@ -5595,17 +5661,20 @@
             {
               "name": "shape",
               "type": "\"square\" | \"round\"",
-              "required": false
+              "required": false,
+              "description": "`square` (default), or `round` only when the thing keyed is itself a dot, such as a map pin."
             },
             {
               "name": "size",
               "type": "\"sm\" | \"md\"",
-              "required": false
+              "required": false,
+              "description": "`md` (default) beside body text, `sm` beside a label or a small figure."
             },
             {
               "name": "tone",
               "type": "\"neutral\" | \"info\" | \"success\" | \"warn\" | \"danger\" | \"accent\"",
-              "required": false
+              "required": false,
+              "description": "The colour keyed, in the badge tones so a key and a status for the same thing agree; `neutral` by default."
             }
           ],
           "forwards": {
@@ -5902,7 +5971,8 @@
             {
               "name": "colSpan",
               "type": "number",
-              "required": true
+              "required": true,
+              "description": "How many columns the row spans: all of them, including a checkbox column, or the empty state sits in the first cell."
             },
             {
               "name": "actions",
@@ -5913,13 +5983,15 @@
             {
               "name": "kind",
               "type": "\"empty\" | \"no-results\" | \"error\" | \"no-permission\"",
-              "required": false
+              "required": false,
+              "description": "Why it is empty, as on `EmptyState`: `empty` (the default), `no-results` when filters emptied it, `error`, or `no-permission`."
             },
             {
               "name": "title",
               "type": "ReactNode",
               "required": false,
-              "default": "Nothing here yet"
+              "default": "Nothing here yet",
+              "description": "The empty state's heading. Defaults to \"Nothing here yet\"; the children become its description."
             },
             {
               "name": "variant",
@@ -5956,7 +6028,8 @@
             {
               "name": "onSort",
               "type": "(() => void)",
-              "required": false
+              "required": false,
+              "description": "Called when the header's sort control is pressed. The page decides the next direction; only used with `sort`."
             },
             {
               "name": "sort",
@@ -6009,7 +6082,8 @@
             {
               "name": "columns",
               "type": "number",
-              "required": true
+              "required": true,
+              "description": "How many cells each row draws: the table's column count, including a checkbox column."
             },
             {
               "name": "rows",
@@ -6031,17 +6105,20 @@
             {
               "name": "columns",
               "type": "DataTableColumn<Row>[]",
-              "required": true
+              "required": true,
+              "description": "What each column shows, how it sorts and aligns, and whether it can be hidden. Order is display order."
             },
             {
               "name": "getRowId",
               "type": "(row: Row) => string",
-              "required": true
+              "required": true,
+              "description": "A stable id per row. Selection is kept by id, so it survives sorting, paging and a refetch that returns new objects."
             },
             {
               "name": "rows",
               "type": "Row[]",
-              "required": true
+              "required": true,
+              "description": "The data. Every row when the table sorts and pages itself; one page, already sorted, when `manual`. Never mutated."
             },
             {
               "name": "bulkActions",
@@ -6052,7 +6129,8 @@
             {
               "name": "caption",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "A visible caption naming the table. Prefer it to `label` when the page has room: a visible name helps every reader, not only assistive tech."
             },
             {
               "name": "columnMenu",
@@ -6064,28 +6142,33 @@
             {
               "name": "defaultHiddenColumns",
               "type": "Iterable<string>",
-              "required": false
+              "required": false,
+              "description": "Column keys hidden at the start when the table owns visibility. The reader can bring them back from the column menu."
             },
             {
               "name": "defaultPage",
               "type": "number",
               "required": false,
-              "default": "1"
+              "default": "1",
+              "description": "The page the table starts on when it owns paging, 1-based. Defaults to 1."
             },
             {
               "name": "defaultSelection",
               "type": "Iterable<string>",
-              "required": false
+              "required": false,
+              "description": "Row ids selected at the start when the table owns selection."
             },
             {
               "name": "defaultSort",
               "type": "DataTableSort",
-              "required": false
+              "required": false,
+              "description": "The sort the table starts with when it owns sorting. Clicking a sorted header cycles ascending → descending → off."
             },
             {
               "name": "empty",
               "type": "ReactNode | DataTableEmpty",
-              "required": false
+              "required": false,
+              "description": "What shows when there are no rows: an empty state as data (title, description, kind, actions), or a node that becomes its description. Use `kind: \"no- results\"` when filters emptied it."
             },
             {
               "name": "frameClassName",
@@ -6097,7 +6180,8 @@
               "name": "framed",
               "type": "boolean",
               "required": false,
-              "default": "false"
+              "default": "false",
+              "description": "Bounds the table with a keyline on a raised ground, for a table that is the panel rather than sitting in one."
             },
             {
               "name": "hiddenColumns",
@@ -6115,7 +6199,8 @@
               "name": "loading",
               "type": "boolean",
               "required": false,
-              "default": "false"
+              "default": "false",
+              "description": "Shows skeleton rows at the real row height in place of the body and says \"Loading…\" in the bar, so the table does not jump when the data lands."
             },
             {
               "name": "manual",
@@ -6134,22 +6219,26 @@
             {
               "name": "onHiddenColumnsChange",
               "type": "((hidden: Set<string>) => void)",
-              "required": false
+              "required": false,
+              "description": "Called with the new set of hidden column keys — to remember the choice between visits."
             },
             {
               "name": "onPageChange",
               "type": "((page: number) => void)",
-              "required": false
+              "required": false,
+              "description": "Called with the new page, 1-based. With `manual`, fetch that page here."
             },
             {
               "name": "onSelectionChange",
               "type": "((selection: Set<string>) => void)",
-              "required": false
+              "required": false,
+              "description": "Called with the new set of selected ids, across every page."
             },
             {
               "name": "onSortChange",
               "type": "((sort: DataTableSort | null) => void)",
-              "required": false
+              "required": false,
+              "description": "Called with the new sort, or `null` when it is turned off. With `manual`, fetch the re-sorted page here; the table also resets to page 1."
             },
             {
               "name": "page",
@@ -6167,7 +6256,8 @@
               "name": "paginationVariant",
               "type": "\"pages\" | \"compact\"",
               "required": false,
-              "default": "compact"
+              "default": "compact",
+              "description": "`compact` (the default) is previous/next with the range; `pages` numbers the pages, for a table where jumping matters more than stepping."
             },
             {
               "name": "rowCount",
@@ -6185,7 +6275,8 @@
               "name": "selectable",
               "type": "boolean",
               "required": false,
-              "default": "false"
+              "default": "false",
+              "description": "Adds a checkbox column and a select-all in the header. Select-all covers the current page only, so paging never selects rows nobody has seen."
             },
             {
               "name": "selection",
@@ -6203,7 +6294,8 @@
               "name": "stickyHeader",
               "type": "boolean",
               "required": false,
-              "default": "false"
+              "default": "false",
+              "description": "Keeps the header row visible while the body scrolls. Give the frame a height with `frameClassName`."
             },
             {
               "name": "wrapperClassName",
@@ -6225,17 +6317,20 @@
             {
               "name": "columns",
               "type": "DataTableColumn<Row>[]",
-              "required": true
+              "required": true,
+              "description": "Every column, hidden or not, so the menu can list them all. A column with `hideable: false` shows checked and disabled."
             },
             {
               "name": "hidden",
               "type": "ReadonlySet<string>",
-              "required": true
+              "required": true,
+              "description": "The keys of the columns currently hidden. The last visible column cannot be hidden."
             },
             {
               "name": "onToggle",
               "type": "(key: string, visible: boolean) => void",
-              "required": true
+              "required": true,
+              "description": "Called with a column's key and whether it should now be visible. The menu stays open, because columns are chosen several at a time."
             }
           ],
           "forwards": {
@@ -6504,7 +6599,8 @@
             {
               "name": "items",
               "type": "StepListItem[]",
-              "required": true
+              "required": true,
+              "description": "The steps, in order. An item without a `label` is numbered by position; one authored label widens the column for every row."
             },
             {
               "name": "inverse",
@@ -6516,7 +6612,8 @@
               "name": "titleAs",
               "type": "\"h3\" | \"h4\" | \"p\"",
               "required": false,
-              "default": "h3"
+              "default": "h3",
+              "description": "The element each step title renders as, `h3` by default: a runbook's steps are its outline. Use `p` when they are not."
             },
             {
               "name": "tone",
@@ -6538,7 +6635,8 @@
             {
               "name": "items",
               "type": "TimelineItem[]",
-              "required": true
+              "required": true,
+              "description": "The events, in the order they happened, one node on the spine each. A `tone` on an item states its outcome."
             },
             {
               "name": "label",
@@ -6752,12 +6850,14 @@
             {
               "name": "tone",
               "type": "\"neutral\" | \"info\" | \"success\" | \"warn\" | \"danger\" | \"accent\"",
-              "required": false
+              "required": false,
+              "description": "The status the badge states, as one of the four layers. Say the state in the label too: the tone colours it, the words carry it."
             },
             {
               "name": "variant",
               "type": "\"solid\" | \"soft\" | \"outline\"",
-              "required": false
+              "required": false,
+              "description": "How loud the claim is: `soft` (default) for a column of statuses, `solid` for the one state that must be seen from across the room, `outline` for categorical metadata."
             }
           ],
           "forwards": {
@@ -6783,7 +6883,8 @@
             {
               "name": "level",
               "type": "\"essential\" | \"highly\" | \"detour\" | \"time\"",
-              "required": false
+              "required": false,
+              "description": "How strongly the recommendation is made, from `essential` (gold) down to `time`. Each level brings its own label; pass children only to reword it."
             }
           ],
           "forwards": {
@@ -6814,6 +6915,7 @@
               "type": "BadgeTone",
               "required": false,
               "default": "neutral",
+              "description": "The status, in the same tones as Badge. Defaults to `neutral`.",
               "values": [
                 "neutral",
                 "danger",
@@ -7085,17 +7187,20 @@
             {
               "name": "title",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "A short heading that states the message. With it the callout becomes a region named by the title; without it, it is plain content and the body has to stand alone."
             },
             {
               "name": "tone",
               "type": "\"neutral\" | \"info\" | \"success\" | \"warn\" | \"danger\"",
-              "required": false
+              "required": false,
+              "description": "The status of the message, carried by the seam (or the swatch), the wash and the tone's icon; `info` by default. The title still has to say it in words."
             },
             {
               "name": "variant",
               "type": "\"seam\" | \"flat\"",
-              "required": false
+              "required": false,
+              "description": "`seam` (default) is the full message: top seam, keyline, icon. `flat` keeps only the wash and a square swatch, for a one-line aside beside a hero or at the head of a list, where a seam reads as a stripe."
             }
           ],
           "forwards": {
@@ -7324,7 +7429,8 @@
             {
               "name": "title",
               "type": "ReactNode",
-              "required": true
+              "required": true,
+              "description": "What the state is, in a few words: \"No saved replies yet\", \"Nothing matches 'refund'\"."
             },
             {
               "name": "actions",
@@ -7335,13 +7441,15 @@
             {
               "name": "description",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "One sentence on why, or on what the action will do."
             },
             {
               "name": "headingLevel",
               "type": "2 | 3 | 4",
               "required": false,
-              "default": "3"
+              "default": "3",
+              "description": "The element for `title`, `h3` by default. Set it from the page outline; the size stays the same."
             },
             {
               "name": "icon",
@@ -7352,12 +7460,14 @@
             {
               "name": "kind",
               "type": "\"empty\" | \"no-results\" | \"error\" | \"no-permission\"",
-              "required": false
+              "required": false,
+              "description": "Which of the four conversations this is: `empty` (default, nothing yet), `no-results` (a filter hides everything), `error` (could not load; announced as an alert) or `no-permission`. Each brings its icon and seam; the copy and the action must match it."
             },
             {
               "name": "size",
               "type": "\"sm\" | \"md\" | \"lg\"",
-              "required": false
+              "required": false,
+              "description": "How much of the slot the state fills vertically: `sm` inside a card or a table, `md` (default) for a panel, `lg` for a whole page."
             },
             {
               "name": "variant",
@@ -7601,18 +7711,21 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the root, which holds the label row and the track."
             },
             {
               "name": "label",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "Visible label; also the accessible name. Use `aria-label` when there is no room for one."
             },
             {
               "name": "size",
               "type": "ProgressSize",
               "required": false,
               "default": "md",
+              "description": "Track thickness: `sm` inside a row or a card, `md` (the default) on its own, `lg` when the reading is the point of the screen.",
               "values": [
                 "sm",
                 "md",
@@ -7629,7 +7742,8 @@
             {
               "name": "valueText",
               "type": "((formatted: string, value: number) => ReactNode)",
-              "required": false
+              "required": false,
+              "description": "Replaces the value text at the end of the label row, e.g. \"212 / 300 MB\". Receives the formatted value and the raw number."
             }
           ],
           "inherits": [
@@ -7647,7 +7761,8 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the root, which holds the label row and the track."
             },
             {
               "name": "label",
@@ -7667,6 +7782,7 @@
               "type": "ProgressSize",
               "required": false,
               "default": "md",
+              "description": "Track thickness: `sm` inside a row or a card, `md` (the default) on its own, `lg` for the one task a screen is waiting on.",
               "values": [
                 "sm",
                 "md",
@@ -7832,12 +7948,14 @@
             {
               "name": "shape",
               "type": "\"block\" | \"text\" | \"line\" | \"avatar\"",
-              "required": false
+              "required": false,
+              "description": "What the bone stands in for: a `block` (default) for a card or chart, `text` for a line, `avatar` for a person's mark. Size a block with classes."
             },
             {
               "name": "size",
               "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
-              "required": false
+              "required": false,
+              "description": "For `shape=\"avatar\"` only: the Avatar size it stands in for, so the bone is exactly the mark that replaces it."
             }
           ],
           "forwards": {
@@ -7889,7 +8007,8 @@
               "name": "lines",
               "type": "number",
               "required": false,
-              "default": "3"
+              "default": "3",
+              "description": "How many lines, 3 by default. Match the text that will arrive; the last line is drawn short."
             }
           ],
           "forwards": {
@@ -8203,7 +8322,8 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the box itself, with or without a `label`. A string, not Base UI's state function: use the `data-checked` and `data-disabled` variants for state."
             },
             {
               "name": "description",
@@ -8247,7 +8367,8 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the `<fieldset>` that holds the legend, the description and the options."
             },
             {
               "name": "description",
@@ -8431,7 +8552,8 @@
             {
               "name": "size",
               "type": "\"sm\" | \"md\" | \"default\" | \"comfortable\"",
-              "required": false
+              "required": false,
+              "description": "`sm` (default) is a one-line filter chip that never wraps; `md` is a control height tall and lets a longer label wrap."
             },
             {
               "name": "type",
@@ -8627,12 +8749,14 @@
             {
               "name": "defaultValue",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "The text in the input on first render, uncontrolled."
             },
             {
               "name": "disabled",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Stated, not faded: the input goes to the shaded cloth and no suggestions open."
             },
             {
               "name": "emptyMessage",
@@ -8643,13 +8767,15 @@
             {
               "name": "label",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "A visible label above the input. Omit it inside `Field`, which renders its own, and spread Field's control props onto this component instead."
             },
             {
               "name": "loading",
               "type": "boolean",
               "required": false,
-              "default": "false"
+              "default": "false",
+              "description": "Suggestions are on their way: the popup shows the working texture and \"Searching…\" and the list is marked busy. Set it while a server search is in flight."
             },
             {
               "name": "locale",
@@ -8660,7 +8786,8 @@
             {
               "name": "name",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Form field name. The typed text is what submits, not a suggestion's value."
             },
             {
               "name": "onValueChange",
@@ -8671,33 +8798,39 @@
             {
               "name": "placeholder",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Shown in the empty input. A hint at what to type, never the label: it disappears on the first keystroke."
             },
             {
               "name": "readOnly",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Shows the text without letting it change; it still submits and can be focused and read."
             },
             {
               "name": "required",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Marks the field required for form validation, and the `label`, when there is one, with the required mark."
             },
             {
               "name": "size",
               "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false,
-              "default": "md"
+              "default": "md",
+              "description": "Control height, shared with Input and Select so the field lines up in a form row. Defaults to `md`; density rescales every size."
             },
             {
               "name": "status",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "A line above the suggestions: \"Showing 20 of 312\", or an error from the search."
             },
             {
               "name": "value",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "The text in the input, controlled. Typing and picking a suggestion both change it, so pair it with `onValueChange`."
             },
             {
               "name": "wrapperClassName",
@@ -8731,12 +8864,14 @@
             {
               "name": "defaultValue",
               "type": "string | string[] | null",
-              "required": false
+              "required": false,
+              "description": "The option `value` selected on first render, uncontrolled. `null` or omitted starts empty. The option values selected on first render, uncontrolled."
             },
             {
               "name": "disabled",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Stated, not faded: the field and any chips go to the shaded cloth and the clear, open and remove buttons are taken away."
             },
             {
               "name": "emptyMessage",
@@ -8771,12 +8906,14 @@
             {
               "name": "multiple",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Omit, or `false`, for a single choice. Set `true` to pick several, shown as removable chips in the field. Pick several options, shown as removable chips in the field. Values become `string[]`."
             },
             {
               "name": "name",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Form field name. The selected option's `value` is submitted under it (one entry per value with `multiple`)."
             },
             {
               "name": "onInputValueChange",
@@ -8787,17 +8924,20 @@
             {
               "name": "onValueChange",
               "type": "((value: string | null) => void) | ((value: string[]) => void)",
-              "required": false
+              "required": false,
+              "description": "Called with the chosen option's `value`, or `null` when the field is cleared. Called with every selected value after a pick, a chip removal or a clear."
             },
             {
               "name": "placeholder",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Shown in the empty input. A hint at what can be searched, never the label: it disappears on the first keystroke."
             },
             {
               "name": "readOnly",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Shows the selection without letting it change. The clear, open and remove buttons are taken away, but the value still submits and can be focused and read."
             },
             {
               "name": "removeLabel",
@@ -8808,12 +8948,14 @@
             {
               "name": "required",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Marks the field required for form validation, and the `label`, when there is one, with the required mark."
             },
             {
               "name": "size",
               "type": "\"sm\" | \"md\" | \"lg\"",
-              "required": false
+              "required": false,
+              "description": "Control height, shared with Input and Select so a combobox lines up in a form row. Defaults to `md`; density rescales every size."
             },
             {
               "name": "status",
@@ -8830,7 +8972,8 @@
             {
               "name": "value",
               "type": "string | string[] | null",
-              "required": false
+              "required": false,
+              "description": "The selected option's `value`, controlled. `null` is no selection; leave it `undefined` to let the combobox hold its own state. The selected option values, controlled, in the order they were picked."
             },
             {
               "name": "wrapperClassName",
@@ -9111,12 +9254,14 @@
             {
               "name": "max",
               "type": "Date | null",
-              "required": false
+              "required": false,
+              "description": "The latest day that can be chosen, inclusive. Later days are disabled, and focus never moves past it."
             },
             {
               "name": "min",
               "type": "Date | null",
-              "required": false
+              "required": false,
+              "description": "The earliest day that can be chosen, inclusive. Earlier days are disabled, and focus never moves before it."
             },
             {
               "name": "onSelect",
@@ -9175,17 +9320,20 @@
               "name": "defaultValue",
               "type": "Date | null",
               "required": false,
-              "default": "null"
+              "default": "null",
+              "description": "The day chosen on first render, uncontrolled. `null` or omitted starts empty."
             },
             {
               "name": "disabled",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Stated, not faded: the input goes to the shaded cloth and the calendar button is disabled."
             },
             {
               "name": "isDateDisabled",
               "type": "((date: Date) => boolean)",
-              "required": false
+              "required": false,
+              "description": "Days inside `min`–`max` that still cannot be chosen: weekends in a freeze, public holidays. Disabled in the grid, and refused when typed with a sentence naming the day."
             },
             {
               "name": "locale",
@@ -9196,12 +9344,14 @@
             {
               "name": "max",
               "type": "Date | null",
-              "required": false
+              "required": false,
+              "description": "The latest day that can be chosen, inclusive; only the day counts, not the time. Later days are disabled in the grid and refused when typed, with a sentence naming the limit."
             },
             {
               "name": "min",
               "type": "Date | null",
-              "required": false
+              "required": false,
+              "description": "The earliest day that can be chosen, inclusive; only the day counts, not the time. Earlier days are disabled in the grid and refused when typed, with a sentence naming the limit."
             },
             {
               "name": "name",
@@ -9212,12 +9362,14 @@
             {
               "name": "onOpenChange",
               "type": "((open: boolean) => void)",
-              "required": false
+              "required": false,
+              "description": "Called when the calendar opens or closes, by the button, Escape, a pick or a press outside."
             },
             {
               "name": "onValueChange",
               "type": "((value: Date | null) => void)",
-              "required": false
+              "required": false,
+              "description": "Called with the day at local midnight when one is picked or a typed date commits (on Enter or blur, never per keystroke), and with `null` when the text is cleared. A typed date that cannot be read is shown as an error and does not call it."
             },
             {
               "name": "open",
@@ -9234,13 +9386,15 @@
             {
               "name": "required",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Marks the input required for form validation. Inside `Field`, the label carries the required mark."
             },
             {
               "name": "size",
               "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false,
-              "default": "md"
+              "default": "md",
+              "description": "Control height, shared with Input and Select so the picker lines up in a form row. Defaults to `md`; density rescales every size."
             },
             {
               "name": "today",
@@ -9251,7 +9405,8 @@
             {
               "name": "value",
               "type": "Date | null",
-              "required": false
+              "required": false,
+              "description": "The chosen day, controlled, at local midnight. `null` is no date; leave it `undefined` to let the picker hold its own state."
             },
             {
               "name": "weekStartsOn",
@@ -9287,32 +9442,38 @@
               "name": "defaultValue",
               "type": "DateRange",
               "required": false,
-              "default": "{ start: null, end: null }"
+              "default": "{ start: null, end: null }",
+              "description": "The range on first render, uncontrolled. Omitted, both ends start `null`."
             },
             {
               "name": "disabled",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Stated, not faded: the trigger goes to the shaded cloth and the popup cannot open."
             },
             {
               "name": "isDateDisabled",
               "type": "((date: Date) => boolean)",
-              "required": false
+              "required": false,
+              "description": "Days inside `min`–`max` that cannot be an end of the range: public holidays, a freeze. Disabled in the grid and refused when typed."
             },
             {
               "name": "locale",
               "type": "LocalesArgument",
-              "required": false
+              "required": false,
+              "description": "BCP 47 tag for names, digits, typed order, week start and how the period is written on the trigger. `undefined` uses the runtime's locale."
             },
             {
               "name": "max",
               "type": "Date | null",
-              "required": false
+              "required": false,
+              "description": "The latest day either end can be, inclusive. Later days are disabled in the grid and refused when typed."
             },
             {
               "name": "min",
               "type": "Date | null",
-              "required": false
+              "required": false,
+              "description": "The earliest day either end can be, inclusive. Earlier days are disabled in the grid and refused when typed."
             },
             {
               "name": "name",
@@ -9323,12 +9484,14 @@
             {
               "name": "onOpenChange",
               "type": "((open: boolean) => void)",
-              "required": false
+              "required": false,
+              "description": "Called when the popup opens or closes. A range pressed on the grid or a preset closes it; a range completed by typing leaves it open, so the person sees it drawn."
             },
             {
               "name": "onValueChange",
               "type": "((value: DateRange) => void)",
-              "required": false
+              "required": false,
+              "description": "Called with the whole range once both ends are chosen, pressed or typed, when a preset is picked, and with both ends `null` when both typed dates are cleared."
             },
             {
               "name": "open",
@@ -9340,7 +9503,8 @@
               "name": "placeholder",
               "type": "string",
               "required": false,
-              "default": "Choose a period"
+              "default": "Choose a period",
+              "description": "The trigger's text while no range is chosen. Defaults to \"Choose a period\"."
             },
             {
               "name": "presets",
@@ -9352,13 +9516,15 @@
             {
               "name": "required",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Marks the trigger `aria-required`. Inside `Field`, the label carries the required mark."
             },
             {
               "name": "size",
               "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false,
-              "default": "md"
+              "default": "md",
+              "description": "Trigger height, shared with Input and Select so the picker lines up in a form row. Defaults to `md`; density rescales every size."
             },
             {
               "name": "today",
@@ -9376,12 +9542,14 @@
             {
               "name": "value",
               "type": "DateRange",
-              "required": false
+              "required": false,
+              "description": "The chosen range, controlled: `{ start, end }`, each a day at local midnight or `null`. The half-chosen range between two presses lives only in the popup and is never the value."
             },
             {
               "name": "weekStartsOn",
               "type": "number",
-              "required": false
+              "required": false,
+              "description": "0 = Sunday … 6 = Saturday. Overrides the locale's first day of the week."
             },
             {
               "name": "wrapperClassName",
@@ -9669,7 +9837,8 @@
             {
               "name": "label",
               "type": "ReactNode",
-              "required": true
+              "required": true,
+              "description": "The visible label, wired to the control by `id`. Required: a placeholder is not a label, and a field with none is a question nobody hears."
             },
             {
               "name": "description",
@@ -9706,7 +9875,8 @@
               "name": "required",
               "type": "boolean",
               "required": false,
-              "default": "false"
+              "default": "false",
+              "description": "Shows the required mark on the label and passes `required` to the control through the render prop, so the browser validates it too. Overrides `optional`."
             }
           ],
           "forwards": {
@@ -9979,17 +10149,20 @@
             {
               "name": "aria-describedby",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Ids of the hint and error, from `Field`. Joined with the drop zone's own constraints text on the browse button."
             },
             {
               "name": "aria-invalid",
               "type": "boolean | \"true\" | \"false\"",
-              "required": false
+              "required": false,
+              "description": "Marks the browse button invalid and draws the drop zone in the danger band. `Field` sets it while it shows an error."
             },
             {
               "name": "aria-label",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Accessible name of the browse button when there is no `Field` label to name it."
             },
             {
               "name": "defaultFiles",
@@ -10001,12 +10174,14 @@
               "name": "disabled",
               "type": "boolean",
               "required": false,
-              "default": "false"
+              "default": "false",
+              "description": "Stated, not faded: the drop zone goes to the shaded cloth, drops are refused, and the browse, retry and remove buttons are disabled."
             },
             {
               "name": "id",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Id of the browse button, so `Field`'s label points at the control a person presses."
             },
             {
               "name": "locale",
@@ -10043,7 +10218,8 @@
               "name": "multiple",
               "type": "boolean",
               "required": false,
-              "default": "false"
+              "default": "false",
+              "description": "Accept several files, added to the list. Off by default: a new file replaces the one there and cancels its upload."
             },
             {
               "name": "name",
@@ -10072,7 +10248,8 @@
             {
               "name": "required",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Makes the form refuse to submit while the list is empty, through the hidden file input. `Field` passes it with its label's mark."
             }
           ],
           "forwards": {
@@ -10301,7 +10478,8 @@
             {
               "name": "allowOutOfRange",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Keep a typed value outside `min`/`max` instead of clamping it on commit, so form validation can say why it is wrong. Off by default; the steppers still stop at the bounds."
             },
             {
               "name": "allowWheelScrub",
@@ -10313,12 +10491,14 @@
               "name": "decrementLabel",
               "type": "string",
               "required": false,
-              "default": "Decrease"
+              "default": "Decrease",
+              "description": "Accessible name of the − stepper. Defaults to \"Decrease\"; translate it with the page."
             },
             {
               "name": "defaultValue",
               "type": "number",
-              "required": false
+              "required": false,
+              "description": "The number on first render, uncontrolled. Omitted, the field starts empty."
             },
             {
               "name": "format",
@@ -10355,17 +10535,20 @@
             {
               "name": "max",
               "type": "number",
-              "required": false
+              "required": false,
+              "description": "The highest value. Stepping and committed values clamp to it, and the increase stepper is disabled there; End jumps to it."
             },
             {
               "name": "min",
               "type": "number",
-              "required": false
+              "required": false,
+              "description": "The lowest value. Stepping and committed values clamp to it, and the decrease stepper is disabled there; Home jumps to it."
             },
             {
               "name": "onValueChange",
               "type": "((value: number | null) => void)",
-              "required": false
+              "required": false,
+              "description": "Called as the number changes, typed or stepped, with `null` when the field is emptied. For a save or a request, use `onValueCommitted`, which does not fire per keystroke."
             },
             {
               "name": "onValueCommitted",
@@ -10377,7 +10560,8 @@
               "name": "size",
               "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false,
-              "default": "md"
+              "default": "md",
+              "description": "Control height, shared with Input and Select so the field lines up in a form row. Defaults to `md`; density rescales every size."
             },
             {
               "name": "smallStep",
@@ -10388,7 +10572,8 @@
             {
               "name": "snapOnStep",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Round to the nearest multiple of the step when stepping, so 13 stepped by 5 goes to 15 rather than 18. Off by default."
             },
             {
               "name": "step",
@@ -10405,7 +10590,8 @@
             {
               "name": "value",
               "type": "number | null",
-              "required": false
+              "required": false,
+              "description": "The number, controlled. `null` is an empty field; leave it `undefined` to let the field hold its own state."
             },
             {
               "name": "wrapperClassName",
@@ -10575,17 +10761,20 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the circle itself, with or without a `label`. A string, not Base UI's state function: use the `data-checked` and `data-disabled` variants for state."
             },
             {
               "name": "description",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "Second line under the label. Linked as the radio's description, before any hint or error `Field` adds."
             },
             {
               "name": "label",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "Visible label. The whole label is the press target and names the radio."
             },
             {
               "name": "wrapperClassName",
@@ -10617,18 +10806,21 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the wrapper that holds the label, the description and the group."
             },
             {
               "name": "description",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "Copy under the label, linked as the group's description so it is heard on entering the group."
             },
             {
               "name": "orientation",
               "type": "\"horizontal\" | \"vertical\"",
               "required": false,
-              "default": "vertical"
+              "default": "vertical",
+              "description": "Lay the options out in a column (the default) or a wrapping row."
             }
           ],
           "inherits": [
@@ -10766,17 +10958,20 @@
             {
               "name": "options",
               "type": "SegmentedOption<V>[]",
-              "required": true
+              "required": true,
+              "description": "The segments, in order: a `value`, a `label` and optionally an icon or `disabled`. Two to five short ones; past that, use a Select."
             },
             {
               "name": "defaultValue",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "The segment pressed on first render, uncontrolled."
             },
             {
               "name": "disabled",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Disables every segment. To disable one, set `disabled` on its option instead."
             },
             {
               "name": "fill",
@@ -10795,18 +10990,21 @@
             {
               "name": "onValueChange",
               "type": "((value: V) => void)",
-              "required": false
+              "required": false,
+              "description": "Called with the newly pressed segment's `value`. Pressing the segment that is already pressed does not call it, so the group never empties."
             },
             {
               "name": "size",
               "type": "\"sm\" | \"md\"",
               "required": false,
-              "default": "md"
+              "default": "md",
+              "description": "Height: `md` (the default) matches the other controls in a row; `sm` for a toolbar or a dense table header."
             },
             {
               "name": "value",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "The pressed segment's `value`, controlled. Give one: a segmented control always has a choice made."
             }
           ],
           "forwards": {
@@ -10981,12 +11179,14 @@
             {
               "name": "defaultValue",
               "type": "string | null",
-              "required": false
+              "required": false,
+              "description": "The option `value` selected on first render, uncontrolled. `null` or omitted shows the `placeholder`."
             },
             {
               "name": "disabled",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Stated, not faded: the trigger goes to the shaded cloth and the list cannot open."
             },
             {
               "name": "label",
@@ -10997,23 +11197,27 @@
             {
               "name": "name",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Form field name. The selected option's `value` is submitted under it through a hidden input."
             },
             {
               "name": "onValueChange",
               "type": "((value: V | null) => void)",
-              "required": false
+              "required": false,
+              "description": "Called with the chosen option's `value` when the selection changes."
             },
             {
               "name": "placeholder",
               "type": "ReactNode",
               "required": false,
-              "default": "Select…"
+              "default": "Select…",
+              "description": "Shown in the trigger while nothing is selected: \"Choose a model\". Not a label; the field still needs one."
             },
             {
               "name": "required",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Marks the select required for form validation, and the `label`, when there is one, with the required mark."
             },
             {
               "name": "rootProps",
@@ -11025,12 +11229,14 @@
               "name": "size",
               "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false,
-              "default": "md"
+              "default": "md",
+              "description": "Trigger height, shared with Input so a select lines up in a form row. Defaults to `md`; density rescales every size."
             },
             {
               "name": "value",
               "type": "string | null",
-              "required": false
+              "required": false,
+              "description": "The selected option's `value`, controlled. `null` is no selection, which shows the `placeholder`; leave it `undefined` to let the select hold its own state."
             },
             {
               "name": "wrapperClassName",
@@ -11162,7 +11368,8 @@
               "name": "size",
               "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false,
-              "default": "md"
+              "default": "md",
+              "description": "Trigger height, shared with Input so a select lines up in a form row. Defaults to `md`; density rescales every size."
             }
           ],
           "inherits": [
@@ -11344,7 +11551,8 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the root, which holds the label row, the track and the end labels."
             },
             {
               "name": "formatValue",
@@ -11361,7 +11569,8 @@
             {
               "name": "maxLabel",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "Label under the high end of the track. Decorative: the value text, not this, is what a screen reader hears."
             },
             {
               "name": "minLabel",
@@ -11492,17 +11701,20 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the switch itself, with or without a `label`. A string, not Base UI's state function: use the `data-checked` and `data-disabled` variants for state."
             },
             {
               "name": "description",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "Second line under the label: what turning it on does. Linked as the switch's description."
             },
             {
               "name": "label",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "Visible label. The whole label is the press target and names the switch."
             },
             {
               "name": "labelPosition",
@@ -11648,23 +11860,27 @@
             {
               "name": "sidebar",
               "type": "ReactNode",
-              "required": true
+              "required": true,
+              "description": "The navigation, usually a `Sidebar`. The same tree is drawn in the layout from 920px and in a modal sheet below it, so desktop and mobile navigation cannot drift."
             },
             {
               "name": "topbar",
               "type": "ReactNode",
-              "required": true
+              "required": true,
+              "description": "The bar across the top, usually a `Topbar`. It stays put while `<main>` scrolls, so the switcher and search are never lost."
             },
             {
               "name": "defaultSidebarCollapsed",
               "type": "boolean",
               "required": false,
-              "default": "false"
+              "default": "false",
+              "description": "Start with the desktop sidebar collapsed to its icon rail. Defaults to `false`; ignored below 920px, where the sidebar is a sheet."
             },
             {
               "name": "onSidebarCollapsedChange",
               "type": "((collapsed: boolean) => void)",
-              "required": false
+              "required": false,
+              "description": "Called when the desktop sidebar collapses or expands — to remember the choice between visits."
             },
             {
               "name": "sidebarCollapsed",
@@ -11757,7 +11973,8 @@
             {
               "name": "icon",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "A leading icon. Needed for the collapsed rail, where the icon is all that shows and the label becomes its tooltip."
             }
           ],
           "forwards": {
@@ -11794,12 +12011,14 @@
             {
               "name": "footer",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "Pinned below the navigation behind a keyline — the signed-in account, help, settings."
             },
             {
               "name": "header",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "Pinned above the navigation and outside its scroll — a workspace switcher or the product's name."
             }
           ],
           "forwards": {
@@ -11946,7 +12165,8 @@
             {
               "name": "width",
               "type": "\"page\" | \"wide\" | \"prose\" | \"full\"",
-              "required": false
+              "required": false,
+              "description": "The column's measure: `page` (default), `wide` for tools whose tables want the screen, `prose` for reading, `full` for no limit. The gutters stay either way."
             }
           ],
           "forwards": {
@@ -11986,7 +12206,8 @@
             {
               "name": "title",
               "type": "ReactNode",
-              "required": true
+              "required": true,
+              "description": "The section's heading, rendered at `level`."
             },
             {
               "name": "actions",
@@ -12003,13 +12224,15 @@
             {
               "name": "lead",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "A sentence or two under the heading, set as a Lead, that says what the section is for."
             },
             {
               "name": "level",
               "type": "1 | 2 | 3",
               "required": false,
-              "default": "2"
+              "default": "2",
+              "description": "The heading level, 2 by default. Set it from the outline of the page, not from the size you want."
             }
           ],
           "forwards": {
@@ -12113,6 +12336,7 @@
               "type": "DividerBand",
               "required": false,
               "default": "oro",
+              "description": "The colour of a `relleno` divider's band, gold by default. Ignored by the other variants.",
               "values": [
                 "cloth",
                 "rojo",
@@ -12125,7 +12349,8 @@
               "name": "orientation",
               "type": "\"horizontal\" | \"vertical\"",
               "required": false,
-              "default": "horizontal"
+              "default": "horizontal",
+              "description": "`vertical` stretches to the height of a flex row, for a seam between columns or toolbar groups. `diente` is horizontal only. Announced only when you also pass `role=\"separator\"`."
             },
             {
               "name": "up",
@@ -12253,12 +12478,14 @@
             {
               "name": "cols",
               "type": "\"halves\" | \"thirds\" | \"quarters\" | \"fifths\" | \"auto\"",
-              "required": false
+              "required": false,
+              "description": "The column pattern, one or two columns on a phone and more at each breakpoint; `thirds` by default. `auto` fits as many `minItem`-wide columns as the space allows and needs no breakpoint."
             },
             {
               "name": "gap",
               "type": "\"tight\" | \"default\" | \"wide\" | \"seamless\"",
-              "required": false
+              "required": false,
+              "description": "Space between cells, on the spacing scale. `seamless` closes the gap to a shared keyline, so the cells read as one panel cut into pieces."
             },
             {
               "name": "minItem",
@@ -12388,27 +12615,32 @@
             {
               "name": "title",
               "type": "ReactNode",
-              "required": true
+              "required": true,
+              "description": "The page's name, rendered as its one `h1`."
             },
             {
               "name": "actions",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "The page's buttons, right of the title. They wrap below it on a narrow screen rather than hiding in an overflow menu, because the primary action should never cost an extra click."
             },
             {
               "name": "breadcrumb",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "A `Breadcrumb`, above the title: it is navigation back up the trail, not a label for the heading."
             },
             {
               "name": "description",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "A sentence under the title saying what the page is for."
             },
             {
               "name": "meta",
               "type": "ReactNode[]",
-              "required": false
+              "required": false,
+              "description": "Short facts — owner, last updated, version — in a row divided by keylines. Rendered as a list, so a screen reader hears how many there are."
             },
             {
               "name": "tabs",
@@ -12560,22 +12792,26 @@
             {
               "name": "band",
               "type": "\"oro\" | \"rojo\" | \"anil\" | \"verde\" | \"cloth\"",
-              "required": false
+              "required": false,
+              "description": "The colour revealed by `edge=\"band\"`, gold by default. Has no effect on the other edges."
             },
             {
               "name": "edge",
               "type": "\"cut\" | \"band\" | \"none\"",
-              "required": false
+              "required": false,
+              "description": "`cut` (default) is the ink keyline; `band` reveals a band of `band`'s colour between two keylines, for the one panel that is the point of the screen; `none` for a ground inside another."
             },
             {
               "name": "layer",
               "type": "\"pale\" | \"cloth\" | \"shade\" | \"ink\" | \"rojo\" | \"anil\" | \"verde\" | \"oro\"",
-              "required": false
+              "required": false,
+              "description": "The ground the panel is cut from, `pale` by default. A filled layer (`rojo`, `anil`, `verde`, `ink`) re-inks everything inside it, so pick it here rather than with a background class."
             },
             {
               "name": "padding",
               "type": "\"none\" | \"sm\" | \"md\" | \"lg\"",
-              "required": false
+              "required": false,
+              "description": "Inner padding on the spacing scale, so it moves with density; `md` by default, `none` for a table or a list that runs edge to edge."
             },
             {
               "name": "tone",
@@ -12729,17 +12965,20 @@
             {
               "name": "align",
               "type": "\"start\" | \"center\" | \"end\" | \"stretch\" | \"baseline\"",
-              "required": false
+              "required": false,
+              "description": "Cross-axis alignment. Inline defaults to `center`, so an icon and a label line up; use `baseline` for mixed type sizes."
             },
             {
               "name": "direction",
               "type": "\"column\" | \"row\"",
-              "required": false
+              "required": false,
+              "description": "`column` (default) stacks children down; `row` lays them across without wrapping, unless `wrap` is set."
             },
             {
               "name": "gap",
               "type": "Gap",
               "required": false,
+              "description": "The space between children, on the role-named scale that moves with density. Stack defaults to `md`, Inline to `sm`.",
               "values": [
                 "xs",
                 "sm",
@@ -12753,12 +12992,14 @@
             {
               "name": "justify",
               "type": "\"start\" | \"center\" | \"end\" | \"between\"",
-              "required": false
+              "required": false,
+              "description": "Main-axis distribution. `between` pushes the first and last child to the ends."
             },
             {
               "name": "wrap",
               "type": "true | false",
-              "required": false
+              "required": false,
+              "description": "Let children wrap onto a new line. On by default for Inline, off for Stack; turn it off on a row only when its children can shrink, or it overflows a phone."
             }
           ],
           "forwards": {
@@ -12775,13 +13016,15 @@
               "name": "align",
               "type": "\"start\" | \"center\" | \"end\" | \"stretch\" | \"baseline\"",
               "required": false,
-              "default": "center"
+              "default": "center",
+              "description": "Cross-axis alignment. Inline defaults to `center`, so an icon and a label line up; use `baseline` for mixed type sizes."
             },
             {
               "name": "gap",
               "type": "Gap",
               "required": false,
               "default": "sm",
+              "description": "The space between children, on the role-named scale that moves with density. Stack defaults to `md`, Inline to `sm`.",
               "values": [
                 "xs",
                 "sm",
@@ -12795,13 +13038,15 @@
             {
               "name": "justify",
               "type": "\"start\" | \"center\" | \"end\" | \"between\"",
-              "required": false
+              "required": false,
+              "description": "Main-axis distribution. `between` pushes the first and last child to the ends."
             },
             {
               "name": "wrap",
               "type": "boolean",
               "required": false,
-              "default": "true"
+              "default": "true",
+              "description": "Let children wrap onto a new line. On by default for Inline, off for Stack; turn it off on a row only when its children can shrink, or it overflows a phone."
             }
           ],
           "forwards": {
@@ -12968,12 +13213,14 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the toolbar, merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute."
             },
             {
               "name": "variant",
               "type": "\"panel\" | \"bare\"",
-              "required": false
+              "required": false,
+              "description": "`bare` (default) inside a header or a table frame; `panel` gives the toolbar its own cut ground over a canvas."
             }
           ],
           "inherits": [
@@ -12992,24 +13239,28 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the button, merged with `cn()`. A string, for the reason given on `Toolbar`."
             },
             {
               "name": "icon",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "Leading icon; decorative. An icon-only button still needs an `aria-label`."
             },
             {
               "name": "size",
               "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false,
-              "default": "sm"
+              "default": "sm",
+              "description": "The control height. Density already re-scales every size, so reach for a different one only to set a button apart from its neighbours, not to make a whole screen compact."
             },
             {
               "name": "variant",
               "type": "\"secondary\" | \"danger\" | \"primary\" | \"ghost\"",
               "required": false,
-              "default": "ghost"
+              "default": "ghost",
+              "description": "The weight of the action: `primary` (ink) for the panel's main action, `secondary` beside it, `danger` only for what destroys something, `ghost` for low-stakes actions in dense rows."
             }
           ],
           "inherits": [
@@ -13042,7 +13293,8 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the `<input>` itself. Set a width with `wrapperClassName`."
             },
             {
               "name": "icon",
@@ -13103,7 +13355,8 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the keyline between groups. A string, for the reason given on `Toolbar`."
             }
           ],
           "inherits": [
@@ -13122,33 +13375,39 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the toggle, merged with `cn()`. A string, for the reason given on `Toolbar`."
             },
             {
               "name": "defaultPressed",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Whether it starts on, without controlling it afterwards."
             },
             {
               "name": "icon",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "Leading icon; decorative. An icon-only toggle still needs an `aria-label`."
             },
             {
               "name": "onPressedChange",
               "type": "((pressed: boolean) => void)",
-              "required": false
+              "required": false,
+              "description": "Called with the new state each time the toggle is pressed."
             },
             {
               "name": "pressed",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Whether the toggle is on, when you control it. Inside a `ToolbarToggleGroup`, control the group's value instead."
             },
             {
               "name": "size",
               "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false,
-              "default": "sm"
+              "default": "sm",
+              "description": "The control height. Density already re-scales every size, so reach for a different one only to set a button apart from its neighbours, not to make a whole screen compact."
             },
             {
               "name": "value",
@@ -13180,7 +13439,8 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the group, which wraps like the toolbar. A string, for the reason given on `Toolbar`."
             }
           ],
           "inherits": [
@@ -13369,7 +13629,8 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the root, merged with `cn()` so yours win a conflict. A string, not Base UI's function of state: style a state with its `data-*` attribute instead (`data-open:`)."
             }
           ],
           "inherits": [
@@ -13387,7 +13648,8 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the item, merged with `cn()`. A string, for the reason given on `Accordion`."
             }
           ],
           "inherits": [
@@ -13407,7 +13669,8 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the content inside the panel, not the panel itself: the panel animates its height, and padding on it would be clipped while it does."
             }
           ],
           "inherits": [
@@ -13426,7 +13689,8 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the trigger button (not the heading around it), merged with `cn()`. A string, for the reason given on `Accordion`."
             },
             {
               "name": "meta",
@@ -13464,7 +13728,8 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the content inside the panel, for the reason given on `AccordionPanel`."
             }
           ],
           "inherits": [
@@ -13483,7 +13748,8 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the trigger button, merged with `cn()`. A string, for the reason given on `Accordion`."
             }
           ],
           "inherits": [
@@ -13616,7 +13882,8 @@
             {
               "name": "items",
               "type": "BreadcrumbItem[]",
-              "required": true
+              "required": true,
+              "description": "The trail, root first. The last item is the current page and renders as text whether or not it has an `href`; pass a long id through `middleTruncate` so both ends survive."
             },
             {
               "name": "renderLink",
@@ -13746,7 +14013,8 @@
             {
               "name": "onPageChange",
               "type": "(page: number) => void",
-              "required": true
+              "required": true,
+              "description": "Called with the 1-based page a person asked for. The page is controlled: set `page` from it, or from the router if pages are addressable."
             },
             {
               "name": "page",
@@ -13757,7 +14025,8 @@
             {
               "name": "pageCount",
               "type": "number",
-              "required": true
+              "required": true,
+              "description": "How many pages there are. The next button is disabled on the last."
             },
             {
               "name": "pageSize",
@@ -13775,13 +14044,15 @@
             {
               "name": "total",
               "type": "number",
-              "required": false
+              "required": false,
+              "description": "Total row count for the `compact` range text. Without it, or without `pageSize`, the text falls back to \"Page 3 of 26\"."
             },
             {
               "name": "variant",
               "type": "\"pages\" | \"compact\"",
               "required": false,
-              "default": "pages"
+              "default": "pages",
+              "description": "`pages` (the default) for results where a page is a place people return to; `compact` (\"51–100 of 1,284\" and two arrows) for dense tables where how much is left matters more."
             }
           ],
           "forwards": {
@@ -13948,13 +14219,15 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the root, merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute."
             },
             {
               "name": "variant",
               "type": "TabsVariant",
               "required": false,
               "default": "underline",
+              "description": "`underline` (default) switches views of one thing, a run's Trace / Output / Logs. `panel` is for tabs that are containers, a settings sheet or a code sample in three languages: the active tab joins the panel below. Every part inside reads it, so set it here only.",
               "values": [
                 "panel",
                 "underline"
@@ -13976,7 +14249,8 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the row of tabs, which scrolls sideways when the tabs outgrow it. A string, for the reason given on `Tabs`."
             },
             {
               "name": "ref",
@@ -14000,7 +14274,8 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the panel, merged with `cn()`. A string, for the reason given on `Tabs`."
             }
           ],
           "inherits": [
@@ -14018,7 +14293,8 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the tab, merged with `cn()`. A string, for the reason given on `Tabs`."
             },
             {
               "name": "count",
@@ -14029,7 +14305,8 @@
             {
               "name": "icon",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "Leading icon; decorative, so the label still has to name the tab."
             }
           ],
           "inherits": [
@@ -14181,7 +14458,8 @@
             {
               "name": "groups",
               "type": "CommandGroup[]",
-              "required": true
+              "required": true,
+              "description": "The commands, in headed groups. Filtered as the person types; label-prefix matches come first within a group, and empty groups are dropped."
             },
             {
               "name": "defaultOpen",
@@ -14200,7 +14478,8 @@
             {
               "name": "onOpenChange",
               "type": "((open: boolean) => void)",
-              "required": false
+              "required": false,
+              "description": "Called when the palette opens or closes: the trigger, Escape, a press outside, or choosing an item, which closes it before the item runs."
             },
             {
               "name": "open",
@@ -14212,7 +14491,8 @@
               "name": "placeholder",
               "type": "string",
               "required": false,
-              "default": "Type a command or search…"
+              "default": "Type a command or search…",
+              "description": "Shown in the empty search input. Defaults to \"Type a command or search…\"."
             },
             {
               "name": "renderEmpty",
@@ -14397,7 +14677,8 @@
             {
               "name": "description",
               "type": "ReactNode",
-              "required": true
+              "required": true,
+              "description": "What happens if the operator confirms, and whether it can be undone. Required: a destructive confirm with no consequence stated is a guess."
             },
             {
               "name": "onConfirm",
@@ -14408,13 +14689,15 @@
             {
               "name": "title",
               "type": "ReactNode",
-              "required": true
+              "required": true,
+              "description": "The question, naming the thing: \"Delete run #4182?\". It is the dialog's accessible name."
             },
             {
               "name": "cancelLabel",
               "type": "string",
               "required": false,
-              "default": "Cancel"
+              "default": "Cancel",
+              "description": "The safe answer's label, \"Cancel\" by default. It takes focus when the dialog opens, so a reflexive Enter cancels."
             },
             {
               "name": "confirmationText",
@@ -14425,7 +14708,8 @@
             {
               "name": "defaultOpen",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Opens the dialog on first render without controlling it afterwards."
             },
             {
               "name": "error",
@@ -14442,12 +14726,14 @@
             {
               "name": "onOpenChange",
               "type": "((open: boolean) => void)",
-              "required": false
+              "required": false,
+              "description": "Called with the next open state on every open and close, Cancel and Escape included."
             },
             {
               "name": "open",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Whether the dialog is open, when you control it: to open it from somewhere other than `trigger`, or to close it after an async confirm of your own."
             },
             {
               "name": "tone",
@@ -14528,12 +14814,14 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the popup, merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute."
             },
             {
               "name": "description",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "A line under the title, read as the dialog's accessible description when it opens. Say what the dialog is for; leave instructions to the body."
             },
             {
               "name": "footer",
@@ -14551,7 +14839,8 @@
             {
               "name": "size",
               "type": "\"sm\" | \"md\" | \"lg\"",
-              "required": false
+              "required": false,
+              "description": "The popup's maximum width: `sm` for a short question, `md` (default) for a form, `lg` for a table or a long review."
             }
           ],
           "inherits": [
@@ -14792,12 +15081,14 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the popup, merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute."
             },
             {
               "name": "description",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "A line under the title, read as the drawer's accessible description when it opens."
             },
             {
               "name": "footer",
@@ -15032,12 +15323,14 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the item, merged with `cn()`. A string, for the reason given on `MenuContent`."
             },
             {
               "name": "shortcut",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "A key hint, as on `MenuItem`: shown, not bound."
             }
           ],
           "inherits": [
@@ -15058,6 +15351,7 @@
               "type": "Align",
               "required": false,
               "default": "start",
+              "description": "How the menu lines up along that side, `start` by default, so it hangs from the trigger's leading edge.",
               "values": [
                 "start",
                 "center",
@@ -15068,18 +15362,21 @@
               "name": "alignOffset",
               "type": "number",
               "required": false,
-              "default": "0"
+              "default": "0",
+              "description": "A shift along the aligned edge in pixels, 0 by default."
             },
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the popup, merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute."
             },
             {
               "name": "side",
               "type": "Side",
               "required": false,
               "default": "bottom",
+              "description": "Which side of the trigger the menu opens on, `bottom` by default. Base UI flips it when there is no room.",
               "values": [
                 "bottom",
                 "top",
@@ -15093,7 +15390,8 @@
               "name": "sideOffset",
               "type": "number",
               "required": false,
-              "default": "6"
+              "default": "6",
+              "description": "The gap between trigger and menu in pixels, 6 by default: enough that the menu's keyline does not merge with the trigger's."
             }
           ],
           "inherits": [
@@ -15132,7 +15430,8 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the item, merged with `cn()`. A string, for the reason given on `MenuContent`."
             },
             {
               "name": "icon",
@@ -15143,7 +15442,8 @@
             {
               "name": "shortcut",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "A key hint, right-aligned in muted figures: \"⌘D\". It only shows the key; binding it is yours, and it is read as part of the item's name."
             },
             {
               "name": "tone",
@@ -15182,7 +15482,8 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the item, merged with `cn()`. A string, for the reason given on `MenuContent`."
             }
           ],
           "inherits": [
@@ -15236,12 +15537,14 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the item, merged with `cn()`. A string, for the reason given on `MenuContent`."
             },
             {
               "name": "icon",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "Leading icon; decorative. The trailing chevron is always drawn."
             }
           ],
           "inherits": [
@@ -15417,6 +15720,7 @@
               "type": "Align",
               "required": false,
               "default": "start",
+              "description": "How the popover lines up along that side, `start` by default.",
               "values": [
                 "start",
                 "center",
@@ -15426,18 +15730,21 @@
             {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the popup (`w-72` and `p-4` by default), merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute."
             },
             {
               "name": "description",
               "type": "ReactNode",
-              "required": false
+              "required": false,
+              "description": "A line under the title, wired as the popover's accessible description."
             },
             {
               "name": "side",
               "type": "Side",
               "required": false,
               "default": "bottom",
+              "description": "Which side of the trigger the popover opens on, `bottom` by default. Base UI flips it when there is no room.",
               "values": [
                 "bottom",
                 "top",
@@ -15451,7 +15758,8 @@
               "name": "sideOffset",
               "type": "number",
               "required": false,
-              "default": "8"
+              "default": "8",
+              "description": "The gap between trigger and popover in pixels, 8 by default."
             },
             {
               "name": "title",
@@ -15585,13 +15893,15 @@
             {
               "name": "content",
               "type": "ReactNode",
-              "required": true
+              "required": true,
+              "description": "The label: a few words, no interactive content. It reaches a screen reader only as the trigger's description, and not at all on touch, so it must repeat something said elsewhere rather than be the only place it lives."
             },
             {
               "name": "align",
               "type": "Align",
               "required": false,
               "default": "center",
+              "description": "How it lines up along that side, `center` by default.",
               "values": [
                 "start",
                 "center",
@@ -15601,7 +15911,8 @@
             {
               "name": "defaultOpen",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Shows it on first render without controlling it afterwards."
             },
             {
               "name": "delay",
@@ -15618,12 +15929,14 @@
             {
               "name": "onOpenChange",
               "type": "((open: boolean, eventDetails: TooltipRootChangeEventDetails) => void)",
-              "required": false
+              "required": false,
+              "description": "Called when hover, focus or Escape would open or close it, with the next state."
             },
             {
               "name": "open",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Whether it is showing, when you control it. Rarely needed: hover and focus open it already."
             },
             {
               "name": "shortcut",
@@ -15636,6 +15949,7 @@
               "type": "Side",
               "required": false,
               "default": "top",
+              "description": "Which side of the trigger it appears on, `top` by default. Base UI flips it when there is no room.",
               "values": [
                 "bottom",
                 "top",
@@ -15835,6 +16149,7 @@
               "name": "level",
               "type": "HeadingLevel",
               "required": true,
+              "description": "The outline level, `h1` to `h4`. Required, and set from the document outline: never skip one to get a smaller look; use `visualLevel`.",
               "values": [
                 "1",
                 "2",
@@ -16494,42 +16809,50 @@
               "name": "as",
               "type": "\"div\" | \"p\" | \"span\"",
               "required": false,
-              "default": "p"
+              "default": "p",
+              "description": "The element, `p` by default: `span` inside a line, `div` around block content. Headings are `Heading`, so the outline never lies."
             },
             {
               "name": "ref",
               "type": "Ref<HTMLElement>",
-              "required": false
+              "required": false,
+              "description": "Forwarded to the rendered element, whichever `as` picks."
             },
             {
               "name": "size",
               "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"base\"",
-              "required": false
+              "required": false,
+              "description": "A step on the type scale, which density re-scales; `md` (body) by default."
             },
             {
               "name": "tabular",
               "type": "true | false",
-              "required": false
+              "required": false,
+              "description": "Tabular figures, so numbers in a column or a ticking counter keep their width."
             },
             {
               "name": "tone",
               "type": "\"neutral\" | \"danger\" | \"success\" | \"default\" | 2 | \"muted\"",
-              "required": false
+              "required": false,
+              "description": "A status ink, over the variant's: `danger` or `success` for a line that reports an outcome. Pair it with words or a glyph that say the state."
             },
             {
               "name": "truncate",
               "type": "true | false",
-              "required": false
+              "required": false,
+              "description": "Cut to one line with an ellipsis. Only for text whose full value is available elsewhere, such as a tooltip or a detail view."
             },
             {
               "name": "variant",
               "type": "\"default\" | \"secondary\" | \"muted\"",
-              "required": false
+              "required": false,
+              "description": "Which of the three inks: `default` for what the reader came for, `secondary` for what explains it, `muted` for what they can skip."
             },
             {
               "name": "weight",
               "type": "\"regular\" | \"medium\" | \"semibold\"",
-              "required": false
+              "required": false,
+              "description": "`regular` by default; `medium` or `semibold` to lift a name or a figure out of a line without changing its size."
             }
           ],
           "forwards": {

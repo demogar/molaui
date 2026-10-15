@@ -49,9 +49,9 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
-| `description` | `ReactNode` |  |  |
-| `label` | `ReactNode` |  |  |
+| `className` | `string` |  | Classes for the switch itself, with or without a `label`. A string, not Base UI's state function: use the `data-checked` and `data-disabled` variants for state. |
+| `description` | `ReactNode` |  | Second line under the label: what turning it on does. Linked as the switch's description. |
+| `label` | `ReactNode` |  | Visible label. The whole label is the press target and names the switch. |
 | `labelPosition` | `"start" \| "end"` | `end` | Put the label before the switch — for settings lists, where labels align left and switches right. |
 | `wrapperClassName` | `string` |  | Classes for the label row a `label` adds around the control. `className` always styles the switch itself. |
 

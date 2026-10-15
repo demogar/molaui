@@ -53,14 +53,14 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `options` (required) | `SegmentedOption<V>[]` |  |  |
-| `defaultValue` | `string` |  |  |
-| `disabled` | `boolean` |  |  |
+| `options` (required) | `SegmentedOption<V>[]` |  | The segments, in order: a `value`, a `label` and optionally an icon or `disabled`. Two to five short ones; past that, use a Select. |
+| `defaultValue` | `string` |  | The segment pressed on first render, uncontrolled. |
+| `disabled` | `boolean` |  | Disables every segment. To disable one, set `disabled` on its option instead. |
 | `fill` | `boolean` | `false` | Segments share the full width equally. |
 | `iconOnly` | `boolean` | `false` | Render icons only; labels become the accessible names. |
-| `onValueChange` | `((value: V) => void)` |  |  |
-| `size` | `"sm" \| "md"` | `md` |  |
-| `value` | `string` |  |  |
+| `onValueChange` | `((value: V) => void)` |  | Called with the newly pressed segment's `value`. Pressing the segment that is already pressed does not call it, so the group never empties. |
+| `size` | `"sm" \| "md"` | `md` | Height: `md` (the default) matches the other controls in a row; `sm` for a toolbar or a dense table header. |
+| `value` | `string` |  | The pressed segment's `value`, controlled. Give one: a segmented control always has a choice made. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="segmented-control">`.
 

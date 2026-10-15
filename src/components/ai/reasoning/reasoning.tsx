@@ -13,10 +13,22 @@ export interface ReasoningProps extends Omit<React.ComponentProps<'div'>, 'child
   text: string
   /** `streaming` while the model is still thinking. */
   status?: 'streaming' | 'done'
+  /**
+   * When the thinking started. Gives the summary line its clock: live while
+   * streaming, "Thought for 12.4s" once done.
+   */
   startedAt?: number | Date
+  /**
+   * When the thinking ended. Freezes the clock; omit while the model is still
+   * thinking.
+   */
   endedAt?: number | Date
   /** A known duration, when there are no timestamps. */
   durationMs?: number
+  /**
+   * Start with the reasoning shown. Closed by default, because reasoning is
+   * evidence for when the answer looks wrong, not the answer.
+   */
   defaultOpen?: boolean
 }
 

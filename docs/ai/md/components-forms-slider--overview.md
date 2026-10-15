@@ -48,10 +48,10 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the root, which holds the label row, the track and the end labels. |
 | `formatValue` | `((formatted: string, value: number) => ReactNode)` |  | Format the printed value. Defaults to Base UI's locale formatting via `format`. |
 | `label` | `ReactNode` |  | Visible label. Names the thumb(s). |
-| `maxLabel` | `ReactNode` |  |  |
+| `maxLabel` | `ReactNode` |  | Label under the high end of the track. Decorative: the value text, not this, is what a screen reader hears. |
 | `minLabel` | `ReactNode` |  | Labels under the two ends of the track: "Precise" / "Creative". |
 | `showValue` | `boolean` | `true` | Print the current value beside the label. |
 

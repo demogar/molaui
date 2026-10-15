@@ -39,12 +39,19 @@ export const emptyStateVariants = cva(
   'relative grid place-items-center rounded-none bg-cloth-shade relleno-field shadow-cut px-6',
   {
     variants: {
+      /**
+       * Which of the four conversations this is: `empty` (default, nothing
+       * yet), `no-results` (a filter hides everything), `error` (could not
+       * load; announced as an alert) or `no-permission`. Each brings its icon
+       * and seam; the copy and the action must match it.
+       */
       kind: {
         empty: 'band-cloth',
         'no-results': 'band-cloth',
         error: 'band-danger',
         'no-permission': 'band-oro',
       },
+      /** How much of the slot the state fills vertically: `sm` inside a card or a table, `md` (default) for a panel, `lg` for a whole page. */
       size: {
         sm: 'py-8',
         md: 'py-14',
@@ -67,12 +74,15 @@ const ICON: Record<EmptyStateKind, React.ComponentType<{ className?: string; str
 export interface EmptyStateProps
   extends Omit<React.ComponentProps<'div'>, 'title'>,
     Variants<typeof emptyStateVariants> {
+  /** What the state is, in a few words: "No saved replies yet", "Nothing matches 'refund'". */
   title: React.ReactNode
+  /** One sentence on why, or on what the action will do. */
   description?: React.ReactNode
   /** One or two buttons. The first is the way forward. */
   actions?: React.ReactNode
   /** Replace the kind's icon, or `false` for none. */
   icon?: React.ReactNode | false
+  /** The element for `title`, `h3` by default. Set it from the page outline; the size stays the same. */
   headingLevel?: 2 | 3 | 4
   /**
    * @deprecated Since 0.7.0; removed in 1.0.0. Use `kind`, which takes the

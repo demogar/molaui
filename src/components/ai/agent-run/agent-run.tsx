@@ -55,15 +55,49 @@ export interface AgentRunFailure
 export interface AgentRunProps extends Omit<React.ComponentProps<'section'>, 'children'> {
   /** The agent's name — "Cayuco research agent". */
   name: string
+  /**
+   * The run's identifier, set as a literal with a copy button beside it, because
+   * it is what an operator pastes into a ticket or a log search.
+   */
   runId: string
+  /**
+   * The state of the run as a whole. It drives the header's glyph, word and clock,
+   * which actions are offered (Cancel while active, Retry once failed, timed out
+   * or cancelled), and the one polite announcement made per change.
+   */
   status: RunStatusValue
+  /**
+   * When the run started. With it, the header shows an elapsed clock that keeps
+   * counting while the run is active.
+   */
   startedAt?: number | Date
+  /**
+   * When the run ended. Freezes the header clock; omit while the run is still
+   * going.
+   */
   endedAt?: number | Date
   /** The model identifier, set as a literal. */
   model?: string
+  /**
+   * Token counts and cost for the run, shown inline in the header. Omit when the
+   * provider does not report them rather than passing zeros.
+   */
   usage?: Pick<TokenUsageProps, 'input' | 'output' | 'cached' | 'costUsd' | 'contextWindow'>
+  /**
+   * The timeline, in order: the order is the content, so the steps render as an
+   * ordered list. A step waiting for approval or failed opens itself.
+   */
   steps: readonly AgentStep[]
+  /**
+   * Stops the run. Shows a Cancel run button while the run is active; omit to
+   * offer no way to stop it from here.
+   */
   onCancel?: () => void
+  /**
+   * Runs it again from the start. Shows Retry run once the run has failed, timed
+   * out or been cancelled; when `failure` is set the retry moves into the failure
+   * panel, next to the reason.
+   */
   onRetry?: () => void
   /**
    * Shown while the run is failed, timed out or cancelled: what stopped it,
@@ -75,6 +109,10 @@ export interface AgentRunProps extends Omit<React.ComponentProps<'section'>, 'ch
   onRetryFromStep?: (stepId: string) => void
   /** Shown under the timeline once the run has finished. */
   summary?: React.ReactNode
+  /**
+   * Heading level for the run's name. Defaults to 3; use 2 when the run is the
+   * page's main subject.
+   */
   headingLevel?: 2 | 3
 }
 

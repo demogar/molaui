@@ -46,7 +46,7 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `items` (required) | `BreadcrumbItem[]` |  |  |
+| `items` (required) | `BreadcrumbItem[]` |  | The trail, root first. The last item is the current page and renders as text whether or not it has an `href`; pass a long id through `middleTruncate` so both ends survive. |
 | `renderLink` | `BreadcrumbLinkRender` |  | The element each link crumb renders as: your router's `<Link />`, or a function returning one. |
 
 `className`, `ref`, `id` and the other DOM props go to `<nav data-slot="breadcrumb">`.

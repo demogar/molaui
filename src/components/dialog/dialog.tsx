@@ -50,6 +50,7 @@ export const dialogContentVariants = cva(
   ],
   {
     variants: {
+      /** The popup's maximum width: `sm` for a short question, `md` (default) for a form, `lg` for a table or a long review. */
       size: {
         sm: 'max-w-sm',
         md: 'max-w-lg',
@@ -81,9 +82,11 @@ export function DialogClose(props: DialogPrimitive.Close.Props) {
 export interface DialogContentProps
   extends Omit<DialogPrimitive.Popup.Props, 'className' | 'title'>,
     Variants<typeof dialogContentVariants> {
+  /** Classes for the popup, merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute. */
   className?: string
   /** The dialog's accessible name. Required: an unnamed modal is announced as "dialog" and nothing else. */
   title: React.ReactNode
+  /** A line under the title, read as the dialog's accessible description when it opens. Say what the dialog is for; leave instructions to the body. */
   description?: React.ReactNode
   /** Action row under the body: right-aligned, or stacked full width with the last action on top when the row is under 24rem. Usually a `ghost` cancel and one primary. */
   footer?: React.ReactNode
@@ -193,15 +196,21 @@ function DialogFrame({
 }
 
 export interface AlertDialogProps extends Omit<React.ComponentProps<'div'>, 'title' | 'children' | 'role'> {
+  /** Whether the dialog is open, when you control it: to open it from somewhere other than `trigger`, or to close it after an async confirm of your own. */
   open?: boolean
+  /** Opens the dialog on first render without controlling it afterwards. */
   defaultOpen?: boolean
+  /** Called with the next open state on every open and close, Cancel and Escape included. */
   onOpenChange?: (open: boolean) => void
   /** Rendered as the trigger, e.g. a danger `Button`. */
   trigger?: React.ReactElement
+  /** The question, naming the thing: "Delete run #4182?". It is the dialog's accessible name. */
   title: React.ReactNode
+  /** What happens if the operator confirms, and whether it can be undone. Required: a destructive confirm with no consequence stated is a guess. */
   description: React.ReactNode
   /** The verb on the confirm button: "Delete run", never "OK". */
   confirmLabel: string
+  /** The safe answer's label, "Cancel" by default. It takes focus when the dialog opens, so a reflexive Enter cancels. */
   cancelLabel?: string
   /**
    * May return a promise. While it is pending the confirm button shows its

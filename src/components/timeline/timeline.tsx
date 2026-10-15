@@ -45,6 +45,7 @@ const NODE: Record<TimelineTone, string> = {
 }
 
 export interface TimelineProps extends Omit<React.ComponentProps<'ol'>, 'children'> {
+  /** The events, in the order they happened, one node on the spine each. A `tone` on an item states its outcome. */
   items: TimelineItem[]
   /** Names the list, since the spine carries no heading of its own. */
   label: string
@@ -145,6 +146,7 @@ const stepListVariants = cva('m-0 list-none p-0', {
 })
 
 export interface StepListProps extends Omit<React.ComponentProps<'ol'>, 'children'> {
+  /** The steps, in order. An item without a `label` is numbered by position; one authored label widens the column for every row. */
   items: StepListItem[]
   /** Set the list on an ink panel. */
   inverse?: boolean
@@ -153,6 +155,7 @@ export interface StepListProps extends Omit<React.ComponentProps<'ol'>, 'childre
    * status everywhere else, and this was a ground.
    */
   tone?: 'default' | 'inverse'
+  /** The element each step title renders as, `h3` by default: a runbook's steps are its outline. Use `p` when they are not. */
   titleAs?: 'h3' | 'h4' | 'p'
 }
 

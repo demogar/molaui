@@ -62,11 +62,11 @@ A block of machine text — a tool call's arguments, a query, a log tail.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `code` (required) | `string` |  |  |
+| `code` (required) | `string` |  | The text, exactly as it should be copied. Rendered verbatim; format JSON before passing it. |
 | `copyable` | `boolean` | `true` | Hide the copy button — for payloads that must not leave the page. |
 | `label` | `string` |  | A filename or a role — "arguments", "result", "query.sql". |
 | `language` | `CodeLanguage` | `text` | Shown as a tag in the header. Only `json` is tokenized; everything else is plain. |
-| `lineNumbers` | `boolean` | `false` |  |
+| `lineNumbers` | `boolean` | `false` | A gutter of line numbers that stays put as the code scrolls sideways. Hidden from assistive tech and never copied. Off by default; turn it on when someone will cite a line. |
 | `maxHeight` | `string` |  | Scroll inside after this height (any CSS length). |
 | `wrap` | `boolean` | `false` | Start with long lines wrapped. The reader can toggle it. |
 

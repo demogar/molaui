@@ -36,6 +36,7 @@ export const headingVariants = cva('m-0 font-display wdth-display', {
 export type HeadingLevel = 1 | 2 | 3 | 4
 
 export interface HeadingProps extends React.ComponentProps<'h2'> {
+  /** The outline level, `h1` to `h4`. Required, and set from the document outline: never skip one to get a smaller look; use `visualLevel`. */
   level: HeadingLevel
   /** The level it should look like, when that must differ from the outline level. */
   visualLevel?: HeadingLevel

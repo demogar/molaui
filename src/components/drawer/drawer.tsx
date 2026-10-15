@@ -155,9 +155,11 @@ const titleClasses = 'm-0 font-display text-xl font-bold leading-snug tracking-d
 const descriptionClasses = 'mt-1.5 mb-0 text-sm text-ink-2'
 
 export interface DrawerContentProps extends Omit<DrawerPrimitive.Popup.Props, 'className' | 'title'> {
+  /** Classes for the popup, merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute. */
   className?: string
   /** The drawer's accessible name. Required: an unnamed modal is announced as "dialog" and nothing else. */
   title: React.ReactNode
+  /** A line under the title, read as the drawer's accessible description when it opens. */
   description?: React.ReactNode
   /** Action row pinned under the scrolling body, behind a keyline. Usually a `ghost` cancel and one primary. */
   footer?: React.ReactNode

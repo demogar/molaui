@@ -39,10 +39,17 @@ const radioClasses = [
 ] as const
 
 export interface RadioProps extends Omit<RadioPrimitive.Root.Props, 'className'> {
+  /**
+   * Classes for the circle itself, with or without a `label`. A string, not Base
+   * UI's state function: use the `data-checked` and `data-disabled` variants for
+   * state.
+   */
   className?: string
   /** Classes for the label row a `label` adds around the control. `className` always styles the control itself. */
   wrapperClassName?: string
+  /** Visible label. The whole label is the press target and names the radio. */
   label?: React.ReactNode
+  /** Second line under the label. Linked as the radio's description, before any hint or error `Field` adds. */
   description?: React.ReactNode
 }
 
@@ -85,8 +92,11 @@ export function Radio({ className, wrapperClassName, label, description, ...prop
 export interface RadioGroupProps extends Omit<RadioGroupPrimitive.Props, 'className'> {
   /** The question the options answer. Names the radiogroup. */
   label: React.ReactNode
+  /** Copy under the label, linked as the group's description so it is heard on entering the group. */
   description?: React.ReactNode
+  /** Lay the options out in a column (the default) or a wrapping row. */
   orientation?: 'vertical' | 'horizontal'
+  /** Classes for the wrapper that holds the label, the description and the group. */
   className?: string
 }
 

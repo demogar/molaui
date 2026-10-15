@@ -53,7 +53,7 @@ How sure the system is, in three steps and in words.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `level` (required) | `ConfidenceLevel` |  |  |
+| `level` (required) | `ConfidenceLevel` |  | How strong the support is: three coarse steps, shown as filled segments and a word, never a percentage the model cannot honestly claim. |
 | `basis` | `string` |  | What the confidence rests on — "3 sources agree", "single source". |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="confidence">`.

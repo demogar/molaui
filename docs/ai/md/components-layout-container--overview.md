@@ -45,7 +45,7 @@ Each story is a live example in Storybook.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `size` (deprecated) | `ContainerWidth` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `width`, which takes the same values. `codemods/prop-vocabulary.ts` rewrites call sites. |
-| `width` | `"page" \| "wide" \| "prose" \| "full"` |  |  |
+| `width` | `"page" \| "wide" \| "prose" \| "full"` |  | The column's measure: `page` (default), `wide` for tools whose tables want the screen, `prose` for reading, `full` for no limit. The gutters stay either way. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="container">`.
 
@@ -64,11 +64,11 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `title` (required) | `ReactNode` |  |  |
+| `title` (required) | `ReactNode` |  | The section's heading, rendered at `level`. |
 | `actions` | `ReactNode` |  | Actions, aligned to the heading's baseline on the right. |
 | `label` | `string` |  | The section's label. It renders UNDER the heading, not above it: a small label above a heading pre-announces what the heading is about to say better. Below, the same string reads as what kind of section this is. |
-| `lead` | `ReactNode` |  |  |
-| `level` | `1 \| 2 \| 3` | `2` |  |
+| `lead` | `ReactNode` |  | A sentence or two under the heading, set as a Lead, that says what the section is for. |
+| `level` | `1 \| 2 \| 3` | `2` | The heading level, 2 by default. Set it from the outline of the page, not from the size you want. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="section-header">`.
 

@@ -74,16 +74,16 @@ One turn of a conversation.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `role` (required) | `MessageRole` |  |  |
+| `role` (required) | `MessageRole` |  | Who the turn belongs to. Sets the gutter label and its band; the content's typeface comes from what you pass in (`StreamingText` for a model's reply). |
 | `author` | `string` |  | Who is speaking, if more specific than the role — "Cayuco", "M. Herrera". |
 | `copyText` | `string` |  | Copies this text. Omit to hide the copy action. |
 | `error` | `string` |  | The error, verbatim from the system. Shown as a literal — operators paste it into tickets. |
 | `feedback` | `"up" \| "down"` |  | The rating already given, if any. |
 | `model` | `string` |  | The model that produced it. A machine identifier, so it is set as a literal. |
 | `onFeedback` | `((value: "up" \| "down") => void)` |  | Called with the reader's rating. Omit to hide the rating actions. |
-| `onRetry` | `(() => void)` |  |  |
+| `onRetry` | `(() => void)` |  | Regenerates the turn. Shows Retry among the actions, or in the error block when `status` is `error`; omit to hide it. |
 | `status` | `"error" \| "streaming" \| "done"` | `done` | `error`: the message failed partway. Content so far stays; the error is stated under it. |
-| `timestamp` | `string \| Date` |  |  |
+| `timestamp` | `string \| Date` |  | When the turn was sent. Shown in the gutter and in the turn's accessible name; see `timeZone` for when it renders. |
 | `timeZone` | `string` |  | IANA zone the time is shown in, such as `"UTC"` or `"America/Panama"`. Without it the time is the reader's own and appears only after hydration, because the server cannot know the reader's zone; pass one to have the time in the server HTML. |
 
 `className`, `ref`, `id` and the other DOM props go to `<article data-slot="message">`.

@@ -3,7 +3,12 @@ import type * as React from 'react'
 import { cn } from '../../../lib/cn'
 
 export interface TokenUsageProps extends Omit<React.ComponentProps<'div'>, 'children'> {
+  /** Tokens sent to the model, cached ones included. */
   input: number
+  /**
+   * Tokens the model produced. With `input`, the total measured against
+   * `contextWindow`.
+   */
   output: number
   /** Input tokens served from cache — cheaper, and worth knowing about. */
   cached?: number

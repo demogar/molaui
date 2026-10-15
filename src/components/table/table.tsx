@@ -182,6 +182,10 @@ export interface TableHeadProps extends React.ComponentProps<'th'> {
    * announcing "not sorted" on every column is noise.
    */
   sort?: TableSortDirection
+  /**
+   * Called when the header's sort control is pressed. The page decides the next
+   * direction; only used with `sort`.
+   */
   onSort?: () => void
 }
 
@@ -313,8 +317,20 @@ export function TableCaption({ className, ...props }: React.ComponentProps<'capt
  * render, no ResizeObserver) the block is the cell's width, as it was.
  */
 export interface TableEmptyProps extends Omit<React.ComponentProps<'tr'>, 'title'> {
+  /**
+   * How many columns the row spans: all of them, including a checkbox column, or
+   * the empty state sits in the first cell.
+   */
   colSpan: number
+  /**
+   * The empty state's heading. Defaults to "Nothing here yet"; the children become
+   * its description.
+   */
   title?: React.ReactNode
+  /**
+   * Why it is empty, as on `EmptyState`: `empty` (the default), `no-results` when
+   * filters emptied it, `error`, or `no-permission`.
+   */
   kind?: EmptyStateProps['kind']
   /**
    * @deprecated Since 0.7.0; removed in 1.0.0. Use `kind`, as on
@@ -359,6 +375,10 @@ export function TableEmpty({
 export interface TableSkeletonRowsProps {
   /** How many rows to draw. */
   rows?: number
+  /**
+   * How many cells each row draws: the table's column count, including a checkbox
+   * column.
+   */
   columns: number
 }
 

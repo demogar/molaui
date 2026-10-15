@@ -34,11 +34,19 @@ const roleBand = cva('', {
 })
 
 export interface MessageProps extends Omit<React.ComponentProps<'article'>, 'role'> {
+  /**
+   * Who the turn belongs to. Sets the gutter label and its band; the content's
+   * typeface comes from what you pass in (`StreamingText` for a model's reply).
+   */
   role: MessageRole
   /** Who is speaking, if more specific than the role — "Cayuco", "M. Herrera". */
   author?: string
   /** The model that produced it. A machine identifier, so it is set as a literal. */
   model?: string
+  /**
+   * When the turn was sent. Shown in the gutter and in the turn's accessible name;
+   * see `timeZone` for when it renders.
+   */
   timestamp?: Date | string
   /**
    * IANA zone the time is shown in, such as `"UTC"` or `"America/Panama"`.
@@ -53,6 +61,10 @@ export interface MessageProps extends Omit<React.ComponentProps<'article'>, 'rol
   error?: string
   /** Copies this text. Omit to hide the copy action. */
   copyText?: string
+  /**
+   * Regenerates the turn. Shows Retry among the actions, or in the error block
+   * when `status` is `error`; omit to hide it.
+   */
   onRetry?: () => void
   /** Called with the reader's rating. Omit to hide the rating actions. */
   onFeedback?: (value: 'up' | 'down') => void

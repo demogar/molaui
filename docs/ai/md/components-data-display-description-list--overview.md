@@ -51,8 +51,8 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `items` (required) | `DescriptionItem[]` |  |  |
-| `layout` | `"inline" \| "stacked" \| "grid"` | `inline` |  |
+| `items` (required) | `DescriptionItem[]` |  | The term and value pairs, in reading order. Mark ids and hashes `literal`. |
+| `layout` | `"inline" \| "stacked" \| "grid"` | `inline` | `inline` (default): term left, value right, for a side panel scanned top to bottom. `stacked`: term above value, for values long enough to wrap. `grid`: two columns under an ink rule, for a summary closing a section. |
 
 `className`, `ref`, `id` and the other DOM props go to `<dl data-slot="description-list">`.
 

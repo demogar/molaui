@@ -37,6 +37,11 @@ export interface DescriptionItem {
 
 export const descriptionListVariants = cva('m-0', {
   variants: {
+    /**
+     * `inline` (default): term left, value right, for a side panel scanned top
+     * to bottom. `stacked`: term above value, for values long enough to wrap.
+     * `grid`: two columns under an ink rule, for a summary closing a section.
+     */
     layout: {
       inline: '',
       stacked: '',
@@ -81,6 +86,7 @@ const detailVariants = cva('m-0 min-w-0 text-ink', {
 export interface DescriptionListProps
   extends Omit<React.ComponentProps<'dl'>, 'children'>,
     Variants<typeof descriptionListVariants> {
+  /** The term and value pairs, in reading order. Mark ids and hashes `literal`. */
   items: DescriptionItem[]
 }
 

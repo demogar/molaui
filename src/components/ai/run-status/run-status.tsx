@@ -66,6 +66,11 @@ export function isRetryableStatus(status: RunStatusValue): boolean {
  *   timed_out   hollow + rojo foot     — ran out rather than broke
  */
 export interface RunStatusGlyphProps extends Omit<React.ComponentProps<'span'>, 'children'> {
+  /**
+   * Which mark to draw. Each status has its own shape, not only its own hue, so
+   * the glyph survives greyscale. Decorative: pair it with the word, as
+   * `RunStatus` does.
+   */
   status: RunStatusValue
 }
 
@@ -123,6 +128,10 @@ const labelVariants = cva('', {
 })
 
 export interface RunStatusProps extends Omit<React.ComponentProps<'span'>, 'children'> {
+  /**
+   * The state shown: it picks the glyph, the word (unless `label` overrides it)
+   * and its colour, and whether the clock keeps running.
+   */
   status: RunStatusValue
   /** Override the word — e.g. "Thinking" for a running reasoning step. The glyph stays. */
   label?: string

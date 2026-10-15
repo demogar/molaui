@@ -50,8 +50,8 @@ What a run consumed.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `input` (required) | `number` |  |  |
-| `output` (required) | `number` |  |  |
+| `input` (required) | `number` |  | Tokens sent to the model, cached ones included. |
+| `output` (required) | `number` |  | Tokens the model produced. With `input`, the total measured against `contextWindow`. |
 | `cached` | `number` |  | Input tokens served from cache — cheaper, and worth knowing about. |
 | `contextWindow` | `number` |  | The model's context window. With it, a meter shows how full the context is. |
 | `costUsd` | `number` |  | Cost in USD, if the platform knows it. |

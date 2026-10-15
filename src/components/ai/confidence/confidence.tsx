@@ -15,6 +15,10 @@ const FILLED: Record<ConfidenceLevel, number> = { high: 3, medium: 2, low: 1 }
 const FILL: Record<ConfidenceLevel, string> = { high: 'bg-verde', medium: 'bg-oro', low: 'bg-danger' }
 
 export interface ConfidenceProps extends Omit<React.ComponentProps<'span'>, 'children'> {
+  /**
+   * How strong the support is: three coarse steps, shown as filled segments and a
+   * word, never a percentage the model cannot honestly claim.
+   */
   level: ConfidenceLevel
   /** What the confidence rests on — "3 sources agree", "single source". */
   basis?: string

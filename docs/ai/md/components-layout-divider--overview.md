@@ -49,8 +49,8 @@ The system's three dividers, in rising order of weight and rarity.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `band` | `DividerBand` | `oro` |  |
-| `orientation` | `"horizontal" \| "vertical"` | `horizontal` |  |
+| `band` | `DividerBand` | `oro` | The colour of a `relleno` divider's band, gold by default. Ignored by the other variants. |
+| `orientation` | `"horizontal" \| "vertical"` | `horizontal` | `vertical` stretches to the height of a flex row, for a seam between columns or toolbar groups. `diente` is horizontal only. Announced only when you also pass `role="separator"`. |
 | `up` | `boolean` | `false` | Teeth pointing up — for the top edge of a filled panel. |
 | `variant` | `"keyline" \| "relleno" \| "diente"` | `keyline` | `keyline` — the decorative 1px rule. Between rows, between fields. `relleno` — the filler slit: a band of colour cut by fine ink lines. For the seam between two parts of a page, not between list items. `diente`  — the sawtooth left where one ground is cut away from another. For the major seam only, where the page gives way to a filled panel. Set `color` on the element to choose the ground. |
 

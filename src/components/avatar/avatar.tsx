@@ -67,6 +67,11 @@ export const avatarVariants = cva(
   'relative inline-grid shrink-0 place-items-center overflow-hidden rounded-none shadow-cut select-none',
   {
     variants: {
+      /**
+       * The square's side, on the spacing scale so density re-scales it: `md`
+       * for a table row or a message, `xs`/`sm` inline with text, `lg`/`xl`
+       * for a profile header.
+       */
       size: {
         xs: 'size-5 text-2xs [--wdth-label:100]',
         sm: 'size-6 text-2xs',
@@ -84,6 +89,10 @@ export interface AvatarProps
     Variants<typeof avatarVariants> {
   /** The person's or agent's name. Becomes the accessible name and seeds the colour. */
   name: string
+  /**
+   * An image URL. The initials stay until it has loaded, and stay for good if
+   * it fails, so a broken URL never shows a broken-image glyph.
+   */
   src?: string
   /** Shown instead of initials when there is no image — e.g. a bot glyph for an agent. */
   icon?: React.ReactNode
@@ -115,6 +124,7 @@ export interface AvatarGroupProps extends React.ComponentProps<'div'> {
   label: string
   /** Show at most this many; the rest collapse into a "+n" tile. */
   max?: number
+  /** Every tile's size, the "+n" tile's included; it overrides the size set on each child, so the row stays even. */
   size?: AvatarProps['size']
 }
 

@@ -44,7 +44,6 @@ export function AccordionItem(input: AccordionItemProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface AccordionItemProps extends Omit<Accordion_2.Item.Props, 'className'> {
-    // (undocumented)
     className?: string;
 }
 
@@ -53,13 +52,11 @@ export function AccordionPanel(input: AccordionPanelProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface AccordionPanelProps extends Omit<Accordion_2.Panel.Props, 'className'> {
-    // (undocumented)
     className?: string;
 }
 
 // @public
 export interface AccordionProps extends Omit<Accordion_2.Root.Props, 'className'> {
-    // (undocumented)
     className?: string;
 }
 
@@ -68,7 +65,6 @@ export function AccordionTrigger(input: AccordionTriggerProps): React_2.JSX.Elem
 
 // @public (undocumented)
 export interface AccordionTriggerProps extends Omit<Accordion_2.Trigger.Props, 'className'> {
-    // (undocumented)
     className?: string;
     meta?: React_2.ReactNode;
 }
@@ -83,28 +79,19 @@ export interface AgentRunFailure extends Pick<RunErrorProps, 'kind' | 'tool' | '
 
 // @public (undocumented)
 export interface AgentRunProps extends Omit<React_2.ComponentProps<'section'>, 'children'> {
-    // (undocumented)
     endedAt?: number | Date;
     failure?: AgentRunFailure;
-    // (undocumented)
     headingLevel?: 2 | 3;
     model?: string;
     name: string;
-    // (undocumented)
     onCancel?: () => void;
-    // (undocumented)
     onRetry?: () => void;
     onRetryFromStep?: (stepId: string) => void;
-    // (undocumented)
     runId: string;
-    // (undocumented)
     startedAt?: number | Date;
-    // (undocumented)
     status: RunStatusValue;
-    // (undocumented)
     steps: readonly AgentStep[];
     summary?: React_2.ReactNode;
-    // (undocumented)
     usage?: Pick<TokenUsageProps, 'input' | 'output' | 'cached' | 'costUsd' | 'contextWindow'>;
 }
 
@@ -136,22 +123,16 @@ export function AlertDialog(input: AlertDialogProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface AlertDialogProps extends Omit<React_2.ComponentProps<'div'>, 'title' | 'children' | 'role'> {
-    // (undocumented)
     cancelLabel?: string;
     confirmationText?: string;
     confirmLabel: string;
-    // (undocumented)
     defaultOpen?: boolean;
-    // (undocumented)
     description: React_2.ReactNode;
     error?: React_2.ReactNode;
     finalFocus?: AlertDialog_2.Popup.Props['finalFocus'];
     onConfirm: () => void | Promise<void>;
-    // (undocumented)
     onOpenChange?: (open: boolean) => void;
-    // (undocumented)
     open?: boolean;
-    // (undocumented)
     title: React_2.ReactNode;
     tone?: 'danger' | 'neutral';
     trigger?: React_2.ReactElement;
@@ -164,14 +145,10 @@ export function AppShell(input: AppShellProps): React_2.JSX.Element;
 export interface AppShellProps extends Omit<React_2.ComponentProps<'div'>, 'children'> {
     // (undocumented)
     children: React_2.ReactNode;
-    // (undocumented)
     defaultSidebarCollapsed?: boolean;
-    // (undocumented)
     onSidebarCollapsedChange?: (collapsed: boolean) => void;
-    // (undocumented)
     sidebar: React_2.ReactNode;
     sidebarCollapsed?: boolean;
-    // (undocumented)
     topbar: React_2.ReactNode;
 }
 
@@ -181,9 +158,7 @@ export function AttachmentChip(input: AttachmentChipProps): React_2.JSX.Element;
 // @public (undocumented)
 export interface AttachmentChipProps extends React_2.ComponentProps<'span'> {
     detail?: string;
-    // (undocumented)
     name: string;
-    // (undocumented)
     onRemove?: () => void;
 }
 
@@ -192,31 +167,20 @@ export function Autocomplete(input: AutocompleteProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface AutocompleteProps extends Omit<React_2.ComponentProps<'input'>, 'value' | 'defaultValue' | 'onChange' | 'size' | 'children' | 'type'> {
-    // (undocumented)
     defaultValue?: string;
-    // (undocumented)
     disabled?: boolean;
     emptyMessage?: React_2.ReactNode;
     items: (string | ComboboxOption)[];
-    // (undocumented)
     label?: React_2.ReactNode;
-    // (undocumented)
     loading?: boolean;
     locale?: Intl.LocalesArgument;
-    // (undocumented)
     name?: string;
     onValueChange?: (value: string) => void;
-    // (undocumented)
     placeholder?: string;
-    // (undocumented)
     readOnly?: boolean;
-    // (undocumented)
     required?: boolean;
-    // (undocumented)
     size?: FieldControlSize;
-    // (undocumented)
     status?: React_2.ReactNode;
-    // (undocumented)
     value?: string;
     wrapperClassName?: string;
 }
@@ -231,7 +195,6 @@ export function AvatarGroup(input: AvatarGroupProps): React_2.JSX.Element;
 export interface AvatarGroupProps extends React_2.ComponentProps<'div'> {
     label: string;
     max?: number;
-    // (undocumented)
     size?: AvatarProps['size'];
 }
 
@@ -245,7 +208,6 @@ export function avatarLayer(name: string): AvatarLayer;
 export interface AvatarProps extends Omit<React_2.ComponentProps<'span'>, 'children'>, Variants<typeof avatarVariants> {
     icon?: React_2.ReactNode;
     name: string;
-    // (undocumented)
     src?: string;
 }
 
@@ -302,7 +264,6 @@ export type BreadcrumbLinkRender = React_2.ReactElement | ((props: React_2.Compo
 
 // @public (undocumented)
 export interface BreadcrumbProps extends Omit<React_2.ComponentProps<'nav'>, 'children'> {
-    // (undocumented)
     items: BreadcrumbItem[];
     renderLink?: BreadcrumbLinkRender;
 }
@@ -318,7 +279,6 @@ export type ButtonArrowProps = React_2.ComponentProps<typeof ArrowRight>;
 
 // @public (undocumented)
 export interface ButtonProps extends Omit<Button_2.Props, 'className'>, Variants<typeof buttonVariants> {
-    // (undocumented)
     className?: string;
     icon?: React_2.ReactNode;
     loading?: boolean;
@@ -342,9 +302,7 @@ export interface CalendarProps extends Omit<React_2.ComponentProps<'div'>, 'onSe
     headingId?: string;
     isDateDisabled?: (date: Date) => boolean;
     locale?: DateLocale;
-    // (undocumented)
     max?: Date | null;
-    // (undocumented)
     min?: Date | null;
     onSelect?: (date: Date) => void;
     renderHeading?: (props: {
@@ -367,7 +325,6 @@ export interface CalloutProps extends Omit<React_2.ComponentProps<'div'>, 'title
     headingLevel?: 2 | 3 | 4 | 5;
     icon?: React_2.ReactNode | false;
     onDismiss?: () => void;
-    // (undocumented)
     title?: React_2.ReactNode;
 }
 
@@ -394,9 +351,7 @@ export function ChangeCount(input: ChangeCountProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface ChangeCountProps extends Omit<React_2.ComponentProps<'span'>, 'children'> {
-    // (undocumented)
     added: number;
-    // (undocumented)
     removed: number;
 }
 
@@ -419,7 +374,6 @@ export interface ChangeReviewProps extends Omit<React_2.ComponentProps<'section'
     children?: React_2.ReactNode;
     decision?: ChangeDecision | null;
     defaultDecision?: ChangeDecision | null;
-    // (undocumented)
     headingLevel?: 2 | 3;
     model?: string;
     onDecide?: (status: ChangeDecisionStatus, reason: string | undefined) => void;
@@ -439,7 +393,6 @@ export function CheckboxGroup(input: CheckboxGroupProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface CheckboxGroupProps extends Omit<CheckboxGroup_2.Props, 'className'> {
-    // (undocumented)
     className?: string;
     description?: React_2.ReactNode;
     legend: React_2.ReactNode;
@@ -448,7 +401,6 @@ export interface CheckboxGroupProps extends Omit<CheckboxGroup_2.Props, 'classNa
 
 // @public (undocumented)
 export interface CheckboxProps extends Omit<Checkbox_2.Root.Props, 'className'> {
-    // (undocumented)
     className?: string;
     description?: React_2.ReactNode;
     label?: React_2.ReactNode;
@@ -485,7 +437,6 @@ export function Citation(input: CitationProps): React_2.JSX.Element;
 // @public (undocumented)
 export interface CitationProps extends Omit<React_2.ComponentProps<'a'>, 'children'> {
     cardSide?: 'top' | 'bottom';
-    // (undocumented)
     n: number;
     render?: React_2.ReactElement | ((props: React_2.ComponentProps<'a'>) => React_2.ReactElement);
     source?: Source;
@@ -506,12 +457,10 @@ export function CodeBlock(input: CodeBlockProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface CodeBlockProps extends Omit<React_2.ComponentProps<'figure'>, 'children'> {
-    // (undocumented)
     code: string;
     copyable?: boolean;
     label?: string;
     language?: CodeLanguage;
-    // (undocumented)
     lineNumbers?: boolean;
     maxHeight?: string;
     wrap?: boolean;
@@ -528,7 +477,6 @@ export function CollapsiblePanel(input: CollapsiblePanelProps): React_2.JSX.Elem
 
 // @public (undocumented)
 export interface CollapsiblePanelProps extends Omit<Collapsible_2.Panel.Props, 'className'> {
-    // (undocumented)
     className?: string;
 }
 
@@ -537,7 +485,6 @@ export function CollapsibleTrigger(input: CollapsibleTriggerProps): React_2.JSX.
 
 // @public (undocumented)
 export interface CollapsibleTriggerProps extends Omit<Collapsible_2.Trigger.Props, 'className'> {
-    // (undocumented)
     className?: string;
 }
 
@@ -547,7 +494,6 @@ export function Combobox(props: ComboboxProps): React_2.ReactNode;
 // @public
 export interface ComboboxCommonProps extends Omit<React_2.ComponentProps<'input'>, 'value' | 'defaultValue' | 'onChange' | 'size' | 'children' | 'multiple' | 'type'> {
     clearLabel?: string;
-    // (undocumented)
     disabled?: boolean;
     emptyMessage?: React_2.ReactNode;
     filter?: null | ((option: ComboboxOption, query: string) => boolean);
@@ -555,16 +501,11 @@ export interface ComboboxCommonProps extends Omit<React_2.ComponentProps<'input'
     label?: React_2.ReactNode;
     loading?: boolean;
     locale?: Intl.LocalesArgument;
-    // (undocumented)
     name?: string;
     onInputValueChange?: (query: string) => void;
-    // (undocumented)
     placeholder?: string;
-    // (undocumented)
     readOnly?: boolean;
-    // (undocumented)
     required?: boolean;
-    // (undocumented)
     size?: FieldControlSize;
     status?: React_2.ReactNode;
     triggerLabel?: string;
@@ -576,14 +517,10 @@ export type ComboboxItems = ComboboxOption[] | ComboboxOptionGroup[];
 
 // @public (undocumented)
 export interface ComboboxMultipleProps extends ComboboxCommonProps {
-    // (undocumented)
     defaultValue?: string[];
-    // (undocumented)
     multiple: true;
-    // (undocumented)
     onValueChange?: (value: string[]) => void;
     removeLabel?: (label: string) => string;
-    // (undocumented)
     value?: string[];
 }
 
@@ -611,14 +548,10 @@ export type ComboboxProps = ComboboxSingleProps | ComboboxMultipleProps;
 
 // @public (undocumented)
 export interface ComboboxSingleProps extends ComboboxCommonProps {
-    // (undocumented)
     defaultValue?: string | null;
-    // (undocumented)
     multiple?: false;
-    // (undocumented)
     onValueChange?: (value: string | null) => void;
     removeLabel?: never;
-    // (undocumented)
     value?: string | null;
 }
 
@@ -654,13 +587,10 @@ export function CommandPalette(input: CommandPaletteProps): React_2.JSX.Element;
 // @public (undocumented)
 export interface CommandPaletteProps extends Omit<React_2.ComponentProps<'div'>, 'children' | 'role'> {
     defaultOpen?: boolean;
-    // (undocumented)
     groups: CommandGroup[];
     label?: string;
-    // (undocumented)
     onOpenChange?: (open: boolean) => void;
     open?: boolean;
-    // (undocumented)
     placeholder?: string;
     renderEmpty?: (query: string) => React_2.ReactNode;
     trigger?: React_2.ReactElement;
@@ -675,7 +605,6 @@ export type ConfidenceLevel = 'high' | 'medium' | 'low';
 // @public (undocumented)
 export interface ConfidenceProps extends Omit<React_2.ComponentProps<'span'>, 'children'> {
     basis?: string;
-    // (undocumented)
     level: ConfidenceLevel;
 }
 
@@ -740,11 +669,8 @@ export function DataTableColumnMenu<Row>(input: DataTableColumnMenuProps<Row>): 
 
 // @public (undocumented)
 export interface DataTableColumnMenuProps<Row> extends Omit<React_2.ComponentProps<'button'>, 'children' | 'onToggle' | 'hidden'> {
-    // (undocumented)
     columns: DataTableColumn<Row>[];
-    // (undocumented)
     hidden: ReadonlySet<string>;
-    // (undocumented)
     onToggle: (key: string, visible: boolean) => void;
 }
 
@@ -754,56 +680,38 @@ export type DataTableEmpty = Pick<EmptyStateProps, 'title' | 'description' | 'ac
 // @public (undocumented)
 export interface DataTableProps<Row> extends Omit<React_2.ComponentProps<'table'>, 'children' | 'aria-label'> {
     bulkActions?: (context: DataTableBulkContext) => React_2.ReactNode;
-    // (undocumented)
     caption?: React_2.ReactNode;
     columnMenu?: boolean;
-    // (undocumented)
     columns: DataTableColumn<Row>[];
-    // (undocumented)
     defaultHiddenColumns?: Iterable<string>;
-    // (undocumented)
     defaultPage?: number;
-    // (undocumented)
     defaultSelection?: Iterable<string>;
-    // (undocumented)
     defaultSort?: DataTableSort;
-    // (undocumented)
     empty?: React_2.ReactNode | DataTableEmpty;
     frameClassName?: string;
-    // (undocumented)
     framed?: boolean;
-    // (undocumented)
     getRowId: (row: Row) => string;
     hiddenColumns?: ReadonlySet<string>;
     label?: string;
-    // (undocumented)
     loading?: boolean;
     manual?: boolean;
     noun?: {
         one: string;
         other: string;
     };
-    // (undocumented)
     onHiddenColumnsChange?: (hidden: Set<string>) => void;
-    // (undocumented)
     onPageChange?: (page: number) => void;
-    // (undocumented)
     onSelectionChange?: (selection: Set<string>) => void;
-    // (undocumented)
     onSortChange?: (sort: DataTableSort | null) => void;
     page?: number;
     pageSize?: number;
-    // (undocumented)
     paginationVariant?: 'compact' | 'pages';
     rowCount?: number;
     rowLabel?: (row: Row) => string;
-    // (undocumented)
     rows: Row[];
-    // (undocumented)
     selectable?: boolean;
     selection?: ReadonlySet<string>;
     sort?: DataTableSort | null;
-    // (undocumented)
     stickyHeader?: boolean;
     wrapperClassName?: string;
 }
@@ -834,30 +742,20 @@ export function DatePicker(input: DatePickerProps): React_2.JSX.Element;
 // @public
 export interface DatePickerProps extends Omit<InputProps, 'value' | 'defaultValue' | 'onChange' | 'size' | 'leading' | 'trailing' | 'type' | 'children' | 'min' | 'max'> {
     defaultOpen?: boolean;
-    // (undocumented)
     defaultValue?: Date | null;
-    // (undocumented)
     disabled?: boolean;
-    // (undocumented)
     isDateDisabled?: (date: Date) => boolean;
     locale?: DateLocale;
-    // (undocumented)
     max?: Date | null;
-    // (undocumented)
     min?: Date | null;
     name?: string;
-    // (undocumented)
     onOpenChange?: (open: boolean) => void;
-    // (undocumented)
     onValueChange?: (value: Date | null) => void;
     open?: boolean;
     placeholder?: string;
-    // (undocumented)
     required?: boolean;
-    // (undocumented)
     size?: FieldControlSize;
     today?: Date;
-    // (undocumented)
     value?: Date | null;
     weekStartsOn?: number;
     wrapperClassName?: string;
@@ -877,36 +775,23 @@ export function DateRangePicker(input: DateRangePickerProps): React_2.JSX.Elemen
 // @public
 export interface DateRangePickerProps extends Omit<React_2.ComponentProps<'button'>, 'value' | 'defaultValue' | 'onChange' | 'children' | 'type' | 'name'> {
     defaultOpen?: boolean;
-    // (undocumented)
     defaultValue?: DateRange;
-    // (undocumented)
     disabled?: boolean;
-    // (undocumented)
     isDateDisabled?: (date: Date) => boolean;
-    // (undocumented)
     locale?: DateLocale;
-    // (undocumented)
     max?: Date | null;
-    // (undocumented)
     min?: Date | null;
     name?: string;
-    // (undocumented)
     onOpenChange?: (open: boolean) => void;
-    // (undocumented)
     onValueChange?: (value: DateRange) => void;
     open?: boolean;
-    // (undocumented)
     placeholder?: string;
     presets?: DateRangePreset[];
-    // (undocumented)
     required?: boolean;
-    // (undocumented)
     size?: FieldControlSize;
     today?: Date;
     typedEntry?: boolean;
-    // (undocumented)
     value?: DateRange;
-    // (undocumented)
     weekStartsOn?: number;
     wrapperClassName?: string;
 }
@@ -944,7 +829,6 @@ export function DescriptionList(input: DescriptionListProps): React_2.JSX.Elemen
 
 // @public (undocumented)
 export interface DescriptionListProps extends Omit<React_2.ComponentProps<'dl'>, 'children'>, Variants<typeof descriptionListVariants> {
-    // (undocumented)
     items: DescriptionItem[];
 }
 
@@ -968,9 +852,7 @@ export function DialogContent(input: DialogContentProps): React_2.JSX.Element;
 // @public (undocumented)
 export interface DialogContentProps extends Omit<Dialog_2.Popup.Props, 'className' | 'title'>, Variants<typeof dialogContentVariants> {
     band?: DialogBand;
-    // (undocumented)
     className?: string;
-    // (undocumented)
     description?: React_2.ReactNode;
     footer?: React_2.ReactNode;
     hideClose?: boolean;
@@ -1042,9 +924,7 @@ export type DividerBand = 'oro' | 'rojo' | 'anil' | 'verde' | 'cloth';
 
 // @public (undocumented)
 export interface DividerProps extends React_2.ComponentProps<'div'> {
-    // (undocumented)
     band?: DividerBand;
-    // (undocumented)
     orientation?: 'horizontal' | 'vertical';
     up?: boolean;
     variant?: 'keyline' | 'relleno' | 'diente';
@@ -1065,9 +945,7 @@ export function DrawerContent(input: DrawerContentProps): React_2.JSX.Element;
 // @public (undocumented)
 export interface DrawerContentProps extends Omit<Drawer_2.Popup.Props, 'className' | 'title'> {
     band?: DrawerBand;
-    // (undocumented)
     className?: string;
-    // (undocumented)
     description?: React_2.ReactNode;
     footer?: React_2.ReactNode;
     hideClose?: boolean;
@@ -1095,12 +973,9 @@ export type EmptyStateKind = NonNullable<Variants<typeof emptyStateVariants>['ki
 // @public (undocumented)
 export interface EmptyStateProps extends Omit<React_2.ComponentProps<'div'>, 'title'>, Variants<typeof emptyStateVariants> {
     actions?: React_2.ReactNode;
-    // (undocumented)
     description?: React_2.ReactNode;
-    // (undocumented)
     headingLevel?: 2 | 3 | 4;
     icon?: React_2.ReactNode | false;
-    // (undocumented)
     title: React_2.ReactNode;
     // @deprecated (undocumented)
     variant?: EmptyStateKind;
@@ -1127,9 +1002,7 @@ export function FieldChanges(input: FieldChangesProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface FieldChangesProps extends Omit<React_2.ComponentProps<'section'>, 'children' | 'title'> {
-    // (undocumented)
     changes: readonly FieldChange[];
-    // (undocumented)
     headingLevel?: 3 | 4 | 5;
     title: React_2.ReactNode;
 }
@@ -1166,11 +1039,9 @@ export interface FieldProps extends Omit<React_2.ComponentProps<'div'>, 'childre
     description?: React_2.ReactNode;
     error?: React_2.ReactNode;
     hint?: React_2.ReactNode;
-    // (undocumented)
     label: React_2.ReactNode;
     labelAside?: React_2.ReactNode;
     optional?: boolean;
-    // (undocumented)
     required?: boolean;
 }
 
@@ -1186,7 +1057,6 @@ export interface FileDiffProps extends Omit<React_2.ComponentProps<'section'>, '
     diff?: string;
     headingLevel?: 3 | 4 | 5;
     hunks?: readonly (DiffHunk | DiffHunkInput)[];
-    // (undocumented)
     kind?: FileChangeKind;
     layout?: 'unified' | 'split';
     path: string;
@@ -1252,30 +1122,23 @@ export interface FileUploadMessages {
 
 // @public (undocumented)
 export interface FileUploadProps extends Omit<React_2.ComponentProps<'div'>, 'children' | 'onChange' | 'defaultValue' | 'id' | 'aria-label' | 'aria-describedby' | 'aria-invalid'> {
-    // (undocumented)
     'aria-describedby'?: string;
-    // (undocumented)
     'aria-invalid'?: boolean | 'true' | 'false';
-    // (undocumented)
     'aria-label'?: string;
     accept?: string;
     defaultFiles?: FileUploadItem[];
-    // (undocumented)
     disabled?: boolean;
-    // (undocumented)
     id?: string;
     locale?: Intl.LocalesArgument;
     maxConcurrent?: number;
     maxFiles?: number;
     maxSize?: number;
     messages?: Partial<FileUploadMessages>;
-    // (undocumented)
     multiple?: boolean;
     name?: string;
     onFilesChange?: (files: FileUploadItem[]) => void;
     onReject?: (rejections: FileRejection[]) => void;
     onUpload?: (file: File, context: UploadContext) => Promise<void>;
-    // (undocumented)
     required?: boolean;
 }
 
@@ -1345,7 +1208,6 @@ export type HeadingLevel = 1 | 2 | 3 | 4;
 
 // @public (undocumented)
 export interface HeadingProps extends React_2.ComponentProps<'h2'> {
-    // (undocumented)
     level: HeadingLevel;
     // @deprecated (undocumented)
     size?: HeadingLevel;
@@ -1461,9 +1323,7 @@ export function MenuCheckboxItem(input: MenuCheckboxItemProps): React_2.JSX.Elem
 
 // @public (undocumented)
 export interface MenuCheckboxItemProps extends Omit<Menu_2.CheckboxItem.Props, 'className'> {
-    // (undocumented)
     className?: string;
-    // (undocumented)
     shortcut?: string;
 }
 
@@ -1472,15 +1332,10 @@ export function MenuContent(input: MenuContentProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface MenuContentProps extends Omit<Menu_2.Popup.Props, 'className'> {
-    // (undocumented)
     align?: Menu_2.Positioner.Props['align'];
-    // (undocumented)
     alignOffset?: number;
-    // (undocumented)
     className?: string;
-    // (undocumented)
     side?: Menu_2.Positioner.Props['side'];
-    // (undocumented)
     sideOffset?: number;
 }
 
@@ -1497,10 +1352,8 @@ export function MenuItem(input: MenuItemProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface MenuItemProps extends Omit<Menu_2.Item.Props, 'className'> {
-    // (undocumented)
     className?: string;
     icon?: React_2.ReactNode;
-    // (undocumented)
     shortcut?: string;
     tone?: 'neutral' | 'danger' | 'default';
 }
@@ -1513,7 +1366,6 @@ export function MenuRadioItem(input: MenuRadioItemProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface MenuRadioItemProps extends Omit<Menu_2.RadioItem.Props, 'className'> {
-    // (undocumented)
     className?: string;
 }
 
@@ -1533,9 +1385,7 @@ export function MenuSubmenuTrigger(input: MenuSubmenuTriggerProps): React_2.JSX.
 
 // @public (undocumented)
 export interface MenuSubmenuTriggerProps extends Omit<Menu_2.SubmenuTrigger.Props, 'className'> {
-    // (undocumented)
     className?: string;
-    // (undocumented)
     icon?: React_2.ReactNode;
 }
 
@@ -1553,12 +1403,9 @@ export interface MessageProps extends Omit<React_2.ComponentProps<'article'>, 'r
     feedback?: 'up' | 'down';
     model?: string;
     onFeedback?: (value: 'up' | 'down') => void;
-    // (undocumented)
     onRetry?: () => void;
-    // (undocumented)
     role: MessageRole;
     status?: 'streaming' | 'done' | 'error';
-    // (undocumented)
     timestamp?: Date | string;
     timeZone?: string;
 }
@@ -1582,17 +1429,13 @@ export function meterLevel(value: number, input: {
 
 // @public (undocumented)
 export interface MeterProps extends Omit<Meter_2.Root.Props, 'className' | 'children'> {
-    // (undocumented)
     className?: string;
-    // (undocumented)
     label?: React_2.ReactNode;
-    // (undocumented)
     size?: ProgressSize;
     thresholds?: {
         warn?: number;
         danger?: number;
     };
-    // (undocumented)
     valueText?: (formatted: string, value: number) => React_2.ReactNode;
 }
 
@@ -1612,7 +1455,6 @@ export interface NavItemProps extends Omit<useRender.ComponentProps<'a'>, 'child
     count?: number;
     countLabel?: string;
     countTone?: 'neutral' | 'danger' | 'attention';
-    // (undocumented)
     icon?: React_2.ReactNode;
 }
 
@@ -1631,33 +1473,24 @@ export function NumberInput(input: NumberInputProps): React_2.JSX.Element;
 
 // @public
 export interface NumberInputProps extends Omit<React_2.ComponentProps<'input'>, 'value' | 'defaultValue' | 'onChange' | 'size' | 'children' | 'min' | 'max' | 'step' | 'type'> {
-    // (undocumented)
     allowOutOfRange?: boolean;
     allowWheelScrub?: boolean;
-    // (undocumented)
     decrementLabel?: string;
-    // (undocumented)
     defaultValue?: number;
     format?: Intl.NumberFormatOptions;
     incrementLabel?: string;
     label?: React_2.ReactNode;
     largeStep?: number;
     locale?: Intl.LocalesArgument;
-    // (undocumented)
     max?: number;
-    // (undocumented)
     min?: number;
-    // (undocumented)
     onValueChange?: (value: number | null) => void;
     onValueCommitted?: NumberField.Root.Props['onValueCommitted'];
-    // (undocumented)
     size?: FieldControlSize;
     smallStep?: number;
-    // (undocumented)
     snapOnStep?: boolean;
     step?: number | 'any';
     unit?: string;
-    // (undocumented)
     value?: number | null;
     wrapperClassName?: string;
 }
@@ -1667,16 +1500,11 @@ export function PageHeader(input: PageHeaderProps): React_2.JSX.Element;
 
 // @public
 export interface PageHeaderProps extends Omit<React_2.ComponentProps<'header'>, 'title'> {
-    // (undocumented)
     actions?: React_2.ReactNode;
-    // (undocumented)
     breadcrumb?: React_2.ReactNode;
-    // (undocumented)
     description?: React_2.ReactNode;
-    // (undocumented)
     meta?: React_2.ReactNode[];
     tabs?: React_2.ReactNode;
-    // (undocumented)
     title: React_2.ReactNode;
 }
 
@@ -1688,16 +1516,12 @@ export function Pagination(input: PaginationProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface PaginationProps extends Omit<React_2.ComponentProps<'nav'>, 'onChange'> {
-    // (undocumented)
     onPageChange: (page: number) => void;
     page: number;
-    // (undocumented)
     pageCount: number;
     pageSize?: number;
     siblings?: number;
-    // (undocumented)
     total?: number;
-    // (undocumented)
     variant?: 'pages' | 'compact';
 }
 
@@ -1769,15 +1593,10 @@ export function PopoverContent(input: PopoverContentProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface PopoverContentProps extends Omit<Popover_2.Popup.Props, 'className' | 'title'> {
-    // (undocumented)
     align?: Popover_2.Positioner.Props['align'];
-    // (undocumented)
     className?: string;
-    // (undocumented)
     description?: React_2.ReactNode;
-    // (undocumented)
     side?: Popover_2.Positioner.Props['side'];
-    // (undocumented)
     sideOffset?: number;
     title?: React_2.ReactNode;
 }
@@ -1790,11 +1609,9 @@ export function Progress(input: ProgressProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface ProgressProps extends Omit<Progress_2.Root.Props, 'className' | 'children'> {
-    // (undocumented)
     className?: string;
     label?: React_2.ReactNode;
     showValue?: boolean;
-    // (undocumented)
     size?: ProgressSize;
     tone?: 'neutral' | 'success' | 'danger' | 'ink';
     valueText?: (formatted: string | null, value: number | null) => React_2.ReactNode;
@@ -1809,23 +1626,18 @@ export function PromptInput(input: PromptInputProps): React_2.JSX.Element;
 // @public (undocumented)
 export interface PromptInputProps extends Omit<React_2.ComponentProps<'form'>, 'onSubmit' | 'onChange' | 'children'> {
     attachments?: React_2.ReactNode;
-    // (undocumented)
     defaultValue?: string;
-    // (undocumented)
     disabled?: boolean;
     label: string;
     maxRows?: number;
     onStop?: () => void;
     onSubmit: (value: string) => void;
-    // (undocumented)
     onValueChange?: (value: string) => void;
-    // (undocumented)
     placeholder?: string;
     showEstimate?: boolean;
     status?: 'idle' | 'generating' | 'offline';
     submitOn?: 'enter' | 'mod-enter';
     toolbar?: React_2.ReactNode;
-    // (undocumented)
     value?: string;
 }
 
@@ -1856,22 +1668,16 @@ export function RadioGroup(input: RadioGroupProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface RadioGroupProps extends Omit<RadioGroup_2.Props, 'className'> {
-    // (undocumented)
     className?: string;
-    // (undocumented)
     description?: React_2.ReactNode;
     label: React_2.ReactNode;
-    // (undocumented)
     orientation?: 'vertical' | 'horizontal';
 }
 
 // @public (undocumented)
 export interface RadioProps extends Omit<Radio_2.Root.Props, 'className'> {
-    // (undocumented)
     className?: string;
-    // (undocumented)
     description?: React_2.ReactNode;
-    // (undocumented)
     label?: React_2.ReactNode;
     wrapperClassName?: string;
 }
@@ -1881,12 +1687,9 @@ export function Reasoning(input: ReasoningProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface ReasoningProps extends Omit<React_2.ComponentProps<'div'>, 'children'> {
-    // (undocumented)
     defaultOpen?: boolean;
     durationMs?: number;
-    // (undocumented)
     endedAt?: number | Date;
-    // (undocumented)
     startedAt?: number | Date;
     status?: 'streaming' | 'done';
     text: string;
@@ -1943,17 +1746,13 @@ export interface RunErrorProps extends Omit<React_2.ComponentProps<'div'>, 'chil
     autoRetry?: boolean;
     copyable?: boolean;
     error?: string;
-    // (undocumented)
     kind?: RunErrorKind;
     message?: React_2.ReactNode;
-    // (undocumented)
     onRetry?: () => void;
-    // (undocumented)
     onRetryFromStep?: () => void;
     retryAt?: number | Date;
     runId?: string;
     step?: string;
-    // (undocumented)
     stepCount?: number;
     stepNumber?: number;
     tool?: string;
@@ -1967,7 +1766,6 @@ export function RunStatusGlyph(input: RunStatusGlyphProps): React_2.JSX.Element;
 
 // @public
 export interface RunStatusGlyphProps extends Omit<React_2.ComponentProps<'span'>, 'children'> {
-    // (undocumented)
     status: RunStatusValue;
 }
 
@@ -1978,7 +1776,6 @@ export interface RunStatusProps extends Omit<React_2.ComponentProps<'span'>, 'ch
     label?: string;
     register?: 'label' | 'inline';
     startedAt?: number | Date;
-    // (undocumented)
     status: RunStatusValue;
 }
 
@@ -2005,11 +1802,8 @@ export function SectionHeader(input: SectionHeaderProps): React_2.JSX.Element;
 export interface SectionHeaderProps extends Omit<React_2.ComponentProps<'div'>, 'title'> {
     actions?: React_2.ReactNode;
     label?: string;
-    // (undocumented)
     lead?: React_2.ReactNode;
-    // (undocumented)
     level?: 1 | 2 | 3;
-    // (undocumented)
     title: React_2.ReactNode;
 }
 
@@ -2024,19 +1818,13 @@ export function SegmentedControl<V extends string = string>(input: SegmentedCont
 
 // @public (undocumented)
 export interface SegmentedControlBaseProps<V extends string = string> extends Omit<React_2.ComponentProps<'div'>, 'defaultValue' | 'onChange' | 'children' | 'aria-label' | 'aria-labelledby'> {
-    // (undocumented)
     defaultValue?: V;
-    // (undocumented)
     disabled?: boolean;
     fill?: boolean;
     iconOnly?: boolean;
-    // (undocumented)
     onValueChange?: (value: V) => void;
-    // (undocumented)
     options: SegmentedOption<V>[];
-    // (undocumented)
     size?: 'sm' | 'md';
-    // (undocumented)
     value?: V;
 }
 
@@ -2113,24 +1901,16 @@ export interface SelectOptionGroup<V extends string = string> {
 
 // @public (undocumented)
 export interface SelectProps<V extends string = string> extends Omit<SelectTriggerProps, 'value' | 'defaultValue' | 'children' | 'placeholder' | 'size' | 'disabled'> {
-    // (undocumented)
     defaultValue?: V | null;
-    // (undocumented)
     disabled?: boolean;
     items: SelectOption<V>[] | SelectOptionGroup<V>[];
     label?: React_2.ReactNode;
-    // (undocumented)
     name?: string;
-    // (undocumented)
     onValueChange?: (value: V | null) => void;
-    // (undocumented)
     placeholder?: React_2.ReactNode;
-    // (undocumented)
     required?: boolean;
     rootProps?: Omit<Select_2.Root.Props<V>, 'items' | 'value' | 'defaultValue' | 'onValueChange' | 'children'>;
-    // (undocumented)
     size?: FieldControlSize;
-    // (undocumented)
     value?: V | null;
     wrapperClassName?: string;
 }
@@ -2151,7 +1931,6 @@ export interface SelectTriggerProps extends Select_2.Trigger.Props {
     // (undocumented)
     className?: string;
     placeholder?: React_2.ReactNode;
-    // (undocumented)
     size?: FieldControlSize;
 }
 
@@ -2173,9 +1952,7 @@ export interface SidebarContextValue {
 
 // @public
 export interface SidebarProps extends Omit<React_2.ComponentProps<'nav'>, 'aria-label'> {
-    // (undocumented)
     footer?: React_2.ReactNode;
-    // (undocumented)
     header?: React_2.ReactNode;
     label: string;
 }
@@ -2209,7 +1986,6 @@ export function SkeletonText(input: SkeletonTextProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface SkeletonTextProps extends React_2.ComponentProps<'div'> {
-    // (undocumented)
     lines?: number;
 }
 
@@ -2224,11 +2000,9 @@ export function Slider(input: SliderProps): React_2.JSX.Element;
 
 // @public
 export interface SliderProps extends Omit<Slider_2.Root.Props<number | readonly number[]>, 'className' | 'children'> {
-    // (undocumented)
     className?: string;
     formatValue?: (formatted: string, value: number) => React_2.ReactNode;
     label?: React_2.ReactNode;
-    // (undocumented)
     maxLabel?: React_2.ReactNode;
     minLabel?: React_2.ReactNode;
     showValue?: boolean;
@@ -2255,7 +2029,6 @@ export function SourceList(input: SourceListProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface SourceListProps extends Omit<React_2.ComponentProps<'ol'>, 'children'> {
-    // (undocumented)
     sources: readonly Source[];
     timeZone?: string;
 }
@@ -2265,11 +2038,8 @@ export function Sparkline(input: SparklineProps): React_2.JSX.Element | null;
 
 // @public
 export interface SparklineProps extends Omit<React_2.ComponentProps<'svg'>, 'values' | 'children'> {
-    // (undocumented)
     height?: number;
-    // (undocumented)
     values: number[];
-    // (undocumented)
     width?: number;
 }
 
@@ -2311,14 +2081,11 @@ export interface StatGroupProps extends React_2.ComponentProps<'dl'> {
 
 // @public (undocumented)
 export interface StatProps extends Omit<React_2.ComponentProps<'div'>, 'children'> {
-    // (undocumented)
     delta?: StatDelta;
     hint?: React_2.ReactNode;
-    // (undocumented)
     label: React_2.ReactNode;
     trend?: number[];
     unit?: React_2.ReactNode;
-    // (undocumented)
     value: React_2.ReactNode;
 }
 
@@ -2329,7 +2096,6 @@ export function StatusDot(input: StatusDotProps): React_2.JSX.Element;
 export interface StatusDotProps extends React_2.ComponentProps<'span'> {
     label?: string;
     pulse?: boolean;
-    // (undocumented)
     tone?: BadgeTone;
 }
 
@@ -2350,9 +2116,7 @@ export interface StepListItem {
 // @public (undocumented)
 export interface StepListProps extends Omit<React_2.ComponentProps<'ol'>, 'children'> {
     inverse?: boolean;
-    // (undocumented)
     items: StepListItem[];
-    // (undocumented)
     titleAs?: 'h3' | 'h4' | 'p';
     // @deprecated (undocumented)
     tone?: 'default' | 'inverse';
@@ -2366,7 +2130,6 @@ export interface StreamingTextProps extends Omit<React_2.ComponentProps<'div'>, 
     doneAnnouncement?: string;
     errorAnnouncement?: string;
     renderCitation?: (n: number) => React_2.ReactNode;
-    // (undocumented)
     status?: StreamStatus;
     text: string;
     // @deprecated (undocumented)
@@ -2399,11 +2162,8 @@ export function Switch(input: SwitchProps): React_2.JSX.Element;
 
 // @public
 export interface SwitchProps extends Omit<Switch_2.Root.Props, 'className'> {
-    // (undocumented)
     className?: string;
-    // (undocumented)
     description?: React_2.ReactNode;
-    // (undocumented)
     label?: React_2.ReactNode;
     labelPosition?: 'start' | 'end';
     wrapperClassName?: string;
@@ -2441,11 +2201,8 @@ export function TableEmpty(input: TableEmptyProps): React_2.JSX.Element;
 // @public
 export interface TableEmptyProps extends Omit<React_2.ComponentProps<'tr'>, 'title'> {
     actions?: React_2.ReactNode;
-    // (undocumented)
     colSpan: number;
-    // (undocumented)
     kind?: EmptyStateProps['kind'];
-    // (undocumented)
     title?: React_2.ReactNode;
     // @deprecated (undocumented)
     variant?: EmptyStateProps['kind'];
@@ -2463,7 +2220,6 @@ export function TableHeader(input: React_2.ComponentProps<'thead'>): React_2.JSX
 // @public (undocumented)
 export interface TableHeadProps extends React_2.ComponentProps<'th'> {
     numeric?: boolean;
-    // (undocumented)
     onSort?: () => void;
     sort?: TableSortDirection;
 }
@@ -2488,7 +2244,6 @@ export function TableSkeletonRows(input: TableSkeletonRowsProps): React_2.JSX.El
 
 // @public (undocumented)
 export interface TableSkeletonRowsProps {
-    // (undocumented)
     columns: number;
     rows?: number;
 }
@@ -2504,7 +2259,6 @@ export function TabsList(input: TabsListProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface TabsListProps extends Omit<Tabs_2.List.Props, 'className'> {
-    // (undocumented)
     className?: string;
     // (undocumented)
     ref?: React_2.Ref<HTMLDivElement>;
@@ -2515,15 +2269,12 @@ export function TabsPanel(input: TabsPanelProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface TabsPanelProps extends Omit<Tabs_2.Panel.Props, 'className'> {
-    // (undocumented)
     className?: string;
 }
 
 // @public (undocumented)
 export interface TabsProps extends Omit<Tabs_2.Root.Props, 'className'> {
-    // (undocumented)
     className?: string;
-    // (undocumented)
     variant?: TabsVariant;
 }
 
@@ -2532,10 +2283,8 @@ export function TabsTab(input: TabsTabProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface TabsTabProps extends Omit<Tabs_2.Tab.Props, 'className'> {
-    // (undocumented)
     className?: string;
     count?: number;
-    // (undocumented)
     icon?: React_2.ReactNode;
 }
 
@@ -2558,9 +2307,7 @@ export { TextDirection }
 
 // @public (undocumented)
 export interface TextProps extends Omit<React_2.HTMLAttributes<HTMLElement>, 'color'>, Variants<typeof textVariants> {
-    // (undocumented)
     as?: 'p' | 'span' | 'div';
-    // (undocumented)
     ref?: React_2.Ref<HTMLElement>;
 }
 
@@ -2602,7 +2349,6 @@ export interface TimelineItem {
 // @public (undocumented)
 export interface TimelineProps extends Omit<React_2.ComponentProps<'ol'>, 'children'> {
     gap?: 'spaced' | 'flush';
-    // (undocumented)
     items: TimelineItem[];
     label: string;
     // @deprecated (undocumented)
@@ -2662,9 +2408,7 @@ export interface TokenUsageProps extends Omit<React_2.ComponentProps<'div'>, 'ch
     cached?: number;
     contextWindow?: number;
     costUsd?: number;
-    // (undocumented)
     input: number;
-    // (undocumented)
     output: number;
     variant?: 'full' | 'inline';
 }
@@ -2677,9 +2421,7 @@ export function ToolbarButton(input: ToolbarButtonProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface ToolbarButtonProps extends Omit<Toolbar_2.Button.Props, 'className'>, Variants<typeof buttonVariants> {
-    // (undocumented)
     className?: string;
-    // (undocumented)
     icon?: React_2.ReactNode;
 }
 
@@ -2693,7 +2435,6 @@ export function ToolbarInput(input: ToolbarInputProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface ToolbarInputProps extends Omit<Toolbar_2.Input.Props, 'className' | 'size'> {
-    // (undocumented)
     className?: string;
     icon?: React_2.ReactNode | false;
     wrapperClassName?: string;
@@ -2727,7 +2468,6 @@ export interface ToolbarOverflowProps extends Omit<React_2.ComponentProps<'div'>
 // @public (undocumented)
 export interface ToolbarProps extends Omit<Toolbar_2.Root.Props, 'className'>, Variants<typeof toolbarVariants> {
     'aria-label': string;
-    // (undocumented)
     className?: string;
 }
 
@@ -2736,7 +2476,6 @@ export function ToolbarSeparator(input: ToolbarSeparatorProps): React_2.JSX.Elem
 
 // @public (undocumented)
 export interface ToolbarSeparatorProps extends Omit<Toolbar_2.Separator.Props, 'className'> {
-    // (undocumented)
     className?: string;
 }
 
@@ -2749,21 +2488,15 @@ export function ToolbarToggleGroup(input: ToolbarToggleGroupProps): React_2.JSX.
 // @public (undocumented)
 export interface ToolbarToggleGroupProps extends Omit<ToggleGroup.Props, 'className'> {
     'aria-label': string;
-    // (undocumented)
     className?: string;
 }
 
 // @public (undocumented)
 export interface ToolbarToggleProps extends Omit<Toolbar_2.Button.Props, 'className' | 'value'>, Pick<Variants<typeof buttonVariants>, 'size'> {
-    // (undocumented)
     className?: string;
-    // (undocumented)
     defaultPressed?: boolean;
-    // (undocumented)
     icon?: React_2.ReactNode;
-    // (undocumented)
     onPressedChange?: (pressed: boolean) => void;
-    // (undocumented)
     pressed?: boolean;
     value?: string;
 }
@@ -2794,7 +2527,6 @@ export function ToolCallGroup(input: ToolCallGroupProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface ToolCallGroupProps extends React_2.ComponentProps<'div'> {
-    // (undocumented)
     count: number;
     label?: string;
 }
@@ -2804,21 +2536,15 @@ export interface ToolCallProps extends Omit<React_2.ComponentProps<'div'>, 'chil
     approval?: ToolCallApproval;
     args?: unknown;
     defaultOpen?: boolean;
-    // (undocumented)
     durationMs?: number;
-    // (undocumented)
     endedAt?: number | Date;
     error?: string;
     name: string;
-    // (undocumented)
     onOpenChange?: (open: boolean) => void;
-    // (undocumented)
     onRetry?: () => void;
     open?: boolean;
     result?: unknown;
-    // (undocumented)
     startedAt?: number | Date;
-    // (undocumented)
     status: RunStatusValue;
     title?: string;
 }
@@ -2828,21 +2554,15 @@ export function Tooltip(input: TooltipProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface TooltipProps extends Omit<React_2.ComponentProps<'div'>, 'children' | 'content' | 'role'> {
-    // (undocumented)
     align?: Tooltip_2.Positioner.Props['align'];
     children: React_2.ReactElement;
-    // (undocumented)
     content: React_2.ReactNode;
-    // (undocumented)
     defaultOpen?: boolean;
     delay?: number;
     disabled?: boolean;
-    // (undocumented)
     onOpenChange?: Tooltip_2.Root.Props['onOpenChange'];
-    // (undocumented)
     open?: boolean;
     shortcut?: string[];
-    // (undocumented)
     side?: Tooltip_2.Positioner.Props['side'];
 }
 

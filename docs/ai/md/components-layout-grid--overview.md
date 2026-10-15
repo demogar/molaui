@@ -44,8 +44,8 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `cols` | `"halves" \| "thirds" \| "quarters" \| "fifths" \| "auto"` |  |  |
-| `gap` | `"tight" \| "default" \| "wide" \| "seamless"` |  |  |
+| `cols` | `"halves" \| "thirds" \| "quarters" \| "fifths" \| "auto"` |  | The column pattern, one or two columns on a phone and more at each breakpoint; `thirds` by default. `auto` fits as many `minItem`-wide columns as the space allows and needs no breakpoint. |
+| `gap` | `"tight" \| "default" \| "wide" \| "seamless"` |  | Space between cells, on the spacing scale. `seamless` closes the gap to a shared keyline, so the cells read as one panel cut into pieces. |
 | `minItem` | `string` |  | For `cols="auto"`: the narrowest a cell may get, as a CSS length. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="grid">`.

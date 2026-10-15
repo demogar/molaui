@@ -397,6 +397,24 @@ for (const info of exportsInfo) {
   entry.exports.push(item)
 }
 
+/*
+ * Every prop the manifest lists is ours: a DOM attribute from @types/react
+ * and a prop inherited from a Base UI part are filtered out above and named
+ * in `inherits`, because their own docs cover them. What is left is a prop an
+ * agent or a reader cannot learn about anywhere else, so one without a
+ * description fails here. At the audit (2026-10-14) 344 of 656 had none, and
+ * the agent docs printed an empty column for each. A cva variant takes its
+ * description from a doc comment on the variant key in the `cva` call, which
+ * TypeScript carries through `Variants<…>` to the props table.
+ */
+const undocumented = [...entries.values()].flatMap((entry) =>
+  entry.exports.flatMap((item) => (item.props ?? []).filter((p) => !p.description && p.deprecated === undefined).map((p) => `${item.name}.${p.name} (${item.source})`)),
+)
+if (undocumented.length) {
+  console.error(`Public props without a description (add a doc comment that says what the prop does and when to use it):\n  ${undocumented.join('\n  ')}`)
+  process.exitCode = 1
+}
+
 const sorted = [...entries.values()].sort((a, b) => a.title.localeCompare(b.title))
 for (const entry of sorted) entry.exports.sort((a, b) => Number(b.kind === 'component') - Number(a.kind === 'component'))
 

@@ -47,6 +47,10 @@ export const badgeVariants = cva(
   ],
   {
     variants: {
+      /**
+       * The status the badge states, as one of the four layers. Say the state
+       * in the label too: the tone colours it, the words carry it.
+       */
       tone: {
         neutral: '',
         info: '',
@@ -55,6 +59,11 @@ export const badgeVariants = cva(
         danger: '',
         accent: '',
       },
+      /**
+       * How loud the claim is: `soft` (default) for a column of statuses,
+       * `solid` for the one state that must be seen from across the room,
+       * `outline` for categorical metadata.
+       */
       variant: {
         solid: '',
         soft: '',
@@ -130,6 +139,7 @@ const DOT_TONE: Record<BadgeTone, string> = {
 }
 
 export interface StatusDotProps extends React.ComponentProps<'span'> {
+  /** The status, in the same tones as Badge. Defaults to `neutral`. */
   tone?: BadgeTone
   /** The state is live. Respects reduced motion: the pulse stills, the dot stays. */
   pulse?: boolean
@@ -175,6 +185,10 @@ export function StatusDot({ tone = 'neutral', pulse = false, label, className, .
  */
 export const recommendationVariants = cva('inline-flex items-center rotulo px-2.5 py-[6px] rounded-none shadow-cut', {
   variants: {
+    /**
+     * How strongly the recommendation is made, from `essential` (gold) down to
+     * `time`. Each level brings its own label; pass children only to reword it.
+     */
     level: {
       essential: 'bg-oro text-on-oro',
       highly: 'bg-cloth-pale text-ink',

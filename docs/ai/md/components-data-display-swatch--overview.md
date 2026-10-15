@@ -51,9 +51,9 @@ Decorative by contract: a swatch is always hidden from assistive technology, so 
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `shape` | `"square" \| "round"` |  |  |
-| `size` | `"sm" \| "md"` |  |  |
-| `tone` | `"neutral" \| "info" \| "success" \| "warn" \| "danger" \| "accent"` |  |  |
+| `shape` | `"square" \| "round"` |  | `square` (default), or `round` only when the thing keyed is itself a dot, such as a map pin. |
+| `size` | `"sm" \| "md"` |  | `md` (default) beside body text, `sm` beside a label or a small figure. |
+| `tone` | `"neutral" \| "info" \| "success" \| "warn" \| "danger" \| "accent"` |  | The colour keyed, in the badge tones so a key and a status for the same thing agree; `neutral` by default. |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="swatch">`.
 

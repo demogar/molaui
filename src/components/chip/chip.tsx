@@ -41,6 +41,10 @@ export const chipVariants = cva(
   ],
   {
     variants: {
+      /**
+       * `sm` (default) is a one-line filter chip that never wraps; `md` is a
+       * control height tall and lets a longer label wrap.
+       */
       size: {
         /** Filter chips: one line, never wraps. */
         sm: 'h-(--control-h-sm) px-[calc(var(--control-px)*0.85)] leading-none whitespace-nowrap',

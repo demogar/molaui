@@ -121,11 +121,11 @@ You handle:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the button, merged with `cn()` so yours win a conflict. A string, not Base UI's function of state: style a state with its `data-*` attribute (`data-disabled:`). |
 | `icon` | `ReactNode` |  | Leading icon. Decorative: the label is the accessible name. |
 | `loading` | `boolean` | `false` | Work is in flight. The label stays (so the button never changes width mid-click), a strip of working relleno runs along its foot, and the button stops accepting presses while staying focusable and announced as busy. |
-| `size` | `"sm" \| "md" \| "lg"` |  |  |
-| `variant` | `"primary" \| "secondary" \| "danger" \| "ghost"` |  |  |
+| `size` | `"sm" \| "md" \| "lg"` |  | The control height. Density already re-scales every size, so reach for a different one only to set a button apart from its neighbours, not to make a whole screen compact. |
+| `variant` | `"primary" \| "secondary" \| "danger" \| "ghost"` |  | The weight of the action: `primary` (ink) for the panel's main action, `secondary` beside it, `danger` only for what destroys something, `ghost` for low-stakes actions in dense rows. |
 | `withArrow` | `boolean` | `false` | Trailing arrow that slides 3px on hover — for actions that move you somewhere. |
 
 Also accepts the props of `ButtonProps`, `NativeButtonProps`.
@@ -143,10 +143,10 @@ A square button that carries only an icon. `label` is required and becomes the a
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `label` (required) | `string` |  | The accessible name. Required: an icon is not a label. |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the button, merged with `cn()` so yours win a conflict. A string, not Base UI's function of state: style a state with its `data-*` attribute (`data-disabled:`). |
 | `loading` | `boolean` |  | Work is in flight. The label stays (so the button never changes width mid-click), a strip of working relleno runs along its foot, and the button stops accepting presses while staying focusable and announced as busy. |
-| `size` | `"sm" \| "md" \| "lg"` |  |  |
-| `variant` | `"secondary" \| "danger" \| "primary" \| "ghost"` |  |  |
+| `size` | `"sm" \| "md" \| "lg"` |  | The control height. Density already re-scales every size, so reach for a different one only to set a button apart from its neighbours, not to make a whole screen compact. |
+| `variant` | `"secondary" \| "danger" \| "primary" \| "ghost"` |  | The weight of the action: `primary` (ink) for the panel's main action, `secondary` beside it, `danger` only for what destroys something, `ghost` for low-stakes actions in dense rows. |
 
 Also accepts the props of `ButtonProps`, `NativeButtonProps`.
 
@@ -205,8 +205,8 @@ You handle:
 | --- | --- | --- | --- |
 | `name` (required) | `string` |  | The person's or agent's name. Becomes the accessible name and seeds the colour. |
 | `icon` | `ReactNode` |  | Shown instead of initials when there is no image — e.g. a bot glyph for an agent. |
-| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` |  |  |
-| `src` | `string` |  |  |
+| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` |  | The square's side, on the spacing scale so density re-scales it: `md` for a table row or a message, `xs`/`sm` inline with text, `lg`/`xl` for a profile header. |
+| `src` | `string` |  | An image URL. The initials stay until it has loaded, and stay for good if it fails, so a broken URL never shows a broken-image glyph. |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="avatar">`.
 
@@ -218,7 +218,7 @@ Overlapping tiles, each separated from the next by a ring of the page ground ins
 | --- | --- | --- | --- |
 | `label` (required) | `string` |  | Names the group: "Reviewers", "On call". |
 | `max` | `number` | `4` | Show at most this many; the rest collapse into a "+n" tile. |
-| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` | `md` |  |
+| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` | `md` | Every tile's size, the "+n" tile's included; it overrides the size set on each child, so the row stays even. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="avatar-group">`.
 
@@ -285,11 +285,11 @@ A block of machine text — a tool call's arguments, a query, a log tail.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `code` (required) | `string` |  |  |
+| `code` (required) | `string` |  | The text, exactly as it should be copied. Rendered verbatim; format JSON before passing it. |
 | `copyable` | `boolean` | `true` | Hide the copy button — for payloads that must not leave the page. |
 | `label` | `string` |  | A filename or a role — "arguments", "result", "query.sql". |
 | `language` | `CodeLanguage` | `text` | Shown as a tag in the header. Only `json` is tokenized; everything else is plain. |
-| `lineNumbers` | `boolean` | `false` |  |
+| `lineNumbers` | `boolean` | `false` | A gutter of line numbers that stays put as the code scrolls sideways. Hidden from assistive tech and never copied. Off by default; turn it on when someone will cite a line. |
 | `maxHeight` | `string` |  | Scroll inside after this height (any CSS length). |
 | `wrap` | `boolean` | `false` | Start with long lines wrapped. The reader can toggle it. |
 
@@ -343,8 +343,8 @@ You handle:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `items` (required) | `DescriptionItem[]` |  |  |
-| `layout` | `"inline" \| "stacked" \| "grid"` | `inline` |  |
+| `items` (required) | `DescriptionItem[]` |  | The term and value pairs, in reading order. Mark ids and hashes `literal`. |
+| `layout` | `"inline" \| "stacked" \| "grid"` | `inline` | `inline` (default): term left, value right, for a side panel scanned top to bottom. `stacked`: term above value, for values long enough to wrap. `grid`: two columns under an ink rule, for a summary closing a section. |
 
 `className`, `ref`, `id` and the other DOM props go to `<dl data-slot="description-list">`.
 
@@ -403,9 +403,9 @@ Anatomy:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `values` (required) | `number[]` |  |  |
-| `height` | `number` | `24` |  |
-| `width` | `number` | `72` |  |
+| `values` (required) | `number[]` |  | The series, oldest first, scaled to its own minimum and maximum. The latest point is cut out in the accent. Empty draws nothing. Decorative: say the figure in text beside it. |
+| `height` | `number` | `24` | Drawn height in pixels, 24 by default. |
+| `width` | `number` | `72` | Drawn width in pixels, 72 by default. |
 
 `className`, `ref`, `id` and the other DOM props go to `<svg data-slot="sparkline">`.
 
@@ -413,9 +413,9 @@ Anatomy:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `label` (required) | `ReactNode` |  |  |
-| `value` (required) | `ReactNode` |  |  |
-| `delta` | `StatDelta` |  |  |
+| `label` (required) | `ReactNode` |  | What the figure measures, set in the label register: "p95 latency", "Runs today". It is the tile's term. |
+| `value` (required) | `ReactNode` |  | The figure itself, already formatted: "1,284", "97.8". Put the unit in `unit` rather than in the string. |
+| `delta` | `StatDelta` |  | The change since a reference period. State both which way it moved (`direction`, the glyph) and whether that is good (`sentiment`, the colour): up is not always good news. |
 | `hint` | `ReactNode` |  | A line of context under the figure. |
 | `trend` | `number[]` |  | The recent series, oldest first. Drawn in ink with the latest point cut out in the accent. |
 | `unit` | `ReactNode` |  | Set smaller beside the figure: "ms", "runs", "%". |
@@ -475,9 +475,9 @@ Decorative by contract: a swatch is always hidden from assistive technology, so 
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `shape` | `"square" \| "round"` |  |  |
-| `size` | `"sm" \| "md"` |  |  |
-| `tone` | `"neutral" \| "info" \| "success" \| "warn" \| "danger" \| "accent"` |  |  |
+| `shape` | `"square" \| "round"` |  | `square` (default), or `round` only when the thing keyed is itself a dot, such as a map pin. |
+| `size` | `"sm" \| "md"` |  | `md` (default) beside body text, `sm` beside a label or a small figure. |
+| `tone` | `"neutral" \| "info" \| "success" \| "warn" \| "danger" \| "accent"` |  | The colour keyed, in the badge tones so a key and a status for the same thing agree; `neutral` by default. |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="swatch">`.
 
@@ -586,10 +586,10 @@ A native checkbox, drawn as a cut square. Native, so space toggles it, forms sub
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `colSpan` (required) | `number` |  |  |
+| `colSpan` (required) | `number` |  | How many columns the row spans: all of them, including a checkbox column, or the empty state sits in the first cell. |
 | `actions` | `ReactNode` |  | One or two buttons; for a filtered table, the one that clears the filters. |
-| `kind` | `"empty" \| "no-results" \| "error" \| "no-permission"` |  |  |
-| `title` | `ReactNode` | `Nothing here yet` |  |
+| `kind` | `"empty" \| "no-results" \| "error" \| "no-permission"` |  | Why it is empty, as on `EmptyState`: `empty` (the default), `no-results` when filters emptied it, `error`, or `no-permission`. |
+| `title` | `ReactNode` | `Nothing here yet` | The empty state's heading. Defaults to "Nothing here yet"; the children become its description. |
 | `variant` (deprecated) | `"empty" \| "no-results" \| "error" \| "no-permission"` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `kind`, as on `EmptyState`. |
 
 `className`, `ref`, `id` and the other DOM props go to `<tr data-slot="table-empty">`.
@@ -603,7 +603,7 @@ A native checkbox, drawn as a cut square. Native, so space toggles it, forms sub
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `numeric` | `boolean` | `false` | Right-align, for a column of figures. Header and cells must agree or the label floats off its numbers. |
-| `onSort` | `(() => void)` |  |  |
+| `onSort` | `(() => void)` |  | Called when the header's sort control is pressed. The page decides the next direction; only used with `sort`. |
 | `sort` | `TableSortDirection` |  | Makes the header a sort control. `none` renders the control in its idle state; `aria-sort` is only set on the column actually sorted, because announcing "not sorted" on every column is noise. |
 
 `className`, `ref`, `id` and the other DOM props go to `<th data-slot="table-head">`.
@@ -626,7 +626,7 @@ Loading rows: real rows at the real height, so the table does not jump when the 
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `columns` (required) | `number` |  |  |
+| `columns` (required) | `number` |  | How many cells each row draws: the table's column count, including a checkbox column. |
 | `rows` | `number` | `5` | How many rows to draw. |
 
 Renders no element of its own, so it takes no `className` or `ref`.
@@ -635,37 +635,37 @@ Renders no element of its own, so it takes no `className` or `ref`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `columns` (required) | `DataTableColumn<Row>[]` |  |  |
-| `getRowId` (required) | `(row: Row) => string` |  |  |
-| `rows` (required) | `Row[]` |  |  |
+| `columns` (required) | `DataTableColumn<Row>[]` |  | What each column shows, how it sorts and aligns, and whether it can be hidden. Order is display order. |
+| `getRowId` (required) | `(row: Row) => string` |  | A stable id per row. Selection is kept by id, so it survives sorting, paging and a refetch that returns new objects. |
+| `rows` (required) | `Row[]` |  | The data. Every row when the table sorts and pages itself; one page, already sorted, when `manual`. Never mutated. |
 | `bulkActions` | `((context: DataTableBulkContext) => ReactNode)` |  | Actions for the selected rows, shown in the bar above the table while any are selected. |
-| `caption` | `ReactNode` |  |  |
+| `caption` | `ReactNode` |  | A visible caption naming the table. Prefer it to `label` when the page has room: a visible name helps every reader, not only assistive tech. |
 | `columnMenu` | `boolean` | `false` | Adds a "Columns" menu to the bar above the table. |
-| `defaultHiddenColumns` | `Iterable<string>` |  |  |
-| `defaultPage` | `number` | `1` |  |
-| `defaultSelection` | `Iterable<string>` |  |  |
-| `defaultSort` | `DataTableSort` |  |  |
-| `empty` | `ReactNode \| DataTableEmpty` |  |  |
+| `defaultHiddenColumns` | `Iterable<string>` |  | Column keys hidden at the start when the table owns visibility. The reader can bring them back from the column menu. |
+| `defaultPage` | `number` | `1` | The page the table starts on when it owns paging, 1-based. Defaults to 1. |
+| `defaultSelection` | `Iterable<string>` |  | Row ids selected at the start when the table owns selection. |
+| `defaultSort` | `DataTableSort` |  | The sort the table starts with when it owns sorting. Clicking a sorted header cycles ascending → descending → off. |
+| `empty` | `ReactNode \| DataTableEmpty` |  | What shows when there are no rows: an empty state as data (title, description, kind, actions), or a node that becomes its description. Use `kind: "no- results"` when filters emptied it. |
 | `frameClassName` | `string` |  | Classes for the scrolling frame around the table. |
-| `framed` | `boolean` | `false` |  |
+| `framed` | `boolean` | `false` | Bounds the table with a keyline on a raised ground, for a table that is the panel rather than sitting in one. |
 | `hiddenColumns` | `ReadonlySet<string>` |  | Controlled hidden columns, by key. |
 | `label` | `string` |  | Names the table for assistive tech when there is no visible caption. |
-| `loading` | `boolean` | `false` |  |
+| `loading` | `boolean` | `false` | Shows skeleton rows at the real row height in place of the body and says "Loading…" in the bar, so the table does not jump when the data lands. |
 | `manual` | `boolean` | `false` | Sorting and paging are done by the server: rows are one page, already sorted. |
 | `noun` | `{ one: string; other: string; }` | `{ one: 'row', other: 'rows' }` | What a row is, for counts: `{ one: 'run', other: 'runs' }`. |
-| `onHiddenColumnsChange` | `((hidden: Set<string>) => void)` |  |  |
-| `onPageChange` | `((page: number) => void)` |  |  |
-| `onSelectionChange` | `((selection: Set<string>) => void)` |  |  |
-| `onSortChange` | `((sort: DataTableSort \| null) => void)` |  |  |
+| `onHiddenColumnsChange` | `((hidden: Set<string>) => void)` |  | Called with the new set of hidden column keys — to remember the choice between visits. |
+| `onPageChange` | `((page: number) => void)` |  | Called with the new page, 1-based. With `manual`, fetch that page here. |
+| `onSelectionChange` | `((selection: Set<string>) => void)` |  | Called with the new set of selected ids, across every page. |
+| `onSortChange` | `((sort: DataTableSort \| null) => void)` |  | Called with the new sort, or `null` when it is turned off. With `manual`, fetch the re-sorted page here; the table also resets to page 1. |
 | `page` | `number` |  | Controlled page, 1-based. |
 | `pageSize` | `number` |  | Rows per page. Setting it turns pagination on. |
-| `paginationVariant` | `"pages" \| "compact"` | `compact` |  |
+| `paginationVariant` | `"pages" \| "compact"` | `compact` | `compact` (the default) is previous/next with the range; `pages` numbers the pages, for a table where jumping matters more than stepping. |
 | `rowCount` | `number` |  | The total across every page, when `manual`. |
 | `rowLabel` | `((row: Row) => string)` |  | How a row checkbox is named, e.g. `(run) => \`Select ${run.id}\``. |
-| `selectable` | `boolean` | `false` |  |
+| `selectable` | `boolean` | `false` | Adds a checkbox column and a select-all in the header. Select-all covers the current page only, so paging never selects rows nobody has seen. |
 | `selection` | `ReadonlySet<string>` |  | Controlled selection. Pair with `onSelectionChange`. |
 | `sort` | `DataTableSort \| null` |  | Controlled sort. `null` is "no sort"; leave undefined to let the table own it. |
-| `stickyHeader` | `boolean` | `false` |  |
+| `stickyHeader` | `boolean` | `false` | Keeps the header row visible while the body scrolls. Give the frame a height with `frameClassName`. |
 | `wrapperClassName` | `string` |  | Classes for the outer element that holds the bar, the table and the pagination. |
 
 `className`, `ref`, `id` and the other DOM props go to `<table data-slot="table">`.
@@ -676,9 +676,9 @@ Renders no element of its own, so it takes no `className` or `ref`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `columns` (required) | `DataTableColumn<Row>[]` |  |  |
-| `hidden` (required) | `ReadonlySet<string>` |  |  |
-| `onToggle` (required) | `(key: string, visible: boolean) => void` |  |  |
+| `columns` (required) | `DataTableColumn<Row>[]` |  | Every column, hidden or not, so the menu can list them all. A column with `hideable: false` shows checked and disabled. |
+| `hidden` (required) | `ReadonlySet<string>` |  | The keys of the columns currently hidden. The last visible column cannot be hidden. |
+| `onToggle` (required) | `(key: string, visible: boolean) => void` |  | Called with a column's key and whether it should now be visible. The menu stays open, because columns are chosen several at a time. |
 
 `className`, `ref`, `id` and the other DOM props go to `<button data-slot="button">`.
 
@@ -734,9 +734,9 @@ Ruled, ordered steps — a runbook, an onboarding checklist, the stages of a rol
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `items` (required) | `StepListItem[]` |  |  |
+| `items` (required) | `StepListItem[]` |  | The steps, in order. An item without a `label` is numbered by position; one authored label widens the column for every row. |
 | `inverse` | `false \| true` |  | Set the list on an ink panel. |
-| `titleAs` | `"h3" \| "h4" \| "p"` | `h3` |  |
+| `titleAs` | `"h3" \| "h4" \| "p"` | `h3` | The element each step title renders as, `h3` by default: a runbook's steps are its outline. Use `p` when they are not. |
 | `tone` (deprecated) | `"default" \| "inverse"` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `inverse`: `tone` is a status everywhere else, and this was a ground. |
 
 `className`, `ref`, `id` and the other DOM props go to `<ol data-slot="step-list">`.
@@ -747,7 +747,7 @@ Ruled, ordered steps — a runbook, an onboarding checklist, the stages of a rol
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `items` (required) | `TimelineItem[]` |  |  |
+| `items` (required) | `TimelineItem[]` |  | The events, in the order they happened, one node on the spine each. A `tone` on an item states its outcome. |
 | `label` (required) | `string` |  | Names the list, since the spine carries no heading of its own. |
 | `gap` | `"spaced" \| "flush"` | `spaced` | `spaced`   separate events, a gap between rows. `flush`    one continuous journey, carried by the connector alone. |
 | `size` (deprecated) | `TimelineVariant` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `variant`, which takes the same values: a type scale is a presentation, and `size` is the t-shirt scale everywhere else. |
@@ -808,8 +808,8 @@ You handle:
 | --- | --- | --- | --- |
 | `dot` | `boolean` | `false` | A leading StatusDot in the badge's tone. |
 | `pulse` | `boolean` | `false` | Pulse the dot — for a state that is live right now (running, streaming). |
-| `tone` | `"neutral" \| "info" \| "success" \| "warn" \| "danger" \| "accent"` |  |  |
-| `variant` | `"solid" \| "soft" \| "outline"` |  |  |
+| `tone` | `"neutral" \| "info" \| "success" \| "warn" \| "danger" \| "accent"` |  | The status the badge states, as one of the four layers. Say the state in the label too: the tone colours it, the words carry it. |
+| `variant` | `"solid" \| "soft" \| "outline"` |  | How loud the claim is: `soft` (default) for a column of statuses, `solid` for the one state that must be seen from across the room, `outline` for categorical metadata. |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="badge">`.
 
@@ -819,7 +819,7 @@ You handle:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `level` | `"essential" \| "highly" \| "detour" \| "time"` |  |  |
+| `level` | `"essential" \| "highly" \| "detour" \| "time"` |  | How strongly the recommendation is made, from `essential` (gold) down to `time`. Each level brings its own label; pass children only to reword it. |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="recommendation-badge">`.
 
@@ -831,7 +831,7 @@ A square, not a circle. It is a scrap of cut cloth, and a round dot is the one s
 | --- | --- | --- | --- |
 | `label` | `string` |  | Announced text for a dot used on its own. Omit when the dot sits beside a label that already says the state — then it is decorative and hidden. |
 | `pulse` | `boolean` | `false` | The state is live. Respects reduced motion: the pulse stills, the dot stays. |
-| `tone` | `BadgeTone` | `neutral` |  |
+| `tone` | `BadgeTone` | `neutral` | The status, in the same tones as Badge. Defaults to `neutral`. |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="status-dot">`.
 
@@ -914,9 +914,9 @@ Anatomy:
 | `headingLevel` | `2 \| 3 \| 4 \| 5` | `3` | The heading element for `title`. |
 | `icon` | `ReactNode` |  | Replace the tone's default mark — the icon, or in `flat` the square swatch — or `false` for none. |
 | `onDismiss` | `(() => void)` |  | Renders a dismiss button. The caller owns whether it comes back. |
-| `title` | `ReactNode` |  |  |
-| `tone` | `"neutral" \| "info" \| "success" \| "warn" \| "danger"` |  |  |
-| `variant` | `"seam" \| "flat"` |  |  |
+| `title` | `ReactNode` |  | A short heading that states the message. With it the callout becomes a region named by the title; without it, it is plain content and the body has to stand alone. |
+| `tone` | `"neutral" \| "info" \| "success" \| "warn" \| "danger"` |  | The status of the message, carried by the seam (or the swatch), the wash and the tone's icon; `info` by default. The title still has to say it in words. |
+| `variant` | `"seam" \| "flat"` |  | `seam` (default) is the full message: top seam, keyline, icon. `flat` keeps only the wash and a square swatch, for a one-line aside beside a hero or at the head of a list, where a seam reads as a stripe. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="callout">`.
 
@@ -987,13 +987,13 @@ Anatomy:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `title` (required) | `ReactNode` |  |  |
+| `title` (required) | `ReactNode` |  | What the state is, in a few words: "No saved replies yet", "Nothing matches 'refund'". |
 | `actions` | `ReactNode` |  | One or two buttons. The first is the way forward. |
-| `description` | `ReactNode` |  |  |
-| `headingLevel` | `2 \| 3 \| 4` | `3` |  |
+| `description` | `ReactNode` |  | One sentence on why, or on what the action will do. |
+| `headingLevel` | `2 \| 3 \| 4` | `3` | The element for `title`, `h3` by default. Set it from the page outline; the size stays the same. |
 | `icon` | `ReactNode` |  | Replace the kind's icon, or `false` for none. |
-| `kind` | `"empty" \| "no-results" \| "error" \| "no-permission"` |  |  |
-| `size` | `"sm" \| "md" \| "lg"` |  |  |
+| `kind` | `"empty" \| "no-results" \| "error" \| "no-permission"` |  | Which of the four conversations this is: `empty` (default, nothing yet), `no-results` (a filter hides everything), `error` (could not load; announced as an alert) or `no-permission`. Each brings its icon and seam; the copy and the action must match it. |
+| `size` | `"sm" \| "md" \| "lg"` |  | How much of the slot the state fills vertically: `sm` inside a card or a table, `md` (default) for a panel, `lg` for a whole page. |
 | `variant` (deprecated) | `EmptyStateKind` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `kind`, which takes the same values. `codemods/prop-vocabulary.ts` rewrites call sites. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="empty-state">`.
@@ -1093,11 +1093,11 @@ You handle:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
-| `label` | `ReactNode` |  |  |
-| `size` | `ProgressSize` | `md` |  |
+| `className` | `string` |  | Classes for the root, which holds the label row and the track. |
+| `label` | `ReactNode` |  | Visible label; also the accessible name. Use `aria-label` when there is no room for one. |
+| `size` | `ProgressSize` | `md` | Track thickness: `sm` inside a row or a card, `md` (the default) on its own, `lg` when the reading is the point of the screen. |
 | `thresholds` | `{ warn?: number; danger?: number; } \| undefined` | `{ warn: 0.75, danger: 0.9 }` | Fractions of the range at which the fill changes: gold past `warn`, rojo past `danger`. Drawn on the track as ticks. Pass `{}` for none. |
-| `valueText` | `((formatted: string, value: number) => ReactNode)` |  |  |
+| `valueText` | `((formatted: string, value: number) => ReactNode)` |  | Replaces the value text at the end of the label row, e.g. "212 / 300 MB". Receives the formatted value and the raw number. |
 
 Also accepts the props of `MeterRootProps`.
 
@@ -1107,10 +1107,10 @@ Also accepts the props of `MeterRootProps`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the root, which holds the label row and the track. |
 | `label` | `ReactNode` |  | Visible label; also the accessible name. Use `aria-label` when there is no room for one. |
 | `showValue` | `boolean` | `true` | Show the formatted value at the end of the label row. Ignored while indeterminate. |
-| `size` | `ProgressSize` | `md` |  |
+| `size` | `ProgressSize` | `md` | Track thickness: `sm` inside a row or a card, `md` (the default) on its own, `lg` for the one task a screen is waiting on. |
 | `tone` | `"neutral" \| "danger" \| "success" \| "ink"` | `neutral` | Fill colour. `neutral` (ink) is in-flight; `success` and `danger` (verde, rojo) for a finished state that stays on screen. `ink` is deprecated since 0.7.0 and removed in 1.0.0: use `neutral`, the same fill under the status word every other `tone` uses. |
 | `valueText` | `((formatted: string \| null, value: number \| null) => ReactNode)` |  | Replaces the value text, e.g. "212 / 300 prompts". |
 
@@ -1168,8 +1168,8 @@ Loading is a cut shape whose content has not arrived, so a block keeps the keyli
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `shape` | `"block" \| "text" \| "line" \| "avatar"` |  |  |
-| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` |  |  |
+| `shape` | `"block" \| "text" \| "line" \| "avatar"` |  | What the bone stands in for: a `block` (default) for a card or chart, `text` for a line, `avatar` for a person's mark. Size a block with classes. |
+| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` |  | For `shape="avatar"` only: the Avatar size it stands in for, so the bone is exactly the mark that replaces it. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="skeleton">`.
 
@@ -1192,7 +1192,7 @@ Lines of text that have not arrived. The last line is short, because a paragraph
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `lines` | `number` | `3` |  |
+| `lines` | `number` | `3` | How many lines, 3 by default. Match the text that will arrive; the last line is drawn short. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="skeleton-text">`.
 
@@ -1316,7 +1316,7 @@ You handle:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the box itself, with or without a `label`. A string, not Base UI's state function: use the `data-checked` and `data-disabled` variants for state. |
 | `description` | `ReactNode` |  | Second line under the label. Linked as the control's description. |
 | `label` | `ReactNode` |  | Visible label. The whole label is the press target. |
 | `wrapperClassName` | `string` |  | Classes for the label row a `label` adds around the control. `className` always styles the control itself. |
@@ -1332,7 +1332,7 @@ A set of checkboxes that share one value array, inside a real fieldset and legen
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `legend` (required) | `ReactNode` |  | The group's name, rendered as the fieldset legend in the label register. |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the `<fieldset>` that holds the legend, the description and the options. |
 | `description` | `ReactNode` |  | Copy under the legend. |
 | `orientation` | `"horizontal" \| "vertical"` | `vertical` | Lay options out in a row rather than a column. |
 
@@ -1400,7 +1400,7 @@ You handle:
 | --- | --- | --- | --- |
 | `children` (required) | `ReactNode` |  | The visible label. Also the control's accessible name, via the wrapping `<label>`. |
 | `count` | `number` |  | A count after the label: how many rows this filter would leave. Tabular, so a row of chips does not jitter as counts change. |
-| `size` | `"sm" \| "md" \| "default" \| "comfortable"` |  |  |
+| `size` | `"sm" \| "md" \| "default" \| "comfortable"` |  | `sm` (default) is a one-line filter chip that never wraps; `md` is a control height tall and lets a longer label wrap. |
 | `type` | `"checkbox" \| "radio"` | `checkbox` | `radio` for one-of-N within a `name` group, `checkbox` for multi-select. |
 
 `className` goes to `<label data-slot="chip">`; `ref`, `id` and the other DOM props go to `<input>`.
@@ -1476,20 +1476,20 @@ Free text with suggestions: a run label, a tag, a search. The typed text is the 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `items` (required) | `(string \| ComboboxOption)[]` |  | Suggestions. Plain strings, or options with a description line. |
-| `defaultValue` | `string` |  |  |
-| `disabled` | `boolean` |  |  |
+| `defaultValue` | `string` |  | The text in the input on first render, uncontrolled. |
+| `disabled` | `boolean` |  | Stated, not faded: the input goes to the shaded cloth and no suggestions open. |
 | `emptyMessage` | `ReactNode` |  | What the popup says when nothing matches. Omit to close the popup instead. |
-| `label` | `ReactNode` |  |  |
-| `loading` | `boolean` | `false` |  |
+| `label` | `ReactNode` |  | A visible label above the input. Omit it inside `Field`, which renders its own, and spread Field's control props onto this component instead. |
+| `loading` | `boolean` | `false` | Suggestions are on their way: the popup shows the working texture and "Searching…" and the list is marked busy. Set it while a server search is in flight. |
 | `locale` | `LocalesArgument` |  | Locale for the built-in matching. Omitted, the runtime's locale is used. |
-| `name` | `string` |  |  |
+| `name` | `string` |  | Form field name. The typed text is what submits, not a suggestion's value. |
 | `onValueChange` | `((value: string) => void)` |  | Every change to the text, typed or chosen. |
-| `placeholder` | `string` |  |  |
-| `readOnly` | `boolean` |  |  |
-| `required` | `boolean` |  |  |
-| `size` | `"sm" \| "md" \| "lg"` | `md` |  |
-| `status` | `ReactNode` |  |  |
-| `value` | `string` |  |  |
+| `placeholder` | `string` |  | Shown in the empty input. A hint at what to type, never the label: it disappears on the first keystroke. |
+| `readOnly` | `boolean` |  | Shows the text without letting it change; it still submits and can be focused and read. |
+| `required` | `boolean` |  | Marks the field required for form validation, and the `label`, when there is one, with the required mark. |
+| `size` | `"sm" \| "md" \| "lg"` | `md` | Control height, shared with Input and Select so the field lines up in a form row. Defaults to `md`; density rescales every size. |
+| `status` | `ReactNode` |  | A line above the suggestions: "Showing 20 of 312", or an error from the search. |
+| `value` | `string` |  | The text in the input, controlled. Typing and picking a suggestion both change it, so pair it with `onValueChange`. |
 | `wrapperClassName` | `string` |  | Classes for the wrapper that holds `label` and the input. Only rendered with a `label`. |
 
 `className`, `ref`, `id` and the other DOM props go to `<input data-slot="autocomplete">`.
@@ -1502,25 +1502,25 @@ Free text with suggestions: a run label, a tag, a search. The typed text is the 
 | --- | --- | --- | --- |
 | `items` (required) | `ComboboxItems` |  | Flat options, or labelled groups. With `filter={null}`, the options to show right now. |
 | `clearLabel` | `string` |  | Accessible name of the clear button. |
-| `defaultValue` | `string \| string[] \| null` |  |  |
-| `disabled` | `boolean` |  |  |
+| `defaultValue` | `string \| string[] \| null` |  | The option `value` selected on first render, uncontrolled. `null` or omitted starts empty. The option values selected on first render, uncontrolled. |
+| `disabled` | `boolean` |  | Stated, not faded: the field and any chips go to the shaded cloth and the clear, open and remove buttons are taken away. |
 | `emptyMessage` | `ReactNode` |  | What the popup says when nothing matches. |
 | `filter` | `((option: ComboboxOption, query: string) => boolean) \| null` |  | How typed text matches an option. Pass `null` when the caller filters — a server search — and hand the results in through `items`. |
 | `label` | `ReactNode` |  | A visible label above the field. Omit it inside `Field`, which renders its own, and spread Field's control props onto this component instead. |
 | `loading` | `boolean` |  | Results are on their way: the popup shows the working texture and "Searching…". |
 | `locale` | `LocalesArgument` |  | Locale for the built-in matching. Omitted, the runtime's locale is used. |
-| `multiple` | `boolean` |  |  |
-| `name` | `string` |  |  |
+| `multiple` | `boolean` |  | Omit, or `false`, for a single choice. Set `true` to pick several, shown as removable chips in the field. Pick several options, shown as removable chips in the field. Values become `string[]`. |
+| `name` | `string` |  | Form field name. The selected option's `value` is submitted under it (one entry per value with `multiple`). |
 | `onInputValueChange` | `((query: string) => void)` |  | What is typed, as it is typed: the hook for a server search. |
-| `onValueChange` | `((value: string \| null) => void) \| ((value: string[]) => void)` |  |  |
-| `placeholder` | `string` |  |  |
-| `readOnly` | `boolean` |  |  |
+| `onValueChange` | `((value: string \| null) => void) \| ((value: string[]) => void)` |  | Called with the chosen option's `value`, or `null` when the field is cleared. Called with every selected value after a pick, a chip removal or a clear. |
+| `placeholder` | `string` |  | Shown in the empty input. A hint at what can be searched, never the label: it disappears on the first keystroke. |
+| `readOnly` | `boolean` |  | Shows the selection without letting it change. The clear, open and remove buttons are taken away, but the value still submits and can be focused and read. |
 | `removeLabel` | `((label: string) => string)` |  | Only with `multiple`: a single value has no chips to remove. Typed `never` so passing it here is an error rather than a silent no-op — an optional discriminant does not narrow the union by itself. Accessible name of each chip's remove button. |
-| `required` | `boolean` |  |  |
-| `size` | `"sm" \| "md" \| "lg"` |  |  |
+| `required` | `boolean` |  | Marks the field required for form validation, and the `label`, when there is one, with the required mark. |
+| `size` | `"sm" \| "md" \| "lg"` |  | Control height, shared with Input and Select so a combobox lines up in a form row. Defaults to `md`; density rescales every size. |
 | `status` | `ReactNode` |  | A line above the results — "Showing 20 of 312", or an error from the search. |
 | `triggerLabel` | `string` |  | Accessible name of the button that opens the list. |
-| `value` | `string \| string[] \| null` |  |  |
+| `value` | `string \| string[] \| null` |  | The selected option's `value`, controlled. `null` is no selection; leave it `undefined` to let the combobox hold its own state. The selected option values, controlled, in the order they were picked. |
 | `wrapperClassName` | `string` |  | Classes for the wrapper that holds `label` and the field. Only rendered with a `label`. |
 
 `className` goes to `<div data-slot="combobox">`; `ref`, `id` and the other DOM props go to `<input>`.
@@ -1590,8 +1590,8 @@ You handle:
 | `headingId` | `string` |  | Id for the month heading, so a dialog can be named by it. |
 | `isDateDisabled` | `((date: Date) => boolean)` |  | Days that exist but cannot be chosen: weekends in a freeze, public holidays. |
 | `locale` | `LocalesArgument` |  | BCP 47 tag. `undefined` uses the runtime's locale, as Intl does. |
-| `max` | `Date \| null` |  |  |
-| `min` | `Date \| null` |  |  |
+| `max` | `Date \| null` |  | The latest day that can be chosen, inclusive. Later days are disabled, and focus never moves past it. |
+| `min` | `Date \| null` |  | The earliest day that can be chosen, inclusive. Earlier days are disabled, and focus never moves before it. |
 | `onSelect` | `((date: Date) => void)` |  | Called with the day a person chose. Range logic belongs to the caller. |
 | `renderHeading` | `((props: { id: string; className: string; children: ReactNode; }) => ReactNode)` |  | Render the heading as the popup's title instead of a plain element. |
 | `selected` | `DateRange` |  | The selected day, or the range. A single date is a range whose ends match. |
@@ -1606,21 +1606,21 @@ You handle:
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `defaultOpen` | `boolean` | `false` | Open the calendar on first render — for a step that exists only to pick a date. |
-| `defaultValue` | `Date \| null` | `null` |  |
-| `disabled` | `boolean` |  |  |
-| `isDateDisabled` | `((date: Date) => boolean)` |  |  |
+| `defaultValue` | `Date \| null` | `null` | The day chosen on first render, uncontrolled. `null` or omitted starts empty. |
+| `disabled` | `boolean` |  | Stated, not faded: the input goes to the shaded cloth and the calendar button is disabled. |
+| `isDateDisabled` | `((date: Date) => boolean)` |  | Days inside `min`–`max` that still cannot be chosen: weekends in a freeze, public holidays. Disabled in the grid, and refused when typed with a sentence naming the day. |
 | `locale` | `LocalesArgument` |  | BCP 47 tag for names, digits, typed order and week start. `undefined` uses the runtime's locale. |
-| `max` | `Date \| null` |  |  |
-| `min` | `Date \| null` |  |  |
+| `max` | `Date \| null` |  | The latest day that can be chosen, inclusive; only the day counts, not the time. Later days are disabled in the grid and refused when typed, with a sentence naming the limit. |
+| `min` | `Date \| null` |  | The earliest day that can be chosen, inclusive; only the day counts, not the time. Earlier days are disabled in the grid and refused when typed, with a sentence naming the limit. |
 | `name` | `string` |  | Submitted as `yyyy-mm-dd`, whatever the display locale. |
-| `onOpenChange` | `((open: boolean) => void)` |  |  |
-| `onValueChange` | `((value: Date \| null) => void)` |  |  |
+| `onOpenChange` | `((open: boolean) => void)` |  | Called when the calendar opens or closes, by the button, Escape, a pick or a press outside. |
+| `onValueChange` | `((value: Date \| null) => void)` |  | Called with the day at local midnight when one is picked or a typed date commits (on Enter or blur, never per keystroke), and with `null` when the text is cleared. A typed date that cannot be read is shown as an error and does not call it. |
 | `open` | `boolean` |  | Whether the calendar is open, when the page owns that. |
 | `placeholder` | `string` |  | Defaults to the locale's format, e.g. `DD/MM/YYYY`. |
-| `required` | `boolean` |  |  |
-| `size` | `"sm" \| "md" \| "lg"` | `md` |  |
+| `required` | `boolean` |  | Marks the input required for form validation. Inside `Field`, the label carries the required mark. |
+| `size` | `"sm" \| "md" \| "lg"` | `md` | Control height, shared with Input and Select so the picker lines up in a form row. Defaults to `md`; density rescales every size. |
 | `today` | `Date` |  | Inject "now" for stable stories and tests. Pass it when server rendering too: today's date, and with it the starting month, depends on the zone it is computed in, and the grid cannot wait for hydration without arriving blank. The server's date, passed down, keeps both renders on one day. |
-| `value` | `Date \| null` |  |  |
+| `value` | `Date \| null` |  | The chosen day, controlled, at local midnight. `null` is no date; leave it `undefined` to let the picker hold its own state. |
 | `weekStartsOn` | `number` |  | 0 = Sunday … 6 = Saturday. Overrides the locale's first day of the week. |
 | `wrapperClassName` | `string` |  | Classes for the outer element that holds the field and its error. |
 
@@ -1631,24 +1631,24 @@ You handle:
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `defaultOpen` | `boolean` | `false` | Open the calendar on first render. |
-| `defaultValue` | `DateRange` | `{ start: null, end: null }` |  |
-| `disabled` | `boolean` |  |  |
-| `isDateDisabled` | `((date: Date) => boolean)` |  |  |
-| `locale` | `LocalesArgument` |  |  |
-| `max` | `Date \| null` |  |  |
-| `min` | `Date \| null` |  |  |
+| `defaultValue` | `DateRange` | `{ start: null, end: null }` | The range on first render, uncontrolled. Omitted, both ends start `null`. |
+| `disabled` | `boolean` |  | Stated, not faded: the trigger goes to the shaded cloth and the popup cannot open. |
+| `isDateDisabled` | `((date: Date) => boolean)` |  | Days inside `min`–`max` that cannot be an end of the range: public holidays, a freeze. Disabled in the grid and refused when typed. |
+| `locale` | `LocalesArgument` |  | BCP 47 tag for names, digits, typed order, week start and how the period is written on the trigger. `undefined` uses the runtime's locale. |
+| `max` | `Date \| null` |  | The latest day either end can be, inclusive. Later days are disabled in the grid and refused when typed. |
+| `min` | `Date \| null` |  | The earliest day either end can be, inclusive. Earlier days are disabled in the grid and refused when typed. |
 | `name` | `string` |  | Submitted as `<name>-start` and `<name>-end`, `yyyy-mm-dd`. |
-| `onOpenChange` | `((open: boolean) => void)` |  |  |
-| `onValueChange` | `((value: DateRange) => void)` |  |  |
+| `onOpenChange` | `((open: boolean) => void)` |  | Called when the popup opens or closes. A range pressed on the grid or a preset closes it; a range completed by typing leaves it open, so the person sees it drawn. |
+| `onValueChange` | `((value: DateRange) => void)` |  | Called with the whole range once both ends are chosen, pressed or typed, when a preset is picked, and with both ends `null` when both typed dates are cleared. |
 | `open` | `boolean` |  | Whether the calendar is open, when the page owns that. |
-| `placeholder` | `string` | `Choose a period` |  |
+| `placeholder` | `string` | `Choose a period` | The trigger's text while no range is chosen. Defaults to "Choose a period". |
 | `presets` | `DateRangePreset[]` | `[   { label: 'Last 7 days', range: (t) => ({ start: addDays(t, -6), end: t }) },   { label: 'Last 30 days', range: (t) => ({ start: addDays(t, -29), end: t }) },   { label: 'Last 90 days', range: (t) => ({ start: addDays(t, -89), end: t }) },   { label: 'This month', range: (t) => ({ start: startOfMonth(t), end: t }) },   {     label: 'Last month',     range: (t) => {       const previous = addMonths(startOfMonth(t), -1)       return { start: previous, end: endOfMonth(previous) }     },   }, ]` | Pass `[]` for none. |
-| `required` | `boolean` |  |  |
-| `size` | `"sm" \| "md" \| "lg"` | `md` |  |
+| `required` | `boolean` |  | Marks the trigger `aria-required`. Inside `Field`, the label carries the required mark. |
+| `size` | `"sm" \| "md" \| "lg"` | `md` | Trigger height, shared with Input and Select so the picker lines up in a form row. Defaults to `md`; density rescales every size. |
 | `today` | `Date` |  | Inject "now" for stable stories and tests. Pass it when server rendering too: today's date, and with it the starting month, depends on the zone it is computed in, and the grid cannot wait for hydration without arriving blank. The server's date, passed down, keeps both renders on one day. |
 | `typedEntry` | `boolean` | `true` | Start and end inputs above the calendar. On by default: typing is the accessible path into a date, not an extra, and the single picker always has it. Turn it off only where presets and the grid cover every case. |
-| `value` | `DateRange` |  |  |
-| `weekStartsOn` | `number` |  |  |
+| `value` | `DateRange` |  | The chosen range, controlled: `{ start, end }`, each a day at local midnight or `null`. The half-chosen range between two presses lives only in the popup and is never the value. |
+| `weekStartsOn` | `number` |  | 0 = Sunday … 6 = Saturday. Overrides the locale's first day of the week. |
 | `wrapperClassName` | `string` |  | Classes for the outer element that holds the trigger. `className` styles the trigger itself. |
 
 `className`, `ref`, `id` and the other DOM props go to `<button data-slot="date-range-picker-trigger">`.
@@ -1736,13 +1736,13 @@ Anatomy:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `label` (required) | `ReactNode` |  |  |
+| `label` (required) | `ReactNode` |  | The visible label, wired to the control by `id`. Required: a placeholder is not a label, and a field with none is a question nobody hears. |
 | `description` | `ReactNode` |  | Alias of `hint`, for callers who think of it as a description. `hint` wins if both are set. |
 | `error` | `ReactNode` |  | Validation message under the control. Its presence is what marks the field invalid. |
 | `hint` | `ReactNode` |  | Supporting copy under the control. |
 | `labelAside` | `ReactNode` |  | Something to the right of the label: a character count, a "Reset" link. |
 | `optional` | `boolean` | `false` | Renders the "Optional" tag. Ignored when `required`. |
-| `required` | `boolean` | `false` |  |
+| `required` | `boolean` | `false` | Shows the required mark on the label and passes `required` to the control through the render prop, so the browser validates it too. Overrides `optional`. |
 
 Renders no element of its own, so it takes no `className` or `ref`.
 
@@ -1838,23 +1838,23 @@ You handle:
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `accept` | `string` |  | Native `accept`: `.jsonl,.csv`, `application/pdf`, `image/*`. Enforced on drop as well as in the picker. |
-| `aria-describedby` | `string` |  |  |
-| `aria-invalid` | `boolean \| "true" \| "false"` |  |  |
-| `aria-label` | `string` |  |  |
+| `aria-describedby` | `string` |  | Ids of the hint and error, from `Field`. Joined with the drop zone's own constraints text on the browse button. |
+| `aria-invalid` | `boolean \| "true" \| "false"` |  | Marks the browse button invalid and draws the drop zone in the danger band. `Field` sets it while it shows an error. |
+| `aria-label` | `string` |  | Accessible name of the browse button when there is no `Field` label to name it. |
 | `defaultFiles` | `FileUploadItem[]` |  | Rows to start with: files already on the server, or a fixed state for a demo. |
-| `disabled` | `boolean` | `false` |  |
-| `id` | `string` |  |  |
+| `disabled` | `boolean` | `false` | Stated, not faded: the drop zone goes to the shaded cloth, drops are refused, and the browse, retry and remove buttons are disabled. |
+| `id` | `string` |  | Id of the browse button, so `Field`'s label points at the control a person presses. |
 | `locale` | `LocalesArgument` |  | Locale for sizes and lists. Omit to use the runtime's locale. |
 | `maxConcurrent` | `number` | `2` | How many `onUpload` calls run at once. |
 | `maxFiles` | `number` |  | Total files in the list, including ones already there. |
 | `maxSize` | `number` |  | Bytes, per file. |
 | `messages` | `Partial<FileUploadMessages>` |  | Copy, for another language. Merged over the English defaults. |
-| `multiple` | `boolean` | `false` |  |
+| `multiple` | `boolean` | `false` | Accept several files, added to the list. Off by default: a new file replaces the one there and cancels its upload. |
 | `name` | `string` |  | Submitted with a form when there is no `onUpload`. |
 | `onFilesChange` | `((files: FileUploadItem[]) => void)` |  | Every change to the list: added, progressed, finished, failed, removed. |
 | `onReject` | `((rejections: FileRejection[]) => void)` |  | Files turned away, with the rule each broke. |
 | `onUpload` | `((file: File, context: UploadContext) => Promise<void>)` |  | Upload one file. Resolve when done; reject with an Error whose message says why. |
-| `required` | `boolean` |  |  |
+| `required` | `boolean` |  | Makes the form refuse to submit while the list is empty, through the hidden file input. `Field` passes it with its label's mark. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="file-upload">`.
 
@@ -1930,25 +1930,25 @@ You handle:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `allowOutOfRange` | `boolean` |  |  |
+| `allowOutOfRange` | `boolean` |  | Keep a typed value outside `min`/`max` instead of clamping it on commit, so form validation can say why it is wrong. Off by default; the steppers still stop at the bounds. |
 | `allowWheelScrub` | `boolean` |  | Let the wheel change a focused, hovered field. Off by default; see above. |
-| `decrementLabel` | `string` | `Decrease` |  |
-| `defaultValue` | `number` |  |  |
+| `decrementLabel` | `string` | `Decrease` | Accessible name of the − stepper. Defaults to "Decrease"; translate it with the page. |
+| `defaultValue` | `number` |  | The number on first render, uncontrolled. Omitted, the field starts empty. |
 | `format` | `NumberFormatOptions` |  | `Intl.NumberFormat` options: grouping, decimals, a unit or a currency. |
 | `incrementLabel` | `string` | `Increase` | Accessible names of the steppers. |
 | `label` | `ReactNode` |  | Visible label above the field. Omit inside `Field`, which renders its own. |
 | `largeStep` | `number` | `10` | Shift+Arrow and PageUp/PageDown step. |
 | `locale` | `LocalesArgument` |  | BCP 47 tag for parsing and formatting. `undefined` uses the runtime's locale. |
-| `max` | `number` |  |  |
-| `min` | `number` |  |  |
-| `onValueChange` | `((value: number \| null) => void)` |  |  |
+| `max` | `number` |  | The highest value. Stepping and committed values clamp to it, and the increase stepper is disabled there; End jumps to it. |
+| `min` | `number` |  | The lowest value. Stepping and committed values clamp to it, and the decrease stepper is disabled there; Home jumps to it. |
+| `onValueChange` | `((value: number \| null) => void)` |  | Called as the number changes, typed or stepped, with `null` when the field is emptied. For a save or a request, use `onValueCommitted`, which does not fire per keystroke. |
 | `onValueCommitted` | `((value: number \| null, eventDetails: NumberFieldRootCommitEventDetails) => void)` |  | Called when the value is committed: on blur, Enter or a stepper press, not per keystroke. |
-| `size` | `"sm" \| "md" \| "lg"` | `md` |  |
+| `size` | `"sm" \| "md" \| "lg"` | `md` | Control height, shared with Input and Select so the field lines up in a form row. Defaults to `md`; density rescales every size. |
 | `smallStep` | `number` |  | Alt+Arrow step. |
-| `snapOnStep` | `boolean` |  |  |
+| `snapOnStep` | `boolean` |  | Round to the nearest multiple of the step when stepping, so 13 stepped by 5 goes to 15 rather than 18. Off by default. |
 | `step` | `number \| "any"` |  | ArrowUp/Down step. |
 | `unit` | `string` |  | Short unit suffix inside the cut: "tokens", "ms", "%". Also added to the accessible description. |
-| `value` | `number \| null` |  |  |
+| `value` | `number \| null` |  | The number, controlled. `null` is an empty field; leave it `undefined` to let the field hold its own state. |
 | `wrapperClassName` | `string` |  | Classes for the wrapper that holds `label` and the field. Only rendered with a `label`. |
 
 `className` goes to `<div data-slot="number-input">`; `ref`, `id` and the other DOM props go to `<input>`.
@@ -2006,9 +2006,9 @@ You handle:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
-| `description` | `ReactNode` |  |  |
-| `label` | `ReactNode` |  |  |
+| `className` | `string` |  | Classes for the circle itself, with or without a `label`. A string, not Base UI's state function: use the `data-checked` and `data-disabled` variants for state. |
+| `description` | `ReactNode` |  | Second line under the label. Linked as the radio's description, before any hint or error `Field` adds. |
+| `label` | `ReactNode` |  | Visible label. The whole label is the press target and names the radio. |
 | `wrapperClassName` | `string` |  | Classes for the label row a `label` adds around the control. `className` always styles the control itself. |
 
 Also accepts the props of `NativeButtonProps`, `RadioRootProps`.
@@ -2022,9 +2022,9 @@ The group, named by a visible label in the rótulo register via `aria-labelledby
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `label` (required) | `ReactNode` |  | The question the options answer. Names the radiogroup. |
-| `className` | `string` |  |  |
-| `description` | `ReactNode` |  |  |
-| `orientation` | `"horizontal" \| "vertical"` | `vertical` |  |
+| `className` | `string` |  | Classes for the wrapper that holds the label, the description and the group. |
+| `description` | `ReactNode` |  | Copy under the label, linked as the group's description so it is heard on entering the group. |
+| `orientation` | `"horizontal" \| "vertical"` | `vertical` | Lay the options out in a column (the default) or a wrapping row. |
 
 Also accepts the props of `RadioGroupProps`.
 
@@ -2081,14 +2081,14 @@ You handle:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `options` (required) | `SegmentedOption<V>[]` |  |  |
-| `defaultValue` | `string` |  |  |
-| `disabled` | `boolean` |  |  |
+| `options` (required) | `SegmentedOption<V>[]` |  | The segments, in order: a `value`, a `label` and optionally an icon or `disabled`. Two to five short ones; past that, use a Select. |
+| `defaultValue` | `string` |  | The segment pressed on first render, uncontrolled. |
+| `disabled` | `boolean` |  | Disables every segment. To disable one, set `disabled` on its option instead. |
 | `fill` | `boolean` | `false` | Segments share the full width equally. |
 | `iconOnly` | `boolean` | `false` | Render icons only; labels become the accessible names. |
-| `onValueChange` | `((value: V) => void)` |  |  |
-| `size` | `"sm" \| "md"` | `md` |  |
-| `value` | `string` |  |  |
+| `onValueChange` | `((value: V) => void)` |  | Called with the newly pressed segment's `value`. Pressing the segment that is already pressed does not call it, so the group never empties. |
+| `size` | `"sm" \| "md"` | `md` | Height: `md` (the default) matches the other controls in a row; `sm` for a toolbar or a dense table header. |
+| `value` | `string` |  | The pressed segment's `value`, controlled. Give one: a segmented control always has a choice made. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="segmented-control">`.
 
@@ -2146,16 +2146,16 @@ The one-line form, for the nine selects in ten that are a label and a list. The 
 | --- | --- | --- | --- |
 | `items` (required) | `SelectOption<V>[] \| SelectOptionGroup<V>[]` |  | Flat options, or labelled groups. |
 | `className` | `string` |  | CSS class applied to the element, or a function that returns a class based on the component's state. |
-| `defaultValue` | `string \| null` |  |  |
-| `disabled` | `boolean` |  |  |
+| `defaultValue` | `string \| null` |  | The option `value` selected on first render, uncontrolled. `null` or omitted shows the `placeholder`. |
+| `disabled` | `boolean` |  | Stated, not faded: the trigger goes to the shaded cloth and the list cannot open. |
 | `label` | `ReactNode` |  | A visible label rendered above the trigger. Omit it when the select sits inside `Field`, which renders its own — and spread Field's control props onto this component instead. |
-| `name` | `string` |  |  |
-| `onValueChange` | `((value: V \| null) => void)` |  |  |
-| `placeholder` | `ReactNode` | `Select…` |  |
-| `required` | `boolean` |  |  |
+| `name` | `string` |  | Form field name. The selected option's `value` is submitted under it through a hidden input. |
+| `onValueChange` | `((value: V \| null) => void)` |  | Called with the chosen option's `value` when the selection changes. |
+| `placeholder` | `ReactNode` | `Select…` | Shown in the trigger while nothing is selected: "Choose a model". Not a label; the field still needs one. |
+| `required` | `boolean` |  | Marks the select required for form validation, and the `label`, when there is one, with the required mark. |
 | `rootProps` | `Omit<Props<V, false>, "defaultValue" \| "children" \| "value" \| "items" \| "onValueChange">` |  | Props for Base UI's `Select.Root`, for what the one-line form does not name: `open`, `onOpenChange`, `modal`, `readOnly`. |
-| `size` | `"sm" \| "md" \| "lg"` | `md` |  |
-| `value` | `string \| null` |  |  |
+| `size` | `"sm" \| "md" \| "lg"` | `md` | Trigger height, shared with Input so a select lines up in a form row. Defaults to `md`; density rescales every size. |
+| `value` | `string \| null` |  | The selected option's `value`, controlled. `null` is no selection, which shows the `placeholder`; leave it `undefined` to let the select hold its own state. |
 | `wrapperClassName` | `string` |  | Classes for the wrapper that holds `label` and the trigger. Only rendered with a `label`. |
 
 Also accepts the props of `NativeButtonProps`.
@@ -2208,7 +2208,7 @@ Renders no element of its own, so it takes no `className` or `ref`.
 | --- | --- | --- | --- |
 | `className` | `string` |  | CSS class applied to the element, or a function that returns a class based on the component's state. |
 | `placeholder` | `ReactNode` |  | Shown when there is no value. |
-| `size` | `"sm" \| "md" \| "lg"` | `md` |  |
+| `size` | `"sm" \| "md" \| "lg"` | `md` | Trigger height, shared with Input so a select lines up in a form row. Defaults to `md`; density rescales every size. |
 
 Also accepts the props of `NativeButtonProps`, `SelectTriggerProps`.
 
@@ -2266,10 +2266,10 @@ You handle:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the root, which holds the label row, the track and the end labels. |
 | `formatValue` | `((formatted: string, value: number) => ReactNode)` |  | Format the printed value. Defaults to Base UI's locale formatting via `format`. |
 | `label` | `ReactNode` |  | Visible label. Names the thumb(s). |
-| `maxLabel` | `ReactNode` |  |  |
+| `maxLabel` | `ReactNode` |  | Label under the high end of the track. Decorative: the value text, not this, is what a screen reader hears. |
 | `minLabel` | `ReactNode` |  | Labels under the two ends of the track: "Precise" / "Creative". |
 | `showValue` | `boolean` | `true` | Print the current value beside the label. |
 
@@ -2324,9 +2324,9 @@ You handle:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
-| `description` | `ReactNode` |  |  |
-| `label` | `ReactNode` |  |  |
+| `className` | `string` |  | Classes for the switch itself, with or without a `label`. A string, not Base UI's state function: use the `data-checked` and `data-disabled` variants for state. |
+| `description` | `ReactNode` |  | Second line under the label: what turning it on does. Linked as the switch's description. |
+| `label` | `ReactNode` |  | Visible label. The whole label is the press target and names the switch. |
 | `labelPosition` | `"start" \| "end"` | `end` | Put the label before the switch — for settings lists, where labels align left and switches right. |
 | `wrapperClassName` | `string` |  | Classes for the label row a `label` adds around the control. `className` always styles the switch itself. |
 
@@ -2388,10 +2388,10 @@ You handle:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `sidebar` (required) | `ReactNode` |  |  |
-| `topbar` (required) | `ReactNode` |  |  |
-| `defaultSidebarCollapsed` | `boolean` | `false` |  |
-| `onSidebarCollapsedChange` | `((collapsed: boolean) => void)` |  |  |
+| `sidebar` (required) | `ReactNode` |  | The navigation, usually a `Sidebar`. The same tree is drawn in the layout from 920px and in a modal sheet below it, so desktop and mobile navigation cannot drift. |
+| `topbar` (required) | `ReactNode` |  | The bar across the top, usually a `Topbar`. It stays put while `<main>` scrolls, so the switcher and search are never lost. |
+| `defaultSidebarCollapsed` | `boolean` | `false` | Start with the desktop sidebar collapsed to its icon rail. Defaults to `false`; ignored below 920px, where the sidebar is a sheet. |
+| `onSidebarCollapsedChange` | `((collapsed: boolean) => void)` |  | Called when the desktop sidebar collapses or expands — to remember the choice between visits. |
 | `sidebarCollapsed` | `boolean` |  | Controlled collapse of the desktop sidebar. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="app-shell">`.
@@ -2425,7 +2425,7 @@ One destination. Active is an ink bar on the leading edge plus a washed ground a
 | `count` | `number` |  | A count beside the label: open items, failures. |
 | `countLabel` | `string` |  | Read with the count: "3 failed". Without it the number is read alone. |
 | `countTone` | `"neutral" \| "danger" \| "attention"` | `neutral` | `danger` fills the count in the danger colour — for failures that need a person, not for totals. `attention` is deprecated since 0.7.0 and removed in 1.0.0: use `danger`, the same fill under the status word every `tone` uses. |
-| `icon` | `ReactNode` |  |  |
+| `icon` | `ReactNode` |  | A leading icon. Needed for the collapsed rail, where the icon is all that shows and the label becomes its tooltip. |
 
 `className`, `ref`, `id` and the other DOM props go to `<a data-slot="nav-item">`.
 
@@ -2442,8 +2442,8 @@ One destination. Active is an ink bar on the leading edge plus a washed ground a
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `label` (required) | `string` |  | Names the navigation landmark: "Main", "Settings". |
-| `footer` | `ReactNode` |  |  |
-| `header` | `ReactNode` |  |  |
+| `footer` | `ReactNode` |  | Pinned below the navigation behind a keyline — the signed-in account, help, settings. |
+| `header` | `ReactNode` |  | Pinned above the navigation and outside its scroll — a workspace switcher or the product's name. |
 
 `className`, `ref`, `id` and the other DOM props go to `<nav data-slot="sidebar-nav">`.
 
@@ -2489,7 +2489,7 @@ You handle:
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `size` (deprecated) | `ContainerWidth` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `width`, which takes the same values. `codemods/prop-vocabulary.ts` rewrites call sites. |
-| `width` | `"page" \| "wide" \| "prose" \| "full"` |  |  |
+| `width` | `"page" \| "wide" \| "prose" \| "full"` |  | The column's measure: `page` (default), `wide` for tools whose tables want the screen, `prose` for reading, `full` for no limit. The gutters stay either way. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="container">`.
 
@@ -2508,11 +2508,11 @@ You handle:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `title` (required) | `ReactNode` |  |  |
+| `title` (required) | `ReactNode` |  | The section's heading, rendered at `level`. |
 | `actions` | `ReactNode` |  | Actions, aligned to the heading's baseline on the right. |
 | `label` | `string` |  | The section's label. It renders UNDER the heading, not above it: a small label above a heading pre-announces what the heading is about to say better. Below, the same string reads as what kind of section this is. |
-| `lead` | `ReactNode` |  |  |
-| `level` | `1 \| 2 \| 3` | `2` |  |
+| `lead` | `ReactNode` |  | A sentence or two under the heading, set as a Lead, that says what the section is for. |
+| `level` | `1 \| 2 \| 3` | `2` | The heading level, 2 by default. Set it from the outline of the page, not from the size you want. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="section-header">`.
 
@@ -2558,8 +2558,8 @@ The system's three dividers, in rising order of weight and rarity.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `band` | `DividerBand` | `oro` |  |
-| `orientation` | `"horizontal" \| "vertical"` | `horizontal` |  |
+| `band` | `DividerBand` | `oro` | The colour of a `relleno` divider's band, gold by default. Ignored by the other variants. |
+| `orientation` | `"horizontal" \| "vertical"` | `horizontal` | `vertical` stretches to the height of a flex row, for a seam between columns or toolbar groups. `diente` is horizontal only. Announced only when you also pass `role="separator"`. |
 | `up` | `boolean` | `false` | Teeth pointing up — for the top edge of a filled panel. |
 | `variant` | `"keyline" \| "relleno" \| "diente"` | `keyline` | `keyline` — the decorative 1px rule. Between rows, between fields. `relleno` — the filler slit: a band of colour cut by fine ink lines. For the seam between two parts of a page, not between list items. `diente`  — the sawtooth left where one ground is cut away from another. For the major seam only, where the page gives way to a filled panel. Set `color` on the element to choose the ground. |
 
@@ -2603,8 +2603,8 @@ You handle:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `cols` | `"halves" \| "thirds" \| "quarters" \| "fifths" \| "auto"` |  |  |
-| `gap` | `"tight" \| "default" \| "wide" \| "seamless"` |  |  |
+| `cols` | `"halves" \| "thirds" \| "quarters" \| "fifths" \| "auto"` |  | The column pattern, one or two columns on a phone and more at each breakpoint; `thirds` by default. `auto` fits as many `minItem`-wide columns as the space allows and needs no breakpoint. |
+| `gap` | `"tight" \| "default" \| "wide" \| "seamless"` |  | Space between cells, on the spacing scale. `seamless` closes the gap to a shared keyline, so the cells read as one panel cut into pieces. |
 | `minItem` | `string` |  | For `cols="auto"`: the narrowest a cell may get, as a CSS length. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="grid">`.
@@ -2659,11 +2659,11 @@ Anatomy:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `title` (required) | `ReactNode` |  |  |
-| `actions` | `ReactNode` |  |  |
-| `breadcrumb` | `ReactNode` |  |  |
-| `description` | `ReactNode` |  |  |
-| `meta` | `ReactNode[]` |  |  |
+| `title` (required) | `ReactNode` |  | The page's name, rendered as its one `h1`. |
+| `actions` | `ReactNode` |  | The page's buttons, right of the title. They wrap below it on a narrow screen rather than hiding in an overflow menu, because the primary action should never cost an extra click. |
+| `breadcrumb` | `ReactNode` |  | A `Breadcrumb`, above the title: it is navigation back up the trail, not a label for the heading. |
+| `description` | `ReactNode` |  | A sentence under the title saying what the page is for. |
+| `meta` | `ReactNode[]` |  | Short facts — owner, last updated, version — in a row divided by keylines. Rendered as a list, so a screen reader hears how many there are. |
 | `tabs` | `ReactNode` |  | A Tabs list. Sits on the header's bottom edge so the active tab cuts into it. |
 
 `className`, `ref`, `id` and the other DOM props go to `<header data-slot="page-header">`.
@@ -2716,10 +2716,10 @@ You handle:
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `as` | `"article" \| "aside" \| "div" \| "section"` | `div` | Render as a landmark-free `section` (named by its heading) instead of a `div`. |
-| `band` | `"oro" \| "rojo" \| "anil" \| "verde" \| "cloth"` |  |  |
-| `edge` | `"cut" \| "band" \| "none"` |  |  |
-| `layer` | `"pale" \| "cloth" \| "shade" \| "ink" \| "rojo" \| "anil" \| "verde" \| "oro"` |  |  |
-| `padding` | `"none" \| "sm" \| "md" \| "lg"` |  |  |
+| `band` | `"oro" \| "rojo" \| "anil" \| "verde" \| "cloth"` |  | The colour revealed by `edge="band"`, gold by default. Has no effect on the other edges. |
+| `edge` | `"cut" \| "band" \| "none"` |  | `cut` (default) is the ink keyline; `band` reveals a band of `band`'s colour between two keylines, for the one panel that is the point of the screen; `none` for a ground inside another. |
+| `layer` | `"pale" \| "cloth" \| "shade" \| "ink" \| "rojo" \| "anil" \| "verde" \| "oro"` |  | The ground the panel is cut from, `pale` by default. A filled layer (`rojo`, `anil`, `verde`, `ink`) re-inks everything inside it, so pick it here rather than with a background class. |
+| `padding` | `"none" \| "sm" \| "md" \| "lg"` |  | Inner padding on the spacing scale, so it moves with density; `md` by default, `none` for a table or a list that runs edge to edge. |
 | `tone` (deprecated) | `PanelLayer` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `layer`, which takes the same values. `codemods/prop-vocabulary.ts` rewrites call sites. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="panel">`.
@@ -2772,11 +2772,11 @@ Vertical rhythm: children down a column, one gap between them.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `align` | `"start" \| "center" \| "end" \| "stretch" \| "baseline"` |  |  |
-| `direction` | `"column" \| "row"` |  |  |
-| `gap` | `Gap` |  |  |
-| `justify` | `"start" \| "center" \| "end" \| "between"` |  |  |
-| `wrap` | `true \| false` |  |  |
+| `align` | `"start" \| "center" \| "end" \| "stretch" \| "baseline"` |  | Cross-axis alignment. Inline defaults to `center`, so an icon and a label line up; use `baseline` for mixed type sizes. |
+| `direction` | `"column" \| "row"` |  | `column` (default) stacks children down; `row` lays them across without wrapping, unless `wrap` is set. |
+| `gap` | `Gap` |  | The space between children, on the role-named scale that moves with density. Stack defaults to `md`, Inline to `sm`. |
+| `justify` | `"start" \| "center" \| "end" \| "between"` |  | Main-axis distribution. `between` pushes the first and last child to the ends. |
+| `wrap` | `true \| false` |  | Let children wrap onto a new line. On by default for Inline, off for Stack; turn it off on a row only when its children can shrink, or it overflows a phone. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="stack">`.
 
@@ -2786,10 +2786,10 @@ A row that wraps — toolbars, badge rows, button groups. Wraps by default, beca
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `align` | `"start" \| "center" \| "end" \| "stretch" \| "baseline"` | `center` |  |
-| `gap` | `Gap` | `sm` |  |
-| `justify` | `"start" \| "center" \| "end" \| "between"` |  |  |
-| `wrap` | `boolean` | `true` |  |
+| `align` | `"start" \| "center" \| "end" \| "stretch" \| "baseline"` | `center` | Cross-axis alignment. Inline defaults to `center`, so an icon and a label line up; use `baseline` for mixed type sizes. |
+| `gap` | `Gap` | `sm` | The space between children, on the role-named scale that moves with density. Stack defaults to `md`, Inline to `sm`. |
+| `justify` | `"start" \| "center" \| "end" \| "between"` |  | Main-axis distribution. `between` pushes the first and last child to the ends. |
+| `wrap` | `boolean` | `true` | Let children wrap onto a new line. On by default for Inline, off for Stack; turn it off on a row only when its children can shrink, or it overflows a phone. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="inline">`.
 
@@ -2855,8 +2855,8 @@ You handle:
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `aria-label` (required) | `string` |  | Names the toolbar: "Run actions", "Text formatting". |
-| `className` | `string` |  |  |
-| `variant` | `"panel" \| "bare"` |  |  |
+| `className` | `string` |  | Classes for the toolbar, merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute. |
+| `variant` | `"panel" \| "bare"` |  | `bare` (default) inside a header or a table frame; `panel` gives the toolbar its own cut ground over a canvas. |
 
 Also accepts the props of `ToolbarRootProps`.
 
@@ -2868,10 +2868,10 @@ A Button that takes part in the toolbar's arrow-key focus. Ghost and small by de
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
-| `icon` | `ReactNode` |  |  |
-| `size` | `"sm" \| "md" \| "lg"` | `sm` |  |
-| `variant` | `"secondary" \| "danger" \| "primary" \| "ghost"` | `ghost` |  |
+| `className` | `string` |  | Classes for the button, merged with `cn()`. A string, for the reason given on `Toolbar`. |
+| `icon` | `ReactNode` |  | Leading icon; decorative. An icon-only button still needs an `aria-label`. |
+| `size` | `"sm" \| "md" \| "lg"` | `sm` | The control height. Density already re-scales every size, so reach for a different one only to set a button apart from its neighbours, not to make a whole screen compact. |
+| `variant` | `"secondary" \| "danger" \| "primary" \| "ghost"` | `ghost` | The weight of the action: `primary` (ink) for the panel's main action, `secondary` beside it, `danger` only for what destroys something, `ghost` for low-stakes actions in dense rows. |
 
 Also accepts the props of `NativeButtonProps`, `ToolbarButtonProps`.
 
@@ -2889,7 +2889,7 @@ A text field that is one of the toolbar's stops. The arrow keys move the caret w
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the `<input>` itself. Set a width with `wrapperClassName`. |
 | `icon` | `ReactNode` |  | A leading glyph. Defaults to the search glyph; `false` for none. |
 | `wrapperClassName` | `string` |  | Classes for the wrapper, e.g. a width. |
 
@@ -2913,7 +2913,7 @@ Actions that fold into a "More" menu when the row runs out of room.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the keyline between groups. A string, for the reason given on `Toolbar`. |
 
 Also accepts the props of `ToolbarSeparatorProps`.
 
@@ -2925,12 +2925,12 @@ A two-state button: "Show archived", "Wrap lines". Inside a `ToolbarToggleGroup`
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
-| `defaultPressed` | `boolean` |  |  |
-| `icon` | `ReactNode` |  |  |
-| `onPressedChange` | `((pressed: boolean) => void)` |  |  |
-| `pressed` | `boolean` |  |  |
-| `size` | `"sm" \| "md" \| "lg"` | `sm` |  |
+| `className` | `string` |  | Classes for the toggle, merged with `cn()`. A string, for the reason given on `Toolbar`. |
+| `defaultPressed` | `boolean` |  | Whether it starts on, without controlling it afterwards. |
+| `icon` | `ReactNode` |  | Leading icon; decorative. An icon-only toggle still needs an `aria-label`. |
+| `onPressedChange` | `((pressed: boolean) => void)` |  | Called with the new state each time the toggle is pressed. |
+| `pressed` | `boolean` |  | Whether the toggle is on, when you control it. Inside a `ToolbarToggleGroup`, control the group's value instead. |
+| `size` | `"sm" \| "md" \| "lg"` | `sm` | The control height. Density already re-scales every size, so reach for a different one only to set a button apart from its neighbours, not to make a whole screen compact. |
 | `value` | `string` |  | Identifies the toggle inside a `ToolbarToggleGroup`. |
 
 Also accepts the props of `NativeButtonProps`, `ToolbarButtonProps`.
@@ -2944,7 +2944,7 @@ A set of toggles: one-of (the default) or `multiple`. It sits inside the toolbar
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `aria-label` (required) | `string` |  | Names the set: "Density", "Status". |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the group, which wraps like the toolbar. A string, for the reason given on `Toolbar`. |
 
 Also accepts the props of `ToggleGroupProps`.
 
@@ -3007,7 +3007,7 @@ You handle:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the root, merged with `cn()` so yours win a conflict. A string, not Base UI's function of state: style a state with its `data-*` attribute instead (`data-open:`). |
 
 Also accepts the props of `AccordionRootProps`.
 
@@ -3017,7 +3017,7 @@ Also accepts the props of `AccordionRootProps`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the item, merged with `cn()`. A string, for the reason given on `Accordion`. |
 
 Also accepts the props of `AccordionItemProps`, `UseCollapsibleRootParameters`.
 
@@ -3029,7 +3029,7 @@ Also accepts the props of `AccordionItemProps`, `UseCollapsibleRootParameters`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the content inside the panel, not the panel itself: the panel animates its height, and padding on it would be clipped while it does. |
 
 Also accepts the props of `AccordionRootProps`.
 
@@ -3039,7 +3039,7 @@ Also accepts the props of `AccordionRootProps`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the trigger button (not the heading around it), merged with `cn()`. A string, for the reason given on `Accordion`. |
 | `meta` | `ReactNode` |  | Secondary text on the same line, right of the title — a count, a status. |
 
 Also accepts the props of `NativeButtonProps`.
@@ -3058,7 +3058,7 @@ One disclosure on its own — "Show 12 more fields", "Raw response". No rules, n
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the content inside the panel, for the reason given on `AccordionPanel`. |
 
 Also accepts the props of `CollapsiblePanelProps`.
 
@@ -3068,7 +3068,7 @@ Also accepts the props of `CollapsiblePanelProps`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the trigger button, merged with `cn()`. A string, for the reason given on `Accordion`. |
 
 Also accepts the props of `NativeButtonProps`.
 
@@ -3117,7 +3117,7 @@ You handle:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `items` (required) | `BreadcrumbItem[]` |  |  |
+| `items` (required) | `BreadcrumbItem[]` |  | The trail, root first. The last item is the current page and renders as text whether or not it has an `href`; pass a long id through `middleTruncate` so both ends survive. |
 | `renderLink` | `BreadcrumbLinkRender` |  | The element each link crumb renders as: your router's `<Link />`, or a function returning one. |
 
 `className`, `ref`, `id` and the other DOM props go to `<nav data-slot="breadcrumb">`.
@@ -3170,13 +3170,13 @@ You handle:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `onPageChange` (required) | `(page: number) => void` |  |  |
+| `onPageChange` (required) | `(page: number) => void` |  | Called with the 1-based page a person asked for. The page is controlled: set `page` from it, or from the router if pages are addressable. |
 | `page` (required) | `number` |  | 1-based. |
-| `pageCount` (required) | `number` |  |  |
+| `pageCount` (required) | `number` |  | How many pages there are. The next button is disabled on the last. |
 | `pageSize` | `number` |  | For the compact range text: rows per page and the total row count. |
 | `siblings` | `number` | `1` | Pages either side of the current one in the `pages` variant. |
-| `total` | `number` |  |  |
-| `variant` | `"pages" \| "compact"` | `pages` |  |
+| `total` | `number` |  | Total row count for the `compact` range text. Without it, or without `pageSize`, the text falls back to "Page 3 of 26". |
+| `variant` | `"pages" \| "compact"` | `pages` | `pages` (the default) for results where a page is a place people return to; `compact` ("51–100 of 1,284" and two arrows) for dense tables where how much is left matters more. |
 
 `className`, `ref`, `id` and the other DOM props go to `<nav data-slot="pagination">`.
 
@@ -3237,8 +3237,8 @@ Anatomy:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
-| `variant` | `TabsVariant` | `underline` |  |
+| `className` | `string` |  | Classes for the root, merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute. |
+| `variant` | `TabsVariant` | `underline` | `underline` (default) switches views of one thing, a run's Trace / Output / Logs. `panel` is for tabs that are containers, a settings sheet or a code sample in three languages: the active tab joins the panel below. Every part inside reads it, so set it here only. |
 
 Also accepts the props of `TabsRootProps`.
 
@@ -3248,7 +3248,7 @@ Also accepts the props of `TabsRootProps`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the row of tabs, which scrolls sideways when the tabs outgrow it. A string, for the reason given on `Tabs`. |
 | `ref` | `Ref<HTMLDivElement>` |  | Allows getting a ref to the component instance. Once the component unmounts, React will set `ref.current` to `null` (or call the ref with `null` if you passed a callback ref). |
 
 Also accepts the props of `TabsListProps`.
@@ -3259,7 +3259,7 @@ Also accepts the props of `TabsListProps`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the panel, merged with `cn()`. A string, for the reason given on `Tabs`. |
 
 Also accepts the props of `TabsPanelProps`.
 
@@ -3269,9 +3269,9 @@ Also accepts the props of `TabsPanelProps`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the tab, merged with `cn()`. A string, for the reason given on `Tabs`. |
 | `count` | `number` |  | Trailing count, e.g. the number of tool calls. Tabular. |
-| `icon` | `ReactNode` |  |  |
+| `icon` | `ReactNode` |  | Leading icon; decorative, so the label still has to name the tab. |
 
 Also accepts the props of `NativeButtonProps`, `TabsTabProps`.
 
@@ -3331,12 +3331,12 @@ You handle:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `groups` (required) | `CommandGroup[]` |  |  |
+| `groups` (required) | `CommandGroup[]` |  | The commands, in headed groups. Filtered as the person types; label-prefix matches come first within a group, and empty groups are dropped. |
 | `defaultOpen` | `boolean` | `false` | Open on first render, for a palette that owns its own state. |
 | `label` | `string` | `Command palette` | Accessible name of the dialog. |
-| `onOpenChange` | `((open: boolean) => void)` |  |  |
+| `onOpenChange` | `((open: boolean) => void)` |  | Called when the palette opens or closes: the trigger, Escape, a press outside, or choosing an item, which closes it before the item runs. |
 | `open` | `boolean` |  | Whether the palette is open, when the page owns that (it usually does, to bind ⌘K). |
-| `placeholder` | `string` | `Type a command or search…` |  |
+| `placeholder` | `string` | `Type a command or search…` | Shown in the empty search input. Defaults to "Type a command or search…". |
 | `renderEmpty` | `((query: string) => ReactNode)` |  | Shown when nothing matches. Receives the query. |
 | `trigger` | `ReactElement<unknown, string \| JSXElementConstructor<any>>` |  | Rendered as the button that opens the palette, e.g. a `SearchInput`-shaped `Button`. |
 
@@ -3414,16 +3414,16 @@ The confirmation for an action that destroys something. Built on Base UI's Alert
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `confirmLabel` (required) | `string` |  | The verb on the confirm button: "Delete run", never "OK". |
-| `description` (required) | `ReactNode` |  |  |
+| `description` (required) | `ReactNode` |  | What happens if the operator confirms, and whether it can be undone. Required: a destructive confirm with no consequence stated is a guess. |
 | `onConfirm` (required) | `() => void \| Promise<void>` |  | May return a promise. While it is pending the confirm button shows its working strip, both buttons stop accepting presses, and the dialog stays open; it closes when the promise resolves and stays open if it rejects, so the operator can see the failure where they caused it. |
-| `title` (required) | `ReactNode` |  |  |
-| `cancelLabel` | `string` | `Cancel` |  |
+| `title` (required) | `ReactNode` |  | The question, naming the thing: "Delete run #4182?". It is the dialog's accessible name. |
+| `cancelLabel` | `string` | `Cancel` | The safe answer's label, "Cancel" by default. It takes focus when the dialog opens, so a reflexive Enter cancels. |
 | `confirmationText` | `string` |  | When set, the confirm button stays disabled until this exact string is typed — the run id, the project slug. For actions that cannot be undone and that a muscle-memory Enter could otherwise fire. |
-| `defaultOpen` | `boolean` |  |  |
+| `defaultOpen` | `boolean` |  | Opens the dialog on first render without controlling it afterwards. |
 | `error` | `ReactNode` |  | Why the last confirm failed, starting with what did not happen: "Not revoked. The server didn't answer." Shown between the body and the buttons, announced once when it appears, and linked to the confirm button so it is read again when focus is there. Hidden while a retry is pending. Clear it when the dialog opens for something else. |
 | `finalFocus` | `boolean \| RefObject<HTMLElement \| null> \| ((closeType: InteractionType) => boolean \| void \| HTMLElement \| null)` |  | Where focus goes when the dialog closes: Base UI's `finalFocus`. By default it returns to the trigger, which is right after Cancel. After a confirm that removed the trigger (a deleted row's button), return the element a reader would carry on from: the next row's action, or the list's heading. A function receives how the dialog was closed. |
-| `onOpenChange` | `((open: boolean) => void)` |  |  |
-| `open` | `boolean` |  |  |
+| `onOpenChange` | `((open: boolean) => void)` |  | Called with the next open state on every open and close, Cancel and Escape included. |
+| `open` | `boolean` |  | Whether the dialog is open, when you control it: to open it from somewhere other than `trigger`, or to close it after an async confirm of your own. |
 | `tone` | `"neutral" \| "danger"` | `danger` | `danger` cuts the seam in rojo and arms the confirm button in red. |
 | `trigger` | `ReactElement<unknown, string \| JSXElementConstructor<any>>` |  | Rendered as the trigger, e.g. a danger `Button`. |
 
@@ -3445,11 +3445,11 @@ Renders no element of its own, so it takes no `className` or `ref`.
 | --- | --- | --- | --- |
 | `title` (required) | `ReactNode` |  | The dialog's accessible name. Required: an unnamed modal is announced as "dialog" and nothing else. |
 | `band` | `DialogBand` | `oro` | The layer revealed in the top seam. |
-| `className` | `string` |  |  |
-| `description` | `ReactNode` |  |  |
+| `className` | `string` |  | Classes for the popup, merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute. |
+| `description` | `ReactNode` |  | A line under the title, read as the dialog's accessible description when it opens. Say what the dialog is for; leave instructions to the body. |
 | `footer` | `ReactNode` |  | Action row under the body: right-aligned, or stacked full width with the last action on top when the row is under 24rem. Usually a `ghost` cancel and one primary. |
 | `hideClose` | `boolean` | `false` | Hide the corner close button. Only when the footer carries an explicit way out. |
-| `size` | `"sm" \| "md" \| "lg"` |  |  |
+| `size` | `"sm" \| "md" \| "lg"` |  | The popup's maximum width: `sm` for a short question, `md` (default) for a form, `lg` for a table or a long review. |
 
 Also accepts the props of `DialogPopupProps`.
 
@@ -3530,8 +3530,8 @@ Renders no element of its own, so it takes no `className` or `ref`.
 | --- | --- | --- | --- |
 | `title` (required) | `ReactNode` |  | The drawer's accessible name. Required: an unnamed modal is announced as "dialog" and nothing else. |
 | `band` | `DrawerBand` | `oro` | The layer revealed in the top seam. |
-| `className` | `string` |  |  |
-| `description` | `ReactNode` |  |  |
+| `className` | `string` |  | Classes for the popup, merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute. |
+| `description` | `ReactNode` |  | A line under the title, read as the drawer's accessible description when it opens. |
 | `footer` | `ReactNode` |  | Action row pinned under the scrolling body, behind a keyline. Usually a `ghost` cancel and one primary. |
 | `hideClose` | `boolean` | `false` | Hide the close button. Only when the footer carries an explicit way out. |
 | `size` | `"sm" \| "md" \| "lg"` | `md` | Width of a side drawer, or height of a bottom sheet. Always capped by the viewport. |
@@ -3608,8 +3608,8 @@ The check sits in a fixed leading column, so checked and unchecked labels stay a
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
-| `shortcut` | `string` |  |  |
+| `className` | `string` |  | Classes for the item, merged with `cn()`. A string, for the reason given on `MenuContent`. |
+| `shortcut` | `string` |  | A key hint, as on `MenuItem`: shown, not bound. |
 
 Also accepts the props of `MenuCheckboxItemProps`, `NativeButtonProps`.
 
@@ -3619,11 +3619,11 @@ Also accepts the props of `MenuCheckboxItemProps`, `NativeButtonProps`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `align` | `Align` | `start` |  |
-| `alignOffset` | `number` | `0` |  |
-| `className` | `string` |  |  |
-| `side` | `Side` | `bottom` |  |
-| `sideOffset` | `number` | `6` |  |
+| `align` | `Align` | `start` | How the menu lines up along that side, `start` by default, so it hangs from the trigger's leading edge. |
+| `alignOffset` | `number` | `0` | A shift along the aligned edge in pixels, 0 by default. |
+| `className` | `string` |  | Classes for the popup, merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute. |
+| `side` | `Side` | `bottom` | Which side of the trigger the menu opens on, `bottom` by default. Base UI flips it when there is no room. |
+| `sideOffset` | `number` | `6` | The gap between trigger and menu in pixels, 6 by default: enough that the menu's keyline does not merge with the trigger's. |
 
 Also accepts the props of `MenuPopupProps`.
 
@@ -3641,9 +3641,9 @@ Also accepts the props of `MenuPopupProps`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the item, merged with `cn()`. A string, for the reason given on `MenuContent`. |
 | `icon` | `ReactNode` |  | Leading icon; decorative. |
-| `shortcut` | `string` |  |  |
+| `shortcut` | `string` |  | A key hint, right-aligned in muted figures: "⌘D". It only shows the key; binding it is yours, and it is read as part of the item's name. |
 | `tone` | `"default" \| "neutral" \| "danger"` | `neutral` | `danger` destroys something: it highlights in rojo instead of ink. `default` is deprecated since 0.7.0 and removed in 1.0.0: use `neutral`, the status word every other `tone` uses. |
 
 Also accepts the props of `MenuItemProps`, `NativeButtonProps`.
@@ -3660,7 +3660,7 @@ One-of-N. The mark is a filled square — a radio dot would be the only round th
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the item, merged with `cn()`. A string, for the reason given on `MenuContent`. |
 
 Also accepts the props of `MenuRadioItemProps`, `NativeButtonProps`.
 
@@ -3684,8 +3684,8 @@ Renders no element of its own, so it takes no `className` or `ref`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
-| `icon` | `ReactNode` |  |  |
+| `className` | `string` |  | Classes for the item, merged with `cn()`. A string, for the reason given on `MenuContent`. |
+| `icon` | `ReactNode` |  | Leading icon; decorative. The trailing chevron is always drawn. |
 
 Also accepts the props of `MenuSubmenuTriggerProps`, `NativeButtonProps`.
 
@@ -3751,11 +3751,11 @@ Renders no element of its own, so it takes no `className` or `ref`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `align` | `Align` | `start` |  |
-| `className` | `string` |  |  |
-| `description` | `ReactNode` |  |  |
-| `side` | `Side` | `bottom` |  |
-| `sideOffset` | `number` | `8` |  |
+| `align` | `Align` | `start` | How the popover lines up along that side, `start` by default. |
+| `className` | `string` |  | Classes for the popup (`w-72` and `p-4` by default), merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute. |
+| `description` | `ReactNode` |  | A line under the title, wired as the popover's accessible description. |
+| `side` | `Side` | `bottom` | Which side of the trigger the popover opens on, `bottom` by default. Base UI flips it when there is no room. |
+| `sideOffset` | `number` | `8` | The gap between trigger and popover in pixels, 8 by default. |
 | `title` | `ReactNode` |  | Heading, wired as the popover's accessible name. |
 
 Also accepts the props of `PopoverPopupProps`.
@@ -3817,15 +3817,15 @@ You handle:
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `children` (required) | `ReactElement<unknown, string \| JSXElementConstructor<any>>` |  | The element that triggers it. Must be focusable — usually a Button or IconButton. |
-| `content` (required) | `ReactNode` |  |  |
-| `align` | `Align` | `center` |  |
-| `defaultOpen` | `boolean` |  |  |
+| `content` (required) | `ReactNode` |  | The label: a few words, no interactive content. It reaches a screen reader only as the trigger's description, and not at all on touch, so it must repeat something said elsewhere rather than be the only place it lives. |
+| `align` | `Align` | `center` | How it lines up along that side, `center` by default. |
+| `defaultOpen` | `boolean` |  | Shows it on first render without controlling it afterwards. |
 | `delay` | `number` |  | Overrides the provider's delay for this tooltip. |
 | `disabled` | `boolean` |  | Never open: for a trigger whose label is already visible in this state. |
-| `onOpenChange` | `((open: boolean, eventDetails: TooltipRootChangeEventDetails) => void)` |  |  |
-| `open` | `boolean` |  |  |
+| `onOpenChange` | `((open: boolean, eventDetails: TooltipRootChangeEventDetails) => void)` |  | Called when hover, focus or Escape would open or close it, with the next state. |
+| `open` | `boolean` |  | Whether it is showing, when you control it. Rarely needed: hover and focus open it already. |
 | `shortcut` | `string[]` |  | Keys, in order: `['⌘', 'K']`. |
-| `side` | `Side` | `top` |  |
+| `side` | `Side` | `top` | Which side of the trigger it appears on, `top` by default. Base UI flips it when there is no room. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="tooltip">`.
 
@@ -3914,7 +3914,7 @@ You handle:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `level` (required) | `HeadingLevel` |  |  |
+| `level` (required) | `HeadingLevel` |  | The outline level, `h1` to `h4`. Required, and set from the document outline: never skip one to get a smaller look; use `visualLevel`. |
 | `size` (deprecated) | `HeadingLevel` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `visualLevel`, which takes the same values. `codemods/prop-vocabulary.ts` rewrites call sites. |
 | `visualLevel` | `1 \| 2 \| 3 \| 4` |  | The level it should look like, when that must differ from the outline level. |
 
@@ -4202,14 +4202,14 @@ You handle:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `as` | `"div" \| "p" \| "span"` | `p` |  |
-| `ref` | `Ref<HTMLElement>` |  |  |
-| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "base"` |  |  |
-| `tabular` | `true \| false` |  |  |
-| `tone` | `"neutral" \| "danger" \| "success" \| "default" \| 2 \| "muted"` |  |  |
-| `truncate` | `true \| false` |  |  |
-| `variant` | `"default" \| "secondary" \| "muted"` |  |  |
-| `weight` | `"regular" \| "medium" \| "semibold"` |  |  |
+| `as` | `"div" \| "p" \| "span"` | `p` | The element, `p` by default: `span` inside a line, `div` around block content. Headings are `Heading`, so the outline never lies. |
+| `ref` | `Ref<HTMLElement>` |  | Forwarded to the rendered element, whichever `as` picks. |
+| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "base"` |  | A step on the type scale, which density re-scales; `md` (body) by default. |
+| `tabular` | `true \| false` |  | Tabular figures, so numbers in a column or a ticking counter keep their width. |
+| `tone` | `"neutral" \| "danger" \| "success" \| "default" \| 2 \| "muted"` |  | A status ink, over the variant's: `danger` or `success` for a line that reports an outcome. Pair it with words or a glyph that say the state. |
+| `truncate` | `true \| false` |  | Cut to one line with an ellipsis. Only for text whose full value is available elsewhere, such as a tooltip or a detail view. |
+| `variant` | `"default" \| "secondary" \| "muted"` |  | Which of the three inks: `default` for what the reader came for, `secondary` for what explains it, `muted` for what they can skip. |
+| `weight` | `"regular" \| "medium" \| "semibold"` |  | `regular` by default; `medium` or `semibold` to lift a name or a figure out of a line without changing its size. |
 
 `className`, `ref`, `id` and the other DOM props go to `<p data-slot="text">`.
 
@@ -4273,19 +4273,19 @@ A long-running agent run, as a timeline.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `name` (required) | `string` |  | The agent's name — "Cayuco research agent". |
-| `runId` (required) | `string` |  |  |
-| `status` (required) | `RunStatusValue` |  |  |
-| `steps` (required) | `readonly AgentStep[]` |  |  |
-| `endedAt` | `number \| Date` |  |  |
+| `runId` (required) | `string` |  | The run's identifier, set as a literal with a copy button beside it, because it is what an operator pastes into a ticket or a log search. |
+| `status` (required) | `RunStatusValue` |  | The state of the run as a whole. It drives the header's glyph, word and clock, which actions are offered (Cancel while active, Retry once failed, timed out or cancelled), and the one polite announcement made per change. |
+| `steps` (required) | `readonly AgentStep[]` |  | The timeline, in order: the order is the content, so the steps render as an ordered list. A step waiting for approval or failed opens itself. |
+| `endedAt` | `number \| Date` |  | When the run ended. Freezes the header clock; omit while the run is still going. |
 | `failure` | `AgentRunFailure` |  | Shown while the run is failed, timed out or cancelled: what stopped it, in words and verbatim, with the ways back. It takes over the header's *Retry run*, so the retry sits next to the reason for it. |
-| `headingLevel` | `2 \| 3` | `3` |  |
+| `headingLevel` | `2 \| 3` | `3` | Heading level for the run's name. Defaults to 3; use 2 when the run is the page's main subject. |
 | `model` | `string` |  | The model identifier, set as a literal. |
-| `onCancel` | `(() => void)` |  |  |
-| `onRetry` | `(() => void)` |  |  |
+| `onCancel` | `(() => void)` |  | Stops the run. Shows a Cancel run button while the run is active; omit to offer no way to stop it from here. |
+| `onRetry` | `(() => void)` |  | Runs it again from the start. Shows Retry run once the run has failed, timed out or been cancelled; when `failure` is set the retry moves into the failure panel, next to the reason. |
 | `onRetryFromStep` | `((stepId: string) => void)` |  | Re-run from the failed step, keeping the work before it. Offered when `failure.stepId` is set. |
-| `startedAt` | `number \| Date` |  |  |
+| `startedAt` | `number \| Date` |  | When the run started. With it, the header shows an elapsed clock that keeps counting while the run is active. |
 | `summary` | `ReactNode` |  | Shown under the timeline once the run has finished. |
-| `usage` | `Pick<TokenUsageProps, "input" \| "output" \| "cached" \| "costUsd" \| "contextWindow">` |  |  |
+| `usage` | `Pick<TokenUsageProps, "input" \| "output" \| "cached" \| "costUsd" \| "contextWindow">` |  | Token counts and cost for the run, shown inline in the header. Omit when the provider does not report them rather than passing zeros. |
 
 `className`, `ref`, `id` and the other DOM props go to `<section data-slot="agent-run">`.
 
@@ -4345,8 +4345,8 @@ You handle:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `added` (required) | `number` |  |  |
-| `removed` (required) | `number` |  |  |
+| `added` (required) | `number` |  | Lines added. Shown as "+n" and said as "n lines added". |
+| `removed` (required) | `number` |  | Lines removed. Shown as "−n" and said as "n lines removed". |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="change-count">`.
 
@@ -4361,7 +4361,7 @@ An agent proposes a change; a person reviews it and decides.
 | `children` | `ReactNode` |  | The change itself: `FileDiff`s, `FieldChanges`, or both. |
 | `decision` | `ChangeDecision \| null` |  | Controlled decision. `null` means undecided. |
 | `defaultDecision` | `ChangeDecision \| null` | `null` | Uncontrolled starting decision. |
-| `headingLevel` | `2 \| 3` | `3` |  |
+| `headingLevel` | `2 \| 3` | `3` | Heading level for the proposal's title. Defaults to 3; use 2 when the review is the page's main subject. |
 | `model` | `string` |  | The model identifier, set as a literal. |
 | `onDecide` | `((status: ChangeDecisionStatus, reason: string) => void)` |  | Called with a valid decision only: never for a rejection without a reason. |
 | `reviewer` | `string` |  | Who decided, shown with the outcome — "M. Herrera". |
@@ -4375,9 +4375,9 @@ A change to a record rather than a file: a feature flag, a customer's plan, a sc
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `changes` (required) | `readonly FieldChange[]` |  |  |
+| `changes` (required) | `readonly FieldChange[]` |  | The fields that changed, each as before → after. Leave out the fields that did not change: the list is the change, not the record. |
 | `title` (required) | `ReactNode` |  | What the record is — "Feature flag help_panel_v2". |
-| `headingLevel` | `3 \| 4 \| 5` | `4` |  |
+| `headingLevel` | `3 \| 4 \| 5` | `4` | Heading level for the record's title. Defaults to 4, under a `ChangeReview` heading. |
 
 `className`, `ref`, `id` and the other DOM props go to `<section data-slot="field-changes">`.
 
@@ -4392,7 +4392,7 @@ One file's change, as a reviewer reads it.
 | `diff` | `string` |  | One file's unified diff, as `git diff` prints it. |
 | `headingLevel` | `3 \| 4 \| 5` | `4` | Heading level for the path. Defaults to 4, under a `ChangeReview` heading. |
 | `hunks` | `readonly (DiffHunk \| DiffHunkInput)[]` |  | Or the hunks, structured. Wins over `diff`. |
-| `kind` | `FileChangeKind` | `modified` |  |
+| `kind` | `FileChangeKind` | `modified` | What happened to the file, shown as a mark and a word in the header. Defaults to `modified`; a `renamed` file with no hunks says so instead of showing an empty diff. |
 | `layout` | `"unified" \| "split"` | `unified` | `unified` is one column of lines. `split` sets old against new side by side once the diff's container is 48rem wide, and stays unified below that — a phone has no room for two columns of code. |
 | `previousPath` | `string` |  | The path before a rename. |
 
@@ -4453,7 +4453,7 @@ How sure the system is, in three steps and in words.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `level` (required) | `ConfidenceLevel` |  |  |
+| `level` (required) | `ConfidenceLevel` |  | How strong the support is: three coarse steps, shown as filled segments and a word, never a percentage the model cannot honestly claim. |
 | `basis` | `string` |  | What the confidence rests on — "3 sources agree", "single source". |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="confidence">`.
@@ -4533,16 +4533,16 @@ One turn of a conversation.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `role` (required) | `MessageRole` |  |  |
+| `role` (required) | `MessageRole` |  | Who the turn belongs to. Sets the gutter label and its band; the content's typeface comes from what you pass in (`StreamingText` for a model's reply). |
 | `author` | `string` |  | Who is speaking, if more specific than the role — "Cayuco", "M. Herrera". |
 | `copyText` | `string` |  | Copies this text. Omit to hide the copy action. |
 | `error` | `string` |  | The error, verbatim from the system. Shown as a literal — operators paste it into tickets. |
 | `feedback` | `"up" \| "down"` |  | The rating already given, if any. |
 | `model` | `string` |  | The model that produced it. A machine identifier, so it is set as a literal. |
 | `onFeedback` | `((value: "up" \| "down") => void)` |  | Called with the reader's rating. Omit to hide the rating actions. |
-| `onRetry` | `(() => void)` |  |  |
+| `onRetry` | `(() => void)` |  | Regenerates the turn. Shows Retry among the actions, or in the error block when `status` is `error`; omit to hide it. |
 | `status` | `"error" \| "streaming" \| "done"` | `done` | `error`: the message failed partway. Content so far stays; the error is stated under it. |
-| `timestamp` | `string \| Date` |  |  |
+| `timestamp` | `string \| Date` |  | When the turn was sent. Shown in the gutter and in the turn's accessible name; see `timeZone` for when it renders. |
 | `timeZone` | `string` |  | IANA zone the time is shown in, such as `"UTC"` or `"America/Panama"`. Without it the time is the reader's own and appears only after hydration, because the server cannot know the reader's zone; pass one to have the time in the server HTML. |
 
 `className`, `ref`, `id` and the other DOM props go to `<article data-slot="message">`.
@@ -4621,9 +4621,9 @@ A file or context item attached to the next prompt. The filename is a literal.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `name` (required) | `string` |  |  |
+| `name` (required) | `string` |  | The file or item's name, set as a literal and used in the remove button's name ("Remove report.csv"). |
 | `detail` | `string` |  | e.g. "CSV · 48 KB". |
-| `onRemove` | `(() => void)` |  |  |
+| `onRemove` | `(() => void)` |  | Takes the attachment off the next prompt. Shows a remove button; omit for an attachment that cannot be removed. |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="attachment-chip">`.
 
@@ -4636,17 +4636,17 @@ The composer.
 | `label` (required) | `string` |  | The visible-to-assistive-tech name of the field — "Message Cayuco". |
 | `onSubmit` (required) | `(value: string) => void` |  | Called with the trimmed prompt. The field clears itself when uncontrolled. |
 | `attachments` | `ReactNode` |  | Attachment chips, above the field. |
-| `defaultValue` | `string` |  |  |
-| `disabled` | `boolean` | `false` |  |
+| `defaultValue` | `string` |  | The starting draft when the composer owns it. Defaults to empty; the field clears itself after a send. |
+| `disabled` | `boolean` | `false` | Locks the composer, for a conversation the reader may not write to. To stop sending for a while, use `status="offline"` instead, which keeps the draft editable and says why. |
 | `maxRows` | `number` | `10` | Rows before the field scrolls instead of growing. |
 | `onStop` | `(() => void)` |  | Called by the stop button while `status` is `generating`. |
-| `onValueChange` | `((value: string) => void)` |  |  |
-| `placeholder` | `string` | `Ask anything…` |  |
+| `onValueChange` | `((value: string) => void)` |  | Called on every keystroke with the whole draft, untrimmed. |
+| `placeholder` | `string` | `Ask anything…` | Defaults to "Ask anything…". It is a hint, never the name: `label` is what assistive tech announces. |
 | `showEstimate` | `boolean` | `true` | Show the rough token estimate. |
 | `status` | `"idle" \| "generating" \| "offline"` | `idle` | `generating`: a response is streaming. The field stays editable — the operator can draft the next prompt — and the send button becomes stop. `offline`: sending is impossible. The draft is kept, and the reason is said. |
 | `submitOn` | `"enter" \| "mod-enter"` | `enter` | `enter`: Enter sends, Shift+Enter is a newline — chat convention. `mod-enter`: ⌘/Ctrl+Enter sends, Enter is a newline — for long prompts, where an accidental send costs a model run. |
 | `toolbar` | `ReactNode` |  | Leading controls in the footer — a model picker, a tool toggle. |
-| `value` | `string` |  |  |
+| `value` | `string` |  | The draft, when the page owns it — to restore a draft or clear it from outside. Pair with `onValueChange`. |
 
 `className`, `ref`, `id` and the other DOM props go to `<form data-slot="prompt-input">`.
 
@@ -4696,10 +4696,10 @@ The model's thinking, behind a disclosure.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `text` (required) | `string` |  | The reasoning text so far. |
-| `defaultOpen` | `boolean` | `false` |  |
+| `defaultOpen` | `boolean` | `false` | Start with the reasoning shown. Closed by default, because reasoning is evidence for when the answer looks wrong, not the answer. |
 | `durationMs` | `number` |  | A known duration, when there are no timestamps. |
-| `endedAt` | `number \| Date` |  |  |
-| `startedAt` | `number \| Date` |  |  |
+| `endedAt` | `number \| Date` |  | When the thinking ended. Freezes the clock; omit while the model is still thinking. |
+| `startedAt` | `number \| Date` |  | When the thinking started. Gives the summary line its clock: live while streaming, "Thought for 12.4s" once done. |
 | `status` | `"streaming" \| "done"` | `done` | `streaming` while the model is still thinking. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="reasoning">`.
@@ -4771,14 +4771,14 @@ What stopped a run, said plainly, with the way back next to it.
 | `autoRetry` | `boolean` | `false` | At `retryAt`, retry by itself instead of re-enabling the buttons. |
 | `copyable` | `boolean` | `kind !== 'cancelled'` | Offer *Copy error details*. On by default except for a cancellation, which is not an error. |
 | `error` | `string` |  | The error, verbatim. |
-| `kind` | `RunErrorKind` | `failed` |  |
+| `kind` | `RunErrorKind` | `failed` | Why the run stopped, which sets the headline, the plain sentence and the glyph. Defaults to `failed`; `cancelled` is not an error, so it offers no copy action. |
 | `message` | `ReactNode` |  | Replaces the plain sentence under the headline. |
-| `onRetry` | `(() => void)` |  |  |
-| `onRetryFromStep` | `(() => void)` |  |  |
+| `onRetry` | `(() => void)` |  | Runs the whole run again from the start. Shows *Retry run*, disabled until `retryAt` passes. |
+| `onRetryFromStep` | `(() => void)` |  | Re-runs from the step that stopped, keeping the work before it, so it takes the stronger button when both retries are offered. Disabled until `retryAt` passes. |
 | `retryAt` | `number \| Date` |  | When a retry is allowed (or will happen). Shows a countdown. |
 | `runId` | `string` |  | The run id, for the copied details. |
 | `step` | `string` |  | The step that stopped, in words — "Break the result down by plan". |
-| `stepCount` | `number` |  |  |
+| `stepCount` | `number` |  | How many steps the run has, so the position reads "step 4 of 5". Only used with `stepNumber`. |
 | `stepNumber` | `number` |  | The step's position, counted from 1. Shown as "step 4 of 5" and used to name *Retry from step 4*. |
 | `tool` | `string` |  | The tool that failed, exactly as the model called it. |
 
@@ -4845,7 +4845,7 @@ Glyph + word + colour, always all three. State is never carried by colour alone:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `status` (required) | `RunStatusValue` |  |  |
+| `status` (required) | `RunStatusValue` |  | The state shown: it picks the glyph, the word (unless `label` overrides it) and its colour, and whether the clock keeps running. |
 | `durationMs` | `number` |  | A known duration, for a finished step that has no timestamps. |
 | `endedAt` | `number \| Date` |  | When it ended. Freezes the clock; omit while the work is open. |
 | `label` | `string` |  | Override the word — e.g. "Thinking" for a running reasoning step. The glyph stays. |
@@ -4860,7 +4860,7 @@ Glyph + word + colour, always all three. State is never carried by colour alone:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `status` (required) | `RunStatusValue` |  |  |
+| `status` (required) | `RunStatusValue` |  | Which mark to draw. Each status has its own shape, not only its own hue, so the glyph survives greyscale. Decorative: pair it with the word, as `RunStatus` does. |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="run-status-glyph">`.
 
@@ -4938,7 +4938,7 @@ An inline citation marker: a small cut chip with the source's number.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `n` (required) | `number` |  |  |
+| `n` (required) | `number` |  | The source's number, matching its place in the `SourceList`. Shown as "[n]"; the link defaults to `#source-n`. |
 | `cardSide` | `"bottom" \| "top"` | `top` | Which side of the marker the card opens on. |
 | `render` | `ReactElement<unknown, string \| JSXElementConstructor<any>> \| ((props: DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>) => ReactElement<...>)` |  | The element the marker renders as: your router's `<Link />` when `href` points inside the app, or a function returning one. Base UI's render prop, so the marker's classes, name and handlers are merged onto it. |
 | `source` | `Source` |  | The source this marker points at. With it, hovering or focusing the marker opens a preview card — title, domain, the passage used — so the claim can be checked without leaving the sentence. |
@@ -4952,7 +4952,7 @@ The sources an answer drew on, as an ordered list whose numbers match the inline
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `sources` (required) | `readonly Source[]` |  |  |
+| `sources` (required) | `readonly Source[]` |  | The sources the answer drew on, in citation order, so each card's number matches its inline marker. |
 | `timeZone` | `string` |  | IANA zone the read times are shown in, such as `"UTC"`. Without it they are the reader's own and appear only after hydration, because the server cannot know the reader's zone. |
 
 `className`, `ref`, `id` and the other DOM props go to `<ol data-slot="source-list">`.
@@ -5017,7 +5017,7 @@ Text that arrives a token at a time.
 | `doneAnnouncement` | `string` | `Response complete.` | Spoken once when a stream that was running completes. |
 | `errorAnnouncement` | `string` | `Response stopped with an error.` | Spoken once when a stream that was running fails. |
 | `renderCitation` | `((n: number) => ReactNode)` |  | How an inline `[n]` marker renders. Without it the marker stays as text. Pass a stable function (module scope or `useCallback`): finished blocks skip re-rendering only while it stays the same. |
-| `status` | `StreamStatus` | `done` |  |
+| `status` | `StreamStatus` | `done` | Where the stream is. `streaming` shows the caret and sets `aria-busy`; the move from `streaming` to `done` or `error` is announced once. Defaults to `done`. |
 | `tone` (deprecated) | `"default" \| "muted"` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `variant`, which takes the same values: a muted ink is a presentation, and `tone` is a status. |
 | `variant` | `"default" \| "muted"` |  | `muted` for text the reader may skim — reasoning, not the answer. |
 
@@ -5067,8 +5067,8 @@ What a run consumed.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `input` (required) | `number` |  |  |
-| `output` (required) | `number` |  |  |
+| `input` (required) | `number` |  | Tokens sent to the model, cached ones included. |
+| `output` (required) | `number` |  | Tokens the model produced. With `input`, the total measured against `contextWindow`. |
 | `cached` | `number` |  | Input tokens served from cache — cheaper, and worth knowing about. |
 | `contextWindow` | `number` |  | The model's context window. With it, a meter shows how full the context is. |
 | `costUsd` | `number` |  | Cost in USD, if the platform knows it. |
@@ -5143,18 +5143,18 @@ One tool invocation: what the model asked a system to do, with what, and what ca
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `name` (required) | `string` |  | The tool's identifier, exactly as the model called it. |
-| `status` (required) | `RunStatusValue` |  |  |
+| `status` (required) | `RunStatusValue` |  | The call's state. `waiting` and `failed` keep the details open, because the decision or the error is the content. |
 | `approval` | `ToolCallApproval` |  | Present when `status` is `waiting`: the call is held for a person. |
 | `args` | `unknown` |  | The arguments the model sent. Objects are shown as formatted JSON. |
 | `defaultOpen` | `boolean` | `false` | Start expanded. Waiting and failed calls are always expanded. |
-| `durationMs` | `number` |  |  |
-| `endedAt` | `number \| Date` |  |  |
+| `durationMs` | `number` |  | A known duration, for a finished call that has no timestamps. |
+| `endedAt` | `number \| Date` |  | When the call ended. Freezes the clock; omit while the call is open. |
 | `error` | `string` |  | The error, verbatim. |
-| `onOpenChange` | `((open: boolean) => void)` |  |  |
-| `onRetry` | `(() => void)` |  |  |
+| `onOpenChange` | `((open: boolean) => void)` |  | Called when the reader opens or closes the details. |
+| `onRetry` | `(() => void)` |  | Calls the tool again. Shows Retry beside the error once the call has failed; omit when the run, not the call, owns retrying. |
 | `open` | `boolean` |  | Whether the details are expanded, when the page owns that. Waiting and failed calls are always expanded. |
 | `result` | `unknown` |  | What came back. Objects as JSON; strings as text. |
-| `startedAt` | `number \| Date` |  |  |
+| `startedAt` | `number \| Date` |  | When the call started. With it, the header shows a clock that counts while the call is active. |
 | `title` | `string` |  | What the call is for, in words — "Query rollout results". Optional; the name is always shown. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="tool-call">`.
@@ -5165,7 +5165,7 @@ Calls the model made at the same time. Drawn as a bracket on the left — one in
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `count` (required) | `number` |  |  |
+| `count` (required) | `number` |  | How many calls ran together. Used for the default label, "N tools in parallel". |
 | `label` | `string` |  | Defaults to "N tools in parallel". |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="tool-call-group">`.

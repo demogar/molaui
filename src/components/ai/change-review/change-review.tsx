@@ -62,6 +62,10 @@ export interface ChangeReviewProps extends Omit<React.ComponentProps<'section'>,
   onDecide?: (status: ChangeDecisionStatus, reason: string | undefined) => void
   /** Who decided, shown with the outcome — "M. Herrera". */
   reviewer?: string
+  /**
+   * Heading level for the proposal's title. Defaults to 3; use 2 when the review
+   * is the page's main subject.
+   */
   headingLevel?: 2 | 3
 }
 
@@ -255,7 +259,15 @@ export interface FieldChange {
 export interface FieldChangesProps extends Omit<React.ComponentProps<'section'>, 'children' | 'title'> {
   /** What the record is — "Feature flag help_panel_v2". */
   title: React.ReactNode
+  /**
+   * The fields that changed, each as before → after. Leave out the fields that did
+   * not change: the list is the change, not the record.
+   */
   changes: readonly FieldChange[]
+  /**
+   * Heading level for the record's title. Defaults to 4, under a `ChangeReview`
+   * heading.
+   */
   headingLevel?: 3 | 4 | 5
 }
 

@@ -13,6 +13,11 @@ export type StreamStatus = 'idle' | 'streaming' | 'done' | 'error'
 export interface StreamingTextProps extends Omit<React.ComponentProps<'div'>, 'children'> {
   /** Everything received so far. Grows; never rewritten from the top. */
   text: string
+  /**
+   * Where the stream is. `streaming` shows the caret and sets `aria-busy`; the
+   * move from `streaming` to `done` or `error` is announced once. Defaults to
+   * `done`.
+   */
   status?: StreamStatus
   /** Spoken once when a stream that was running completes. */
   doneAnnouncement?: string

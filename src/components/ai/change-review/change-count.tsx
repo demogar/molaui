@@ -3,7 +3,9 @@ import type * as React from 'react'
 import { cn } from '../../../lib/cn'
 
 export interface ChangeCountProps extends Omit<React.ComponentProps<'span'>, 'children'> {
+  /** Lines added. Shown as "+n" and said as "n lines added". */
   added: number
+  /** Lines removed. Shown as "−n" and said as "n lines removed". */
   removed: number
 }
 

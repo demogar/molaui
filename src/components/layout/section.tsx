@@ -27,7 +27,9 @@ export function Section({ divided = false, rhythm = 'panel', className, ...props
 }
 
 export interface SectionHeaderProps extends Omit<React.ComponentProps<'div'>, 'title'> {
+  /** The section's heading, rendered at `level`. */
   title: React.ReactNode
+  /** A sentence or two under the heading, set as a Lead, that says what the section is for. */
   lead?: React.ReactNode
   /**
    * The section's label. It renders UNDER the heading, not above it: a small
@@ -37,6 +39,7 @@ export interface SectionHeaderProps extends Omit<React.ComponentProps<'div'>, 't
   label?: string
   /** Actions, aligned to the heading's baseline on the right. */
   actions?: React.ReactNode
+  /** The heading level, 2 by default. Set it from the outline of the page, not from the size you want. */
   level?: 1 | 2 | 3
 }
 

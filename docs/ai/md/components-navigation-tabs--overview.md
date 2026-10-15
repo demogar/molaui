@@ -58,8 +58,8 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
-| `variant` | `TabsVariant` | `underline` |  |
+| `className` | `string` |  | Classes for the root, merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute. |
+| `variant` | `TabsVariant` | `underline` | `underline` (default) switches views of one thing, a run's Trace / Output / Logs. `panel` is for tabs that are containers, a settings sheet or a code sample in three languages: the active tab joins the panel below. Every part inside reads it, so set it here only. |
 
 Also accepts the props of `TabsRootProps`.
 
@@ -69,7 +69,7 @@ Also accepts the props of `TabsRootProps`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the row of tabs, which scrolls sideways when the tabs outgrow it. A string, for the reason given on `Tabs`. |
 | `ref` | `Ref<HTMLDivElement>` |  | Allows getting a ref to the component instance. Once the component unmounts, React will set `ref.current` to `null` (or call the ref with `null` if you passed a callback ref). |
 
 Also accepts the props of `TabsListProps`.
@@ -80,7 +80,7 @@ Also accepts the props of `TabsListProps`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the panel, merged with `cn()`. A string, for the reason given on `Tabs`. |
 
 Also accepts the props of `TabsPanelProps`.
 
@@ -90,9 +90,9 @@ Also accepts the props of `TabsPanelProps`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the tab, merged with `cn()`. A string, for the reason given on `Tabs`. |
 | `count` | `number` |  | Trailing count, e.g. the number of tool calls. Tabular. |
-| `icon` | `ReactNode` |  |  |
+| `icon` | `ReactNode` |  | Leading icon; decorative, so the label still has to name the tab. |
 
 Also accepts the props of `NativeButtonProps`, `TabsTabProps`.
 

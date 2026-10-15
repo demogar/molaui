@@ -76,13 +76,13 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `label` (required) | `ReactNode` |  |  |
+| `label` (required) | `ReactNode` |  | The visible label, wired to the control by `id`. Required: a placeholder is not a label, and a field with none is a question nobody hears. |
 | `description` | `ReactNode` |  | Alias of `hint`, for callers who think of it as a description. `hint` wins if both are set. |
 | `error` | `ReactNode` |  | Validation message under the control. Its presence is what marks the field invalid. |
 | `hint` | `ReactNode` |  | Supporting copy under the control. |
 | `labelAside` | `ReactNode` |  | Something to the right of the label: a character count, a "Reset" link. |
 | `optional` | `boolean` | `false` | Renders the "Optional" tag. Ignored when `required`. |
-| `required` | `boolean` | `false` |  |
+| `required` | `boolean` | `false` | Shows the required mark on the label and passes `required` to the control through the render prop, so the browser validates it too. Overrides `optional`. |
 
 Renders no element of its own, so it takes no `className` or `ref`.
 

@@ -18,10 +18,25 @@ import { Heading } from '../typography'
  * keylines. It is a list, so a screen reader hears "list, 3 items".
  */
 export interface PageHeaderProps extends Omit<React.ComponentProps<'header'>, 'title'> {
+  /** The page's name, rendered as its one `h1`. */
   title: React.ReactNode
+  /** A sentence under the title saying what the page is for. */
   description?: React.ReactNode
+  /**
+   * A `Breadcrumb`, above the title: it is navigation back up the trail, not a
+   * label for the heading.
+   */
   breadcrumb?: React.ReactNode
+  /**
+   * The page's buttons, right of the title. They wrap below it on a narrow screen
+   * rather than hiding in an overflow menu, because the primary action should
+   * never cost an extra click.
+   */
   actions?: React.ReactNode
+  /**
+   * Short facts — owner, last updated, version — in a row divided by keylines.
+   * Rendered as a list, so a screen reader hears how many there are.
+   */
   meta?: React.ReactNode[]
   /** A Tabs list. Sits on the header's bottom edge so the active tab cuts into it. */
   tabs?: React.ReactNode

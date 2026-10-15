@@ -48,6 +48,7 @@ export type ProgressSize = 'sm' | 'md' | 'lg'
 const sizeClasses: Record<ProgressSize, string> = { sm: 'h-1.5', md: 'h-2.5', lg: 'h-4' }
 
 export interface ProgressProps extends Omit<ProgressPrimitive.Root.Props, 'className' | 'children'> {
+  /** Classes for the root, which holds the label row and the track. */
   className?: string
   /** Visible label; also the accessible name. Use `aria-label` when there is no room for one. */
   label?: React.ReactNode
@@ -55,6 +56,10 @@ export interface ProgressProps extends Omit<ProgressPrimitive.Root.Props, 'class
   showValue?: boolean
   /** Replaces the value text, e.g. "212 / 300 prompts". */
   valueText?: (formatted: string | null, value: number | null) => React.ReactNode
+  /**
+   * Track thickness: `sm` inside a row or a card, `md` (the default) on its own,
+   * `lg` for the one task a screen is waiting on.
+   */
   size?: ProgressSize
   /**
    * Fill colour. `neutral` (ink) is in-flight; `success` and `danger` (verde,
@@ -108,14 +113,24 @@ export function Progress({
 }
 
 export interface MeterProps extends Omit<MeterPrimitive.Root.Props, 'className' | 'children'> {
+  /** Classes for the root, which holds the label row and the track. */
   className?: string
+  /** Visible label; also the accessible name. Use `aria-label` when there is no room for one. */
   label?: React.ReactNode
   /**
    * Fractions of the range at which the fill changes: gold past `warn`, rojo
    * past `danger`. Drawn on the track as ticks. Pass `{}` for none.
    */
   thresholds?: { warn?: number; danger?: number }
+  /**
+   * Replaces the value text at the end of the label row, e.g. "212 / 300 MB".
+   * Receives the formatted value and the raw number.
+   */
   valueText?: (formatted: string, value: number) => React.ReactNode
+  /**
+   * Track thickness: `sm` inside a row or a card, `md` (the default) on its own,
+   * `lg` when the reading is the point of the screen.
+   */
   size?: ProgressSize
 }
 

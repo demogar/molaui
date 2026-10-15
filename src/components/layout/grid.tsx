@@ -11,6 +11,11 @@ import { type Variants } from '../../lib/variants'
  */
 export const gridVariants = cva('grid', {
   variants: {
+    /**
+     * The column pattern, one or two columns on a phone and more at each breakpoint;
+     * `thirds` by default. `auto` fits as many `minItem`-wide columns as the
+     * space allows and needs no breakpoint.
+     */
     cols: {
       halves: 'grid-cols-1 md:grid-cols-2',
       thirds: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
@@ -18,6 +23,10 @@ export const gridVariants = cva('grid', {
       fifths: 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-5',
       auto: 'grid-cols-[repeat(auto-fill,minmax(min(var(--grid-min,240px),100%),1fr))]',
     },
+    /**
+     * Space between cells, on the spacing scale. `seamless` closes the gap to a
+     * shared keyline, so the cells read as one panel cut into pieces.
+     */
     gap: {
       tight: 'gap-3',
       default: 'gap-6',

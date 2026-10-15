@@ -61,15 +61,41 @@ export interface DatePickerProps
     InputProps,
     'value' | 'defaultValue' | 'onChange' | 'size' | 'leading' | 'trailing' | 'type' | 'children' | 'min' | 'max'
   > {
+  /**
+   * The chosen day, controlled, at local midnight. `null` is no date; leave it
+   * `undefined` to let the picker hold its own state.
+   */
   value?: Date | null
+  /** The day chosen on first render, uncontrolled. `null` or omitted starts empty. */
   defaultValue?: Date | null
+  /**
+   * Called with the day at local midnight when one is picked or a typed date commits
+   * (on Enter or blur, never per keystroke), and with `null` when the text is
+   * cleared. A typed date that cannot be read is shown as an error and does not call
+   * it.
+   */
   onValueChange?: (value: Date | null) => void
   /** BCP 47 tag for names, digits, typed order and week start. `undefined` uses the runtime's locale. */
   locale?: DateLocale
   /** 0 = Sunday … 6 = Saturday. Overrides the locale's first day of the week. */
   weekStartsOn?: number
+  /**
+   * The earliest day that can be chosen, inclusive; only the day counts, not the
+   * time. Earlier days are disabled in the grid and refused when typed, with a
+   * sentence naming the limit.
+   */
   min?: Date | null
+  /**
+   * The latest day that can be chosen, inclusive; only the day counts, not the time.
+   * Later days are disabled in the grid and refused when typed, with a sentence
+   * naming the limit.
+   */
   max?: Date | null
+  /**
+   * Days inside `min`–`max` that still cannot be chosen: weekends in a freeze,
+   * public holidays. Disabled in the grid, and refused when typed with a sentence
+   * naming the day.
+   */
   isDateDisabled?: (date: Date) => boolean
   /**
    * Inject "now" for stable stories and tests. Pass it when server rendering
@@ -82,11 +108,18 @@ export interface DatePickerProps
   open?: boolean
   /** Open the calendar on first render — for a step that exists only to pick a date. */
   defaultOpen?: boolean
+  /** Called when the calendar opens or closes, by the button, Escape, a pick or a press outside. */
   onOpenChange?: (open: boolean) => void
   /** Submitted as `yyyy-mm-dd`, whatever the display locale. */
   name?: string
+  /**
+   * Control height, shared with Input and Select so the picker lines up in a form
+   * row. Defaults to `md`; density rescales every size.
+   */
   size?: FieldControlSize
+  /** Stated, not faded: the input goes to the shaded cloth and the calendar button is disabled. */
   disabled?: boolean
+  /** Marks the input required for form validation. Inside `Field`, the label carries the required mark. */
   required?: boolean
   /** Defaults to the locale's format, e.g. `DD/MM/YYYY`. */
   placeholder?: string

@@ -53,13 +53,27 @@ const fmt = (n: number) => n.toLocaleString('en-US')
 export interface PaginationProps extends Omit<React.ComponentProps<'nav'>, 'onChange'> {
   /** 1-based. */
   page: number
+  /** How many pages there are. The next button is disabled on the last. */
   pageCount: number
+  /**
+   * Called with the 1-based page a person asked for. The page is controlled: set
+   * `page` from it, or from the router if pages are addressable.
+   */
   onPageChange: (page: number) => void
+  /**
+   * `pages` (the default) for results where a page is a place people return to;
+   * `compact` ("51–100 of 1,284" and two arrows) for dense tables where how much is
+   * left matters more.
+   */
   variant?: 'pages' | 'compact'
   /** Pages either side of the current one in the `pages` variant. */
   siblings?: number
   /** For the compact range text: rows per page and the total row count. */
   pageSize?: number
+  /**
+   * Total row count for the `compact` range text. Without it, or without `pageSize`,
+   * the text falls back to "Page 3 of 26".
+   */
   total?: number
 }
 

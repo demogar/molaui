@@ -76,18 +76,18 @@ One tool invocation: what the model asked a system to do, with what, and what ca
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `name` (required) | `string` |  | The tool's identifier, exactly as the model called it. |
-| `status` (required) | `RunStatusValue` |  |  |
+| `status` (required) | `RunStatusValue` |  | The call's state. `waiting` and `failed` keep the details open, because the decision or the error is the content. |
 | `approval` | `ToolCallApproval` |  | Present when `status` is `waiting`: the call is held for a person. |
 | `args` | `unknown` |  | The arguments the model sent. Objects are shown as formatted JSON. |
 | `defaultOpen` | `boolean` | `false` | Start expanded. Waiting and failed calls are always expanded. |
-| `durationMs` | `number` |  |  |
-| `endedAt` | `number \| Date` |  |  |
+| `durationMs` | `number` |  | A known duration, for a finished call that has no timestamps. |
+| `endedAt` | `number \| Date` |  | When the call ended. Freezes the clock; omit while the call is open. |
 | `error` | `string` |  | The error, verbatim. |
-| `onOpenChange` | `((open: boolean) => void)` |  |  |
-| `onRetry` | `(() => void)` |  |  |
+| `onOpenChange` | `((open: boolean) => void)` |  | Called when the reader opens or closes the details. |
+| `onRetry` | `(() => void)` |  | Calls the tool again. Shows Retry beside the error once the call has failed; omit when the run, not the call, owns retrying. |
 | `open` | `boolean` |  | Whether the details are expanded, when the page owns that. Waiting and failed calls are always expanded. |
 | `result` | `unknown` |  | What came back. Objects as JSON; strings as text. |
-| `startedAt` | `number \| Date` |  |  |
+| `startedAt` | `number \| Date` |  | When the call started. With it, the header shows a clock that counts while the call is active. |
 | `title` | `string` |  | What the call is for, in words — "Query rollout results". Optional; the name is always shown. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="tool-call">`.
@@ -98,7 +98,7 @@ Calls the model made at the same time. Drawn as a bracket on the left — one in
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `count` (required) | `number` |  |  |
+| `count` (required) | `number` |  | How many calls ran together. Used for the default label, "N tools in parallel". |
 | `label` | `string` |  | Defaults to "N tools in parallel". |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="tool-call-group">`.

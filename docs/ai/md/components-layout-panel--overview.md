@@ -55,10 +55,10 @@ Each story is a live example in Storybook.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `as` | `"article" \| "aside" \| "div" \| "section"` | `div` | Render as a landmark-free `section` (named by its heading) instead of a `div`. |
-| `band` | `"oro" \| "rojo" \| "anil" \| "verde" \| "cloth"` |  |  |
-| `edge` | `"cut" \| "band" \| "none"` |  |  |
-| `layer` | `"pale" \| "cloth" \| "shade" \| "ink" \| "rojo" \| "anil" \| "verde" \| "oro"` |  |  |
-| `padding` | `"none" \| "sm" \| "md" \| "lg"` |  |  |
+| `band` | `"oro" \| "rojo" \| "anil" \| "verde" \| "cloth"` |  | The colour revealed by `edge="band"`, gold by default. Has no effect on the other edges. |
+| `edge` | `"cut" \| "band" \| "none"` |  | `cut` (default) is the ink keyline; `band` reveals a band of `band`'s colour between two keylines, for the one panel that is the point of the screen; `none` for a ground inside another. |
+| `layer` | `"pale" \| "cloth" \| "shade" \| "ink" \| "rojo" \| "anil" \| "verde" \| "oro"` |  | The ground the panel is cut from, `pale` by default. A filled layer (`rojo`, `anil`, `verde`, `ink`) re-inks everything inside it, so pick it here rather than with a background class. |
+| `padding` | `"none" \| "sm" \| "md" \| "lg"` |  | Inner padding on the spacing scale, so it moves with density; `md` by default, `none` for a table or a list that runs edge to edge. |
 | `tone` (deprecated) | `PanelLayer` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `layer`, which takes the same values. `codemods/prop-vocabulary.ts` rewrites call sites. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="panel">`.

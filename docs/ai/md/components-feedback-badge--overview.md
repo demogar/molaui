@@ -60,8 +60,8 @@ Each story is a live example in Storybook.
 | --- | --- | --- | --- |
 | `dot` | `boolean` | `false` | A leading StatusDot in the badge's tone. |
 | `pulse` | `boolean` | `false` | Pulse the dot — for a state that is live right now (running, streaming). |
-| `tone` | `"neutral" \| "info" \| "success" \| "warn" \| "danger" \| "accent"` |  |  |
-| `variant` | `"solid" \| "soft" \| "outline"` |  |  |
+| `tone` | `"neutral" \| "info" \| "success" \| "warn" \| "danger" \| "accent"` |  | The status the badge states, as one of the four layers. Say the state in the label too: the tone colours it, the words carry it. |
+| `variant` | `"solid" \| "soft" \| "outline"` |  | How loud the claim is: `soft` (default) for a column of statuses, `solid` for the one state that must be seen from across the room, `outline` for categorical metadata. |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="badge">`.
 
@@ -71,7 +71,7 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `level` | `"essential" \| "highly" \| "detour" \| "time"` |  |  |
+| `level` | `"essential" \| "highly" \| "detour" \| "time"` |  | How strongly the recommendation is made, from `essential` (gold) down to `time`. Each level brings its own label; pass children only to reword it. |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="recommendation-badge">`.
 
@@ -83,7 +83,7 @@ A square, not a circle. It is a scrap of cut cloth, and a round dot is the one s
 | --- | --- | --- | --- |
 | `label` | `string` |  | Announced text for a dot used on its own. Omit when the dot sits beside a label that already says the state — then it is decorative and hidden. |
 | `pulse` | `boolean` | `false` | The state is live. Respects reduced motion: the pulse stills, the dot stays. |
-| `tone` | `BadgeTone` | `neutral` |  |
+| `tone` | `BadgeTone` | `neutral` | The status, in the same tones as Badge. Defaults to `neutral`. |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="status-dot">`.
 

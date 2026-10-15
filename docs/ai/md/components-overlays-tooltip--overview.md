@@ -50,15 +50,15 @@ Each story is a live example in Storybook.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `children` (required) | `ReactElement<unknown, string \| JSXElementConstructor<any>>` |  | The element that triggers it. Must be focusable — usually a Button or IconButton. |
-| `content` (required) | `ReactNode` |  |  |
-| `align` | `Align` | `center` |  |
-| `defaultOpen` | `boolean` |  |  |
+| `content` (required) | `ReactNode` |  | The label: a few words, no interactive content. It reaches a screen reader only as the trigger's description, and not at all on touch, so it must repeat something said elsewhere rather than be the only place it lives. |
+| `align` | `Align` | `center` | How it lines up along that side, `center` by default. |
+| `defaultOpen` | `boolean` |  | Shows it on first render without controlling it afterwards. |
 | `delay` | `number` |  | Overrides the provider's delay for this tooltip. |
 | `disabled` | `boolean` |  | Never open: for a trigger whose label is already visible in this state. |
-| `onOpenChange` | `((open: boolean, eventDetails: TooltipRootChangeEventDetails) => void)` |  |  |
-| `open` | `boolean` |  |  |
+| `onOpenChange` | `((open: boolean, eventDetails: TooltipRootChangeEventDetails) => void)` |  | Called when hover, focus or Escape would open or close it, with the next state. |
+| `open` | `boolean` |  | Whether it is showing, when you control it. Rarely needed: hover and focus open it already. |
 | `shortcut` | `string[]` |  | Keys, in order: `['⌘', 'K']`. |
-| `side` | `Side` | `top` |  |
+| `side` | `Side` | `top` | Which side of the trigger it appears on, `top` by default. Base UI flips it when there is no room. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="tooltip">`.
 

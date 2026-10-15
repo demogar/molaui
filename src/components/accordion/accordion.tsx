@@ -33,6 +33,11 @@ import { cn } from '../../lib/cn'
  */
 
 export interface AccordionProps extends Omit<AccordionPrimitive.Root.Props, 'className'> {
+  /**
+   * Classes for the root, merged with `cn()` so yours win a conflict. A
+   * string, not Base UI's function of state: style a state with its `data-*`
+   * attribute instead (`data-open:`).
+   */
   className?: string
 }
 
@@ -47,6 +52,7 @@ export function Accordion({ className, ...props }: AccordionProps) {
 }
 
 export interface AccordionItemProps extends Omit<AccordionPrimitive.Item.Props, 'className'> {
+  /** Classes for the item, merged with `cn()`. A string, for the reason given on `Accordion`. */
   className?: string
 }
 
@@ -72,6 +78,7 @@ const markerClasses =
   'ms-auto size-(--icon) shrink-0 text-ink-2 transition-transform duration-(--motion-base) group-data-panel-open/trigger:rotate-45'
 
 export interface AccordionTriggerProps extends Omit<AccordionPrimitive.Trigger.Props, 'className'> {
+  /** Classes for the trigger button (not the heading around it), merged with `cn()`. A string, for the reason given on `Accordion`. */
   className?: string
   /** Secondary text on the same line, right of the title — a count, a status. */
   meta?: React.ReactNode
@@ -101,6 +108,11 @@ const panelClasses = [
 ]
 
 export interface AccordionPanelProps extends Omit<AccordionPrimitive.Panel.Props, 'className'> {
+  /**
+   * Classes for the content inside the panel, not the panel itself: the
+   * panel animates its height, and padding on it would be clipped while it
+   * does.
+   */
   className?: string
 }
 
@@ -129,6 +141,7 @@ export function Collapsible(props: CollapsiblePrimitive.Root.Props) {
 }
 
 export interface CollapsibleTriggerProps extends Omit<CollapsiblePrimitive.Trigger.Props, 'className'> {
+  /** Classes for the trigger button, merged with `cn()`. A string, for the reason given on `Accordion`. */
   className?: string
 }
 
@@ -154,6 +167,7 @@ export function CollapsibleTrigger({ className, children, ...props }: Collapsibl
 }
 
 export interface CollapsiblePanelProps extends Omit<CollapsiblePrimitive.Panel.Props, 'className'> {
+  /** Classes for the content inside the panel, for the reason given on `AccordionPanel`. */
   className?: string
 }
 

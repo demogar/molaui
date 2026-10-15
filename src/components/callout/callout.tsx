@@ -49,6 +49,11 @@ import { Swatch } from '../swatch'
  */
 export const calloutVariants = cva('relative rounded-none text-ink', {
   variants: {
+    /**
+     * The status of the message, carried by the seam (or the swatch), the
+     * wash and the tone's icon; `info` by default. The title still has to say
+     * it in words.
+     */
     tone: {
       neutral: 'bg-ink-soft band-cloth',
       info: 'bg-anil-soft band-anil',
@@ -56,6 +61,11 @@ export const calloutVariants = cva('relative rounded-none text-ink', {
       warn: 'bg-oro-soft band-oro',
       danger: 'bg-danger-soft band-danger',
     },
+    /**
+     * `seam` (default) is the full message: top seam, keyline, icon. `flat`
+     * keeps only the wash and a square swatch, for a one-line aside beside a
+     * hero or at the head of a list, where a seam reads as a stripe.
+     */
     variant: {
       seam: 'shadow-cut',
       flat: 'h-fit',
@@ -91,6 +101,11 @@ const ICON_INK: Record<CalloutTone, string> = {
 export interface CalloutProps
   extends Omit<React.ComponentProps<'div'>, 'title'>,
     Variants<typeof calloutVariants> {
+  /**
+   * A short heading that states the message. With it the callout becomes a
+   * region named by the title; without it, it is plain content and the body
+   * has to stand alone.
+   */
   title?: React.ReactNode
   /** Buttons under the body. Usually one secondary, at `size="sm"`. */
   actions?: React.ReactNode

@@ -24,8 +24,14 @@ const GAP: Record<Gap, string> = {
 
 export const stackVariants = cva('flex', {
   variants: {
+    /** `column` (default) stacks children down; `row` lays them across without wrapping, unless `wrap` is set. */
     direction: { column: 'flex-col', row: 'flex-row' },
+    /**
+     * The space between children, on the role-named scale that moves with
+     * density. Stack defaults to `md`, Inline to `sm`.
+     */
     gap: GAP,
+    /** Cross-axis alignment. Inline defaults to `center`, so an icon and a label line up; use `baseline` for mixed type sizes. */
     align: {
       start: 'items-start',
       center: 'items-center',
@@ -33,12 +39,18 @@ export const stackVariants = cva('flex', {
       stretch: 'items-stretch',
       baseline: 'items-baseline',
     },
+    /** Main-axis distribution. `between` pushes the first and last child to the ends. */
     justify: {
       start: 'justify-start',
       center: 'justify-center',
       end: 'justify-end',
       between: 'justify-between',
     },
+    /**
+     * Let children wrap onto a new line. On by default for Inline, off for
+     * Stack; turn it off on a row only when its children can shrink, or it
+     * overflows a phone.
+     */
     wrap: { true: 'flex-wrap', false: '' },
   },
   defaultVariants: { direction: 'column', gap: 'md', wrap: false },

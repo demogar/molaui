@@ -66,8 +66,8 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `added` (required) | `number` |  |  |
-| `removed` (required) | `number` |  |  |
+| `added` (required) | `number` |  | Lines added. Shown as "+n" and said as "n lines added". |
+| `removed` (required) | `number` |  | Lines removed. Shown as "−n" and said as "n lines removed". |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="change-count">`.
 
@@ -82,7 +82,7 @@ An agent proposes a change; a person reviews it and decides.
 | `children` | `ReactNode` |  | The change itself: `FileDiff`s, `FieldChanges`, or both. |
 | `decision` | `ChangeDecision \| null` |  | Controlled decision. `null` means undecided. |
 | `defaultDecision` | `ChangeDecision \| null` | `null` | Uncontrolled starting decision. |
-| `headingLevel` | `2 \| 3` | `3` |  |
+| `headingLevel` | `2 \| 3` | `3` | Heading level for the proposal's title. Defaults to 3; use 2 when the review is the page's main subject. |
 | `model` | `string` |  | The model identifier, set as a literal. |
 | `onDecide` | `((status: ChangeDecisionStatus, reason: string) => void)` |  | Called with a valid decision only: never for a rejection without a reason. |
 | `reviewer` | `string` |  | Who decided, shown with the outcome — "M. Herrera". |
@@ -96,9 +96,9 @@ A change to a record rather than a file: a feature flag, a customer's plan, a sc
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `changes` (required) | `readonly FieldChange[]` |  |  |
+| `changes` (required) | `readonly FieldChange[]` |  | The fields that changed, each as before → after. Leave out the fields that did not change: the list is the change, not the record. |
 | `title` (required) | `ReactNode` |  | What the record is — "Feature flag help_panel_v2". |
-| `headingLevel` | `3 \| 4 \| 5` | `4` |  |
+| `headingLevel` | `3 \| 4 \| 5` | `4` | Heading level for the record's title. Defaults to 4, under a `ChangeReview` heading. |
 
 `className`, `ref`, `id` and the other DOM props go to `<section data-slot="field-changes">`.
 
@@ -113,7 +113,7 @@ One file's change, as a reviewer reads it.
 | `diff` | `string` |  | One file's unified diff, as `git diff` prints it. |
 | `headingLevel` | `3 \| 4 \| 5` | `4` | Heading level for the path. Defaults to 4, under a `ChangeReview` heading. |
 | `hunks` | `readonly (DiffHunk \| DiffHunkInput)[]` |  | Or the hunks, structured. Wins over `diff`. |
-| `kind` | `FileChangeKind` | `modified` |  |
+| `kind` | `FileChangeKind` | `modified` | What happened to the file, shown as a mark and a word in the header. Defaults to `modified`; a `renamed` file with no hunks says so instead of showing an empty diff. |
 | `layout` | `"unified" \| "split"` | `unified` | `unified` is one column of lines. `split` sets old against new side by side once the diff's container is 48rem wide, and stays unified below that — a phone has no room for two columns of code. |
 | `previousPath` | `string` |  | The path before a rename. |
 
