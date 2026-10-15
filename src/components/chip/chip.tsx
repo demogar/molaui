@@ -1,7 +1,8 @@
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type Variants } from '../../lib/variants'
 
 /**
  * A filter you can see the state of. A real `<input type="checkbox|radio">`
@@ -52,7 +53,7 @@ export const chipVariants = cva(
 
 export interface ChipProps
   extends Omit<React.ComponentProps<'input'>, 'size' | 'type' | 'children'>,
-    VariantProps<typeof chipVariants> {
+    Variants<typeof chipVariants> {
   /** `radio` for one-of-N within a `name` group, `checkbox` for multi-select. */
   type?: 'checkbox' | 'radio'
   /** The visible label. Also the control's accessible name, via the wrapping `<label>`. */

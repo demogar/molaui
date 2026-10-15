@@ -1,7 +1,8 @@
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type Variants } from '../../lib/variants'
 
 /**
  * The cut surface: a region of one ground, bounded by a hard edge.
@@ -60,9 +61,9 @@ export const panelVariants = cva('relative min-w-0 rounded-none', {
   defaultVariants: { tone: 'pale', edge: 'cut', padding: 'md', band: 'oro' },
 })
 
-export type PanelTone = NonNullable<VariantProps<typeof panelVariants>['tone']>
+export type PanelTone = NonNullable<Variants<typeof panelVariants>['tone']>
 
-export interface PanelProps extends React.ComponentProps<'div'>, VariantProps<typeof panelVariants> {
+export interface PanelProps extends React.ComponentProps<'div'>, Variants<typeof panelVariants> {
   /** Render as a landmark-free `section` (named by its heading) instead of a `div`. */
   as?: 'div' | 'section' | 'article' | 'aside'
 }

@@ -1,10 +1,11 @@
 'use client'
 
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
 import { CircleAlert, CircleCheck, Info, TriangleAlert, X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type Variants } from '../../lib/variants'
 import { IconButton } from '../button'
 import { Swatch } from '../swatch'
 
@@ -63,8 +64,8 @@ export const calloutVariants = cva('relative rounded-none text-ink', {
   defaultVariants: { tone: 'info', variant: 'seam' },
 })
 
-export type CalloutTone = NonNullable<VariantProps<typeof calloutVariants>['tone']>
-export type CalloutVariant = NonNullable<VariantProps<typeof calloutVariants>['variant']>
+export type CalloutTone = NonNullable<Variants<typeof calloutVariants>['tone']>
+export type CalloutVariant = NonNullable<Variants<typeof calloutVariants>['variant']>
 
 const ICON: Record<CalloutTone, React.ComponentType<{ className?: string }>> = {
   neutral: Info,
@@ -89,7 +90,7 @@ const ICON_INK: Record<CalloutTone, string> = {
 
 export interface CalloutProps
   extends Omit<React.ComponentProps<'div'>, 'title'>,
-    VariantProps<typeof calloutVariants> {
+    Variants<typeof calloutVariants> {
   title?: React.ReactNode
   /** Buttons under the body. Usually one secondary, at `size="sm"`. */
   actions?: React.ReactNode

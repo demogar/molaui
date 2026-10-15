@@ -175,8 +175,13 @@ export const TimedOut: Story = {
   },
 }
 
+// Relative to now (the visual tests freeze the clock, so it is still
+// deterministic there): the run finished its steps and has waited 64s for a
+// person. Against the fixed fixture date the approval read as nine days old.
+const WAITING_RUN_START = Date.now() - 64_000 - RUN_LENGTH
+
 export const WaitingForApproval: Story = {
-  args: { status: 'waiting', endedAt: undefined, startedAt: Date.now() - 64_000, steps: staticSteps('waiting') },
+  args: { status: 'waiting', endedAt: undefined, startedAt: WAITING_RUN_START, steps: staticSteps('waiting', WAITING_RUN_START) },
 }
 
 export const Cancelled: Story = {

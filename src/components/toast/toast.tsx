@@ -91,15 +91,33 @@ export function useToast() {
       error: withTone('danger'),
       info: withTone('info'),
       running: withTone('running'),
-      /** Re-tone and re-word an existing toast in place. A running toast that becomes a result starts its timeout. */
+      /**
+       * Re-tone and re-word an existing toast in place. A running toast that
+       * becomes a result starts the provider's timeout.
+       *
+       * Why `timeout` is sent as an explicitly present `undefined` rather than
+       * a number: Base UI falls back to the provider's `timeout` only when the
+       * toast's own is undefined, and the running toast stored 0. This used to
+       * send a hard-coded 5000, so a provider set to 8000 still dismissed the
+       * result after 5s. It also always sent the key, so re-wording a running
+       * toast ("812 of 1,204 documents") cleared its 0 and started it timing
+       * out mid-task. The key is now sent only when the tone or the timeout
+       * changes.
+       */
       update: (id: string, options: Partial<ToastOptions>) => {
         const next = toManagerOptions({ title: undefined, ...options })
+        const timeoutChange =
+          options.timeout !== undefined
+            ? { timeout: options.timeout }
+            : options.tone !== undefined
+              ? { timeout: options.tone === 'running' ? 0 : undefined }
+              : {}
         manager.update(id, {
           ...(options.title !== undefined && { title: next.title }),
           ...(options.description !== undefined && { description: next.description }),
           ...(options.tone !== undefined && { type: next.type, priority: next.priority }),
           ...(options.action !== undefined && { actionProps: next.actionProps }),
-          timeout: options.timeout ?? (options.tone && options.tone !== 'running' ? 5000 : undefined),
+          ...timeoutChange,
         })
       },
       dismiss: (id?: string) => manager.close(id),
@@ -111,7 +129,7 @@ export interface ToastProviderProps {
   children: React.ReactNode
   /** Toasts kept visible at once; older ones fold away. */
   limit?: number
-  /** Default auto-dismiss, ms. */
+  /** Default auto-dismiss, ms. Also the timeout a running toast starts when `update()` turns it into a result. */
   timeout?: number
 }
 

@@ -1,7 +1,8 @@
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type Variants } from '../../lib/variants'
 
 /**
  * A colour key: the small square before a legend entry, a filter chip's label
@@ -56,11 +57,11 @@ export const swatchVariants = cva('inline-block shrink-0 forced-ink', {
   defaultVariants: { tone: 'neutral', size: 'md', shape: 'square' },
 })
 
-export type SwatchTone = NonNullable<VariantProps<typeof swatchVariants>['tone']>
+export type SwatchTone = NonNullable<Variants<typeof swatchVariants>['tone']>
 
 export interface SwatchProps
   extends Omit<React.ComponentProps<'span'>, 'children'>,
-    VariantProps<typeof swatchVariants> {}
+    Variants<typeof swatchVariants> {}
 
 /**
  * Decorative by contract: a swatch is always hidden from assistive technology,

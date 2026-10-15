@@ -118,8 +118,12 @@ export const cutClean = (text: string) => text.replace(/\n-\s*$/, '').trimEnd()
 /** Static frames: the same run, finished, failed, held for approval, stopped, rate limited or out of time. */
 export function staticSteps(
   ending: 'succeeded' | 'failed' | 'waiting' | 'cancelled' | 'rate_limited' | 'timed_out',
+  // A frame with a step still open (waiting) counts that step's clock against
+  // the real time, so it must start relative to now; a fixed date there read
+  // as "waiting 220h". Finished frames only show durations, so they keep the
+  // fixed date.
+  base = Date.parse('2026-10-05T14:01:50Z'),
 ): AgentStep[] {
-  const base = Date.parse('2026-10-05T14:01:50Z')
   const done = deriveSteps(RUN_LENGTH, base)
   if (ending === 'succeeded') return done.map((s) => ({ ...s, defaultOpen: false }))
 

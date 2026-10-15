@@ -1,10 +1,11 @@
 'use client'
 
 import { Avatar as AvatarPrimitive } from '@base-ui/react/avatar'
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type Variants } from '../../lib/variants'
 
 /**
  * A person, or an agent, as a square of cut cloth.
@@ -71,7 +72,7 @@ export const avatarVariants = cva(
 
 export interface AvatarProps
   extends Omit<React.ComponentProps<'span'>, 'children'>,
-    VariantProps<typeof avatarVariants> {
+    Variants<typeof avatarVariants> {
   /** The person's or agent's name. Becomes the accessible name and seeds the colour. */
   name: string
   src?: string

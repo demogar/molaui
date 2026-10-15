@@ -1,7 +1,8 @@
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type Variants } from '../../lib/variants'
 import { deprecate } from '../../lib/deprecate'
 
 /**
@@ -65,7 +66,7 @@ const skeletonVariants = cva(['rounded-none bg-cloth-shade', skeletonShimmer], {
   defaultVariants: { shape: 'block', size: 'md' },
 })
 
-export interface SkeletonProps extends React.ComponentProps<'div'>, VariantProps<typeof skeletonVariants> {}
+export interface SkeletonProps extends React.ComponentProps<'div'>, Variants<typeof skeletonVariants> {}
 
 /**
  * Loading is a cut shape whose content has not arrived, so a block keeps the

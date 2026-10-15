@@ -1,7 +1,8 @@
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type Variants } from '../../lib/variants'
 
 /**
  * A status mark. Small, flat, cut — a scrap of the layer that says what state
@@ -91,11 +92,11 @@ export const badgeVariants = cva(
   },
 )
 
-export type BadgeTone = NonNullable<VariantProps<typeof badgeVariants>['tone']>
+export type BadgeTone = NonNullable<Variants<typeof badgeVariants>['tone']>
 
 export interface BadgeProps
   extends React.ComponentProps<'span'>,
-    VariantProps<typeof badgeVariants> {
+    Variants<typeof badgeVariants> {
   /** A leading StatusDot in the badge's tone. */
   dot?: boolean
   /** Pulse the dot — for a state that is live right now (running, streaming). */
@@ -184,7 +185,7 @@ export const recommendationVariants = cva('inline-flex items-center rotulo px-2.
   defaultVariants: { level: 'essential' },
 })
 
-export type RecommendationLevel = NonNullable<VariantProps<typeof recommendationVariants>['level']>
+export type RecommendationLevel = NonNullable<Variants<typeof recommendationVariants>['level']>
 
 export const RECOMMENDATION_LABELS: Record<RecommendationLevel, string> = {
   essential: 'Essential',
@@ -195,7 +196,7 @@ export const RECOMMENDATION_LABELS: Record<RecommendationLevel, string> = {
 
 export interface RecommendationBadgeProps
   extends React.ComponentProps<'span'>,
-    VariantProps<typeof recommendationVariants> {}
+    Variants<typeof recommendationVariants> {}
 
 export function RecommendationBadge({ className, level, children, ...props }: RecommendationBadgeProps) {
   return (

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
-import { Stat, StatGroup } from './stat'
+import { Sparkline, Stat, StatGroup } from './stat'
 
 describe('Stat', () => {
   it('is a term and its value', () => {
@@ -31,5 +31,29 @@ describe('Stat', () => {
     )
     expect(container.querySelectorAll('dl')).toHaveLength(1)
     expect(screen.getAllByRole('term')).toHaveLength(2)
+  })
+})
+
+describe('Sparkline', () => {
+  const coordinates = (container: HTMLElement) => [
+    ...(container.querySelector('polyline')?.getAttribute('points') ?? '').split(/[ ,]/),
+    ...['x', 'y'].map((a) => container.querySelector('rect')?.getAttribute(a) ?? ''),
+  ]
+
+  it('draws one value as the "now" square at the end, with no NaN', () => {
+    const { container } = render(<Sparkline values={[42]} width={72} height={24} />)
+    const values = coordinates(container)
+    expect(values.every((v) => Number.isFinite(Number(v)))).toBe(true)
+    expect(container.querySelector('rect')).toHaveAttribute('x', String(72 - 3 - 2.5))
+  })
+
+  it('draws nothing for no values', () => {
+    const { container } = render(<Sparkline values={[]} />)
+    expect(container.querySelector('svg')).toBeNull()
+  })
+
+  it('spreads several values from edge to edge', () => {
+    const { container } = render(<Sparkline values={[1, 3, 2]} width={72} height={24} />)
+    expect(container.querySelector('polyline')).toHaveAttribute('points', '3.0,21.0 36.0,3.0 69.0,12.0')
   })
 })

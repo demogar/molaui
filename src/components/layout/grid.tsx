@@ -1,7 +1,8 @@
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type Variants } from '../../lib/variants'
 
 /**
  * The responsive column patterns that recur. `auto` is the one a tool reaches
@@ -28,7 +29,7 @@ export const gridVariants = cva('grid', {
   defaultVariants: { cols: 'thirds', gap: 'default' },
 })
 
-export interface GridProps extends React.ComponentProps<'div'>, VariantProps<typeof gridVariants> {
+export interface GridProps extends React.ComponentProps<'div'>, Variants<typeof gridVariants> {
   /** For `cols="auto"`: the narrowest a cell may get, as a CSS length. */
   minItem?: string
 }

@@ -1,7 +1,8 @@
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type Variants } from '../../lib/variants'
 
 /**
  * Running UI text in the system voice. Three inks and no more: ink for what
@@ -42,7 +43,7 @@ export const textVariants = cva('m-0 font-ui', {
 
 export interface TextProps
   extends Omit<React.HTMLAttributes<HTMLElement>, 'color'>,
-    VariantProps<typeof textVariants> {
+    Variants<typeof textVariants> {
   as?: 'p' | 'span' | 'div'
 }
 

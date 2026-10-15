@@ -144,12 +144,17 @@ export function Sparkline({
   height?: number
   className?: string
 }) {
+  // No values is no shape: draw nothing rather than an svg of NaN. One value
+  // has no past to draw, only the "now" square, set at the end where the
+  // latest point always sits (`i / (length - 1)` divided by zero there and
+  // wrote NaN into `points`).
+  if (values.length === 0) return null
   const min = Math.min(...values)
   const max = Math.max(...values)
   const span = max - min || 1
   const pad = 3
   const points = values.map((v, i) => [
-    pad + (i / (values.length - 1)) * (width - pad * 2),
+    pad + (values.length > 1 ? i / (values.length - 1) : 1) * (width - pad * 2),
     pad + (1 - (v - min) / span) * (height - pad * 2),
   ])
   const last = points.at(-1)!

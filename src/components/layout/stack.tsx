@@ -1,7 +1,8 @@
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type Variants } from '../../lib/variants'
 
 /**
  * The gap scale, named by role rather than by pixel. Every value is a spacing
@@ -43,7 +44,7 @@ export const stackVariants = cva('flex', {
   defaultVariants: { direction: 'column', gap: 'md', wrap: false },
 })
 
-export interface StackProps extends React.ComponentProps<'div'>, VariantProps<typeof stackVariants> {}
+export interface StackProps extends React.ComponentProps<'div'>, Variants<typeof stackVariants> {}
 
 /** Vertical rhythm: children down a column, one gap between them. */
 export function Stack({ className, direction, gap, align, justify, wrap, ...props }: StackProps) {
