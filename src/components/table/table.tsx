@@ -244,7 +244,9 @@ export function TableHead({
           type="button"
           onClick={onSort}
           className={cn(
-            'group/sort -mx-1.5 inline-flex items-center gap-1.5 px-1.5 py-1 uppercase',
+            // At least 24px tall (WCAG 2.5.8): `py-1` around 11px caps came to
+            // 18px at compact density.
+            'group/sort -mx-1.5 inline-flex min-h-[24px] items-center gap-1.5 px-1.5 py-1 uppercase',
             'tracking-[inherit] [font:inherit]',
             'hover:text-ink',
             numeric && 'flex-row-reverse',
