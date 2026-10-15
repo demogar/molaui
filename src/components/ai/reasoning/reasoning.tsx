@@ -5,8 +5,10 @@ import { Plus } from 'lucide-react'
 import type * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../../lib/messages'
 import { formatDuration, useElapsed } from '../run-status'
 import { StreamingText } from '../streaming-text'
+import { type ReasoningMessages, reasoningMessages } from './messages'
 
 export interface ReasoningProps extends Omit<React.ComponentProps<'div'>, 'children'> {
   /** The reasoning text so far. */
@@ -30,6 +32,8 @@ export interface ReasoningProps extends Omit<React.ComponentProps<'div'>, 'child
    * evidence for when the answer looks wrong, not the answer.
    */
   defaultOpen?: boolean
+  /** Words for translation: the summary line and the announcement when it finishes. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<ReasoningMessages>
 }
 
 /**
@@ -49,13 +53,15 @@ export function Reasoning({
   endedAt,
   durationMs,
   defaultOpen = false,
+  messages,
   className,
   ...props
 }: ReasoningProps) {
+  const [t, f] = useMessages('reasoning', reasoningMessages, messages)
   const thinking = status === 'streaming'
   const elapsed = useElapsed(startedAt, thinking ? endedAt : (endedAt ?? startedAt))
   const ms = durationMs ?? (startedAt !== undefined && (thinking || endedAt !== undefined) ? elapsed : undefined)
-  const summary = thinking ? 'Thinking' : ms !== undefined ? `Thought for ${formatDuration(ms)}` : 'Reasoning'
+  const summary = thinking ? t.thinking : ms !== undefined ? f.format(t.thoughtFor, { duration: formatDuration(ms) }) : t.reasoning
 
   return (
     <Collapsible.Root defaultOpen={defaultOpen} render={<div data-slot="reasoning" data-status={status} className={cn('flex flex-col', className)} {...props} />}>
@@ -81,7 +87,7 @@ export function Reasoning({
             text={text}
             status={thinking ? 'streaming' : 'done'}
             variant="muted"
-            doneAnnouncement="Reasoning complete."
+            doneAnnouncement={t.complete}
             className="text-base"
           />
         </div>

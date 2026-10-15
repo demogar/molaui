@@ -5,11 +5,14 @@ import { Check, Plus, RotateCcw, ShieldAlert, Wrench, X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../../lib/messages'
 import { useControllable } from '../../../lib/use-controllable'
 import { Button } from '../../button'
 import { CodeBlock } from '../../code'
 import { FailureReportedContext } from '../run-error/failure-reported'
 import { RunStatus, type RunStatusValue } from '../run-status'
+
+import { type ToolCallGroupMessages, type ToolCallMessages, toolCallGroupMessages, toolCallMessages } from './messages'
 
 export interface ToolCallApproval {
   /** Why a person has to approve this — said in words, not implied by an icon. */
@@ -58,6 +61,8 @@ export interface ToolCallProps extends Omit<React.ComponentProps<'div'>, 'childr
   defaultOpen?: boolean
   /** Called when the reader opens or closes the details. */
   onOpenChange?: (open: boolean) => void
+  /** Words for translation: the payload labels, the error and approval sentences and their buttons. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<ToolCallMessages>
 }
 
 /**
@@ -102,9 +107,11 @@ export function ToolCall({
   open: openProp,
   defaultOpen = false,
   onOpenChange,
+  messages,
   className,
   ...props
 }: ToolCallProps) {
+  const [t] = useMessages('toolCall', toolCallMessages, messages)
   const failed = status === 'failed' || status === 'timed_out'
   const waiting = status === 'waiting' && approval !== undefined
   const forcedOpen = failed || waiting
@@ -165,11 +172,11 @@ export function ToolCall({
         {hasBody ? (
           <Collapsible.Panel data-part="body" className="border-t border-keyline">
             <div className="flex flex-col gap-3 p-3">
-              {waiting ? <ApprovalBlock approval={approval} /> : null}
-              {failed && !reported ? <ErrorBlock status={status} error={error} onRetry={onRetry} /> : null}
-              {args !== undefined ? <Payload label="arguments" value={args} /> : null}
-              {result !== undefined ? <Payload label="result" value={result} /> : null}
-              {failed && reported && error ? <Payload label="error" value={error} wrap /> : null}
+              {waiting ? <ApprovalBlock approval={approval} t={t} /> : null}
+              {failed && !reported ? <ErrorBlock status={status} error={error} onRetry={onRetry} t={t} /> : null}
+              {args !== undefined ? <Payload label={t.arguments} value={args} /> : null}
+              {result !== undefined ? <Payload label={t.result} value={result} /> : null}
+              {failed && reported && error ? <Payload label={t.error} value={error} wrap /> : null}
             </div>
           </Collapsible.Panel>
         ) : null}
@@ -195,16 +202,18 @@ function ErrorBlock({
   status,
   error,
   onRetry,
+  t,
 }: {
   status: RunStatusValue
   error?: string
   onRetry?: () => void
+  t: ToolCallMessages
 }) {
   return (
     <div role="alert" data-part="error" className="flex flex-wrap items-start gap-x-4 gap-y-3 bg-danger-soft px-3.5 py-3 bar-start-danger">
       <div className="min-w-0 flex-1">
         <p className="m-0 font-ui text-sm font-semibold text-ink">
-          {status === 'timed_out' ? 'The tool did not answer in time.' : 'The tool returned an error.'}
+          {status === 'timed_out' ? t.timedOut : t.failed}
         </p>
         {/* Verbatim and left-to-right: a right-to-left paragraph would reorder
             the punctuation of a string someone is going to paste into a search. */}
@@ -216,20 +225,20 @@ function ErrorBlock({
       </div>
       {onRetry ? (
         <Button size="sm" variant="secondary" icon={<RotateCcw />} onClick={onRetry}>
-          Retry call
+          {t.retry}
         </Button>
       ) : null}
     </div>
   )
 }
 
-function ApprovalBlock({ approval }: { approval: ToolCallApproval }) {
+function ApprovalBlock({ approval, t }: { approval: ToolCallApproval; t: ToolCallMessages }) {
   return (
     <div data-part="approval" className="flex flex-col gap-3 bg-oro-soft px-3.5 py-3">
       <div className="flex items-start gap-2.5">
         <ShieldAlert aria-hidden className="mt-0.5 size-(--icon) shrink-0 text-ink" />
         <div className="min-w-0">
-          <p className="m-0 font-ui text-sm font-semibold text-ink">This call needs your approval.</p>
+          <p className="m-0 font-ui text-sm font-semibold text-ink">{t.needsApproval}</p>
           <div className="m-0 mt-1 font-ui text-sm text-ink-on-tint">{approval.reason}</div>
         </div>
       </div>
@@ -238,10 +247,10 @@ function ApprovalBlock({ approval }: { approval: ToolCallApproval }) {
             primary until the two were compared side by side: the doc said
             "equal weight" and the pixels said "press this one". */}
         <Button size="sm" variant="secondary" icon={<Check />} onClick={approval.onApprove}>
-          {approval.approveLabel ?? 'Approve'}
+          {approval.approveLabel ?? t.approve}
         </Button>
         <Button size="sm" variant="secondary" icon={<X />} onClick={approval.onDeny}>
-          {approval.denyLabel ?? 'Deny'}
+          {approval.denyLabel ?? t.deny}
         </Button>
       </div>
     </div>
@@ -256,6 +265,8 @@ export interface ToolCallGroupProps extends React.ComponentProps<'div'> {
    * parallel".
    */
   count: number
+  /** Words for translation: the default label. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<ToolCallGroupMessages>
 }
 
 /**
@@ -263,16 +274,18 @@ export interface ToolCallGroupProps extends React.ComponentProps<'div'> {
  * one ink rule spanning the group — so "these ran together" is a shape,
  * not a sentence the operator has to find.
  */
-export function ToolCallGroup({ label, count, className, children, ...props }: ToolCallGroupProps) {
+export function ToolCallGroup({ label, count, messages, className, children, ...props }: ToolCallGroupProps) {
+  const [t, f] = useMessages('toolCallGroup', toolCallGroupMessages, messages)
+  const name = label ?? f.plural(t.label, count)
   return (
     <div
       data-slot="tool-call-group"
       role="group"
-      aria-label={label ?? `${count} tools in parallel`}
+      aria-label={name}
       className={cn('flex flex-col gap-2', className)}
       {...props}
     >
-      <p className="m-0 rotulo text-ink-muted">{label ?? `${count} tools in parallel`}</p>
+      <p className="m-0 rotulo text-ink-muted">{name}</p>
       <div className="flex flex-col gap-2 border-s-(length:--bar-w) border-ink ps-3">{children}</div>
     </div>
   )

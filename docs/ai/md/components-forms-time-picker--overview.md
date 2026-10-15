@@ -73,7 +73,7 @@ Each story is a live example in Storybook.
 | `isDateDisabled` | `((date: Date) => boolean)` |  | Days inside `min`–`max` that still cannot be chosen, as on DatePicker. |
 | `locale` | `LocalesArgument` |  | BCP 47 tag for names, digits, the typed date order, the clock and the week start. |
 | `max` | `Date \| null` |  | The latest moment, inclusive. Later days are unavailable in the calendar, and a later time on the same day is refused with a sentence under both halves. |
-| `messages` | `Partial<DateTimePickerMessages>` |  | The words "Date" and "Time" that name each half, and TimePicker's segment names and sentences, for translation. |
+| `messages` | `MessagesOverride<DateTimePickerMessages>` |  | Words for translation: "Date" and "Time", which name each half, and the time half's segment names and sentences. Keys left out come from `MessagesProvider`, then English. The date half's words come from the provider's `datePicker` table. |
 | `min` | `Date \| null` |  | The earliest moment, inclusive. Earlier days are unavailable in the calendar, and an earlier time on the same day is refused with a sentence under both halves. |
 | `minuteStep` | `number` |  | Minutes per Up or Down press in the minute segment. |
 | `name` | `string` |  | Submitted as `yyyy-mm-ddThh:mm`, local time, as `<input type="datetime-local">` writes it. |
@@ -98,7 +98,7 @@ Each story is a live example in Storybook.
 | `id` | `string` |  | Given to the first segment, so a `<label for>` (as `Field` writes it) focuses it. |
 | `locale` | `LocalesArgument` |  | BCP 47 tag for the clock (12- or 24-hour), the day-period words and the digits. `undefined` uses the runtime's locale. |
 | `max` | `string \| null` |  | The latest allowed time, `HH:mm`. |
-| `messages` | `Partial<TimePickerMessages>` |  | The segment names and the sentences, for translation. |
+| `messages` | `MessagesOverride<TimePickerMessages>` |  | Words for translation: the segment names and the sentences. Keys left out come from `MessagesProvider`, then English. |
 | `min` | `string \| null` |  | The earliest allowed time, `HH:mm`. |
 | `minuteStep` | `number` | `1` | Minutes per Up or Down press in the minute segment; typing still takes any minute. |
 | `name` | `string` |  | Submitted as `HH:mm`, whatever the display locale. |
@@ -114,7 +114,7 @@ Each story is a live example in Storybook.
 
 Everything locale-specific about writing a time, read from `Intl` rather than from a table: whether the clock is 12- or 24-hour (es-PA writes `9:05 p. m.`, es-ES `21:05`), where the day period goes, and what separates the hour from the minute (`21.05` in Finnish).
 
-Types: `DateTimePickerMessages`, `DateTimePickerProps`, `TimePickerMessages`, `TimePickerProps`, `TimeLayout`, `TimeSegment`, `TimeString`
+Types: `DateTimePickerMessages`, `TimePickerMessages`, `DateTimePickerProps`, `TimePickerProps`, `TimeLayout`, `TimeSegment`, `TimeString`
 
 ## Accessibility
 

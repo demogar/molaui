@@ -5,9 +5,11 @@ import { Plus } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../../lib/messages'
 
 import { ChangeCount } from './change-count'
-import { GUTTER, LINE_GLYPH, LINE_WASH, LineCode } from './diff-line'
+import { GUTTER, LINE_GLYPH, LINE_WASH, LineCode, LineWords } from './diff-line'
+import { type FileDiffMessages, fileDiffMessages } from './messages'
 import {
   countChanges,
   numberHunk,
@@ -19,13 +21,6 @@ import {
 } from './parse-diff'
 
 export type FileChangeKind = 'added' | 'modified' | 'deleted' | 'renamed'
-
-const KIND_LABEL: Record<FileChangeKind, string> = {
-  added: 'Added',
-  modified: 'Modified',
-  deleted: 'Deleted',
-  renamed: 'Renamed',
-}
 
 // A filled square for a file that now exists in full, hollow for one that is
 // gone, half for one that changed: the same cut-square vocabulary as a run
@@ -63,6 +58,8 @@ export interface FileDiffProps extends Omit<React.ComponentProps<'section'>, 'ch
   defaultCollapsed?: boolean
   /** Heading level for the path. Defaults to 4, under a `ChangeReview` heading. */
   headingLevel?: 3 | 4 | 5
+  /** Words for translation: the kind of change, the rename and the words said before each changed line. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<FileDiffMessages>
 }
 
 const isNumbered = (hunk: DiffHunk | DiffHunkInput): hunk is DiffHunk =>
@@ -103,9 +100,11 @@ export function FileDiff({
   layout = 'unified',
   defaultCollapsed = false,
   headingLevel = 4,
+  messages,
   className,
   ...props
 }: FileDiffProps) {
+  const [t] = useMessages('fileDiff', fileDiffMessages, messages)
   const hunks = React.useMemo(
     () => (hunksProp ? hunksProp.map((h) => (isNumbered(h) ? h : numberHunk(h))) : parseUnifiedDiff(diff ?? '')),
     [hunksProp, diff],
@@ -115,6 +114,7 @@ export function FileDiff({
   const headingId = React.useId()
 
   return (
+    <LineWords.Provider value={t}>
     <section
       data-slot="file-diff"
       data-kind={kind}
@@ -127,7 +127,7 @@ export function FileDiff({
       <header className="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-b border-keyline px-3 py-2.5">
         <span className="inline-flex shrink-0 items-center gap-1.5 rotulo text-ink-2">
           <span aria-hidden className={cn('relative inline-block size-[11px] overflow-hidden shadow-cut', KIND_MARK[kind])} />
-          {KIND_LABEL[kind]}
+          {t.kinds[kind]}
         </span>
         {/* On a phone the path takes its own line under the kind and the count,
             so it breaks at its slashes rather than mid-name. */}
@@ -142,7 +142,7 @@ export function FileDiff({
               </span>
               <span className="text-ink-muted">
                 <span aria-hidden> → </span>
-                <span className="sr-only"> renamed to </span>
+                <span className="sr-only"> {t.renamedTo} </span>
               </span>
             </>
           ) : null}
@@ -154,7 +154,7 @@ export function FileDiff({
       </header>
       {hunks.length === 0 ? (
         <p className="m-0 px-3 py-3 font-ui text-sm text-ink-muted">
-          {kind === 'renamed' ? 'Renamed without changes to its content.' : 'No line changes.'}
+          {kind === 'renamed' ? t.renamedOnly : t.noChanges}
         </p>
       ) : (
         hunks.map((hunk, i) => (
@@ -162,6 +162,7 @@ export function FileDiff({
         ))
       )}
     </section>
+    </LineWords.Provider>
   )
 }
 

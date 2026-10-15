@@ -1,8 +1,12 @@
+'use client'
+
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { IconButton } from '../button'
+import { type PaginationMessages, paginationMessages } from './messages'
 
 /**
  * Moving through a long, ordered result — runs, documents, audit events.
@@ -80,8 +84,6 @@ function responsiveRange(page: number, pageCount: number, siblings: number) {
 const onlyWide = 'max-[25rem]:hidden'
 const onlyNarrow = 'min-[25rem]:hidden'
 
-const fmt = (n: number) => n.toLocaleString('en-US')
-
 export interface PaginationProps extends Omit<React.ComponentProps<'nav'>, 'onChange'> {
   /** 1-based. */
   page: number
@@ -107,6 +109,8 @@ export interface PaginationProps extends Omit<React.ComponentProps<'nav'>, 'onCh
    * the text falls back to "Page 3 of 26".
    */
   total?: number
+  /** Words for translation: the landmark's name, the buttons and the range text. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<PaginationMessages>
 }
 
 export function Pagination({
@@ -118,16 +122,20 @@ export function Pagination({
   pageSize,
   total,
   className,
-  'aria-label': ariaLabel = 'Pagination',
+  'aria-label': ariaLabel,
+  messages,
   ...props
 }: PaginationProps) {
+  const [t, f] = useMessages('pagination', paginationMessages, messages)
+  const fmt = f.number
+  const label = ariaLabel ?? t.label
   const prev = (
-    <IconButton label="Previous page" variant="secondary" size="sm" disabled={page <= 1} onClick={() => onPageChange(page - 1)}>
+    <IconButton label={t.previous} variant="secondary" size="sm" disabled={page <= 1} onClick={() => onPageChange(page - 1)}>
       <ChevronLeft className="flip-rtl" />
     </IconButton>
   )
   const next = (
-    <IconButton label="Next page" variant="secondary" size="sm" disabled={page >= pageCount} onClick={() => onPageChange(page + 1)}>
+    <IconButton label={t.next} variant="secondary" size="sm" disabled={page >= pageCount} onClick={() => onPageChange(page + 1)}>
       <ChevronRight className="flip-rtl" />
     </IconButton>
   )
@@ -136,20 +144,20 @@ export function Pagination({
     const from = pageSize ? (page - 1) * pageSize + 1 : page
     const to = pageSize ? Math.min(page * pageSize, total ?? page * pageSize) : page
     return (
-      <nav aria-label={ariaLabel} data-slot="pagination" className={cn('flex items-center gap-3', className)} {...props}>
+      <nav aria-label={label} data-slot="pagination" className={cn('flex items-center gap-3', className)} {...props}>
         {/* `dir="auto"`, so "1–25 of 40" keeps its order in a right-to-left page. */}
         <p dir="auto" className="m-0 font-ui text-sm tabular-nums text-ink-2" aria-live="polite">
           {pageSize && total !== undefined ? (
-            <>
-              <span className="font-semibold text-ink">
-                {fmt(from)}–{fmt(to)}
-              </span>{' '}
-              of {fmt(total)}
-            </>
+            f.nodes(t.rangeOf, {
+              range: (
+                <span className="font-semibold text-ink">
+                  {fmt(from)}–{fmt(to)}
+                </span>
+              ),
+              total: fmt(total),
+            })
           ) : (
-            <>
-              Page <span className="font-semibold text-ink">{fmt(page)}</span> of {fmt(pageCount)}
-            </>
+            f.nodes(t.pageOf, { page: <span className="font-semibold text-ink">{fmt(page)}</span>, count: fmt(pageCount) })
           )}
         </p>
         <div className="flex gap-1.5">
@@ -161,7 +169,7 @@ export function Pagination({
   }
 
   return (
-    <nav aria-label={ariaLabel} data-slot="pagination" className={className} {...props}>
+    <nav aria-label={label} data-slot="pagination" className={className} {...props}>
       <ul className="m-0 flex list-none flex-wrap items-center gap-1 p-0">
         <li className="me-1">{prev}</li>
         {responsiveRange(page, pageCount, siblings).map(({ item, wide, narrow }) => {
@@ -173,7 +181,7 @@ export function Pagination({
                 aria-current={item === page ? 'page' : undefined}
                 // The name carries the number as it is shown ("12,480"), or a
                 // speech-input user saying what they see does not match it.
-                aria-label={`Page ${fmt(item)}`}
+                aria-label={f.format(t.page, { page: fmt(item) })}
                 onClick={() => onPageChange(item)}
                 className={cn(
                   'inline-grid h-(--control-h-sm) min-w-(--control-h-sm) cursor-pointer place-items-center rounded-none px-1.5',

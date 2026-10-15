@@ -4,11 +4,13 @@ import { ArrowDown, ArrowUp, ArrowUpDown, Check, Minus } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { useMergedRefs } from '../../lib/merge-props'
 import { deprecate } from '../../lib/deprecate'
 import { useScrollEdge } from '../../lib/scroll-edge'
 import { EmptyState, type EmptyStateProps } from '../empty-state'
 import { skeletonShimmer } from '../skeleton/skeleton'
+import { type TableMessages, tableMessages } from './messages'
 
 /**
  * The table primitives. A table in an internal tool is read for hours, so
@@ -348,18 +350,22 @@ export interface TableEmptyProps extends Omit<React.ComponentProps<'tr'>, 'title
   variant?: EmptyStateProps['kind']
   /** One or two buttons; for a filtered table, the one that clears the filters. */
   actions?: React.ReactNode
+  /** Words for translation: the default heading. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<TableMessages>
 }
 
 /** `className`, `ref` and the rest of the DOM props go to the `<tr>`. */
 export function TableEmpty({
   colSpan,
-  title = 'Nothing here yet',
+  title,
   kind,
   variant,
   actions,
+  messages,
   children,
   ...props
 }: TableEmptyProps) {
+  const [t] = useMessages('table', tableMessages, messages)
   if (variant !== undefined) {
     deprecate('table-empty-variant', { what: '<TableEmpty variant>', instead: '<TableEmpty kind>', removal: '1.0.0' })
   }
@@ -370,7 +376,7 @@ export function TableEmpty({
           <EmptyState
             size="sm"
             kind={kind ?? variant}
-            title={title}
+            title={title ?? t.empty}
             description={children}
             actions={actions}
             // The error seam's keyline is drawn outside it, and at the table's

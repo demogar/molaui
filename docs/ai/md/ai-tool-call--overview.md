@@ -84,6 +84,7 @@ One tool invocation: what the model asked a system to do, with what, and what ca
 | `durationMs` | `number` |  | A known duration, for a finished call that has no timestamps. |
 | `endedAt` | `number \| Date` |  | When the call ended. Freezes the clock; omit while the call is open. |
 | `error` | `string` |  | The error, verbatim. |
+| `messages` | `MessagesOverride<ToolCallMessages>` |  | Words for translation: the payload labels, the error and approval sentences and their buttons. Keys left out come from `MessagesProvider`, then English. |
 | `onOpenChange` | `((open: boolean) => void)` |  | Called when the reader opens or closes the details. |
 | `onRetry` | `(() => void)` |  | Calls the tool again. Shows Retry beside the error once the call has failed; omit when the run, not the call, owns retrying. |
 | `open` | `boolean` |  | Whether the details are expanded, when the page owns that. Waiting and failed calls are always expanded. |
@@ -101,10 +102,11 @@ Calls the model made at the same time. Drawn as a bracket on the left — one in
 | --- | --- | --- | --- |
 | `count` (required) | `number` |  | How many calls ran together. Used for the default label, "N tools in parallel". |
 | `label` | `string` |  | Defaults to "N tools in parallel". |
+| `messages` | `MessagesOverride<ToolCallGroupMessages>` |  | Words for translation: the default label. Keys left out come from `MessagesProvider`, then English. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="tool-call-group">`.
 
-Types: `ToolCallApproval`, `ToolCallGroupProps`, `ToolCallProps`
+Types: `ToolCallGroupMessages`, `ToolCallMessages`, `ToolCallApproval`, `ToolCallGroupProps`, `ToolCallProps`
 
 ## Accessibility
 

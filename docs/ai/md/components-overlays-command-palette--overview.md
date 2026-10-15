@@ -56,10 +56,11 @@ Each story is a live example in Storybook.
 | --- | --- | --- | --- |
 | `groups` (required) | `CommandGroup[]` |  | The commands, in headed groups. Filtered as the person types; label-prefix matches come first within a group, and empty groups are dropped. |
 | `defaultOpen` | `boolean` | `false` | Open on first render, for a palette that owns its own state. |
-| `label` | `string` | `Command palette` | Accessible name of the dialog. |
+| `label` | `string` |  | Accessible name of the dialog. Defaults to "Command palette" (`messages.label`). |
+| `messages` | `MessagesOverride<CommandPaletteMessages>` |  | Words for translation: the defaults above, the key hints, the empty sentence and the result count. Keys left out come from `MessagesProvider`, then English. |
 | `onOpenChange` | `((open: boolean) => void)` |  | Called when the palette opens or closes: the trigger, Escape, a press outside, or choosing an item, which closes it before the item runs. |
 | `open` | `boolean` |  | Whether the palette is open, when the page owns that (it usually does, to bind ⌘K). |
-| `placeholder` | `string` | `Type a command or search…` | Shown in the empty search input. Defaults to "Type a command or search…". |
+| `placeholder` | `string` |  | Shown in the empty search input. Defaults to "Type a command or search…" (`messages.placeholder`). |
 | `renderEmpty` | `((query: string) => ReactNode)` |  | Shown when nothing matches. Receives the query. |
 | `trigger` | `ReactElement<unknown, string \| JSXElementConstructor<any>>` |  | Rendered as the button that opens the palette, e.g. a `SearchInput`-shaped `Button`. |
 
@@ -73,7 +74,7 @@ The groups and items that match `query`, empty groups dropped, label-prefix matc
 
 Opens the palette on ⌘K on a Mac and Ctrl-K everywhere else, from anywhere on the page, a search field included. Ctrl as well as ⌘, because half of every internal team is on Windows or Linux and a shortcut that silently does nothing there is worse than none.
 
-Types: `CommandGroup`, `CommandItem`, `CommandPaletteProps`
+Types: `CommandPaletteMessages`, `CommandGroup`, `CommandItem`, `CommandPaletteProps`
 
 ## Accessibility
 

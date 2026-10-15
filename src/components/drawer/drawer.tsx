@@ -7,9 +7,11 @@ import { X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { slotUnlessRendered } from '../../lib/slot'
 import { IconButton } from '../button'
 import { actionRowClasses } from '../dialog/dialog'
+import { type DrawerMessages, drawerMessages } from './messages'
 
 /**
  * A panel that slides in from an edge of the page: the run details beside a
@@ -169,6 +171,8 @@ export interface DrawerContentProps extends Omit<DrawerPrimitive.Popup.Props, 'c
   band?: DrawerBand
   /** Hide the close button. Only when the footer carries an explicit way out. */
   hideClose?: boolean
+  /** Words for translation: the close button's name. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<DrawerMessages>
 }
 
 export function DrawerContent({
@@ -179,9 +183,11 @@ export function DrawerContent({
   footer,
   band = 'oro',
   hideClose = false,
+  messages,
   children,
   ...props
 }: DrawerContentProps) {
+  const [t] = useMessages('drawer', drawerMessages, messages)
   const side = React.useContext(DrawerSideContext)
   const bottom = side === 'bottom'
   return (
@@ -216,7 +222,7 @@ export function DrawerContent({
               <div className="-mt-1 -me-2">
                 <DrawerPrimitive.Close
                   render={
-                    <IconButton label="Close" variant="ghost" size="sm">
+                    <IconButton label={t.close} variant="ghost" size="sm">
                       <X />
                     </IconButton>
                   }

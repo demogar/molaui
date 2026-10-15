@@ -4,7 +4,9 @@ import * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { useMergedRefs } from '../../lib/merge-props'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { FormErrorContext, focusEntry } from './form-context'
+import { type FormErrorSummaryMessages, formErrorSummaryMessages } from './messages'
 
 /**
  * Every error in the form, at the top of it, each one a link to its field.
@@ -45,26 +47,28 @@ export interface FormErrorSummaryProps extends Omit<React.ComponentProps<'div'>,
   /**
    * The heading, which is also the summary's accessible name and what a
    * screen reader says when it takes focus. Pass a function to word it for
-   * the count, or to translate it. Defaults to “1 field needs fixing” /
-   * “3 fields need fixing”.
+   * the count. Defaults to “1 field needs fixing” / “3 fields need fixing”
+   * (`messages.title`, which is where a translation goes).
    */
   title?: React.ReactNode | ((count: number) => React.ReactNode)
   /** A sentence under the heading: what happens next, or what is kept. */
   description?: React.ReactNode
   /** The heading element. Match the form's outline; `h2` by default. */
   headingLevel?: 2 | 3 | 4
+  /** Words for translation: the default heading, by count. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<FormErrorSummaryMessages>
 }
 
-const defaultTitle = (count: number) => (count === 1 ? '1 field needs fixing' : `${count} fields need fixing`)
-
 export function FormErrorSummary({
-  title = defaultTitle,
+  title,
   description,
   headingLevel = 2,
+  messages,
   className,
   ref,
   ...props
 }: FormErrorSummaryProps) {
+  const [t, f] = useMessages('formErrorSummary', formErrorSummaryMessages, messages)
   const store = React.useContext(FormErrorContext)
   const own = React.useRef<HTMLDivElement>(null)
   const mergedRef = useMergedRefs(own, ref)
@@ -105,7 +109,7 @@ export function FormErrorSummary({
       <div aria-hidden data-part="seam" className="relleno h-2" />
       <div className="px-4 pt-3.5 pb-4">
         <Heading id={titleId} data-part="title" className="m-0 font-ui text-sm font-semibold leading-snug text-ink">
-          {typeof title === 'function' ? title(count) : title}
+          {typeof title === 'function' ? title(count) : (title ?? f.plural(t.title, count))}
         </Heading>
         {description ? (
           <p data-part="description" className="mt-1 mb-0 text-sm leading-body text-ink-2">

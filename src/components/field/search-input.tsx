@@ -5,8 +5,10 @@ import * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { useMergedRefs } from '../../lib/merge-props'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { useControllable } from '../../lib/use-controllable'
 import { Input, type InputProps } from './input'
+import { type SearchInputMessages, searchInputMessages } from './messages'
 
 export interface SearchInputProps extends Omit<InputProps, 'leading' | 'trailing' | 'type'> {
   /**
@@ -19,6 +21,8 @@ export interface SearchInputProps extends Omit<InputProps, 'leading' | 'trailing
   onClear?: () => void
   /** Accessible name for the clear button. */
   clearLabel?: string
+  /** Words for translation: the clear button's default name and the default placeholder. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<SearchInputMessages>
 }
 
 /**
@@ -37,15 +41,17 @@ export interface SearchInputProps extends Omit<InputProps, 'leading' | 'trailing
 export function SearchInput({
   shortcut,
   onClear,
-  clearLabel = 'Clear search',
+  clearLabel,
   value,
   defaultValue,
   onChange,
   className,
-  placeholder = 'Search',
+  placeholder,
+  messages,
   ref: refProp,
   ...props
 }: SearchInputProps) {
+  const [t] = useMessages('searchInput', searchInputMessages, messages)
   // The clear button needs the input, and so may the consumer (to focus it
   // from a shortcut). Both refs are attached; one replacing the other is how
   // the clear button used to stop working when a ref was passed.
@@ -76,7 +82,7 @@ export function SearchInput({
     <Input
       type="search"
       role="searchbox"
-      placeholder={placeholder}
+      placeholder={placeholder ?? t.placeholder}
       value={value ?? current}
       className={cn('[&_input::-webkit-search-cancel-button]:appearance-none', className)}
       leading={<Search />}
@@ -84,7 +90,7 @@ export function SearchInput({
         current ? (
           <button
             type="button"
-            aria-label={clearLabel}
+            aria-label={clearLabel ?? t.clear}
             onClick={clear}
             className="-me-1 grid size-6 place-items-center text-ink-muted transition-colors hover:bg-ink-soft hover:text-ink [&_svg]:size-(--icon-sm)"
           >

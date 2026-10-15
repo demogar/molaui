@@ -4,9 +4,13 @@ import { Check } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { useControllable } from '../../lib/use-controllable'
 import { Button } from '../button'
 import { Form } from '../form'
+import { type StepperMessages, stepperMessages } from './messages'
+
+export type { StepperMessages } from './messages'
 
 /**
  * A task split into steps that are done in order: create an agent, connect a
@@ -71,23 +75,6 @@ export interface StepperStep {
   invalid?: boolean
 }
 
-export interface StepperMessages {
-  back: string
-  continue: string
-  finish: string
-  /** The line above the panel heading. */
-  stepOf: (position: number, total: number) => string
-  states: Record<StepperStepState, string>
-}
-
-const MESSAGES: StepperMessages = {
-  back: 'Back',
-  continue: 'Continue',
-  finish: 'Finish',
-  stepOf: (position, total) => `Step ${position} of ${total}`,
-  states: { upcoming: 'To do', current: 'Current', complete: 'Done', invalid: 'Needs fixing' },
-}
-
 export interface StepperProps extends Omit<React.ComponentProps<'div'>, 'children'> {
   /** Names the list of steps, which is a `nav`: “Steps to create an agent”. */
   label: string
@@ -111,8 +98,8 @@ export interface StepperProps extends Omit<React.ComponentProps<'div'>, 'childre
   children: (step: StepperStep, index: number) => React.ReactNode
   /** The level of the panel heading; match the page outline. `h2` by default. */
   headingLevel?: 2 | 3
-  /** Words, for translation. Any key not given keeps its English default. */
-  messages?: Partial<Omit<StepperMessages, 'states'>> & { states?: Partial<StepperMessages['states']> }
+  /** Words for translation: the buttons, the "Step 2 of 4" line and the state words. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<StepperMessages>
 }
 
 export function Stepper({
@@ -129,7 +116,7 @@ export function Stepper({
   className,
   ...props
 }: StepperProps) {
-  const t = { ...MESSAGES, ...overrides, states: { ...MESSAGES.states, ...overrides?.states } }
+  const [t, f] = useMessages('stepper', stepperMessages, overrides)
   const [current, setCurrent] = useControllable<string>({
     value: stepProp,
     defaultValue: () => defaultStep ?? steps[0]?.id ?? '',
@@ -242,7 +229,7 @@ export function Stepper({
       <Form data-part="panel" aria-labelledby={headingId} onSubmit={submit} className="flex min-w-0 flex-col gap-5">
         <div className="flex flex-col gap-1">
           <span data-part="position" className="rotulo text-ink-muted">
-            {t.stepOf(index + 1, steps.length)}
+            {f.format(t.stepOf, { position: index + 1, total: steps.length })}
           </span>
           <Heading
             ref={headingRef}

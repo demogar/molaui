@@ -10,6 +10,7 @@ import { toHex } from '../../tokens/color'
 import { promisedPairs } from '../../tokens/pairings'
 import { resolveColor } from '../../tokens/resolve'
 import { ROJO_TOKENS } from '../../tokens/scopes'
+import { defaultMessages } from '../../lib/default-messages'
 import { USAGE } from '../usage/guidance'
 import { WORDS } from './content'
 import { CHART_GROUNDS, SERIES, worstOnGrounds } from './dataviz'
@@ -196,6 +197,25 @@ describe('Iconography page', () => {
 })
 
 describe('Content page word list', () => {
+  // The key is the place a translation changes the word, so it must exist
+  // and must hold the word the row is about (its first word, any case:
+  // "Retry from step {n}" for Retry, the actions record for Approve).
+  it('names a messages key that holds each word', () => {
+    const wrong = WORDS.flatMap((g) =>
+      g.words.flatMap((w) =>
+        w.where
+          .filter((p) => p.key)
+          .filter((p) => {
+            const value = p.key!.split('.').reduce<unknown>((at, k) => (at as Record<string, unknown> | undefined)?.[k], defaultMessages)
+            const text = typeof value === 'string' ? value : JSON.stringify(value ?? '')
+            return !text.toLowerCase().includes(w.say.split(/[ ,]/)[0]!.toLowerCase())
+          })
+          .map((p) => `${w.say} → messages.${p.key}`),
+      ),
+    )
+    expect(wrong).toEqual([])
+  })
+
   it('points every word at a documented component', () => {
     const missing = WORDS.flatMap((g) => g.words.flatMap((w) => w.where.filter((p) => !USAGE[p.title]).map((p) => `${w.say} → ${p.title}`)))
     expect(missing).toEqual([])

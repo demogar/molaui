@@ -6,8 +6,11 @@ import { ArrowUpRight } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { type MessageFormat, type MessagesOverride, useMessages } from '../../../lib/messages'
 import { useHydrated } from '../../../lib/use-hydrated'
 import { floatingSurface } from '../../popover/surface'
+
+import { type SourcesMessages, sourcesMessages } from './messages'
 
 export interface Source {
   id: number
@@ -43,6 +46,8 @@ export interface CitationProps extends Omit<React.ComponentProps<'a'>, 'children
   source?: Source
   /** Which side of the marker the card opens on. */
   cardSide?: 'top' | 'bottom'
+  /** Words for translation: the marker's name and the preview card's link and read time. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<SourcesMessages>
 }
 
 const markerClass = cn(
@@ -81,18 +86,19 @@ const markerClass = cn(
  * closes it. Tried first: opening on focus, which a tap also gives — but the
  * focus delay is longer than the click, so the page had already jumped.
  */
-export function Citation({ n, title, source, cardSide = 'top', href, className, render, ...props }: CitationProps) {
+export function Citation({ n, title, source, cardSide = 'top', href, className, render, messages, ...props }: CitationProps) {
+  const [t, f] = useMessages('sources', sourcesMessages, messages)
   const name = title ?? source?.title
   const markerProps = {
     'data-slot': 'citation',
     href: href ?? `#source-${n}`,
-    'aria-label': name ? `Source ${n}: ${name}` : `Source ${n}`,
+    'aria-label': name ? f.format(t.citationNamed, { n, name }) : f.format(t.citation, { n }),
     className: cn(markerClass, className),
     ...props,
   }
 
   if (!source) return <CitationMarker render={render} markerProps={markerProps} n={n} />
-  return <CitationWithCard n={n} source={source} side={cardSide} markerProps={markerProps} render={render} />
+  return <CitationWithCard n={n} source={source} side={cardSide} markerProps={markerProps} render={render} t={t} f={f} />
 }
 
 function CitationMarker({
@@ -116,12 +122,16 @@ function CitationWithCard({
   side,
   markerProps,
   render,
+  t,
+  f,
 }: {
   n: number
   source: Source
   side: 'top' | 'bottom'
   markerProps: React.ComponentProps<'a'>
   render: CitationProps['render']
+  t: SourcesMessages
+  f: MessageFormat
 }) {
   const [open, setOpen] = React.useState(false)
   // The pointer that started the current press. `click` does not say whether
@@ -155,7 +165,7 @@ function CitationWithCard({
             data-slot="citation-card"
             className={cn(floatingSurface, 'w-80 max-w-[calc(100vw-2rem)] p-0')}
           >
-            <SourcePreview source={source} />
+            <SourcePreview source={source} t={t} f={f} />
           </PreviewCard.Popup>
         </PreviewCard.Positioner>
       </PreviewCard.Portal>
@@ -163,13 +173,13 @@ function CitationWithCard({
   )
 }
 
-function SourcePreview({ source }: { source: Source }) {
+function SourcePreview({ source, t, f }: { source: Source; t: SourcesMessages; f: MessageFormat }) {
   return (
     <div className="flex flex-col">
       <div className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-1 p-3">
         <SourceNumber id={source.id} className="row-span-2" />
         <p className="m-0 font-ui text-sm leading-snug font-semibold text-ink">{source.title}</p>
-        <SourceMeta source={source} />
+        <SourceMeta source={source} t={t} f={f} />
       </div>
       {source.snippet ? (
         <p className="m-0 border-t border-keyline px-3 py-2.5 font-text text-sm leading-body text-ink-2 [overflow-wrap:anywhere]">
@@ -187,8 +197,8 @@ function SourcePreview({ source }: { source: Source }) {
         )}
       >
         <span>
-          Open source{' '}
-          <span className="sr-only">{source.id} (opens in a new tab)</span>
+          {t.openSource}{' '}
+          <span className="sr-only">{f.format(t.openSourceDetail, { n: source.id })}</span>
         </span>
         <ArrowUpRight aria-hidden className="size-(--icon) shrink-0 text-ink-muted group-hover/open:text-ink" />
       </a>
@@ -216,7 +226,7 @@ function SourceNumber({ id, className }: { id: number; className?: string }) {
  * waits for hydration: the server would write its own zone's time and the
  * browser would disagree.
  */
-function SourceMeta({ source, timeZone }: { source: Source; timeZone?: string }) {
+function SourceMeta({ source, timeZone, t, f }: { source: Source; timeZone?: string; t: SourcesMessages; f: MessageFormat }) {
   const retrieved = source.retrievedAt ? new Date(source.retrievedAt) : undefined
   const hydrated = useHydrated()
   return (
@@ -224,10 +234,13 @@ function SourceMeta({ source, timeZone }: { source: Source; timeZone?: string })
       <span dir="ltr">{source.domain}</span>
       {retrieved && (timeZone !== undefined || hydrated) ? (
         <time dateTime={retrieved.toISOString()} className="tabular">
-          read{' '}
-          <span dir="ltr">
-            {retrieved.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZone })}
-          </span>
+          {f.nodes(t.retrieved, {
+            time: (
+              <span dir="ltr">
+                {retrieved.toLocaleString(f.locale ?? 'en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZone })}
+              </span>
+            ),
+          })}
         </time>
       ) : null}
     </span>
@@ -262,6 +275,8 @@ export interface SourceListProps extends Omit<React.ComponentProps<'ol'>, 'child
    * cannot know the reader's zone.
    */
   timeZone?: string
+  /** Words for translation: the read time. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<SourcesMessages>
 }
 
 /**
@@ -270,7 +285,8 @@ export interface SourceListProps extends Omit<React.ComponentProps<'ol'>, 'child
  * (domain), what was used (the snippet, in the reading voice — it is quoted
  * prose) and when it was read.
  */
-export function SourceList({ sources, timeZone, className, ...props }: SourceListProps) {
+export function SourceList({ sources, timeZone, messages, className, ...props }: SourceListProps) {
+  const [t, f] = useMessages('sources', sourcesMessages, messages)
   return (
     <ol data-slot="source-list" className={cn('m-0 grid list-none gap-2 p-0 sm:grid-cols-2', className)} {...props}>
       {sources.map((source) => (
@@ -289,7 +305,7 @@ export function SourceList({ sources, timeZone, className, ...props }: SourceLis
               <span className="font-ui text-sm font-semibold leading-snug">{source.title}</span>
               <ArrowUpRight aria-hidden className="size-(--icon-sm) shrink-0 text-ink-muted group-hover/source:text-ink" />
             </span>
-            <SourceMeta source={source} timeZone={timeZone} />
+            <SourceMeta source={source} timeZone={timeZone} t={t} f={f} />
             {source.snippet ? (
               <span className="font-text text-sm leading-body text-ink-2 [overflow-wrap:anywhere]">“{source.snippet}”</span>
             ) : null}

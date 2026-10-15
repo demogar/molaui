@@ -5,6 +5,7 @@ import { CalendarDays, Check } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { useControllable } from '../../lib/use-controllable'
 import { type FieldControlSize, fieldControlClasses, fieldControlSizes } from '../field/field-control'
 import { Input } from '../field/input'
@@ -17,6 +18,7 @@ import {
   type DateLocale,
   type DateRange,
   type DateRangePreset,
+  defaultPresetKeys,
   defaultRangePresets,
   formatInputDate,
   formatLongDate,
@@ -26,6 +28,7 @@ import {
   startOfDay,
   toISODate,
 } from './date-utils'
+import { type DateRangePickerMessages, dateRangePickerMessages } from './messages'
 
 /**
  * A period, for the reports and run histories every internal tool filters by.
@@ -144,10 +147,17 @@ export interface DateRangePickerProps
   disabled?: boolean
   /** Marks the trigger `aria-required`. Inside `Field`, the label carries the required mark. */
   required?: boolean
-  /** The trigger's text while no range is chosen. Defaults to "Choose a period". */
+  /** The trigger's text while no range is chosen. Defaults to "Choose a period" (`messages.placeholder`). */
   placeholder?: string
   /** Classes for the outer element that holds the trigger. `className` styles the trigger itself. */
   wrapperClassName?: string
+  /**
+   * Words for translation: the inputs' labels, the status line, the default
+   * presets' labels and the sentences a refused date is stated with. Keys
+   * left out come from `MessagesProvider`, then English. The calendar's own
+   * words come from the provider's `calendar` table.
+   */
+  messages?: MessagesOverride<DateRangePickerMessages>
 }
 
 const EMPTY: DateRange = { start: null, end: null }
@@ -168,7 +178,7 @@ export function DateRangePicker({
   defaultValue = EMPTY,
   onValueChange,
   presets = defaultRangePresets,
-  locale,
+  locale: localeProp,
   weekStartsOn,
   min,
   max,
@@ -182,14 +192,17 @@ export function DateRangePicker({
   size = 'md',
   disabled,
   required,
-  placeholder = 'Choose a period',
+  placeholder,
   id,
   className,
   wrapperClassName,
+  messages,
   'aria-describedby': describedByProp,
   'aria-invalid': invalid,
   ...triggerProps
 }: DateRangePickerProps) {
+  const [t, f] = useMessages('dateRangePicker', dateRangePickerMessages, messages)
+  const locale = localeProp ?? f.locale
   const uid = React.useId()
   const valueId = `${uid}-value`
   const formatId = `${uid}-format`
@@ -252,7 +265,11 @@ export function DateRangePicker({
   function commitTyped(which: 'start' | 'end') {
     const input = which === 'start' ? startInput : endInput
     const current = shown[which]
-    const result = readTypedDate(input.text, { locale, min, max, isDateDisabled }, `the ${which} date`)
+    const result = readTypedDate(
+      input.text,
+      { locale, min, max, isDateDisabled, messages: t },
+      which === 'start' ? t.notADateStart : t.notADateEnd,
+    )
     if (!result.ok) {
       input.setError(result.message)
       return
@@ -262,11 +279,11 @@ export function DateRangePicker({
     if (date && other) {
       const otherWords = formatLongDate(other, locale, false)
       if (which === 'start' && compareDays(date, other) > 0) {
-        input.setError(`The start date is after the end date, ${otherWords}. Choose that day or earlier.`)
+        input.setError(f.format(t.startAfterEnd, { date: otherWords }))
         return
       }
       if (which === 'end' && compareDays(date, other) < 0) {
-        input.setError(`The end date is before the start date, ${otherWords}. Choose that day or later.`)
+        input.setError(f.format(t.endBeforeStart, { date: otherWords }))
         return
       }
     }
@@ -285,19 +302,19 @@ export function DateRangePicker({
   const label = formatDateRange(value, locale)
   const status =
     shown.start && shown.end
-      ? `${formatDateRange(shown, locale)}, ${dayCount(shown)} ${dayCount(shown) === 1 ? 'day' : 'days'}.`
+      ? f.plural(t.rangeChosen, dayCount(shown), { range: formatDateRange(shown, locale) ?? '' })
       : shown.start
-        ? `Start ${formatLongDate(shown.start, locale, false)}. Choose the end date.`
+        ? f.format(t.startChosen, { date: formatLongDate(shown.start, locale, false) })
         : shown.end
-          ? `End ${formatLongDate(shown.end, locale, false)}. Choose the start date.`
-          : 'Choose the start date.'
+          ? f.format(t.endChosen, { date: formatLongDate(shown.end, locale, false) })
+          : t.chooseStart
 
   function typedInput(which: 'start' | 'end', input: TypedEnd) {
     const inputId = `${uid}-${which}`
     const errorId = `${uid}-${which}-error`
     return (
       <div className="grid min-w-0 gap-2">
-        <Label htmlFor={inputId}>{which === 'start' ? 'Start date' : 'End date'}</Label>
+        <Label htmlFor={inputId}>{which === 'start' ? t.startDate : t.endDate}</Label>
         <Input
           id={inputId}
           size="sm"
@@ -350,7 +367,7 @@ export function DateRangePicker({
               direction, and "14.–25. Sept. 2026" laid out right-to-left
               comes apart into "Sept. 2026 .25–.14". */}
           <span dir="auto" id={valueId} className={cn('min-w-0 truncate tabular-nums', !label && 'text-ink-muted')}>
-            {label ?? placeholder}
+            {label ?? placeholder ?? t.placeholder}
           </span>
           <CalendarDays aria-hidden className="size-(--icon) shrink-0 text-ink-muted" />
         </PopoverPrimitive.Trigger>
@@ -371,12 +388,14 @@ export function DateRangePicker({
             {presets.length > 0 ? (
               <div
                 role="group"
-                aria-label="Presets"
+                aria-label={t.presets}
                 className="flex flex-wrap gap-1 border-b border-keyline p-2 sm:w-40 sm:flex-col sm:flex-nowrap sm:border-e sm:border-b-0"
               >
                 {presets.map((preset) => {
                   const range = preset.range(today)
                   const active = isSameDay(range.start, value.start) && isSameDay(range.end, value.end)
+                  const key = defaultPresetKeys.get(preset)
+                  const presetLabel = key ? t.presetLabels[key] : preset.label
                   const available = inRange(range)
                   return (
                     <button
@@ -394,7 +413,7 @@ export function DateRangePicker({
                       )}
                     >
                       <Check aria-hidden strokeWidth={2.5} className={cn('size-(--icon-sm) shrink-0', !active && 'invisible')} />
-                      {preset.label}
+                      {presetLabel}
                     </button>
                   )
                 })}
@@ -405,13 +424,13 @@ export function DateRangePicker({
                 // As wide as the calendar's seven days, including their 36px
                 // cap on a phone (calendar.tsx); wider, the two inputs set
                 // the popup's width and the end date ran past its edge.
-                <div role="group" aria-label="Type the dates" className="grid max-w-[calc(var(--control-h)*7)] gap-2 max-sm:max-w-[calc(min(var(--control-h),2.25rem)*7)]">
+                <div role="group" aria-label={t.typeTheDates} className="grid max-w-[calc(var(--control-h)*7)] gap-2 max-sm:max-w-[calc(min(var(--control-h),2.25rem)*7)]">
                   <div className="grid grid-cols-2 gap-2">
                     {typedInput('start', startInput)}
                     {typedInput('end', endInput)}
                   </div>
                   <span id={formatId} className="text-xs leading-snug text-ink-muted">
-                    Format: {pattern}
+                    {f.format(t.format, { pattern })}
                   </span>
                   {startInput.error ? <DateError id={`${uid}-start-error`}>{startInput.error}</DateError> : null}
                   {endInput.error ? <DateError id={`${uid}-end-error`}>{endInput.error}</DateError> : null}

@@ -4,12 +4,14 @@ import * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { joinIds } from '../../lib/merge-props'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { useControllable } from '../../lib/use-controllable'
 import { useLabelFor } from '../../lib/use-label-for'
 import { DateError, DatePicker } from '../date-picker/date-picker'
 import { type DateLocale, formatMediumDate, startOfDay } from '../date-picker/date-utils'
 import { type FieldControlSize } from '../field/field-control'
-import { TimePicker, type TimePickerMessages } from './time-picker'
+import { type DateTimePickerMessages, dateTimePickerMessages } from './messages'
+import { TimePicker } from './time-picker'
 import { atTime, formatTime, parseTime, toLocalDateTime, toTimeString, type TimeString } from './time-utils'
 
 /**
@@ -44,10 +46,7 @@ import { atTime, formatTime, parseTime, toLocalDateTime, toTimeString, type Time
  * `className`, `ref` and the other DOM props go to the group.
  */
 
-export interface DateTimePickerMessages extends TimePickerMessages {
-  date: string
-  time: string
-}
+export type { DateTimePickerMessages } from './messages'
 
 export interface DateTimePickerProps
   extends Omit<React.ComponentProps<'div'>, 'defaultValue' | 'onChange' | 'children' | 'role'> {
@@ -98,8 +97,13 @@ export interface DateTimePickerProps
   required?: boolean
   /** Given to the date input, so a `<label for>` focuses it. */
   id?: string
-  /** The words "Date" and "Time" that name each half, and TimePicker's segment names and sentences, for translation. */
-  messages?: Partial<DateTimePickerMessages>
+  /**
+   * Words for translation: "Date" and "Time", which name each half, and the
+   * time half's segment names and sentences. Keys left out come from
+   * `MessagesProvider`, then English. The date half's words come from the
+   * provider's `datePicker` table.
+   */
+  messages?: MessagesOverride<DateTimePickerMessages>
 }
 
 const timeOf = (date: Date | null | undefined): TimeString | null =>
@@ -109,7 +113,7 @@ export function DateTimePicker({
   value: valueProp,
   defaultValue = null,
   onValueChange,
-  locale,
+  locale: localeProp,
   hourCycle,
   minuteStep,
   weekStartsOn,
@@ -139,7 +143,9 @@ export function DateTimePicker({
   const dateWordId = `${uid}-date-word`
   const timeWordId = `${uid}-time-word`
   const errorId = `${uid}-error`
-  const { date: dateWord = 'Date', time: timeWord = 'Time', ...timeMessages } = messagesProp ?? {}
+  const [t, f] = useMessages('dateTimePicker', dateTimePickerMessages, messagesProp)
+  const { date: dateWord, time: timeWord, ...timeMessages } = t
+  const locale = localeProp ?? f.locale
   const labelId = useLabelFor(dateId)
 
   const [value, setValue] = useControllable<Date | null>({ value: valueProp, defaultValue, onChange: onValueChange })
@@ -161,9 +167,11 @@ export function DateTimePicker({
   const tooLate = moment && max && moment > max
   const momentText = (date: Date) =>
     `${formatMediumDate(date, locale)}, ${formatTime({ hour: date.getHours(), minute: date.getMinutes() }, locale, hourCycle)}`
-  const sayTooEarly = messagesProp?.tooEarly ?? ((formatted: string) => `Choose ${formatted} or later.`)
-  const sayTooLate = messagesProp?.tooLate ?? ((formatted: string) => `Choose ${formatted} or earlier.`)
-  const rangeError = tooEarly ? sayTooEarly(momentText(min)) : tooLate ? sayTooLate(momentText(max)) : null
+  const rangeError = tooEarly
+    ? f.format(t.tooEarly, { time: momentText(min) })
+    : tooLate
+      ? f.format(t.tooLate, { time: momentText(max) })
+      : null
 
   function emit(nextDay: Date | null, nextTime: TimeString | null) {
     const nextParts = parseTime(nextTime)

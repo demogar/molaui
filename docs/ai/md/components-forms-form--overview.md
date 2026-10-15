@@ -74,7 +74,8 @@ Each story is a live example in Storybook.
 | --- | --- | --- | --- |
 | `description` | `ReactNode` |  | A sentence under the heading: what happens next, or what is kept. |
 | `headingLevel` | `2 \| 3 \| 4` | `2` | The heading element. Match the form's outline; `h2` by default. |
-| `title` | `ReactNode \| ((count: number) => ReactNode)` | `(count: number) => (count === 1 ? '1 field needs fixing' : `${count} fields need fixing`)` | The heading, which is also the summary's accessible name and what a screen reader says when it takes focus. Pass a function to word it for the count, or to translate it. Defaults to “1 field needs fixing” / “3 fields need fixing”. |
+| `messages` | `MessagesOverride<FormErrorSummaryMessages>` |  | Words for translation: the default heading, by count. Keys left out come from `MessagesProvider`, then English. |
+| `title` | `ReactNode \| ((count: number) => ReactNode)` |  | The heading, which is also the summary's accessible name and what a screen reader says when it takes focus. Pass a function to word it for the count. Defaults to “1 field needs fixing” / “3 fields need fixing” (`messages.title`, which is where a translation goes). |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="form-error-summary">`.
 
@@ -89,7 +90,7 @@ Each story is a live example in Storybook.
 
 `className`, `ref`, `id` and the other DOM props go to `<fieldset data-slot="fieldset">`.
 
-Types: `FormProps`, `FormErrorSummaryProps`, `FieldsetProps`
+Types: `FormErrorSummaryMessages`, `FormProps`, `FormErrorSummaryProps`, `FieldsetProps`
 
 ## Accessibility
 

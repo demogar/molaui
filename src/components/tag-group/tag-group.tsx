@@ -6,7 +6,9 @@ import * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { useMergedRefs } from '../../lib/merge-props'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { useControllable } from '../../lib/use-controllable'
+import { type TagGroupMessages, tagGroupMessages } from './messages'
 
 /**
  * A set of short values shown as tags: the labels on a Cayuco dataset, the
@@ -70,6 +72,8 @@ export interface TagGroupBaseProps
   empty?: React.ReactNode
   /** No tag can be removed or selected; they stay readable. */
   disabled?: boolean
+  /** Words for translation: the remove buttons' default name and the empty text. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<TagGroupMessages>
 }
 
 /**
@@ -94,18 +98,22 @@ const tagClasses = [
 export function TagGroup({
   items,
   onRemove,
-  removeLabel = (label) => `Remove ${label}`,
+  removeLabel: removeLabelProp,
   selectionMode = 'none',
   value,
   defaultValue,
   onValueChange,
-  empty = 'None',
+  empty: emptyProp,
   disabled = false,
+  messages,
   className,
   ref,
   onKeyDown: onKeyDownProp,
   ...props
 }: TagGroupProps) {
+  const [t, f] = useMessages('tagGroup', tagGroupMessages, messages)
+  const removeLabel = removeLabelProp ?? ((name: string) => f.format(t.remove, { name }))
+  const empty = emptyProp ?? t.empty
   const direction = useDirection()
   const [selected, setSelected] = useControllable<string[]>({
     value,

@@ -45,13 +45,14 @@ The slot where something will go and has not yet: a photograph that has not been
 | --- | --- | --- | --- |
 | `alt` (required) | `string` |  | Announced in place of the missing content. |
 | `name` (required) | `string` |  | What it would show — "Account logo", "Tickets by plan". |
-| `label` | `string` | `Placeholder` | The kind of thing that goes here — "Image", "Chart", "Preview". |
+| `label` | `string` |  | The kind of thing that goes here — "Image", "Chart", "Preview". |
 | `layer` | `"shade" \| "deep"` |  | The cloth it is cut from: `shade` by default, `deep` on a shaded panel, where `shade` would vanish. |
+| `messages` | `MessagesOverride<PlaceholderMessages>` |  | Words for translation: the default label. Keys left out come from `MessagesProvider`, then English. |
 | `tone` (deprecated) | `"default" \| "deep"` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `layer`: `default` is `shade`, `deep` is `deep`. A ground is a layer, as on `Panel`; `tone` is a status. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="placeholder">`.
 
-Types: `PlaceholderProps`
+Types: `PlaceholderMessages`, `PlaceholderProps`
 
 ## Accessibility
 

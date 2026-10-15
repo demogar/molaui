@@ -45,8 +45,12 @@ export function ContentRules() {
 interface Word {
   say: string
   when: string
-  /** Where a component says it today, with the page it is on. */
-  where: { label: string; title: string }[]
+  /**
+   * Where a component says it today, with the page it is on, and the
+   * `MessagesProvider` key that holds the word (`dialog.close`), so a
+   * translation changes it in one place. No key: the caller writes the word.
+   */
+  where: { label: string; title: string; key?: string }[]
   not?: string
 }
 
@@ -63,8 +67,8 @@ export const WORDS: { group: string; words: Word[] }[] = [
         say: 'Close',
         when: 'Puts away a container the person opened. Nothing is lost; the work inside is kept or was already saved.',
         where: [
-          { label: 'Dialog and Drawer header button', title: 'Components/Overlays/Dialog' },
-          { label: '“Close navigation” on the mobile sidebar', title: 'Components/Layout/App shell' },
+          { label: 'Dialog and Drawer header button', title: 'Components/Overlays/Dialog', key: 'dialog.close' },
+          { label: '“Close navigation” on the mobile sidebar', title: 'Components/Layout/App shell', key: 'appShell.closeNavigation' },
         ],
         not: 'Not for a notice the system raised (Dismiss), or for abandoning a change (Cancel).',
       },
@@ -72,9 +76,9 @@ export const WORDS: { group: string; words: Word[] }[] = [
         say: 'Dismiss',
         when: 'Sends away a notice the system put in front of the person: a toast, a callout. The notice was information, not a task.',
         where: [
-          { label: 'Toast close button', title: 'Components/Feedback/Toast' },
-          { label: 'Callout with onDismiss', title: 'Components/Feedback/Callout' },
-          { label: 'Banner with onDismiss', title: 'Components/Feedback/Banner' },
+          { label: 'Toast close button', title: 'Components/Feedback/Toast', key: 'toast.dismiss' },
+          { label: 'Callout with onDismiss', title: 'Components/Feedback/Callout', key: 'callout.dismiss' },
+          { label: 'Banner with onDismiss', title: 'Components/Feedback/Banner', key: 'banner.dismiss' },
         ],
         not: 'Not for a dialog the person opened themselves (Close).',
       },
@@ -87,7 +91,7 @@ export const WORDS: { group: string; words: Word[] }[] = [
       {
         say: 'Cancel',
         when: 'Abandons what the person started in this panel, changing nothing. Always beside a named action, never alone.',
-        where: [{ label: 'Dialog footer, the default cancelLabel', title: 'Components/Overlays/Dialog' }],
+        where: [{ label: 'Dialog footer, the default cancelLabel', title: 'Components/Overlays/Dialog', key: 'alertDialog.cancel' }],
         not: 'Not as the confirm of a destructive question; the confirm repeats the verb, “Delete run”.',
       },
     ],
@@ -131,17 +135,17 @@ export const WORDS: { group: string; words: Word[] }[] = [
         say: 'Remove',
         when: 'Takes an item out of this list, selection or message. The item itself still exists.',
         where: [
-          { label: '“Remove {name}” on a chosen option', title: 'Components/Forms/Combobox' },
-          { label: '“Remove {name}” on a file', title: 'Components/Forms/File upload' },
-          { label: '“Remove {name}” on an attachment', title: 'AI/Prompt input' },
+          { label: '“Remove {name}” on a chosen option', title: 'Components/Forms/Combobox', key: 'combobox.remove' },
+          { label: '“Remove {name}” on a file', title: 'Components/Forms/File upload', key: 'fileUpload.remove' },
+          { label: '“Remove {name}” on an attachment', title: 'AI/Prompt input', key: 'attachmentChip.remove' },
         ],
       },
       {
         say: 'Clear',
         when: 'Empties a field or a set of filters. The field stays, ready for a new value.',
         where: [
-          { label: '“Clear search” in SearchInput', title: 'Components/Forms/Field' },
-          { label: '“Clear selection”', title: 'Components/Forms/Combobox' },
+          { label: '“Clear search” in SearchInput', title: 'Components/Forms/Field', key: 'searchInput.clear' },
+          { label: '“Clear selection”', title: 'Components/Forms/Combobox', key: 'combobox.clear' },
           { label: '“Clear filters” when filters hide every row', title: 'Components/Data display/Table' },
         ],
       },
@@ -153,20 +157,20 @@ export const WORDS: { group: string; words: Word[] }[] = [
       {
         say: 'Stop',
         when: 'Halts a response while it generates and keeps what has already arrived, marked as partial. The send button becomes Stop in the same place.',
-        where: [{ label: 'Prompt input while a response streams', title: 'AI/Prompt input' }],
+        where: [{ label: 'Prompt input while a response streams', title: 'AI/Prompt input', key: 'promptInput.stop' }],
         not: 'Stopped is not failed: no rojo, no alert.',
       },
       {
         say: 'Cancel run',
         when: 'Ends a run that is still open. Its status reads Cancelled.',
-        where: [{ label: 'Agent run actions', title: 'AI/Agent run' }],
+        where: [{ label: 'Agent run actions', title: 'AI/Agent run', key: 'agentRun.cancelRun' }],
       },
       {
         say: 'Retry',
         when: 'Runs the same thing again after it failed. Say what is retried when it is not obvious: “Retry from step 3”, “Retry run”.',
         where: [
-          { label: '“Retry from step N”', title: 'AI/Run error' },
-          { label: '“Retry {name}” on a failed upload', title: 'Components/Forms/File upload' },
+          { label: '“Retry from step N”', title: 'AI/Run error', key: 'runError.retryFromStep' },
+          { label: '“Retry {name}” on a failed upload', title: 'Components/Forms/File upload', key: 'fileUpload.retry' },
         ],
       },
     ],
@@ -177,12 +181,12 @@ export const WORDS: { group: string; words: Word[] }[] = [
       {
         say: 'Approve and Deny',
         when: 'Permission for one action an agent wants to take. Deny refuses it, and the call does not run.',
-        where: [{ label: 'Tool call approval', title: 'AI/Tool call' }],
+        where: [{ label: 'Tool call approval', title: 'AI/Tool call', key: 'toolCall.approve' }],
       },
       {
         say: 'Approve, Request changes and Reject',
         when: 'A verdict on work an agent proposes. Reject turns the work down; Request changes sends it back with a reason.',
-        where: [{ label: 'Change review', title: 'AI/Change review' }],
+        where: [{ label: 'Change review', title: 'AI/Change review', key: 'changeReview.actions' }],
       },
     ],
   },
@@ -193,8 +197,8 @@ export const WORDS: { group: string; words: Word[] }[] = [
         say: 'Copy, then Copied',
         when: 'The button names what it copies, and its name changes to say it worked: “Copy run id” becomes “Run id copied”.',
         where: [
-          { label: 'Code block', title: 'Components/Data display/Code' },
-          { label: 'Agent run id', title: 'AI/Agent run' },
+          { label: 'Code block', title: 'Components/Data display/Code', key: 'codeBlock.copy' },
+          { label: 'Agent run id', title: 'AI/Agent run', key: 'agentRun.copyRunId' },
         ],
       },
     ],
@@ -237,6 +241,7 @@ export function WordList() {
                               {titleName(place.title)}
                             </a>
                             <span className="block text-xs">{place.label}</span>
+                            {place.key ? <Code className="text-2xs">{`messages.${place.key}`}</Code> : null}
                           </li>
                         ))}
                       </ul>

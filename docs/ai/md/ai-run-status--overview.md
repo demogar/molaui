@@ -66,6 +66,7 @@ Glyph + word + colour, always all three. State is never carried by colour alone:
 | `durationMs` | `number` |  | A known duration, for a finished step that has no timestamps. |
 | `endedAt` | `number \| Date` |  | When it ended. Freezes the clock; omit while the work is open. |
 | `label` | `string` |  | Override the word — e.g. "Thinking" for a running reasoning step. The glyph stays. |
+| `messages` | `MessagesOverride<RunStatusMessages>` |  | Words for translation: the word for each status. Keys left out come from `MessagesProvider`, then English. |
 | `register` | `"inline" \| "label"` | `label` | `label`: the rótulo register, for headers. `inline`: sentence case, for rows and running text. |
 | `startedAt` | `number \| Date` |  | When the work started. With it, an elapsed clock follows the label. |
 
@@ -82,6 +83,8 @@ Glyph + word + colour, always all three. State is never carried by colour alone:
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="run-status-glyph">`.
 
 ### `RUN_STATUS_LABEL` (constant)
+
+The English word for each status. Kept as an export for code that read it before the words became translatable; the components read `runStatus.statuses` through `MessagesProvider` instead.
 
 ### `isActiveStatus` (function)
 
@@ -103,7 +106,7 @@ Work is over and will not change again without a retry.
 
 Milliseconds since `startedAt`, ticking while the work is still open.
 
-Types: `RunStatusGlyphProps`, `RunStatusProps`, `RunStatusValue`
+Types: `RunStatusMessages`, `RunStatusGlyphProps`, `RunStatusProps`, `RunStatusValue`
 
 ## Accessibility
 

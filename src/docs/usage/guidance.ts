@@ -420,7 +420,7 @@ export const USAGE: Record<string, Usage> = {
       'Icon-only actions in dense rows and toolbars, with IconButton and its required label.',
     ],
     avoid: [
-      { when: 'Going to another page or URL. Use a link: an a element, or your router’s link styled with buttonVariants.', use: null },
+      { when: 'Going to another page or URL.', use: 'Components/Navigation/Link', label: 'LinkButton' },
       { when: 'A row of related actions above a table or canvas, with one tab stop.', use: 'Components/Layout/Toolbar' },
       { when: 'More actions on one object than deserve a button each.', use: 'Components/Overlays/Menu' },
       { when: 'Choosing between views, where the pressed state stays.', use: 'Components/Forms/Segmented control' },
@@ -1534,6 +1534,35 @@ export const USAGE: Record<string, Usage> = {
     content: [
       'Use each page’s own title as its crumb, so the trail matches the headings.',
       'Shorten ids in the middle, keeping both ends: “run_8f3a…c21e”.',
+    ],
+  },
+  'Components/Navigation/Link': {
+    summary: 'Going somewhere: Link for text, in a sentence or on its own, and LinkButton for a navigation cut like a button.',
+    use: [
+      'A place in a sentence, with the inline variant: “Open the run history to restore one.”',
+      'A link set on its own under a list or in a card’s foot, with standalone: “View all runs”.',
+      'The main way forward when it is a navigation, with LinkButton: “Open run”, “Read the guide”.',
+      'A page outside the app, with external, which opens a new tab and says so.',
+    ],
+    avoid: [
+      { when: 'Doing something on this page: saving, deleting, opening a dialog.', use: 'Components/Actions/Button' },
+      { when: 'A destination in the app’s sidebar.', use: 'Components/Layout/App shell', label: 'NavItem' },
+      { when: 'The path back up from the current page.', use: 'Components/Navigation/Breadcrumb' },
+      { when: 'A numbered source an answer cites.', use: 'AI/Sources', label: 'Citation' },
+    ],
+    practices: [
+      {
+        do: 'Pass render your router’s link, as an element (<NextLink href="/runs" />) or a function that returns one.',
+        dont: 'Wrap a Button in a link, or put onClick navigation on a Button; a link opens in a new tab, shows its address and is announced as a link.',
+      },
+      {
+        do: 'Use external for a page that leaves the app, so the arrow and the hidden “(opens in a new tab)” go with it.',
+        dont: 'Open a link in the app in a new tab; it breaks Back for everyone and strands a screen reader user.',
+      },
+    ],
+    content: [
+      'Name the destination, not the gesture: “run history”, never “click here” or “this link”.',
+      'In a sentence, link the words that name the place, not the whole sentence.',
     ],
   },
   'Components/Navigation/Pagination': {

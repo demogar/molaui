@@ -74,6 +74,7 @@ A file or context item attached to the next prompt. The filename is a literal.
 | --- | --- | --- | --- |
 | `name` (required) | `string` |  | The file or item's name, set as a literal and used in the remove button's name ("Remove report.csv"). |
 | `detail` | `string` |  | e.g. "CSV · 48 KB". |
+| `messages` | `MessagesOverride<AttachmentChipMessages>` |  | Words for translation: the remove button's name. Keys left out come from `MessagesProvider`, then English. |
 | `onRemove` | `(() => void)` |  | Takes the attachment off the next prompt. Shows a remove button; omit for an attachment that cannot be removed. |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="attachment-chip">`.
@@ -90,9 +91,10 @@ The composer.
 | `defaultValue` | `string` |  | The starting draft when the composer owns it. Defaults to empty; the field clears itself after a send. |
 | `disabled` | `boolean` | `false` | Locks the composer, for a conversation the reader may not write to. To stop sending for a while, use `status="offline"` instead, which keeps the draft editable and says why. |
 | `maxRows` | `number` | `10` | Rows before the field scrolls instead of growing. |
+| `messages` | `MessagesOverride<PromptInputMessages>` |  | Words for translation: the placeholder, the hints, the estimate and the buttons. Keys left out come from `MessagesProvider`, then English. |
 | `onStop` | `(() => void)` |  | Called by the stop button while `status` is `generating`. |
 | `onValueChange` | `((value: string) => void)` |  | Called on every keystroke with the whole draft, untrimmed. |
-| `placeholder` | `string` | `Ask anything…` | Defaults to "Ask anything…". It is a hint, never the name: `label` is what assistive tech announces. |
+| `placeholder` | `string` |  | Defaults to "Ask anything…" (`messages.placeholder`). It is a hint, never the name: `label` is what assistive tech announces. |
 | `showEstimate` | `boolean` | `true` | Show the rough token estimate. |
 | `status` | `"idle" \| "generating" \| "offline"` | `idle` | `generating`: a response is streaming. The field stays editable — the operator can draft the next prompt — and the send button becomes stop. `offline`: sending is impossible. The draft is kept, and the reason is said. |
 | `submitOn` | `"enter" \| "mod-enter"` | `enter` | `enter`: Enter sends, Shift+Enter is a newline — chat convention. `mod-enter`: ⌘/Ctrl+Enter sends, Enter is a newline — for long prompts, where an accidental send costs a model run. |
@@ -101,7 +103,7 @@ The composer.
 
 `className`, `ref`, `id` and the other DOM props go to `<form data-slot="prompt-input">`.
 
-Types: `AttachmentChipProps`, `PromptInputProps`
+Types: `AttachmentChipMessages`, `PromptInputMessages`, `AttachmentChipProps`, `PromptInputProps`
 
 ## Accessibility
 

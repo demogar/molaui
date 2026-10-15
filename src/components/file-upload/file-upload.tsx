@@ -4,6 +4,8 @@ import { ArrowDownToLine, Check, Clock, Paperclip, RotateCcw, TriangleAlert, Upl
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { deprecate } from '../../lib/deprecate'
+import { type MessagesOverride, type PluralMessage, formatMessage, useMessages } from '../../lib/messages'
 import { Button, IconButton } from '../button/button'
 import { Progress } from '../progress/progress'
 import {
@@ -12,6 +14,7 @@ import {
   formatFileSize,
   validateFiles,
 } from './file-upload-utils'
+import { type FileUploadMessageTemplates, fileUploadMessages } from './messages'
 
 /**
  * A place to put files: a dropzone with a real button in it, and a list of
@@ -88,7 +91,19 @@ export interface UploadContext {
   onProgress: (fraction: number | null) => void
 }
 
-export interface FileUploadMessages {
+export type { FileUploadMessageTemplates } from './messages'
+
+/**
+ * The words as functions, the shape `messages` took before the shared
+ * `MessagesProvider` (docs/adr/0014-messages.md). A function cannot cross from
+ * a server component to the client, and a translation tool cannot read one,
+ * so the table is now templates (`FileUploadMessageTemplates`). A function passed in
+ * `messages` still works, and warns.
+ *
+ * @deprecated since 0.7.0, removed in 1.0.0: pass templates in `messages`, or
+ * set them for the whole app with `MessagesProvider`.
+ */
+export interface FileUploadMessageFunctions {
   /** Before the browse button: "Drag files here, or". */
   prompt: (multiple: boolean) => string
   browse: (multiple: boolean) => string
@@ -113,36 +128,63 @@ export interface FileUploadMessages {
   list: string
 }
 
-const plural = (n: number, one: string, many: string) => (n === 1 ? one : many)
+/**
+ * The function table under its old name, so code typed against it before
+ * 0.7.0 still compiles.
+ *
+ * @deprecated since 0.7.0, removed in 1.0.0: type a translation as
+ * `MolaMessages['fileUpload']` (`FileUploadMessageTemplates`).
+ */
+export type FileUploadMessages = FileUploadMessageFunctions
 
-export const defaultFileUploadMessages: FileUploadMessages = {
-  prompt: (multiple) => (multiple ? 'Drag files here, or' : 'Drag a file here, or'),
-  browse: (multiple) => (multiple ? 'Browse files' : 'Browse'),
-  dropToAdd: (count) => (count > 0 ? `Drop to add ${count} ${plural(count, 'file', 'files')}` : 'Drop to add files'),
-  added: (accepted, rejected) => {
-    const parts = []
-    if (accepted > 0) parts.push(`Added ${accepted} ${plural(accepted, 'file', 'files')}.`)
-    if (rejected > 0) parts.push(`${rejected} ${plural(rejected, 'file was', 'files were')} not added.`)
-    return parts.join(' ')
-  },
-  removed: (name) => `Removed ${name}.`,
-  status: { attached: 'Attached', queued: 'Queued', uploading: 'Uploading', done: 'Uploaded', failed: 'Failed' },
-  remove: (name) => `Remove ${name}`,
-  retry: (name) => `Retry ${name}`,
-  retryShort: 'Retry',
-  settled: (name, status) => (status === 'done' ? `${name} uploaded.` : `${name} failed to upload.`),
-  rejectType: (name, accepted) => `${name} is not an accepted type. Use ${accepted}.`,
-  rejectSize: (name, size, limit) => `${name} is ${size}; the limit is ${limit}.`,
-  rejectCount: (name, max) => `${name} was not added: the limit is ${max} ${plural(max, 'file', 'files')}.`,
-  constraints: (types, limit, maxFiles) => {
-    const parts = []
-    if (types) parts.push(types)
-    if (limit) parts.push(`up to ${limit}${maxFiles !== undefined && maxFiles > 1 ? ' each' : ''}`)
-    if (maxFiles !== undefined && maxFiles > 1) parts.push(`${maxFiles} files at most`)
-    return parts.length > 0 ? parts.join(' · ') : null
-  },
-  list: 'Files',
+type Plural = (message: PluralMessage, count: number, values?: Record<string, string | number>) => string
+
+/** The template table as the functions the component calls. */
+function toFunctions(m: FileUploadMessageTemplates, plural: Plural): FileUploadMessageFunctions {
+  return {
+    prompt: (multiple) => (multiple ? m.prompt.multiple : m.prompt.single),
+    browse: (multiple) => (multiple ? m.browse.multiple : m.browse.single),
+    dropToAdd: (count) => (count > 0 ? plural(m.dropToAdd, count) : m.dropToAddUnknown),
+    added: (accepted, rejected) => {
+      const parts = []
+      if (accepted > 0) parts.push(plural(m.added, accepted))
+      if (rejected > 0) parts.push(plural(m.notAdded, rejected))
+      return parts.join(' ')
+    },
+    removed: (name) => formatMessage(m.removed, { name }),
+    status: m.status,
+    remove: (name) => formatMessage(m.remove, { name }),
+    retry: (name) => formatMessage(m.retry, { name }),
+    retryShort: m.retryShort,
+    settled: (name, status) => formatMessage(status === 'done' ? m.uploaded : m.failedToUpload, { name }),
+    rejectType: (name, types) => formatMessage(m.rejectType, { name, types }),
+    rejectSize: (name, size, limit) => formatMessage(m.rejectSize, { name, size, limit }),
+    rejectCount: (name, max) => plural(m.rejectCount, max, { name }),
+    constraints: (types, limit, maxFiles) => {
+      const several = maxFiles !== undefined && maxFiles > 1
+      const parts = []
+      if (types) parts.push(types)
+      if (limit) parts.push(formatMessage(several ? m.upToEach : m.upTo, { limit }))
+      if (several) parts.push(plural(m.atMost, maxFiles))
+      return parts.length > 0 ? parts.join(' · ') : null
+    },
+    list: m.list,
+  }
 }
+
+const englishPlural: Plural = (message, count, values = {}) =>
+  formatMessage(message[new Intl.PluralRules('en-US').select(count)] ?? message.other, {
+    count: count.toLocaleString('en-US'),
+    ...values,
+  })
+
+/**
+ * The English words as functions.
+ *
+ * @deprecated since 0.7.0, removed in 1.0.0: read `defaultMessages.fileUpload`,
+ * the template table, instead.
+ */
+export const defaultFileUploadMessages: FileUploadMessageFunctions = toFunctions(fileUploadMessages, englishPlural)
 
 export interface FileUploadProps
   extends Omit<
@@ -179,8 +221,17 @@ export interface FileUploadProps
   onFilesChange?: (files: FileUploadItem[]) => void
   /** Files turned away, with the rule each broke. */
   onReject?: (rejections: FileRejection[]) => void
-  /** Copy, for another language. Merged over the English defaults. */
-  messages?: Partial<FileUploadMessages>
+  /**
+   * Words for translation: every prompt, status word, button name and
+   * announcement, as templates. Keys left out come from `MessagesProvider`,
+   * then English. A function in a key (the shape before 0.7.0) still works,
+   * and is deprecated.
+   */
+  messages?: {
+    [K in keyof FileUploadMessageTemplates | keyof FileUploadMessageFunctions]?:
+      | (K extends keyof FileUploadMessageTemplates ? MessagesOverride<FileUploadMessageTemplates>[K] : never)
+      | (K extends keyof FileUploadMessageFunctions ? FileUploadMessageFunctions[K] : never)
+  }
   /* Field wiring, spread from `{...control}`: these go to the browse button, the control. */
   /** Id of the browse button, so `Field`'s label points at the control a person presses. */
   id?: string
@@ -209,7 +260,7 @@ export function FileUpload({
   multiple = false,
   disabled = false,
   name,
-  locale,
+  locale: localeProp,
   defaultFiles,
   onUpload,
   maxConcurrent = 2,
@@ -224,7 +275,24 @@ export function FileUpload({
   'aria-label': ariaLabel,
   ...props
 }: FileUploadProps) {
-  const t = { ...defaultFileUploadMessages, ...messageOverrides }
+  // Templates go through the shared merge; a function (the shape before
+  // 0.7.0) overrides its key after it.
+  const templates: Record<string, unknown> = {}
+  const functions: Record<string, unknown> = {}
+  for (const [key, value] of Object.entries(messageOverrides ?? {})) {
+    if (typeof value === 'function') functions[key] = value
+    else templates[key] = value
+  }
+  if (Object.keys(functions).length > 0) {
+    deprecate('file-upload-message-functions', {
+      what: '<FileUpload messages={{ key: (…) => … }}> with functions',
+      instead: 'templates, such as { remove: \'Remove {name}\' }, or MessagesProvider',
+      removal: '1.0.0',
+    })
+  }
+  const [table, f] = useMessages('fileUpload', fileUploadMessages, templates as MessagesOverride<FileUploadMessageTemplates>)
+  const locale = localeProp ?? f.locale
+  const t: FileUploadMessageFunctions = { ...toFunctions(table, f.plural), ...functions }
   const uid = React.useId()
   const constraintsId = `${uid}-constraints`
   const inputRef = React.useRef<HTMLInputElement>(null)
@@ -547,7 +615,7 @@ const STATUS_INK: Record<FileUploadStatus, string> = {
 interface FileRowProps {
   item: FileUploadItem
   locale?: Intl.LocalesArgument
-  messages: FileUploadMessages
+  messages: FileUploadMessageFunctions
   canRetry: boolean
   disabled: boolean
   onRemove: () => void

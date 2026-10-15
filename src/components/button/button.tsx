@@ -156,7 +156,7 @@ export function Button({
   )
 }
 
-/** The arrow micro-interaction, exported so a router `<Link>` styled with `buttonVariants` gets the same one. */
+/** The arrow micro-interaction, exported so a custom control styled with `buttonVariants` gets the same one. `LinkButton` uses it. */
 export type ButtonArrowProps = React.ComponentProps<typeof ArrowRight>
 
 export function ButtonArrow({ className, ...props }: ButtonArrowProps) {

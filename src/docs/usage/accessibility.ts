@@ -283,7 +283,7 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
     you: [
       'Write a label that names the action with a verb: Deploy, Save changes.',
       'Give every `IconButton` a `label`; the icon is not a name.',
-      'Use a link styled with `buttonVariants` when the control goes somewhere rather than does something.',
+      'Use `LinkButton` when the control goes somewhere rather than does something.',
     ],
   },
   'Components/Data display/Avatar': {
@@ -958,6 +958,23 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
     you: [
       'Leave `href` off the last item.',
       'When you shorten a label with `middleTruncate`, make sure the full id is on the page it leads to.',
+    ],
+  },
+  'Components/Navigation/Link': {
+    keyboard: [
+      { keys: ['Tab'], action: 'Moves focus to the link.' },
+      { keys: ['Enter'], action: 'Follows the link. Space does not, even on a LinkButton: it is a link, and Space scrolls the page.' },
+    ],
+    handles: [
+      'Renders an `<a>` (or your router’s link, through `render`), so it is announced as a link, opens in a new tab on a middle click and shows its address.',
+      'Underlines `inline` links at all times, so a link in a sentence is not told apart by colour alone.',
+      'With `external` or `target="_blank"`, adds `rel="noopener noreferrer"`, the up-right arrow and a hidden “(opens in a new tab)” after the label, from `messages.link.newTab`.',
+      'Hides the glyphs from assistive technology, so the label is the name.',
+    ],
+    you: [
+      'Write link text that names the destination on its own, since screen readers list links out of context.',
+      'Make sure the element you pass to `render` renders an `<a>` with an `href`, and forwards the props and ref it receives.',
+      'Use a `Button` that says why, not a link, when the destination is not available yet; a link cannot be disabled.',
     ],
   },
   'Components/Navigation/Pagination': {

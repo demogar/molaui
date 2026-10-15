@@ -41,6 +41,7 @@ type LabelFixture = { plain: Fixture; labelled: Fixture }
 
 const EXEMPT: Record<string, string> = {
   DirectionProvider: 'a context provider; renders its children only',
+  MessagesProvider: 'a context provider; renders its children only',
   ToastProvider: 'a context provider; renders its children and a portalled viewport',
   TooltipProvider: 'a context provider; renders its children only',
   HotkeysProvider: 'a context provider; renders its children only',
@@ -448,6 +449,16 @@ const FIXTURES: Record<string, Fixture | LabelFixture> = {
     </mola.Collapsible>
   ),
   Breadcrumb: (p) => <mola.Breadcrumb {...p} items={[{ label: 'Home', href: '/' }, { label: 'Here' }]} />,
+  Link: (p) => (
+    <mola.Link {...p} href="/runs">
+      Runs
+    </mola.Link>
+  ),
+  LinkButton: (p) => (
+    <mola.LinkButton {...p} href="/runs">
+      Open run
+    </mola.LinkButton>
+  ),
   Pagination: (p) => <mola.Pagination {...p} page={1} pageCount={3} onPageChange={noop} />,
   Stepper: (p) => (
     <mola.Stepper {...p} label="Steps" steps={[{ id: 'a', title: 'Basics' }]}>

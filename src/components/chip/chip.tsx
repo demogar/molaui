@@ -1,7 +1,10 @@
+'use client'
+
 import { cva } from 'class-variance-authority'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { useMessagesLocale } from '../../lib/messages'
 import { deprecate } from '../../lib/deprecate'
 import { type Variants } from '../../lib/variants'
 
@@ -102,7 +105,7 @@ export function Chip({ className, style, size, type = 'checkbox', count, childre
           {/* Muted by token, not by opacity: a 75% fade of the label was never
               measured against either ground. */}
           <span className="ms-0.5 text-xs tabular text-ink-muted group-has-checked/chip:text-on-ink-muted">
-            {count.toLocaleString('en-US')}
+            <Count value={count} />
           </span>
         </>
       ) : null}
@@ -129,4 +132,10 @@ export function ChipGroup({ legend, hideLegend = false, className, children, ...
       <div className="flex flex-wrap gap-2">{children}</div>
     </fieldset>
   )
+}
+
+// A count in the provider's locale, `en-US` without one: a fixed locale, not
+// the runtime's, so the server and the browser write the same digits.
+function Count({ value }: { value: number }) {
+  return value.toLocaleString(useMessagesLocale() ?? 'en-US')
 }

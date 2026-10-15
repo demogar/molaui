@@ -66,8 +66,9 @@ Text that arrives a token at a time.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `text` (required) | `string` |  | Everything received so far. Grows; never rewritten from the top. |
-| `doneAnnouncement` | `string` | `Response complete.` | Spoken once when a stream that was running completes. |
-| `errorAnnouncement` | `string` | `Response stopped with an error.` | Spoken once when a stream that was running fails. |
+| `doneAnnouncement` | `string` |  | Spoken once when a stream that was running completes. |
+| `errorAnnouncement` | `string` |  | Spoken once when a stream that was running fails. |
+| `messages` | `MessagesOverride<StreamingTextMessages>` |  | Words for translation: the default done and error announcements. Keys left out come from `MessagesProvider`, then English. |
 | `renderCitation` | `((n: number) => ReactNode)` |  | How an inline `[n]` marker renders. Without it the marker stays as text. Pass a stable function (module scope or `useCallback`): finished blocks skip re-rendering only while it stays the same. |
 | `status` | `StreamStatus` | `done` | Where the stream is. `streaming` shows the caret and sets `aria-busy`; the move from `streaming` to `done` or `error` is announced once. Defaults to `done`. |
 | `tone` (deprecated) | `"default" \| "muted"` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `variant`, which takes the same values: a muted ink is a presentation, and `tone` is a status. |
@@ -79,7 +80,7 @@ Text that arrives a token at a time.
 
 ### `parseInline` (function)
 
-Types: `CaretProps`, `StreamStatus`, `StreamingTextProps`, `Block`, `InlineRun`
+Types: `StreamingTextMessages`, `CaretProps`, `StreamStatus`, `StreamingTextProps`, `Block`, `InlineRun`
 
 ## Accessibility
 

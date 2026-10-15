@@ -672,6 +672,14 @@
       "    ]} />$0"
     ]
   },
+  "Link": {
+    "scope": "typescriptreact,javascriptreact",
+    "prefix": "mola-link",
+    "description": "Going somewhere: Link for text, in a sentence or on its own, and LinkButton for a navigation cut like a button. import { Link } from '@demogar/mola-ui'",
+    "body": [
+      "<Link href=\"#\" variant=\"standalone\">${1:View all runs}</Link>$0"
+    ]
+  },
   "Pagination": {
     "scope": "typescriptreact,javascriptreact",
     "prefix": "mola-pagination",
@@ -693,7 +701,7 @@
       "      back: 'Atrás',",
       "      continue: 'Continuar',",
       "      finish: 'Crear agente',",
-      "      stepOf: (position: number, total: number) => `Paso \\${position} de \\${total}`,",
+      "      stepOf: 'Paso {position} de {total}',",
       "      states: { upcoming: 'Pendiente', current: 'Actual', complete: 'Hecho', invalid: 'Por corregir' },",
       "    }}>$0</Stepper>"
     ]

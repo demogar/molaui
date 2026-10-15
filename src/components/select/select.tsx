@@ -6,8 +6,10 @@ import * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { nameListbox } from '../../lib/listbox-name'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { type FieldControlSize, fieldControlClasses, fieldControlSizes } from '../field/field-control'
 import { Label } from '../field/label'
+import { type SelectMessages, selectMessages } from './messages'
 
 /**
  * A select is two shapes in this system, and they are different materials.
@@ -263,6 +265,8 @@ export interface SelectProps<V extends string = string>
    * name: `open`, `onOpenChange`, `modal`, `readOnly`.
    */
   rootProps?: Omit<SelectPrimitive.Root.Props<V>, 'items' | 'value' | 'defaultValue' | 'onValueChange' | 'children'>
+  /** Words for translation: the default placeholder. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<SelectMessages>
 }
 
 function isGrouped<V extends string>(
@@ -286,7 +290,7 @@ export function Select<V extends string = string>({
   value,
   defaultValue,
   onValueChange,
-  placeholder = 'Select…',
+  placeholder,
   label,
   size = 'md',
   disabled,
@@ -295,13 +299,15 @@ export function Select<V extends string = string>({
   id,
   wrapperClassName,
   rootProps,
+  messages,
   ...props
 }: SelectProps<V>) {
+  const [t] = useMessages('select', selectMessages, messages)
   const uid = React.useId()
   const triggerId = id ?? `${uid}-trigger`
   const flat = isGrouped(items) ? items.flatMap((group) => group.items) : items
 
-  const trigger = <SelectTrigger {...props} id={triggerId} size={size} placeholder={placeholder} />
+  const trigger = <SelectTrigger {...props} id={triggerId} size={size} placeholder={placeholder ?? t.placeholder} />
 
   return (
     <SelectRoot<V>

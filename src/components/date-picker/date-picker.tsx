@@ -6,6 +6,7 @@ import * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { mergeProps } from '../../lib/merge-props'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { useControllable } from '../../lib/use-controllable'
 import { type FieldControlSize } from '../field/field-control'
 import { Input, type InputProps } from '../field/input'
@@ -21,6 +22,7 @@ import {
   startOfDay,
   toISODate,
 } from './date-utils'
+import { type DatePickerMessages, datePickerMessages } from './messages'
 
 /**
  * A date you can type or pick — the APG "date picker dialog" pattern: a text
@@ -125,6 +127,13 @@ export interface DatePickerProps
   placeholder?: string
   /** Classes for the outer element that holds the field and its error. */
   wrapperClassName?: string
+  /**
+   * Words for translation: the calendar button's name, the format line and
+   * the sentences a refused date is stated with. Keys left out come from
+   * `MessagesProvider`, then English. The calendar's own words come from the
+   * provider's `calendar` table.
+   */
+  messages?: MessagesOverride<DatePickerMessages>
 }
 
 const errorClasses = 'flex items-start gap-2 text-xs leading-snug font-medium text-ink-danger'
@@ -150,7 +159,7 @@ export function DatePicker({
   value: valueProp,
   defaultValue = null,
   onValueChange,
-  locale,
+  locale: localeProp,
   weekStartsOn,
   min,
   max,
@@ -167,10 +176,13 @@ export function DatePicker({
   id,
   className,
   wrapperClassName,
+  messages,
   'aria-describedby': describedByProp,
   'aria-invalid': invalidProp,
   ...inputProps
 }: DatePickerProps) {
+  const [t, f] = useMessages('datePicker', datePickerMessages, messages)
+  const locale = localeProp ?? f.locale
   const uid = React.useId()
   const formatId = `${uid}-format`
   const errorId = `${uid}-error`
@@ -193,7 +205,7 @@ export function DatePicker({
   }
 
   function commit() {
-    const result = readTypedDate(text, { locale, min, max, isDateDisabled })
+    const result = readTypedDate(text, { locale, min, max, isDateDisabled, messages: t }, t.notADate)
     if (!result.ok) {
       setError(result.message)
       return
@@ -215,7 +227,7 @@ export function DatePicker({
   }
 
   const describedBy = [formatId, describedByProp, error ? errorId : undefined].filter(Boolean).join(' ')
-  const buttonLabel = value ? `Change date, ${formatLongDate(value, locale)}` : 'Choose date'
+  const buttonLabel = value ? f.format(t.changeDate, { date: formatLongDate(value, locale) }) : t.chooseDate
 
   return (
     <PopoverPrimitive.Root open={open} onOpenChange={setOpen}>
@@ -257,7 +269,7 @@ export function DatePicker({
           }
         />
         <span id={formatId} className="sr-only">
-          Format: {pattern}
+          {f.format(t.format, { pattern })}
         </span>
         {error ? <DateError id={errorId}>{error}</DateError> : null}
         {name ? <input type="hidden" name={name} value={value ? toISODate(value) : ''} /> : null}

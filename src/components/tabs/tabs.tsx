@@ -4,6 +4,7 @@ import { Tabs as TabsPrimitive } from '@base-ui/react/tabs'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { useMessagesLocale } from '../../lib/messages'
 import { useMergedRefs } from '../../lib/merge-props'
 import { useScrollEdge } from '../../lib/scroll-edge'
 
@@ -172,7 +173,7 @@ export function TabsTab({ className, count, icon, children, ...props }: TabsTabP
       {children}
       {count !== undefined ? (
         <span data-part="count" className="min-w-5 bg-ink-soft px-1.5 py-0.5 text-center text-2xs tabular-nums text-ink-2 group-data-active/tab:bg-ink group-data-active/tab:text-on-ink">
-          {count.toLocaleString('en-US')}
+          <Count value={count} />
         </span>
       ) : null}
     </TabsPrimitive.Tab>
@@ -199,4 +200,10 @@ export function TabsPanel({ className, ...props }: TabsPanelProps) {
       {...props}
     />
   )
+}
+
+// A count in the provider's locale, `en-US` without one: a fixed locale, not
+// the runtime's, so the server and the browser write the same digits.
+function Count({ value }: { value: number }) {
+  return value.toLocaleString(useMessagesLocale() ?? 'en-US')
 }

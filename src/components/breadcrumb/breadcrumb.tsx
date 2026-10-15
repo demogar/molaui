@@ -4,6 +4,8 @@ import { useRender } from '@base-ui/react/use-render'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
+import { type BreadcrumbMessages, breadcrumbMessages } from './messages'
 
 /**
  * Where this page sits — Workspace / Agents / knowledge-agent / Run #4182.
@@ -51,6 +53,8 @@ export interface BreadcrumbProps extends Omit<React.ComponentProps<'nav'>, 'chil
   items: BreadcrumbItem[]
   /** The element each link crumb renders as: your router's `<Link />`, or a function returning one. */
   renderLink?: BreadcrumbLinkRender
+  /** Words for translation: the landmark's name. Keys left out come from `MessagesProvider`, then English. `aria-label` still wins. */
+  messages?: MessagesOverride<BreadcrumbMessages>
 }
 
 /** Base UI's render prop, with the anchor props a crumb link receives. */
@@ -61,9 +65,10 @@ export type BreadcrumbLinkRender =
 const linkClasses =
   'text-ink-2 no-underline decoration-ink-muted hover:text-ink hover:underline focus-visible:focus-ring focus-visible:outline-none'
 
-export function Breadcrumb({ items, renderLink, className, ...props }: BreadcrumbProps) {
+export function Breadcrumb({ items, renderLink, messages, className, ...props }: BreadcrumbProps) {
+  const [t] = useMessages('breadcrumb', breadcrumbMessages, messages)
   return (
-    <nav aria-label="Breadcrumb" data-slot="breadcrumb" className={cn('min-w-0', className)} {...props}>
+    <nav aria-label={t.label} data-slot="breadcrumb" className={cn('min-w-0', className)} {...props}>
       <ol className="m-0 flex list-none flex-wrap items-center gap-x-2 gap-y-1 p-0 font-ui text-sm">
         {items.map((item, i) => {
           const last = i === items.length - 1

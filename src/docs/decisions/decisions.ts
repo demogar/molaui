@@ -155,6 +155,16 @@ const NOTES: Record<string, Notes> = {
       'Foundations/Content and voice': 'Notification is an event and Announcement a standing condition; the words table holds both.',
     },
   },
+  '0014': {
+    name: 'One messages table',
+    decided:
+      'Every word a component says on its own comes from a `messages.ts` table beside it, overridden by an optional `MessagesProvider` and then by the component’s `messages` prop. Messages are templates and plural objects, not functions, so a server component can pass a translation.',
+    governs: {
+      'Foundations/Internationalisation':
+        'The words are plain templates in one table per component, read through an optional provider, so an app that does not localise changes nothing and one that does can pass a JSON file from the server.',
+      'Foundations/Content and voice': 'Each word in the list names the messages key that holds it, so a translation changes it in one place.',
+    },
+  },
   '0015': {
     name: 'Pressed is ink',
     decided:

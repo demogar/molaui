@@ -4,10 +4,12 @@ import { Check, Copy, RotateCcw, StepForward } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { formatMessage, type MessageFormat, type MessagesOverride, useMessages } from '../../../lib/messages'
 import { Button } from '../../button'
 import { RunStatus, type RunStatusValue } from '../run-status'
 
-import { formatCountdown, spokenCountdown, useCountdown } from './use-countdown'
+import { type PartialOutputMessages, type RunErrorMessages, partialOutputMessages, runErrorMessages } from './messages'
+import { formatCountdown, useCountdown } from './use-countdown'
 
 /**
  * Why a run stopped. Four reasons, because the operator's next move differs
@@ -28,13 +30,6 @@ const STATUS: Record<RunErrorKind, RunStatusValue> = {
   rate_limited: 'failed',
   timed_out: 'timed_out',
   cancelled: 'cancelled',
-}
-
-const LABEL: Record<RunErrorKind, string> = {
-  failed: 'Failed',
-  rate_limited: 'Rate limited',
-  timed_out: 'Timed out',
-  cancelled: 'Cancelled',
 }
 
 export interface RunErrorProps extends Omit<React.ComponentProps<'div'>, 'children' | 'title'> {
@@ -80,40 +75,67 @@ export interface RunErrorProps extends Omit<React.ComponentProps<'div'>, 'childr
   onRetryFromStep?: () => void
   /** Offer *Copy error details*. On by default except for a cancellation, which is not an error. */
   copyable?: boolean
+  /**
+   * Words for translation: the status words, the sentences, the countdown,
+   * the buttons and the copied details. Keys left out come from
+   * `MessagesProvider`, then English.
+   */
+  messages?: MessagesOverride<RunErrorMessages>
 }
 
-function plainSentence(kind: RunErrorKind, tool: string | undefined): string {
+function plainSentence(kind: RunErrorKind, tool: string | undefined, t: RunErrorMessages): string {
   switch (kind) {
     case 'failed':
-      return `${tool ? `${tool} returned an error` : 'The step returned an error'}, so the run stopped. Work before this step is kept.`
+      return tool ? formatMessage(t.failedTool, { tool }) : t.failed
     case 'rate_limited':
-      return 'The model provider turned the request away because this workspace sent too many in a short time. Nothing is broken, and work before this step is kept.'
+      return t.rateLimited
     case 'timed_out':
-      return `${tool ? `${tool} did not answer` : 'The step did not finish'} in time. What arrived before the deadline is kept.`
+      return tool ? formatMessage(t.timedOutTool, { tool }) : t.timedOut
     case 'cancelled':
-      return 'You stopped the run. Nothing after this step ran, and what arrived before it is kept.'
+      return t.cancelled
   }
 }
 
-/** The plain-text block *Copy error details* puts on the clipboard: everything a ticket needs, one fact per line. */
-export function formatRunErrorDetails({
-  kind = 'failed',
-  step,
-  stepNumber,
-  stepCount,
-  tool,
-  error,
-  runId,
-  at,
-}: Pick<RunErrorProps, 'kind' | 'step' | 'stepNumber' | 'stepCount' | 'tool' | 'error' | 'runId' | 'at'>): string {
-  const where = stepNumber !== undefined ? `${stepNumber}${stepCount ? ` of ${stepCount}` : ''}${step ? ` — ${step}` : ''}` : step
+/** The same figure as `formatCountdown`, spelled out for a screen reader: "1 minute 5 seconds". */
+function spokenCountdown(ms: number, t: RunErrorMessages, f: MessageFormat): string {
+  const s = Math.ceil(ms / 1000)
+  if (s < 60) return f.plural(t.seconds, s)
+  const rest = s % 60
+  const minutes = f.plural(t.minutes, Math.floor(s / 60))
+  return rest === 0 ? minutes : f.format(t.minutesAndSeconds, { minutes, seconds: f.plural(t.seconds, rest) })
+}
+
+/**
+ * The plain-text block *Copy error details* puts on the clipboard: everything
+ * a ticket needs, one fact per line. In English unless `messages` (a full
+ * RunError table, `defaultMessages.runError` with your keys) says otherwise:
+ * this is a plain function, so it cannot read `MessagesProvider`.
+ */
+export function formatRunErrorDetails(
+  {
+    kind = 'failed',
+    step,
+    stepNumber,
+    stepCount,
+    tool,
+    error,
+    runId,
+    at,
+  }: Pick<RunErrorProps, 'kind' | 'step' | 'stepNumber' | 'stepCount' | 'tool' | 'error' | 'runId' | 'at'>,
+  messages: RunErrorMessages = runErrorMessages,
+): string {
+  const t = messages
+  const where =
+    stepNumber !== undefined
+      ? `${stepCount ? formatMessage(t.detailsStepOf, { n: stepNumber, count: stepCount }) : stepNumber}${step ? ` — ${step}` : ''}`
+      : step
   return [
-    `Status: ${LABEL[kind]}`,
-    runId ? `Run: ${runId}` : undefined,
-    where ? `Step: ${where}` : undefined,
-    tool ? `Tool: ${tool}` : undefined,
-    error ? `Error: ${error}` : undefined,
-    at !== undefined ? `At: ${new Date(at).toISOString()}` : undefined,
+    formatMessage(t.detailsStatus, { value: t.kinds[kind] }),
+    runId ? formatMessage(t.detailsRun, { value: runId }) : undefined,
+    where ? formatMessage(t.detailsStep, { value: where }) : undefined,
+    tool ? formatMessage(t.detailsTool, { value: tool }) : undefined,
+    error ? formatMessage(t.detailsError, { value: error }) : undefined,
+    at !== undefined ? formatMessage(t.detailsAt, { value: new Date(at).toISOString() }) : undefined,
   ]
     .filter(Boolean)
     .join('\n')
@@ -166,9 +188,11 @@ export function RunError({
   onRetry,
   onRetryFromStep,
   copyable = kind !== 'cancelled',
+  messages,
   className,
   ...props
 }: RunErrorProps) {
+  const [t, f] = useMessages('runError', runErrorMessages, messages)
   const headlineId = React.useId()
   const remaining = useCountdown(retryAt)
   const counting = remaining !== undefined && remaining > 0
@@ -180,9 +204,9 @@ export function RunError({
   // unknown until hydration ends (see `useCountdown`), so the figure is
   // captured on the render after.
   const [startFigure, setStartFigure] = React.useState(() =>
-    remaining !== undefined ? spokenCountdown(remaining) : undefined,
+    remaining !== undefined ? spokenCountdown(remaining, t, f) : undefined,
   )
-  if (startFigure === undefined && remaining !== undefined) setStartFigure(spokenCountdown(remaining))
+  if (startFigure === undefined && remaining !== undefined) setStartFigure(spokenCountdown(remaining, t, f))
   // 'pending': there is a target but no clock yet. Leaving it is the figure
   // arriving, not a milestone passing, so it announces nothing.
   const milestone =
@@ -201,8 +225,8 @@ export function RunError({
     setPrevMilestone(milestone)
     if (prevMilestone === 'pending') {
       // The first figure, already said by the alert.
-    } else if (milestone === 'ten') setAnnouncement(autoRetry ? 'Retrying in 10 seconds.' : 'You can retry in 10 seconds.')
-    else if (milestone === 'zero') setAnnouncement(autoRetry ? 'Retrying now.' : 'You can retry now.')
+    } else if (milestone === 'ten') setAnnouncement(autoRetry ? t.retryingInTen : t.canRetryInTen)
+    else if (milestone === 'zero') setAnnouncement(autoRetry ? t.retryingNow : t.canRetryNow)
   }
 
   // One automatic retry per target time, even if the parent re-renders at zero.
@@ -217,10 +241,13 @@ export function RunError({
 
   const where =
     stepNumber !== undefined
-      ? `step ${stepNumber}${stepCount ? ` of ${stepCount}` : ''}`
+      ? stepCount
+        ? f.format(t.stepOf, { n: stepNumber, count: stepCount })
+        : f.format(t.step, { n: stepNumber })
       : undefined
   // The status line above already says why, so the headline says where.
-  const headline = where || step ? `Stopped at ${where ?? ''}${where && step ? ': ' : ''}${step ?? ''}.` : `The run ${LABEL[kind].toLowerCase()}.`
+  const place = where && step ? f.format(t.place, { where, step }) : (where ?? step)
+  const headline = place ? f.format(t.stoppedAt, { place }) : t.headlines[kind]
   // Until the clock is known the wait is assumed to be on: an enabled Retry
   // in server HTML that turns disabled on hydration would be a promise taken back.
   const blocked = (counting || milestone === 'pending') && !autoRetry
@@ -230,7 +257,7 @@ export function RunError({
       <p id={headlineId} className="m-0 font-ui text-sm leading-snug font-semibold text-ink">
         {headline}
       </p>
-      <p className="m-0 font-ui text-sm leading-snug text-ink-2">{message ?? plainSentence(kind, tool)}</p>
+      <p className="m-0 font-ui text-sm leading-snug text-ink-2">{message ?? plainSentence(kind, tool, t)}</p>
       {error ? (
         <p className="m-0 literal text-xs leading-body text-ink [overflow-wrap:anywhere]">
           <span dir="ltr">{error}</span>
@@ -238,7 +265,7 @@ export function RunError({
       ) : null}
       {startFigure ? (
         <span className="sr-only">
-          {autoRetry ? `Retrying automatically in ${startFigure}.` : `You can retry in ${startFigure}.`}
+          {f.format(autoRetry ? t.retryingIn : t.canRetryIn, { time: startFigure })}
         </span>
       ) : null}
     </>
@@ -263,33 +290,30 @@ export function RunError({
     >
       {alarm ? (
         <div role="alert" className="flex flex-col gap-1.5">
-          <RunStatus status={STATUS[kind]} label={LABEL[kind]} className="mb-1" />
+          <RunStatus status={STATUS[kind]} label={t.kinds[kind]} className="mb-1" />
           {body}
         </div>
       ) : (
         <div className="flex flex-col gap-1.5">
-          <RunStatus status={STATUS[kind]} label={LABEL[kind]} className="mb-1" />
+          <RunStatus status={STATUS[kind]} label={t.kinds[kind]} className="mb-1" />
           {body}
         </div>
       )}
 
       {milestone === 'pending' ? (
         <p className="m-0 font-ui text-sm text-ink">
-          {autoRetry ? 'Retrying automatically after the wait.' : 'You can retry after the wait.'}
+          {autoRetry ? t.retryingAfterWait : t.canRetryAfterWait}
         </p>
       ) : null}
       {remaining !== undefined ? (
         <p className="m-0 font-ui text-sm text-ink">
-          {counting ? (
-            <>
-              {autoRetry ? 'Retrying automatically in ' : 'You can retry in '}
-              <span className="tabular font-semibold">{formatCountdown(remaining)}</span>.
-            </>
-          ) : autoRetry ? (
-            'Retrying now.'
-          ) : (
-            'You can retry now.'
-          )}
+          {counting
+            ? f.nodes(autoRetry ? t.retryingIn : t.canRetryIn, {
+                time: <span className="tabular font-semibold">{formatCountdown(remaining)}</span>,
+              })
+            : autoRetry
+              ? t.retryingNow
+              : t.canRetryNow}
         </p>
       ) : null}
 
@@ -304,7 +328,7 @@ export function RunError({
               onClick={onRetryFromStep}
               aria-describedby={headlineId}
             >
-              {stepNumber !== undefined ? `Retry from step ${stepNumber}` : 'Retry from this step'}
+              {stepNumber !== undefined ? f.format(t.retryFromStep, { n: stepNumber }) : t.retryFromThisStep}
             </Button>
           ) : null}
           {onRetry ? (
@@ -315,11 +339,11 @@ export function RunError({
               disabled={blocked}
               onClick={onRetry}
             >
-              Retry run
+              {t.retryRun}
             </Button>
           ) : null}
           {copyable ? (
-            <CopyDetails text={formatRunErrorDetails({ kind, step, stepNumber, stepCount, tool, error, runId, at })} />
+            <CopyDetails text={formatRunErrorDetails({ kind, step, stepNumber, stepCount, tool, error, runId, at }, t)} t={t} />
           ) : null}
         </div>
       ) : null}
@@ -331,12 +355,12 @@ export function RunError({
   )
 }
 
-function CopyDetails({ text }: { text: string }) {
+function CopyDetails({ text, t }: { text: string; t: RunErrorMessages }) {
   const [copied, setCopied] = React.useState(false)
   React.useEffect(() => {
     if (!copied) return
-    const t = setTimeout(() => setCopied(false), 1600)
-    return () => clearTimeout(t)
+    const timer = setTimeout(() => setCopied(false), 1600)
+    return () => clearTimeout(timer)
   }, [copied])
 
   return (
@@ -349,10 +373,10 @@ function CopyDetails({ text }: { text: string }) {
           void navigator.clipboard?.writeText(text).then(() => setCopied(true))
         }}
       >
-        Copy error details
+        {t.copyDetails}
       </Button>
       <span role="status" className="sr-only">
-        {copied ? 'Error details copied.' : ''}
+        {copied ? t.detailsCopied : ''}
       </span>
     </>
   )
@@ -361,6 +385,8 @@ function CopyDetails({ text }: { text: string }) {
 export interface PartialOutputProps extends React.ComponentProps<'div'> {
   /** What cut it short, in words. Defaults to a plain statement. */
   note?: React.ReactNode
+  /** Words for translation: the label and the default note. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<PartialOutputMessages>
 }
 
 /**
@@ -372,14 +398,15 @@ export interface PartialOutputProps extends React.ComponentProps<'div'> {
  * reads as the model's conclusion. So it stays, with a label above saying it
  * is partial and a rule below saying where it ends.
  */
-export function PartialOutput({ note, className, children, ...props }: PartialOutputProps) {
+export function PartialOutput({ note, messages, className, children, ...props }: PartialOutputProps) {
+  const [t] = useMessages('partialOutput', partialOutputMessages, messages)
   return (
     <div data-slot="partial-output" className={cn('flex flex-col gap-2', className)} {...props}>
-      <p className="m-0 rotulo text-ink-muted">Partial output</p>
+      <p className="m-0 rotulo text-ink-muted">{t.label}</p>
       <div className="min-w-0">{children}</div>
       <p className="m-0 flex items-center gap-2 font-ui text-xs text-ink-muted">
         <span aria-hidden className="h-(--cut-w) w-6 shrink-0 bg-ink-muted forced-ink" />
-        {note ?? 'Output stops here. The rest never arrived.'}
+        {note ?? t.note}
       </p>
     </div>
   )

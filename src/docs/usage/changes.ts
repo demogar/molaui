@@ -233,6 +233,8 @@ export const SCOPE_PAGES: Record<string, string[]> = {
   toolbar: [`${L}Toolbar`],
   tooltip: ['Components/Overlays/Tooltip'],
   tree: ['Components/Navigation/Tree'],
+  link: ['Components/Navigation/Link'],
+  'link-button': ['Components/Navigation/Link'],
   typography: [
     `${T}Display`,
     `${T}Heading`,

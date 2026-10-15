@@ -21,7 +21,7 @@ A cut shape. Hover reveals the band of the layer beneath — the edge grows outw
 
 ### When not to
 
-- Going to another page or URL. Use a link: an a element, or your router’s link styled with buttonVariants.
+- Going to another page or URL. Use [LinkButton](https://demogar.github.io/molaui/md/components-navigation-link--overview.md).
 - A row of related actions above a table or canvas, with one tab stop. Use [Toolbar](https://demogar.github.io/molaui/md/components-layout-toolbar--overview.md).
 - More actions on one object than deserve a button each. Use [Menu](https://demogar.github.io/molaui/md/components-overlays-menu--overview.md).
 - Choosing between views, where the pressed state stays. Use [Segmented control](https://demogar.github.io/molaui/md/components-forms-segmented-control--overview.md).
@@ -120,7 +120,7 @@ Types: `ButtonArrowProps`, `ButtonProps`, `IconButtonProps`
 
 - Write a label that names the action with a verb: Deploy, Save changes.
 - Give every `IconButton` a `label`; the icon is not a name.
-- Use a link styled with `buttonVariants` when the control goes somewhere rather than does something.
+- Use `LinkButton` when the control goes somewhere rather than does something.
 
 ### Testing status
 
@@ -133,6 +133,7 @@ Types: `ButtonArrowProps`, `ButtonProps`, `IconButtonProps`
 
 ### Use instead, when it fits better
 
+- [Link](https://demogar.github.io/molaui/md/components-navigation-link--overview.md)
 - [Toolbar](https://demogar.github.io/molaui/md/components-layout-toolbar--overview.md)
 - [Menu](https://demogar.github.io/molaui/md/components-overlays-menu--overview.md)
 - [Segmented control](https://demogar.github.io/molaui/md/components-forms-segmented-control--overview.md)

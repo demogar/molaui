@@ -4,9 +4,11 @@ import { Check, Copy, WrapText } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { useScrollEdge } from '../../lib/scroll-edge'
 import { IconButton } from '../button'
 import { JSON_TOKEN_CLASS, tokenizeJson } from './highlight-json'
+import { type CodeBlockMessages, codeBlockMessages } from './messages'
 
 /**
  * An inline machine literal: an id, a field name, a flag.
@@ -47,6 +49,8 @@ export interface CodeBlockProps extends Omit<React.ComponentProps<'figure'>, 'ch
   wrap?: boolean
   /** Hide the copy button — for payloads that must not leave the page. */
   copyable?: boolean
+  /** Words for translation: the wrap and copy buttons and the copy announcement. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<CodeBlockMessages>
 }
 
 /**
@@ -83,9 +87,11 @@ export function CodeBlock({
   maxHeight,
   wrap: initialWrap = false,
   copyable = true,
+  messages,
   className,
   ...props
 }: CodeBlockProps) {
+  const [words] = useMessages('codeBlock', codeBlockMessages, messages)
   const [wrap, setWrap] = React.useState(initialWrap)
   const [copied, setCopied] = React.useState(false)
   const labelId = React.useId()
@@ -141,7 +147,7 @@ export function CodeBlock({
         ) : null}
         <span className="ms-auto flex items-center gap-1">
           <IconButton
-            label={wrap ? 'Do not wrap lines' : 'Wrap lines'}
+            label={wrap ? words.unwrap : words.wrap}
             variant="ghost"
             size="sm"
             aria-pressed={wrap}
@@ -151,13 +157,13 @@ export function CodeBlock({
             <WrapText />
           </IconButton>
           {copyable ? (
-            <IconButton label={copied ? 'Copied' : 'Copy to clipboard'} variant="ghost" size="sm" onClick={copy}>
+            <IconButton label={copied ? words.copied : words.copy} variant="ghost" size="sm" onClick={copy}>
               {copied ? <Check className="text-verde" /> : <Copy />}
             </IconButton>
           ) : null}
         </span>
         <span role="status" aria-live="polite" className="sr-only">
-          {copied ? 'Copied to clipboard' : ''}
+          {copied ? words.copiedAnnouncement : ''}
         </span>
       </figcaption>
       {/* Code reads left to right in every language, so the body is pinned

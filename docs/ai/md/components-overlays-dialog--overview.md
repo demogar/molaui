@@ -68,11 +68,12 @@ The confirmation for an action that destroys something. Built on Base UI's Alert
 | `description` (required) | `ReactNode` |  | What happens if the operator confirms, and whether it can be undone. Required: a destructive confirm with no consequence stated is a guess. |
 | `onConfirm` (required) | `() => void \| Promise<void>` |  | May return a promise. While it is pending the confirm button shows its working strip, both buttons stop accepting presses, and the dialog stays open; it closes when the promise resolves and stays open if it rejects, so the operator can see the failure where they caused it. |
 | `title` (required) | `ReactNode` |  | The question, naming the thing: "Delete run #4182?". It is the dialog's accessible name. |
-| `cancelLabel` | `string` | `Cancel` | The safe answer's label, "Cancel" by default. It takes focus when the dialog opens, so a reflexive Enter cancels. |
+| `cancelLabel` | `string` |  | The safe answer's label, "Cancel" (`messages.cancel`) by default. It takes focus when the dialog opens, so a reflexive Enter cancels. |
 | `confirmationText` | `string` |  | When set, the confirm button stays disabled until this exact string is typed — the run id, the project slug. For actions that cannot be undone and that a muscle-memory Enter could otherwise fire. |
 | `defaultOpen` | `boolean` |  | Opens the dialog on first render without controlling it afterwards. |
 | `error` | `ReactNode` |  | Why the last confirm failed, starting with what did not happen: "Not revoked. The server didn't answer." Shown between the body and the buttons, announced once when it appears, and linked to the confirm button so it is read again when focus is there. Hidden while a retry is pending. Clear it when the dialog opens for something else. |
 | `finalFocus` | `boolean \| RefObject<HTMLElement \| null> \| ((closeType: InteractionType) => boolean \| void \| HTMLElement \| null)` |  | Where focus goes when the dialog closes: Base UI's `finalFocus`. By default it returns to the trigger, which is right after Cancel. After a confirm that removed the trigger (a deleted row's button), return the element a reader would carry on from: the next row's action, or the list's heading. A function receives how the dialog was closed. |
+| `messages` | `MessagesOverride<AlertDialogMessages>` |  | Words for translation: the default cancel label and the confirmation field's label. Keys left out come from `MessagesProvider`, then English. |
 | `onOpenChange` | `((open: boolean) => void)` |  | Called with the next open state on every open and close, Cancel and Escape included. |
 | `open` | `boolean` |  | Whether the dialog is open, when you control it: to open it from somewhere other than `trigger`, or to close it after an async confirm of your own. |
 | `tone` | `"neutral" \| "danger"` | `danger` | `danger` cuts the seam in rojo and arms the confirm button in red. |
@@ -100,6 +101,7 @@ Renders no element of its own, so it takes no `className` or `ref`.
 | `description` | `ReactNode` |  | A line under the title, read as the dialog's accessible description when it opens. Say what the dialog is for; leave instructions to the body. |
 | `footer` | `ReactNode` |  | Action row under the body: right-aligned, or stacked full width with the last action on top when the row is under 24rem. Usually a `ghost` cancel and one primary. |
 | `hideClose` | `boolean` | `false` | Hide the corner close button. Only when the footer carries an explicit way out. |
+| `messages` | `MessagesOverride<DialogMessages>` |  | Words for translation: the close button's name. Keys left out come from `MessagesProvider`, then English. |
 | `size` | `"sm" \| "md" \| "lg"` |  | The popup's maximum width: `sm` for a short question, `md` (default) for a form, `lg` for a table or a long review. |
 
 Also accepts the props of `DialogPopupProps`.
@@ -114,7 +116,7 @@ Also accepts the props of `DialogPopupProps`.
 
 A modal is a panel cut out of the page and laid on top of it, so it is the one place a seam earns the full relleno: an 11px strip of the layer colour slit with ink along its top edge. In the source mola that strip is how a panel announces where one layer ends and the next begins; here it is how a dialog says "you are now inside something" without a title bar or a tint. Gold by default, rojo on a destructive confirm — the band is the only place the dialog's intent shows before a word is read.
 
-Types: `AlertDialogProps`, `DialogBand`, `DialogContentProps`
+Types: `AlertDialogMessages`, `DialogMessages`, `AlertDialogProps`, `DialogBand`, `DialogContentProps`
 
 ## Accessibility
 

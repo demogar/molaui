@@ -582,6 +582,16 @@
       "pressesKeys": true,
       "screenReadersByHand": false
     },
+    "Components/Navigation/Link": {
+      "stories": 6,
+      "unitTests": [
+        "src/components/link/link.test.tsx"
+      ],
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
+      "screenReadersByHand": false
+    },
     "Components/Navigation/Pagination": {
       "stories": 4,
       "unitTests": [

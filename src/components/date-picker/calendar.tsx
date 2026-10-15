@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { IconButton } from '../button'
 import {
   addDays,
@@ -26,6 +27,7 @@ import {
   toISODate,
   weekdays,
 } from './date-utils'
+import { type CalendarMessages, calendarMessages } from './messages'
 
 /**
  * A month grid that follows the WAI-ARIA APG date picker dialog pattern.
@@ -97,6 +99,8 @@ export interface CalendarProps extends Omit<React.ComponentProps<'div'>, 'onSele
   headingId?: string
   /** Render the heading as the popup's title instead of a plain element. */
   renderHeading?: (props: { id: string; className: string; children: React.ReactNode }) => React.ReactNode
+  /** Words for translation: the month buttons' names. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<CalendarMessages>
 }
 
 export function Calendar({
@@ -108,15 +112,18 @@ export function Calendar({
   min,
   max,
   isDateDisabled,
-  locale,
+  locale: localeProp,
   weekStartsOn: weekStartsOnProp,
   autoFocus = false,
   activeCellRef,
   headingId: headingIdProp,
   renderHeading,
+  messages,
   className,
   ...props
 }: CalendarProps) {
+  const [t, f] = useMessages('calendar', calendarMessages, messages)
+  const locale = localeProp ?? f.locale
   const direction = useDirection()
   const uid = React.useId()
   const headingId = headingIdProp ?? `${uid}-heading`
@@ -225,7 +232,7 @@ export function Calendar({
         <IconButton
           variant="ghost"
           size="sm"
-          label={`Previous month, ${formatMonthYear(prevMonth, locale)}`}
+          label={f.format(t.previousMonth, { month: formatMonthYear(prevMonth, locale) })}
           disabled={!canGoBack}
           onClick={() => setFocused(clampDay(addMonths(focused, -1), min, max))}
         >
@@ -243,7 +250,7 @@ export function Calendar({
         <IconButton
           variant="ghost"
           size="sm"
-          label={`Next month, ${formatMonthYear(nextMonth, locale)}`}
+          label={f.format(t.nextMonth, { month: formatMonthYear(nextMonth, locale) })}
           disabled={!canGoForward}
           onClick={() => setFocused(clampDay(addMonths(focused, 1), min, max))}
         >

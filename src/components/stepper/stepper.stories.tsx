@@ -174,7 +174,7 @@ export const Translated: Story = {
       back: 'Atrás',
       continue: 'Continuar',
       finish: 'Crear agente',
-      stepOf: (position: number, total: number) => `Paso ${position} de ${total}`,
+      stepOf: 'Paso {position} de {total}',
       states: { upcoming: 'Pendiente', current: 'Actual', complete: 'Hecho', invalid: 'Por corregir' },
     },
     children: () => <p className="m-0 text-sm text-ink-2">Los campos del paso van aquí.</p>,

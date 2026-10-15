@@ -5,6 +5,7 @@ import { Check, Copy, Plus, RotateCcw, Square } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../../lib/messages'
 import { useControllable } from '../../../lib/use-controllable'
 import { Button, IconButton } from '../../button'
 import {
@@ -20,16 +21,9 @@ import {
 import { RunError, type RunErrorProps } from '../run-error'
 import { FailureReportedContext } from '../run-error/failure-reported'
 import { TokenUsage, type TokenUsageProps } from '../token-usage'
+import { type AgentRunMessages, agentRunMessages } from './messages'
 
 export type AgentStepKind = 'reasoning' | 'tool' | 'message' | 'handoff' | 'approval'
-
-const KIND_LABEL: Record<AgentStepKind, string> = {
-  reasoning: 'Reasoning',
-  tool: 'Tool call',
-  message: 'Message',
-  handoff: 'Handoff',
-  approval: 'Approval',
-}
 
 export interface AgentStep {
   id: string
@@ -114,6 +108,8 @@ export interface AgentRunProps extends Omit<React.ComponentProps<'section'>, 'ch
    * page's main subject.
    */
   headingLevel?: 2 | 3
+  /** Words for translation: step kinds, status announcements, the header buttons and the copy button. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<AgentRunMessages>
 }
 
 /**
@@ -160,9 +156,11 @@ export function AgentRun({
   onRetryFromStep,
   summary,
   headingLevel = 3,
+  messages,
   className,
   ...props
 }: AgentRunProps) {
+  const [t, f] = useMessages('agentRun', agentRunMessages, messages)
   const Heading = headingLevel === 2 ? 'h2' : 'h3'
   const active = isActiveStatus(status)
   const headingId = React.useId()
@@ -192,7 +190,7 @@ export function AgentRun({
     // A failure panel is an alert and says it in a full sentence; saying
     // "Run failed." as well would be the same news twice.
     const alerted = shown !== undefined && shown.kind !== 'cancelled' && status !== 'cancelled'
-    setAnnouncement(alerted ? '' : `Run ${RUN_STATUS_LABEL[status].toLowerCase()}.`)
+    setAnnouncement(alerted ? '' : t.announce[status])
   }
 
   return (
@@ -214,18 +212,18 @@ export function AgentRun({
           <div className="flex shrink-0 gap-2">
             {active && onCancel ? (
               <Button size="sm" variant="secondary" icon={<Square className="fill-current" />} onClick={onCancel}>
-                Cancel run
+                {t.cancelRun}
               </Button>
             ) : null}
             {isRetryableStatus(status) && onRetry && !shown ? (
               <Button size="sm" icon={<RotateCcw />} onClick={onRetry}>
-                Retry run
+                {t.retryRun}
               </Button>
             ) : null}
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
-          <RunId id={runId} />
+          <RunId id={runId} t={t} />
           {model ? <span className="literal text-xs text-ink-muted">{model}</span> : null}
           {usage ? <TokenUsage variant="inline" {...usage} /> : null}
         </div>
@@ -250,10 +248,10 @@ export function AgentRun({
         />
       ) : null}
 
-      <ol aria-label={`Steps of ${name}`} className="m-0 list-none p-4 pb-2">
+      <ol aria-label={f.format(t.steps, { name })} className="m-0 list-none p-4 pb-2">
         {steps.map((step, i) => (
           <FailureReportedContext.Provider key={step.id} value={shown !== undefined && i === failedIndex}>
-            <StepRow step={step} last={i === steps.length - 1} nextStarted={steps[i + 1]?.status !== 'queued'} />
+            <StepRow step={step} kindLabel={t.kinds[step.kind]} last={i === steps.length - 1} nextStarted={steps[i + 1]?.status !== 'queued'} />
           </FailureReportedContext.Provider>
         ))}
       </ol>
@@ -267,7 +265,7 @@ export function AgentRun({
   )
 }
 
-function StepRow({ step, last, nextStarted }: { step: AgentStep; last: boolean; nextStarted: boolean }) {
+function StepRow({ step, kindLabel, last, nextStarted }: { step: AgentStep; kindLabel: string; last: boolean; nextStarted: boolean }) {
   const active = isActiveStatus(step.status)
   const working = step.status === 'running' || step.status === 'streaming'
   const forcedOpen = step.status === 'waiting' || step.status === 'failed' || step.status === 'timed_out'
@@ -288,7 +286,7 @@ function StepRow({ step, last, nextStarted }: { step: AgentStep; last: boolean; 
   const headline = (
     <span className="flex min-w-0 flex-1 flex-wrap items-start gap-x-2 gap-y-1">
       <span className="flex min-w-[min(100%,9rem)] flex-1 flex-col gap-0.5">
-        <span className="rotulo text-ink-muted">{KIND_LABEL[step.kind]}</span>
+        <span className="rotulo text-ink-muted">{kindLabel}</span>
         <span className={cn('font-ui text-sm leading-snug', step.status === 'queued' ? 'text-ink-muted' : 'text-ink')}>
           {step.title}
         </span>
@@ -346,12 +344,12 @@ function WorkingStrip() {
 }
 
 /** The run id as a literal, with a copy action — run ids are pasted into tickets more than they are read. */
-function RunId({ id }: { id: string }) {
+function RunId({ id, t }: { id: string; t: AgentRunMessages }) {
   const [copied, setCopied] = React.useState(false)
   React.useEffect(() => {
     if (!copied) return
-    const t = setTimeout(() => setCopied(false), 1600)
-    return () => clearTimeout(t)
+    const timer = setTimeout(() => setCopied(false), 1600)
+    return () => clearTimeout(timer)
   }, [copied])
 
   return (
@@ -360,7 +358,7 @@ function RunId({ id }: { id: string }) {
       <IconButton
         size="sm"
         variant="ghost"
-        label={copied ? 'Run id copied' : 'Copy run id'}
+        label={copied ? t.runIdCopied : t.copyRunId}
         className="size-6 w-6"
         onClick={() => {
           void navigator.clipboard?.writeText(id).then(() => setCopied(true))
@@ -369,7 +367,7 @@ function RunId({ id }: { id: string }) {
         {copied ? <Check /> : <Copy />}
       </IconButton>
       <span role="status" className="sr-only">
-        {copied ? 'Run id copied' : ''}
+        {copied ? t.runIdCopied : ''}
       </span>
     </span>
   )

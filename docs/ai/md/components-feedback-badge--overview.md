@@ -72,6 +72,7 @@ Each story is a live example in Storybook.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `level` | `"essential" \| "highly" \| "detour" \| "time"` |  | How strongly the recommendation is made, from `essential` (gold) down to `time`. Each level brings its own label; pass children only to reword it. |
+| `messages` | `MessagesOverride<RecommendationBadgeMessages>` |  | Words for translation: the label of each level. Keys left out come from `MessagesProvider`, then English. |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="recommendation-badge">`.
 
@@ -89,6 +90,8 @@ A square, not a circle. It is a scrap of cut cloth, and a round dot is the one s
 
 ### `RECOMMENDATION_LABELS` (constant)
 
+The English label of each level. Kept as an export for code that read it; the badge itself reads `messages.recommendationBadge`, so a translation reaches it.
+
 ### `badgeVariants` (function)
 
 A status mark. Small, flat, cut — a scrap of the layer that says what state something is in.
@@ -97,7 +100,7 @@ A status mark. Small, flat, cut — a scrap of the layer that says what state so
 
 The editorial recommendation scale of the editorial system this grew out of — kept as lineage, and because "how strongly do we stand behind this" is a scale a support or knowledge tool also has. Gold is the layer a mola reveals last and least, so gold is `essential`.
 
-Types: `BadgeProps`, `BadgeTone`, `RecommendationBadgeProps`, `RecommendationLevel`, `StatusDotProps`
+Types: `RecommendationBadgeMessages`, `BadgeProps`, `BadgeTone`, `RecommendationBadgeProps`, `RecommendationLevel`, `StatusDotProps`
 
 ## Accessibility
 

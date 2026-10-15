@@ -3,6 +3,7 @@
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { useMessagesLocale } from '../../lib/messages'
 import { useHydrated } from '../../lib/use-hydrated'
 import { type DateLocale } from '../date-picker/date-utils'
 
@@ -59,7 +60,7 @@ export interface RelativeTimeProps extends Omit<React.ComponentProps<'time'>, 'c
    * not tick; omitted, it uses the browser's clock from hydration on.
    */
   now?: Date | number
-  /** BCP 47 tag for the words and digits. `undefined` uses the runtime's locale. */
+  /** BCP 47 tag for the words and digits. Left out, `MessagesProvider`'s locale, then the runtime's. */
   locale?: DateLocale
   /** `long` "3 minutes ago", `short` "3 min. ago", `narrow` "3m ago" (in English). */
   format?: 'long' | 'short' | 'narrow'
@@ -157,7 +158,7 @@ function useClock(target: number, enabled: boolean, live: boolean): number {
 export function RelativeTime({
   date,
   now,
-  locale,
+  locale: localeProp,
   format = 'long',
   numeric = 'auto',
   timeZone,
@@ -166,6 +167,8 @@ export function RelativeTime({
   title,
   ...props
 }: RelativeTimeProps) {
+  const providerLocale = useMessagesLocale()
+  const locale = localeProp ?? providerLocale
   const target = toTime(date)
   const hydrated = useHydrated()
   const clock = useClock(target, now === undefined && hydrated, live)

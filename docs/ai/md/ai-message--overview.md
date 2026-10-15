@@ -80,6 +80,7 @@ One turn of a conversation.
 | `copyText` | `string` |  | Copies this text. Omit to hide the copy action. |
 | `error` | `string` |  | The error, verbatim from the system. Shown as a literal — operators paste it into tickets. |
 | `feedback` | `"up" \| "down"` |  | The rating already given, if any. |
+| `messages` | `MessagesOverride<MessageMessages>` |  | Words for translation: the role labels, the error block and the actions. Keys left out come from `MessagesProvider`, then English. |
 | `model` | `string` |  | The model that produced it. A machine identifier, so it is set as a literal. |
 | `onFeedback` | `((value: "up" \| "down") => void)` |  | Called with the reader's rating. Omit to hide the rating actions. |
 | `onRetry` | `(() => void)` |  | Regenerates the turn. Shows Retry among the actions, or in the error block when `status` is `error`; omit to hide it. |
@@ -96,11 +97,12 @@ The scrolling transcript.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `label` (required) | `string` |  | Names the region. Required: a transcript is a landmark worth finding. |
+| `messages` | `MessagesOverride<ThreadMessages>` |  | Words for translation: the jump button and the scrolling area's name. Keys left out come from `MessagesProvider`, then English. |
 | `stickThreshold` | `number` | `48` | Distance from the bottom, in px, that still counts as "at the bottom". |
 
 `className`, `ref`, `id` and the other DOM props go to `<section data-slot="thread">`.
 
-Types: `MessageProps`, `MessageRole`, `ThreadProps`
+Types: `MessageMessages`, `ThreadMessages`, `MessageProps`, `MessageRole`, `ThreadProps`
 
 ## Accessibility
 

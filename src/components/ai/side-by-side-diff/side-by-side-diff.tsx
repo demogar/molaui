@@ -3,9 +3,10 @@
 import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../../lib/messages'
 import { useScrollEdge } from '../../../lib/scroll-edge'
 import { ChangeCount } from '../change-review/change-count'
-import { GUTTER, LINE_GLYPH, LINE_WASH, LineCode } from '../change-review/diff-line'
+import { GUTTER, LINE_GLYPH, LINE_WASH, LineCode, LineWords } from '../change-review/diff-line'
 import { UnifiedLines } from '../change-review/file-diff'
 import {
   countChanges,
@@ -17,6 +18,7 @@ import {
   type DiffHunkInput,
   type DiffLine,
 } from '../change-review/parse-diff'
+import { type SideBySideDiffMessages, sideBySideDiffMessages } from './messages'
 
 export interface SideBySideDiffProps extends Omit<React.ComponentProps<'section'>, 'children' | 'title'> {
   /** What is being compared, as a heading: “System prompt, triage agent”. */
@@ -31,12 +33,14 @@ export interface SideBySideDiffProps extends Omit<React.ComponentProps<'section'
   hunks?: readonly (DiffHunk | DiffHunkInput)[]
   /** Unchanged lines kept around each change when the diff is worked out from `before` and `after`. Defaults to 3. */
   context?: number
-  /** The old pane's name, shown above it and naming its scroll region. Defaults to “Before”. */
+  /** The old pane's name, shown above it and naming its scroll region. Defaults to “Before” (`messages.before`). */
   beforeLabel?: string
-  /** The new pane's name. Defaults to “After”. */
+  /** The new pane's name. Defaults to “After” (`messages.after`). */
   afterLabel?: string
   /** Heading level for the title. Defaults to 4, under a `ChangeReview` heading. */
   headingLevel?: 3 | 4 | 5
+  /** Words for translation: the pane names, the empty sentence and the words said before each changed line. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<SideBySideDiffMessages>
 }
 
 /**
@@ -81,12 +85,14 @@ export function SideBySideDiff({
   diff,
   hunks: hunksProp,
   context = 3,
-  beforeLabel = 'Before',
-  afterLabel = 'After',
+  beforeLabel,
+  afterLabel,
   headingLevel = 4,
+  messages,
   className,
   ...props
 }: SideBySideDiffProps) {
+  const [t] = useMessages('sideBySideDiff', sideBySideDiffMessages, messages)
   const hunks = React.useMemo(() => {
     if (hunksProp) return hunksProp.map((h) => (isNumbered(h) ? h : numberHunk(h)))
     if (diff !== undefined) return parseUnifiedDiff(diff)
@@ -116,6 +122,7 @@ export function SideBySideDiff({
   }
 
   return (
+    <LineWords.Provider value={t}>
     <section
       data-slot="side-by-side-diff"
       aria-labelledby={headingId}
@@ -131,7 +138,7 @@ export function SideBySideDiff({
         <ChangeCount data-part="count" added={added} removed={removed} className="shrink-0" />
       </header>
       {hunks.length === 0 ? (
-        <p className="m-0 px-3 py-3 font-ui text-sm text-ink-muted">No line changes.</p>
+        <p className="m-0 px-3 py-3 font-ui text-sm text-ink-muted">{t.noChanges}</p>
       ) : (
         <>
           <div data-panes="" className="hidden grid-cols-2 @3xl:grid">
@@ -139,7 +146,7 @@ export function SideBySideDiff({
               <Pane
                 key={side}
                 side={side}
-                label={side === 0 ? beforeLabel : afterLabel}
+                label={side === 0 ? (beforeLabel ?? t.before) : (afterLabel ?? t.after)}
                 headingId={headingId}
                 hunks={hunks}
                 widest={widest}
@@ -158,6 +165,7 @@ export function SideBySideDiff({
         </>
       )}
     </section>
+    </LineWords.Provider>
   )
 }
 

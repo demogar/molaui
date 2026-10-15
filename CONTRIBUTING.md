@@ -180,10 +180,16 @@ src/components/<name>/
   <name>.tsx          the component: cva variants, cn(), a doc comment that explains WHY
   <name>.stories.tsx  every state, with docs descriptions that state the decisions
   <name>.test.tsx     behaviour by role and accessible name, keyboard included
+  messages.ts         the words it says on its own, if any: an interface and the English table
   index.ts            the public exports
 ```
 
 Then export it from `src/index.ts`.
+
+A component never writes a user-visible English literal. Its words go in `messages.ts`, are read
+with `useMessages()` from `src/lib/messages.tsx`, are registered in `src/lib/default-messages.ts`,
+and reach the component's `messages` prop and `MessagesProvider` (docs/adr/0014-messages.md).
+`src/test/messages.test.ts` fails a literal left in the JSX.
 
 ### Parts and the anatomy diagram
 

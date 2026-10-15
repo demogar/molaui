@@ -1,6 +1,8 @@
 export { FileUpload, defaultFileUploadMessages } from './file-upload'
 export type {
   FileUploadItem,
+  FileUploadMessageFunctions,
+  FileUploadMessageTemplates,
   FileUploadMessages,
   FileUploadProps,
   FileUploadStatus,

@@ -56,7 +56,7 @@ Each story is a live example in Storybook.
 | `date` (required) | `string \| number \| Date` |  | The moment: a `Date`, epoch milliseconds, or an ISO 8601 string. |
 | `format` | `"long" \| "short" \| "narrow"` | `long` | `long` "3 minutes ago", `short` "3 min. ago", `narrow` "3m ago" (in English). |
 | `live` | `boolean` | `true` | Keep the text current while the tab is visible. Ignored when `now` is given. |
-| `locale` | `LocalesArgument` |  | BCP 47 tag for the words and digits. `undefined` uses the runtime's locale. |
+| `locale` | `LocalesArgument` |  | BCP 47 tag for the words and digits. Left out, `MessagesProvider`'s locale, then the runtime's. |
 | `now` | `number \| Date` |  | The moment to measure from. Given, the text renders on the server and does not tick; omitted, it uses the browser's clock from hydration on. |
 | `numeric` | `"auto" \| "always"` | `auto` | `auto` writes "yesterday" and "now" where the locale has them; `always` writes "1 day ago". |
 | `timeZone` | `string` |  | The zone for the exact moment in `title`, and in the server text when `now` is omitted. |

@@ -48,6 +48,7 @@ Each story is a live example in Storybook.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `items` (required) | `BreadcrumbItem[]` |  | The trail, root first. The last item is the current page and renders as text whether or not it has an `href`; pass a long id through `middleTruncate` so both ends survive. |
+| `messages` | `MessagesOverride<BreadcrumbMessages>` |  | Words for translation: the landmark's name. Keys left out come from `MessagesProvider`, then English. `aria-label` still wins. |
 | `renderLink` | `BreadcrumbLinkRender` |  | The element each link crumb renders as: your router's `<Link />`, or a function returning one. |
 
 `className`, `ref`, `id` and the other DOM props go to `<nav data-slot="breadcrumb">`.
@@ -56,7 +57,7 @@ Each story is a live example in Storybook.
 
 `run_8f3a2b91c21e` → `run_8f3a…c21e`. Both ends survive; the middle is what nobody reads.
 
-Types: `BreadcrumbItem`, `BreadcrumbLinkRender`, `BreadcrumbProps`
+Types: `BreadcrumbMessages`, `BreadcrumbItem`, `BreadcrumbLinkRender`, `BreadcrumbProps`
 
 ## Accessibility
 
@@ -95,6 +96,7 @@ Types: `BreadcrumbItem`, `BreadcrumbLinkRender`, `BreadcrumbProps`
 
 ### Pages that send readers here
 
+- [Link](https://demogar.github.io/molaui/md/components-navigation-link--overview.md)
 - [Tree](https://demogar.github.io/molaui/md/components-navigation-tree--overview.md)
 
 ### Used in

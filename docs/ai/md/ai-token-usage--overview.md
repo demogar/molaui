@@ -55,13 +55,14 @@ What a run consumed.
 | `cached` | `number` |  | Input tokens served from cache — cheaper, and worth knowing about. |
 | `contextWindow` | `number` |  | The model's context window. With it, a meter shows how full the context is. |
 | `costUsd` | `number` |  | Cost in USD, if the platform knows it. |
+| `messages` | `MessagesOverride<TokenUsageMessages>` |  | Words for translation: the terms, the warnings and the meter's name and reading. Keys left out come from `MessagesProvider`, then English. |
 | `variant` | `"full" \| "inline"` | `full` | `full`: a definition list and meter. `inline`: one line, for a run header. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="token-usage">`.
 
 ### `contextLevel` (function)
 
-Types: `TokenUsageProps`
+Types: `TokenUsageMessages`, `TokenUsageProps`
 
 ## Accessibility
 

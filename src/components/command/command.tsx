@@ -5,10 +5,12 @@ import { Search } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { useControllable } from '../../lib/use-controllable'
 import { formatHotkey } from '../shortcuts/hotkeys'
 import { useHotkeyPlatform, useHotkeys } from '../shortcuts/use-hotkeys'
 import { Kbd } from '../typography'
+import { type CommandPaletteMessages, commandPaletteMessages } from './messages'
 
 /**
  * The keyboard's front door to the whole tool: jump to a run, switch agent,
@@ -135,12 +137,14 @@ export interface CommandPaletteProps extends Omit<React.ComponentProps<'div'>, '
    * matches come first within a group, and empty groups are dropped.
    */
   groups: CommandGroup[]
-  /** Shown in the empty search input. Defaults to "Type a command or search…". */
+  /** Shown in the empty search input. Defaults to "Type a command or search…" (`messages.placeholder`). */
   placeholder?: string
   /** Shown when nothing matches. Receives the query. */
   renderEmpty?: (query: string) => React.ReactNode
-  /** Accessible name of the dialog. */
+  /** Accessible name of the dialog. Defaults to "Command palette" (`messages.label`). */
   label?: string
+  /** Words for translation: the defaults above, the key hints, the empty sentence and the result count. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<CommandPaletteMessages>
 }
 
 /**
@@ -155,12 +159,16 @@ export function CommandPalette({
   onOpenChange,
   trigger,
   groups,
-  placeholder = 'Type a command or search…',
+  placeholder: placeholderProp,
   renderEmpty,
-  label = 'Command palette',
+  label: labelProp,
+  messages,
   className,
   ...props
 }: CommandPaletteProps) {
+  const [t, f] = useMessages('commandPalette', commandPaletteMessages, messages)
+  const placeholder = placeholderProp ?? t.placeholder
+  const label = labelProp ?? t.label
   const [open, setOpen] = useControllable({ value: openProp, defaultValue: defaultOpen, onChange: onOpenChange })
   const [query, setQuery] = React.useState('')
   const platform = useHotkeyPlatform()
@@ -187,7 +195,8 @@ export function CommandPalette({
   // query is not a search), and cleared when the palette closes.
   const [announcement, setAnnouncement] = React.useState('')
   const trimmed = query.trim()
-  const spoken = trimmed === '' ? '' : flat.length === 0 ? `No matches for “${trimmed}”.` : `${flat.length} ${flat.length === 1 ? 'result' : 'results'}`
+  const results = f.plural(t.results, flat.length)
+  const spoken = trimmed === '' ? '' : flat.length === 0 ? f.format(t.noMatches, { query: trimmed }) : results
   React.useEffect(() => {
     const timer = window.setTimeout(() => setAnnouncement(spoken), ANNOUNCE_DELAY_MS)
     return () => window.clearTimeout(timer)
@@ -280,7 +289,7 @@ export function CommandPalette({
               onKeyDown={onKeyDown}
               className="h-14 min-w-0 flex-1 border-0 bg-transparent font-ui text-lg text-ink outline-none placeholder:text-ink-muted focus:shadow-none focus-visible:shadow-none"
             />
-            <Kbd>esc</Kbd>
+            <Kbd>{t.escape}</Kbd>
           </div>
           {/* With nothing to list there is no listbox: an empty one is an
               ARIA error, and text inside it is presentational. The combobox
@@ -290,7 +299,7 @@ export function CommandPalette({
             ref={listRef}
             id={hasResults ? listId : undefined}
             role={hasResults ? 'listbox' : undefined}
-            aria-label={hasResults ? 'Commands' : undefined}
+            aria-label={hasResults ? t.commands : undefined}
             className="scroll-cloth min-h-0 flex-1 overflow-y-auto py-2"
           >
             {!hasResults ? (
@@ -300,7 +309,7 @@ export function CommandPalette({
                 ) : (
                   <>
                     {/* The same words as Combobox's empty filter, with the query. */}
-                    No matches for <span className="font-semibold text-ink">“{query}”</span>.
+                    {f.nodes(t.noMatches, { query: <span className="font-semibold text-ink">{query}</span> })}
                   </>
                 )}
               </div>
@@ -376,13 +385,13 @@ export function CommandPalette({
           <div aria-hidden className="flex items-center gap-4 bg-cloth-shade px-4 py-2 text-xs text-ink-muted rule-t">
             <span className="flex items-center gap-1.5">
               <Kbd>↑</Kbd>
-              <Kbd>↓</Kbd> move
+              <Kbd>↓</Kbd> {t.move}
             </span>
             <span className="flex items-center gap-1.5">
-              <Kbd>↵</Kbd> select
+              <Kbd>↵</Kbd> {t.select}
             </span>
             <span className="ms-auto tabular-nums">
-              {flat.length} {flat.length === 1 ? 'result' : 'results'}
+              {results}
             </span>
           </div>
         </DialogPrimitive.Popup>

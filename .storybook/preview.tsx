@@ -94,7 +94,7 @@ const preview: Preview = {
             'Changelog',
           ],
           'Foundations',
-          ['Color', 'Typography', 'Spacing', 'Density', 'Responsive', 'The cut', 'Layers and elevation', 'Motion', 'Iconography', 'Data visualisation', 'Content and voice', 'Accessibility', 'Theming', 'Tokens'],
+          ['Color', 'Typography', 'Spacing', 'Density', 'Responsive', 'The cut', 'Layers and elevation', 'Motion', 'Iconography', 'Data visualisation', 'Content and voice', 'Internationalisation', 'Accessibility', 'Theming', 'Tokens'],
           'Decisions',
           ['All decisions'],
           'Components',

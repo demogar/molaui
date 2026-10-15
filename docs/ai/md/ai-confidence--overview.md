@@ -55,6 +55,7 @@ How sure the system is, in three steps and in words.
 | --- | --- | --- | --- |
 | `level` (required) | `ConfidenceLevel` |  | How strong the support is: three coarse steps, shown as filled segments and a word, never a percentage the model cannot honestly claim. |
 | `basis` | `string` |  | What the confidence rests on — "3 sources agree", "single source". |
+| `messages` | `MessagesOverride<ConfidenceMessages>` |  | Words for translation: the word for each level. Keys left out come from `MessagesProvider`, then English. |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="confidence">`.
 
@@ -65,11 +66,12 @@ Where the model flags its own doubt, in the answer, next to the claim.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `action` | `ReactNode` |  | An action that resolves it — "Open the dashboard". |
-| `title` | `string` | `The model is unsure` | The short claim — "Unverified figure". Defaults to "The model is unsure". |
+| `messages` | `MessagesOverride<UncertaintyNoteMessages>` |  | Words for translation: the default title. Keys left out come from `MessagesProvider`, then English. |
+| `title` | `string` |  | The short claim — "Unverified figure". Defaults to "The model is unsure" (`messages.title`). |
 
 `className`, `ref`, `id` and the other DOM props go to `<aside data-slot="uncertainty-note">`.
 
-Types: `ConfidenceLevel`, `ConfidenceProps`, `UncertaintyNoteProps`
+Types: `ConfidenceMessages`, `UncertaintyNoteMessages`, `ConfidenceLevel`, `ConfidenceProps`, `UncertaintyNoteProps`
 
 ## Accessibility
 

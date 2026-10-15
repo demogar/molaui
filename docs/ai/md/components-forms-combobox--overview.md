@@ -68,6 +68,7 @@ Free text with suggestions: a run label, a tag, a search. The typed text is the 
 | `label` | `ReactNode` |  | A visible label above the input. Omit it inside `Field`, which renders its own, and spread Field's control props onto this component instead. |
 | `loading` | `boolean` | `false` | Suggestions are on their way: the popup shows the working texture and "Searching…" and the list is marked busy. Set it while a server search is in flight. |
 | `locale` | `LocalesArgument` |  | Locale for the built-in matching. Omitted, the runtime's locale is used. |
+| `messages` | `MessagesOverride<AutocompleteMessages>` |  | Words for translation: the status line while loading. Keys left out come from `MessagesProvider`, then English. |
 | `name` | `string` |  | Form field name. The typed text is what submits, not a suggestion's value. |
 | `onValueChange` | `((value: string) => void)` |  | Every change to the text, typed or chosen. |
 | `placeholder` | `string` |  | Shown in the empty input. A hint at what to type, never the label: it disappears on the first keystroke. |
@@ -95,6 +96,7 @@ Free text with suggestions: a run label, a tag, a search. The typed text is the 
 | `label` | `ReactNode` |  | A visible label above the field. Omit it inside `Field`, which renders its own, and spread Field's control props onto this component instead. |
 | `loading` | `boolean` |  | Results are on their way: the popup shows the working texture and "Searching…". |
 | `locale` | `LocalesArgument` |  | Locale for the built-in matching. Omitted, the runtime's locale is used. |
+| `messages` | `MessagesOverride<ComboboxMessages>` |  | Words for translation: the status lines, the button names and the chip hint. Keys left out come from `MessagesProvider`, then English. |
 | `multiple` | `boolean` |  | Omit, or `false`, for a single choice. Set `true` to pick several, shown as removable chips in the field. Pick several options, shown as removable chips in the field. Values become `string[]`. |
 | `name` | `string` |  | Form field name. The selected option's `value` is submitted under it (one entry per value with `multiple`). |
 | `onInputValueChange` | `((query: string) => void)` |  | What is typed, as it is typed: the hook for a server search. |
@@ -111,7 +113,7 @@ Free text with suggestions: a run label, a tag, a search. The typed text is the 
 
 `className` goes to `<div data-slot="combobox">`; `ref`, `id` and the other DOM props go to `<input>`.
 
-Types: `AutocompleteProps`, `ComboboxCommonProps`, `ComboboxItems`, `ComboboxMultipleProps`, `ComboboxOption`, `ComboboxOptionGroup`, `ComboboxProps`, `ComboboxSingleProps`
+Types: `AutocompleteMessages`, `ComboboxMessages`, `AutocompleteProps`, `ComboboxCommonProps`, `ComboboxItems`, `ComboboxMultipleProps`, `ComboboxOption`, `ComboboxOptionGroup`, `ComboboxProps`, `ComboboxSingleProps`
 
 ## Accessibility
 

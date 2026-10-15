@@ -7,6 +7,17 @@ export { contrast, mixOklab, parseHex, toHex, type RGB } from './tokens/color'
 // Right-to-left: see lib/direction.ts.
 export { DirectionProvider, useDirection, type TextDirection } from './lib/direction'
 
+// Built-in words and the locale they are written in: see lib/messages.tsx.
+export {
+  MessagesProvider,
+  formatMessage,
+  type MessagesOverride,
+  type MessagesProviderProps,
+  type PluralMessage,
+} from './lib/messages'
+export { defaultMessages } from './lib/default-messages'
+export type * from './lib/default-messages'
+
 // Sideways-scrolling regions: see lib/scroll-edge.ts and the scroll-edge utility.
 export { useScrollEdge } from './lib/scroll-edge'
 
@@ -58,6 +69,7 @@ export * from './components/shortcuts'
 export * from './components/tabs'
 export * from './components/accordion'
 export * from './components/breadcrumb'
+export * from './components/link'
 export * from './components/pagination'
 export * from './components/tree'
 export * from './components/stepper'

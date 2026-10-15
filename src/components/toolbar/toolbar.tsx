@@ -8,6 +8,7 @@ import { Ellipsis, Search } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { type Variants } from '../../lib/variants'
 import { slotUnlessRendered } from '../../lib/slot'
 import { useMergedRefs } from '../../lib/merge-props'
@@ -15,6 +16,7 @@ import { deprecate } from '../../lib/deprecate'
 import { buttonVariants } from '../button'
 import { fieldControlClasses, fieldControlSizes } from '../field/field-control'
 import { Menu, MenuContent, MenuItem, MenuTrigger } from '../menu'
+import { type ToolbarOverflowMessages, toolbarOverflowMessages } from './messages'
 
 /**
  * A row of related controls with `role="toolbar"` and one tab stop: Tab
@@ -252,10 +254,12 @@ export interface ToolbarOverflowItem {
 export interface ToolbarOverflowProps extends Omit<React.ComponentProps<'div'>, 'children'> {
   /** In priority order: the first items stay visible longest. */
   items: ToolbarOverflowItem[]
-  /** The name of the menu button that collects what does not fit. */
+  /** The name of the menu button that collects what does not fit. "More actions" (`messages.moreActions`) by default. */
   moreLabel?: string
   /** Which end of the free space the buttons hug. */
   align?: 'start' | 'end'
+  /** Words for translation: the menu button's label and name. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<ToolbarOverflowMessages>
 }
 
 const GAP = 4 // gap-1
@@ -275,7 +279,8 @@ const GAP = 4 // gap-1
  *
  * `className`, `ref` and the rest of the DOM props go to the row.
  */
-export function ToolbarOverflow({ items, moreLabel = 'More actions', align = 'end', className, ref, ...props }: ToolbarOverflowProps) {
+export function ToolbarOverflow({ items, moreLabel, align = 'end', messages, className, ref, ...props }: ToolbarOverflowProps) {
+  const [t] = useMessages('toolbarOverflow', toolbarOverflowMessages, messages)
   if (items.some((item) => item.tone === 'default')) {
     deprecate('toolbar-overflow-tone-default', {
       what: 'A ToolbarOverflow item with tone: "default"',
@@ -350,7 +355,7 @@ export function ToolbarOverflow({ items, moreLabel = 'More actions', align = 'en
         ))}
         <span className={buttonVariants({ variant: 'ghost', size: 'sm' })}>
           <Ellipsis />
-          More
+          {t.more}
         </span>
       </div>
       {shown.map((item) => (
@@ -366,8 +371,8 @@ export function ToolbarOverflow({ items, moreLabel = 'More actions', align = 'en
       ))}
       {folded.length > 0 ? (
         <Menu>
-          <ToolbarButton render={<MenuTrigger />} icon={<Ellipsis />} aria-label={moreLabel}>
-            More
+          <ToolbarButton render={<MenuTrigger />} icon={<Ellipsis />} aria-label={moreLabel ?? t.moreActions}>
+            {t.more}
           </ToolbarButton>
           <MenuContent align="end">
             {folded.map((item) => (

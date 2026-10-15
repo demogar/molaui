@@ -67,6 +67,7 @@ An inline citation marker: a small cut chip with the source's number.
 | --- | --- | --- | --- |
 | `n` (required) | `number` |  | The source's number, matching its place in the `SourceList`. Shown as "[n]"; the link defaults to `#source-n`. |
 | `cardSide` | `"bottom" \| "top"` | `top` | Which side of the marker the card opens on. |
+| `messages` | `MessagesOverride<SourcesMessages>` |  | Words for translation: the marker's name and the preview card's link and read time. Keys left out come from `MessagesProvider`, then English. |
 | `render` | `ReactElement<unknown, string \| JSXElementConstructor<any>> \| ((props: DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>) => ReactElement<...>)` |  | The element the marker renders as: your router's `<Link />` when `href` points inside the app, or a function returning one. Base UI's render prop, so the marker's classes, name and handlers are merged onto it. |
 | `source` | `Source` |  | The source this marker points at. With it, hovering or focusing the marker opens a preview card — title, domain, the passage used — so the claim can be checked without leaving the sentence. |
 | `title` | `string` |  | The source's title, for the accessible name. "[2]" alone tells a screen reader nothing. Defaults to `source.title`. |
@@ -80,6 +81,7 @@ The sources an answer drew on, as an ordered list whose numbers match the inline
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `sources` (required) | `readonly Source[]` |  | The sources the answer drew on, in citation order, so each card's number matches its inline marker. |
+| `messages` | `MessagesOverride<SourcesMessages>` |  | Words for translation: the read time. Keys left out come from `MessagesProvider`, then English. |
 | `timeZone` | `string` |  | IANA zone the read times are shown in, such as `"UTC"`. Without it they are the reader's own and appear only after hydration, because the server cannot know the reader's zone. |
 
 `className`, `ref`, `id` and the other DOM props go to `<ol data-slot="source-list">`.
@@ -88,7 +90,7 @@ The sources an answer drew on, as an ordered list whose numbers match the inline
 
 A `renderCitation` for `StreamingText`, built from the same array the `SourceList` renders, so marker [2] opens source 2 and links to its card.
 
-Types: `CitationProps`, `Source`, `SourceListProps`
+Types: `SourcesMessages`, `CitationProps`, `Source`, `SourceListProps`
 
 ## Accessibility
 
@@ -128,6 +130,7 @@ Types: `CitationProps`, `Source`, `SourceListProps`
 
 ### Pages that send readers here
 
+- [Link](https://demogar.github.io/molaui/md/components-navigation-link--overview.md)
 - [Popover](https://demogar.github.io/molaui/md/components-overlays-popover--overview.md)
 - [Pullquote](https://demogar.github.io/molaui/md/components-typography-pullquote--overview.md)
 

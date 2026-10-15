@@ -50,12 +50,3 @@ export function formatCountdown(ms: number): string {
   if (s < 60) return `${s}s`
   return `${Math.floor(s / 60)}m ${String(s % 60).padStart(2, '0')}s`
 }
-
-/** The same figure, spelled out for a screen reader: "1 minute 5 seconds". */
-export function spokenCountdown(ms: number): string {
-  const s = Math.ceil(ms / 1000)
-  const unit = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`
-  if (s < 60) return unit(s, 'second')
-  const rest = s % 60
-  return rest === 0 ? unit(Math.floor(s / 60), 'minute') : `${unit(Math.floor(s / 60), 'minute')} ${unit(rest, 'second')}`
-}

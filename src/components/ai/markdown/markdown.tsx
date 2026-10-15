@@ -3,11 +3,14 @@
 import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../../lib/messages'
 import { CodeBlock, type CodeLanguage } from '../../code'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../table'
 import { createBlockParser } from '../streaming-text/parse'
 import { Caret, type StreamStatus } from '../streaming-text/streaming-text'
 import { useCompletionAnnouncement } from '../streaming-text/use-completion-announcement'
+import { linkMessages } from '../../link/messages'
+import { type MarkdownMessages, markdownMessages } from './messages'
 
 import { parseMarkdown, type MarkdownBlock, type MarkdownInline } from './parse-markdown'
 
@@ -39,6 +42,12 @@ export interface MarkdownProps extends Omit<React.ComponentProps<'div'>, 'childr
   headingLevel?: 2 | 3 | 4
   /** `muted` for text the reader may skim — reasoning, not the answer. */
   variant?: 'default' | 'muted'
+  /**
+   * Words for translation: the default done and error announcements. Keys
+   * left out come from `MessagesProvider`, then English. The new-tab cue on
+   * an absolute link is `link.newTab`, shared with Link.
+   */
+  messages?: MessagesOverride<MarkdownMessages>
 }
 
 /**
@@ -78,20 +87,23 @@ export interface MarkdownProps extends Omit<React.ComponentProps<'div'>, 'childr
 export function Markdown({
   text,
   status = 'done',
-  doneAnnouncement = 'Response complete.',
-  errorAnnouncement = 'Response stopped with an error.',
+  doneAnnouncement,
+  errorAnnouncement,
   renderCitation,
   headingLevel = 3,
   variant = 'default',
+  messages,
   className,
   ...props
 }: MarkdownProps) {
+  const [t] = useMessages('markdown', markdownMessages, messages)
+  const [{ newTab }] = useMessages('link', linkMessages)
   const streaming = status === 'streaming'
   // One parser per mounted stream: it holds the settled blocks between chunks.
   const [parse] = React.useState(() => createBlockParser<MarkdownBlock>(parseMarkdown))
   const blocks = React.useMemo(() => parse(text, streaming), [parse, text, streaming])
-  const announcement = useCompletionAnnouncement(status, doneAnnouncement, errorAnnouncement)
-  const context = React.useMemo(() => ({ renderCitation, headingLevel }), [renderCitation, headingLevel])
+  const announcement = useCompletionAnnouncement(status, doneAnnouncement ?? t.done, errorAnnouncement ?? t.error)
+  const context = React.useMemo(() => ({ renderCitation, headingLevel, newTab }), [renderCitation, headingLevel, newTab])
 
   return (
     <div
@@ -125,6 +137,8 @@ export function Markdown({
 interface RenderContext {
   renderCitation?: (n: number) => React.ReactNode
   headingLevel: number
+  /** Read after an absolute link, which opens a new tab. */
+  newTab: string
 }
 
 // The look of a heading by its depth in the Markdown. The first two follow
@@ -308,7 +322,7 @@ function Inlines({ inlines, context }: { inlines: MarkdownInline[]; context: Ren
             <Inlines inlines={inline.children} context={context} />
             {/* The space is inside the hidden span, so the underline does not
                 run on past the last word. */}
-            {external ? <span className="sr-only"> (opens in a new tab)</span> : null}
+            {external ? <span className="sr-only">{' '}{context.newTab}</span> : null}
           </a>
         )
       }

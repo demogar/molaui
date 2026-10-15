@@ -1,0 +1,86 @@
+# 0014 — Built-in words come from one messages table, through an optional provider
+
+**Date:** 2026-10-15 · **Status:** accepted
+
+## Context
+
+The 2026-10-14 audit found every word the components say on their own written as an English
+literal in the JSX: "Close", "Dismiss", "Previous page", "Thought for 4s", "Jump to latest". A
+scan found about 300 of them in 50 files. A few components had a label prop for one of them
+(`cancelLabel`, `clearLabel`), Stepper and TimePicker had just gained `messages` props of their
+own shape, FileUpload had another, and the rest could only be changed by forking the component.
+That blocks any product that is not in English, including the Spanish-speaking one this system
+came from.
+
+Counts had the same problem one level down. To keep server and browser output identical, they
+were written with a fixed `toLocaleString('en-US')`, so a Spanish page read "1,284 rows".
+
+## Decision
+
+**One table, kept beside each component.** Each component that says something on its own has a
+`messages.ts` beside it: an interface with a doc comment on every key, and the English values.
+The component reads it through `useMessages(namespace, defaults, overrides)`. It imports only its
+own table, so a page that uses Button does not ship the agent console's sentences.
+`src/lib/default-messages.ts` gathers every table into `defaultMessages` and the `MolaMessages`
+type, for translators and for the provider's types.
+
+**Three layers, each optional.** The English default, then `MessagesProvider`'s keys for the
+namespace, then the component's own `messages` prop. An app that does not localise adds nothing
+and changes nothing. An app that does wraps its root once. A screen that needs one different word
+("Close settings") passes `messages` to that one component. Existing label props
+(`cancelLabel`, `clearLabel`, `moreLabel`) stay and default to the table.
+
+**Strings, not functions.** A message with a value in it is a template, `'Step {position} of
+{total}'`. A message with a count is a plural object keyed by `Intl.PluralRules` categories,
+`{ one: '{count} file', other: '{count} files' }`, and is replaced whole, never merged, so a
+language with only `other` cannot inherit English's `one`. A live element inside a sentence (a
+countdown, a bold range) is filled by name too, so it can sit wherever the language puts it.
+
+Stepper and TimePicker took functions, and that was the first design here as well. A function
+cannot cross from a React Server Component to the client provider. A Next.js layout that loads
+`es.json` on the server and passes it down is the ordinary way to localise, and it would fail on
+the first function. Translation tools also read and write strings, not code. Both were
+unreleased and were converted. FileUpload had shipped functions in 0.2.0. Its functions still
+work and warn (`file-upload-message-functions`), and its old type keeps its name until 1.0.0.
+
+**The provider carries the locale.** `MessagesProvider locale="es-PA"` sets the locale for counts,
+plural categories and dates. Components with a `locale` prop use the provider's when theirs is
+unset. Without a provider, counts keep the fixed `en-US` they had and dates keep the runtime's
+locale, so nothing changes for an app that does not opt in.
+
+**Context, not attributes.** Theme and density are document attributes so that portals inherit
+them through CSS (ADR 0005). Words are not CSS, and React context already passes through portals,
+so a dialog, toast or menu rendered into `document.body` reads the provider above it. The one
+exception is `ToastProvider`, whose toasts render where it is mounted. `MessagesProvider` goes
+above it, which its doc comment says.
+
+**Server components.** A component that reads the provider is a client component. Eight modules that had
+no `'use client'` (Label, Pagination, Badge's RecommendationBadge, Placeholder, Confidence,
+TokenUsage, ChangeCount, Chip) gained it. They still render from a server page, as client
+references. A server-only path that reads the table without context, through `React.cache` or
+`AsyncLocalStorage`, was rejected because neither works the same way across the frameworks the
+consumer tests cover.
+
+## Gates
+
+- `src/test/messages.test.ts` reads every component's syntax tree and fails on JSX text, a
+  string in a visible attribute (`aria-label`, `title`, `placeholder`, `label`), a string that
+  starts like an English word, or a template with words in its fixed text. `messages.ts` tables,
+  `deprecate()`, `console` and `Error` text, and `KeyboardEvent.key` names are excluded. Anything
+  else needs an `ALLOWED` entry with a reason. It also fails a `messages.ts` table that is
+  missing from `defaultMessages`, and a table that does not survive `JSON.stringify`.
+- `src/lib/messages.test.tsx` covers a provider reaching a portaled dialog, a prop beating the
+  provider, nested providers, the locale on the server and in the browser, and a plural replaced
+  whole.
+- The word list on Foundations/Content and voice names the key that holds each word, and
+  `foundations.test.tsx` fails a key that does not exist or no longer holds that word.
+
+## Consequences
+
+- Every component that says something on its own gained an optional `messages` prop. The
+  manifest lists its keys, and the Internationalisation page lists every key with its English.
+- A translation is a plain object. It can be JSON, typed as `MessagesOverride<MolaMessages>`.
+- Word order is the translator's. Sentences that used to be assembled from pieces ("Up" +
+  value, "of" + total) are now whole templates, so another language can reorder them.
+- Not covered: words a caller passes in (titles, labels, `aria-label`s on its own controls), and
+  RunError's `formatCountdown` unit letters ("1m 05s"), which are a compact machine format.

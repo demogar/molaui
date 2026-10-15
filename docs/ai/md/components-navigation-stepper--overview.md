@@ -71,7 +71,7 @@ Each story is a live example in Storybook.
 | `steps` (required) | `StepperStep[]` |  | The steps, in the order they are done. |
 | `defaultStep` | `string` |  | The step to open on, uncontrolled. The first step by default. |
 | `headingLevel` | `2 \| 3` | `2` | The level of the panel heading; match the page outline. `h2` by default. |
-| `messages` | `(Partial<Omit<StepperMessages, "states">> & { states?: Partial<Record<StepperStepState, string>>; })` |  | Words, for translation. Any key not given keeps its English default. |
+| `messages` | `MessagesOverride<StepperMessages>` |  | Words for translation: the buttons, the "Step 2 of 4" line and the state words. Keys left out come from `MessagesProvider`, then English. |
 | `onComplete` | `(() => void)` |  | Called after the last step's `onStepSubmit` passes. |
 | `onStepChange` | `((step: string) => void)` |  | Called with the new step's id when Continue, Back or a step in the list changes it. |
 | `onStepSubmit` | `((step: string, event: FormEvent<HTMLFormElement>) => boolean \| void \| Promise<boolean \| void>)` |  | Runs when Continue or Finish is pressed, with the step's id and the submit event. Validate here; return `false` (or a promise of `false`) to stay on the step. While a promise is pending, Continue shows it is working. |

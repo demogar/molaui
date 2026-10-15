@@ -1,6 +1,11 @@
-import type * as React from 'react'
+'use client'
+
+import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { formatMessage, type MessagesOverride, useMessages } from '../../../lib/messages'
+
+import { type TokenUsageMessages, tokenUsageMessages } from './messages'
 
 export interface TokenUsageProps extends Omit<React.ComponentProps<'div'>, 'children'> {
   /** Tokens sent to the model, cached ones included. */
@@ -18,10 +23,15 @@ export interface TokenUsageProps extends Omit<React.ComponentProps<'div'>, 'chil
   contextWindow?: number
   /** `full`: a definition list and meter. `inline`: one line, for a run header. */
   variant?: 'full' | 'inline'
+  /** Words for translation: the terms, the warnings and the meter's name and reading. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<TokenUsageMessages>
 }
 
-const compact = new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 })
-const usd = new Intl.NumberFormat('en', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 4 })
+// `en` without a provider locale, so the server and the browser write the
+// same digits; a provider's locale replaces it on both.
+const compactFormat = (locale: string) => new Intl.NumberFormat(locale, { notation: 'compact', maximumFractionDigits: 1 })
+const usdFormat = (locale: string) =>
+  new Intl.NumberFormat(locale, { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 4 })
 
 export function contextLevel(ratio: number): 'ok' | 'warn' | 'danger' {
   if (ratio >= 0.95) return 'danger'
@@ -29,7 +39,6 @@ export function contextLevel(ratio: number): 'ok' | 'warn' | 'danger' {
   return 'ok'
 }
 
-const LEVEL_WORD = { ok: '', warn: 'Near the limit', danger: 'At the limit' } as const
 
 /**
  * What a run consumed.
@@ -54,9 +63,15 @@ export function TokenUsage({
   costUsd,
   contextWindow,
   variant = 'full',
+  messages,
   className,
   ...props
 }: TokenUsageProps) {
+  const [t, f] = useMessages('tokenUsage', tokenUsageMessages, messages)
+  const locale = f.locale ?? 'en'
+  const compact = React.useMemo(() => compactFormat(locale), [locale])
+  const usd = React.useMemo(() => usdFormat(locale), [locale])
+  const levelWord = { ok: '', warn: t.nearLimit, danger: t.atLimit }
   const used = input + output
   const ratio = contextWindow ? Math.min(1, used / contextWindow) : undefined
   const level = ratio !== undefined ? contextLevel(ratio) : 'ok'
@@ -64,23 +79,19 @@ export function TokenUsage({
   if (variant === 'inline') {
     return (
       <div data-slot="token-usage" className={cn('flex flex-wrap items-center gap-x-3 gap-y-1 font-ui text-xs tabular text-ink-muted', className)} {...props}>
-        <span>
-          <span className="text-ink-2">{compact.format(input)}</span> in
-        </span>
-        <span>
-          <span className="text-ink-2">{compact.format(output)}</span> out
-        </span>
+        <span>{f.nodes(t.inlineInput, { count: <span className="text-ink-2">{compact.format(input)}</span> })}</span>
+        <span>{f.nodes(t.inlineOutput, { count: <span className="text-ink-2">{compact.format(output)}</span> })}</span>
         {costUsd !== undefined ? <span className="text-ink-2">{usd.format(costUsd)}</span> : null}
-        {ratio !== undefined ? <ContextMeter ratio={ratio} level={level} className="w-16" /> : null}
+        {ratio !== undefined ? <ContextMeter ratio={ratio} level={level} messages={t} className="w-16" /> : null}
       </div>
     )
   }
 
   const rows: [string, string][] = [
-    ['Input', compact.format(input)],
-    ...(cached !== undefined ? ([['Cached', compact.format(cached)]] as [string, string][]) : []),
-    ['Output', compact.format(output)],
-    ...(costUsd !== undefined ? ([['Cost', usd.format(costUsd)]] as [string, string][]) : []),
+    [t.input, compact.format(input)],
+    ...(cached !== undefined ? ([[t.cached, compact.format(cached)]] as [string, string][]) : []),
+    [t.output, compact.format(output)],
+    ...(costUsd !== undefined ? ([[t.cost, usd.format(costUsd)]] as [string, string][]) : []),
   ]
 
   return (
@@ -97,34 +108,45 @@ export function TokenUsage({
         <div className="flex flex-col gap-1.5">
           <div className="flex items-baseline justify-between gap-3 font-ui text-xs">
             <span className="rotulo text-ink-muted">
-              Context
+              {t.context}
             </span>
             <span className="tabular text-ink-2">
-              {LEVEL_WORD[level] ? (
+              {levelWord[level] ? (
                 <span className={cn('me-2 font-semibold', level === 'danger' ? 'text-ink-danger' : 'text-ink-warn')}>
-                  {LEVEL_WORD[level]}
+                  {levelWord[level]}
                 </span>
               ) : null}
               {compact.format(used)} / {compact.format(contextWindow)} · {Math.round(ratio * 100)}%
             </span>
           </div>
-          <ContextMeter ratio={ratio} level={level} />
+          <ContextMeter ratio={ratio} level={level} messages={t} />
         </div>
       ) : null}
     </div>
   )
 }
 
-function ContextMeter({ ratio, level, className }: { ratio: number; level: 'ok' | 'warn' | 'danger'; className?: string }) {
+function ContextMeter({
+  ratio,
+  level,
+  messages: t,
+  className,
+}: {
+  ratio: number
+  level: 'ok' | 'warn' | 'danger'
+  messages: TokenUsageMessages
+  className?: string
+}) {
   const pct = Math.round(ratio * 100)
+  const valueText = level === 'danger' ? t.meterValueAt : level === 'warn' ? t.meterValueNear : t.meterValue
   return (
     <div
       role="meter"
-      aria-label="Context window used"
+      aria-label={t.meterLabel}
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={pct}
-      aria-valuetext={`${pct}% of the context window${LEVEL_WORD[level] ? `, ${LEVEL_WORD[level].toLowerCase()}` : ''}`}
+      aria-valuetext={formatMessage(valueText, { percent: pct })}
       className={cn('relative h-2 bg-cloth-shade shadow-cut', className)}
     >
       {/* Scaled from the inline start rather than sized, so the ease is
