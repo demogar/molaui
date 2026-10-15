@@ -87,9 +87,31 @@ travel guide. Mola UI is that system **carried from an editorial site into produ
 the same identity, re-argued for information density, a dark theme for all-day use, and the
 states AI work actually produces.
 
+## How to read a component page
+
+Every component page has the same sections in the same order, so you always know where to look.
+
+1. **Summary and status.** What the component is for, in one sentence, and its lifecycle phase:
+   Experimental, Stable or Deprecated. [Versioning](https://demogar.github.io/molaui/?path=/docs/mola-ui-versioning--overview)
+   says what each phase promises. Under it, the decisions behind the component.
+2. **Usage.** When to use it, when not to and what to use instead, do and don't, and how to word it.
+3. **Examples.** The main example with its controls, then every documented state.
+4. **Accessibility.** The keys it answers to, what Mola handles and what you must still do, and
+   how it is tested: what runs on every pull request, and what has not been tested yet.
+5. **Related.** The components this page sends you to, and the ones that send readers here.
+6. **Changes.** What changed in the component, release by release, with the pull request and the
+   commit. It is read from the changelog by each commit's scope, so it appears only on components
+   that have changed. [What's new](https://demogar.github.io/molaui/?path=/docs/mola-ui-what-s-new-0-6--overview) has the
+   highlights of each release.
+
+Usage comes before the examples on purpose. "Should I use this at all?" is the first question,
+and the answer is often a different component. A test holds every component page to this order,
+and fails a page that would leave a section empty. What the pages don't have yet is listed on
+[Known gaps](https://demogar.github.io/molaui/?path=/docs/mola-ui-known-gaps--overview).
+
 ## Read next
 
-- **[Getting started](https://demogar.github.io/molaui/?path=/docs/mola-ui-getting-started--overview)** — install, import, theme and density.
+- **[Getting started](https://demogar.github.io/molaui/?path=/docs/mola-ui-getting-started--overview)** — install, the stylesheet, the app root, theme and density, with a playground to try it first.
 - **[Choosing a component](https://demogar.github.io/molaui/?path=/docs/mola-ui-choosing-a-component--overview)** — which component for which job, and what to use instead.
 - **[Principles](https://demogar.github.io/molaui/?path=/docs/mola-ui-principles--overview)** — the six rules every component obeys.
 - **[Decisions](https://demogar.github.io/molaui/?path=/docs/decisions-all-decisions--overview)** — why the foundations are the way

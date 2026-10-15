@@ -14,6 +14,7 @@ const METRICS: { name: string; label: string }[] = [
   { name: '--control-h-lg', label: 'Large control' },
   { name: '--control-px', label: 'Control padding, inline' },
   { name: '--row-h', label: 'Table row height' },
+  { name: '--icon', label: 'Default icon' },
   { name: '--text-2xs', label: 'Label text' },
   { name: '--text-xs', label: 'Small text' },
   { name: '--text-sm', label: 'Secondary text' },
@@ -29,7 +30,9 @@ function px(value: string | undefined) {
   return value.endsWith('rem') ? `${value} (${n}px)` : value
 }
 
-export function DensityMetrics() {
+/** `only` picks rows by token name, in METRICS order, for a page that needs a short table. */
+export function DensityMetrics({ only }: { only?: string[] } = {}) {
+  const metrics = only ? METRICS.filter((m) => only.includes(m.name)) : METRICS
   const cell = 'border-t border-keyline p-3 text-start align-top'
   return (
     <div className="sb-unstyled not-prose relative my-6 overflow-x-auto bg-cloth-pale font-ui text-sm text-ink shadow-cut">
@@ -47,7 +50,7 @@ export function DensityMetrics() {
           </tr>
         </thead>
         <tbody>
-          {METRICS.map((m) => {
+          {metrics.map((m) => {
             const values = DENSITIES.map((d) => densityValue(m.name, d))
             return (
               <tr key={m.name}>

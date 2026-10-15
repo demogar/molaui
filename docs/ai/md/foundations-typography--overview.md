@@ -11,6 +11,19 @@ model** speaks to you in Alegreya, and the **machine's literals** are Martian Mo
 
 > Not included in the Markdown version: an interactive `Specimen` block. See it on the page: https://demogar.github.io/molaui/?path=/docs/foundations-typography--overview
 
+## Roles
+
+| Role | Face | Write it as | For |
+| --- | --- | --- | --- |
+| The system | Archivo at the drawn width | `font-ui` (the default) | Labels, controls, navigation, table cells, figures |
+| Headings | Archivo, set wide | `Heading`, or `font-display wdth-display` | Page and section titles, stat values |
+| Labels | Archivo at 116, caps, tracked | `rotulo`, or `Rotulo` | The label above a block, a column header, a status word |
+| The reader | Alegreya | `Prose`, `Lead`, or `font-text` | Prose a person or a model says to the reader: an answer, a description, a help text |
+| The machine | Martian Mono, narrowed | `literal`, or `Code` | Ids, hashes, code, JSON, tool arguments. Never a label, never a number in a table |
+
+The face says who is speaking. A transcript can be scanned for what the agent said (Alegreya)
+against what it did (Martian Mono) from the type alone.
+
 ## The width axis
 
 Archivo was chosen for its `wdth` axis, and it is used at three registers. Running text stays at
@@ -23,8 +36,10 @@ tracked-out caption.
 
 ## Scale
 
-The comfortable scale. The small end moves with density; the display end does not — a dense tool
-is dense in its rows, not its page titles.
+Each step with its size in compact, comfortable and spacious, and its line height as a ratio of the
+size, read from `tokens.css` and `theme.css`. The samples are set in the density of this page. The
+small end moves with density; the display end does not — a dense tool is dense in its rows, not its
+page titles. The line heights are ratios, so a density that changes a size keeps the rhythm.
 
 > Not included in the Markdown version: an interactive `Specimen` block. See it on the page: https://demogar.github.io/molaui/?path=/docs/foundations-typography--overview
 
@@ -35,3 +50,28 @@ Numbers compared down a column — costs, tokens, durations, ranks — are set w
 monospace usually does in a dashboard, minus the costume.
 
 > Not included in the Markdown version: an interactive `Specimen` block. See it on the page: https://demogar.github.io/molaui/?path=/docs/foundations-typography--overview
+
+## The measure
+
+Prose is set at `max-w-reading`, 65ch. The measure is counted in the text's own characters, so it
+follows the type size: a 15px chat column is narrower than a 17px document. Alegreya's zero is
+wide, so 65ch holds about 89 average characters of Alegreya, measured in Chromium at 15, 16 and
+17px. `Prose` and `Lead` set it for you. System text in Archivo has no measure of its own, because
+it sits in controls, cells and panels that are already narrow. A long description in a panel is
+prose, and takes the measure.
+
+> Not included in the Markdown version: an interactive `Specimen` block. See it on the page: https://demogar.github.io/molaui/?path=/docs/foundations-typography--overview
+
+## On a phone
+
+The type scale does not change with the viewport. A label, a table cell and a paragraph are the
+same size on a phone as on a monitor, and the reading column narrows instead. Two things adapt:
+
+- **`Display`**, the hero heading of an empty state or an introduction page, is set fluid between
+  40 and 76px, so it fits a phone without wrapping a word per line.
+- **Headings balance** their lines (`text-wrap: balance`) and paragraphs avoid a last word left
+  alone on its line (`text-wrap: pretty`), so a narrow column wraps evenly.
+
+Mobile browsers are told not to enlarge text on their own (`text-size-adjust: 100%`), because the
+page already asks for the size it needs. See [Responsive](https://demogar.github.io/molaui/?path=/docs/foundations-responsive--overview)
+for the 320px rule.

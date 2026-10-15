@@ -5,7 +5,9 @@ Markdown version of https://demogar.github.io/molaui/?path=/docs/mola-ui-princip
 # Principles
 
 Six rules. Each one exists because breaking it produced a real, specific failure — in the
-editorial system this grew out of, or in the tools it is built for.
+editorial system this grew out of, or in the tools it is built for. Where they come from, the mola's
+method of layers, cut edges and revealed bands, is told on the
+[Introduction](https://demogar.github.io/molaui/?path=/docs/mola-ui-introduction--overview).
 
 ## 1. Colour owns regions, never the reading column
 

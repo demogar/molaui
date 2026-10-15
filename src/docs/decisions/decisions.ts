@@ -56,6 +56,7 @@ const NOTES: Record<string, Notes> = {
     governs: {
       'Foundations/Typography': 'Martian Mono is for machine literals only, never a label, a heading or a table number.',
       'Foundations/Content and voice': 'Three voices with three jobs: the system, the reader and the machine, told apart by typeface.',
+      'Foundations/Data visualisation': 'Figures on a chart and in its table are Archivo with tabular numerals, not Martian Mono.',
     },
   },
   '0004': {
@@ -65,6 +66,7 @@ const NOTES: Record<string, Notes> = {
       'Foundations/Color': 'Both themes are declared in one token, so a colour cannot exist in one and be forgotten in the other.',
       'Foundations/Accessibility': 'Both values of every colour sit side by side, so the contrast test resolves and checks both themes.',
       'Foundations/Tokens': 'Every colour is one light-dark() pair, which is why each row has a light and a dark value from one declaration.',
+      'Foundations/Theming': 'An override gives every colour both themes in one light-dark() pair, as the tokens do, so neither theme is left unchecked.',
     },
   },
   '0005': {
@@ -74,6 +76,7 @@ const NOTES: Record<string, Notes> = {
       'Foundations/Density': 'Density is a property of the surface, not a prop on each component.',
       'Foundations/Accessibility': 'Nothing drops below 11px text or a 24px target, even in compact.',
       'Foundations/Spacing': 'Density redefines the spacing unit on a surface, so every gap and padding in it re-scales with no component involved.',
+      'Foundations/Responsive': 'Density is an attribute on a surface, so a screen at spacious density still has to reflow at 320px.',
     },
   },
   '0006': {
@@ -92,6 +95,7 @@ const NOTES: Record<string, Notes> = {
       'Foundations/Tokens': "Tailwind's defaults are closed, so every utility you can write resolves to a token on this page.",
       'Foundations/Spacing': 'The page widths and the reading measure are Mola tokens, and the breakpoints are all in rem so they sort by width.',
       'Foundations/Motion': 'A bare transition runs on --motion-cut and the cut curve, not on Tailwind’s 150ms default.',
+      'Foundations/Responsive': 'Every breakpoint is in rem, so they sort by width, and nav sits between md and lg.',
     },
   },
   '0008': {
@@ -101,6 +105,8 @@ const NOTES: Record<string, Notes> = {
     governs: {
       'Foundations/Color': 'Rojo is danger on a product screen, through the danger role; the accent is gold, by name.',
       'Foundations/The cut': 'A red seam is band-danger: rojo is only ever danger on a product screen.',
+      'Foundations/Theming': 'The accent has its own name, so an app re-brands it without repainting gold, which warnings still use.',
+      'Foundations/Data visualisation': 'Rojo is never a chart series: on a product screen it means something failed or can be lost.',
     },
   },
   '0009': {
@@ -109,6 +115,7 @@ const NOTES: Record<string, Notes> = {
     governs: {
       'Foundations/The cut': 'A stitched trailing edge (scroll-edge) marks a region that scrolls sideways; a solid keyline still means the panel ends.',
       'Foundations/Accessibility': 'Reflow is audited at 320px: only a region carrying the scroll-edge cue may scroll sideways.',
+      'Foundations/Responsive': 'A region meant to scroll sideways carries the stitched edge; nothing else may scroll sideways at 320px.',
     },
   },
   '0010': {

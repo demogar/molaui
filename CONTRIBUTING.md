@@ -292,6 +292,15 @@ Releases are automated with [release-please](https://github.com/googleapis/relea
    listed in `WHATS_NEW`) lands in the next pull request to `main`, not in the release PR. The
    release PR passes without it. `changes.test.ts` requires a page for every released minor
    except the newest, so a missing page turns the *next* release PR red.
+5. A release with breaking changes is different: its section on the Migration page
+   (`src/docs/migration.mdx`, opened by `<ReleaseStatus version="x.y.z" />` and linking every
+   breaking pull request) must land on `main` **before** the release PR is merged.
+   `migration.test.ts` reads `CHANGELOG.md`, so the release PR is red until it does. A guide written
+   after the release is too late for whoever upgrades on the first day. Write the section in the
+   pull request that makes the breaking change, or in one right after it.
+6. The release PR also bumps the playground (`examples/playground/package.json`, through
+   `extra-files` in `release-please-config.json`), so the Getting started playground installs the
+   version just released. `src/docs/pages.test.ts` holds the two versions equal.
 
 ### The release PR needs `RELEASE_PLEASE_TOKEN`
 

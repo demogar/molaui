@@ -20,7 +20,14 @@
   "packages": {
     ".": {
       "package-name": "@demogar/mola-ui",
-      "changelog-path": "CHANGELOG.md"
+      "changelog-path": "CHANGELOG.md",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "examples/playground/package.json",
+          "jsonpath": "$.dependencies['@demogar/mola-ui']"
+        }
+      ]
     }
   }
 }

@@ -90,7 +90,9 @@ The ESLint plugin (`eslint/plugin.ts`, shipped as `@demogar/mola-ui/eslint`) wra
 
 Library build (`vite.config.ts`): ESM with `preserveModules` for file-level tree-shaking, all deps/peers external, a single CSS file `dist/mola-ui.css`, plus raw CSS layers copied to `dist/tailwind/`; a second pass (`vite.css.config.ts`) then builds `dist/mola-ui-components.css`, the `components.css` entry for apps that already have page styles (no preflight or base). Stories, tests, `src/docs/` and `src/patterns/` are excluded from the build and from type declarations. `@/` aliases `src/`.
 
-Storybook docs pages (introduction, principles, foundations, changelog) are MDX in `src/docs/`. Doc blocks in `src/docs/blocks/` import `tokens.css?raw` and resolve values with `src/tokens/resolve.ts`, so swatches show exactly what the contract test checks.
+Storybook docs pages (introduction, principles, foundations, migration, changelog) are MDX in `src/docs/`. Doc blocks in `src/docs/blocks/` import `tokens.css?raw` and resolve values with `src/tokens/resolve.ts`, so swatches show exactly what the contract test checks. A block's logic that the Markdown twins also need lives in a plain `.ts` module beside it with no `?raw` import (`css-block.ts`, `override.ts`, `responsive.ts`, `dataviz.ts`), and `scripts/agent-docs.ts` renders the same data. `src/docs/pages.test.ts` holds the page contract: Getting started's section order, every Foundations and Mola UI page in `storySort`, and the playground. Foundations/Theming measures its override examples live (`checkOverride`); Foundations/Responsive's breakpoint table is checked against the components' source.
+
+`examples/playground/` is a small Vite app that installs the published package from npm; Getting started opens it on StackBlitz. release-please bumps its `@demogar/mola-ui` version (`extra-files`), and it is not part of the build or the tests.
 
 ### Storybook and token gotchas
 - MDX-only pages never run decorators, so `.storybook/preview.css` pins `:root:not([data-theme])` to light (Storybook only) to stop docs following the OS dark scheme.
@@ -113,6 +115,7 @@ Storybook docs pages (introduction, principles, foundations, changelog) are MDX 
 
 ### Things that drift
 - The README and introduction counts (components = non-AI docs pages, parts = exported React components, stories) are checked by `npm run manifest:check`; update the wording it names when it fails. Other prose claims are not checked.
+- A breaking release needs its section on the Migration page (`src/docs/migration.mdx`) on `main` before the release PR merges; `src/docs/usage/migration.test.ts` reads `CHANGELOG.md` and fails the release PR otherwise. Write it with the breaking change.
 - The agent docs (`docs/ai/components.json`, the Markdown twins, the llms files) embed each component's `changes`, parsed from CHANGELOG.md, which only release-please writes. So the release PR regenerates them itself: the `agent-docs` job in `release-please.yml` runs `npm run manifest` on the release branch and pushes the result, and main's `manifest:check` still holds after a release. If that job fails, run `npm run manifest` on the release branch and push before merging it.
 - Composed demos live under AI/Agent console, Components/Layout/App shell, Components/Forms/Form example and Patterns/*.
 

@@ -26,6 +26,10 @@ import { readdirSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
 import evidenceFile from '../docs/accessibility/evidence.json' with { type: 'json' }
+import { block as cssBlock } from '../src/docs/blocks/css-block'
+import { CHART_GROUNDS, SERIES, worstOnGrounds } from '../src/docs/blocks/dataviz'
+import { checkOverride } from '../src/docs/blocks/override'
+import { BREAKPOINT_JOBS, BREAKPOINT_USES, componentName, scaleRows } from '../src/docs/blocks/responsive'
 import type { Accessibility } from '../src/docs/usage/accessibility-types'
 import type { ChangeEntry } from '../src/docs/usage/changes'
 import { USAGE, type Usage } from '../src/docs/usage/guidance'
@@ -320,6 +324,8 @@ export function screenTwin(p: ScreenPage, site: string) {
 
 const tokensCss = read('src/styles/tokens.css')
 const decls = parseRootDeclarations(tokensCss)
+/** theme.css's literal `@theme` scale, where the breakpoints and container steps live. */
+const THEME_SCALE = cssBlock(read('src/styles/theme.css'), /@theme\s*\{/)
 export const TOKEN_ROWS = tokenRows(tokensCss, decls)
 
 function resolved(name: string, theme: ThemeName) {
@@ -588,6 +594,48 @@ function renderBlock(block: string, page: MdxPage, ctx: MdxContext): string {
           return `[${d.heading}](${d.page ? twinUrl(ctx.site, d.page) : d.file})${status ? ` (${status.replace(/\*/g, '')})` : ''}`
         }),
       )
+    case 'OverrideCheck': {
+      const css = /```css\n([\s\S]*?)```/.exec(block)?.[1] ?? ''
+      const result = checkOverride(css, decls)
+      return [
+        '```css',
+        css.trimEnd(),
+        '```',
+        '',
+        `${attr('label') ?? ''} ${result.failing.length ? `${result.failing.length} of ${result.rows.length} measurements fail` : `All ${result.rows.length} measurements hold`}, computed from tokens.css with the override applied:`.trim(),
+        '',
+        '| Text or mark | On | Theme | Shipped | Yours | At least | Result |',
+        '| --- | --- | --- | --- | --- | --- | --- |',
+        ...result.rows.map((r) => `| \`${r.fg}\` | \`${r.bg}\` | ${r.theme} | ${r.shipped.toFixed(2)} | ${r.ratio.toFixed(2)} | ${r.min} | ${r.holds ? 'Holds' : 'Fails'} |`),
+      ].join('\n')
+    }
+    case 'BreakpointTable':
+      return [
+        'Viewport breakpoints, read from theme.css:',
+        '',
+        '| Variant | From | What changes there | Components that use it |',
+        '| --- | --- | --- | --- |',
+        ...scaleRows(THEME_SCALE, 'breakpoint').map((r) => {
+          const uses = BREAKPOINT_USES[r.name] ?? []
+          return `| \`${r.name}:\` | ${r.value}${r.px !== null ? ` (${r.px}px)` : ''} | ${cell(BREAKPOINT_JOBS[r.name] ?? '')} | ${uses.length ? uses.map(componentName).join(', ') : 'None'} |`
+        }),
+      ].join('\n')
+    case 'ContainerTable':
+      return [
+        'Container steps, read from theme.css (`max-w-*`, and the `@` container queries):',
+        '',
+        '| Step | Width |',
+        '| --- | --- |',
+        ...scaleRows(THEME_SCALE, 'container').map((r) => `| \`${r.name}\` | ${r.value}${r.px !== null && !r.value.endsWith('px') ? ` (${r.px}px)` : ''} |`),
+      ].join('\n')
+    case 'SeriesTable':
+      return [
+        `Series colours, with the lowest contrast each reaches on ${CHART_GROUNDS.map((g) => `\`${g}\``).join(', ')}, computed from tokens.css. A mark owes 3:1.`,
+        '',
+        '| Series | Token | Light | Dark | When |',
+        '| --- | --- | --- | --- | --- |',
+        ...SERIES.map((s) => `| ${s.name} | \`${s.token}\` | ${worstOnGrounds(s.token, 'light', decls).toFixed(2)} | ${worstOnGrounds(s.token, 'dark', decls).toFixed(2)} | ${cell(s.job)} |`),
+      ].join('\n')
     case 'DecisionsBehind':
       return `The decisions behind this page are architecture decision records: see [Decisions](${twinUrl(ctx.site, 'Decisions/All decisions')}).`
     default: {
