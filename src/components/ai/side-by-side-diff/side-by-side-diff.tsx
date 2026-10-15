@@ -4,7 +4,7 @@ import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
 import { type MessagesOverride, useMessages } from '../../../lib/messages'
-import { useScrollEdge } from '../../../lib/scroll-edge'
+import { measureScrollEdge, useScrollEdge } from '../../../lib/scroll-edge'
 import { ChangeCount } from '../change-review/change-count'
 import { GUTTER, LINE_GLYPH, LINE_WASH, LineCode, LineWords } from '../change-review/diff-line'
 import { UnifiedLines } from '../change-review/file-diff'
@@ -109,18 +109,6 @@ export function SideBySideDiff({
     [hunks],
   )
 
-  // The other pane is found from the one that scrolled, at the moment it
-  // scrolls: the pair is fixed by the markup, so it needs no refs to hold.
-  // Setting the other's scrollLeft fires its own scroll event, which finds the
-  // two already level and stops.
-  const follow = (event: React.UIEvent<HTMLDivElement>) => {
-    const pane = event.currentTarget
-    const left = pane.scrollLeft
-    for (const other of pane.closest('[data-panes]')?.querySelectorAll<HTMLElement>('[role="region"]') ?? []) {
-      if (other !== pane && Math.abs(other.scrollLeft - left) > 0.5) other.scrollLeft = left
-    }
-  }
-
   return (
     <LineWords.Provider value={t}>
     <section
@@ -141,17 +129,25 @@ export function SideBySideDiff({
         <p className="m-0 px-3 py-3 font-ui text-sm text-ink-muted">{t.noChanges}</p>
       ) : (
         <>
-          <div data-panes="" className="hidden grid-cols-2 @3xl:grid">
+          {/* The divider is a column of its own, not a border on the after
+              pane: that border made the after pane's scroller a pixel
+              narrower, so it scrolled a pixel further than the before pane,
+              and at the end of a line the two came to rest a pixel apart with
+              the after pane's cue still drawn. A border, not a 1px gap over a
+              keyline ground, because forced colours keep borders and repaint
+              backgrounds. */}
+          <div data-panes="" className="hidden grid-cols-[minmax(0,1fr)_1px_minmax(0,1fr)] @3xl:grid">
             {([0, 1] as const).map((side) => (
-              <Pane
-                key={side}
-                side={side}
-                label={side === 0 ? (beforeLabel ?? t.before) : (afterLabel ?? t.after)}
-                headingId={headingId}
-                hunks={hunks}
-                widest={widest}
-                onScroll={follow}
-              />
+              <React.Fragment key={side}>
+                {side === 1 ? <div aria-hidden className="border-s border-keyline" /> : null}
+                <Pane
+                  side={side}
+                  label={side === 0 ? (beforeLabel ?? t.before) : (afterLabel ?? t.after)}
+                  headingId={headingId}
+                  hunks={hunks}
+                  widest={widest}
+                />
+              </React.Fragment>
             ))}
           </div>
           <div className="@3xl:hidden">
@@ -167,6 +163,93 @@ export function SideBySideDiff({
     </section>
     </LineWords.Provider>
   )
+}
+
+/**
+ * The position each pane was last moved to by its partner, until that move's
+ * own scroll event arrives.
+ *
+ * The two panes are kept level by moving one when the other scrolls. A scroll
+ * event is dispatched at the next frame, not when the position is set, so the
+ * moved pane's event arrived a frame late, by which time the pane the reader
+ * was scrolling had gone on; the first version found the two apart and set
+ * the reader's pane back to where it had been. Measured in Chromium, a pane
+ * moved 10px a frame travelled 200px in 40 frames instead of 400, every
+ * second step undone, and ten ArrowRight presses travelled 201px instead of
+ * 400, because each write also cancelled the smooth scroll the key had
+ * started. That was the jitter and the lag. So a pane's scroll event that
+ * only reports the position its partner gave it is the echo and goes no
+ * further; any other position is the reader's, and leads.
+ *
+ * One scroller holding both columns was considered, since it cannot fall out
+ * of step. But a scroller is one window onto its content: two columns in it
+ * scroll as one wide strip, so the after column slides away instead of
+ * scrolling inside its own half, and a screen reader would find one region
+ * where there are two versions. Letting whichever pane has the pointer or
+ * focus lead was the other alternative; it misses scrolls that come with no
+ * input event on the pane (find in page, a screen reader's cursor, the
+ * pointer resting on one pane while the keyboard scrolls the other). The
+ * echo is told apart by the event itself.
+ */
+const echoes = new WeakMap<HTMLElement, number>()
+
+/**
+ * Keeps the other pane level with the one that scrolled. The partner is found
+ * from the markup at the moment of the scroll, so the pair needs no refs.
+ */
+function follow(event: React.UIEvent<HTMLElement>) {
+  const pane = event.currentTarget
+  // This scroll may only be the echo of the pane being moved to follow the
+  // other one, which must not be sent back (see `echoes`).
+  const echo = echoes.get(pane)
+  echoes.delete(pane)
+  if (echo !== undefined && Math.abs(pane.scrollLeft - echo) < 1) return
+  for (const other of partners(pane)) moveTo(other, pane.scrollLeft)
+  levelBeforePaint(pane)
+}
+
+/**
+ * Moves the partners level once more just before this frame is painted.
+ *
+ * A scroll event reports where the pane was when the frame began, but a
+ * smooth scroll the browser animates on the main thread (an arrow key or a
+ * wheel notch, where the scroller is not composited) moves it again before
+ * the paint, so the partner was painted a frame behind: 8/0, 22/8, 41/22 as
+ * an arrow key's scroll ran. Called from the scroll event for every frame
+ * after the first, and from the key or wheel event for the first, which
+ * moves the pane before any scroll event says so. A partner that anything
+ * else has moved meanwhile is left alone.
+ */
+function levelBeforePaint(pane: HTMLElement, wait = 0) {
+  const others = partners(pane)
+  const placed = others.map((other) => other.scrollLeft)
+  const from = pane.scrollLeft
+  requestAnimationFrame(() => {
+    // A smooth scroll can take a frame or two to make its first move.
+    if (pane.scrollLeft === from && wait > 0) return levelBeforePaint(pane, wait - 1)
+    others.forEach((other, i) => {
+      if (other.scrollLeft === placed[i]) moveTo(other, pane.scrollLeft)
+    })
+  })
+}
+
+const partners = (pane: HTMLElement) =>
+  [...(pane.closest('[data-panes]')?.querySelectorAll<HTMLElement>('[role="region"]') ?? [])].filter((other) => other !== pane)
+
+const leadBeforePaint = (event: React.SyntheticEvent<HTMLElement>) => levelBeforePaint(event.currentTarget, 3)
+
+/** Moves a pane to its partner's position. */
+function moveTo(pane: HTMLElement, left: number) {
+  const was = pane.scrollLeft
+  if (Math.abs(was - left) < 1) return
+  pane.scrollLeft = left
+  // Its cue now, not at its own event a frame later (see measureScrollEdge).
+  measureScrollEdge(pane)
+  // Read back rather than `left`: the browser clamps and snaps what it is
+  // given, the cue coming off at the end moves the end, and an assignment
+  // that changed nothing fires no event to wait for.
+  const now = pane.scrollLeft
+  if (now !== was) echoes.set(pane, now)
 }
 
 const isNumbered = (hunk: DiffHunk | DiffHunkInput): hunk is DiffHunk =>
@@ -203,19 +286,17 @@ function Pane({
   headingId,
   hunks,
   widest,
-  onScroll,
 }: {
   side: 0 | 1
   label: string
   headingId: string
   hunks: DiffHunk[]
   widest: number
-  onScroll: (event: React.UIEvent<HTMLDivElement>) => void
 }) {
   const labelId = React.useId()
   const ref = useScrollEdge<HTMLDivElement>()
   return (
-    <div data-part="pane" data-side={side === 0 ? 'before' : 'after'} className={cn('flex min-w-0 flex-col', side === 1 && 'border-s border-keyline')}>
+    <div data-part="pane" data-side={side === 0 ? 'before' : 'after'} className="flex min-w-0 flex-col">
       <p id={labelId} data-part="pane-label" className="m-0 border-b border-keyline px-3 py-1.5 rotulo text-ink-2">
         {label}
       </p>
@@ -225,11 +306,17 @@ function Pane({
         aria-labelledby={`${labelId} ${headingId}`}
         tabIndex={0}
         dir="ltr"
-        onScroll={onScroll}
+        onScroll={follow}
+        onKeyDown={leadBeforePaint}
+        onWheel={leadBeforePaint}
         className="overflow-x-auto scroll-cloth scroll-edge focus-visible:focus-ring-inset"
       >
-        {/* Wide enough for the longest line on either side, plus the gutter. */}
-        <div className="w-max min-w-full literal text-xs leading-body [tab-size:4]" style={{ minWidth: `calc(${widest}ch + 6.25em)` }}>
+        {/* Wide enough for the longest line on either side, plus the gutter,
+            and never narrower than the pane. Both in the one inline min-width:
+            a `min-w-full` class beside it was overridden by the inline style,
+            so short lines left the washes and the hunk header stopping partway
+            across the pane. */}
+        <div className="w-max literal text-xs leading-body [tab-size:4]" style={{ minWidth: `max(100%, calc(${widest}ch + 6.25em))` }}>
           {hunks.map((hunk, h) => (
             <React.Fragment key={h}>
               <HunkHeader hunk={hunk} side={side} first={h === 0} />

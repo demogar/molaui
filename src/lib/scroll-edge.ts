@@ -27,14 +27,24 @@ export function useScrollEdge<T extends HTMLElement = HTMLElement>(): (el: T | n
   return trackScrollEdge
 }
 
+/**
+ * Sets or clears the cue on one element now, rather than at its next scroll
+ * event. For a scroller moved by script in step with another: SideBySideDiff
+ * moves one pane as the other scrolls, and the moved pane's own event comes a
+ * frame later, so at the end of a line its cue came off a frame after its
+ * partner's. The cue's border gives back 2px as it comes off, so for that
+ * frame the two panes rested 2px apart.
+ */
+export function measureScrollEdge(el: HTMLElement) {
+  const more = el.scrollWidth - el.clientWidth - Math.abs(el.scrollLeft) > 1
+  if (more) el.dataset.overflowEnd = ''
+  else delete el.dataset.overflowEnd
+}
+
 function trackScrollEdge(el: HTMLElement | null) {
   if (!el) return undefined
   el.dataset.scrollEdge = ''
-  const measure = () => {
-    const more = el.scrollWidth - el.clientWidth - Math.abs(el.scrollLeft) > 1
-    if (more) el.dataset.overflowEnd = ''
-    else delete el.dataset.overflowEnd
-  }
+  const measure = () => measureScrollEdge(el)
   measure()
   el.addEventListener('scroll', measure, { passive: true })
   // The content can grow (rows arrive, a tab is added) without the frame
