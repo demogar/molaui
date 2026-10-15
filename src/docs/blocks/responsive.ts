@@ -18,6 +18,7 @@ export const BREAKPOINT_USES: Record<string, string[]> = {
     'ai/token-usage/token-usage.tsx',
     'app-shell/app-shell.tsx',
     'app-shell/page-header.tsx',
+    'date-picker/calendar.tsx',
     'date-picker/date-range-picker.tsx',
     'description-list/description-list.tsx',
     'layout/container.tsx',
@@ -35,7 +36,7 @@ export const BREAKPOINT_USES: Record<string, string[]> = {
 
 /** What each breakpoint is for, in a line. */
 export const BREAKPOINT_JOBS: Record<string, string> = {
-  sm: 'A phone ends here. Below it, parts that sat side by side stack: a description list puts each term above its value, the date range presets move above the calendar, toasts span the screen.',
+  sm: 'A phone ends here. Below it, parts that sat side by side stack: a description list puts each term above its value, the date range presets move above the calendar, toasts span the screen, and calendar days shrink to fit.',
   md: 'Two columns of form or detail fit.',
   nav: 'The application shell keeps its sidebar. Below it, the sidebar becomes a sheet behind a menu button.',
   lg: 'A grid takes its full column count, and page gutters reach their widest.',

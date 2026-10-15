@@ -22,7 +22,7 @@ Viewport breakpoints, read from theme.css:
 
 | Variant | From | What changes there | Components that use it |
 | --- | --- | --- | --- |
-| `sm:` | 40rem (640px) | A phone ends here. Below it, parts that sat side by side stack: a description list puts each term above its value, the date range presets move above the calendar, toasts span the screen. | Change review, Prompt input, Sources, Token usage, App shell, Page header, Date range picker, Description list, Container, Grid, Section, Timeline, Toast |
+| `sm:` | 40rem (640px) | A phone ends here. Below it, parts that sat side by side stack: a description list puts each term above its value, the date range presets move above the calendar, toasts span the screen, and calendar days shrink to fit. | Change review, Prompt input, Sources, Token usage, App shell, Page header, Calendar, Date range picker, Description list, Container, Grid, Section, Timeline, Toast |
 | `md:` | 48rem (768px) | Two columns of form or detail fit. | Grid |
 | `nav:` | 57.5rem (920px) | The application shell keeps its sidebar. Below it, the sidebar becomes a sheet behind a menu button. | App shell |
 | `lg:` | 64rem (1024px) | A grid takes its full column count, and page gutters reach their widest. | Container, Grid, Section |
@@ -101,10 +101,11 @@ targets chooses `spacious`. So a screen must still reflow at 320px in spacious. 
 makes no exception for a setting the user picked, and the pages that need room most are the ones
 used at the largest density.
 
-Today the audit measures the composed screens (the patterns, the agent console, the application
-shell and the form example) at spacious density, at 1024, 768 and 320px. Some single components
-still overflow a 320px phone at spacious density. That is a [known gap](https://demogar.github.io/molaui/?path=/docs/mola-ui-known-gaps--overview),
-and fixing them is tracked in [issue 130](https://github.com/demogar/molaui/issues/130).
+The audit holds every story to it: each one is measured again at spacious density at 320px. The
+composed screens (the patterns, the agent console, the application shell and the form example)
+are also measured at 1024 and 768px, because spacious grows every control while a screen's columns
+stay the same width, and a form beside its section heading can be squeezed there and not on a
+phone.
 
 ## Type does not follow the window
 
