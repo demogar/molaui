@@ -143,6 +143,7 @@ export function AppShell(input: AppShellProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface AppShellProps extends Omit<React_2.ComponentProps<'div'>, 'children'> {
+    banner?: React_2.ReactNode;
     // (undocumented)
     children: React_2.ReactNode;
     defaultSidebarCollapsed?: boolean;
@@ -232,6 +233,27 @@ export type BadgeTone = NonNullable<Variants<typeof badgeVariants>['tone']>;
 export const badgeVariants: (props?: ({
     tone?: "neutral" | "danger" | "success" | "warn" | "info" | "accent" | null | undefined;
     variant?: "solid" | "soft" | "outline" | null | undefined;
+} & ClassProp) | undefined) => string;
+
+// @public
+export function Banner(input: BannerProps): React_2.JSX.Element;
+
+// @public (undocumented)
+export interface BannerProps extends Omit<React_2.ComponentProps<'section'>, 'title'>, Variants<typeof bannerVariants> {
+    action?: React_2.ReactNode;
+    announce?: boolean;
+    icon?: React_2.ReactNode | false;
+    label?: string;
+    onDismiss?: () => void;
+    title?: React_2.ReactNode;
+}
+
+// @public (undocumented)
+export type BannerTone = NonNullable<Variants<typeof bannerVariants>['tone']>;
+
+// @public
+export const bannerVariants: (props?: ({
+    tone?: "neutral" | "danger" | "success" | "warn" | "info" | null | undefined;
 } & ClassProp) | undefined) => string;
 
 // @public (undocumented)
@@ -570,6 +592,7 @@ export interface CommandItem {
     description?: string;
     // (undocumented)
     disabled?: boolean;
+    hotkey?: string;
     // (undocumented)
     icon?: React_2.ReactNode;
     // (undocumented)
@@ -849,6 +872,9 @@ export const defaultRangePresets: DateRangePreset[];
 
 // @public
 export function describeAccept(accept: string | undefined, locale?: Intl.LocalesArgument): string | null;
+
+// @public
+export function describeHotkey(keys: string, platform: HotkeyPlatform): string;
 
 // @public
 export interface DescriptionItem {
@@ -1232,6 +1258,9 @@ export function formatDuration(ms: number): string;
 export function formatFileSize(bytes: number, locale?: Intl.LocalesArgument): string;
 
 // @public
+export function formatHotkey(keys: string, platform: HotkeyPlatform): string[][];
+
+// @public
 export function formatRelativeTime(date: Date | number | string, now: Date | number, input?: Pick<RelativeTimeProps, 'locale' | 'format' | 'numeric'>): string;
 
 // @public
@@ -1296,6 +1325,19 @@ export interface HeadingProps extends React_2.ComponentProps<'h2'> {
 export const headingVariants: (props?: ({
     visualLevel?: 2 | 1 | 3 | 4 | null | undefined;
 } & ClassProp) | undefined) => string;
+
+// @public
+export type HotkeyPlatform = 'apple' | 'other';
+
+// @public
+export function HotkeysProvider(input: HotkeysProviderProps): React_2.JSX.Element;
+
+// @public (undocumented)
+export interface HotkeysProviderProps {
+    // (undocumented)
+    children: React_2.ReactNode;
+    platform?: HotkeyPlatform;
+}
 
 // @public
 export function IconButton(input: IconButtonProps): React_2.JSX.Element;
@@ -1603,6 +1645,50 @@ export interface NavSectionProps extends Omit<React_2.ComponentProps<'div'>, 'ti
     title?: string;
 }
 
+// @public
+export function NotificationCentre(input: NotificationCentreProps): React_2.JSX.Element;
+
+// @public (undocumented)
+export interface NotificationCentreProps extends Omit<NotificationListProps, 'label'> {
+    defaultOpen?: boolean;
+    footer?: React_2.ReactNode;
+    label?: string;
+    onMarkAllRead?: () => void;
+    onOpenChange?: (open: boolean) => void;
+    open?: boolean;
+}
+
+// @public (undocumented)
+export interface NotificationItem {
+    action?: {
+        label: string;
+        onClick: () => void;
+    };
+    dateTime?: string;
+    description?: React_2.ReactNode;
+    // (undocumented)
+    id: string;
+    read?: boolean;
+    time: string;
+    title: string;
+    // (undocumented)
+    tone?: NotificationTone;
+}
+
+// @public
+export function NotificationList(input: NotificationListProps): React_2.JSX.Element;
+
+// @public (undocumented)
+export interface NotificationListProps extends Omit<React_2.ComponentProps<'div'>, 'children'> {
+    empty?: React_2.ReactNode;
+    label?: string;
+    notifications: NotificationItem[];
+    onMarkRead?: (id: string) => void;
+}
+
+// @public
+export type NotificationTone = 'neutral' | 'info' | 'success' | 'warn' | 'danger';
+
 // @public (undocumented)
 export function NumberInput(input: NumberInputProps): React_2.JSX.Element;
 
@@ -1848,6 +1934,13 @@ export const recommendationVariants: (props?: ({
     level?: "time" | "essential" | "highly" | "detour" | null | undefined;
 } & ClassProp) | undefined) => string;
 
+// @public
+export interface RegisteredHotkey {
+    group: string;
+    keys: string;
+    label: string;
+}
+
 // @public (undocumented)
 export function RelativeTime(input: RelativeTimeProps): React_2.JSX.Element;
 
@@ -2085,6 +2178,19 @@ export interface SelectTriggerProps extends Select_2.Trigger.Props {
 
 // @public (undocumented)
 export function SelectValue(props: Select_2.Value.Props): React_2.JSX.Element;
+
+// @public
+export function ShortcutsDialog(input: ShortcutsDialogProps): React_2.JSX.Element;
+
+// @public
+export interface ShortcutsDialogProps extends Omit<DialogContentProps, 'title' | 'children'> {
+    defaultOpen?: boolean;
+    hotkey?: string | false;
+    onOpenChange?: (open: boolean) => void;
+    open?: boolean;
+    title?: React_2.ReactNode;
+    trigger?: React_2.ReactElement;
+}
 
 // @public (undocumented)
 export function Sidebar(input: SidebarProps): React_2.JSX.Element;
@@ -2923,6 +3029,7 @@ export interface UploadContext {
 // @public
 export function useCommandShortcut(onTrigger: () => void, input?: {
     key?: string;
+    label?: string;
 }): void;
 
 // @public
@@ -2936,6 +3043,26 @@ export { useDirection }
 export function useElapsed(startedAt: number | Date | undefined, endedAt?: number | Date | undefined, input?: {
     intervalMs?: number;
 }): number | undefined;
+
+// @public
+export function useHotkeyKeys(keys: string): string[];
+
+// @public
+export function useHotkeyPlatform(): HotkeyPlatform;
+
+// @public
+export function useHotkeys(keys: string, handler: ((event: KeyboardEvent) => void) | null, options: UseHotkeysOptions): void;
+
+// @public (undocumented)
+export interface UseHotkeysOptions {
+    enabled?: boolean;
+    group?: string;
+    inFields?: boolean;
+    label: string;
+}
+
+// @public
+export function useRegisteredHotkeys(): RegisteredHotkey[];
 
 // @public
 export function useScrollEdge<T extends HTMLElement = HTMLElement>(): (el: T | null) => (() => void) | undefined;

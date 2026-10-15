@@ -17,6 +17,7 @@ The frame an internal tool lives in. Exactly the viewport tall, and only `<main>
 - The outer frame of an application with navigation, search and a work area.
 - Navigation with sections, a current page and counts, through Sidebar, NavSection and NavItem.
 - The product mark, search and account controls, through Topbar.
+- A condition of the whole application above the top bar, through the banner slot and a Banner.
 
 ### When not to
 
@@ -44,6 +45,7 @@ Each story is a live example in Storybook.
 - [Cayuco](https://demogar.github.io/molaui/?path=/story/components-layout-app-shell--cayuco)
 - [CollapsedRail](https://demogar.github.io/molaui/?path=/story/components-layout-app-shell--collapsed-rail)
 - [Mobile](https://demogar.github.io/molaui/?path=/story/components-layout-app-shell--mobile)
+- [WithNotices](https://demogar.github.io/molaui/?path=/story/components-layout-app-shell--with-notices)
 
 ## API
 
@@ -53,6 +55,7 @@ Each story is a live example in Storybook.
 | --- | --- | --- | --- |
 | `sidebar` (required) | `ReactNode` |  | The navigation, usually a `Sidebar`. The same tree is drawn in the layout from 920px and in a modal sheet below it, so desktop and mobile navigation cannot drift. |
 | `topbar` (required) | `ReactNode` |  | The bar across the top, usually a `Topbar`. It stays put while `<main>` scrolls, so the switcher and search are never lost. |
+| `banner` | `ReactNode` |  | A condition of the whole application, usually a `Banner`: drawn full width above the top bar, so it pushes the frame down rather than covering it. After the skip link in reading order, so the way to the content stays first. |
 | `defaultSidebarCollapsed` | `boolean` | `false` | Start with the desktop sidebar collapsed to its icon rail. Defaults to `false`; ignored below 920px, where the sidebar is a sheet. |
 | `onSidebarCollapsedChange` | `((collapsed: boolean) => void)` |  | Called when the desktop sidebar collapses or expands — to remember the choice between visits. |
 | `sidebarCollapsed` | `boolean` |  | Controlled collapse of the desktop sidebar. |
@@ -136,10 +139,11 @@ Types: `AppShellProps`, `SidebarContextValue`, `SidebarToggleProps`, `TopbarProp
 
 - Give the sidebar a `label` that names the navigation.
 - Give each page one `h1`, usually through `PageHeader`.
+- Put a condition of the whole application in the `banner` slot, as a `Banner`, rather than above the shell.
 
 ### Testing status
 
-- Automated, jsdom: each of its 3 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 4 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

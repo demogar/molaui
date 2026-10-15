@@ -401,6 +401,23 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
       'Give a `StatusDot` that stands alone a `label`.',
     ],
   },
+  'Components/Feedback/Banner': {
+    keyboard: [
+      { keys: ['Tab'], action: 'Moves to the action and the Dismiss button, after the skip link and before the top bar.' },
+      { keys: ['Enter', 'Space'], action: 'Runs the action, or dismisses the banner.' },
+    ],
+    handles: [
+      'Is a landmark named Announcement, or your `label`, so it can be found in a landmark list.',
+      'Says its tone in hidden words before the message, Warning, Error or Success, and hides the icon.',
+      'Says nothing on its own. With `announce`, says the message once, politely, from a status region that mounts empty and is filled a moment later.',
+      'Names the dismiss button “Dismiss”.',
+    ],
+    you: [
+      'Give each banner a `label` that names its kind when a page could show more than one.',
+      'Pass `announce` only for a banner that appears during the session.',
+      'Decide whether a dismissed banner comes back, and when.',
+    ],
+  },
   'Components/Feedback/Callout': {
     keyboard: [
       { keys: ['Tab'], action: 'Moves focus to the dismiss button, when `onDismiss` is set.' },
@@ -459,6 +476,25 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
     ],
     you: [
       'Wrap the bones in a `SkeletonGroup` and say what is loading in its `label`: Loading runs.',
+    ],
+  },
+  'Components/Feedback/Notification centre': {
+    keyboard: [
+      { keys: ['Enter', 'Space'], action: 'On the bell, opens the list and moves focus into it.' },
+      { keys: ['Tab', 'Shift+Tab'], action: 'Moves through Mark all as read and each notification’s action.' },
+      { keys: ['Escape'], action: 'Closes the list and returns focus to the bell.' },
+    ],
+    handles: [
+      'Names the bell “Notifications”, with the unread count when there is one: “Notifications, 2 unread”.',
+      'Changes the count silently, with no live region: the toast that raised the event already announced it.',
+      'Renders a named list; each unread item starts with a hidden “Unread.” and its tone in words.',
+      'Shows unread as an ink edge, a semibold title and the word New, never colour alone.',
+      'Keeps focus in the popover when Mark all as read, its own button, goes away.',
+    ],
+    you: [
+      'Raise a toast for an event that needs saying now; the centre will not say it.',
+      'Write titles that stand on their own, away from the page they came from.',
+      'Save the read state if it should survive a reload.',
     ],
   },
   'Components/Feedback/Toast': {
@@ -802,6 +838,7 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
     you: [
       'Give the sidebar a `label` that names the navigation.',
       'Give each page one `h1`, usually through `PageHeader`.',
+      'Put a condition of the whole application in the `banner` slot, as a `Banner`, rather than above the shell.',
     ],
   },
   'Components/Layout/Container': {
@@ -987,9 +1024,27 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
       'Load content on `onValueChange`, which only Enter, Space and a click send, and move focus to it yourself only when the person asks.',
     ],
   },
+  'Components/Overlays/Shortcuts dialog': {
+    keyboard: [
+      { keys: ['?'], action: 'Opens the dialog, or closes it, from anywhere but a text field.' },
+      { keys: ['Tab', 'Shift+Tab'], action: 'Moves between the dialog’s controls; focus stays inside.' },
+      { keys: ['Escape'], action: 'Closes the dialog and returns focus to where it was.' },
+    ],
+    handles: [
+      'Lists only the shortcuts bound under the `HotkeysProvider`, so the list cannot drift from the keys.',
+      'Prints each key for the platform, ⌘ on a Mac and Ctrl elsewhere, and hides the keycaps behind the same keys in words: “Control K”, “G, then E”.',
+      '`useHotkeys` ignores plain keys typed in a text field, every key during IME composition, key repeat and keys a component has already handled.',
+      'It is a modal Base UI Dialog, titled “Keyboard shortcuts”, with a Close button.',
+    ],
+    you: [
+      'Mount `HotkeysProvider` once near the root, around `ToastProvider`.',
+      'Give every `useHotkeys` call a `label` that starts with a verb.',
+      'Use `mod` for cross-platform chords, and sequences rather than single letters for navigation.',
+    ],
+  },
   'Components/Overlays/Command palette': {
     keyboard: [
-      { keys: ['Control+K', 'Meta+K'], action: 'Opens the palette, when the page calls `useCommandShortcut`.' },
+      { keys: ['Control+K', 'Meta+K'], action: 'Opens the palette when the page calls `useCommandShortcut`: ⌘K on a Mac, Ctrl-K elsewhere.' },
       { keys: ['ArrowDown', 'ArrowUp'], action: 'Moves the highlight, skipping disabled commands and wrapping at the ends.' },
       { keys: ['Enter'], action: 'Runs the highlighted command and closes the palette.' },
       { keys: ['Escape'], action: 'Closes the palette.' },
@@ -1002,7 +1057,7 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
       'Icons and the key hints in the footer are hidden from assistive technology; the status region speaks the count instead.',
     ],
     you: [
-      'Call `useCommandShortcut` to bind ⌘K and Ctrl-K; the shortcuts shown on items are display only.',
+      'Call `useCommandShortcut` to bind ⌘K or Ctrl-K. Give a command a `hotkey` to bind it, print it and list it in the shortcuts dialog; `shortcut` is display only.',
       'Write command labels as actions, “Start a new run”, and add `keywords` for the other words people use.',
     ],
   },

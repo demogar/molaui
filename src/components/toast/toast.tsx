@@ -7,6 +7,7 @@ import * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { Button, IconButton } from '../button'
+import { useHotkeys } from '../shortcuts/use-hotkeys'
 
 /**
  * Something happened somewhere other than where the operator is looking.
@@ -143,8 +144,15 @@ export interface ToastProviderProps {
   timeout?: number
 }
 
-/** Mount once near the root. Renders the viewport, bottom-right, into a portal. */
+/**
+ * Mount once near the root. Renders the viewport, bottom-right, into a portal.
+ *
+ * Inside a `HotkeysProvider` it lists F6, the key Base UI binds to move focus
+ * to the stack, in the shortcuts dialog. Listed, not bound: Base UI already
+ * listens for it, and a second listener would move focus twice.
+ */
 export function ToastProvider({ children, limit = 3, timeout = 5000 }: ToastProviderProps) {
+  useHotkeys('f6', null, { label: 'Move focus to new notifications' })
   return (
     <ToastPrimitive.Provider limit={limit} timeout={timeout}>
       {children}

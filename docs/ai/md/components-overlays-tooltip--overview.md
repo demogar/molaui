@@ -107,4 +107,5 @@ Types: `TooltipProps`
 
 ### Pages that send readers here
 
+- [Shortcuts dialog](https://demogar.github.io/molaui/md/components-overlays-shortcuts-dialog--overview.md)
 - [Kbd](https://demogar.github.io/molaui/md/components-typography-kbd--overview.md)

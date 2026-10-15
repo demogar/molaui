@@ -169,6 +169,10 @@ Why each one is there:
   the first `toast.success()` throws "useToastManager must be used within `<Toast.Provider>`".
 - **`TooltipProvider`** (optional). Tooltips under one provider share their delay, so moving
   along a toolbar shows the next tooltip at once instead of waiting again.
+- **`HotkeysProvider`** (optional). The registry `useHotkeys` writes to and `ShortcutsDialog`
+  reads, so every shortcut the page binds is listed in one place. Put it around `ToastProvider`
+  and the toast region's F6 is listed too. Without it, shortcuts still work; they are just not
+  listed.
 
 ## Use a component
 

@@ -43,6 +43,7 @@ const EXEMPT: Record<string, string> = {
   DirectionProvider: 'a context provider; renders its children only',
   ToastProvider: 'a context provider; renders its children and a portalled viewport',
   TooltipProvider: 'a context provider; renders its children only',
+  HotkeysProvider: 'a context provider; renders its children only',
   Dialog: 'the Base UI root; DialogContent is the element',
   Drawer: 'the Base UI root; DrawerContent is the element',
   Popover: 'the Base UI root; PopoverContent is the element',
@@ -187,6 +188,9 @@ const FIXTURES: Record<string, Fixture | LabelFixture> = {
   RecommendationBadge: (p) => <mola.RecommendationBadge {...p} />,
   StatusDot: (p) => <mola.StatusDot {...p} />,
   Callout: (p) => <mola.Callout {...p}>Note</mola.Callout>,
+  Banner: (p) => <mola.Banner {...p}>Maintenance tonight</mola.Banner>,
+  NotificationCentre: (p) => <mola.NotificationCentre {...p} defaultOpen notifications={[]} />,
+  NotificationList: (p) => <mola.NotificationList {...p} notifications={[]} />,
   EmptyState: (p) => <mola.EmptyState {...p} title="Nothing" />,
   Placeholder: (p) => <mola.Placeholder {...p} name="Logo" alt="No logo" />,
   Meter: (p) => <mola.Meter {...p} label="Disk" value={10} />,
@@ -620,6 +624,7 @@ const FIXTURES: Record<string, Fixture | LabelFixture> = {
       </mola.PopoverContent>
     </mola.Popover>
   ),
+  ShortcutsDialog: (p) => <mola.ShortcutsDialog {...p} defaultOpen />,
   PopoverContent: (p) => (
     <mola.Popover open>
       <mola.PopoverTrigger>Open</mola.PopoverTrigger>

@@ -102,6 +102,30 @@ export const ANATOMY: Record<string, Anatomy> = {
       { part: 'actions', name: 'Actions', does: 'Back, and Continue or Finish, which is the form’s submit button.' },
     ],
   },
+  'Components/Feedback/Banner': {
+    story: 'WithAction',
+    slot: 'banner',
+    parts: [
+      { part: 'root', name: 'Strip', does: 'Full bleed, the tone’s wash, with a heavy foot edge in the status colour: the region a status owns.' },
+      { part: 'icon', name: 'Icon', does: 'The tone’s glyph, so the tone is never colour alone. Hidden; the tone is also said in words.' },
+      { part: 'message', name: 'Message', does: 'The condition and what it means for the work, in ink, never in the tone’s colour.' },
+      { part: 'title', name: 'Title', does: 'A few words in bold that name the condition.' },
+      { part: 'action', name: 'Action', does: 'One follow-up, a verb on the object.' },
+      { part: 'dismiss', name: 'Dismiss', does: 'Present only with onDismiss; the caller decides whether the banner comes back.' },
+    ],
+  },
+  'Components/Feedback/Notification centre': {
+    story: 'List',
+    slot: 'notification-list',
+    parts: [
+      { part: 'item', name: 'Notification', does: 'One event. Unread, it carries a heavy ink edge at its start.' },
+      { part: 'tone', name: 'Tone mark', does: 'The toast’s own cut square, so the record is recognisably the toast it came from.' },
+      { part: 'title', name: 'Title', does: 'What happened, in the past tense; semibold while unread.' },
+      { part: 'unread', name: 'New', does: 'The word that says unread, beside the edge and the weight, so unread is never colour alone.' },
+      { part: 'time', name: 'Time', does: 'When, as a person reads it, in a time element with the machine date.' },
+      { part: 'action', name: 'Action', does: 'One follow-up; running it marks the notification read.' },
+    ],
+  },
   'Components/Feedback/Callout': {
     story: 'WithActions',
     slot: 'callout',

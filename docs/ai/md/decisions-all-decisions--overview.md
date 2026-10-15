@@ -24,6 +24,7 @@ each rest on one, and a change that ignores it reopens an argument that was sett
 - [0010 — One meaning each for tone, variant, kind and size, and one place for className](https://demogar.github.io/molaui/md/decisions-0010-one-prop-vocabulary--overview.md)
 - [0011 — The lint rules ship in the package](https://demogar.github.io/molaui/md/decisions-0011-lint-rules-in-the-package--overview.md)
 - [0012 — Composite widgets Base UI does not provide follow the APG, written out](https://demogar.github.io/molaui/md/decisions-0012-composites-base-ui-lacks--overview.md)
+- [0013 — Three kinds of notice, one of them spoken, and one registry of keys](https://demogar.github.io/molaui/md/decisions-0013-notices-and-shortcuts--overview.md)
 
 ## How a decision changes
 

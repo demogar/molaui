@@ -115,3 +115,4 @@ Nothing in it takes focus, so there is no keyboard table.
 ### Pages that send readers here
 
 - [Relative time](https://demogar.github.io/molaui/md/components-data-display-relative-time--overview.md)
+- [Notification centre](https://demogar.github.io/molaui/md/components-feedback-notification-centre--overview.md)

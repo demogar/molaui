@@ -1,0 +1,26 @@
+- dialog "Keyboard shortcuts":
+  - heading "Keyboard shortcuts" [level=2]
+  - button "Close"
+  - heading "General" [level=3]
+  - term: Show keyboard shortcuts
+  - definition: Question mark
+  - term: Open the command palette
+  - definition: Control K
+  - term: Move focus to new notifications
+  - definition: F6
+  - heading "Actions" [level=3]
+  - term: Start a new run
+  - definition: C
+  - heading "Go to" [level=3]
+  - term: Escalations
+  - definition: G, then E
+  - term: Documents
+  - definition: G, then D
+  - term: Settings
+  - definition: G, then S
+  - heading "Runs" [level=3]
+  - term: Search runs
+  - definition: Slash
+  - term: Refresh the table
+  - definition: Shift R
+- region "Notifications"

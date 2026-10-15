@@ -160,6 +160,7 @@ Types: `AlertDialogProps`, `DialogBand`, `DialogContentProps`
 
 ### Pages that send readers here
 
+- [Banner](https://demogar.github.io/molaui/md/components-feedback-banner--overview.md)
 - [Callout](https://demogar.github.io/molaui/md/components-feedback-callout--overview.md)
 
 ### Used in

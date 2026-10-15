@@ -22,7 +22,7 @@ Viewport breakpoints, read from theme.css:
 
 | Variant | From | What changes there | Components that use it |
 | --- | --- | --- | --- |
-| `sm:` | 40rem (640px) | A phone ends here. Below it, parts that sat side by side stack: a description list puts each term above its value, the date range presets move above the calendar, toasts span the screen, and calendar days shrink to fit. | Change review, Prompt input, Sources, Token usage, App shell, Page header, Calendar, Date range picker, Description list, Container, Grid, Section, Timeline, Toast |
+| `sm:` | 40rem (640px) | A phone ends here. Below it, parts that sat side by side stack: a description list puts each term above its value, the date range presets move above the calendar, toasts span the screen, and calendar days shrink to fit. | Change review, Prompt input, Sources, Token usage, App shell, Page header, Banner, Calendar, Date range picker, Description list, Container, Grid, Section, Timeline, Toast |
 | `md:` | 48rem (768px) | Two columns of form or detail fit. | Grid |
 | `nav:` | 57.5rem (920px) | The application shell keeps its sidebar. Below it, the sidebar becomes a sheet behind a menu button. | App shell |
 | `lg:` | 64rem (1024px) | A grid takes its full column count, and page gutters reach their widest. | Container, Grid, Section |

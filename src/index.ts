@@ -42,6 +42,8 @@ export * from './components/placeholder'
 export * from './components/skeleton'
 export * from './components/empty-state'
 export * from './components/toast'
+export * from './components/banner'
+export * from './components/notification-centre'
 
 // Overlays
 export * from './components/dialog'
@@ -50,6 +52,7 @@ export * from './components/popover'
 export * from './components/tooltip'
 export * from './components/menu'
 export * from './components/command'
+export * from './components/shortcuts'
 
 // Navigation
 export * from './components/tabs'
