@@ -136,15 +136,23 @@ async function rest(pane: Locator) {
     .toBe(true)
 }
 
-/** Starts sampling both panes once a frame, after the frame's scroll events. */
+/**
+ * Starts sampling both panes once a frame, as the frame was painted: a task
+ * posted from requestAnimationFrame runs after every frame callback and the
+ * paint, and before the next frame. Sampled inside requestAnimationFrame
+ * instead, the reading depended on whether the sampler's callback ran before
+ * or after the component's own.
+ */
 async function record(page: Page) {
   await page.evaluate(() => {
     const w = window as unknown as { __frames: Frame[]; __stop?: () => void }
     w.__stop?.()
     const regions = [...document.querySelectorAll<HTMLElement>('[data-panes] [role="region"]')]
     w.__frames = []
-    let id = 0
-    const tick = () => {
+    let stopped = false
+    const channel = new MessageChannel()
+    channel.port1.onmessage = () => {
+      if (stopped) return
       w.__frames.push({
         left: regions.map((el) => el.scrollLeft),
         cue: regions.map((el) => el.hasAttribute('data-overflow-end')),
@@ -154,10 +162,13 @@ async function record(page: Page) {
           return gutter ? gutter.getBoundingClientRect().left - el.getBoundingClientRect().left : NaN
         }),
       })
-      id = requestAnimationFrame(tick)
+      requestAnimationFrame(tick)
     }
-    id = requestAnimationFrame(tick)
-    w.__stop = () => cancelAnimationFrame(id)
+    const tick = () => channel.port2.postMessage(null)
+    requestAnimationFrame(tick)
+    w.__stop = () => {
+      stopped = true
+    }
   })
 }
 

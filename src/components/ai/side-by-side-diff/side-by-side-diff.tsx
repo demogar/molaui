@@ -109,30 +109,6 @@ export function SideBySideDiff({
     [hunks],
   )
 
-  // The other pane is found from the one that scrolled, at the moment it
-  // scrolls: the pair is fixed by the markup, so it needs no refs to hold.
-  // It is moved in the same handler, so both are painted level in one frame.
-  const follow = (event: React.UIEvent<HTMLDivElement>) => {
-    const pane = event.currentTarget
-    // This scroll may only be the echo of the pane being moved to follow the
-    // other one, which must not be sent back (see `echoes`).
-    const echo = echoes.get(pane)
-    echoes.delete(pane)
-    if (echo !== undefined && Math.abs(pane.scrollLeft - echo) < 1) return
-    const left = pane.scrollLeft
-    for (const other of pane.closest('[data-panes]')?.querySelectorAll<HTMLElement>('[role="region"]') ?? []) {
-      if (other === pane || Math.abs(other.scrollLeft - left) < 1) continue
-      const was = other.scrollLeft
-      other.scrollLeft = left
-      // Its cue now, not at its own event a frame later (see measureScrollEdge).
-      measureScrollEdge(other)
-      // Read back rather than `left`: the browser clamps and snaps what it is
-      // given, the cue coming off at the end moves the end, and an assignment
-      // that changed nothing fires no event to wait for.
-      if (other.scrollLeft !== was) echoes.set(other, other.scrollLeft)
-    }
-  }
-
   return (
     <LineWords.Provider value={t}>
     <section
@@ -170,7 +146,6 @@ export function SideBySideDiff({
                   headingId={headingId}
                   hunks={hunks}
                   widest={widest}
-                  onScroll={follow}
                 />
               </React.Fragment>
             ))}
@@ -218,6 +193,65 @@ export function SideBySideDiff({
  */
 const echoes = new WeakMap<HTMLElement, number>()
 
+/**
+ * Keeps the other pane level with the one that scrolled. The partner is found
+ * from the markup at the moment of the scroll, so the pair needs no refs.
+ */
+function follow(event: React.UIEvent<HTMLElement>) {
+  const pane = event.currentTarget
+  // This scroll may only be the echo of the pane being moved to follow the
+  // other one, which must not be sent back (see `echoes`).
+  const echo = echoes.get(pane)
+  echoes.delete(pane)
+  if (echo !== undefined && Math.abs(pane.scrollLeft - echo) < 1) return
+  for (const other of partners(pane)) moveTo(other, pane.scrollLeft)
+  levelBeforePaint(pane)
+}
+
+/**
+ * Moves the partners level once more just before this frame is painted.
+ *
+ * A scroll event reports where the pane was when the frame began, but a
+ * smooth scroll the browser animates on the main thread (an arrow key or a
+ * wheel notch, where the scroller is not composited) moves it again before
+ * the paint, so the partner was painted a frame behind: 8/0, 22/8, 41/22 as
+ * an arrow key's scroll ran. Called from the scroll event for every frame
+ * after the first, and from the key or wheel event for the first, which
+ * moves the pane before any scroll event says so. A partner that anything
+ * else has moved meanwhile is left alone.
+ */
+function levelBeforePaint(pane: HTMLElement, wait = 0) {
+  const others = partners(pane)
+  const placed = others.map((other) => other.scrollLeft)
+  const from = pane.scrollLeft
+  requestAnimationFrame(() => {
+    // A smooth scroll can take a frame or two to make its first move.
+    if (pane.scrollLeft === from && wait > 0) return levelBeforePaint(pane, wait - 1)
+    others.forEach((other, i) => {
+      if (other.scrollLeft === placed[i]) moveTo(other, pane.scrollLeft)
+    })
+  })
+}
+
+const partners = (pane: HTMLElement) =>
+  [...(pane.closest('[data-panes]')?.querySelectorAll<HTMLElement>('[role="region"]') ?? [])].filter((other) => other !== pane)
+
+const leadBeforePaint = (event: React.SyntheticEvent<HTMLElement>) => levelBeforePaint(event.currentTarget, 3)
+
+/** Moves a pane to its partner's position. */
+function moveTo(pane: HTMLElement, left: number) {
+  const was = pane.scrollLeft
+  if (Math.abs(was - left) < 1) return
+  pane.scrollLeft = left
+  // Its cue now, not at its own event a frame later (see measureScrollEdge).
+  measureScrollEdge(pane)
+  // Read back rather than `left`: the browser clamps and snaps what it is
+  // given, the cue coming off at the end moves the end, and an assignment
+  // that changed nothing fires no event to wait for.
+  const now = pane.scrollLeft
+  if (now !== was) echoes.set(pane, now)
+}
+
 const isNumbered = (hunk: DiffHunk | DiffHunkInput): hunk is DiffHunk =>
   hunk.lines.every((line) => 'oldNumber' in line || 'newNumber' in line)
 
@@ -252,14 +286,12 @@ function Pane({
   headingId,
   hunks,
   widest,
-  onScroll,
 }: {
   side: 0 | 1
   label: string
   headingId: string
   hunks: DiffHunk[]
   widest: number
-  onScroll: (event: React.UIEvent<HTMLDivElement>) => void
 }) {
   const labelId = React.useId()
   const ref = useScrollEdge<HTMLDivElement>()
@@ -274,7 +306,9 @@ function Pane({
         aria-labelledby={`${labelId} ${headingId}`}
         tabIndex={0}
         dir="ltr"
-        onScroll={onScroll}
+        onScroll={follow}
+        onKeyDown={leadBeforePaint}
+        onWheel={leadBeforePaint}
         className="overflow-x-auto scroll-cloth scroll-edge focus-visible:focus-ring-inset"
       >
         {/* Wide enough for the longest line on either side, plus the gutter,
