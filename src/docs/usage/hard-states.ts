@@ -41,6 +41,15 @@ export const HARD_STATE_LABELS: Record<HardStateName, string> = {
 }
 
 export const HARD_STATE_EXEMPT: Record<string, Partial<Record<ExemptState, string>>> = {
+  'Components/Feedback/Banner': {
+    disabled: 'A banner is a standing condition, never switched off; its action is a Button with its own disabled state.',
+  },
+  'Components/Feedback/Notification centre': {
+    disabled: 'When everything is read, Mark all as read is removed rather than shown disabled, as All read shows.',
+  },
+  'Components/Overlays/Shortcuts dialog': {
+    error: 'It lists the bindings that exist; a binding that failed to register is simply not listed.',
+  },
   'AI/Change review': {
     disabled: 'The three decisions are always available to the reviewer; nothing in a review is switched off.',
     error: 'Its one error, a no without a reason, appears only after someone presses Reject; the Try it story shows it.',
