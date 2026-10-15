@@ -42,6 +42,16 @@
   white-space: normal;
   overflow-wrap: anywhere;
 }
+/* A list item may break inside a word that has no spaces. The Changelog
+ * renders release-please's entries, and a pull request with several scopes
+ * writes them as one bold run, `shortcuts,kbd,command,tooltip,menu,field:`,
+ * which overflowed a 320px phone by 17px; the 320px audit caught it only on
+ * the release PR, the first branch whose CHANGELOG.md has such an entry.
+ * `break-word` rather than `anywhere`: it breaks only a run that cannot fit,
+ * so ordinary items keep whole words. */
+.sbdocs-content li {
+  overflow-wrap: break-word;
+}
 @media (max-width: 600px) {
   .sbdocs.sbdocs-wrapper {
     padding-inline: 16px;
