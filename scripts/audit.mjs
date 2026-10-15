@@ -232,21 +232,28 @@ async function clipped(story) {
   // Controls join the overlap check as whole boxes: the agent console's
   // composer sat on its run panel's empty-state text without any two text
   // runs touching. Each box is cut to what its clipping ancestors show.
+  //
+  // An inline link that wraps is two line boxes, not one: its bounding box
+  // spans both lines edge to edge and covered the text before it on the
+  // first line, a Markdown answer's link reported as overlapping the words
+  // it follows. So an inline control joins as each of its line boxes.
   for (const [rootIndex, root] of roots.entries()) {
     for (const el of root.querySelectorAll('button, input:not([type=hidden]), textarea, select, a[href], [role="button"], [role="combobox"]')) {
       if (!shown(el)) continue
-      const b = el.getBoundingClientRect()
-      if (b.width < 2 || b.height < 2) continue
-      let r = { left: b.left, top: b.top, right: b.right, bottom: b.bottom }
-      for (let a = el.parentElement; a && a !== document.body && r; a = a.parentElement) {
-        const s = getComputedStyle(a)
-        if (s.overflowX === 'visible' && s.overflowY === 'visible') continue
-        const box = inner(a)
-        if (s.overflowX !== 'visible') r = { ...r, left: Math.max(r.left, box.left), right: Math.min(r.right, box.right) }
-        if (s.overflowY !== 'visible') r = { ...r, top: Math.max(r.top, box.top), bottom: Math.min(r.bottom, box.bottom) }
-        if (r.right - r.left < 1 || r.bottom - r.top < 1) r = null
+      const rects = getComputedStyle(el).display === 'inline' ? [...el.getClientRects()] : [el.getBoundingClientRect()]
+      for (const b of rects) {
+        if (b.width < 2 || b.height < 2) continue
+        let r = { left: b.left, top: b.top, right: b.right, bottom: b.bottom }
+        for (let a = el.parentElement; a && a !== document.body && r; a = a.parentElement) {
+          const s = getComputedStyle(a)
+          if (s.overflowX === 'visible' && s.overflowY === 'visible') continue
+          const box = inner(a)
+          if (s.overflowX !== 'visible') r = { ...r, left: Math.max(r.left, box.left), right: Math.min(r.right, box.right) }
+          if (s.overflowY !== 'visible') r = { ...r, top: Math.max(r.top, box.top), bottom: Math.min(r.bottom, box.bottom) }
+          if (r.right - r.left < 1 || r.bottom - r.top < 1) r = null
+        }
+        if (r) boxes.push({ el, r, root: rootIndex, pinned: pinned(el), control: true })
       }
-      if (r) boxes.push({ el, r, root: rootIndex, pinned: pinned(el), control: true })
     }
   }
 

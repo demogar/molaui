@@ -183,6 +183,22 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
       'Use `label` to change the word, such as “Thinking”, and keep it a word a person would say.',
     ],
   },
+  'AI/Side-by-side diff': {
+    keyboard: [
+      { keys: ['Tab'], action: 'Moves focus to the old pane, then the new one; a focused pane scrolls sideways with the arrow keys.' },
+    ],
+    handles: [
+      'The diff is a section named by its title, and each pane a focusable region named by its label and the title, so a keyboard can scroll it and a screen reader can jump to it.',
+      'Changed lines say “Removed:” or “Added:”, and carry a +/− glyph as well as the wash; line numbers and glyphs are hidden from screen readers and from a copy.',
+      'The blank rows that keep the panes aligned are hidden from screen readers, so each pane reads as its version, in order.',
+      'The panes scroll together and carry the scroll-edge cue while there is more to the side; below 48rem they become one column of wrapped lines.',
+      'Code is pinned left to right, so a right-to-left page does not reorder a line of source.',
+    ],
+    you: [
+      'Give it a `title` that says what is compared, and pane labels that say which version is which.',
+      'Set `headingLevel` so the title fits the page outline.',
+    ],
+  },
   'AI/Sources': {
     keyboard: [
       { keys: ['Tab'], action: 'Moves to a citation marker and opens its preview card, or to a source card in the list.' },
@@ -197,6 +213,22 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
     you: [
       'Pass `source` or `title` to each `Citation`, or the marker is named only by its number.',
       'Render the `SourceList` on the same page under a heading, so `#source-n` has somewhere to land.',
+    ],
+  },
+  'AI/Markdown': {
+    keyboard: [
+      { keys: ['Tab'], action: 'Moves through the answer’s links and citation markers in reading order, then a code block’s wrap and copy buttons and a table that scrolls.' },
+    ],
+    handles: [
+      'Headings are real headings, from `headingLevel` down, so the answer joins the page outline; lists, quotes and tables are their own elements.',
+      'The text is `aria-busy` while it streams, and a polite status says “Response complete.” once, when a running stream ends.',
+      'Nothing from the model is rendered as HTML, and a link keeps its href only for http(s), mailto and relative paths.',
+      'An absolute link opens in a new tab and says “(opens in a new tab)” to screen readers.',
+      'Citation markers go through `renderCitation`, so with `citationRenderer` each is a link named “Source 2:” and the source’s title.',
+    ],
+    you: [
+      'Set `headingLevel` so the answer’s headings sit under the heading above it.',
+      'Render the `SourceList` on the same page, so each marker’s `#source-n` link has somewhere to land.',
     ],
   },
   'AI/Streaming text': {

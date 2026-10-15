@@ -129,6 +129,33 @@ export const USAGE: Record<string, Usage> = {
       'Title an UncertaintyNote with the claim, “Unverified figure”, not with “Warning” or “Note”.',
     ],
   },
+  'AI/Markdown': {
+    summary: 'A model’s Markdown answer, streamed and rendered in Mola’s typography, with its citation markers kept and no HTML ever injected.',
+    use: [
+      'The model answers in Markdown: headings, tables, numbered and nested lists, quotes, links and fenced code.',
+      'The answer cites sources with [n] markers that must stay Citations, with their preview cards.',
+      'Rendering untrusted model output, which must never reach the page as markup.',
+    ],
+    avoid: [
+      { when: 'Plain paragraphs, bullets and code with no headings, tables or links; the smaller grammar is enough.', use: 'AI/Streaming text' },
+      { when: 'Long-form content you write and trust, such as documentation, rendered by your own pipeline.', use: 'Components/Typography/Prose' },
+      { when: 'A tool’s raw result or a payload, which is machine text, not an answer.', use: 'Components/Data display/Code', label: 'CodeBlock' },
+    ],
+    practices: [
+      {
+        do: 'Pass renderCitation built once with citationRenderer(sources), and render the SourceList on the same page.',
+        dont: 'Put a general Markdown library in front of the text; it drops the [n] markers or reads them as links.',
+      },
+      {
+        do: 'Append to text as tokens arrive and pass status, so open markers close and the end is announced once.',
+        dont: 'Strip or buffer the Markdown yourself until a block is complete; the component already holds back what cannot be read yet.',
+      },
+    ],
+    content: [
+      'Set headingLevel so the answer’s # sits one level under the heading above it.',
+      'Ask the model for the subset it renders: no raw HTML, footnotes or reference-style links.',
+    ],
+  },
   'AI/Message': {
     summary: 'One turn of a conversation, laid out as a ledger: who spoke, when, with which model, and what they said or did.',
     use: [
@@ -256,6 +283,33 @@ export const USAGE: Record<string, Usage> = {
       'Use the same words everywhere on the page; a run is not “Errored” in a table and “Failed” in its header.',
     ],
   },
+  'AI/Side-by-side diff': {
+    summary: 'Two versions of one text in two panes, each change opposite its replacement, falling back to one column when narrow.',
+    use: [
+      'Comparing a prompt, a policy or a config with an agent’s revision of it, line against line.',
+      'You hold both versions rather than a patch: pass before and after and the diff is worked out.',
+      'A reviewer has to read across, comparing a changed line with the one it replaces.',
+    ],
+    avoid: [
+      { when: 'One file among several in a proposed change, with hunks to fold.', use: 'AI/Change review', label: 'FileDiff' },
+      { when: 'A change to a record’s fields rather than to lines of text.', use: 'AI/Change review', label: 'FieldChanges' },
+      { when: 'A single version of code or a payload, with nothing to compare it to.', use: 'Components/Data display/Code', label: 'CodeBlock' },
+    ],
+    practices: [
+      {
+        do: 'Name the panes for what the versions are, such as Live and Proposed.',
+        dont: 'Leave both panes as Before and After when the reader needs to know which one is running.',
+      },
+      {
+        do: 'Put it inside a ChangeReview when an agent proposes the change, so the comparison and the decision sit together.',
+        dont: 'Show a proposed change in a diff with no way to approve or reject it.',
+      },
+    ],
+    content: [
+      'Title it by what is compared, “System prompt, support triage agent”, not by the action.',
+      'Keep pane labels to one or two words; they name the scroll regions.',
+    ],
+  },
   'AI/Sources': {
     summary: 'Inline citation markers and the numbered list of sources they point to, with a preview card on hover, focus or first tap.',
     use: [
@@ -292,6 +346,7 @@ export const USAGE: Record<string, Usage> = {
       'Text the reader may skim, such as reasoning, with tone set to muted.',
     ],
     avoid: [
+      { when: 'An answer in Markdown with headings, tables, numbered lists or links.', use: 'AI/Markdown' },
       { when: 'Long-form markup that does not stream, such as rendered documentation.', use: 'Components/Typography/Prose' },
       { when: 'Text the system says in its own voice, such as labels and hints.', use: 'Components/Typography/Text' },
       { when: 'Saying that work is under way before any text exists, outside a message.', use: 'AI/Run status' },

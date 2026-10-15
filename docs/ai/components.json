@@ -95,11 +95,11 @@
   "counts": {
     "components": 61,
     "parts": 155,
-    "aiComponents": 12,
-    "aiParts": 23,
-    "pages": 73,
-    "stories": 334,
-    "summary": "61 components and 12 AI components (73 documented pages)"
+    "aiComponents": 14,
+    "aiParts": 25,
+    "pages": 75,
+    "stories": 345,
+    "summary": "61 components and 14 AI components (75 documented pages)"
   },
   "tokens": {
     "source": "src/styles/tokens.css",
@@ -2136,6 +2136,12 @@
           "description": "Lines added and removed across hunks — the figures `ChangeCount` shows."
         },
         {
+          "name": "diffLines",
+          "kind": "function",
+          "source": "src/components/ai/change-review/parse-diff.ts",
+          "description": "Two versions of a text → the hunks between them, numbered, with `context` unchanged lines around each change (3 by default, as `git diff`)."
+        },
+        {
           "name": "parseUnifiedDiff",
           "kind": "function",
           "source": "src/components/ai/change-review/parse-diff.ts",
@@ -2367,6 +2373,176 @@
       "usedIn": [
         "AI/Agent console",
         "Patterns/Agent hand-off"
+      ]
+    },
+    {
+      "title": "AI/Markdown",
+      "name": "Markdown",
+      "layer": "ai",
+      "category": "AI",
+      "docs": "https://demogar.github.io/molaui/?path=/docs/ai-markdown--overview",
+      "phase": "experimental",
+      "summary": "A model’s Markdown answer, streamed and rendered in Mola’s typography, with its citation markers kept and no HTML ever injected.",
+      "description": "A model’s answer written in Markdown, streamed and rendered in Mola’s typography, with its `[n]` citation markers kept as `Citation`s.\n\n- **Citations survive.** A Markdown library behind `StreamingText` reads `[2]` as text or as a broken link. Here the markers are part of the grammar and go through `renderCitation`, so `citationRenderer(sources)` gives each one its preview card.\n- **Three voices.** Paragraphs, lists and quotes are Alegreya, because the model is talking. Headings return to the system voice, as in `Prose`. Code is a Martian Mono literal, and a fenced block is a `CodeBlock` with copy, wrap and the scroll-edge cue. A table is a Mola `Table`, so at 320px it scrolls sideways inside its frame instead of widening the page.\n- **Never HTML.** The parser builds plain objects that React renders as text: `<script>` in an answer is shown, never run. Links keep their href only for http(s), mailto and relative paths, and an absolute link opens in a new tab and says so.\n- **Streaming-safe.** A marker still open at the end of the stream renders closed, so “**Star” is bold at once rather than two asterisks that vanish a token later. An unclosed fence is a code block that grows. Finished blocks are parsed once and memoised, as in `StreamingText`.\n- **An in-house parser, on purpose.** The subset a model writes, about 2 kB gzipped, instead of a general library that would cost tens of kilobytes or emit HTML strings. Setext headings, indented code, reference links, footnotes and raw HTML stay as text.",
+      "usage": {
+        "use": [
+          "The model answers in Markdown: headings, tables, numbered and nested lists, quotes, links and fenced code.",
+          "The answer cites sources with [n] markers that must stay Citations, with their preview cards.",
+          "Rendering untrusted model output, which must never reach the page as markup."
+        ],
+        "avoid": [
+          {
+            "when": "Plain paragraphs, bullets and code with no headings, tables or links; the smaller grammar is enough.",
+            "use": "AI/Streaming text"
+          },
+          {
+            "when": "Long-form content you write and trust, such as documentation, rendered by your own pipeline.",
+            "use": "Components/Typography/Prose"
+          },
+          {
+            "when": "A tool’s raw result or a payload, which is machine text, not an answer.",
+            "use": "Components/Data display/Code",
+            "label": "CodeBlock"
+          }
+        ],
+        "practices": [
+          {
+            "do": "Pass renderCitation built once with citationRenderer(sources), and render the SourceList on the same page.",
+            "dont": "Put a general Markdown library in front of the text; it drops the [n] markers or reads them as links."
+          },
+          {
+            "do": "Append to text as tokens arrive and pass status, so open markers close and the end is announced once.",
+            "dont": "Strip or buffer the Markdown yourself until a block is complete; the component already holds back what cannot be read yet."
+          }
+        ],
+        "content": [
+          "Set headingLevel so the answer’s # sits one level under the heading above it.",
+          "Ask the model for the subset it renders: no raw HTML, footnotes or reference-style links."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves through the answer’s links and citation markers in reading order, then a code block’s wrap and copy buttons and a table that scrolls."
+          }
+        ],
+        "handles": [
+          "Headings are real headings, from `headingLevel` down, so the answer joins the page outline; lists, quotes and tables are their own elements.",
+          "The text is `aria-busy` while it streams, and a polite status says “Response complete.” once, when a running stream ends.",
+          "Nothing from the model is rendered as HTML, and a link keeps its href only for http(s), mailto and relative paths.",
+          "An absolute link opens in a new tab and says “(opens in a new tab)” to screen readers.",
+          "Citation markers go through `renderCitation`, so with `citationRenderer` each is a link named “Source 2:” and the source’s title."
+        ],
+        "you": [
+          "Set `headingLevel` so the answer’s headings sit under the heading above it.",
+          "Render the `SourceList` on the same page, so each marker’s `#source-n` link has somewhere to land."
+        ]
+      },
+      "exports": [
+        {
+          "name": "Markdown",
+          "kind": "component",
+          "source": "src/components/ai/markdown/markdown.tsx",
+          "description": "A model's answer written in Markdown, streamed and rendered in Mola's typography, with its citation markers kept.",
+          "props": [
+            {
+              "name": "text",
+              "type": "string",
+              "required": true,
+              "description": "The Markdown received so far. Grows; never rewritten from the top."
+            },
+            {
+              "name": "doneAnnouncement",
+              "type": "string",
+              "required": false,
+              "default": "Response complete.",
+              "description": "Spoken once when a stream that was running completes."
+            },
+            {
+              "name": "errorAnnouncement",
+              "type": "string",
+              "required": false,
+              "default": "Response stopped with an error.",
+              "description": "Spoken once when a stream that was running fails."
+            },
+            {
+              "name": "headingLevel",
+              "type": "2 | 3 | 4",
+              "required": false,
+              "default": "3",
+              "description": "The heading level a `#` becomes; `##` is one deeper, and so on, never past 6. Defaults to 3, for an answer under a page and a section heading. The look follows the depth in the Markdown, not the level, so the same answer looks the same wherever it is placed."
+            },
+            {
+              "name": "renderCitation",
+              "type": "((n: number) => ReactNode)",
+              "required": false,
+              "description": "How an inline `[n]` marker renders, usually `citationRenderer(sources)`. Without it the marker stays as text. Pass a stable function (module scope or `useMemo`): finished blocks skip re-rendering only while it stays the same."
+            },
+            {
+              "name": "status",
+              "type": "StreamStatus",
+              "required": false,
+              "default": "done",
+              "description": "Where the stream is. `streaming` shows the caret, sets `aria-busy` and closes markers still open at the end; the move from `streaming` to `done` or `error` is announced once. Defaults to `done`.",
+              "values": [
+                "error",
+                "streaming",
+                "done",
+                "idle"
+              ]
+            },
+            {
+              "name": "variant",
+              "type": "\"default\" | \"muted\"",
+              "required": false,
+              "default": "default",
+              "description": "`muted` for text the reader may skim — reasoning, not the answer."
+            }
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"markdown\">"
+          }
+        },
+        {
+          "name": "MarkdownProps",
+          "kind": "type",
+          "source": "src/components/ai/markdown/markdown.tsx"
+        }
+      ],
+      "stories": [
+        {
+          "name": "Complete",
+          "id": "ai-markdown--complete",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-markdown--complete"
+        },
+        {
+          "name": "MidStream",
+          "id": "ai-markdown--mid-stream",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-markdown--mid-stream"
+        },
+        {
+          "name": "Muted",
+          "id": "ai-markdown--muted",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-markdown--muted"
+        },
+        {
+          "name": "OpenFence",
+          "id": "ai-markdown--open-fence",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-markdown--open-fence"
+        },
+        {
+          "name": "Streaming",
+          "id": "ai-markdown--streaming",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-markdown--streaming"
+        },
+        {
+          "name": "UntrustedInput",
+          "id": "ai-markdown--untrusted-input",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-markdown--untrusted-input"
+        }
       ]
     },
     {
@@ -3636,6 +3812,237 @@
       ]
     },
     {
+      "title": "AI/Side-by-side diff",
+      "name": "Side-by-side diff",
+      "layer": "ai",
+      "category": "AI",
+      "docs": "https://demogar.github.io/molaui/?path=/docs/ai-side-by-side-diff--overview",
+      "phase": "experimental",
+      "summary": "Two versions of one text in two panes, each change opposite its replacement, falling back to one column when narrow.",
+      "description": "Two versions of one text side by side: the old in one pane, the new in the other, each change opposite its replacement. Pass `before` and `after` and the diff is worked out for you (`diffLines`), or pass a unified `diff` or `hunks` as to `FileDiff`.\n\n- **Lines never wrap; the panes scroll.** In code and config the indentation is the structure, and two wrapped panes stop lining up row for row. Each pane scrolls sideways with the scroll-edge cue, the two scroll together, and both are as wide as the longest line on either side, so the column being compared stays opposite itself.\n- **Below 48rem it is one column.** The panes are a container query: a phone, or a side panel on a wide screen, gets the unified lines `FileDiff` draws, wrapped, because there is no room for two panes of code.\n- **Two regions, read in turn.** Each pane is a focusable region named by its label and the title. A screen reader hears the old version, then the new, each changed line prefixed “Removed:” or “Added:”; the blank rows that keep the panes aligned are hidden from it.\n- **State is never colour alone.** A changed line is a wash, a +/− glyph and a word. The gutter stays put while the code scrolls under it, and is hidden from assistive technology and from a copy.\n- **Composed, not copied.** The same parser, pairing, glyphs and `ChangeCount` as `FileDiff`, and it sits in a `ChangeReview` beside FileDiffs.",
+      "usage": {
+        "use": [
+          "Comparing a prompt, a policy or a config with an agent’s revision of it, line against line.",
+          "You hold both versions rather than a patch: pass before and after and the diff is worked out.",
+          "A reviewer has to read across, comparing a changed line with the one it replaces."
+        ],
+        "avoid": [
+          {
+            "when": "One file among several in a proposed change, with hunks to fold.",
+            "use": "AI/Change review",
+            "label": "FileDiff"
+          },
+          {
+            "when": "A change to a record’s fields rather than to lines of text.",
+            "use": "AI/Change review",
+            "label": "FieldChanges"
+          },
+          {
+            "when": "A single version of code or a payload, with nothing to compare it to.",
+            "use": "Components/Data display/Code",
+            "label": "CodeBlock"
+          }
+        ],
+        "practices": [
+          {
+            "do": "Name the panes for what the versions are, such as Live and Proposed.",
+            "dont": "Leave both panes as Before and After when the reader needs to know which one is running."
+          },
+          {
+            "do": "Put it inside a ChangeReview when an agent proposes the change, so the comparison and the decision sit together.",
+            "dont": "Show a proposed change in a diff with no way to approve or reject it."
+          }
+        ],
+        "content": [
+          "Title it by what is compared, “System prompt, support triage agent”, not by the action.",
+          "Keep pane labels to one or two words; they name the scroll regions."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus to the old pane, then the new one; a focused pane scrolls sideways with the arrow keys."
+          }
+        ],
+        "handles": [
+          "The diff is a section named by its title, and each pane a focusable region named by its label and the title, so a keyboard can scroll it and a screen reader can jump to it.",
+          "Changed lines say “Removed:” or “Added:”, and carry a +/− glyph as well as the wash; line numbers and glyphs are hidden from screen readers and from a copy.",
+          "The blank rows that keep the panes aligned are hidden from screen readers, so each pane reads as its version, in order.",
+          "The panes scroll together and carry the scroll-edge cue while there is more to the side; below 48rem they become one column of wrapped lines.",
+          "Code is pinned left to right, so a right-to-left page does not reorder a line of source."
+        ],
+        "you": [
+          "Give it a `title` that says what is compared, and pane labels that say which version is which.",
+          "Set `headingLevel` so the title fits the page outline."
+        ]
+      },
+      "anatomy": {
+        "slot": "side-by-side-diff",
+        "parts": [
+          {
+            "part": "root",
+            "name": "Container",
+            "does": "A keylined section named by its title, and the container the two-pane query measures.",
+            "selector": "[data-slot=\"side-by-side-diff\"]"
+          },
+          {
+            "part": "title",
+            "name": "Title",
+            "does": "What is being compared, as a heading.",
+            "selector": "[data-part=\"title\"]"
+          },
+          {
+            "part": "count",
+            "name": "Count",
+            "does": "Lines added and removed: “+2 −1” to the eye, a sentence to a screen reader.",
+            "selector": "[data-part=\"count\"]"
+          },
+          {
+            "part": "pane",
+            "name": "Pane",
+            "does": "One version. Its code scrolls sideways under the scroll-edge cue, in step with the other pane.",
+            "selector": "[data-part=\"pane\"]"
+          },
+          {
+            "part": "pane-label",
+            "name": "Pane label",
+            "does": "Which version this is; it names the pane’s scroll region.",
+            "selector": "[data-part=\"pane-label\"]"
+          },
+          {
+            "part": "hunk-header",
+            "name": "Hunk header",
+            "does": "The range and section, held at the start while the pane scrolls.",
+            "selector": "[data-part=\"hunk-header\"]"
+          },
+          {
+            "part": "line",
+            "name": "Line",
+            "does": "One line of the version. A change is a wash, a glyph and a hidden word.",
+            "selector": "[data-part=\"line\"]"
+          },
+          {
+            "part": "gutter",
+            "name": "Gutter",
+            "does": "Line number and +/− glyph, held in place while the code scrolls, never copied.",
+            "selector": "[data-part=\"gutter\"]"
+          },
+          {
+            "part": "filler",
+            "name": "Blank row",
+            "does": "Keeps the panes aligned where one side has no line, in the empty texture, hidden from screen readers.",
+            "selector": "[data-part=\"filler\"]"
+          }
+        ]
+      },
+      "exports": [
+        {
+          "name": "SideBySideDiff",
+          "kind": "component",
+          "source": "src/components/ai/side-by-side-diff/side-by-side-diff.tsx",
+          "description": "Two versions of one text, side by side: the old in one pane, the new in the other, each change opposite its replacement.",
+          "props": [
+            {
+              "name": "title",
+              "type": "ReactNode",
+              "required": true,
+              "description": "What is being compared, as a heading: “System prompt, triage agent”."
+            },
+            {
+              "name": "after",
+              "type": "string",
+              "required": false,
+              "description": "The text after the change."
+            },
+            {
+              "name": "afterLabel",
+              "type": "string",
+              "required": false,
+              "default": "After",
+              "description": "The new pane's name. Defaults to “After”."
+            },
+            {
+              "name": "before",
+              "type": "string",
+              "required": false,
+              "description": "The text before the change. With `after`, the diff is worked out for you."
+            },
+            {
+              "name": "beforeLabel",
+              "type": "string",
+              "required": false,
+              "default": "Before",
+              "description": "The old pane's name, shown above it and naming its scroll region. Defaults to “Before”."
+            },
+            {
+              "name": "context",
+              "type": "number",
+              "required": false,
+              "default": "3",
+              "description": "Unchanged lines kept around each change when the diff is worked out from `before` and `after`. Defaults to 3."
+            },
+            {
+              "name": "diff",
+              "type": "string",
+              "required": false,
+              "description": "Or one unified diff, as `git diff` prints it. Wins over `before` and `after`."
+            },
+            {
+              "name": "headingLevel",
+              "type": "3 | 4 | 5",
+              "required": false,
+              "default": "4",
+              "description": "Heading level for the title. Defaults to 4, under a `ChangeReview` heading."
+            },
+            {
+              "name": "hunks",
+              "type": "readonly (DiffHunk | DiffHunkInput)[]",
+              "required": false,
+              "description": "Or the hunks, structured. Wins over `diff`."
+            }
+          ],
+          "forwards": {
+            "element": "<section data-slot=\"side-by-side-diff\">"
+          }
+        },
+        {
+          "name": "SideBySideDiffProps",
+          "kind": "type",
+          "source": "src/components/ai/side-by-side-diff/side-by-side-diff.tsx"
+        }
+      ],
+      "stories": [
+        {
+          "name": "Default",
+          "id": "ai-side-by-side-diff--default",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-side-by-side-diff--default"
+        },
+        {
+          "name": "FromUnifiedDiff",
+          "id": "ai-side-by-side-diff--from-unified-diff",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-side-by-side-diff--from-unified-diff"
+        },
+        {
+          "name": "InChangeReview",
+          "id": "ai-side-by-side-diff--in-change-review",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-side-by-side-diff--in-change-review"
+        },
+        {
+          "name": "Narrow",
+          "id": "ai-side-by-side-diff--narrow",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-side-by-side-diff--narrow"
+        },
+        {
+          "name": "NoChanges",
+          "id": "ai-side-by-side-diff--no-changes",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-side-by-side-diff--no-changes"
+        }
+      ]
+    },
+    {
       "title": "AI/Sources",
       "name": "Sources",
       "layer": "ai",
@@ -3866,6 +4273,10 @@
           "Text the reader may skim, such as reasoning, with tone set to muted."
         ],
         "avoid": [
+          {
+            "when": "An answer in Markdown with headings, tables, numbered lists or links.",
+            "use": "AI/Markdown"
+          },
           {
             "when": "Long-form markup that does not stream, such as rendered documentation.",
             "use": "Components/Typography/Prose"

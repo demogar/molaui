@@ -26,6 +26,7 @@ Text that arrives a token at a time.
 
 ### When not to
 
+- An answer in Markdown with headings, tables, numbered lists or links. Use [Markdown](https://demogar.github.io/molaui/md/ai-markdown--overview.md).
 - Long-form markup that does not stream, such as rendered documentation. Use [Prose](https://demogar.github.io/molaui/md/components-typography-prose--overview.md).
 - Text the system says in its own voice, such as labels and hints. Use [Text](https://demogar.github.io/molaui/md/components-typography-text--overview.md).
 - Saying that work is under way before any text exists, outside a message. Use [Run status](https://demogar.github.io/molaui/md/ai-run-status--overview.md).
@@ -106,6 +107,7 @@ Nothing in it takes focus, so there is no keyboard table.
 
 ### Use instead, when it fits better
 
+- [Markdown](https://demogar.github.io/molaui/md/ai-markdown--overview.md)
 - [Prose](https://demogar.github.io/molaui/md/components-typography-prose--overview.md)
 - [Text](https://demogar.github.io/molaui/md/components-typography-text--overview.md)
 - [Run status](https://demogar.github.io/molaui/md/ai-run-status--overview.md)

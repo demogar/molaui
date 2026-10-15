@@ -10,5 +10,5 @@ export type {
 } from './change-review'
 export { FileDiff } from './file-diff'
 export type { FileChangeKind, FileDiffProps } from './file-diff'
-export { countChanges, parseUnifiedDiff } from './parse-diff'
+export { countChanges, diffLines, parseUnifiedDiff } from './parse-diff'
 export type { DiffHunk, DiffHunkInput, DiffLine, DiffLineKind } from './parse-diff'

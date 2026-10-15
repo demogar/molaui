@@ -31,6 +31,16 @@
       "pressesKeys": false,
       "screenReadersByHand": false
     },
+    "AI/Markdown": {
+      "stories": 6,
+      "unitTests": [
+        "src/components/ai/markdown/markdown.test.tsx"
+      ],
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
+      "screenReadersByHand": false
+    },
     "AI/Message": {
       "stories": 5,
       "unitTests": [
@@ -79,6 +89,16 @@
       "keyboardInUnitTests": false,
       "keysUntested": [],
       "pressesKeys": false,
+      "screenReadersByHand": false
+    },
+    "AI/Side-by-side diff": {
+      "stories": 5,
+      "unitTests": [
+        "src/components/ai/side-by-side-diff/side-by-side-diff.test.tsx"
+      ],
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "AI/Sources": {

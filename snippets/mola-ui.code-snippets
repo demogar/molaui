@@ -35,6 +35,14 @@
       "</UncertaintyNote>$0"
     ]
   },
+  "Markdown": {
+    "scope": "typescriptreact,javascriptreact",
+    "prefix": "mola-markdown",
+    "description": "A model’s Markdown answer, streamed and rendered in Mola’s typography, with its citation markers kept and no HTML ever injected. import { Markdown } from '@demogar/mola-ui'",
+    "body": [
+      "<Markdown text=\"${1:The drop is concentrated in **Starter workspa}\" status=\"streaming\" />$0"
+    ]
+  },
   "Message": {
     "scope": "typescriptreact,javascriptreact",
     "prefix": "mola-message",
@@ -73,6 +81,14 @@
     "description": "The one status vocabulary for a run, a step and a tool call: a glyph, a word and a colour, with an elapsed clock. import { RunStatus } from '@demogar/mola-ui'",
     "body": [
       "<RunStatus status=\"running\" />$0"
+    ]
+  },
+  "Side-by-side diff": {
+    "scope": "typescriptreact,javascriptreact",
+    "prefix": "mola-side-by-side-diff",
+    "description": "Two versions of one text in two panes, each change opposite its replacement, falling back to one column when narrow. import { SideBySideDiff } from '@demogar/mola-ui'",
+    "body": [
+      "<SideBySideDiff title={${1:title}} />$0"
     ]
   },
   "Sources": {

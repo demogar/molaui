@@ -7,6 +7,7 @@ import * as React from 'react'
 import { cn } from '../../../lib/cn'
 
 import { ChangeCount } from './change-count'
+import { GUTTER, LINE_GLYPH, LINE_WASH, LineCode } from './diff-line'
 import {
   countChanges,
   numberHunk,
@@ -216,42 +217,27 @@ function Hunk({ hunk, layout, defaultOpen, first }: { hunk: DiffHunk; layout: 'u
   )
 }
 
-const WASH: Record<DiffLine['kind'], string> = {
-  add: 'bg-verde-soft',
-  remove: 'bg-danger-soft',
-  context: '',
-}
-const GLYPH: Record<DiffLine['kind'], string> = { add: '+', remove: '−', context: '' }
-const SPOKEN: Record<DiffLine['kind'], string> = { add: 'Added: ', remove: 'Removed: ', context: '' }
-
-const gutter = 'select-none text-end tabular text-ink-muted'
-
 function Code({ line }: { line: DiffLine }) {
-  return (
-    <span className="min-w-0 whitespace-pre-wrap text-ink [overflow-wrap:anywhere]">
-      {SPOKEN[line.kind] ? <span className="sr-only">{SPOKEN[line.kind]}</span> : null}
-      <span dir="ltr">{line.text === '' ? '​' : line.text}</span>
-    </span>
-  )
+  return <LineCode line={line} className="min-w-0 whitespace-pre-wrap text-ink [overflow-wrap:anywhere]" />
 }
 
-function UnifiedLines({ lines, className }: { lines: readonly DiffLine[]; className?: string }) {
+export function UnifiedLines({ lines, className }: { lines: readonly DiffLine[]; className?: string }) {
   return (
     <ol className={cn('m-0 list-none py-1 ps-0 literal text-xs leading-body', className)}>
       {lines.map((line, i) => (
         <li
           key={i}
           data-kind={line.kind}
-          className={cn('grid grid-cols-[2.75em_2.75em_1.5em_minmax(0,1fr)] pe-3 @md:grid-cols-[3.5em_3.5em_1.75em_minmax(0,1fr)]', WASH[line.kind])}
+          className={cn('grid grid-cols-[2.75em_2.75em_1.5em_minmax(0,1fr)] pe-3 @md:grid-cols-[3.5em_3.5em_1.75em_minmax(0,1fr)]', LINE_WASH[line.kind])}
         >
-          <span aria-hidden className={gutter}>
+          <span aria-hidden className={GUTTER}>
             {line.oldNumber ?? ''}
           </span>
-          <span aria-hidden className={gutter}>
+          <span aria-hidden className={GUTTER}>
             {line.newNumber ?? ''}
           </span>
           <span aria-hidden className="select-none text-center text-ink-2">
-            {GLYPH[line.kind]}
+            {LINE_GLYPH[line.kind]}
           </span>
           <Code line={line} />
         </li>
@@ -270,15 +256,15 @@ function SplitCell({ line, side, hidden }: { line?: DiffLine; side: 'old' | 'new
         // Nothing on this side: the system's empty texture on the rows' own
         // ground. A cloth-shade fill read as a hole in the dark theme, where
         // shade is darker than every row around it.
-        line ? WASH[line.kind] : 'relleno-field',
+        line ? LINE_WASH[line.kind] : 'relleno-field',
         side === 'new' && 'border-s border-keyline',
       )}
     >
-      <span aria-hidden className={gutter}>
+      <span aria-hidden className={GUTTER}>
         {number ?? ''}
       </span>
       <span aria-hidden className="select-none text-center text-ink-2">
-        {line ? GLYPH[line.kind] : ''}
+        {line ? LINE_GLYPH[line.kind] : ''}
       </span>
       {line ? <Code line={line} /> : <span />}
     </span>

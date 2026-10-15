@@ -189,6 +189,21 @@ export const ANATOMY: Record<string, Anatomy> = {
       { part: 'error', name: 'Error', does: 'What failed, the error verbatim, and Retry. A failed call is held open.', story: 'Failed' },
     ],
   },
+  'AI/Side-by-side diff': {
+    story: 'Default',
+    slot: 'side-by-side-diff',
+    parts: [
+      { part: 'root', name: 'Container', does: 'A keylined section named by its title, and the container the two-pane query measures.' },
+      { part: 'title', name: 'Title', does: 'What is being compared, as a heading.' },
+      { part: 'count', name: 'Count', does: 'Lines added and removed: “+2 −1” to the eye, a sentence to a screen reader.' },
+      { part: 'pane', name: 'Pane', does: 'One version. Its code scrolls sideways under the scroll-edge cue, in step with the other pane.' },
+      { part: 'pane-label', name: 'Pane label', does: 'Which version this is; it names the pane’s scroll region.' },
+      { part: 'hunk-header', name: 'Hunk header', does: 'The range and section, held at the start while the pane scrolls.' },
+      { part: 'line', name: 'Line', does: 'One line of the version. A change is a wash, a glyph and a hidden word.' },
+      { part: 'gutter', name: 'Gutter', does: 'Line number and +/− glyph, held in place while the code scrolls, never copied.' },
+      { part: 'filler', name: 'Blank row', does: 'Keeps the panes aligned where one side has no line, in the empty texture, hidden from screen readers.' },
+    ],
+  },
   'AI/Prompt input': {
     story: 'WithAttachments',
     slot: 'prompt-input',

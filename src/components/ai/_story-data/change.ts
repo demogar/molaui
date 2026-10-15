@@ -51,5 +51,27 @@ export const FLAG_CHANGES = [
   { field: 'rollout.review_after', after: '2026-10-19' },
 ] as const
 
+/** The triage agent's system prompt, and the research agent's revision of it after ro-0412. */
+export const PROMPT_BEFORE = `You are the Cayuco support triage agent.
+
+Read each new ticket and assign one queue: billing, access, data, or general.
+Reply to the customer within two minutes with an acknowledgement.
+If the ticket mentions an outage, page the on-call engineer.
+
+Tone: friendly, brief, no jargon.
+Never promise a resolution time.
+Sign every reply as "Cayuco Support".`
+
+export const PROMPT_AFTER = `You are the Cayuco support triage agent.
+
+Read each new ticket and assign one queue: billing, access, data, onboarding, or general.
+For workspaces on the Starter plan created in the last 14 days, link the matching help panel article before anything else (see ro-0412: −6.1 tickets per 1,000).
+Reply to the customer within two minutes with an acknowledgement.
+If the ticket mentions an outage, page the on-call engineer.
+
+Tone: friendly, brief, no jargon.
+Never promise a resolution time.
+Sign every reply as "Cayuco Support".`
+
 export const CHANGE_SUMMARY =
   'The help panel cut tickets from Starter workspaces by 6.1 per 1,000 and did nothing measurable for Enterprise workspaces. This rolls the panel out to Starter only, adds an escalation alert the brief asks for, and narrows the dashboard window so a guardrail regression shows within two weeks.'
