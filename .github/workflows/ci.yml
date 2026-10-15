@@ -143,9 +143,9 @@ jobs:
       - run: npm run consumers
 
   # The three-to-four-minute target, checked rather than remembered: fails
-  # when the first job's start to the last job's end is over four minutes,
-  # and writes every job's time and the spread between shards to the run
-  # summary. Not a required check (a slow GitHub day should not block a
+  # when the critical path of job execution through this file's `needs` is
+  # over four minutes (time waiting for a runner is not counted), and writes
+  # every job's time and the spread between shards to the run summary. Not a required check (a slow GitHub day should not block a
   # merge), but a red one on the pull request that made CI slower.
   budget:
     name: CI budget
@@ -158,7 +158,10 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          sparse-checkout: scripts
+          # The script reads the job graph from this file.
+          sparse-checkout: |
+            scripts
+            .github/workflows
       # The runner's own Node is enough for one fetch; no setup, no modules.
       - run: node scripts/ci-budget.mjs
         env:
