@@ -8,6 +8,7 @@ import { cn } from '../../lib/cn'
 import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { useControllable } from '../../lib/use-controllable'
 import { formatHotkey } from '../shortcuts/hotkeys'
+import { hotkeysMessages } from '../shortcuts/messages'
 import { useHotkeyPlatform, useHotkeys } from '../shortcuts/use-hotkeys'
 import { Kbd } from '../typography'
 import { type CommandPaletteMessages, commandPaletteMessages } from './messages'
@@ -99,9 +100,10 @@ export function filterCommands(groups: CommandGroup[], query: string): CommandGr
  */
 export function useCommandShortcut(
   onTrigger: () => void,
-  { key = 'k', label = 'Open the command palette' }: { key?: string; label?: string } = {},
+  { key = 'k', label }: { key?: string; label?: string } = {},
 ) {
-  useHotkeys(`mod+${key}`, () => onTrigger(), { label })
+  const [t] = useMessages('commandPalette', commandPaletteMessages)
+  useHotkeys(`mod+${key}`, () => onTrigger(), { label: label ?? t.open })
 }
 
 /**
@@ -172,6 +174,7 @@ export function CommandPalette({
   const [open, setOpen] = useControllable({ value: openProp, defaultValue: defaultOpen, onChange: onOpenChange })
   const [query, setQuery] = React.useState('')
   const platform = useHotkeyPlatform()
+  const [keyWords] = useMessages('hotkeys', hotkeysMessages)
   // The highlight is held by id, not position, so it survives the list
   // re-sorting under it; `null` means "the first enabled match".
   const [activeId, setActiveId] = React.useState<string | null>(null)
@@ -362,7 +365,7 @@ export function CommandPalette({
                           {item.hotkey || item.shortcut ? (
                             <span className="flex shrink-0 gap-1 text-xs tabular-nums text-ink-muted group-aria-selected/option:text-on-ink-muted">
                               {/* By position, not glyph: G G repeats a key. */}
-                              {(item.hotkey ? formatHotkey(item.hotkey, platform).flat() : item.shortcut!).map((key, i) => (
+                              {(item.hotkey ? formatHotkey(item.hotkey, platform, keyWords).flat() : item.shortcut!).map((key, i) => (
                                 <span key={i} className="min-w-4 text-center">
                                   {key}
                                 </span>

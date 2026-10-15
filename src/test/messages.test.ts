@@ -70,6 +70,9 @@ const KEY_NAMES = new Set([
   'ArrowLeft',
   'ArrowRight',
   'Shift',
+  'Control',
+  'Alt',
+  'Meta',
   'Space',
 ])
 
@@ -77,6 +80,8 @@ const KEY_NAMES = new Set([
 const ALLOWED: Record<string, string> = {
   'components/file-upload/file-upload.tsx: Files':
     'The drag data type the browser sets for files (`dataTransfer.types`), compared, never shown.',
+  'components/shortcuts/hotkeys.ts: `Key${chord.key.toUpperCase()}`': 'A `KeyboardEvent.code` value (KeyA), compared, never shown.',
+  'components/shortcuts/hotkeys.ts: `Digit${chord.key}`': 'A `KeyboardEvent.code` value (Digit1), compared, never shown.',
 }
 
 function walk(dir: string): string[] {

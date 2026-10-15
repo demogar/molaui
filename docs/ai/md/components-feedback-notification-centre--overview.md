@@ -69,9 +69,10 @@ The bell for the top bar's `end`, and the list in a popover under it. `className
 | --- | --- | --- | --- |
 | `notifications` (required) | `NotificationItem[]` |  | Newest first. |
 | `defaultOpen` | `boolean` | `false` | Open on first render. |
-| `empty` | `ReactNode` |  | Shown when there is nothing. Defaults to “No notifications yet.” |
+| `empty` | `ReactNode` |  | Shown when there is nothing. Defaults to “No notifications yet.” (`messages.empty`) |
 | `footer` | `ReactNode` |  | Under the list: usually a link to a full notifications page, “View all”. |
-| `label` | `string` | `Notifications` | The popover's title and the bell's name, “Notifications” by default. |
+| `label` | `string` |  | The popover's title and the bell's name, “Notifications” (`messages.label`) by default. |
+| `messages` | `MessagesOverride<NotificationsMessages>` |  | Words for translation: the defaults above, the unread and tone words, Mark all as read and the bell's name. Keys left out come from `MessagesProvider`, then English. |
 | `onMarkAllRead` | `(() => void)` |  | Called when the operator presses Mark all as read. The button shows only while something is unread. |
 | `onMarkRead` | `((id: string) => void)` |  | Called with an item's id when its action runs. |
 | `onOpenChange` | `((open: boolean) => void)` |  | Called when the popover opens or closes. |
@@ -86,13 +87,14 @@ The list on its own, for a full notifications page or a panel the page places it
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `notifications` (required) | `NotificationItem[]` |  | Newest first. |
-| `empty` | `ReactNode` | `No notifications yet.` | Shown when there is nothing. Defaults to “No notifications yet.” |
-| `label` | `string` | `Notifications` | The list's accessible name, “Notifications” by default. |
+| `empty` | `ReactNode` |  | Shown when there is nothing. Defaults to “No notifications yet.” (`messages.empty`) |
+| `label` | `string` |  | The list's accessible name, “Notifications” (`messages.label`) by default. |
+| `messages` | `MessagesOverride<NotificationsMessages>` |  | Words for translation: the defaults above, the unread and tone words, Mark all as read and the bell's name. Keys left out come from `MessagesProvider`, then English. |
 | `onMarkRead` | `((id: string) => void)` |  | Called with an item's id when its action runs. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="notification-list">`.
 
-Types: `NotificationCentreProps`, `NotificationItem`, `NotificationListProps`, `NotificationTone`
+Types: `NotificationsMessages`, `NotificationCentreProps`, `NotificationItem`, `NotificationListProps`, `NotificationTone`
 
 ## Accessibility
 

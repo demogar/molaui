@@ -2,7 +2,7 @@
 
 > A design system cut like a mola: flat layers, hard keylines, revealed bands. React components for dense internal tools and AI-native interfaces. Published as `@demogar/mola-ui`: React 19, Base UI for behaviour, Tailwind v4 for styling, design tokens as CSS custom properties.
 
-64 components and 14 AI components (78 documented pages).
+65 components and 14 AI components (79 documented pages).
 
 Install and set up:
 
@@ -151,6 +151,7 @@ An MCP server with the same data ships in the package: `npx -y --package @demoga
 
 - [Accordion](https://demogar.github.io/molaui/?path=/docs/components-navigation-accordion--overview) ([Markdown](https://demogar.github.io/molaui/md/components-navigation-accordion--overview.md)): Sections of one document that open one or several at a time; Collapsible for a single disclosure.
 - [Breadcrumb](https://demogar.github.io/molaui/?path=/docs/components-navigation-breadcrumb--overview) ([Markdown](https://demogar.github.io/molaui/md/components-navigation-breadcrumb--overview.md)): Where a page sits, as links back up the path, with the current page as plain text.
+- [Link](https://demogar.github.io/molaui/?path=/docs/components-navigation-link--overview) ([Markdown](https://demogar.github.io/molaui/md/components-navigation-link--overview.md)) (Experimental): Going somewhere: Link for text, in a sentence or on its own, and LinkButton for a navigation cut like a button.
 - [Pagination](https://demogar.github.io/molaui/?path=/docs/components-navigation-pagination--overview) ([Markdown](https://demogar.github.io/molaui/md/components-navigation-pagination--overview.md)): Moving through a long ordered result, as numbered pages or as a compact range with two arrows.
 - [Stepper](https://demogar.github.io/molaui/?path=/docs/components-navigation-stepper--overview) ([Markdown](https://demogar.github.io/molaui/md/components-navigation-stepper--overview.md)) (Experimental): A task done in order, one step at a time: the steps with their state, and the current step as a form that validates before it moves on.
 - [Tabs](https://demogar.github.io/molaui/?path=/docs/components-navigation-tabs--overview) ([Markdown](https://demogar.github.io/molaui/md/components-navigation-tabs--overview.md)): Switching between views of one thing: underline for views, panel for tabs that are containers.

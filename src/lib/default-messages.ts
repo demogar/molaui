@@ -55,6 +55,7 @@ import {
 import { type AppShellMessages, appShellMessages } from '../components/app-shell/messages'
 import { type AvatarGroupMessages, avatarGroupMessages } from '../components/avatar/messages'
 import { type RecommendationBadgeMessages, recommendationBadgeMessages } from '../components/badge/messages'
+import { type BannerMessages, bannerMessages } from '../components/banner/messages'
 import { type BreadcrumbMessages, breadcrumbMessages } from '../components/breadcrumb/messages'
 import { type CalloutMessages, calloutMessages } from '../components/callout/messages'
 import { type CodeBlockMessages, codeBlockMessages } from '../components/code/messages'
@@ -79,10 +80,17 @@ import { type LabelMessages, type SearchInputMessages, labelMessages, searchInpu
 import { type FileUploadMessageTemplates, fileUploadMessages } from '../components/file-upload/messages'
 import { type FormErrorSummaryMessages, formErrorSummaryMessages } from '../components/form/messages'
 import { type LinkMessages, linkMessages } from '../components/link/messages'
+import { type NotificationsMessages, notificationsMessages } from '../components/notification-centre/messages'
 import { type NumberInputMessages, numberInputMessages } from '../components/number-input/messages'
 import { type PaginationMessages, paginationMessages } from '../components/pagination/messages'
 import { type PlaceholderMessages, placeholderMessages } from '../components/placeholder/messages'
 import { type SelectMessages, selectMessages } from '../components/select/messages'
+import {
+  type HotkeysMessages,
+  type ShortcutsDialogMessages,
+  hotkeysMessages,
+  shortcutsDialogMessages,
+} from '../components/shortcuts/messages'
 import { type StatMessages, statMessages } from '../components/stat/messages'
 import { type StepperMessages, stepperMessages } from '../components/stepper/messages'
 import { type DataTableMessages, type TableMessages, dataTableMessages, tableMessages } from '../components/table/messages'
@@ -104,6 +112,7 @@ export type {
   AttachmentChipMessages,
   AutocompleteMessages,
   AvatarGroupMessages,
+  BannerMessages,
   BreadcrumbMessages,
   CalendarMessages,
   CalloutMessages,
@@ -123,10 +132,12 @@ export type {
   FileDiffMessages,
   FileUploadMessageTemplates,
   FormErrorSummaryMessages,
+  HotkeysMessages,
   LabelMessages,
   LinkMessages,
   MarkdownMessages,
   MessageMessages,
+  NotificationsMessages,
   NumberInputMessages,
   PaginationMessages,
   PartialOutputMessages,
@@ -138,6 +149,7 @@ export type {
   RunStatusMessages,
   SearchInputMessages,
   SelectMessages,
+  ShortcutsDialogMessages,
   SideBySideDiffMessages,
   SourcesMessages,
   StatMessages,
@@ -165,6 +177,7 @@ export interface MolaMessages {
   attachmentChip: AttachmentChipMessages
   autocomplete: AutocompleteMessages
   avatarGroup: AvatarGroupMessages
+  banner: BannerMessages
   breadcrumb: BreadcrumbMessages
   calendar: CalendarMessages
   callout: CalloutMessages
@@ -184,10 +197,12 @@ export interface MolaMessages {
   fileDiff: FileDiffMessages
   fileUpload: FileUploadMessageTemplates
   formErrorSummary: FormErrorSummaryMessages
+  hotkeys: HotkeysMessages
   label: LabelMessages
   link: LinkMessages
   markdown: MarkdownMessages
   message: MessageMessages
+  notifications: NotificationsMessages
   numberInput: NumberInputMessages
   pagination: PaginationMessages
   partialOutput: PartialOutputMessages
@@ -199,6 +214,7 @@ export interface MolaMessages {
   runStatus: RunStatusMessages
   searchInput: SearchInputMessages
   select: SelectMessages
+  shortcutsDialog: ShortcutsDialogMessages
   sideBySideDiff: SideBySideDiffMessages
   sources: SourcesMessages
   stat: StatMessages
@@ -223,6 +239,7 @@ export const defaultMessages: MolaMessages = {
   attachmentChip: attachmentChipMessages,
   autocomplete: autocompleteMessages,
   avatarGroup: avatarGroupMessages,
+  banner: bannerMessages,
   breadcrumb: breadcrumbMessages,
   calendar: calendarMessages,
   callout: calloutMessages,
@@ -242,10 +259,12 @@ export const defaultMessages: MolaMessages = {
   fileDiff: fileDiffMessages,
   fileUpload: fileUploadMessages,
   formErrorSummary: formErrorSummaryMessages,
+  hotkeys: hotkeysMessages,
   label: labelMessages,
   link: linkMessages,
   markdown: markdownMessages,
   message: messageMessages,
+  notifications: notificationsMessages,
   numberInput: numberInputMessages,
   pagination: paginationMessages,
   partialOutput: partialOutputMessages,
@@ -257,6 +276,7 @@ export const defaultMessages: MolaMessages = {
   runStatus: runStatusMessages,
   searchInput: searchInputMessages,
   select: selectMessages,
+  shortcutsDialog: shortcutsDialogMessages,
   sideBySideDiff: sideBySideDiffMessages,
   sources: sourcesMessages,
   stat: statMessages,

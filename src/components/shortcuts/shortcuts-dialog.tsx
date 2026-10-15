@@ -3,10 +3,12 @@
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { useControllable } from '../../lib/use-controllable'
 import { Dialog, DialogContent, type DialogContentProps, DialogTrigger } from '../dialog'
 import { Kbd } from '../typography'
 import { describeHotkey, formatHotkey } from './hotkeys'
+import { type ShortcutsDialogMessages, hotkeysMessages, shortcutsDialogMessages } from './messages'
 import { type RegisteredHotkey, useHotkeyPlatform, useHotkeys, useRegisteredHotkeys } from './use-hotkeys'
 
 /**
@@ -26,7 +28,7 @@ import { type RegisteredHotkey, useHotkeyPlatform, useHotkeys, useRegisteredHotk
  * first: the page-wide keys are the ones a reader is looking for.
  */
 
-export interface ShortcutsDialogProps extends Omit<DialogContentProps, 'title' | 'children'> {
+export interface ShortcutsDialogProps extends Omit<DialogContentProps, 'title' | 'children' | 'messages'> {
   /** Whether the dialog is open, when the page owns that. */
   open?: boolean
   /** Open on first render. */
@@ -37,8 +39,14 @@ export interface ShortcutsDialogProps extends Omit<DialogContentProps, 'title' |
   trigger?: React.ReactElement
   /** The key that opens it, listed with the rest; `?` by default. `false` binds none. */
   hotkey?: string | false
-  /** The dialog's title and accessible name. Defaults to “Keyboard shortcuts”. */
+  /** The dialog's title and accessible name. Defaults to “Keyboard shortcuts” (`messages.title`). */
   title?: React.ReactNode
+  /**
+   * Words for translation: the title, its own binding's label and the empty
+   * sentence. Keys left out come from `MessagesProvider`, then English. The
+   * key names come from the provider's `hotkeys` table.
+   */
+  messages?: MessagesOverride<ShortcutsDialogMessages>
 }
 
 /** `className`, `ref` and the rest go to the dialog popup, as on `DialogContent`. */
@@ -48,38 +56,41 @@ export function ShortcutsDialog({
   onOpenChange,
   trigger,
   hotkey = '?',
-  title = 'Keyboard shortcuts',
+  title,
   size = 'sm',
+  messages,
   className,
   ...props
 }: ShortcutsDialogProps) {
+  const [t] = useMessages('shortcutsDialog', shortcutsDialogMessages, messages)
   const [open, setOpen] = useControllable({ value: openProp, defaultValue: defaultOpen, onChange: onOpenChange })
-  useHotkeys(hotkey || '?', () => setOpen(!open), { label: 'Show keyboard shortcuts', enabled: hotkey !== false })
+  useHotkeys(hotkey || '?', () => setOpen(!open), { label: t.show, enabled: hotkey !== false })
   return (
     <Dialog open={open} onOpenChange={(next) => setOpen(next)}>
       {trigger ? <DialogTrigger render={trigger} /> : null}
-      <DialogContent {...props} size={size} title={title} data-slot="shortcuts-dialog" className={cn(className)}>
-        <ShortcutList />
+      <DialogContent {...props} size={size} title={title ?? t.title} data-slot="shortcuts-dialog" className={cn(className)}>
+        <ShortcutList empty={t.empty} />
       </DialogContent>
     </Dialog>
   )
 }
 
-function grouped(entries: RegisteredHotkey[]) {
+function grouped(entries: RegisteredHotkey[], general: string) {
   const groups = new Map<string, RegisteredHotkey[]>()
   for (const entry of entries) groups.set(entry.group, [...(groups.get(entry.group) ?? []), entry])
-  return [...groups].sort(([a], [b]) => Number(b === 'General') - Number(a === 'General'))
+  return [...groups].sort(([a], [b]) => Number(b === general) - Number(a === general))
 }
 
-function ShortcutList() {
+function ShortcutList({ empty }: { empty: string }) {
   const entries = useRegisteredHotkeys()
   const platform = useHotkeyPlatform()
+  const [words] = useMessages('hotkeys', hotkeysMessages)
   if (entries.length === 0) {
-    return <p className="m-0 text-sm text-ink-2">No keyboard shortcuts are bound on this page.</p>
+    return <p className="m-0 text-sm text-ink-2">{empty}</p>
   }
   return (
     <div className="grid gap-5">
-      {grouped(entries).map(([group, rows]) => (
+      {grouped(entries, words.general).map(([group, rows]) => (
         // Not a <section> with a name: a landmark per group inside a dialog is
         // landmark noise, and the heading already gives each group its place.
         <div key={group} className="grid gap-1.5">
@@ -89,10 +100,10 @@ function ShortcutList() {
               <div key={row.keys} className="flex min-h-(--row-h) items-center justify-between gap-4 py-1 rule-b-soft last:shadow-none">
                 <dt className="min-w-0 text-sm text-ink">{row.label}</dt>
                 <dd className="m-0 flex shrink-0 items-center gap-1.5 text-xs text-ink-muted">
-                  <span className="sr-only">{describeHotkey(row.keys, platform)}</span>
-                  {formatHotkey(row.keys, platform).map((step, i) => (
+                  <span className="sr-only">{describeHotkey(row.keys, platform, words)}</span>
+                  {formatHotkey(row.keys, platform, words).map((step, i) => (
                     <React.Fragment key={i}>
-                      {i > 0 ? <span aria-hidden>then</span> : null}
+                      {i > 0 ? <span aria-hidden>{words.thenShort}</span> : null}
                       <kbd aria-hidden className="inline-flex items-center gap-1 font-ui">
                         {step.map((key, k) => (
                           <Kbd key={k}>{key}</Kbd>

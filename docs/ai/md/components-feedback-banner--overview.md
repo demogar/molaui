@@ -72,7 +72,8 @@ Each story is a live example in Storybook.
 | `action` | `ReactNode` |  | One follow-up, usually a `Button` at `size="sm"` or a link: “View status”. |
 | `announce` | `boolean` | `false` | Say the message once, politely, when the banner appears. Only for a banner that appears during the session because something changed; one that is there when the page loads is read in order, and announcing it talks over the page's own title. |
 | `icon` | `ReactNode` |  | Replace the tone's icon, or `false` for none. |
-| `label` | `string` | `Announcement` | The landmark's name, “Announcement” by default. Name it for what it is when there is more than one kind: “Maintenance”. |
+| `label` | `string` |  | The landmark's name, “Announcement” (`messages.label`) by default. Name it for what it is when there is more than one kind: “Maintenance”. |
+| `messages` | `MessagesOverride<BannerMessages>` |  | Words for translation: the landmark's name, the dismiss button and the tone words read before the message. Keys left out come from `MessagesProvider`, then English. |
 | `onDismiss` | `(() => void)` |  | Renders a Dismiss button. The caller owns whether the banner comes back, and when. |
 | `title` | `ReactNode` |  | A few words in bold before the message: “Scheduled maintenance”. |
 | `tone` | `"neutral" \| "info" \| "success" \| "warn" \| "danger"` |  | The status of the condition, carried by the wash, the foot edge and the icon; `info` by default. The message still says it in words. |
@@ -83,7 +84,7 @@ Each story is a live example in Storybook.
 
 A condition of the whole application, said once across the top of it: maintenance tonight, the workspace is read-only, the connection dropped.
 
-Types: `BannerProps`, `BannerTone`
+Types: `BannerMessages`, `BannerProps`, `BannerTone`
 
 ## Accessibility
 

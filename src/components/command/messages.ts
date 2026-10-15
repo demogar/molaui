@@ -18,6 +18,8 @@ export interface CommandPaletteMessages {
   select: string
   /** The count of matches, in the footer and announced after a pause. */
   results: PluralMessage
+  /** `useCommandShortcut`'s label in the shortcuts dialog, when `label` is not set. */
+  open: string
 }
 
 export const commandPaletteMessages: CommandPaletteMessages = {
@@ -29,4 +31,5 @@ export const commandPaletteMessages: CommandPaletteMessages = {
   move: 'move',
   select: 'select',
   results: { one: '{count} result', other: '{count} results' },
+  open: 'Open the command palette',
 }
