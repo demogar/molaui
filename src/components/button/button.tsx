@@ -68,10 +68,12 @@ export const buttonVariants = cva(
           'data-disabled:bg-transparent',
         ],
       },
+      // `--button-h` names the height so a slot that lets a long label wrap
+      // (wrapping-slot.ts) can keep it as a minimum.
       size: {
-        sm: 'h-(--control-h-sm) px-[calc(var(--control-px)*0.75)] text-2xs [&_svg]:size-(--icon-sm)',
-        md: 'h-(--control-h) px-(--control-px) text-xs [&_svg]:size-(--icon)',
-        lg: 'h-(--control-h-lg) px-[calc(var(--control-px)*1.4)] text-sm [&_svg]:size-(--icon)',
+        sm: 'h-(--control-h-sm) [--button-h:var(--control-h-sm)] px-[calc(var(--control-px)*0.75)] text-2xs [&_svg]:size-(--icon-sm)',
+        md: 'h-(--control-h) [--button-h:var(--control-h)] px-(--control-px) text-xs [&_svg]:size-(--icon)',
+        lg: 'h-(--control-h-lg) [--button-h:var(--control-h-lg)] px-[calc(var(--control-px)*1.4)] text-sm [&_svg]:size-(--icon)',
       },
     },
     defaultVariants: { variant: 'primary', size: 'md' },

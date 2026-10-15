@@ -69,7 +69,7 @@ export function SegmentedControl<V extends string = string>({
       defaultValue={defaultValue === undefined ? undefined : [defaultValue]}
       disabled={disabled}
       className={cn(
-        'inline-flex items-stretch bg-cloth-pale shadow-cut',
+        'inline-flex max-w-full items-stretch bg-cloth-pale shadow-cut',
         size === 'sm' ? 'h-(--control-h-sm)' : 'h-(--control-h)',
         fill && 'flex w-full',
         className,
@@ -94,10 +94,13 @@ export function SegmentedControl<V extends string = string>({
               ? 'px-[calc(var(--control-px)*0.75)] text-2xs'
               : 'px-(--control-px) text-xs',
             iconOnly && 'aspect-square px-0',
-            // Filled segments share the width and give way before the page
-            // does: a long label truncates rather than pushing the control
-            // past a phone's edge.
-            fill && 'min-w-0 flex-1',
+            // Segments give way before the page does: a long label truncates
+            // rather than pushing the control past a phone's edge. Filled
+            // segments also share the width; unfilled ones only shrink when
+            // the control meets `max-w-full`, which three labelled segments
+            // with icons did by 2px at 320.
+            'min-w-0',
+            fill && 'flex-1',
             // The slit between segments: an inset ink line on every segment
             // but the first, so the seams never double.
             'not-first:cut-s',
@@ -114,7 +117,7 @@ export function SegmentedControl<V extends string = string>({
           )}
         >
           {option.icon ? <span aria-hidden className="contents">{option.icon}</span> : null}
-          {iconOnly ? null : fill ? <span className="truncate">{option.label}</span> : option.label}
+          {iconOnly ? null : <span className="truncate">{option.label}</span>}
         </Toggle>
       ))}
     </ToggleGroup>

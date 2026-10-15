@@ -201,6 +201,30 @@ export function NumberInput({
 
   const describedBy = [ariaDescribedBy, unit ? unitId : undefined].filter(Boolean).join(' ') || undefined
 
+  // The input never gets narrower than the longest number it will show: `max`
+  // when there is one, else the current value or `min`, formatted the way the
+  // field formats it. It was `min-w-0 flex-1`, so the unit and the steppers
+  // kept their width and the number took what was left; at spacious density
+  // that left a 21px input showing "40,0" of 40,000. In `ch`, because
+  // tabular figures are each exactly one `ch` wide, plus one for the
+  // separators and the caret. Measured in en-US when no locale is given: the
+  // runtime default differs between server and browser, which would make the
+  // style a hydration mismatch, and grouping changes the length by nothing
+  // that one spare `ch` does not cover. The input is also `w-0` (it grows
+  // with `flex-1`): an input's intrinsic width is about twenty characters,
+  // and that, not the number, set the field's minimum, which ran 14–26px past
+  // a 320px phone on Linux, where the default size measures wider.
+  const longest = [max, current, min]
+    .filter((n): n is number => typeof n === 'number' && Number.isFinite(n))
+    .map((n) => {
+      try {
+        return new Intl.NumberFormat(props.locale ?? 'en-US', props.format).format(n).length
+      } catch {
+        return String(n).length
+      }
+    })
+  const minChars = longest.length ? Math.max(...longest) + 1 : undefined
+
   const field = (
     <NumberFieldPrimitive.Group
       data-slot="number-input"
@@ -224,7 +248,8 @@ export function NumberInput({
         aria-label={ariaLabel}
         aria-describedby={describedBy}
         aria-invalid={ariaInvalid}
-        className="h-full min-w-0 flex-1 border-0 bg-transparent p-0 [font-size:inherit] text-ink tabular-nums outline-none placeholder:text-ink-muted focus:shadow-none focus-visible:shadow-none disabled:cursor-not-allowed disabled:text-ink-muted"
+        style={minChars ? { minWidth: `${minChars}ch` } : undefined}
+        className="h-full w-0 min-w-0 flex-1 border-0 bg-transparent p-0 [font-size:inherit] text-ink tabular-nums outline-none placeholder:text-ink-muted focus:shadow-none focus-visible:shadow-none disabled:cursor-not-allowed disabled:text-ink-muted"
       />
       {unit ? (
         <span id={unitId} className="shrink-0 text-sm text-ink-muted">

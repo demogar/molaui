@@ -449,6 +449,58 @@ export const NoResultsOnAPhone: Story = {
   },
 }
 
+function PhoneWidthDemo({ scrolled }: { scrolled: boolean }) {
+  const ref = React.useRef<HTMLDivElement>(null)
+  React.useLayoutEffect(() => {
+    const frame = ref.current?.querySelector<HTMLElement>('[data-slot="table-frame"]')
+    if (!frame || !scrolled) return
+    // The far end in either direction (scrollLeft runs negative in
+    // right-to-left); the browser clamps the overshoot. Kept there while the
+    // table settles: its columns widen once the fonts and the relative times
+    // arrive, and a scroll measured on the first layout stopped a column
+    // short of the end.
+    const toEnd = () => {
+      frame.scrollLeft = (getComputedStyle(frame).direction === 'rtl' ? -1 : 1) * 1e6
+    }
+    toEnd()
+    if (typeof ResizeObserver === 'undefined') return
+    const observer = new ResizeObserver(toEnd)
+    if (frame.firstElementChild) observer.observe(frame.firstElementChild)
+    return () => observer.disconnect()
+  }, [scrolled])
+  return (
+    <div ref={ref} className="max-w-[24.375rem]">
+      <DataTable label="Agent runs" columns={columns} rows={runs.slice(0, 5)} getRowId={(run) => run.id} framed />
+    </div>
+  )
+}
+
+export const ScrollsSideways: Story = {
+  name: 'Scrolls sideways',
+  render: () => <PhoneWidthDemo scrolled={false} />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A table wider than its frame, at a phone’s width (390px). While there are columns past the trailing edge, the frame draws a stitched ink line there (`scroll-edge`), so the table no longer reads as complete with its Status and Cost columns off-screen. Stitched, not solid, so it cannot be mistaken for the cut keyline that closes a panel. The frame is a tab stop only because it overflows.',
+      },
+    },
+  },
+}
+
+export const ScrolledToTheEnd: Story = {
+  name: 'Scrolled to the end',
+  render: () => <PhoneWidthDemo scrolled />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The same table scrolled to its last column: nothing is left past the edge, so the line is gone. It is a scroll-driven animation on the frame’s own scroll, CSS only, so a consumer’s own scrolling row gets it from the class alone, and in right-to-left it follows the scroll to the left edge.',
+      },
+    },
+  },
+}
+
 const ROW_COUNT = 10_000
 const OVERSCAN = 8
 const bigRuns = makeAgentRuns(ROW_COUNT, 3)

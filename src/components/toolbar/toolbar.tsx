@@ -50,8 +50,13 @@ export function Toolbar({ variant, className, ...props }: ToolbarProps) {
   return <ToolbarPrimitive.Root data-slot="toolbar" className={cn(toolbarVariants({ variant }), className)} {...props} />
 }
 
+/**
+ * Wraps, like `ToolbarToggleGroup` and for the same reason: the toolbar
+ * wraps its children, and a group is one child. Unwrapped, the app shell's
+ * three filter buttons ran 86px past a 320px phone.
+ */
 export function ToolbarGroup({ className, ...props }: Omit<ToolbarPrimitive.Group.Props, 'className'> & { className?: string }) {
-  return <ToolbarPrimitive.Group className={cn('flex items-center gap-1', className)} {...props} />
+  return <ToolbarPrimitive.Group className={cn('flex flex-wrap items-center gap-1', className)} {...props} />
 }
 
 export function ToolbarSeparator({ className }: { className?: string }) {
@@ -151,9 +156,15 @@ export interface ToolbarToggleGroupProps extends Omit<ToggleGroup.Props, 'classN
  * A set of toggles: one-of (the default) or `multiple`. It sits inside the
  * toolbar's roving focus rather than adding a second arrow-key scope, so the
  * arrows walk straight through it and out the other side.
+ *
+ * It wraps. The toolbar wraps its children, but a group is one child, so a
+ * row of status filters stayed one unbreakable line and was clipped 405px
+ * past a 320px phone; `ToolbarOverflow` folds buttons into More, and a
+ * pressed toggle in a menu would hide the current filter. Wrapping keeps
+ * every toggle, and which one is pressed, on screen.
  */
 export function ToolbarToggleGroup({ className, ...props }: ToolbarToggleGroupProps) {
-  return <ToggleGroup data-slot="toolbar-toggle-group" className={cn('flex items-center gap-1', className)} {...props} />
+  return <ToggleGroup data-slot="toolbar-toggle-group" className={cn('flex flex-wrap items-center gap-1', className)} {...props} />
 }
 
 export interface ToolbarInputProps extends Omit<ToolbarPrimitive.Input.Props, 'className' | 'size'> {

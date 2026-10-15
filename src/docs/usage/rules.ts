@@ -70,4 +70,8 @@ export const RULES: Rule[] = [
     rule: 'On a product screen, rojo means danger and is used only through the danger role (`bg-danger`, `bg-danger-soft`, `text-ink-danger`, `band-danger`). The accent is gold, by name (`band-accent`).',
     why: 'A red label band or bullet beside a red FAILED mark makes the failure one red thing among several (ADR 0008).',
   },
+  {
+    rule: 'A screen reflows at 320px: only a region meant to scroll sideways (a table, code, a tab or chip row) may, and it carries the `scroll-edge` utility with `useScrollEdge()` as its ref. Table, Tabs and CodeBlock already do.',
+    why: 'WCAG 1.4.10 is measured at 320px, and a region that scrolls with no cue reads as complete: a table hid its Status column and its only action that way.',
+  },
 ]

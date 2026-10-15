@@ -80,6 +80,8 @@ Also accepts the props of `NativeButtonProps`, `ToolbarButtonProps`.
 
 ### `ToolbarGroup` (component)
 
+Wraps, like `ToolbarToggleGroup` and for the same reason: the toolbar wraps its children, and a group is one child. Unwrapped, the app shell's three filter buttons ran 86px past a 320px phone.
+
 - `variant`: `panel`, `bare` (default `bare`)
 
 ### `ToolbarInput` (component)

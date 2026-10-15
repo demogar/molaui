@@ -2421,6 +2421,8 @@ export function TabsList(input: TabsListProps): React_2.JSX.Element;
 export interface TabsListProps extends Omit<Tabs_2.List.Props, 'className'> {
     // (undocumented)
     className?: string;
+    // (undocumented)
+    ref?: React_2.Ref<HTMLDivElement>;
 }
 
 // @public (undocumented)
@@ -2589,7 +2591,7 @@ export interface ToolbarButtonProps extends Omit<Toolbar_2.Button.Props, 'classN
     icon?: React_2.ReactNode;
 }
 
-// @public (undocumented)
+// @public
 export function ToolbarGroup(input: Omit<Toolbar_2.Group.Props, 'className'> & {
     className?: string;
 }): React_2.JSX.Element;
@@ -2789,6 +2791,9 @@ export { useDirection }
 export function useElapsed(startedAt: number | Date | undefined, endedAt?: number | Date | undefined, input?: {
     intervalMs?: number;
 }): number | undefined;
+
+// @public
+export function useScrollEdge<T extends HTMLElement = HTMLElement>(): (el: T | null) => (() => void) | undefined;
 
 // @public
 export function useToast(): {

@@ -3,6 +3,7 @@
 import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { useScrollEdge } from '../../../lib/scroll-edge'
 
 import { createBlockParser, type Block, type InlineRun } from './parse'
 
@@ -136,6 +137,7 @@ const BlockView = React.memo(function BlockView({
   renderCitation?: (n: number) => React.ReactNode
 }) {
   const caret = showCaret ? <Caret /> : null
+  const edgeRef = useScrollEdge<HTMLPreElement>()
   switch (block.kind) {
     case 'p':
       return (
@@ -157,7 +159,7 @@ const BlockView = React.memo(function BlockView({
       )
     case 'pre':
       return (
-        <pre className="m-0 overflow-x-auto bg-cloth-shade px-3 py-2.5 text-ink shadow-cut scroll-cloth">
+        <pre ref={edgeRef} className="m-0 overflow-x-auto bg-cloth-shade px-3 py-2.5 text-ink shadow-cut scroll-cloth scroll-edge">
           <code className="literal text-sm leading-reading">
             {block.text}
             {caret}

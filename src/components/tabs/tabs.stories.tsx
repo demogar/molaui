@@ -1,7 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Coins, FileText, ListTree, ScrollText } from 'lucide-react'
 
+import { useScrollEdge } from '../../lib/scroll-edge'
 import { Tabs, TabsList, TabsPanel, TabsTab } from './tabs'
+
+/** Source that scrolls sideways on a phone, with the scroll-edge cue. */
+function Snippet({ children }: { children: string }) {
+  return (
+    <pre ref={useScrollEdge()} className="literal m-0 overflow-x-auto text-ink-2 scroll-cloth scroll-edge">
+      {children}
+    </pre>
+  )
+}
 
 const meta = {
   title: 'Components/Navigation/Tabs',
@@ -67,13 +77,13 @@ export const Panel: Story = {
         <TabsTab value="curl">cURL</TabsTab>
       </TabsList>
       <TabsPanel value="ts">
-        <pre className="literal m-0 text-ink-2">{`const run = await agents.runs.create({\n  agent: 'knowledge-agent',\n  input: 'Summarise the fair-play policy',\n})`}</pre>
+        <Snippet>{`const run = await agents.runs.create({\n  agent: 'knowledge-agent',\n  input: 'Summarise the fair-play policy',\n})`}</Snippet>
       </TabsPanel>
       <TabsPanel value="py">
-        <pre className="literal m-0 text-ink-2">{`run = agents.runs.create(\n    agent="knowledge-agent",\n    input="Summarise the fair-play policy",\n)`}</pre>
+        <Snippet>{`run = agents.runs.create(\n    agent="knowledge-agent",\n    input="Summarise the fair-play policy",\n)`}</Snippet>
       </TabsPanel>
       <TabsPanel value="curl">
-        <pre className="literal m-0 text-ink-2">{`curl -X POST /v1/runs \\\n  -d agent=knowledge-agent`}</pre>
+        <Snippet>{`curl -X POST /v1/runs \\\n  -d agent=knowledge-agent`}</Snippet>
       </TabsPanel>
     </Tabs>
   ),

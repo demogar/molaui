@@ -68,6 +68,7 @@ Also accepts the props of `TabsRootProps`.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `className` | `string` |  |  |
+| `ref` | `Ref<HTMLDivElement>` |  | Allows getting a ref to the component instance. Once the component unmounts, React will set `ref.current` to `null` (or call the ref with `null` if you passed a callback ref). |
 
 Also accepts the props of `TabsListProps`.
 

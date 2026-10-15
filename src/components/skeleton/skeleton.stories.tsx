@@ -73,7 +73,7 @@ export const Card: Story = {
       loading
       label="Loading agent"
       fallback={<AgentCardBones />}
-      className="w-80 bg-cloth-pale p-5 shadow-cut"
+      className="w-80 max-w-full bg-cloth-pale p-5 shadow-cut"
     />
   ),
 }
@@ -98,7 +98,7 @@ export const LoadingToLoaded: Story = {
           loading={loading}
           label="Loading agent"
           fallback={<AgentCardBones />}
-          className="w-80 bg-cloth-pale p-5 shadow-cut"
+          className="w-80 max-w-full bg-cloth-pale p-5 shadow-cut"
         >
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-3">

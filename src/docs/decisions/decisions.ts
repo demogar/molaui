@@ -103,6 +103,14 @@ const NOTES: Record<string, Notes> = {
       'Foundations/The cut': 'A red seam is band-danger: rojo is only ever danger on a product screen.',
     },
   },
+  '0009': {
+    name: 'Scroll-edge cue',
+    decided: 'A region meant to scroll sideways draws a stitched ink edge on its trailing side while there is more past it, and nothing else may scroll sideways at 320px.',
+    governs: {
+      'Foundations/The cut': 'A stitched trailing edge (scroll-edge) marks a region that scrolls sideways; a solid keyline still means the panel ends.',
+      'Foundations/Accessibility': 'Reflow is audited at 320px: only a region carrying the scroll-edge cue may scroll sideways.',
+    },
+  },
 }
 
 export interface Decision extends Notes {

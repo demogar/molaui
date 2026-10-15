@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import type * as React from 'react'
 
+import { useScrollEdge } from '../../lib/scroll-edge'
 import { Badge, RecommendationBadge, StatusDot, type BadgeTone } from './badge'
 
 const TONES: BadgeTone[] = ['neutral', 'info', 'success', 'warn', 'danger', 'accent']
@@ -34,11 +36,20 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+/** The matrix scrolls sideways on a phone, with the scroll-edge cue. */
+function Scrolls({ children }: { children: React.ReactNode }) {
+  return (
+    <div ref={useScrollEdge()} className="max-w-full overflow-x-auto scroll-cloth scroll-edge">
+      {children}
+    </div>
+  )
+}
+
 export const Default: Story = {}
 
 export const Matrix: Story = {
   render: () => (
-    <div className="max-w-full overflow-x-auto">
+    <Scrolls>
       <table className="border-separate border-spacing-x-4 border-spacing-y-3">
         <thead>
           <tr>
@@ -63,7 +74,7 @@ export const Matrix: Story = {
           ))}
         </tbody>
       </table>
-    </div>
+    </Scrolls>
   ),
   parameters: {
     docs: {

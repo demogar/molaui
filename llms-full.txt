@@ -55,6 +55,7 @@ Theme and density are attributes, not props: `<html data-theme="dark" data-densi
 - Check a component’s lifecycle phase before building on it. Stable is covered by semver, Experimental may change in a minor release, and Deprecated names its replacement: use that instead. A screen built on a component that is about to change or go is built twice.
 - Do what each component’s accessibility section leaves to you, usually an accessible name or a label. The component handles roles, focus and announcements. Axe catches a missing name only on the screens it is run on; the component cannot know what its button is for.
 - On a product screen, rojo means danger and is used only through the danger role (`bg-danger`, `bg-danger-soft`, `text-ink-danger`, `band-danger`). The accent is gold, by name (`band-accent`). A red label band or bullet beside a red FAILED mark makes the failure one red thing among several (ADR 0008).
+- A screen reflows at 320px: only a region meant to scroll sideways (a table, code, a tab or chip row) may, and it carries the `scroll-edge` utility with `useScrollEdge()` as its ref. Table, Tabs and CodeBlock already do. WCAG 1.4.10 is measured at 320px, and a region that scrolls with no cue reads as complete: a table hid its Status column and its only action that way.
 
 ## Lifecycle phases
 
@@ -2677,6 +2678,8 @@ Also accepts the props of `NativeButtonProps`, `ToolbarButtonProps`.
 
 #### `ToolbarGroup` (component)
 
+Wraps, like `ToolbarToggleGroup` and for the same reason: the toolbar wraps its children, and a group is one child. Unwrapped, the app shell's three filter buttons ran 86px past a 320px phone.
+
 - `variant`: `panel`, `bare` (default `bare`)
 
 #### `ToolbarInput` (component)
@@ -3012,6 +3015,7 @@ Also accepts the props of `TabsRootProps`.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `className` | `string` |  |  |
+| `ref` | `Ref<HTMLDivElement>` |  | Allows getting a ref to the component instance. Once the component unmounts, React will set `ref.current` to `null` (or call the ref with `null` if you passed a callback ref). |
 
 Also accepts the props of `TabsListProps`.
 
@@ -5040,3 +5044,4 @@ Accessibility:
 - `DirectionProvider` (component, @base-ui/react): Enables RTL behavior for Base UI components.
 - `useDirection` (hook, @base-ui/react)
 - `TextDirection` (type, @base-ui/react)
+- `useScrollEdge` (hook, src/lib/scroll-edge.ts): Keeps `data-overflow-end` on a sideways-scrolling element while there is more past its trailing edge, for the `scroll-edge` utility to draw its cue from. Also marks the element `data-scroll-edge`, so the browser audit can tell a region meant to scroll from a layout that overflows by accident.

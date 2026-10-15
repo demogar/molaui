@@ -71,7 +71,7 @@ export const Toggles: Story = {
   render: (args) => {
     const [wrap, setWrap] = React.useState(true)
     return (
-      <Toolbar {...args} variant="panel" className="w-fit">
+      <Toolbar {...args} variant="panel" className="w-fit max-w-full">
         <ToolbarToggleGroup aria-label="Show steps" multiple defaultValue={['tool', 'message']}>
           <ToolbarToggle value="reasoning">Reasoning</ToolbarToggle>
           <ToolbarToggle value="tool">Tool calls</ToolbarToggle>

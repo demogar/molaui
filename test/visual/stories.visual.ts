@@ -13,7 +13,8 @@ import { mine } from './shard'
  * three modes most likely to break quietly: compact density, right-to-left,
  * and forced colours. Every story in every mode would be about 1,400
  * screenshots per run; the first story of a component is its canonical one,
- * and a regression in a mode almost always shows there.
+ * and a regression in a mode almost always shows there. The patterns are also
+ * held at spacious density, below.
  *
  * The list comes from the built Storybook's index, so a new story is covered
  * the moment it exists, and needs a baseline before CI passes.
@@ -46,7 +47,7 @@ const firstOfEach = stories.filter((s, i) => stories.findIndex((t) => t.title ==
 interface Mode {
   name: string
   theme: 'light' | 'dark'
-  density?: 'compact'
+  density?: 'compact' | 'spacious'
   rtl?: boolean
   forced?: boolean
 }
@@ -134,14 +135,27 @@ const FORCED_TOO = new Set(['components-layout-divider--relleno', 'components-la
 const forcedToo = stories.filter((s) => FORCED_TOO.has(s.id) && !firstOfEach.includes(s))
 if (forcedToo.length !== FORCED_TOO.size) throw new Error(`A forced-colours story is missing from the index: ${[...FORCED_TOO].join(', ')}`)
 
+/**
+ * The patterns at the third density. With `light` (comfortable) and
+ * `compact` above, each pattern is held at all three. Spacious is where a
+ * whole screen breaks rather than a component: it grows every control while
+ * the columns keep their width, and the settings page's token limit shrank to
+ * a 21px field at spacious with nothing in the baselines to show it.
+ */
+const patterns = firstOfEach.filter((s) => s.title.startsWith('Patterns/'))
+// A renamed title would quietly empty the matrix rather than fail it.
+if (patterns.length < 6) throw new Error(`expected the six patterns, found ${patterns.length}`)
+const patternModes: Mode[] = [{ name: 'spacious', theme: 'light', density: 'spacious' }]
+
 /** Every screenshot in a fixed order, which `mine()` deals across shards. */
 const shots = [
   ...everyStory.flatMap((mode) => stories.map((story) => ({ mode, story }))),
   ...representative.flatMap((mode) => (mode.forced ? [...firstOfEach, ...forcedToo] : firstOfEach).map((story) => ({ mode, story }))),
+  ...patternModes.flatMap((mode) => patterns.map((story) => ({ mode, story }))),
 ]
 const file = ({ mode, story }: (typeof shots)[number]) => `${story.id}--${mode.name}.png`
 
-for (const mode of [...everyStory, ...representative]) {
+for (const mode of [...everyStory, ...representative, ...patternModes]) {
   test.describe(mode.name, () => {
     test.use({ viewport: { width: 1280, height: 900 } })
     shots.forEach((shot, i) => {

@@ -120,6 +120,9 @@ because keyboard direction is read from context.
 12. **Do what the accessibility section leaves to you** (`accessibility.you` in the manifest),
     usually an accessible name or a label. The component already handles roles, focus and
     announcements; don't add your own on top.
+13. **Reflow at 320px.** Nothing scrolls sideways except a region meant to (a table, code, a tab
+    or chip row), and that region carries `scroll-edge` with `ref={useScrollEdge()}`, so a
+    stitched edge says there is more. `Table`, `Tabs` and `CodeBlock` already do.
 
 ## Picking a component
 
