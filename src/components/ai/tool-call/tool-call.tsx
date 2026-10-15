@@ -132,14 +132,22 @@ export function ToolCall({
       {...props}
     >
       {working ? <span aria-hidden data-part="progress" className="absolute inset-x-0 top-0 h-(--bar-w) band-accent relleno-working" /> : null}
-      <Collapsible.Root open={forcedOpen || openState} onOpenChange={setOpenState}>
+      {/* A forced-open call ignores the toggle, so it does not come back
+          collapsed (or expanded) by a click made while it could not close. */}
+      <Collapsible.Root open={forcedOpen || openState} onOpenChange={(next) => !forcedOpen && setOpenState(next)}>
+        {/* Forced open, the header is `aria-disabled`, not `disabled`: a
+            disabled button leaves the tab order, so on a failed call or one
+            waiting for approval, Tab went straight to Retry or Approve and the
+            call's name and status were never a stop. Now it is one, announced
+            as expanded and unavailable — open, and staying open. */}
         <Collapsible.Trigger
           data-part="header"
-          disabled={!hasBody || forcedOpen}
+          disabled={!hasBody}
+          aria-disabled={forcedOpen || undefined}
           className={cn(
             'group/trigger flex w-full min-h-(--control-h) items-center gap-2.5 px-3 py-2 text-start',
-            'transition-colors enabled:hover:bg-ink-soft',
-            'focus-visible:focus-ring-inset disabled:cursor-default',
+            'transition-colors enabled:not-aria-disabled:hover:bg-ink-soft',
+            'focus-visible:focus-ring-inset disabled:cursor-default aria-disabled:cursor-default',
           )}
         >
           <Plus

@@ -89,7 +89,7 @@ Nothing in it takes focus, so there is no keyboard table.
 ### Mola handles
 
 - The text is `aria-busy` while it streams, so it is not read token by token.
-- A polite status says “Response complete.” or “Response stopped with an error.” once, when a running stream ends, and not on mount.
+- A polite status says “Response complete.” or “Response stopped with an error.” once, when a running stream ends, and not on mount; inside an `AgentRun` the run announces the outcome instead.
 - The caret is hidden from screen readers, and under reduced motion it stops blinking.
 
 ### You handle

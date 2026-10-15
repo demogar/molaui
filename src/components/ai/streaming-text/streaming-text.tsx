@@ -9,6 +9,7 @@ import { useScrollEdge } from '../../../lib/scroll-edge'
 
 import { type StreamingTextMessages, streamingTextMessages } from './messages'
 import { createBlockParser, type Block, type InlineRun } from './parse'
+import { RunAnnouncesContext } from './run-announces'
 import { useCompletionAnnouncement } from './use-completion-announcement'
 
 export type StreamStatus = 'idle' | 'streaming' | 'done' | 'error'
@@ -101,6 +102,8 @@ export function StreamingText({
   const streaming = status === 'streaming'
 
   const announcement = useCompletionAnnouncement(status, doneAnnouncement ?? t.done, errorAnnouncement ?? t.error)
+  // Inside an AgentRun the run says how it ended; see RunAnnouncesContext.
+  const runAnnounces = React.useContext(RunAnnouncesContext)
 
   return (
     <div
@@ -128,9 +131,11 @@ export function StreamingText({
           <Caret />
         </p>
       ) : null}
-      <span role="status" className="sr-only">
-        {announcement}
-      </span>
+      {runAnnounces ? null : (
+        <span role="status" className="sr-only">
+          {announcement}
+        </span>
+      )}
     </div>
   )
 }

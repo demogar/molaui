@@ -110,7 +110,7 @@ Each story is a live example in Storybook.
 
 ### `TableCheckbox` (component)
 
-A native checkbox, drawn as a cut square. Native, so space toggles it, forms submit it and screen readers announce it with no ARIA to keep in sync; the visible square is a sibling painted from the input's own `:checked` and `:indeterminate` state.
+A native checkbox, drawn as a cut square. Native, so space toggles it, forms submit it and screen readers announce it with no ARIA to keep in sync.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -257,9 +257,9 @@ Types: `DataTableMessages`, `TableMessages`, `TableCellProps`, `TableCheckboxPro
 
 ### Mola handles
 
-- Puts the scrolling frame in the tab order only when the table overflows it.
+- Puts the scrolling frame in the tab order only when the table overflows it, and then makes it a group named as the table is.
 - Sets `aria-sort` on the sorted column only, and `aria-selected` on selected rows.
-- Uses native checkboxes, and announces the selection count once through a polite status.
+- Uses native checkboxes with a 24px hit area around the drawn square, and announces the selection count once through a polite status.
 - Marks a loading `DataTable` with `aria-busy` and hides its skeleton rows from assistive tech.
 - With `virtualize`, sets `aria-rowcount` and `aria-rowindex` so the full count is heard, and keeps the focused row rendered while it is scrolled away.
 - Makes each column resize handle a focusable separator with its width as `aria-valuenow`, so it can be found and moved without a pointer.

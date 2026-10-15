@@ -78,7 +78,7 @@ Each story is a live example in Storybook.
 
 ### `StatusDot` (component)
 
-A square, not a circle. It is a scrap of cut cloth, and a round dot is the one shape a blade cannot make. Gold dots carry an ink keyline because gold on light cloth is 1.66:1 — under the 3:1 a graphic mark needs to be seen.
+A square, not a circle. It is a scrap of cut cloth, and a round dot is the one shape a blade cannot make. Each tone is cut as its own shape (see STATUS_GLYPH), and every shape carries an ink keyline, because gold on light cloth is 1.66:1 — under the 3:1 a graphic mark needs to be seen.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -107,12 +107,13 @@ Nothing in it takes focus, so there is no keyboard table.
 ### Mola handles
 
 - Hides `StatusDot` from assistive tech when it sits beside a word, and gives it `role="img"` and a name when `label` is set.
+- Cuts each tone as its own shape — hollow, striped, filled, half, crossed, diamond — so a state never rests on colour alone, even on a solid badge.
 - Stills the pulse under reduced motion, leaving the dot in place.
-- Keeps dots visible in forced colours mode by painting them in the system text colour.
+- Keeps dots visible in forced colours mode by painting their shapes in the system colours.
 
 ### You handle
 
-- Put the state in words inside the badge: Failed, Running.
+- Put the state in words inside the badge: Failed, Running; pass `dot` so the word has its shape beside it.
 - Give a `StatusDot` that stands alone a `label`.
 
 ### Testing status

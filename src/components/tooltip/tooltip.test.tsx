@@ -57,6 +57,30 @@ describe('Tooltip', () => {
     expect(screen.getByRole('button', { name: 'Copy' })).toHaveFocus()
   })
 
+  // Base UI renders neither the role nor the link, so the tooltip's words
+  // existed only for sighted users.
+  it('is a tooltip that describes its trigger while open, and only then', async () => {
+    const user = userEvent.setup()
+    render(
+      <>
+        <Tooltip content="Re-run from this step" shortcut={['⌘', '⇧', 'R']} delay={0}>
+          <Button aria-describedby="run-note">Re-run</Button>
+        </Tooltip>
+        <p id="run-note">Uses the cached inputs.</p>
+        <button type="button">Elsewhere</button>
+      </>,
+    )
+    const trigger = screen.getByRole('button', { name: 'Re-run' })
+    expect(trigger).toHaveAttribute('aria-describedby', 'run-note')
+    await user.tab()
+    const tooltip = await screen.findByRole('tooltip')
+    expect(trigger).toHaveAccessibleDescription('Uses the cached inputs. Re-run from this step, Command Shift R')
+    expect(trigger.getAttribute('aria-describedby')).toContain(tooltip.id)
+    await user.tab()
+    await waitFor(() => expect(screen.queryByRole('tooltip')).toBeNull())
+    expect(trigger).toHaveAttribute('aria-describedby', 'run-note')
+  })
+
   it('renders shortcut keys as <kbd>', async () => {
     render(
       <Tooltip content="Search" shortcut={['⌘', 'K']} defaultOpen>

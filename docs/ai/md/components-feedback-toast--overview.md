@@ -81,7 +81,7 @@ Types: `ToastMessages`, `ToastOptions`, `ToastProviderProps`, `ToastTone`
 
 ### Mola handles
 
-- Renders the stack in a polite live region, and announces `danger` toasts assertively.
+- Renders the stack in a polite live region, and announces `danger` toasts assertively, once: the card opts out of the polite region so the alert is the only reading.
 - Prefixes the title with hidden words for its tone: Success, Error, In progress.
 - Pauses the timers while the region has keyboard focus, and keeps a running toast until it is updated or dismissed.
 - Names the dismiss button "Dismiss".

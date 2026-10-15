@@ -19,6 +19,7 @@ import {
 } from '../run-status'
 import { RunError, type RunErrorProps } from '../run-error'
 import { FailureReportedContext } from '../run-error/failure-reported'
+import { RunAnnouncesContext } from '../streaming-text/run-announces'
 import { TokenUsage, type TokenUsageProps } from '../token-usage'
 import { runStatusMessages } from '../run-status/messages'
 import { type AgentRunMessages, agentRunMessages } from './messages'
@@ -194,74 +195,77 @@ export function AgentRun({
   }
 
   return (
-    <section
-      data-slot="agent-run"
-      data-status={status}
-      aria-labelledby={headingId}
-      className={cn('flex flex-col bg-cloth-pale shadow-cut', className)}
-      {...props}
-    >
-      <header className="flex flex-col gap-3 border-b border-keyline p-4">
-        <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
-          <div className="flex min-w-0 flex-col gap-1.5">
-            <Heading ref={headingRef} id={headingId} tabIndex={-1} className="m-0 outline-none font-display text-lg leading-snug font-bold tracking-display wdth-display">
-              {name}
-            </Heading>
-            <RunStatus status={status} startedAt={startedAt} endedAt={endedAt} />
+    // The run announces its own outcome below, so a stream inside it does not.
+    <RunAnnouncesContext.Provider value={true}>
+      <section
+        data-slot="agent-run"
+        data-status={status}
+        aria-labelledby={headingId}
+        className={cn('flex flex-col bg-cloth-pale shadow-cut', className)}
+        {...props}
+      >
+        <header className="flex flex-col gap-3 border-b border-keyline p-4">
+          <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+            <div className="flex min-w-0 flex-col gap-1.5">
+              <Heading ref={headingRef} id={headingId} tabIndex={-1} className="m-0 outline-none font-display text-lg leading-snug font-bold tracking-display wdth-display">
+                {name}
+              </Heading>
+              <RunStatus status={status} startedAt={startedAt} endedAt={endedAt} />
+            </div>
+            <div className="flex shrink-0 gap-2">
+              {active && onCancel ? (
+                <Button size="sm" variant="secondary" icon={<Square className="fill-current" />} onClick={onCancel}>
+                  {t.cancelRun}
+                </Button>
+              ) : null}
+              {isRetryableStatus(status) && onRetry && !shown ? (
+                <Button size="sm" icon={<RotateCcw />} onClick={onRetry}>
+                  {t.retryRun}
+                </Button>
+              ) : null}
+            </div>
           </div>
-          <div className="flex shrink-0 gap-2">
-            {active && onCancel ? (
-              <Button size="sm" variant="secondary" icon={<Square className="fill-current" />} onClick={onCancel}>
-                {t.cancelRun}
-              </Button>
-            ) : null}
-            {isRetryableStatus(status) && onRetry && !shown ? (
-              <Button size="sm" icon={<RotateCcw />} onClick={onRetry}>
-                {t.retryRun}
-              </Button>
-            ) : null}
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
+            <RunId id={runId} t={t} />
+            {model ? <span className="literal text-xs text-ink-muted">{model}</span> : null}
+            {usage ? <TokenUsage variant="inline" {...usage} /> : null}
           </div>
-        </div>
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
-          <RunId id={runId} t={t} />
-          {model ? <span className="literal text-xs text-ink-muted">{model}</span> : null}
-          {usage ? <TokenUsage variant="inline" {...usage} /> : null}
-        </div>
-      </header>
+        </header>
 
-      {shown ? (
-        <RunError
-          className="mx-4 mt-4"
-          kind={shown.kind ?? (status === 'timed_out' ? 'timed_out' : status === 'cancelled' ? 'cancelled' : 'failed')}
-          step={typeof failedStep?.title === 'string' ? failedStep.title : undefined}
-          stepNumber={failedStep ? failedIndex + 1 : undefined}
-          stepCount={failedStep ? steps.length : undefined}
-          tool={shown.tool}
-          error={shown.error}
-          message={shown.message}
-          runId={runId}
-          at={shown.at}
-          retryAt={shown.retryAt}
-          autoRetry={shown.autoRetry}
-          onRetry={onRetry ? retrying(onRetry) : undefined}
-          onRetryFromStep={failedStep && onRetryFromStep ? retrying(() => onRetryFromStep(failedStep.id)) : undefined}
-        />
-      ) : null}
+        {shown ? (
+          <RunError
+            className="mx-4 mt-4"
+            kind={shown.kind ?? (status === 'timed_out' ? 'timed_out' : status === 'cancelled' ? 'cancelled' : 'failed')}
+            step={typeof failedStep?.title === 'string' ? failedStep.title : undefined}
+            stepNumber={failedStep ? failedIndex + 1 : undefined}
+            stepCount={failedStep ? steps.length : undefined}
+            tool={shown.tool}
+            error={shown.error}
+            message={shown.message}
+            runId={runId}
+            at={shown.at}
+            retryAt={shown.retryAt}
+            autoRetry={shown.autoRetry}
+            onRetry={onRetry ? retrying(onRetry) : undefined}
+            onRetryFromStep={failedStep && onRetryFromStep ? retrying(() => onRetryFromStep(failedStep.id)) : undefined}
+          />
+        ) : null}
 
-      <ol aria-label={f.format(t.steps, { name })} className="m-0 list-none p-4 pb-2">
-        {steps.map((step, i) => (
-          <FailureReportedContext.Provider key={step.id} value={shown !== undefined && i === failedIndex}>
-            <StepRow step={step} kindLabel={t.kinds[step.kind]} last={i === steps.length - 1} nextStarted={steps[i + 1]?.status !== 'queued'} />
-          </FailureReportedContext.Provider>
-        ))}
-      </ol>
+        <ol aria-label={f.format(t.steps, { name })} className="m-0 list-none p-4 pb-2">
+          {steps.map((step, i) => (
+            <FailureReportedContext.Provider key={step.id} value={shown !== undefined && i === failedIndex}>
+              <StepRow step={step} kindLabel={t.kinds[step.kind]} last={i === steps.length - 1} nextStarted={steps[i + 1]?.status !== 'queued'} />
+            </FailureReportedContext.Provider>
+          ))}
+        </ol>
 
-      {summary && !active ? <footer className="border-t border-keyline p-4">{summary}</footer> : null}
+        {summary && !active ? <footer className="border-t border-keyline p-4">{summary}</footer> : null}
 
-      <span role="status" className="sr-only">
-        {announcement}
-      </span>
-    </section>
+        <span role="status" className="sr-only">
+          {announcement}
+        </span>
+      </section>
+    </RunAnnouncesContext.Provider>
   )
 }
 
@@ -310,12 +314,16 @@ function StepRow({ step, kindLabel, last, nextStarted }: { step: AgentStep; kind
       </span>
       <div className={cn('min-w-0', !last && 'pb-4')}>
         {hasDetail ? (
-          <Collapsible.Root open={forcedOpen || openState} onOpenChange={setOpenState}>
+          <Collapsible.Root open={forcedOpen || openState} onOpenChange={(next) => !forcedOpen && setOpenState(next)}>
+            {/* Held open, the header is `aria-disabled` rather than
+                `disabled`, as on ToolCall: a disabled button leaves the tab
+                order, and a failed step or one waiting for approval is the
+                step a keyboard user most needs to stop on. */}
             <Collapsible.Trigger
-              disabled={forcedOpen}
+              aria-disabled={forcedOpen || undefined}
               className={cn(
                 'group/step -mx-2 -my-1 flex w-[calc(100%+1rem)] items-start gap-2 px-2 py-1 text-start',
-                'transition-colors enabled:hover:bg-ink-soft disabled:cursor-default',
+                'transition-colors not-aria-disabled:hover:bg-ink-soft aria-disabled:cursor-default',
               )}
             >
               <Plus

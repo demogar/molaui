@@ -83,12 +83,13 @@ Types: `TooltipProps`
 ### Mola handles
 
 - It opens on keyboard focus as well as on hover.
-- `shortcut` keys are rendered as `<kbd>` elements.
+- The popup is `role="tooltip"`, and while it is open the trigger is `aria-describedby` it, joined with any description the trigger already has.
+- `shortcut` keys are drawn as `<kbd>` elements and read as words: “Command Shift R”.
 - Inside a `TooltipProvider`, moving along a `Toolbar` shows the next tooltip at once, after the first delay.
 
 ### You handle
 
-- Give the trigger its own accessible name, such as an `IconButton` `label`; the tooltip is not wired to it as a name or description.
+- Give the trigger its own accessible name, such as an `IconButton` `label`; the tooltip is its description, not its name.
 - Never put information only in a tooltip; it does not exist on touch.
 - Pass a focusable element as the child.
 

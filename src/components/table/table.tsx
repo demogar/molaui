@@ -53,18 +53,30 @@ export function Table({
   const frameRef = React.useRef<HTMLDivElement>(null)
   const overflows = useOverflows(frameRef)
   const setFrame = useMergedRefs(frameRef, useScrollEdge<HTMLDivElement>())
+  const named = Boolean(props['aria-label'] || props['aria-labelledby'])
   return (
     <TableContext.Provider value={{ stickyHeader }}>
       <div
         ref={setFrame}
         data-slot="table-frame"
         // A scrolling region has to be reachable by keyboard, or its overflow is
-        // unreachable to anyone without a wheel. Named by the table inside it.
-        // It was focusable only with `stickyHeader`, but any table wider than
-        // its frame scrolls sideways — every wide table on a phone — so it
-        // is focusable whenever it actually overflows, and only then: a table
-        // that fits should not add a stop to the tab order.
-        tabIndex={stickyHeader || overflows ? 0 : undefined}
+        // unreachable to anyone without a wheel. Any table wider than its frame
+        // scrolls sideways — every wide table on a phone — so the frame is
+        // focusable whenever it actually overflows, and only then: a table that
+        // fits should not add a stop to the tab order. It used to be focusable
+        // whenever `stickyHeader` was set too, overflow or not, which put a
+        // nameless stop before every sticky table on a wide screen.
+        //
+        // A stop has to say what it is, so while it is one the frame is a
+        // group named as the table is named. A group, not a region: a region
+        // is a landmark, and a table labelled by its section's heading made a
+        // second "Recent runs" landmark inside the first (axe's
+        // landmark-unique, on every phone-width table). A table with no name
+        // gets no role, since an unnamed group says nothing either.
+        tabIndex={overflows ? 0 : undefined}
+        role={overflows && named ? 'group' : undefined}
+        aria-label={overflows ? props['aria-label'] : undefined}
+        aria-labelledby={overflows ? props['aria-labelledby'] : undefined}
         className={cn(
           'relative w-full overflow-auto scroll-cloth scroll-edge',
           framed && 'bg-cloth-pale shadow-cut',
@@ -441,9 +453,15 @@ export interface TableCheckboxProps extends Omit<React.ComponentProps<'input'>, 
 
 /**
  * A native checkbox, drawn as a cut square. Native, so space toggles it, forms
- * submit it and screen readers announce it with no ARIA to keep in sync; the
- * visible square is a sibling painted from the input's own `:checked` and
- * `:indeterminate` state.
+ * submit it and screen readers announce it with no ARIA to keep in sync.
+ *
+ * The square is 16px (14px at compact), but the input is 24px: transparent
+ * and overhanging the square on every side, so the thing a pointer has to hit meets
+ * WCAG 2.5.8 (24 by 24) while the row keeps its drawn size. The square — the
+ * wrapper — is painted from the input's state with `has-*`, so the focus ring
+ * is drawn on an ancestor of the focused element, where a focus check (and a
+ * reader of the code) looks for it. The input used to be the square, and its
+ * 16px was the whole target.
  */
 export function TableCheckbox({ indeterminate = false, className, ref: refProp, ...props }: TableCheckboxProps) {
   // Merged with the consumer's ref rather than replaced by it: when a passed
@@ -455,15 +473,28 @@ export function TableCheckbox({ indeterminate = false, className, ref: refProp, 
   }, [indeterminate])
 
   return (
-    <span data-slot="table-checkbox" className={cn('relative inline-grid size-4 shrink-0 place-items-center align-middle', className)}>
+    <span
+      data-slot="table-checkbox"
+      className={cn(
+        'relative inline-grid size-4 shrink-0 place-items-center align-middle',
+        'bg-cloth-pale shadow-cut transition-colors',
+        'has-checked:bg-ink has-indeterminate:bg-ink',
+        'has-focus-visible:focus-ring',
+        'has-disabled:bg-disabled',
+        className,
+      )}
+    >
       <input
         type="checkbox"
         className={cn(
-          'peer absolute inset-0 m-0 size-full cursor-pointer appearance-none rounded-none',
-          'bg-cloth-pale shadow-cut transition-colors',
-          'checked:bg-ink indeterminate:bg-ink',
-          'focus-visible:focus-ring',
-          'disabled:cursor-not-allowed disabled:bg-disabled',
+          // Inset by half of (square − 24px) on every side: 24px whatever the
+          // square measures. `-inset-1` was a spacing unit, which compact
+          // density shrinks, and left a 22px target round a 14px square.
+          'peer absolute inset-[calc((100%-24px)/2)] m-0 cursor-pointer appearance-none rounded-none bg-transparent',
+          // The ring is the wrapper's; the base layer would draw a second,
+          // 24px one round the transparent overhang.
+          'focus-visible:shadow-none',
+          'disabled:cursor-not-allowed',
         )}
         {...props}
         ref={mergedRef}

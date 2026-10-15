@@ -131,8 +131,9 @@ Types: `AlertDialogMessages`, `DialogMessages`, `AlertDialogProps`, `DialogBand`
 
 ### Mola handles
 
-- Base UI traps focus, locks scroll, makes the page inert and returns focus on close.
+- Base UI traps focus, locks scroll, makes the page inert and returns focus on close; the popup says `aria-modal="true"`.
 - The dialog is named by `title` and described by `description`, and a named Close button is always rendered unless `hideClose` is set.
+- A body long enough to scroll is a tab stop named by the title, in every browser, and only while it scrolls.
 - `AlertDialog` is a `role="alertdialog"` that an outside click does not dismiss, and it focuses Cancel first.
 - While an async confirm is pending, both buttons stop taking presses and the dialog cannot be closed.
 - An AlertDialog `error` is a `role="alert"`, announced once when it appears and again after each failed retry, and it is the confirm button’s description.
