@@ -205,7 +205,9 @@ function ToastList() {
         toast={toast}
         swipeDirection={swipeDirection}
         data-slot="toast"
-        className={cn(stackClasses, 'bg-cloth-pale text-ink shadow-floating')}
+        // The toast itself is a tab stop (Base UI), and it showed no focus:
+        // the floating shadow was its only edge. Found by the hard-states story.
+        className={cn(stackClasses, 'bg-cloth-pale text-ink shadow-floating outline-none focus-visible:focus-ring')}
       >
         <ToastPrimitive.Content className="flex h-full items-start gap-3 overflow-hidden py-3 pe-2 ps-4 transition-opacity duration-(--motion-base) data-behind:opacity-0 data-expanded:opacity-100">
           <span aria-hidden className={cn('mt-[5px] size-2.5 shrink-0', MARK[tone])} />

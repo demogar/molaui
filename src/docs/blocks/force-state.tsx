@@ -11,7 +11,7 @@ import * as React from 'react'
  * picture. So this copies the component's own rules instead. Every style rule
  * whose selector names `:hover`, `:active` or `:focus-visible` is inserted
  * again right after itself, in the same `@layer` and `@media`, with the
- * pseudo-class replaced by "inside an element marked `data-force-state`". The
+ * pseudo-class widened to "or inside an element marked `data-force-state`". The
  * copy sits beside the original, so it wins and loses exactly where the
  * original would. storybook-addon-pseudo-states does the same thing; this is
  * the forty lines of it the system needs, without another dependency to pin.
@@ -43,7 +43,10 @@ function copyForced(parent: RuleParent) {
       if (plain) continue
       const selector = rule.selectorText.replace(
         PSEUDO,
-        (_, state: string) => `:is([data-force-state~="${state}"], [data-force-state~="${state}"] *)`,
+        // The real pseudo-class stays as an alternative: a rule for two states
+        // at once (`:active:focus-visible`, a pressed button that is also
+        // focused) must still match when one is forced and the other real.
+        (_, state: string) => `:is(:${state}, [data-force-state~="${state}"], [data-force-state~="${state}"] *)`,
       )
       try {
         parent.insertRule(`${selector}{${rule.style.cssText}}`, i + 1)

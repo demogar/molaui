@@ -10,6 +10,7 @@ import { Select } from '../select'
 import { Drawer, DrawerClose, DrawerContent, DrawerTrigger, type DrawerSide } from './drawer'
 import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 import { DirectionProvider } from '../../lib/direction'
+import { wrappingButtonSlot } from '../button/wrapping-slot'
 
 const meta = {
   title: 'Components/Overlays/Drawer',
@@ -239,7 +240,7 @@ export const HardStates: Story = {
   tags: ['hard-states', '!autodocs'],
   render: () => (
     <HardStatesFrame>
-      <HardState state="long-label">
+      <HardState state="long-label" className={wrappingButtonSlot}>
         <Drawer>
           <DrawerTrigger render={<Button variant="secondary">View the refund and chargeback triage run</Button>} />
           <DrawerContent

@@ -152,7 +152,7 @@ export const HardStates: Story = {
     <HardStatesFrame>
       <HardState state="long-label">
         <Toolbar aria-label="Run actions, long labels" variant="panel">
-          <ToolbarButton icon={<Play />}>Re-run from the failed step</ToolbarButton>
+          <ToolbarButton icon={<Play />}>Re-run the failed step</ToolbarButton>
           <ToolbarButton icon={<Link2 />}>Share the full trace</ToolbarButton>
         </Toolbar>
       </HardState>

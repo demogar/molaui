@@ -373,7 +373,11 @@ export function TableEmpty({
             title={title}
             description={children}
             actions={actions}
-            className="shadow-none forced-colors:outline-none"
+            // The error seam's keyline is drawn outside it, and at the table's
+            // full width that 1.5px fell outside the scrolling frame, which
+            // clips it. Inset by the keyline, it stays inside. Found by the
+            // Table hard-states story.
+            className="shadow-none forced-colors:outline-none [&>[data-part=seam]]:inset-x-(--cut-w)"
           />
         </div>
       </td>

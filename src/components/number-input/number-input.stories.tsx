@@ -199,7 +199,7 @@ export const HardStates: Story = {
           hint="Shared by every agent in the workspace; runs stop when it is reached."
         >
           {(control) => (
-            <NumberInput {...control} locale="en-US" min={0} largeStep={1_000_000} defaultValue={125_000_000} unit="tokens a month" />
+            <NumberInput {...control} locale="en-US" min={0} largeStep={1_000_000} defaultValue={125_000_000} unit="tokens" />
           )}
         </Field>
       </HardState>

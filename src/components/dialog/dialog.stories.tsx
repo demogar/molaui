@@ -7,6 +7,7 @@ import { Button } from '../button'
 import { Field, Input } from '../field'
 import { AlertDialog, Dialog, DialogClose, DialogContent, DialogTrigger } from './dialog'
 import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
+import { wrappingButtonSlot } from '../button/wrapping-slot'
 
 const meta = {
   title: 'Components/Overlays/Dialog',
@@ -194,7 +195,7 @@ export const HardStates: Story = {
   tags: ['hard-states', '!autodocs'],
   render: () => (
     <HardStatesFrame>
-      <HardState state="long-label">
+      <HardState state="long-label" className={wrappingButtonSlot}>
         <Dialog>
           <DialogTrigger render={<Button variant="secondary">Rename the help panel rollout for new workspaces</Button>} />
           <DialogContent

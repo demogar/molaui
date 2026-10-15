@@ -52,7 +52,10 @@ export function Input({ className, size = 'md', leading, trailing, disabled, ...
         'has-[[aria-invalid=true]]:focus-within:cut-band-focus',
         'data-disabled:cursor-not-allowed data-disabled:bg-disabled data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
         // Read-only was styled on the bare input only; the box carries it now.
-        'has-[input:read-only]:bg-cloth-shade',
+        // A disabled input matches :read-only too, and this rule comes after
+        // the disabled one, so a disabled field took the read-only well: the
+        // same colour in light, the near-black frame --disabled replaces in dark.
+        'has-[input:read-only:not(:disabled)]:bg-cloth-shade',
         '[&_svg]:size-(--icon) [&_svg]:shrink-0',
         className,
       )}

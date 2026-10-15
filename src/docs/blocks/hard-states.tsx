@@ -8,9 +8,13 @@ import { HARD_STATE_LABELS, type HardStateName } from '../usage/hard-states'
  * src/docs/usage/hard-states.ts). One look for every page, so a reviewer
  * reads the four states the same way on each, and `data-hard-state` marks
  * each cell for the test that checks they are all there.
+ *
+ * `grid-cols-1`, not the implicit column: an implicit track is as wide as
+ * its widest unbreakable content, so a long label widened the whole frame
+ * past the phone instead of showing what the component does at 320px.
  */
 export function HardStates({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={cn('grid items-start gap-x-10 gap-y-8 md:grid-cols-2', className)}>{children}</div>
+  return <div className={cn('grid grid-cols-1 items-start gap-x-10 gap-y-8 md:grid-cols-2', className)}>{children}</div>
 }
 
 export interface HardStateProps {
@@ -34,7 +38,7 @@ export function HardState({ state, children, className }: HardStateProps) {
       data-hard-state={state}
       dir={rtl ? 'rtl' : undefined}
       lang={rtl ? 'ar' : undefined}
-      className={cn('grid min-w-0 content-start gap-3', state === 'long-label' && 'max-w-80', className)}
+      className={cn('grid min-w-0 grid-cols-1 content-start gap-3', state === 'long-label' && 'max-w-80', className)}
     >
       <p lang={rtl ? 'en' : undefined} className="m-0 rotulo text-ink-muted">
         {HARD_STATE_LABELS[state]}

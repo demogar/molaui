@@ -7,6 +7,7 @@ import { Button } from '../button'
 import { KbdChord } from '../typography'
 import { type CommandGroup, CommandPalette, useCommandShortcut } from './command'
 import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
+import { wrappingButtonSlot } from '../button/wrapping-slot'
 
 const groups: CommandGroup[] = [
   {
@@ -143,7 +144,7 @@ export const HardStates: Story = {
   tags: ['hard-states', '!autodocs'],
   render: () => (
     <HardStatesFrame>
-      <HardState state="long-label">
+      <HardState state="long-label" className={wrappingButtonSlot}>
         <CommandPalette
           label="Command palette, long names"
           groups={longGroups}
