@@ -93,13 +93,13 @@
     }
   },
   "counts": {
-    "components": 64,
-    "parts": 160,
+    "components": 65,
+    "parts": 162,
     "aiComponents": 14,
     "aiParts": 25,
-    "pages": 78,
-    "stories": 413,
-    "summary": "64 components and 14 AI components (78 documented pages)"
+    "pages": 79,
+    "stories": 420,
+    "summary": "65 components and 14 AI components (79 documented pages)"
   },
   "tokens": {
     "source": "src/styles/tokens.css",
@@ -1714,6 +1714,12 @@
               "description": "Heading level for the run's name. Defaults to 3; use 2 when the run is the page's main subject."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<AgentRunMessages>",
+              "required": false,
+              "description": "Words for translation: step kinds, status announcements, the header buttons and the copy button. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "model",
               "type": "string",
               "required": false,
@@ -1759,6 +1765,12 @@
           "forwards": {
             "element": "<section data-slot=\"agent-run\">"
           }
+        },
+        {
+          "name": "AgentRunMessages",
+          "kind": "type",
+          "source": "src/components/ai/agent-run/messages.ts",
+          "description": "The words AgentRun says on its own."
         },
         {
           "name": "AgentRunFailure",
@@ -1953,6 +1965,12 @@
               "type": "number",
               "required": true,
               "description": "Lines removed. Shown as \"−n\" and said as \"n lines removed\"."
+            },
+            {
+              "name": "messages",
+              "type": "MessagesOverride<ChangeCountMessages>",
+              "required": false,
+              "description": "Words for translation: the sentence a screen reader hears. Keys left out come from `MessagesProvider`, then English."
             }
           ],
           "forwards": {
@@ -2002,6 +2020,12 @@
               "required": false,
               "default": "3",
               "description": "Heading level for the proposal's title. Defaults to 3; use 2 when the review is the page's main subject."
+            },
+            {
+              "name": "messages",
+              "type": "MessagesOverride<ChangeReviewMessages>",
+              "required": false,
+              "description": "Words for translation: the decisions, the reason field and the header labels. Keys left out come from `MessagesProvider`, then English."
             },
             {
               "name": "model",
@@ -2056,6 +2080,12 @@
               "required": false,
               "default": "4",
               "description": "Heading level for the record's title. Defaults to 4, under a `ChangeReview` heading."
+            },
+            {
+              "name": "messages",
+              "type": "MessagesOverride<FieldChangesMessages>",
+              "required": false,
+              "description": "Words for translation: the count and the before/after words. Keys left out come from `MessagesProvider`, then English."
             }
           ],
           "forwards": {
@@ -2121,6 +2151,12 @@
               "description": "`unified` is one column of lines. `split` sets old against new side by side once the diff's container is 48rem wide, and stays unified below that — a phone has no room for two columns of code."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<FileDiffMessages>",
+              "required": false,
+              "description": "Words for translation: the kind of change, the rename and the words said before each changed line. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "previousPath",
               "type": "string",
               "required": false,
@@ -2130,6 +2166,30 @@
           "forwards": {
             "element": "<section data-slot=\"file-diff\">"
           }
+        },
+        {
+          "name": "ChangeCountMessages",
+          "kind": "type",
+          "source": "src/components/ai/change-review/messages.ts",
+          "description": "The words ChangeCount says on its own."
+        },
+        {
+          "name": "ChangeReviewMessages",
+          "kind": "type",
+          "source": "src/components/ai/change-review/messages.ts",
+          "description": "The words ChangeReview says on its own."
+        },
+        {
+          "name": "FieldChangesMessages",
+          "kind": "type",
+          "source": "src/components/ai/change-review/messages.ts",
+          "description": "The words FieldChanges says on its own."
+        },
+        {
+          "name": "FileDiffMessages",
+          "kind": "type",
+          "source": "src/components/ai/change-review/messages.ts",
+          "description": "The words FileDiff says on its own."
         },
         {
           "name": "ChangeCountProps",
@@ -2359,6 +2419,12 @@
               "type": "string",
               "required": false,
               "description": "What the confidence rests on — \"3 sources agree\", \"single source\"."
+            },
+            {
+              "name": "messages",
+              "type": "MessagesOverride<ConfidenceMessages>",
+              "required": false,
+              "description": "Words for translation: the word for each level. Keys left out come from `MessagesProvider`, then English."
             }
           ],
           "forwards": {
@@ -2378,16 +2444,33 @@
               "description": "An action that resolves it — \"Open the dashboard\"."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<UncertaintyNoteMessages>",
+              "required": false,
+              "description": "Words for translation: the default title. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "title",
               "type": "string",
               "required": false,
-              "default": "The model is unsure",
-              "description": "The short claim — \"Unverified figure\". Defaults to \"The model is unsure\"."
+              "description": "The short claim — \"Unverified figure\". Defaults to \"The model is unsure\" (`messages.title`)."
             }
           ],
           "forwards": {
             "element": "<aside data-slot=\"uncertainty-note\">"
           }
+        },
+        {
+          "name": "ConfidenceMessages",
+          "kind": "type",
+          "source": "src/components/ai/confidence/messages.ts",
+          "description": "The words Confidence says on its own."
+        },
+        {
+          "name": "UncertaintyNoteMessages",
+          "kind": "type",
+          "source": "src/components/ai/confidence/messages.ts",
+          "description": "The words UncertaintyNote says on its own."
         },
         {
           "name": "ConfidenceLevel",
@@ -2505,14 +2588,12 @@
               "name": "doneAnnouncement",
               "type": "string",
               "required": false,
-              "default": "Response complete.",
               "description": "Spoken once when a stream that was running completes."
             },
             {
               "name": "errorAnnouncement",
               "type": "string",
               "required": false,
-              "default": "Response stopped with an error.",
               "description": "Spoken once when a stream that was running fails."
             },
             {
@@ -2521,6 +2602,12 @@
               "required": false,
               "default": "3",
               "description": "The heading level a `#` becomes; `##` is one deeper, and so on, never past 6. Defaults to 3, for an answer under a page and a section heading. The look follows the depth in the Markdown, not the level, so the same answer looks the same wherever it is placed."
+            },
+            {
+              "name": "messages",
+              "type": "MessagesOverride<MarkdownMessages>",
+              "required": false,
+              "description": "Words for translation: the default done and error announcements. Keys left out come from `MessagesProvider`, then English. The new-tab cue on an absolute link is `link.newTab`, shared with Link."
             },
             {
               "name": "renderCitation",
@@ -2552,6 +2639,12 @@
           "forwards": {
             "element": "<div data-slot=\"markdown\">"
           }
+        },
+        {
+          "name": "MarkdownMessages",
+          "kind": "type",
+          "source": "src/components/ai/markdown/messages.ts",
+          "description": "The words Markdown says on its own. The cue after a link that opens a new tab is Link's (`link.newTab`), so it is translated once for both."
         },
         {
           "name": "MarkdownProps",
@@ -2779,6 +2872,12 @@
               "description": "The rating already given, if any."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<MessageMessages>",
+              "required": false,
+              "description": "Words for translation: the role labels, the error block and the actions. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "model",
               "type": "string",
               "required": false,
@@ -2833,6 +2932,12 @@
               "description": "Names the region. Required: a transcript is a landmark worth finding."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<ThreadMessages>",
+              "required": false,
+              "description": "Words for translation: the jump button and the scrolling area's name. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "stickThreshold",
               "type": "number",
               "required": false,
@@ -2843,6 +2948,18 @@
           "forwards": {
             "element": "<section data-slot=\"thread\">"
           }
+        },
+        {
+          "name": "MessageMessages",
+          "kind": "type",
+          "source": "src/components/ai/message/messages.ts",
+          "description": "The words Message says on its own."
+        },
+        {
+          "name": "ThreadMessages",
+          "kind": "type",
+          "source": "src/components/ai/message/messages.ts",
+          "description": "The words Thread says on its own."
         },
         {
           "name": "MessageProps",
@@ -3054,6 +3171,12 @@
               "description": "e.g. \"CSV · 48 KB\"."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<AttachmentChipMessages>",
+              "required": false,
+              "description": "Words for translation: the remove button's name. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "onRemove",
               "type": "(() => void)",
               "required": false,
@@ -3110,6 +3233,12 @@
               "description": "Rows before the field scrolls instead of growing."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<PromptInputMessages>",
+              "required": false,
+              "description": "Words for translation: the placeholder, the hints, the estimate and the buttons. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "onStop",
               "type": "(() => void)",
               "required": false,
@@ -3125,8 +3254,7 @@
               "name": "placeholder",
               "type": "string",
               "required": false,
-              "default": "Ask anything…",
-              "description": "Defaults to \"Ask anything…\". It is a hint, never the name: `label` is what assistive tech announces."
+              "description": "Defaults to \"Ask anything…\" (`messages.placeholder`). It is a hint, never the name: `label` is what assistive tech announces."
             },
             {
               "name": "showEstimate",
@@ -3165,6 +3293,18 @@
           "forwards": {
             "element": "<form data-slot=\"prompt-input\">"
           }
+        },
+        {
+          "name": "AttachmentChipMessages",
+          "kind": "type",
+          "source": "src/components/ai/prompt-input/messages.ts",
+          "description": "The words AttachmentChip says on its own."
+        },
+        {
+          "name": "PromptInputMessages",
+          "kind": "type",
+          "source": "src/components/ai/prompt-input/messages.ts",
+          "description": "The words PromptInput says on its own."
         },
         {
           "name": "AttachmentChipProps",
@@ -3310,6 +3450,12 @@
               "description": "When the thinking ended. Freezes the clock; omit while the model is still thinking."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<ReasoningMessages>",
+              "required": false,
+              "description": "Words for translation: the summary line and the announcement when it finishes. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "startedAt",
               "type": "number | Date",
               "required": false,
@@ -3326,6 +3472,12 @@
           "forwards": {
             "element": "<div data-slot=\"reasoning\">"
           }
+        },
+        {
+          "name": "ReasoningMessages",
+          "kind": "type",
+          "source": "src/components/ai/reasoning/messages.ts",
+          "description": "The words Reasoning says on its own."
         },
         {
           "name": "ReasoningProps",
@@ -3443,6 +3595,12 @@
           "description": "Output that stopped arriving before it was finished — kept, and marked.",
           "props": [
             {
+              "name": "messages",
+              "type": "MessagesOverride<PartialOutputMessages>",
+              "required": false,
+              "description": "Words for translation: the label and the default note. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "note",
               "type": "ReactNode",
               "required": false,
@@ -3505,6 +3663,12 @@
               "description": "Replaces the plain sentence under the headline."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<RunErrorMessages>",
+              "required": false,
+              "description": "Words for translation: the status words, the sentences, the countdown, the buttons and the copied details. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "onRetry",
               "type": "(() => void)",
               "required": false,
@@ -3558,10 +3722,22 @@
           }
         },
         {
+          "name": "PartialOutputMessages",
+          "kind": "type",
+          "source": "src/components/ai/run-error/messages.ts",
+          "description": "The words PartialOutput says on its own."
+        },
+        {
+          "name": "RunErrorMessages",
+          "kind": "type",
+          "source": "src/components/ai/run-error/messages.ts",
+          "description": "The words RunError says on its own."
+        },
+        {
           "name": "formatRunErrorDetails",
           "kind": "function",
           "source": "src/components/ai/run-error/run-error.tsx",
-          "description": "The plain-text block *Copy error details* puts on the clipboard: everything a ticket needs, one fact per line."
+          "description": "The plain-text block *Copy error details* puts on the clipboard: everything a ticket needs, one fact per line. In English unless `messages` (a full RunError table, `defaultMessages.runError` with your keys) says otherwise: this is a plain function, so it cannot read `MessagesProvider`."
         },
         {
           "name": "PartialOutputProps",
@@ -3765,6 +3941,12 @@
               "description": "Override the word — e.g. \"Thinking\" for a running reasoning step. The glyph stays."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<RunStatusMessages>",
+              "required": false,
+              "description": "Words for translation: the word for each status. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "register",
               "type": "\"inline\" | \"label\"",
               "required": false,
@@ -3808,6 +3990,12 @@
           "forwards": {
             "element": "<span data-slot=\"run-status-glyph\">"
           }
+        },
+        {
+          "name": "RunStatusMessages",
+          "kind": "type",
+          "source": "src/components/ai/run-status/messages.ts",
+          "description": "The words RunStatus says on its own."
         },
         {
           "name": "RUN_STATUS_LABEL",
@@ -4033,8 +4221,7 @@
               "name": "afterLabel",
               "type": "string",
               "required": false,
-              "default": "After",
-              "description": "The new pane's name. Defaults to “After”."
+              "description": "The new pane's name. Defaults to “After” (`messages.after`)."
             },
             {
               "name": "before",
@@ -4046,8 +4233,7 @@
               "name": "beforeLabel",
               "type": "string",
               "required": false,
-              "default": "Before",
-              "description": "The old pane's name, shown above it and naming its scroll region. Defaults to “Before”."
+              "description": "The old pane's name, shown above it and naming its scroll region. Defaults to “Before” (`messages.before`)."
             },
             {
               "name": "context",
@@ -4074,11 +4260,23 @@
               "type": "readonly (DiffHunk | DiffHunkInput)[]",
               "required": false,
               "description": "Or the hunks, structured. Wins over `diff`."
+            },
+            {
+              "name": "messages",
+              "type": "MessagesOverride<SideBySideDiffMessages>",
+              "required": false,
+              "description": "Words for translation: the pane names, the empty sentence and the words said before each changed line. Keys left out come from `MessagesProvider`, then English."
             }
           ],
           "forwards": {
             "element": "<section data-slot=\"side-by-side-diff\">"
           }
+        },
+        {
+          "name": "SideBySideDiffMessages",
+          "kind": "type",
+          "source": "src/components/ai/side-by-side-diff/messages.ts",
+          "description": "The words SideBySideDiff says on its own."
         },
         {
           "name": "SideBySideDiffProps",
@@ -4216,6 +4414,12 @@
               "description": "Which side of the marker the card opens on."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<SourcesMessages>",
+              "required": false,
+              "description": "Words for translation: the marker's name and the preview card's link and read time. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "render",
               "type": "ReactElement<unknown, string | JSXElementConstructor<any>> | ((props: DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>) => ReactElement<...>)",
               "required": false,
@@ -4251,6 +4455,12 @@
               "description": "The sources the answer drew on, in citation order, so each card's number matches its inline marker."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<SourcesMessages>",
+              "required": false,
+              "description": "Words for translation: the read time. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "timeZone",
               "type": "string",
               "required": false,
@@ -4260,6 +4470,12 @@
           "forwards": {
             "element": "<ol data-slot=\"source-list\">"
           }
+        },
+        {
+          "name": "SourcesMessages",
+          "kind": "type",
+          "source": "src/components/ai/sources/messages.ts",
+          "description": "The words Citation and SourceList say on their own."
         },
         {
           "name": "citationRenderer",
@@ -4423,15 +4639,19 @@
               "name": "doneAnnouncement",
               "type": "string",
               "required": false,
-              "default": "Response complete.",
               "description": "Spoken once when a stream that was running completes."
             },
             {
               "name": "errorAnnouncement",
               "type": "string",
               "required": false,
-              "default": "Response stopped with an error.",
               "description": "Spoken once when a stream that was running fails."
+            },
+            {
+              "name": "messages",
+              "type": "MessagesOverride<StreamingTextMessages>",
+              "required": false,
+              "description": "Words for translation: the default done and error announcements. Keys left out come from `MessagesProvider`, then English."
             },
             {
               "name": "renderCitation",
@@ -4468,6 +4688,12 @@
           "forwards": {
             "element": "<div data-slot=\"streaming-text\">"
           }
+        },
+        {
+          "name": "StreamingTextMessages",
+          "kind": "type",
+          "source": "src/components/ai/streaming-text/messages.ts",
+          "description": "The words StreamingText says on its own."
         },
         {
           "name": "CaretProps",
@@ -4626,6 +4852,12 @@
               "description": "Cost in USD, if the platform knows it."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<TokenUsageMessages>",
+              "required": false,
+              "description": "Words for translation: the terms, the warnings and the meter's name and reading. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "variant",
               "type": "\"full\" | \"inline\"",
               "required": false,
@@ -4636,6 +4868,12 @@
           "forwards": {
             "element": "<div data-slot=\"token-usage\">"
           }
+        },
+        {
+          "name": "TokenUsageMessages",
+          "kind": "type",
+          "source": "src/components/ai/token-usage/messages.ts",
+          "description": "The words TokenUsage says on its own."
         },
         {
           "name": "contextLevel",
@@ -4882,6 +5120,12 @@
               "description": "The error, verbatim."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<ToolCallMessages>",
+              "required": false,
+              "description": "Words for translation: the payload labels, the error and approval sentences and their buttons. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "onOpenChange",
               "type": "((open: boolean) => void)",
               "required": false,
@@ -4939,11 +5183,29 @@
               "type": "string",
               "required": false,
               "description": "Defaults to \"N tools in parallel\"."
+            },
+            {
+              "name": "messages",
+              "type": "MessagesOverride<ToolCallGroupMessages>",
+              "required": false,
+              "description": "Words for translation: the default label. Keys left out come from `MessagesProvider`, then English."
             }
           ],
           "forwards": {
             "element": "<div data-slot=\"tool-call-group\">"
           }
+        },
+        {
+          "name": "ToolCallGroupMessages",
+          "kind": "type",
+          "source": "src/components/ai/tool-call/messages.ts",
+          "description": "The words ToolCallGroup says on its own."
+        },
+        {
+          "name": "ToolCallMessages",
+          "kind": "type",
+          "source": "src/components/ai/tool-call/messages.ts",
+          "description": "The words ToolCall says on its own."
         },
         {
           "name": "ToolCallApproval",
@@ -5026,8 +5288,9 @@
         ],
         "avoid": [
           {
-            "when": "Going to another page or URL. Use a link: an a element, or your router’s link styled with buttonVariants.",
-            "use": null
+            "when": "Going to another page or URL.",
+            "use": "Components/Navigation/Link",
+            "label": "LinkButton"
           },
           {
             "when": "A row of related actions above a table or canvas, with one tab stop.",
@@ -5083,7 +5346,7 @@
         "you": [
           "Write a label that names the action with a verb: Deploy, Save changes.",
           "Give every `IconButton` a `label`; the icon is not a name.",
-          "Use a link styled with `buttonVariants` when the control goes somewhere rather than does something."
+          "Use `LinkButton` when the control goes somewhere rather than does something."
         ]
       },
       "exports": [
@@ -5225,7 +5488,7 @@
           "name": "ButtonArrowProps",
           "kind": "type",
           "source": "src/components/button/button.tsx",
-          "description": "The arrow micro-interaction, exported so a router `<Link>` styled with `buttonVariants` gets the same one."
+          "description": "The arrow micro-interaction, exported so a custom control styled with `buttonVariants` gets the same one. `LinkButton` uses it."
         },
         {
           "name": "ButtonProps",
@@ -5417,6 +5680,12 @@
               "description": "Show at most this many; the rest collapse into a \"+n\" tile."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<AvatarGroupMessages>",
+              "required": false,
+              "description": "Words for translation: the \"+n\" tile's name. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "size",
               "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
               "required": false,
@@ -5427,6 +5696,12 @@
           "forwards": {
             "element": "<div data-slot=\"avatar-group\">"
           }
+        },
+        {
+          "name": "AvatarGroupMessages",
+          "kind": "type",
+          "source": "src/components/avatar/messages.ts",
+          "description": "The words AvatarGroup says on its own."
         },
         {
           "name": "avatarLayer",
@@ -5643,6 +5918,12 @@
               "description": "Scroll inside after this height (any CSS length)."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<CodeBlockMessages>",
+              "required": false,
+              "description": "Words for translation: the wrap and copy buttons and the copy announcement. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "wrap",
               "type": "boolean",
               "required": false,
@@ -5653,6 +5934,12 @@
           "forwards": {
             "element": "<figure data-slot=\"code-block\">"
           }
+        },
+        {
+          "name": "CodeBlockMessages",
+          "kind": "type",
+          "source": "src/components/code/messages.ts",
+          "description": "The words CodeBlock says on its own."
         },
         {
           "name": "CodeBlockProps",
@@ -5937,7 +6224,7 @@
               "name": "locale",
               "type": "LocalesArgument",
               "required": false,
-              "description": "BCP 47 tag for the words and digits. `undefined` uses the runtime's locale."
+              "description": "BCP 47 tag for the words and digits. Left out, `MessagesProvider`'s locale, then the runtime's."
             },
             {
               "name": "now",
@@ -6166,6 +6453,12 @@
               "description": "A line of context under the figure."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<StatMessages>",
+              "required": false,
+              "description": "Words for translation: the change, read as one sentence to a screen reader. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "trend",
               "type": "number[]",
               "required": false,
@@ -6199,6 +6492,12 @@
           "forwards": {
             "element": "<dl data-slot=\"stat-group\">"
           }
+        },
+        {
+          "name": "StatMessages",
+          "kind": "type",
+          "source": "src/components/stat/messages.ts",
+          "description": "The words Stat says on its own: the change, read as one sentence to a screen reader."
         },
         {
           "name": "SparklineProps",
@@ -6707,10 +7006,15 @@
               "description": "Why it is empty, as on `EmptyState`: `empty` (the default), `no-results` when filters emptied it, `error`, or `no-permission`."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<TableMessages>",
+              "required": false,
+              "description": "Words for translation: the default heading. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "title",
               "type": "ReactNode",
               "required": false,
-              "default": "Nothing here yet",
               "description": "The empty state's heading. Defaults to \"Nothing here yet\"; the children become its description."
             },
             {
@@ -6972,11 +7276,16 @@
               "description": "Sorting and paging are done by the server: rows are one page, already sorted."
             },
             {
-              "name": "noun",
-              "type": "{ one: string; other: string; }",
+              "name": "messages",
+              "type": "MessagesOverride<DataTableMessages>",
               "required": false,
-              "default": "{ one: 'row', other: 'rows' }",
-              "description": "What a row is, for counts: `{ one: 'run', other: 'runs' }`."
+              "description": "Words for translation: the counts, the selection names, the empty heading and the column menu. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
+              "name": "noun",
+              "type": "PluralMessage",
+              "required": false,
+              "description": "What a row is, for counts: `{ one: 'run', other: 'runs' }`. Any plural category a language needs may be given (`few`, `many`); `other` is required."
             },
             {
               "name": "onColumnWidthsChange",
@@ -7139,11 +7448,29 @@
               "type": "(key: string, visible: boolean) => void",
               "required": true,
               "description": "Called with a column's key and whether it should now be visible. The menu stays open, because columns are chosen several at a time."
+            },
+            {
+              "name": "messages",
+              "type": "MessagesOverride<DataTableMessages>",
+              "required": false,
+              "description": "Words for translation: the button and the menu's heading. Keys left out come from `MessagesProvider`, then English."
             }
           ],
           "forwards": {
             "element": "<button data-slot=\"button\">"
           }
+        },
+        {
+          "name": "DataTableMessages",
+          "kind": "type",
+          "source": "src/components/table/messages.ts",
+          "description": "The words DataTable and DataTableColumnMenu say on their own. `{noun}` is the `noun` prop (or `noun` here) in the plural category of the count beside it."
+        },
+        {
+          "name": "TableMessages",
+          "kind": "type",
+          "source": "src/components/table/messages.ts",
+          "description": "The words Table's parts say on their own."
         },
         {
           "name": "TableCellProps",
@@ -7727,6 +8054,12 @@
               "type": "\"essential\" | \"highly\" | \"detour\" | \"time\"",
               "required": false,
               "description": "How strongly the recommendation is made, from `essential` (gold) down to `time`. Each level brings its own label; pass children only to reword it."
+            },
+            {
+              "name": "messages",
+              "type": "MessagesOverride<RecommendationBadgeMessages>",
+              "required": false,
+              "description": "Words for translation: the label of each level. Keys left out come from `MessagesProvider`, then English."
             }
           ],
           "forwards": {
@@ -7771,6 +8104,12 @@
           "forwards": {
             "element": "<span data-slot=\"status-dot\">"
           }
+        },
+        {
+          "name": "RecommendationBadgeMessages",
+          "kind": "type",
+          "source": "src/components/badge/messages.ts",
+          "description": "The words RecommendationBadge says on its own: one label per level."
         },
         {
           "name": "RECOMMENDATION_LABELS",
@@ -8011,8 +8350,13 @@
               "name": "label",
               "type": "string",
               "required": false,
-              "default": "Announcement",
-              "description": "The landmark's name, “Announcement” by default. Name it for what it is when there is more than one kind: “Maintenance”."
+              "description": "The landmark's name, “Announcement” (`messages.label`) by default. Name it for what it is when there is more than one kind: “Maintenance”."
+            },
+            {
+              "name": "messages",
+              "type": "MessagesOverride<BannerMessages>",
+              "required": false,
+              "description": "Words for translation: the landmark's name, the dismiss button and the tone words read before the message. Keys left out come from `MessagesProvider`, then English."
             },
             {
               "name": "onDismiss",
@@ -8036,6 +8380,12 @@
           "forwards": {
             "element": "<section data-slot=\"banner\">"
           }
+        },
+        {
+          "name": "BannerMessages",
+          "kind": "type",
+          "source": "src/components/banner/messages.ts",
+          "description": "The words Banner says on its own."
         },
         {
           "name": "bannerVariants",
@@ -8257,6 +8607,12 @@
               "description": "Replace the tone's default mark — the icon, or in `flat` the square swatch — or `false` for none."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<CalloutMessages>",
+              "required": false,
+              "description": "Words for translation: the dismiss button's name. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "onDismiss",
               "type": "(() => void)",
               "required": false,
@@ -8284,6 +8640,12 @@
           "forwards": {
             "element": "<div data-slot=\"callout\">"
           }
+        },
+        {
+          "name": "CalloutMessages",
+          "kind": "type",
+          "source": "src/components/callout/messages.ts",
+          "description": "The words Callout says on its own."
         },
         {
           "name": "calloutVariants",
@@ -8766,7 +9128,7 @@
               "name": "empty",
               "type": "ReactNode",
               "required": false,
-              "description": "Shown when there is nothing. Defaults to “No notifications yet.”"
+              "description": "Shown when there is nothing. Defaults to “No notifications yet.” (`messages.empty`)"
             },
             {
               "name": "footer",
@@ -8778,8 +9140,13 @@
               "name": "label",
               "type": "string",
               "required": false,
-              "default": "Notifications",
-              "description": "The popover's title and the bell's name, “Notifications” by default."
+              "description": "The popover's title and the bell's name, “Notifications” (`messages.label`) by default."
+            },
+            {
+              "name": "messages",
+              "type": "MessagesOverride<NotificationsMessages>",
+              "required": false,
+              "description": "Words for translation: the defaults above, the unread and tone words, Mark all as read and the bell's name. Keys left out come from `MessagesProvider`, then English."
             },
             {
               "name": "onMarkAllRead",
@@ -8826,15 +9193,19 @@
               "name": "empty",
               "type": "ReactNode",
               "required": false,
-              "default": "No notifications yet.",
-              "description": "Shown when there is nothing. Defaults to “No notifications yet.”"
+              "description": "Shown when there is nothing. Defaults to “No notifications yet.” (`messages.empty`)"
             },
             {
               "name": "label",
               "type": "string",
               "required": false,
-              "default": "Notifications",
-              "description": "The list's accessible name, “Notifications” by default."
+              "description": "The list's accessible name, “Notifications” (`messages.label`) by default."
+            },
+            {
+              "name": "messages",
+              "type": "MessagesOverride<NotificationsMessages>",
+              "required": false,
+              "description": "Words for translation: the defaults above, the unread and tone words, Mark all as read and the bell's name. Keys left out come from `MessagesProvider`, then English."
             },
             {
               "name": "onMarkRead",
@@ -8846,6 +9217,12 @@
           "forwards": {
             "element": "<div data-slot=\"notification-list\">"
           }
+        },
+        {
+          "name": "NotificationsMessages",
+          "kind": "type",
+          "source": "src/components/notification-centre/messages.ts",
+          "description": "The words NotificationList and NotificationCentre say on their own."
         },
         {
           "name": "NotificationCentreProps",
@@ -8967,7 +9344,6 @@
               "name": "label",
               "type": "string",
               "required": false,
-              "default": "Placeholder",
               "description": "The kind of thing that goes here — \"Image\", \"Chart\", \"Preview\"."
             },
             {
@@ -8975,6 +9351,12 @@
               "type": "\"shade\" | \"deep\"",
               "required": false,
               "description": "The cloth it is cut from: `shade` by default, `deep` on a shaded panel, where `shade` would vanish."
+            },
+            {
+              "name": "messages",
+              "type": "MessagesOverride<PlaceholderMessages>",
+              "required": false,
+              "description": "Words for translation: the default label. Keys left out come from `MessagesProvider`, then English."
             },
             {
               "name": "tone",
@@ -8986,6 +9368,12 @@
           "forwards": {
             "element": "<div data-slot=\"placeholder\">"
           }
+        },
+        {
+          "name": "PlaceholderMessages",
+          "kind": "type",
+          "source": "src/components/placeholder/messages.ts",
+          "description": "The words Placeholder says on its own."
         },
         {
           "name": "PlaceholderProps",
@@ -9548,7 +9936,7 @@
           "name": "ToastProvider",
           "kind": "component",
           "source": "src/components/toast/toast.tsx",
-          "description": "Mount once near the root. Renders the viewport, bottom-right, into a portal.",
+          "description": "Mount once near the root, inside `MessagesProvider` if the app has one. Renders the viewport, bottom-right, into a portal.",
           "props": [
             {
               "name": "limit",
@@ -9556,6 +9944,12 @@
               "required": false,
               "default": "3",
               "description": "Toasts kept visible at once; older ones fold away."
+            },
+            {
+              "name": "messages",
+              "type": "MessagesOverride<ToastMessages>",
+              "required": false,
+              "description": "Words for translation: the close button and the tone words read before a title. Keys left out come from `MessagesProvider`, then English. The toasts render here, so a `MessagesProvider` must sit above this one, not inside it."
             },
             {
               "name": "timeout",
@@ -9568,6 +9962,12 @@
           "forwards": {
             "element": null
           }
+        },
+        {
+          "name": "ToastMessages",
+          "kind": "type",
+          "source": "src/components/toast/messages.ts",
+          "description": "The words a toast says on its own."
         },
         {
           "name": "useToast",
@@ -10182,6 +10582,12 @@
               "description": "Locale for the built-in matching. Omitted, the runtime's locale is used."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<AutocompleteMessages>",
+              "required": false,
+              "description": "Words for translation: the status line while loading. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "name",
               "type": "string",
               "required": false,
@@ -10302,6 +10708,12 @@
               "description": "Locale for the built-in matching. Omitted, the runtime's locale is used."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<ComboboxMessages>",
+              "required": false,
+              "description": "Words for translation: the status lines, the button names and the chip hint. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "multiple",
               "type": "boolean",
               "required": false,
@@ -10384,6 +10796,18 @@
             "element": "<input>",
             "className": "<div data-slot=\"combobox\">"
           }
+        },
+        {
+          "name": "AutocompleteMessages",
+          "kind": "type",
+          "source": "src/components/combobox/messages.ts",
+          "description": "The words Autocomplete says on its own."
+        },
+        {
+          "name": "ComboboxMessages",
+          "kind": "type",
+          "source": "src/components/combobox/messages.ts",
+          "description": "The words Combobox says on its own."
         },
         {
           "name": "AutocompleteProps",
@@ -10661,6 +11085,12 @@
               "description": "The latest day that can be chosen, inclusive. Later days are disabled, and focus never moves past it."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<CalendarMessages>",
+              "required": false,
+              "description": "Words for translation: the month buttons' names. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "min",
               "type": "Date | null",
               "required": false,
@@ -10749,6 +11179,12 @@
               "type": "Date | null",
               "required": false,
               "description": "The latest day that can be chosen, inclusive; only the day counts, not the time. Later days are disabled in the grid and refused when typed, with a sentence naming the limit."
+            },
+            {
+              "name": "messages",
+              "type": "MessagesOverride<DatePickerMessages>",
+              "required": false,
+              "description": "Words for translation: the calendar button's name, the format line and the sentences a refused date is stated with. Keys left out come from `MessagesProvider`, then English. The calendar's own words come from the provider's `calendar` table."
             },
             {
               "name": "min",
@@ -10873,6 +11309,12 @@
               "description": "The latest day either end can be, inclusive. Later days are disabled in the grid and refused when typed."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<DateRangePickerMessages>",
+              "required": false,
+              "description": "Words for translation: the inputs' labels, the status line, the default presets' labels and the sentences a refused date is stated with. Keys left out come from `MessagesProvider`, then English. The calendar's own words come from the provider's `calendar` table."
+            },
+            {
               "name": "min",
               "type": "Date | null",
               "required": false,
@@ -10906,14 +11348,13 @@
               "name": "placeholder",
               "type": "string",
               "required": false,
-              "default": "Choose a period",
-              "description": "The trigger's text while no range is chosen. Defaults to \"Choose a period\"."
+              "description": "The trigger's text while no range is chosen. Defaults to \"Choose a period\" (`messages.placeholder`)."
             },
             {
               "name": "presets",
               "type": "DateRangePreset[]",
               "required": false,
-              "default": "[\n  { label: 'Last 7 days', range: (t) => ({ start: addDays(t, -6), end: t }) },\n  { label: 'Last 30 days', range: (t) => ({ start: addDays(t, -29), end: t }) },\n  { label: 'Last 90 days', range: (t) => ({ start: addDays(t, -89), end: t }) },\n  { label: 'This month', range: (t) => ({ start: startOfMonth(t), end: t }) },\n  {\n    label: 'Last month',\n    range: (t) => {\n      const previous = addMonths(startOfMonth(t), -1)\n      return { start: previous, end: endOfMonth(previous) }\n    },\n  },\n]",
+              "default": "(Object.keys(PRESET_RANGES) as PresetKey[]).map((key) => {\n  const preset = { label: dateRangePickerMessages.presetLabels[key], range: PRESET_RANGES[key] }\n  defaultPresetKeys.set(preset, key)\n  return preset\n})",
               "description": "Pass `[]` for none."
             },
             {
@@ -10966,6 +11407,30 @@
           }
         },
         {
+          "name": "CalendarMessages",
+          "kind": "type",
+          "source": "src/components/date-picker/messages.ts",
+          "description": "The words Calendar says on its own."
+        },
+        {
+          "name": "DatePickerMessages",
+          "kind": "type",
+          "source": "src/components/date-picker/messages.ts",
+          "description": "The words DatePicker says on its own."
+        },
+        {
+          "name": "DateRangePickerMessages",
+          "kind": "type",
+          "source": "src/components/date-picker/messages.ts",
+          "description": "The words DateRangePicker says on its own."
+        },
+        {
+          "name": "DateEntryMessages",
+          "kind": "type",
+          "source": "src/components/date-picker/messages.ts",
+          "description": "The sentences both date pickers refuse a typed or pressed day with. `{date}` is a day as the locale writes it, `{typed}` what the person typed."
+        },
+        {
           "name": "CalendarProps",
           "kind": "type",
           "source": "src/components/date-picker/calendar.tsx",
@@ -10992,8 +11457,7 @@
         {
           "name": "defaultRangePresets",
           "kind": "constant",
-          "source": "src/components/date-picker/date-utils.ts",
-          "description": "The presets an analytics screen reaches for. \"Last 7 days\" includes today: it is the seven days you can see on the chart, ending now."
+          "source": "src/components/date-picker/date-utils.ts"
         },
         {
           "name": "getDatePattern",
@@ -11004,8 +11468,7 @@
         {
           "name": "DateLocale",
           "kind": "type",
-          "source": "src/components/date-picker/date-utils.ts",
-          "description": "The date arithmetic the pickers need, and nothing more."
+          "source": "src/components/date-picker/date-utils.ts"
         },
         {
           "name": "DatePart",
@@ -11223,6 +11686,12 @@
           "source": "src/components/field/label.tsx",
           "props": [
             {
+              "name": "messages",
+              "type": "MessagesOverride<LabelMessages>",
+              "required": false,
+              "description": "Words for translation: the \"Optional\" tag. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "optional",
               "type": "boolean",
               "required": false,
@@ -11354,8 +11823,13 @@
               "name": "clearLabel",
               "type": "string",
               "required": false,
-              "default": "Clear search",
               "description": "Accessible name for the clear button."
+            },
+            {
+              "name": "messages",
+              "type": "MessagesOverride<SearchInputMessages>",
+              "required": false,
+              "description": "Words for translation: the clear button's default name and the default placeholder. Keys left out come from `MessagesProvider`, then English."
             },
             {
               "name": "onClear",
@@ -11380,6 +11854,18 @@
             "element": "<input data-slot=\"input\">",
             "className": "<div data-slot=\"input-group\">"
           }
+        },
+        {
+          "name": "LabelMessages",
+          "kind": "type",
+          "source": "src/components/field/messages.ts",
+          "description": "The words Label says on its own."
+        },
+        {
+          "name": "SearchInputMessages",
+          "kind": "type",
+          "source": "src/components/field/messages.ts",
+          "description": "The words SearchInput says on its own."
         },
         {
           "name": "LabelProps",
@@ -11627,9 +12113,9 @@
             },
             {
               "name": "messages",
-              "type": "Partial<FileUploadMessages>",
+              "type": "{ list?: string; status?: MessagesOverride<{ attached: string; queued: string; uploading: string; done: string; failed: string; }> | Record<FileUploadStatus, string>; ... 19 more ...; constraints?: ((types: string | null, limit: string | null, maxFiles: number | undefined) => string | null) |...",
               "required": false,
-              "description": "Copy, for another language. Merged over the English defaults."
+              "description": "Words for translation: every prompt, status word, button name and announcement, as templates. Keys left out come from `MessagesProvider`, then English. A function in a key (the shape before 0.7.0) still works, and is deprecated."
             },
             {
               "name": "multiple",
@@ -11674,9 +12160,16 @@
           }
         },
         {
+          "name": "FileUploadMessageTemplates",
+          "kind": "type",
+          "source": "src/components/file-upload/messages.ts",
+          "description": "The words FileUpload says on its own. `{name}` is a file's name, `{count}` a number of files."
+        },
+        {
           "name": "defaultFileUploadMessages",
           "kind": "constant",
-          "source": "src/components/file-upload/file-upload.tsx"
+          "source": "src/components/file-upload/file-upload.tsx",
+          "description": "The English words as functions."
         },
         {
           "name": "FileUploadItem",
@@ -11684,9 +12177,16 @@
           "source": "src/components/file-upload/file-upload.tsx"
         },
         {
+          "name": "FileUploadMessageFunctions",
+          "kind": "type",
+          "source": "src/components/file-upload/file-upload.tsx",
+          "description": "The words as functions, the shape `messages` took before the shared `MessagesProvider` (docs/adr/0014-messages.md). A function cannot cross from a server component to the client, and a translation tool cannot read one, so the table is now templates (`FileUploadMessageTemplates`). A function passed in `messages` still works, and warns."
+        },
+        {
           "name": "FileUploadMessages",
           "kind": "type",
-          "source": "src/components/file-upload/file-upload.tsx"
+          "source": "src/components/file-upload/file-upload.tsx",
+          "description": "The function table under its old name, so code typed against it before 0.7.0 still compiles."
         },
         {
           "name": "FileUploadProps",
@@ -11956,11 +12456,16 @@
               "description": "The heading element. Match the form's outline; `h2` by default."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<FormErrorSummaryMessages>",
+              "required": false,
+              "description": "Words for translation: the default heading, by count. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "title",
               "type": "ReactNode | ((count: number) => ReactNode)",
               "required": false,
-              "default": "(count: number) => (count === 1 ? '1 field needs fixing' : `${count} fields need fixing`)",
-              "description": "The heading, which is also the summary's accessible name and what a screen reader says when it takes focus. Pass a function to word it for the count, or to translate it. Defaults to “1 field needs fixing” / “3 fields need fixing”."
+              "description": "The heading, which is also the summary's accessible name and what a screen reader says when it takes focus. Pass a function to word it for the count. Defaults to “1 field needs fixing” / “3 fields need fixing” (`messages.title`, which is where a translation goes)."
             }
           ],
           "forwards": {
@@ -12001,6 +12506,12 @@
           "forwards": {
             "element": "<fieldset data-slot=\"fieldset\">"
           }
+        },
+        {
+          "name": "FormErrorSummaryMessages",
+          "kind": "type",
+          "source": "src/components/form/messages.ts",
+          "description": "The words FormErrorSummary says on its own."
         },
         {
           "name": "FormProps",
@@ -12432,7 +12943,6 @@
               "name": "decrementLabel",
               "type": "string",
               "required": false,
-              "default": "Decrease",
               "description": "Accessible name of the − stepper. Defaults to \"Decrease\"; translate it with the page."
             },
             {
@@ -12451,7 +12961,6 @@
               "name": "incrementLabel",
               "type": "string",
               "required": false,
-              "default": "Increase",
               "description": "Accessible names of the steppers."
             },
             {
@@ -12478,6 +12987,12 @@
               "type": "number",
               "required": false,
               "description": "The highest value. Stepping and committed values clamp to it, and the increase stepper is disabled there; End jumps to it."
+            },
+            {
+              "name": "messages",
+              "type": "MessagesOverride<NumberInputMessages>",
+              "required": false,
+              "description": "Words for translation: the steppers' default names. Keys left out come from `MessagesProvider`, then English."
             },
             {
               "name": "min",
@@ -12545,6 +13060,12 @@
             "element": "<input>",
             "className": "<div data-slot=\"number-input\">"
           }
+        },
+        {
+          "name": "NumberInputMessages",
+          "kind": "type",
+          "source": "src/components/number-input/messages.ts",
+          "description": "The words NumberInput says on its own."
         },
         {
           "name": "NumberInputProps",
@@ -13155,6 +13676,12 @@
               "description": "A visible label rendered above the trigger. Omit it when the select sits inside `Field`, which renders its own — and spread Field's control props onto this component instead."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<SelectMessages>",
+              "required": false,
+              "description": "Words for translation: the default placeholder. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "name",
               "type": "string",
               "required": false,
@@ -13170,7 +13697,6 @@
               "name": "placeholder",
               "type": "ReactNode",
               "required": false,
-              "default": "Select…",
               "description": "Shown in the trigger while nothing is selected: \"Choose a model\". Not a label; the field still needs one."
             },
             {
@@ -13351,6 +13877,12 @@
           "forwards": {
             "element": "<span data-slot=\"select-value\">"
           }
+        },
+        {
+          "name": "SelectMessages",
+          "kind": "type",
+          "source": "src/components/select/messages.ts",
+          "description": "The words Select says on its own."
         },
         {
           "name": "SelectContentProps",
@@ -13913,8 +14445,13 @@
               "name": "empty",
               "type": "ReactNode",
               "required": false,
-              "default": "None",
               "description": "What the group says when it has no tags. Kept as text, so an empty group is never a blank gap."
+            },
+            {
+              "name": "messages",
+              "type": "MessagesOverride<TagGroupMessages>",
+              "required": false,
+              "description": "Words for translation: the remove buttons' default name and the empty text. Keys left out come from `MessagesProvider`, then English."
             },
             {
               "name": "onRemove",
@@ -13932,7 +14469,6 @@
               "name": "removeLabel",
               "type": "((label: string) => string)",
               "required": false,
-              "default": "(label) => `Remove ${label}`",
               "description": "Accessible name of each remove button."
             },
             {
@@ -13952,6 +14488,12 @@
           "forwards": {
             "element": "<div data-slot=\"tag-group\">"
           }
+        },
+        {
+          "name": "TagGroupMessages",
+          "kind": "type",
+          "source": "src/components/tag-group/messages.ts",
+          "description": "The words TagGroup says on its own."
         },
         {
           "name": "TagGroupBaseProps",
@@ -14206,9 +14748,9 @@
             },
             {
               "name": "messages",
-              "type": "Partial<DateTimePickerMessages>",
+              "type": "MessagesOverride<DateTimePickerMessages>",
               "required": false,
-              "description": "The words \"Date\" and \"Time\" that name each half, and TimePicker's segment names and sentences, for translation."
+              "description": "Words for translation: \"Date\" and \"Time\", which name each half, and the time half's segment names and sentences. Keys left out come from `MessagesProvider`, then English. The date half's words come from the provider's `datePicker` table."
             },
             {
               "name": "min",
@@ -14326,9 +14868,9 @@
             },
             {
               "name": "messages",
-              "type": "Partial<TimePickerMessages>",
+              "type": "MessagesOverride<TimePickerMessages>",
               "required": false,
-              "description": "The segment names and the sentences, for translation."
+              "description": "Words for translation: the segment names and the sentences. Keys left out come from `MessagesProvider`, then English."
             },
             {
               "name": "min",
@@ -14388,19 +14930,19 @@
         {
           "name": "DateTimePickerMessages",
           "kind": "type",
-          "source": "src/components/time-picker/date-time-picker.tsx",
-          "description": "A moment: a DatePicker and a TimePicker side by side, read as one value."
+          "source": "src/components/time-picker/messages.ts",
+          "description": "The words DateTimePicker says on its own, and the TimePicker words it hands to its time half. The time half reads them from here rather than from the `timePicker` table, so one table words the whole control; in `tooEarly` and `tooLate`, `{time}` is the whole moment, date and time."
+        },
+        {
+          "name": "TimePickerMessages",
+          "kind": "type",
+          "source": "src/components/time-picker/messages.ts",
+          "description": "The words TimePicker says on its own."
         },
         {
           "name": "DateTimePickerProps",
           "kind": "type",
           "source": "src/components/time-picker/date-time-picker.tsx"
-        },
-        {
-          "name": "TimePickerMessages",
-          "kind": "type",
-          "source": "src/components/time-picker/time-picker.tsx",
-          "description": "A time of day, entered as segments: an hour, a minute and, where the locale keeps a 12-hour clock, a day period. Each segment is a `spinbutton`."
         },
         {
           "name": "TimePickerProps",
@@ -14581,6 +15123,12 @@
               "description": "Start with the desktop sidebar collapsed to its icon rail. Defaults to `false`; ignored below 920px, where the sidebar is a sheet."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<AppShellMessages>",
+              "required": false,
+              "description": "Words for translation: the skip link, the phone sheet's heading and close button, and SidebarToggle's names, which read them from here. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "onSidebarCollapsedChange",
               "type": "((collapsed: boolean) => void)",
               "required": false,
@@ -14728,6 +15276,12 @@
           "forwards": {
             "element": "<nav data-slot=\"sidebar-nav\">"
           }
+        },
+        {
+          "name": "AppShellMessages",
+          "kind": "type",
+          "source": "src/components/app-shell/messages.ts",
+          "description": "The words AppShell and SidebarToggle say on their own."
         },
         {
           "name": "SidebarContext",
@@ -16050,11 +16604,16 @@
               "description": "Which end of the free space the buttons hug."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<ToolbarOverflowMessages>",
+              "required": false,
+              "description": "Words for translation: the menu button's label and name. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "moreLabel",
               "type": "string",
               "required": false,
-              "default": "More actions",
-              "description": "The name of the menu button that collects what does not fit."
+              "description": "The name of the menu button that collects what does not fit. \"More actions\" (`messages.moreActions`) by default."
             }
           ],
           "forwards": {
@@ -16163,6 +16722,12 @@
           "forwards": {
             "element": "<div data-slot=\"toolbar-toggle-group\">"
           }
+        },
+        {
+          "name": "ToolbarOverflowMessages",
+          "kind": "type",
+          "source": "src/components/toolbar/messages.ts",
+          "description": "The words ToolbarOverflow says on its own."
         },
         {
           "name": "toolbarVariants",
@@ -16614,6 +17179,12 @@
               "description": "The trail, root first. The last item is the current page and renders as text whether or not it has an `href`; pass a long id through `middleTruncate` so both ends survive."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<BreadcrumbMessages>",
+              "required": false,
+              "description": "Words for translation: the landmark's name. Keys left out come from `MessagesProvider`, then English. `aria-label` still wins."
+            },
+            {
               "name": "renderLink",
               "type": "BreadcrumbLinkRender",
               "required": false,
@@ -16623,6 +17194,12 @@
           "forwards": {
             "element": "<nav data-slot=\"breadcrumb\">"
           }
+        },
+        {
+          "name": "BreadcrumbMessages",
+          "kind": "type",
+          "source": "src/components/breadcrumb/messages.ts",
+          "description": "The words Breadcrumb says on its own."
         },
         {
           "name": "middleTruncate",
@@ -16669,6 +17246,250 @@
         "Patterns/Agent hand-off",
         "Patterns/Confirmation",
         "Patterns/Empty states"
+      ]
+    },
+    {
+      "title": "Components/Navigation/Link",
+      "name": "Link",
+      "layer": "components",
+      "category": "Navigation",
+      "docs": "https://demogar.github.io/molaui/?path=/docs/components-navigation-link--overview",
+      "phase": "experimental",
+      "summary": "Going somewhere: Link for text, in a sentence or on its own, and LinkButton for a navigation cut like a button.",
+      "description": "A link goes somewhere; a button does something. `Link` is text, underlined in a sentence (`inline`) or set on its own in the UI face (`standalone`). `LinkButton` is an `<a>` cut like a Button, for the main way forward when it is a navigation. Both take `render` for your router’s link, as NavItem and Breadcrumb do, so there is no router dependency. `external` (or `target=\"_blank\"`) opens a new tab and says so twice: the up-right arrow for the eye and a hidden “(opens in a new tab)” for a screen reader, from `messages.link.newTab`.",
+      "usage": {
+        "use": [
+          "A place in a sentence, with the inline variant: “Open the run history to restore one.”",
+          "A link set on its own under a list or in a card’s foot, with standalone: “View all runs”.",
+          "The main way forward when it is a navigation, with LinkButton: “Open run”, “Read the guide”.",
+          "A page outside the app, with external, which opens a new tab and says so."
+        ],
+        "avoid": [
+          {
+            "when": "Doing something on this page: saving, deleting, opening a dialog.",
+            "use": "Components/Actions/Button"
+          },
+          {
+            "when": "A destination in the app’s sidebar.",
+            "use": "Components/Layout/App shell",
+            "label": "NavItem"
+          },
+          {
+            "when": "The path back up from the current page.",
+            "use": "Components/Navigation/Breadcrumb"
+          },
+          {
+            "when": "A numbered source an answer cites.",
+            "use": "AI/Sources",
+            "label": "Citation"
+          }
+        ],
+        "practices": [
+          {
+            "do": "Pass render your router’s link, as an element (<NextLink href=\"/runs\" />) or a function that returns one.",
+            "dont": "Wrap a Button in a link, or put onClick navigation on a Button; a link opens in a new tab, shows its address and is announced as a link."
+          },
+          {
+            "do": "Use external for a page that leaves the app, so the arrow and the hidden “(opens in a new tab)” go with it.",
+            "dont": "Open a link in the app in a new tab; it breaks Back for everyone and strands a screen reader user."
+          }
+        ],
+        "content": [
+          "Name the destination, not the gesture: “run history”, never “click here” or “this link”.",
+          "In a sentence, link the words that name the place, not the whole sentence."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus to the link."
+          },
+          {
+            "keys": [
+              "Enter"
+            ],
+            "action": "Follows the link. Space does not, even on a LinkButton: it is a link, and Space scrolls the page."
+          }
+        ],
+        "handles": [
+          "Renders an `<a>` (or your router’s link, through `render`), so it is announced as a link, opens in a new tab on a middle click and shows its address.",
+          "Underlines `inline` links at all times, so a link in a sentence is not told apart by colour alone.",
+          "With `external` or `target=\"_blank\"`, adds `rel=\"noopener noreferrer\"`, the up-right arrow and a hidden “(opens in a new tab)” after the label, from `messages.link.newTab`.",
+          "Hides the glyphs from assistive technology, so the label is the name."
+        ],
+        "you": [
+          "Write link text that names the destination on its own, since screen readers list links out of context.",
+          "Make sure the element you pass to `render` renders an `<a>` with an `href`, and forwards the props and ref it receives.",
+          "Use a `Button` that says why, not a link, when the destination is not available yet; a link cannot be disabled."
+        ]
+      },
+      "exports": [
+        {
+          "name": "Link",
+          "kind": "component",
+          "source": "src/components/link/link.tsx",
+          "description": "Text that goes somewhere: in a sentence (`inline`, underlined) or on its own (`standalone`). `className`, `ref` and the rest of the DOM props go to the `<a>`, or to the element `render` returns.",
+          "variants": {
+            "variant": {
+              "values": [
+                "inline",
+                "standalone"
+              ],
+              "default": "inline"
+            }
+          },
+          "props": [
+            {
+              "name": "className",
+              "type": "string",
+              "required": false,
+              "description": "Classes for the link, merged with `cn()` so yours win a conflict."
+            },
+            {
+              "name": "external",
+              "type": "boolean",
+              "required": false,
+              "description": "The link leaves the app: it opens in a new tab with `rel=\"noopener noreferrer\"`, marked by the up-right arrow and a hidden \"(opens in a new tab)\". `target=\"_blank\"` turns the same marks on."
+            },
+            {
+              "name": "messages",
+              "type": "MessagesOverride<LinkMessages>",
+              "required": false,
+              "description": "Words for translation: the hidden new-tab cue. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
+              "name": "variant",
+              "type": "\"inline\" | \"standalone\"",
+              "required": false,
+              "description": "`inline` sits in a sentence and is always underlined, because colour alone cannot pick a link out of the words around it (WCAG 1.4.1). It takes the font of the text it sits in. `standalone` stands on its own (\"View all runs\" under a list) in the UI face, and underlines on hover: its place says it is a link."
+            }
+          ],
+          "forwards": {
+            "element": "<a data-slot=\"link\">"
+          }
+        },
+        {
+          "name": "LinkButton",
+          "kind": "component",
+          "source": "src/components/link/link.tsx",
+          "description": "A link that looks like a button, for the main way forward that is a navigation: \"Open run\", \"Read the guide\". It is still an `<a>`, so it opens in a new tab on a middle click, shows its address on hover, and Space does not press it. It has no `disabled`: a link cannot be disabled, so render a `Button` that says why instead.",
+          "props": [
+            {
+              "name": "className",
+              "type": "string",
+              "required": false,
+              "description": "Classes for the link, merged with `cn()` so yours win a conflict."
+            },
+            {
+              "name": "external",
+              "type": "boolean",
+              "required": false,
+              "description": "The link leaves the app: it opens in a new tab with `rel=\"noopener noreferrer\"`, marked by the up-right arrow and a hidden \"(opens in a new tab)\". `target=\"_blank\"` turns the same marks on."
+            },
+            {
+              "name": "icon",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Leading icon. Decorative: the label is the accessible name."
+            },
+            {
+              "name": "messages",
+              "type": "MessagesOverride<LinkMessages>",
+              "required": false,
+              "description": "Words for translation: the hidden new-tab cue. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
+              "name": "size",
+              "type": "\"sm\" | \"md\" | \"lg\"",
+              "required": false,
+              "description": "The control height. Density already re-scales every size, so reach for a different one only to set a button apart from its neighbours, not to make a whole screen compact."
+            },
+            {
+              "name": "variant",
+              "type": "\"secondary\" | \"primary\" | \"ghost\"",
+              "required": false,
+              "description": "The weight of the way forward, as on Button. There is no `danger`: going somewhere destroys nothing, and the rojo button keeps meaning that it does."
+            },
+            {
+              "name": "withArrow",
+              "type": "boolean",
+              "required": false,
+              "default": "false",
+              "description": "Trailing arrow that slides 3px on hover, as Button's does: for a link that moves you on in a flow."
+            }
+          ],
+          "forwards": {
+            "element": "<a data-slot=\"link-button\">"
+          }
+        },
+        {
+          "name": "LinkMessages",
+          "kind": "type",
+          "source": "src/components/link/messages.ts",
+          "description": "The words Link and LinkButton say on their own."
+        },
+        {
+          "name": "linkVariants",
+          "kind": "function",
+          "source": "src/components/link/link.tsx",
+          "description": "A link: it goes somewhere. A button does something. The audit found \"use a link styled with `buttonVariants`\" on three pages and no component to do it with, so each caller rebuilt the classes, the arrow and the new-tab cue, and most left the cue out."
+        },
+        {
+          "name": "LinkButtonProps",
+          "kind": "type",
+          "source": "src/components/link/link.tsx"
+        },
+        {
+          "name": "LinkExternalProps",
+          "kind": "type",
+          "source": "src/components/link/link.tsx",
+          "description": "What Link and LinkButton share: opening a new tab, and saying so."
+        },
+        {
+          "name": "LinkProps",
+          "kind": "type",
+          "source": "src/components/link/link.tsx"
+        }
+      ],
+      "stories": [
+        {
+          "name": "Buttons",
+          "id": "components-navigation-link--buttons",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-link--buttons"
+        },
+        {
+          "name": "External",
+          "id": "components-navigation-link--external",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-link--external"
+        },
+        {
+          "name": "HardStates",
+          "id": "components-navigation-link--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-link--hard-states"
+        },
+        {
+          "name": "Inline",
+          "id": "components-navigation-link--inline",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-link--inline"
+        },
+        {
+          "name": "RouterLink",
+          "id": "components-navigation-link--router-link",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-link--router-link"
+        },
+        {
+          "name": "Standalone",
+          "id": "components-navigation-link--standalone",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-link--standalone"
+        },
+        {
+          "name": "Translated",
+          "id": "components-navigation-link--translated",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-link--translated"
+        }
       ]
     },
     {
@@ -16761,6 +17582,12 @@
               "description": "How many pages there are. The next button is disabled on the last."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<PaginationMessages>",
+              "required": false,
+              "description": "Words for translation: the landmark's name, the buttons and the range text. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "pageSize",
               "type": "number",
               "required": false,
@@ -16790,6 +17617,12 @@
           "forwards": {
             "element": "<nav data-slot=\"pagination\">"
           }
+        },
+        {
+          "name": "PaginationMessages",
+          "kind": "type",
+          "source": "src/components/pagination/messages.ts",
+          "description": "The words Pagination says on its own."
         },
         {
           "name": "getPageRange",
@@ -17010,9 +17843,9 @@
             },
             {
               "name": "messages",
-              "type": "(Partial<Omit<StepperMessages, \"states\">> & { states?: Partial<Record<StepperStepState, string>>; })",
+              "type": "MessagesOverride<StepperMessages>",
               "required": false,
-              "description": "Words, for translation. Any key not given keeps its English default."
+              "description": "Words for translation: the buttons, the \"Step 2 of 4\" line and the state words. Keys left out come from `MessagesProvider`, then English."
             },
             {
               "name": "onComplete",
@@ -17046,7 +17879,8 @@
         {
           "name": "StepperMessages",
           "kind": "type",
-          "source": "src/components/stepper/stepper.tsx"
+          "source": "src/components/stepper/messages.ts",
+          "description": "The words Stepper says on its own."
         },
         {
           "name": "StepperProps",
@@ -17712,8 +18546,13 @@
               "name": "label",
               "type": "string",
               "required": false,
-              "default": "Command palette",
-              "description": "Accessible name of the dialog."
+              "description": "Accessible name of the dialog. Defaults to \"Command palette\" (`messages.label`)."
+            },
+            {
+              "name": "messages",
+              "type": "MessagesOverride<CommandPaletteMessages>",
+              "required": false,
+              "description": "Words for translation: the defaults above, the key hints, the empty sentence and the result count. Keys left out come from `MessagesProvider`, then English."
             },
             {
               "name": "onOpenChange",
@@ -17731,8 +18570,7 @@
               "name": "placeholder",
               "type": "string",
               "required": false,
-              "default": "Type a command or search…",
-              "description": "Shown in the empty search input. Defaults to \"Type a command or search…\"."
+              "description": "Shown in the empty search input. Defaults to \"Type a command or search…\" (`messages.placeholder`)."
             },
             {
               "name": "renderEmpty",
@@ -17750,6 +18588,12 @@
           "forwards": {
             "element": "<div data-slot=\"command-palette\">"
           }
+        },
+        {
+          "name": "CommandPaletteMessages",
+          "kind": "type",
+          "source": "src/components/command/messages.ts",
+          "description": "The words CommandPalette says on its own."
         },
         {
           "name": "filterCommands",
@@ -17941,8 +18785,7 @@
               "name": "cancelLabel",
               "type": "string",
               "required": false,
-              "default": "Cancel",
-              "description": "The safe answer's label, \"Cancel\" by default. It takes focus when the dialog opens, so a reflexive Enter cancels."
+              "description": "The safe answer's label, \"Cancel\" (`messages.cancel`) by default. It takes focus when the dialog opens, so a reflexive Enter cancels."
             },
             {
               "name": "confirmationText",
@@ -17967,6 +18810,12 @@
               "type": "boolean | RefObject<HTMLElement | null> | ((closeType: InteractionType) => boolean | void | HTMLElement | null)",
               "required": false,
               "description": "Where focus goes when the dialog closes: Base UI's `finalFocus`. By default it returns to the trigger, which is right after Cancel. After a confirm that removed the trigger (a deleted row's button), return the element a reader would carry on from: the next row's action, or the list's heading. A function receives how the dialog was closed."
+            },
+            {
+              "name": "messages",
+              "type": "MessagesOverride<AlertDialogMessages>",
+              "required": false,
+              "description": "Words for translation: the default cancel label and the confirmation field's label. Keys left out come from `MessagesProvider`, then English."
             },
             {
               "name": "onOpenChange",
@@ -18082,6 +18931,12 @@
               "description": "Hide the corner close button. Only when the footer carries an explicit way out."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<DialogMessages>",
+              "required": false,
+              "description": "Words for translation: the close button's name. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "size",
               "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false,
@@ -18107,6 +18962,18 @@
           "forwards": {
             "element": "<button data-slot=\"dialog-trigger\">"
           }
+        },
+        {
+          "name": "AlertDialogMessages",
+          "kind": "type",
+          "source": "src/components/dialog/messages.ts",
+          "description": "The words AlertDialog says on its own."
+        },
+        {
+          "name": "DialogMessages",
+          "kind": "type",
+          "source": "src/components/dialog/messages.ts",
+          "description": "The words Dialog says on its own."
         },
         {
           "name": "dialogContentVariants",
@@ -18354,6 +19221,12 @@
               "description": "Hide the close button. Only when the footer carries an explicit way out."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<DrawerMessages>",
+              "required": false,
+              "description": "Words for translation: the close button's name. Keys left out come from `MessagesProvider`, then English."
+            },
+            {
               "name": "size",
               "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false,
@@ -18380,6 +19253,12 @@
           "forwards": {
             "element": "<button data-slot=\"drawer-trigger\">"
           }
+        },
+        {
+          "name": "DrawerMessages",
+          "kind": "type",
+          "source": "src/components/drawer/messages.ts",
+          "description": "The words Drawer says on its own."
         },
         {
           "name": "DrawerBand",
@@ -19213,6 +20092,12 @@
               "description": "The key that opens it, listed with the rest; `?` by default. `false` binds none."
             },
             {
+              "name": "messages",
+              "type": "MessagesOverride<ShortcutsDialogMessages>",
+              "required": false,
+              "description": "Words for translation: the title, its own binding's label and the empty sentence. Keys left out come from `MessagesProvider`, then English. The key names come from the provider's `hotkeys` table."
+            },
+            {
               "name": "onOpenChange",
               "type": "((open: boolean) => void)",
               "required": false,
@@ -19235,8 +20120,7 @@
               "name": "title",
               "type": "ReactNode",
               "required": false,
-              "default": "Keyboard shortcuts",
-              "description": "The dialog's title and accessible name. Defaults to “Keyboard shortcuts”."
+              "description": "The dialog's title and accessible name. Defaults to “Keyboard shortcuts” (`messages.title`)."
             },
             {
               "name": "trigger",
@@ -19272,6 +20156,18 @@
           "forwards": {
             "element": null
           }
+        },
+        {
+          "name": "HotkeysMessages",
+          "kind": "type",
+          "source": "src/components/shortcuts/messages.ts",
+          "description": "How a key binding is printed and spoken: the glyphs on a Mac's keys and everyone else's, the words a screen reader hears, and the group a binding with none falls into. Keys are `KeyboardEvent.key` values in lower case (`escape`, `arrowup`, `?`); a key not listed is printed as typed, in capitals."
+        },
+        {
+          "name": "ShortcutsDialogMessages",
+          "kind": "type",
+          "source": "src/components/shortcuts/messages.ts",
+          "description": "The words ShortcutsDialog says on its own."
         },
         {
           "name": "describeHotkey",
@@ -21342,10 +22238,49 @@
       "source": "@base-ui/react"
     },
     {
+      "name": "MessagesProvider",
+      "kind": "component",
+      "source": "src/lib/messages.tsx",
+      "description": "Words and a locale for every Mola component below it, portals included. Nested providers merge, so a section can reword one component without restating the app's whole table. Renders no element of its own."
+    },
+    {
+      "name": "formatMessage",
+      "kind": "function",
+      "source": "src/lib/messages.tsx",
+      "description": "`format('Step {position} of {total}', { position: 2, total: 4 })` → `'Step 2 of 4'`. An unknown name is left as written."
+    },
+    {
+      "name": "MessagesOverride",
+      "kind": "type",
+      "source": "src/lib/messages.tsx",
+      "description": "Any key may be left out, at any depth. A plural object is replaced whole, not merged: a language with only `other` must not inherit English's `one`."
+    },
+    {
+      "name": "MessagesProviderProps",
+      "kind": "type",
+      "source": "src/lib/messages.tsx"
+    },
+    {
+      "name": "PluralMessage",
+      "kind": "type",
+      "source": "src/lib/messages.tsx",
+      "description": "A message with a count, keyed by plural category. `other` is required; every language has it."
+    },
+    {
+      "name": "defaultMessages",
+      "kind": "constant",
+      "source": "src/lib/default-messages.ts"
+    },
+    {
       "name": "useScrollEdge",
       "kind": "hook",
       "source": "src/lib/scroll-edge.ts",
       "description": "Keeps `data-overflow-end` on a sideways-scrolling element while there is more past its trailing edge, for the `scroll-edge` utility to draw its cue from. Also marks the element `data-scroll-edge`, so the browser audit can tell a region meant to scroll from a layout that overflows by accident."
+    },
+    {
+      "name": "MolaMessages",
+      "kind": "type",
+      "source": "src/lib/default-messages.ts"
     }
   ]
 }

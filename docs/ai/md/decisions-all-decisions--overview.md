@@ -25,6 +25,7 @@ each rest on one, and a change that ignores it reopens an argument that was sett
 - [0011 — The lint rules ship in the package](https://demogar.github.io/molaui/md/decisions-0011-lint-rules-in-the-package--overview.md)
 - [0012 — Composite widgets Base UI does not provide follow the APG, written out](https://demogar.github.io/molaui/md/decisions-0012-composites-base-ui-lacks--overview.md)
 - [0013 — Three kinds of notice, one of them spoken, and one registry of keys](https://demogar.github.io/molaui/md/decisions-0013-notices-and-shortcuts--overview.md)
+- [0014 — Built-in words come from one messages table, through an optional provider](https://demogar.github.io/molaui/md/decisions-0014-one-messages-table--overview.md)
 - [0015 — Pressed is ink, disabled is a ground of its own](https://demogar.github.io/molaui/md/decisions-0015-pressed-is-ink--overview.md)
 
 ## How a decision changes

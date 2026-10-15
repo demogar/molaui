@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { BookOpen } from 'lucide-react'
 import * as React from 'react'
 
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 import { MessagesProvider } from '../../lib/messages'
 import { Text } from '../typography'
 import { Link, LinkButton } from './link'
@@ -114,4 +115,45 @@ export const Translated: Story = {
       </Text>
     </MessagesProvider>
   ),
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <div className="flex max-w-reading flex-col items-start gap-3">
+          <Text>
+            Open the <Link href="#">full trace of every step the knowledge agent took before it stopped</Link> to see
+            where it went wrong.
+          </Text>
+          <LinkButton href="#" variant="secondary" withArrow className="h-auto min-h-(--button-h) max-w-full whitespace-normal py-1 text-start">
+            Open the run history for the knowledge agent
+          </LinkButton>
+        </div>
+      </HardState>
+      <HardState state="rtl">
+        <div className="flex flex-col items-start gap-3">
+          <Text>
+            افتح <Link href="#">سجل التشغيل</Link> لاستعادة تشغيل قبل حذفه.
+          </Text>
+          <Link variant="standalone" href="https://www.w3.org/WAI/" external messages={{ newTab: '(يفتح في علامة تبويب جديدة)' }}>
+            إرشادات الوصول
+          </Link>
+          <LinkButton href="#" withArrow>
+            فتح التشغيل
+          </LinkButton>
+        </div>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'An inline link wraps with the sentence it sits in; a LinkButton with a sentence-length label takes a second line rather than running off a phone. In right to left the new-tab arrow and the button arrow change sides. There is no disabled cell, because a link cannot be disabled, and no error cell, because a link only goes somewhere.',
+      },
+    },
+  },
 }

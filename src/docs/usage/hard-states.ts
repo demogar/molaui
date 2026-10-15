@@ -93,6 +93,10 @@ export const HARD_STATE_EXEMPT: Record<string, Partial<Record<ExemptState, strin
     disabled: 'Every crumb is a place you can go, and the current page is text, not a disabled link.',
     error: 'A breadcrumb only names where you are; it has nothing that can fail or be invalid.',
   },
+  'Components/Navigation/Link': {
+    disabled: 'A link cannot be disabled; a destination not available yet is a Button that says why, as the guidance says.',
+    error: 'A link only goes somewhere; a page that fails to load is that page’s error, not the link’s.',
+  },
   'Components/Navigation/Pagination': {
     error: 'A page that fails to load is the table’s error, not the pagination control’s.',
   },

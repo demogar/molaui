@@ -221,7 +221,7 @@ export const HardStates: Story = {
             back: 'رجوع',
             continue: 'متابعة',
             finish: 'إنشاء الوكيل',
-            stepOf: (position: number, total: number) => `الخطوة ${position} من ${total}`,
+            stepOf: 'الخطوة {position} من {total}',
             states: { upcoming: 'لم تبدأ', current: 'الحالية', complete: 'تمّت', invalid: 'تحتاج إلى تصحيح' },
           }}
         >

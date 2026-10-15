@@ -583,7 +583,7 @@
       "screenReadersByHand": false
     },
     "Components/Navigation/Link": {
-      "stories": 6,
+      "stories": 7,
       "unitTests": [
         "src/components/link/link.test.tsx"
       ],

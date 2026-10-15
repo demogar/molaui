@@ -44,6 +44,7 @@ Each story is a live example in Storybook.
 
 - [Buttons](https://demogar.github.io/molaui/?path=/story/components-navigation-link--buttons)
 - [External](https://demogar.github.io/molaui/?path=/story/components-navigation-link--external)
+- [HardStates](https://demogar.github.io/molaui/?path=/story/components-navigation-link--hard-states)
 - [Inline](https://demogar.github.io/molaui/?path=/story/components-navigation-link--inline)
 - [RouterLink](https://demogar.github.io/molaui/?path=/story/components-navigation-link--router-link)
 - [Standalone](https://demogar.github.io/molaui/?path=/story/components-navigation-link--standalone)
@@ -112,7 +113,7 @@ Types: `LinkMessages`, `LinkButtonProps`, `LinkExternalProps`, `LinkProps`
 
 ### Testing status
 
-- Automated, jsdom: each of its 6 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 7 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.
