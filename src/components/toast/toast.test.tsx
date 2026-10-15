@@ -52,6 +52,26 @@ describe('Toast', () => {
     expect(screen.getAllByText(/Index rebuilt/)).toHaveLength(1)
   })
 
+  it('names its Dismiss button before focus enters the region', async () => {
+    // Base UI aria-hides the close button until the stack is expanded or the
+    // button is focused. Ours is always drawn, so it must always be named: a
+    // screen reader browsing the page, and a test, find it without first
+    // moving focus into the toast.
+    //
+    // A danger toast is the exception, and Base UI's on purpose: it is high
+    // priority, read out at once by an assertive live region, and the whole
+    // toast stays aria-hidden until it is focused so it is not read twice.
+    // F6 reaches it, and then its Dismiss is named like the others.
+    setup()
+    act(() => {
+      api.show({ title: 'Draft saved' })
+      api.warn({ title: 'Spend at 80%' })
+    })
+    await screen.findAllByText(/Draft saved/)
+    expect(document.activeElement).toBe(document.body)
+    expect(screen.getAllByRole('button', { name: 'Dismiss' })).toHaveLength(2)
+  })
+
   it('runs the action and can be dismissed', async () => {
     setup()
     let undone = false

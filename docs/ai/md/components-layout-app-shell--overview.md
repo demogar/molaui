@@ -28,6 +28,8 @@ The frame an internal tool lives in. Exactly the viewport tall, and only `<main>
 
 - Do: Mark the current destination with active, and set countTone to attention only for things that need a person.
 - Don’t: Fill every count in rojo; totals are not alarms.
+- Do: Render each NavItem as your router’s link with render={<Link to="/runs" />}, so the shell navigates without reloading the page.
+- Don’t: Wrap a NavItem in your own link, or pass a plain href in a single-page app; the first nests links, the second reloads the document.
 
 ### Content
 

@@ -211,7 +211,16 @@ function ToastList() {
               <ToastPrimitive.Action render={<Button variant="secondary" size="sm" className="mt-2.5" />} />
             ) : null}
           </div>
+          {/* Always in the accessibility tree. Base UI hides the close button
+              (`aria-hidden`) until the stack is expanded or the button has
+              focus, for stacks whose close appears only on hover. Ours is
+              drawn at all times, so a sighted user saw "Dismiss" on the front
+              toast that a screen reader in browse mode, or a test looking it
+              up by role, could not find until focus was already inside the
+              region. The toast's title was never hidden, so a toast behind
+              the front one now has both, the same as the front one. */}
           <ToastPrimitive.Close
+            aria-hidden={false}
             render={
               <IconButton label="Dismiss" variant="ghost" size="sm">
                 <X />

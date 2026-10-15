@@ -25,7 +25,7 @@ A named `<nav>` around an ordered list. The current page is text with `aria-curr
 
 ### Do and don’t
 
-- Do: Pass renderLink to use your router’s link.
+- Do: Pass renderLink your router’s link, as an element (<Link />) or a function that returns one.
 - Don’t: Link the current page; a link to where you already are does nothing.
 
 ### Content

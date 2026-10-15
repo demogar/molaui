@@ -70,9 +70,9 @@ expectTypeOf<Extract<ComboboxProps, { multiple: true }>['value']>().toEqualTypeO
 // optional on the single form, and an absent discriminant does not narrow a
 // union: `removeLabel` was accepted here and silently ignored.
 // @ts-expect-error removeLabel needs multiple
-export const comboboxSingleWithRemoveLabel = <Combobox items={[]} removeLabel={(label) => `Remove ${label}`} />
+export const comboboxSingleWithRemoveLabel = <Combobox items={[]} removeLabel={(label: string) => `Remove ${label}`} />
 // @ts-expect-error removeLabel needs multiple, and multiple={false} is not it
-export const comboboxFalseWithRemoveLabel = <Combobox multiple={false} items={[]} removeLabel={(label) => `Remove ${label}`} />
+export const comboboxFalseWithRemoveLabel = <Combobox multiple={false} items={[]} removeLabel={(label: string) => `Remove ${label}`} />
 
 /* 2b. Every component takes its element's ref, and the simple-API forms
    type it as the element they forward it to: the input, the trigger. */
