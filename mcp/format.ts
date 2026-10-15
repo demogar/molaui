@@ -97,6 +97,48 @@ export function componentMarkdown(c: Component, data: Data, via?: string) {
   return join(out)
 }
 
+/**
+ * The page cut to what writing the code needs: what it is for, when not to
+ * use it, each component export's props on one line apiece, and what the
+ * accessibility section leaves to the caller. The full page is several
+ * thousand tokens for the larger components (Field, Dialog), most of it
+ * prose, anatomy, keyboard tables and links an agent reads once, if ever;
+ * an agent composing a screen from eight components paid for all of it
+ * eight times. Prop descriptions are dropped too, because the type and
+ * default carry most of the meaning; the footer says what was left out and
+ * how to get it, so a brief never passes for the whole page.
+ */
+export function componentBrief(c: Component, data: Data, via?: string) {
+  const { manifest } = data
+  const components = c.exports.filter((x) => x.kind === 'component')
+  const out: (string | false | undefined)[] = [
+    `# ${c.name} (brief)`,
+    '',
+    via ? `\`${via}\` is documented on this page.\n` : undefined,
+    c.summary,
+    '',
+    c.phase && c.phase !== 'stable' ? `Status: ${manifest.phases[c.phase]?.label}. ${manifest.phases[c.phase]?.promise}` : undefined,
+    c.usage?.replacedBy ? `Use ${nameOf(c.usage.replacedBy)} instead.` : undefined,
+    components.length ? `\`\`\`tsx\nimport { ${components.map((x) => x.name).join(', ')} } from '${manifest.name}'\n\`\`\`\n` : undefined,
+  ]
+  if (c.usage) {
+    out.push('## When to use', '', list(c.usage.use), '', '## When not to', '')
+    out.push(list(c.usage.avoid.map((a) => `${a.when}${a.use ? ` Use ${a.label ?? nameOf(a.use)}.` : ''}`)), '')
+  }
+  out.push('## Props', '')
+  for (const x of components) {
+    const line = (x.props ?? []).map((p) => `\`${p.name}${p.required ? '' : '?'}: ${p.type.replace(/\n/g, ' ')}${p.default ? ` = ${p.default}` : ''}\``).join(', ')
+    const inherits = x.inherits?.length ? `${line ? '; ' : ''}also the props of ${x.inherits.map((n) => `\`${n}\``).join(', ')}` : ''
+    out.push(`- \`${x.name}\`: ${line || inherits ? `${line}${inherits}` : 'no props of its own'}`)
+  }
+  out.push('')
+  if (c.accessibility?.you.length) out.push('## You handle', '', list(c.accessibility.you), '')
+  out.push(
+    `Brief: left out the description, do and don’t, content, anatomy, prop descriptions, keyboard table, examples and changes. Call get_component with brief false for the whole page, or read ${markdownUrl(c.docs)}.`,
+  )
+  return join(out)
+}
+
 export function patternMarkdown(p: Pattern) {
   const g = p.guidance
   const out: (string | false | undefined)[] = [`# ${nameOf(p.title)} (${p.kind})`, '', g?.summary ?? p.summary, '', `Docs: ${p.docs}`, `Markdown: ${markdownUrl(p.docs)}`, '']
@@ -182,7 +224,8 @@ export function rulesMarkdown(data: Data) {
     '',
     'Every screen built with Mola UI is reviewed against these.',
     '',
-    list(m.rules.map((r) => `${r.rule} ${r.why}`)),
+    // Numbered, because check_code cites rules by number ("rule 4").
+    m.rules.map((r, i) => `${i + 1}. ${r.rule} ${r.why}`).join('\n'),
     '',
     '## Setup',
     '',

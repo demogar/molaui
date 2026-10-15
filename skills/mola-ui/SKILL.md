@@ -13,6 +13,9 @@ Before you write code, look up the components you plan to use. Don't guess props
 
 - If the `mola-ui` MCP server is connected (`npx -y --package @demogar/mola-ui mola-ui-mcp`), use
   its `get_component`, `search` and `get_tokens` tools. They answer for the installed version.
+  `get_component` with `brief: true` returns only the summary, usage, props and what you must
+  handle, when you already know the component; `search` takes the job ("loading state") as well
+  as a name.
   Before you hand UI code back, pass each file you wrote to its `check_code` tool and fix every
   error it reports (see "Before you call it done").
 
@@ -21,8 +24,8 @@ Before you write code, look up the components you plan to use. Don't guess props
   from the source, so it is current.
 - `https://demogar.github.io/molaui/?path=/docs/<id>` is each component's docs page. The manifest
   gives the URL. The same page as Markdown is `https://demogar.github.io/molaui/md/<id>.md`, and
-  `llms-components.txt`, `llms-tokens.txt` and `llms-patterns.txt` at the Storybook root hold one
-  topic each.
+  `llms-components.txt`, `llms-tokens.txt`, `llms-patterns.txt` and `llms-rules.txt` at the
+  Storybook root hold one topic each.
 
 ## Setup
 

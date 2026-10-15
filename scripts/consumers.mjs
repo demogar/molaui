@@ -216,6 +216,8 @@ async function checkMcp(tarball) {
     if (names !== 'check_code, get_component, get_pattern, get_rules, get_tokens, list_components, search') result.errors.push(`unexpected tools: ${names}`)
     const button = await client.callTool({ name: 'get_component', arguments: { name: 'Button' } })
     if (!button.content?.[0]?.text?.startsWith('# Button')) result.errors.push(`get_component Button returned: ${JSON.stringify(button).slice(0, 300)}`)
+    const brief = await client.callTool({ name: 'get_component', arguments: { name: 'Button', brief: true } })
+    if (!brief.content?.[0]?.text?.startsWith('# Button (brief)')) result.errors.push(`get_component Button brief returned: ${JSON.stringify(brief).slice(0, 300)}`)
     const tokens = await client.callTool({ name: 'get_tokens', arguments: { filter: 'oro' } })
     if (!tokens.content?.[0]?.text?.includes('`--oro`')) result.errors.push('get_tokens "oro" did not list --oro')
     const checked = await client.callTool({ name: 'check_code', arguments: { code: '<button className="border rounded-lg">Save</button>', filename: 'save.tsx' } })

@@ -1,6 +1,9 @@
 // @vitest-environment node
 import { Client } from '@modelcontextprotocol/sdk/client/index.js'
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js'
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
+
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
 import pkg from '../package.json'
@@ -88,6 +91,26 @@ describe('mola-ui MCP server', () => {
     expect(text).toContain(changed.changes![0]!.subject)
   })
 
+  it('get_component with brief returns the summary, usage, props and what you handle, at a fraction of the size', async () => {
+    const full = await call('get_component', { name: 'Field' })
+    const brief = await call('get_component', { name: 'Field', brief: true })
+    expect(brief.isError).toBe(false)
+    expect(brief.text).toMatch(/^# Field \(brief\)/)
+    for (const heading of ['## When to use', '## When not to', '## Props', '## You handle']) expect(brief.text).toContain(heading)
+    for (const heading of ['## Anatomy', '## Accessibility', '## Examples', '## Changes', '### Do and don’t']) expect(brief.text).not.toContain(heading)
+    expect(brief.text).toContain("import { Label, Field, Input, Textarea, SearchInput } from '@demogar/mola-ui'")
+    expect(brief.text).toMatch(/^- `Field`: `label: ReactNode`, /m)
+    expect(brief.text).toContain('`optional?: boolean = false`')
+    expect(brief.text).toContain('Call get_component with brief false for the whole page')
+    expect(brief.text.length).toBeLessThan(full.text.length / 2)
+    // Across every page, not only the one above.
+    const sizes = await Promise.all(
+      data.manifest.components.map(async (c) => [(await call('get_component', { name: c.name, brief: true })).text.length, (await call('get_component', { name: c.name })).text.length]),
+    )
+    expect(sizes.reduce((a, [b]) => a + b!, 0) / sizes.reduce((a, [, f]) => a + f!, 0)).toBeLessThan(0.4)
+    expect((await call('get_component', { name: 'IconButton', brief: true })).text).toMatch(/^# Button \(brief\)\n\n`IconButton` is documented on this page/)
+  })
+
   it('get_component finds a page by a loose name or by an export', async () => {
     expect((await call('get_component', { name: 'date-picker' })).text).toMatch(/^# Date picker/)
     const byExport = await call('get_component', { name: 'IconButton' })
@@ -105,6 +128,27 @@ describe('mola-ui MCP server', () => {
     expect((await call('search', { query: 'confirmation' })).text).toContain('pattern **Confirmation**')
     expect((await call('search', { query: 'oro-soft' })).text).toContain('token **--oro-soft**')
     expect((await call('search', { query: 'zzz-nothing' })).text).toMatch(/^Nothing matches/)
+  })
+
+  it('search finds a component by the job its usage guidance describes', async () => {
+    const top = async (query: string) => (await call('search', { query })).text.split('\n')[0]
+    expect(await top('loading')).toMatch(/^- component \*\*Skeleton\*\*/)
+    expect(await top('work with a known total')).toMatch(/^- component \*\*Progress\*\*/)
+    expect(await top('confirm a destructive action')).toMatch(/^- pattern \*\*Confirmation\*\*/)
+    // Stopwords do not have to match: "show" and "an" are in almost no page.
+    expect(await top('how do I show an error')).toMatch(/^- component \*\*Run error\*\*/)
+  })
+
+  it('search credits a "when not to" line to the page it points to, not the page that rejects the job', async () => {
+    // Progress's guidance says "Content loading into a known layout" is a job for Skeleton.
+    const { text } = await call('search', { query: 'known layout' })
+    expect(text.split('\n')[0]).toMatch(/^- component \*\*Skeleton\*\*/)
+    expect(text).not.toContain('**Progress**')
+  })
+
+  it('search matches prose at the start of a word, so "loading" is not found inside "upload"', async () => {
+    const { text } = await call('search', { query: 'loading', limit: 50 })
+    expect(text).not.toContain('**File upload**')
   })
 
   it('get_tokens gives both theme values, and filters', async () => {
@@ -140,8 +184,15 @@ describe('mola-ui MCP server', () => {
 
   it('get_rules returns every design rule with its reason', async () => {
     const { text } = await call('get_rules')
-    for (const r of data.manifest.rules) expect(text).toContain(r.rule)
+    // Numbered, as check_code cites them.
+    data.manifest.rules.forEach((r, i) => expect(text).toContain(`${i + 1}. ${r.rule}`))
     expect(text).toContain(data.manifest.install)
+  })
+
+  it('llms-rules.txt holds every rule, numbered as check_code cites them', () => {
+    const file = readFileSync(join(findRoot(), 'llms-rules.txt'), 'utf8')
+    data.manifest.rules.forEach((r, i) => expect(file).toContain(`\n${i + 1}. ${r.rule} ${r.why}\n`))
+    expect(readFileSync(join(findRoot(), 'llms.txt'), 'utf8')).toContain('llms-rules.txt')
   })
 
   it('check_code reports each finding with its line, rule and fix, and cites the rules', async () => {
