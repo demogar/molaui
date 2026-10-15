@@ -30,6 +30,7 @@ const SOURCES = [
   ...found(walk(join(repoRoot, 'src'), (name) => /\.(mdx|tsx?)$/.test(name)), 200, 'sources under src/').map((path) => relative(repoRoot, path)),
   ...found(walk(join(repoRoot, 'skills'), (name) => name.endsWith('.md')), 1, 'skill Markdown').map((path) => relative(repoRoot, path)),
   ...found(walk(join(repoRoot, 'codemods'), (name) => name.endsWith('.md')), 1, 'codemod READMEs').map((path) => relative(repoRoot, path)),
+  ...found(walk(join(repoRoot, '.github/ISSUE_TEMPLATE'), (name) => name.endsWith('.yml')), 3, 'issue templates').map((path) => relative(repoRoot, path)),
 ]
 
 const LINK = /path=\/(?:docs|story)\/([a-z0-9-]+)/g
@@ -50,6 +51,29 @@ describe('links into Storybook', () => {
     for (const id of ['mola-ui-introduction--overview', 'components-feedback-callout--overview', 'ai-agent-console--console']) {
       expect(knownIds).toContain(id)
     }
+  })
+})
+
+/**
+ * The roadmap and the docs send a reader to a specific issue form
+ * (`issues/new?template=proposal.yml`). GitHub quietly falls back to the
+ * template chooser when the named template does not exist, so a renamed form
+ * would break the path from the roadmap to a proposal without anything
+ * failing.
+ */
+describe('links to issue templates', () => {
+  it('every issues/new?template= link names a template in .github/ISSUE_TEMPLATE', () => {
+    const pattern = /github\.com\/demogar\/molaui\/issues\/new\?template=([\w.-]+)/g
+    const broken: string[] = []
+    let seen = 0
+    for (const file of SOURCES) {
+      for (const match of readFileSync(join(repoRoot, file), 'utf8').matchAll(pattern)) {
+        seen++
+        if (!existsSync(join(repoRoot, '.github/ISSUE_TEMPLATE', match[1]!))) broken.push(`${file}: ${match[1]}`)
+      }
+    }
+    expect(seen).toBeGreaterThan(0)
+    expect([...new Set(broken)]).toEqual([])
   })
 })
 

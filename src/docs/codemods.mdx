@@ -1,0 +1,56 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Mola UI/Codemods" />
+
+# Codemods
+
+A codemod is a script that rewrites your code across a breaking change, so you don't have to
+make the same edit by hand in every file. This page lists every codemod Mola UI ships, the
+release that deprecated what it migrates and the release that removes it. When and how a codemod
+is written is on the [Versioning](?path=/docs/mola-ui-versioning--overview) page.
+
+## Every codemod
+
+| Codemod | Change | Deprecated in | Removed in | Test |
+| --- | --- | --- | --- | --- |
+| [`skeleton-line-to-text.ts`](https://github.com/demogar/molaui/blob/main/codemods/skeleton-line-to-text.ts) | `<Skeleton shape="line">` → `<Skeleton shape="text">` | 0.2.0 | 1.0.0 | [`skeleton-line-to-text.test.ts`](https://github.com/demogar/molaui/blob/main/codemods/skeleton-line-to-text.test.ts) |
+| [`prop-vocabulary.ts`](https://github.com/demogar/molaui/blob/main/codemods/prop-vocabulary.ts) | One meaning each for `tone`, `variant`, `kind` and `size` (ADR 0010): `<Panel tone>` → `layer`, `<EmptyState variant>` → `kind`, `<Chip size="comfortable">` → `size="md"`, `<Heading size>` → `visualLevel` and the rest listed in the file | 0.7.0 | 1.0.0 | [`prop-vocabulary.test.ts`](https://github.com/demogar/molaui/blob/main/codemods/prop-vocabulary.test.ts) |
+
+The deprecated API keeps working, and warns in development, until the release in the "Removed
+in" column. Run the codemod any time before you take that release. Why the prop vocabulary
+changed is in [One prop vocabulary](?path=/docs/decisions-0010-one-prop-vocabulary--overview).
+
+## Running one
+
+Codemods run from a checkout of this repository, against your source. Run with `--dry` first to
+see what would change:
+
+```bash
+git clone https://github.com/demogar/molaui.git
+cd molaui && npm ci
+npx tsx codemods/skeleton-line-to-text.ts ../your-app/src --dry   # list what would change
+npx tsx codemods/skeleton-line-to-text.ts ../your-app/src         # rewrite in place
+npx tsx codemods/prop-vocabulary.ts ../your-app/src --dry
+```
+
+A codemod rewrites only what it can prove came from `@demogar/mola-ui`, and leaves formatting and
+comments as they were, so the diff shows only the change. What it can't decide, such as a value
+computed at runtime, it prints with a file and line for you to check by hand.
+
+## Deprecations without a codemod
+
+Some changes can't be made by a script, such as a component split in two. Those get a migration
+section in the release notes instead, and are listed here so this page accounts for every
+deprecation that is still live.
+
+- `toolbar-overflow-tone-default`: a `ToolbarOverflow` item with `tone: "default"` becomes
+  `tone: "neutral"`. The tone sits inside the `items` array, which a codemod can't follow
+  reliably, so change it by hand when the warning names it. The same goes for DataTable's
+  `empty={{ variant }}`, which warns as `table-empty-variant` and becomes `empty={{ kind }}`.
+
+## How this page stays complete
+
+A test (`codemods/index.test.ts`) reads the `codemods/` folder and fails if a codemod has no row
+here, no test beside it, or versions that disagree with its own record and with the
+`deprecate()` warning it migrates. It also fails if a `deprecate()` call in the library has
+neither a codemod nor a line under "Deprecations without a codemod".

@@ -7,9 +7,12 @@ branch to a release.
 
 - Be kind. Everyone taking part is expected to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 - Report security problems privately. See [SECURITY.md](SECURITY.md) and never open a public issue for them.
-- For a new component, a new token or anything that changes how the system looks, open an issue
-  first so the design can be agreed before you write code. The decisions so far are in
-  [`docs/adr/`](docs/adr/); a change that reverses one needs a new ADR.
+- For a new component, a new token or anything that changes how the system looks, open a
+  [proposal](https://github.com/demogar/molaui/issues/new?template=proposal.yml) first so the
+  design can be agreed before you write code. Check the
+  [Roadmap](https://demogar.github.io/molaui/?path=/docs/mola-ui-roadmap--overview) before you
+  do: it may already be planned, under consideration or decided against. The decisions so far are
+  in [`docs/adr/`](docs/adr/); a change that reverses one needs a new ADR.
 
 ## What belongs in the system
 
@@ -250,7 +253,9 @@ page in Storybook. In short:
   `@deprecated` (since, instead, removal), call `deprecate()` from `src/lib/deprecate.ts` where it
   is used, and keep it working. Remove it in the next major, no sooner than one minor later.
 - **Ship a codemod for mechanical changes.** Renames get a tested script in `codemods/` built on
-  the TypeScript compiler API; see `codemods/skeleton-line-to-text.ts`.
+  the TypeScript compiler API, with a `meta` record and a row on the Codemods page
+  (`src/docs/codemods.mdx`); see `codemods/skeleton-line-to-text.ts`. `codemods/index.test.ts`
+  fails until the row, the record and the `deprecate()` call agree.
 
 ## Repository settings
 

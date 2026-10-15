@@ -127,7 +127,9 @@ the package. The version in `package.json` and `CHANGELOG.md` are never edited b
 
 When a breaking change is mechanical (a renamed prop, prop value, export or token), the release
 that removes the old API ships a codemod in [`codemods/`](https://github.com/demogar/molaui/tree/main/codemods),
-named for what it does: `skeleton-line-to-text.ts`.
+named for what it does: `skeleton-line-to-text.ts`. The [Codemods](https://demogar.github.io/molaui/?path=/docs/mola-ui-codemods--overview)
+page lists every one, with the release that deprecated what it migrates and the release that
+removes it.
 
 ```bash
 npx tsx codemods/skeleton-line-to-text.ts src/ --dry   # list what would change

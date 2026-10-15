@@ -6,3 +6,6 @@ contact_links:
   - name: Storybook
     url: https://demogar.github.io/molaui/
     about: Every component and state, documented. Check here first.
+  - name: Roadmap
+    url: https://demogar.github.io/molaui/?path=/docs/mola-ui-roadmap--overview
+    about: What is planned and what is under consideration. Check here before proposing something new.

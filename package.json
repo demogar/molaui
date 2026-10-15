@@ -30,7 +30,8 @@
   "files": [
     "dist",
     "docs/ai/components.json",
-    "docs/ai/tokens.json"
+    "docs/ai/tokens.json",
+    "snippets"
   ],
   "main": "./dist/index.js",
   "module": "./dist/index.js",

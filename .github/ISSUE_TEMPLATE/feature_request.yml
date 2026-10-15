@@ -1,5 +1,5 @@
 name: Feature request
-description: Suggest a component, state, token or improvement
+description: Suggest a small improvement to something that exists. For a new component, token or pattern, use Proposal.
 labels: [enhancement]
 body:
   - type: textarea

@@ -18,6 +18,9 @@
  *   docs/ai/composition.json  which components each pattern and showcase is
  *                             built from, read from its imports; the docs
  *                             pages render "Built from" and "Used in" from it
+ *   snippets/mola-ui.code-snippets
+ *                             a VS Code snippet per component page, taken
+ *                             from its stories (see scripts/snippets.ts)
  *
  * Like tokens/mola.tokens.json these are derived artefacts, never edited: an
  * agent that builds UI from a stale prop list writes code that does not
@@ -39,6 +42,7 @@ import ts from 'typescript'
 
 import evidenceFile from '../docs/accessibility/evidence.json' with { type: 'json' }
 import pkg from '../package.json' with { type: 'json' }
+import { SNIPPETS_FILE, snippets, snippetsText } from './snippets'
 import { changeLine, colorInfo, componentTwin, forwardsLine, mdxPages, mdxTwin, screenTwin, SERVED_AS_IS, TOKEN_ROWS, tokensJson, tokensText, twinPath, twinUrl } from './agent-docs'
 import { ACCESSIBILITY } from '../src/docs/usage/accessibility'
 import { ANATOMY, ROOT_PART } from '../src/docs/usage/anatomy'
@@ -782,6 +786,22 @@ const twins: [string, string][] = [
     .map((page) => [page.title, mdxTwin(page, { site: SITE, pages: mdx, description: pkg.description })] as const),
 ].map(([title, text]) => [twinPath(docsId(title)), text])
 
+/* ── VS Code snippets, from the stories ────────────────────────────── */
+
+const snippetText = snippetsText(
+  snippets(
+    sorted.map((entry) => ({
+      title: entry.title,
+      source: readFileSync(resolve(root, stories.find((s) => s.title === entry.title)!.file), 'utf8'),
+      summary: entry.summary ?? '',
+      required: Object.fromEntries(
+        entry.exports.filter((x) => x.kind === 'component').map((x) => [x.name, (x.props ?? []).filter((p) => p.required)]),
+      ),
+    })),
+    new Set(exportsInfo.map((e) => e.name)),
+  ),
+)
+
 /* ── write or check ─────────────────────────────────────────────────── */
 
 const outputs: [string, string][] = [
@@ -793,6 +813,7 @@ const outputs: [string, string][] = [
   ['llms-patterns.txt', patternsText],
   ['llms-rules.txt', rulesText],
   ['docs/ai/tokens.json', `${JSON.stringify(tokensJson(), null, 2)}\n`],
+  [SNIPPETS_FILE, snippetText],
   ...twins,
   [
     'docs/ai/composition.json',
@@ -854,6 +875,7 @@ if (process.argv.includes('--check')) {
   console.log('Agent docs are up to date.')
 } else {
   mkdirSync(resolve(root, 'docs/ai/md'), { recursive: true })
+  mkdirSync(resolve(root, dirname(SNIPPETS_FILE)), { recursive: true })
   for (const path of orphans) rmSync(resolve(root, path))
   for (const [path, text] of outputs) writeFileSync(resolve(root, path), text)
   console.log(`Wrote ${outputs.filter(([p]) => !p.startsWith('docs/ai/md/')).map(([p]) => p).join(', ')} and ${twins.length} Markdown twins in docs/ai/md: ${counts.components} components (${counts.parts} parts), ${counts.aiComponents} AI components, ${counts.stories} stories.`)
