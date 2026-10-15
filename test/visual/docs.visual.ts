@@ -27,13 +27,19 @@ async function open(page: Page, id: string, theme: 'light' | 'dark') {
   await settle(page)
 }
 
-// A component page lists its own changes and release status, read from
-// CHANGELOG.md, which only release-please writes. Screenshotted as they are,
-// every release PR moved the pages it touched and failed Visual regression
-// on the one PR whose checks gate a publish, for text the release itself
-// wrote. Their content is held by changes.test.ts; here they are taken out
-// of the layout, so the page's height does not move either.
-const RELEASE_TEXT = '[data-changes], [data-release-status] { display: none !important; }'
+// Left out of the layout before the screenshot, so the page height holds:
+//
+// - A component page's Changes and release-status sections, read from
+//   CHANGELOG.md, which only release-please writes. Screenshotted, every
+//   release PR moved the pages it touched and failed Visual regression on
+//   the one PR whose checks gate a publish. changes.test.ts holds their text.
+// - Storybook's args table. react-docgen lists props, and the members of a
+//   union, in whatever order the type checker hands them over on that build:
+//   main failed on Button's page with `size` and `variant` swapped and
+//   "primary" | "secondary" reordered, with no change to the source. It is
+//   Storybook's chrome, not Mola's; the audit leaves it out too, and the
+//   manifest test holds the props it lists.
+const UNSTABLE = '[data-changes], [data-release-status], .docblock-argstable { display: none !important; }'
 
 test.use({ viewport: { width: 1280, height: 900 } })
 
@@ -42,7 +48,7 @@ DOCS_SHOTS.forEach(({ theme, id, file }, i) => {
   if (!mine(i)) return
   test(`docs ${theme} › ${id}`, async ({ page }) => {
     await open(page, id, theme)
-    await page.addStyleTag({ content: RELEASE_TEXT })
+    await page.addStyleTag({ content: UNSTABLE })
     await expect(page).toHaveScreenshot(file, { fullPage: true })
   })
 })
