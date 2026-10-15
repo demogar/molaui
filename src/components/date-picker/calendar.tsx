@@ -208,8 +208,19 @@ export function Calendar({
   const headingClass = 'm-0 flex-1 text-center font-ui text-sm font-semibold text-ink'
   const headingText = formatMonthYear(month, locale)
 
+  // A day is a `--control-h` square, capped at 36px (the comfortable size) on
+  // a phone: at spacious density (48px) seven days overflowed a 320px screen
+  // by 32px (#130). 40px fit the page but not a popover, whose padding and
+  // collision margin left 266px for the days. Letting the columns share the
+  // container's width was tried first, but a table with a set width will not
+  // go narrower than it, and without one a calendar in a popover shrank to
+  // its digits. 36px is still above the 24px target size.
   return (
-    <div {...props} data-slot="calendar" className={cn('grid w-max gap-2', className)}>
+    <div
+      {...props}
+      data-slot="calendar"
+      className={cn('grid w-max gap-2 [--day:var(--control-h)] max-sm:[--day:min(var(--control-h),2.25rem)]', className)}
+    >
       <div className="flex items-center gap-2">
         <IconButton
           variant="ghost"
@@ -254,7 +265,7 @@ export function Calendar({
                 key={day.long}
                 scope="col"
                 abbr={day.long}
-                className="h-7 w-(--control-h) p-0 text-center text-2xs font-semibold text-ink-muted"
+                className="h-7 w-(--day) p-0 text-center text-2xs font-semibold text-ink-muted"
               >
                 {day.short}
               </th>
@@ -297,7 +308,7 @@ export function Calendar({
                       if (!isDisabled) onSelect?.(date)
                     }}
                     className={cn(
-                      'relative size-(--control-h) p-0 text-center align-middle font-ui text-sm tabular-nums text-ink',
+                      'relative size-(--day) p-0 text-center align-middle font-ui text-sm tabular-nums text-ink',
                       'cursor-default outline-none select-none',
                       'transition-[background-color,color]',
                       'hover:bg-ink-soft',

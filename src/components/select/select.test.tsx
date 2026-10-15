@@ -111,6 +111,30 @@ describe('Select', () => {
     expect(trigger).toHaveAccessibleDescription('Where it runs. Required.')
   })
 
+  // The listbox Base UI opens has no name of its own; a screen reader moving
+  // into the options would hear only "listbox" (#142).
+  it.each([
+    ['its own label', <Select key="a" label="Environment" required items={items} />],
+    [
+      'a Field',
+      <Field key="b" label="Environment">
+        {(control) => <Select {...control} items={items} />}
+      </Field>,
+    ],
+    ['aria-label on the trigger', <Select key="c" aria-label="Environment" items={items} />],
+    [
+      'a hand-written label without an id',
+      <div key="d">
+        <label htmlFor="env">Environment</label>
+        <Select id="env" items={items} />
+      </div>,
+    ],
+  ])('names its listbox after %s', async (_how, ui) => {
+    render(ui)
+    await userEvent.click(screen.getByRole('combobox', { name: 'Environment' }))
+    expect(await screen.findByRole('listbox', { name: 'Environment' })).toBeInTheDocument()
+  })
+
   it('renders group labels for grouped items', async () => {
     render(
       <Select

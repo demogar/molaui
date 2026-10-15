@@ -10,13 +10,21 @@ import { cn } from '../../lib/cn'
  * The required asterisk and the "Optional" tag sit inside the label rather
  * than being left for every caller to re-assemble from two spans.
  *
- * The asterisk is `aria-hidden`: it is a visual convention, and `required` on
- * the control is what makes the requirement programmatically determinable
- * (see `Field`). "Optional" is not hidden — it carries meaning no attribute
- * does. It is preceded by a real space as a text node in the label itself,
- * because the gap drawn between them is a margin, and margins are invisible to
- * name computation: without it the accessible name concatenates to
- * "URLOptional", one word to a screen reader.
+ * The asterisk is kept out of the accessible name: it is a visual convention,
+ * and `required` on the control is what makes the requirement
+ * programmatically determinable (see `Field`). It is drawn as generated
+ * content with empty alternative text (`content: '*' / ''`), not as an
+ * `aria-hidden` span. The span was the first version, and it leaked: while a
+ * combobox popup is open Base UI hides everything outside it, the label's
+ * wrapper included, and a name computed from a hidden label takes its hidden
+ * children too, so the field was announced as "Reviewer*". Text that is not
+ * in the DOM cannot leak.
+ *
+ * "Optional" is not hidden — it carries meaning no attribute does. It is
+ * preceded by a real space as a text node in the label itself, because the
+ * gap drawn between them is a margin, and margins are invisible to name
+ * computation: without it the accessible name concatenates to "URLOptional",
+ * one word to a screen reader.
  */
 export interface LabelProps extends React.ComponentProps<'label'> {
   /** Renders the required asterisk. Does NOT set `required` on any control. */
@@ -33,13 +41,16 @@ export function Label({
   ...props
 }: LabelProps) {
   return (
-    <label data-slot="label" className={cn('block rotulo text-ink-2', className)} {...props}>
+    <label
+      data-slot="label"
+      className={cn(
+        'block rotulo text-ink-2',
+        required && "after:ms-0.5 after:text-ink after:content-['*'_/_'']",
+        className,
+      )}
+      {...props}
+    >
       {children}
-      {required ? (
-        <span aria-hidden className="ms-0.5 text-ink">
-          *
-        </span>
-      ) : null}
       {optional ? (
         <>
           {' '}

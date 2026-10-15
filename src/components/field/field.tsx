@@ -102,7 +102,7 @@ export function Field({
   return (
     <div data-slot="field" className={cn('flex flex-col gap-2', className)} {...props}>
       <div className="flex items-baseline justify-between gap-4">
-        <Label data-part="label" htmlFor={id} required={required} optional={optional && !required}>
+        <Label data-part="label" id={`${uid}-label`} htmlFor={id} required={required} optional={optional && !required}>
           {label}
         </Label>
         {labelAside ? <span data-part="label-aside" className="text-xs text-ink-muted tabular">{labelAside}</span> : null}

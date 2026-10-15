@@ -40,6 +40,17 @@ describe('Combobox', () => {
     expect(input).toHaveAccessibleDescription('They approve the run. Choose a reviewer.')
   })
 
+  // #142: the listbox was unnamed, and the required asterisk reached the
+  // input's name once the open popup hid the label ("Reviewer*").
+  it('names its listbox after the label, and the asterisk stays out of both names', async () => {
+    render(<Combobox label="Reviewer" required items={reviewers} />)
+    const input = screen.getByRole('combobox', { name: 'Reviewer' })
+    await userEvent.click(input)
+    await userEvent.keyboard('{ArrowDown}')
+    expect(await screen.findByRole('listbox', { name: 'Reviewer' })).toBeInTheDocument()
+    expect(screen.getByText('Reviewer').textContent).toBe('Reviewer')
+  })
+
   it('filters as you type and commits the highlighted option with Enter', async () => {
     const onValueChange = vi.fn()
     render(<Combobox label="Reviewer" items={reviewers} onValueChange={onValueChange} />)
@@ -197,6 +208,12 @@ describe('Autocomplete', () => {
       </Field>,
     )
     expect(screen.getByRole('combobox', { name: 'Tag' })).toHaveAttribute('aria-invalid', 'true')
+  })
+
+  it('names its listbox after the label', async () => {
+    render(<Autocomplete label="Run label" items={tags} />)
+    await userEvent.type(screen.getByRole('combobox', { name: 'Run label' }), 're')
+    expect(await screen.findByRole('listbox', { name: 'Run label' })).toBeInTheDocument()
   })
 })
 

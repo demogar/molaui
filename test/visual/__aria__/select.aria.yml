@@ -1,6 +1,6 @@
 - text: Environment
 - combobox "Environment" [expanded]: Staging
-- listbox:
+- listbox "Environment":
   - option "Production"
   - option "Staging" [selected]
   - option "Preview"
