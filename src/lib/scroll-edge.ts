@@ -47,9 +47,22 @@ function trackScrollEdge(el: HTMLElement | null) {
   // come to overflow. Text arriving is re-measured too.
   const mutations = typeof MutationObserver === 'undefined' ? undefined : new MutationObserver(measure)
   mutations?.observe(el, { childList: true, characterData: true, subtree: true })
+  // Text can also widen inside boxes that keep their size: a code block held
+  // at a max height kept its frame and its <pre> when spacious density grew
+  // the type, so neither observer fired and the cue stayed off on JSON that
+  // now scrolled (#130). Density changes and late fonts re-measure too.
+  // Density is an attribute on any element, so the whole document is
+  // watched, for that one attribute only.
+  const density =
+    typeof MutationObserver === 'undefined' ? undefined : new MutationObserver(measure)
+  density?.observe(el.ownerDocument.documentElement, { attributes: true, attributeFilter: ['data-density'], subtree: true })
+  const fonts = el.ownerDocument.fonts as FontFaceSet | undefined
+  fonts?.addEventListener?.('loadingdone', measure)
   return () => {
     el.removeEventListener('scroll', measure)
     observer?.disconnect()
     mutations?.disconnect()
+    density?.disconnect()
+    fonts?.removeEventListener?.('loadingdone', measure)
   }
 }
