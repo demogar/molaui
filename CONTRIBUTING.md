@@ -125,6 +125,17 @@ rewriting the existing set would add 18 MB of new versions to history to save on
 checkout, and running it in the baseline workflow puts a downloaded binary in a job that holds a
 write token. Revisit if the set passes about 50 MB.
 
+### ARIA snapshots
+
+`test/visual/aria.behaviour.ts` pins the accessibility tree of the composite components (menus,
+select and combobox listboxes, the calendar grid, tabs, the data table, the command palette, the
+thread) as Chromium computes it, with Playwright's `toMatchAriaSnapshot`. The snapshots are YAML in
+`test/visual/__aria__/`, and unlike the screenshots they do not depend on the operating system, so
+update them from any machine: `npm run build-storybook && npm run visual:update -- aria.behaviour`.
+Review the diff as you would code: every changed line is something a screen reader announces
+differently. Playwright writes numbers as regular expressions when it generates a snapshot, so a
+changed count or time does not fail it; a changed role, name, state or nesting does.
+
 ## Anatomy of a component
 
 ```
