@@ -76,10 +76,10 @@ export function Slider({
             key={index}
             index={index}
             className={cn(
-              'size-4 rounded-none bg-cloth-pale shadow-cut band-oro [--cut-reveal:3px]',
+              'size-4 rounded-none bg-cloth-pale shadow-cut band-accent [--cut-reveal:3px]',
               'transition-[box-shadow]',
               'hover:cut-band data-dragging:cut-band',
-              'has-focus-visible:shadow-[var(--focus-ring)] has-focus-visible:forced-focus',
+              'has-focus-visible:focus-ring has-focus-visible:forced-focus',
               'data-disabled:bg-cloth-shade data-disabled:hover:shadow-cut',
             )}
           />

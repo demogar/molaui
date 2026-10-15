@@ -36,7 +36,7 @@ export interface CitationProps extends Omit<React.ComponentProps<'a'>, 'children
 
 const markerClass = cn(
   'relative -top-[0.1em] mx-[0.1em] inline-flex h-[1.3em] min-w-[1.3em] items-center justify-center px-[0.3em] align-baseline',
-  'bg-cloth-pale font-ui text-[0.62em] font-semibold tabular text-ink no-underline shadow-cut band-oro [--cut-reveal:2px]',
+  'bg-cloth-pale font-ui text-[0.62em] font-semibold tabular text-ink no-underline shadow-cut band-accent [--cut-reveal:2px]',
   'transition-[box-shadow,background-color] hover:cut-band data-[popup-open]:cut-band',
 )
 
@@ -121,7 +121,7 @@ function CitationWithCard({
         {n}
       </PreviewCard.Trigger>
       <PreviewCard.Portal>
-        <PreviewCard.Positioner side={side} align="start" sideOffset={6} collisionPadding={16} className="z-50">
+        <PreviewCard.Positioner side={side} align="start" sideOffset={6} collisionPadding={16} className="z-(--z-popover)">
           <PreviewCard.Popup
             data-slot="citation-card"
             className={cn(floatingSurface, 'w-80 max-w-[calc(100vw-2rem)] p-0')}
@@ -143,7 +143,7 @@ function SourcePreview({ source }: { source: Source }) {
         <SourceMeta source={source} />
       </div>
       {source.snippet ? (
-        <p className="m-0 border-t border-keyline px-3 py-2.5 font-text text-sm leading-[1.45] text-ink-2 [overflow-wrap:anywhere]">
+        <p className="m-0 border-t border-keyline px-3 py-2.5 font-text text-sm leading-body text-ink-2 [overflow-wrap:anywhere]">
           “{source.snippet}”
         </p>
       ) : null}
@@ -161,7 +161,7 @@ function SourcePreview({ source }: { source: Source }) {
           Open source{' '}
           <span className="sr-only">{source.id} (opens in a new tab)</span>
         </span>
-        <ArrowUpRight aria-hidden className="size-4 shrink-0 text-ink-muted group-hover/open:text-ink" />
+        <ArrowUpRight aria-hidden className="size-(--icon) shrink-0 text-ink-muted group-hover/open:text-ink" />
       </a>
     </div>
   )
@@ -247,18 +247,18 @@ export function SourceList({ sources, timeZone, className, ...props }: SourceLis
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
-              'group/source grid h-full grid-cols-[auto_1fr] gap-x-3 gap-y-1 bg-cloth-pale p-3 text-ink no-underline shadow-cut band-oro [--cut-reveal:3px]',
+              'group/source grid h-full grid-cols-[auto_1fr] gap-x-3 gap-y-1 bg-cloth-pale p-3 text-ink no-underline shadow-cut band-accent [--cut-reveal:3px]',
               'transition-[box-shadow] hover:cut-band',
             )}
           >
             <SourceNumber id={source.id} className="row-span-3" />
             <span className="flex items-start justify-between gap-2">
               <span className="font-ui text-sm font-semibold leading-snug">{source.title}</span>
-              <ArrowUpRight aria-hidden className="size-3.5 shrink-0 text-ink-muted group-hover/source:text-ink" />
+              <ArrowUpRight aria-hidden className="size-(--icon-sm) shrink-0 text-ink-muted group-hover/source:text-ink" />
             </span>
             <SourceMeta source={source} timeZone={timeZone} />
             {source.snippet ? (
-              <span className="font-text text-sm leading-[1.45] text-ink-2 [overflow-wrap:anywhere]">“{source.snippet}”</span>
+              <span className="font-text text-sm leading-body text-ink-2 [overflow-wrap:anywhere]">“{source.snippet}”</span>
             ) : null}
           </a>
         </li>

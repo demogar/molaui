@@ -75,7 +75,10 @@ export const SCOPES: Record<Scope, ScopeInfo> = {
   },
   edge: {
     meaning: 'A line: a keyline, a divider, an underline, a current-item bar, the revealed band of a cut. Mola draws most edges with `box-shadow`.',
-    tailwind: ['border', 'border-x', 'border-y', 'border-t', 'border-b', 'border-s', 'border-e', 'border-l', 'border-r', 'divide', 'outline', 'ring', 'decoration', 'stroke'],
+    // `cut-`, `bar-start-` and `bar-bottom-` are the coloured edge utilities
+    // of cloth.css: `cut-anil` is an añil keyline, `bar-start-danger` a
+    // danger bar.
+    tailwind: ['border', 'border-x', 'border-y', 'border-t', 'border-b', 'border-s', 'border-e', 'border-l', 'border-r', 'divide', 'outline', 'ring', 'decoration', 'stroke', 'cut', 'bar-start', 'bar-bottom'],
     publish: ['border', 'decoration'],
     figma: ['STROKE_COLOR', 'EFFECT_COLOR'],
   },
@@ -165,11 +168,19 @@ export const COLOR_SCOPES: Record<string, Entry> = {
   },
   '--on-oro': { scopes: ['text'] },
 
+  // ── accent and selection
+  '--accent': { scopes: ['surface', 'mark', 'edge'], why: 'As --oro, which it names: a field, a mark, the band a control reveals.' },
+  '--on-accent': { scopes: ['text'] },
+  '--accent-soft': { scopes: ['surface'] },
+  '--selected': { scopes: ['surface'] },
+
   // ── status
   '--danger': {
-    scopes: ['mark', 'edge'],
-    why: 'The status tone, for a dot, a swatch key, a bar or a ring. Words in a status take --ink-danger, which on-layer collapses on a filled panel where no status hue survives; the contract measures the tone on cloth at 4.5 because --ink-danger resolves to it.',
+    scopes: ['mark', 'edge', 'surface'],
+    why: 'The status tone, for a dot, a swatch key, a bar or a ring, and the filled region of a danger button, a solid badge or a highlighted destructive menu item, which carries --on-layer. Words in a status take --ink-danger, which on-layer collapses on a filled panel where no status hue survives.',
   },
+  '--danger-strong': { scopes: ['surface'], why: 'The pressed danger button, carrying --on-layer.' },
+  '--danger-soft': { scopes: ['surface'] },
   '--success': { scopes: ['mark', 'edge'], why: 'As --danger: words take --ink-success.' },
   '--warn': { scopes: ['mark', 'edge'], why: 'As --danger: words take --ink-warn.' },
   '--info': { scopes: ['mark', 'edge'], why: 'As --danger: words take --ink-info.' },
@@ -208,6 +219,31 @@ export const COLOR_SCOPES: Record<string, Entry> = {
     scopes: ['edge', 'mark'],
     why: 'The revealed colour of a cut, set per element with band-*: the middle ring of cut-band, and the fill of relleno.',
   },
+}
+
+/**
+ * The rojo register (docs/adr/0008-the-rojo-register.md).
+ *
+ * Rojo used to mean two things on one screen: danger (the destructive button,
+ * a failed run) and the editorial accent the system inherited (the rótulo's
+ * band, list markers, the agent's name dash, a step numeral). On the hand-off
+ * pattern the agent's red dash sat a few lines from a red FAILED mark. So on
+ * a product surface rojo is used only through the danger role (--danger,
+ * --danger-strong, --danger-soft, --ink-danger, `band-danger`), and the rojo
+ * tokens themselves only in the editorial components below. scopes.test.ts
+ * reads the shipped source for it.
+ *
+ * A colour-named prop map is not a use: `Divider`, `Panel`, `Rotulo`,
+ * `Drawer` and `Dialog` offer the layers by name (`band="rojo"`), and the
+ * entry that maps the name to its utility (`rojo: 'band-rojo'`) is allowed
+ * wherever it is. Choosing rojo on a product screen is then the caller's
+ * statement that the thing is dangerous.
+ */
+export const ROJO_TOKENS = ['--rojo', '--rojo-deep', '--rojo-soft', '--rojo-rule', '--rojo-on-shade']
+
+/** Files that may use rojo as the editorial accent, relative to src/, and why. */
+export const EDITORIAL: Record<string, string> = {
+  'components/typography/prose.tsx': 'Long-form prose: links in rojo-deep over a rojo rule, rojo list markers.',
 }
 
 /** The Tailwind utilities a token is published with: one per published prefix of each of its scopes. */

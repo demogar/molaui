@@ -67,7 +67,7 @@ export function Thread({ label, stickThreshold = 48, className, children, ...pro
         onScroll={onScroll}
         tabIndex={0}
         aria-label={`${label} transcript`}
-        className="scroll-cloth min-h-0 flex-1 overflow-y-auto [overflow-anchor:none] focus-visible:shadow-[var(--focus-ring-inset)]"
+        className="scroll-cloth min-h-0 flex-1 overflow-y-auto [overflow-anchor:none] focus-visible:focus-ring-inset"
       >
         <div ref={contentRef} className="px-1">
           {children}

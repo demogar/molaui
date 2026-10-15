@@ -124,7 +124,7 @@ export function CodeBlock({
       className={cn('m-0 min-w-0 rounded-none bg-cloth-pale shadow-cut', className)}
       {...props}
     >
-      <figcaption className="flex min-h-(--control-h-sm) items-center gap-3 bg-cloth-shade py-1 pe-1 ps-3 shadow-[inset_0_-1px_0_var(--keyline)]">
+      <figcaption className="flex min-h-(--control-h-sm) items-center gap-3 bg-cloth-shade py-1 pe-1 ps-3 rule-b">
         <span id={labelId} className="min-w-0 truncate rotulo text-ink-2">
           {title}
         </span>
@@ -163,7 +163,7 @@ export function CodeBlock({
         {lineNumbers ? (
           <div
             aria-hidden
-            className="sticky inset-s-0 shrink-0 bg-cloth-pale px-3 py-3 text-end font-ui text-xs leading-(--code-lh) text-ink-muted tabular select-none shadow-[inset_-1px_0_0_var(--keyline-soft)]"
+            className="sticky inset-s-0 shrink-0 bg-cloth-pale px-3 py-3 text-end font-ui text-xs leading-(--code-lh) text-ink-muted tabular select-none rule-e-soft"
           >
             {lines.map((_, i) => (
               <div key={i}>{i + 1}</div>
@@ -175,7 +175,7 @@ export function CodeBlock({
           aria-labelledby={labelId}
           className={cn(
             'm-0 min-w-0 flex-1 p-3 literal text-xs leading-(--code-lh) text-ink',
-            'focus-visible:shadow-[var(--focus-ring-inset)]',
+            'focus-visible:focus-ring-inset',
             wrap ? 'break-words whitespace-pre-wrap' : 'whitespace-pre',
           )}
         >

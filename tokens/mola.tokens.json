@@ -21,7 +21,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--cloth)"
           }
-        }
+        },
+        "$description": "cloth: the page. Promised to carry --ink ≥ 4.5 (15.52 light, 15.18 dark); --ink-2 ≥ 4.5 (8.80 light, 10.45 dark); --ink-muted ≥ 4.5 (5.19 light, 6.58 dark); --rojo ≥ 4.5 (5.04 light, 5.85 dark); --rojo-deep ≥ 4.5 (6.75 light, 7.78 dark); --anil ≥ 4.5 (7.35 light, 7.49 dark); --verde ≥ 4.5 (5.59 light, 8.15 dark); --warn ≥ 4.5 (4.60 light, 9.18 dark); --danger ≥ 4.5 (5.04 light, 5.85 dark); --success ≥ 4.5 (5.59 light, 8.15 dark); --info ≥ 4.5 (7.35 light, 7.49 dark); --ink-danger ≥ 4.5 (6.75 light, 7.78 dark); --oro ≥ 4.5 (10.12 dark)."
       },
       "cloth-pale": {
         "$type": "color",
@@ -42,7 +43,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--cloth-pale)"
           }
-        }
+        },
+        "$description": "cloth: raised: cards, inputs, sheets. Promised to carry --ink ≥ 4.5 (16.82 light, 13.79 dark); --ink-2 ≥ 4.5 (9.54 light, 9.49 dark); --ink-muted ≥ 4.5 (5.62 light, 5.98 dark); --rojo ≥ 4.5 (5.46 light, 5.31 dark); --rojo-deep ≥ 4.5 (7.32 light, 7.06 dark); --anil ≥ 4.5 (7.96 light, 6.80 dark); --verde ≥ 4.5 (6.06 light, 7.40 dark); --warn ≥ 4.5 (4.99 light, 8.34 dark); --danger ≥ 4.5 (5.46 light, 5.31 dark); --success ≥ 4.5 (6.06 light, 7.40 dark); --info ≥ 4.5 (7.96 light, 6.80 dark); --ink-danger ≥ 4.5 (7.32 light, 7.06 dark)."
       },
       "cloth-shade": {
         "$type": "color",
@@ -63,7 +65,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--cloth-shade)"
           }
-        }
+        },
+        "$description": "cloth: one step down from the page. Promised to carry --ink ≥ 4.5 (14.46 light, 15.90 dark); --ink-2 ≥ 4.5 (8.19 light, 10.94 dark); --ink-muted ≥ 4.5 (4.83 light, 6.89 dark); --rojo-on-shade ≥ 4.5 (6.29 light, 8.14 dark); --anil ≥ 3 (6.84 light, 7.84 dark); --verde ≥ 3 (5.21 light, 8.53 dark); --warn ≥ 3 (4.29 light, 9.61 dark); --rojo ≥ 3 (4.70 light, 6.12 dark)."
       },
       "cloth-deep": {
         "$type": "color",
@@ -84,7 +87,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--cloth-deep)"
           }
-        }
+        },
+        "$description": "cloth: the deepest cloth before a layer takes over. Promised to carry --ink ≥ 4.5 (12.84 light, 11.66 dark); --ink-2 ≥ 4.5 (7.28 light, 8.02 dark)."
       },
       "ink": {
         "$type": "color",
@@ -108,7 +112,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--ink)"
           }
-        }
+        },
+        "$description": "ink: on --cloth  15.52 / 15.18. Promised to read on --cloth ≥ 4.5 (15.52 light, 15.18 dark); --cloth-pale ≥ 4.5 (16.82 light, 13.79 dark); --cloth-shade ≥ 4.5 (14.46 light, 15.90 dark); --rojo-soft ≥ 4.5 (14.22 light, 11.76 dark); --anil-soft ≥ 4.5 (13.78 light, 11.44 dark); --verde-soft ≥ 4.5 (14.09 light, 11.33 dark); --oro-soft ≥ 4.5 (15.09 light, 11.47 dark); --ink-soft ≥ 4.5 (14.30 light, 11.82 dark); --danger-soft ≥ 4.5 (14.22 light, 11.76 dark); --accent-soft ≥ 4.5 (15.09 light, 11.47 dark); --selected ≥ 4.5 (15.09 light, 11.47 dark); --cloth-deep ≥ 4.5 (12.84 light, 11.66 dark). Promised to carry --on-ink ≥ 4.5 (16.82 light, 13.79 dark); --on-ink-muted ≥ 4.5 (8.36 light, 6.56 dark); --oro ≥ 4.5 (9.34 light); --on-ink-accent ≥ 4.5 (9.34 light, 5.67 dark)."
       },
       "ink-2": {
         "$type": "color",
@@ -128,7 +133,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--ink-2)"
           }
-        }
+        },
+        "$description": "ink: on --cloth   8.80 / 10.45. Promised to read on --cloth ≥ 4.5 (8.80 light, 10.45 dark); --cloth-pale ≥ 4.5 (9.54 light, 9.49 dark); --cloth-shade ≥ 4.5 (8.19 light, 10.94 dark); --rojo-soft ≥ 4.5 (8.06 light, 8.09 dark); --anil-soft ≥ 4.5 (7.81 light, 7.87 dark); --verde-soft ≥ 4.5 (7.98 light, 7.79 dark); --oro-soft ≥ 4.5 (8.56 light, 7.89 dark); --ink-soft ≥ 4.5 (8.11 light, 8.13 dark); --danger-soft ≥ 4.5 (8.06 light, 8.09 dark); --accent-soft ≥ 4.5 (8.56 light, 7.89 dark); --selected ≥ 4.5 (8.56 light, 7.89 dark); --cloth-deep ≥ 4.5 (7.28 light, 8.02 dark)."
       },
       "ink-muted": {
         "$type": "color",
@@ -151,7 +157,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--ink-muted)"
           }
-        }
+        },
+        "$description": "ink: on --cloth   5.19 /  6.58   (floor: 4.83 on --cloth-shade, light). Promised to read on --cloth ≥ 4.5 (5.19 light, 6.58 dark); --cloth-pale ≥ 4.5 (5.62 light, 5.98 dark); --cloth-shade ≥ 4.5 (4.83 light, 6.89 dark); --rojo-soft ≥ 4.5 (4.75 light, 5.10 dark); --anil-soft ≥ 4.5 (4.61 light, 4.96 dark); --verde-soft ≥ 4.5 (4.71 light, 4.91 dark); --oro-soft ≥ 4.5 (5.05 light, 4.98 dark); --ink-soft ≥ 4.5 (4.78 light, 5.13 dark); --danger-soft ≥ 4.5 (4.75 light, 5.10 dark); --accent-soft ≥ 4.5 (5.05 light, 4.98 dark); --selected ≥ 4.5 (5.05 light, 4.98 dark)."
       },
       "keyline": {
         "$type": "color",
@@ -173,7 +180,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--keyline)"
           }
-        }
+        },
+        "$description": "keylines."
       },
       "keyline-soft": {
         "$type": "color",
@@ -194,7 +202,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--keyline-soft)"
           }
-        }
+        },
+        "$description": "keylines."
       },
       "rojo": {
         "$type": "color",
@@ -218,7 +227,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--rojo)"
           }
-        }
+        },
+        "$description": "the four layers: 5.04 / 5.85   --anil  7.35 / 7.49   --verde  5.59 / 8.15. Promised to read on --cloth ≥ 4.5 (5.04 light, 5.85 dark); --cloth-pale ≥ 4.5 (5.46 light, 5.31 dark); --cloth-shade ≥ 3 (4.70 light, 6.12 dark); --rojo-soft ≥ 3 (4.62 light, 4.53 dark). Promised to carry --on-layer ≥ 4.5 (5.46 light, 5.31 dark)."
       },
       "rojo-deep": {
         "$type": "color",
@@ -240,7 +250,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--rojo-deep)"
           }
-        }
+        },
+        "$description": "the four layers: hover / pressed: one step further from the ground. Promised to read on --cloth ≥ 4.5 (6.75 light, 7.78 dark); --cloth-pale ≥ 4.5 (7.32 light, 7.06 dark); --rojo-soft ≥ 4.5 (6.19 light, 6.02 dark). Promised to carry --on-layer ≥ 4.5 (7.32 light, 7.06 dark)."
       },
       "anil": {
         "$type": "color",
@@ -264,7 +275,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--anil)"
           }
-        }
+        },
+        "$description": "the four layers. Promised to read on --cloth ≥ 4.5 (7.35 light, 7.49 dark); --cloth-pale ≥ 4.5 (7.96 light, 6.80 dark); --anil-soft ≥ 4.5 (6.52 light, 5.64 dark); --cloth-shade ≥ 3 (6.84 light, 7.84 dark). Promised to carry --on-layer ≥ 4.5 (7.96 light, 6.80 dark)."
       },
       "verde": {
         "$type": "color",
@@ -288,7 +300,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--verde)"
           }
-        }
+        },
+        "$description": "the four layers. Promised to read on --cloth ≥ 4.5 (5.59 light, 8.15 dark); --cloth-pale ≥ 4.5 (6.06 light, 7.40 dark); --verde-soft ≥ 4.5 (5.07 light, 6.08 dark); --cloth-shade ≥ 3 (5.21 light, 8.53 dark). Promised to carry --on-layer ≥ 4.5 (6.06 light, 7.40 dark)."
       },
       "oro": {
         "$type": "color",
@@ -311,7 +324,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--oro)"
           }
-        }
+        },
+        "$description": "the four layers: 1.66 / 10.12 — gold is never text on light cloth. It is a field colour and a mark there; on an ink panel it measures 9.34. Promised to read on --cloth ≥ 4.5 (10.12 dark); --ink ≥ 4.5 (9.34 light). Promised to carry --on-oro ≥ 4.5 (9.34 light, 9.19 dark)."
       },
       "on-layer": {
         "$type": "color",
@@ -332,7 +346,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--on-layer)"
           }
-        }
+        },
+        "$description": "the four layers. Promised to read on --rojo ≥ 4.5 (5.46 light, 5.31 dark); --rojo-deep ≥ 4.5 (7.32 light, 7.06 dark); --anil ≥ 4.5 (7.96 light, 6.80 dark); --verde ≥ 4.5 (6.06 light, 7.40 dark); --danger ≥ 4.5 (5.46 light, 5.31 dark); --danger-strong ≥ 4.5 (7.32 light, 7.06 dark)."
       },
       "on-oro": {
         "$type": "color",
@@ -352,9 +367,34 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--on-oro)"
           }
-        }
+        },
+        "$description": "the four layers. Promised to read on --oro ≥ 4.5 (9.34 light, 9.19 dark)."
       },
       "danger": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.7529,
+            0.1529,
+            0.1765
+          ],
+          "hex": "#c0272d"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "SHAPE_FILL",
+            "STROKE_COLOR",
+            "EFFECT_COLOR",
+            "FRAME_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--danger)"
+          }
+        },
+        "$description": "status. Promised to read on --cloth ≥ 4.5 (5.04 light, 5.85 dark); --cloth-pale ≥ 4.5 (5.46 light, 5.31 dark); --danger-soft ≥ 3 (4.62 light, 4.53 dark). Promised to carry --on-layer ≥ 4.5 (5.46 light, 5.31 dark)."
+      },
+      "danger-strong": {
         "$type": "color",
         "$value": {
           "colorSpace": "srgb",
@@ -367,14 +407,14 @@
         },
         "$extensions": {
           "com.figma.scopes": [
-            "SHAPE_FILL",
-            "STROKE_COLOR",
-            "EFFECT_COLOR"
+            "FRAME_FILL",
+            "SHAPE_FILL"
           ],
           "com.figma.codeSyntax": {
-            "WEB": "var(--danger)"
+            "WEB": "var(--danger-strong)"
           }
-        }
+        },
+        "$description": "status. Promised to carry --on-layer ≥ 4.5 (7.32 light, 7.06 dark)."
       },
       "success": {
         "$type": "color",
@@ -396,7 +436,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--success)"
           }
-        }
+        },
+        "$description": "status. Promised to read on --cloth ≥ 4.5 (5.59 light, 8.15 dark); --cloth-pale ≥ 4.5 (6.06 light, 7.40 dark)."
       },
       "warn": {
         "$type": "color",
@@ -418,7 +459,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--warn)"
           }
-        }
+        },
+        "$description": "status. Promised to read on --cloth ≥ 4.5 (4.60 light, 9.18 dark); --cloth-pale ≥ 4.5 (4.99 light, 8.34 dark); --cloth-shade ≥ 3 (4.29 light, 9.61 dark); --oro-soft ≥ 3 (4.47 light, 6.94 dark)."
       },
       "info": {
         "$type": "color",
@@ -440,7 +482,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--info)"
           }
-        }
+        },
+        "$description": "status. Promised to read on --cloth ≥ 4.5 (7.35 light, 7.49 dark); --cloth-pale ≥ 4.5 (7.96 light, 6.80 dark)."
       },
       "ink-danger": {
         "$type": "color",
@@ -460,7 +503,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--ink-danger)"
           }
-        }
+        },
+        "$description": "status. Promised to read on --cloth ≥ 4.5 (6.75 light, 7.78 dark); --cloth-pale ≥ 4.5 (7.32 light, 7.06 dark); --danger-soft ≥ 4.5 (6.19 light, 6.02 dark); --ink-soft ≥ 4.5 (6.22 light, 6.05 dark)."
       },
       "ink-success": {
         "$type": "color",
@@ -480,7 +524,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--ink-success)"
           }
-        }
+        },
+        "$description": "status. Promised to read on --ink-soft ≥ 4.5 (5.15 light, 6.34 dark)."
       },
       "ink-warn": {
         "$type": "color",
@@ -500,7 +545,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--ink-warn)"
           }
-        }
+        },
+        "$description": "status."
       },
       "ink-info": {
         "$type": "color",
@@ -520,7 +566,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--ink-info)"
           }
-        }
+        },
+        "$description": "status."
       },
       "rojo-soft": {
         "$type": "color",
@@ -541,7 +588,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--rojo-soft)"
           }
-        }
+        },
+        "$description": "washes. Promised to carry --ink ≥ 4.5 (14.22 light, 11.76 dark); --ink-2 ≥ 4.5 (8.06 light, 8.09 dark); --ink-muted ≥ 4.5 (4.75 light, 5.10 dark); --rojo-deep ≥ 4.5 (6.19 light, 6.02 dark); --rojo ≥ 3 (4.62 light, 4.53 dark)."
       },
       "anil-soft": {
         "$type": "color",
@@ -562,7 +610,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--anil-soft)"
           }
-        }
+        },
+        "$description": "washes. Promised to carry --ink ≥ 4.5 (13.78 light, 11.44 dark); --ink-2 ≥ 4.5 (7.81 light, 7.87 dark); --ink-muted ≥ 4.5 (4.61 light, 4.96 dark); --anil ≥ 4.5 (6.52 light, 5.64 dark)."
       },
       "verde-soft": {
         "$type": "color",
@@ -583,7 +632,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--verde-soft)"
           }
-        }
+        },
+        "$description": "washes. Promised to carry --ink ≥ 4.5 (14.09 light, 11.33 dark); --ink-2 ≥ 4.5 (7.98 light, 7.79 dark); --ink-muted ≥ 4.5 (4.71 light, 4.91 dark); --verde ≥ 4.5 (5.07 light, 6.08 dark)."
       },
       "oro-soft": {
         "$type": "color",
@@ -604,7 +654,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--oro-soft)"
           }
-        }
+        },
+        "$description": "washes. Promised to carry --ink ≥ 4.5 (15.09 light, 11.47 dark); --ink-2 ≥ 4.5 (8.56 light, 7.89 dark); --ink-muted ≥ 4.5 (5.05 light, 4.98 dark); --warn ≥ 3 (4.47 light, 6.94 dark)."
       },
       "ink-soft": {
         "$type": "color",
@@ -625,7 +676,30 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--ink-soft)"
           }
-        }
+        },
+        "$description": "washes. Promised to carry --ink ≥ 4.5 (14.30 light, 11.82 dark); --ink-2 ≥ 4.5 (8.11 light, 8.13 dark); --ink-muted ≥ 4.5 (4.78 light, 5.13 dark); --ink-success ≥ 4.5 (5.15 light, 6.34 dark); --ink-danger ≥ 4.5 (6.22 light, 6.05 dark)."
+      },
+      "danger-soft": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9529,
+            0.8784,
+            0.851
+          ],
+          "hex": "#f3e0d9"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--danger-soft)"
+          }
+        },
+        "$description": "washes. Promised to carry --ink ≥ 4.5 (14.22 light, 11.76 dark); --ink-2 ≥ 4.5 (8.06 light, 8.09 dark); --ink-muted ≥ 4.5 (4.75 light, 5.10 dark); --ink-danger ≥ 4.5 (6.19 light, 6.02 dark); --danger ≥ 3 (4.62 light, 4.53 dark)."
       },
       "ink-on-tint": {
         "$type": "color",
@@ -645,7 +719,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--ink-on-tint)"
           }
-        }
+        },
+        "$description": "washes."
       },
       "rojo-on-shade": {
         "$type": "color",
@@ -665,7 +740,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--rojo-on-shade)"
           }
-        }
+        },
+        "$description": "washes. Promised to read on --cloth-shade ≥ 4.5 (6.29 light, 8.14 dark)."
       },
       "rojo-rule": {
         "$type": "color",
@@ -687,7 +763,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--rojo-rule)"
           }
-        }
+        },
+        "$description": "washes."
       },
       "on-ink": {
         "$type": "color",
@@ -708,7 +785,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--on-ink)"
           }
-        }
+        },
+        "$description": "on an ink panel. Promised to read on --ink ≥ 4.5 (16.82 light, 13.79 dark)."
       },
       "on-ink-muted": {
         "$type": "color",
@@ -728,7 +806,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--on-ink-muted)"
           }
-        }
+        },
+        "$description": "on an ink panel. Promised to read on --ink ≥ 4.5 (8.36 light, 6.56 dark)."
       },
       "on-ink-accent": {
         "$type": "color",
@@ -748,7 +827,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--on-ink-accent)"
           }
-        }
+        },
+        "$description": "on an ink panel. Promised to read on --ink ≥ 4.5 (9.34 light, 5.67 dark)."
       },
       "keyline-on-ink": {
         "$type": "color",
@@ -770,7 +850,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--keyline-on-ink)"
           }
-        }
+        },
+        "$description": "on an ink panel."
       },
       "scrim": {
         "$type": "color",
@@ -792,7 +873,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--scrim)"
           }
-        }
+        },
+        "$description": "over arbitrary pixels. Promised to carry --on-scrim ≥ 4.5 (null light, null dark); --on-scrim-muted ≥ 4.5 (null light, null dark)."
       },
       "on-scrim": {
         "$type": "color",
@@ -812,7 +894,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--on-scrim)"
           }
-        }
+        },
+        "$description": "over arbitrary pixels. Promised to read on --scrim ≥ 4.5 (null light, null dark)."
       },
       "on-scrim-muted": {
         "$type": "color",
@@ -833,7 +916,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--on-scrim-muted)"
           }
-        }
+        },
+        "$description": "over arbitrary pixels. Promised to read on --scrim ≥ 4.5 (null light, null dark)."
       },
       "backdrop": {
         "$type": "color",
@@ -855,7 +939,97 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--backdrop)"
           }
-        }
+        },
+        "$description": "over arbitrary pixels."
+      },
+      "accent": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9294,
+            0.6902,
+            0.1216
+          ],
+          "hex": "#edb01f"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--accent)"
+          }
+        },
+        "$description": "accent and selection. Promised to carry --on-accent ≥ 4.5 (9.34 light, 9.19 dark)."
+      },
+      "on-accent": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.0784,
+            0.0863,
+            0.102
+          ],
+          "hex": "#14161a"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "TEXT_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--on-accent)"
+          }
+        },
+        "$description": "accent and selection. Promised to read on --accent ≥ 4.5 (9.34 light, 9.19 dark)."
+      },
+      "accent-soft": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9608,
+            0.9176,
+            0.8157
+          ],
+          "hex": "#f5ead0"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--accent-soft)"
+          }
+        },
+        "$description": "accent and selection. Promised to carry --ink ≥ 4.5 (15.09 light, 11.47 dark); --ink-2 ≥ 4.5 (8.56 light, 7.89 dark); --ink-muted ≥ 4.5 (5.05 light, 4.98 dark)."
+      },
+      "selected": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9608,
+            0.9176,
+            0.8157
+          ],
+          "hex": "#f5ead0"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--selected)"
+          }
+        },
+        "$description": "accent and selection. Promised to carry --ink ≥ 4.5 (15.09 light, 11.47 dark); --ink-2 ≥ 4.5 (8.56 light, 7.89 dark); --ink-muted ≥ 4.5 (5.05 light, 4.98 dark)."
       },
       "band": {
         "$type": "color",
@@ -877,7 +1051,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--band)"
           }
-        }
+        },
+        "$description": "the cut."
       }
     },
     "dark": {
@@ -900,7 +1075,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--cloth)"
           }
-        }
+        },
+        "$description": "cloth: the page. Promised to carry --ink ≥ 4.5 (15.52 light, 15.18 dark); --ink-2 ≥ 4.5 (8.80 light, 10.45 dark); --ink-muted ≥ 4.5 (5.19 light, 6.58 dark); --rojo ≥ 4.5 (5.04 light, 5.85 dark); --rojo-deep ≥ 4.5 (6.75 light, 7.78 dark); --anil ≥ 4.5 (7.35 light, 7.49 dark); --verde ≥ 4.5 (5.59 light, 8.15 dark); --warn ≥ 4.5 (4.60 light, 9.18 dark); --danger ≥ 4.5 (5.04 light, 5.85 dark); --success ≥ 4.5 (5.59 light, 8.15 dark); --info ≥ 4.5 (7.35 light, 7.49 dark); --ink-danger ≥ 4.5 (6.75 light, 7.78 dark); --oro ≥ 4.5 (10.12 dark)."
       },
       "cloth-pale": {
         "$type": "color",
@@ -921,7 +1097,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--cloth-pale)"
           }
-        }
+        },
+        "$description": "cloth: raised: cards, inputs, sheets. Promised to carry --ink ≥ 4.5 (16.82 light, 13.79 dark); --ink-2 ≥ 4.5 (9.54 light, 9.49 dark); --ink-muted ≥ 4.5 (5.62 light, 5.98 dark); --rojo ≥ 4.5 (5.46 light, 5.31 dark); --rojo-deep ≥ 4.5 (7.32 light, 7.06 dark); --anil ≥ 4.5 (7.96 light, 6.80 dark); --verde ≥ 4.5 (6.06 light, 7.40 dark); --warn ≥ 4.5 (4.99 light, 8.34 dark); --danger ≥ 4.5 (5.46 light, 5.31 dark); --success ≥ 4.5 (6.06 light, 7.40 dark); --info ≥ 4.5 (7.96 light, 6.80 dark); --ink-danger ≥ 4.5 (7.32 light, 7.06 dark)."
       },
       "cloth-shade": {
         "$type": "color",
@@ -942,7 +1119,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--cloth-shade)"
           }
-        }
+        },
+        "$description": "cloth: one step down from the page. Promised to carry --ink ≥ 4.5 (14.46 light, 15.90 dark); --ink-2 ≥ 4.5 (8.19 light, 10.94 dark); --ink-muted ≥ 4.5 (4.83 light, 6.89 dark); --rojo-on-shade ≥ 4.5 (6.29 light, 8.14 dark); --anil ≥ 3 (6.84 light, 7.84 dark); --verde ≥ 3 (5.21 light, 8.53 dark); --warn ≥ 3 (4.29 light, 9.61 dark); --rojo ≥ 3 (4.70 light, 6.12 dark)."
       },
       "cloth-deep": {
         "$type": "color",
@@ -963,7 +1141,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--cloth-deep)"
           }
-        }
+        },
+        "$description": "cloth: the deepest cloth before a layer takes over. Promised to carry --ink ≥ 4.5 (12.84 light, 11.66 dark); --ink-2 ≥ 4.5 (7.28 light, 8.02 dark)."
       },
       "ink": {
         "$type": "color",
@@ -987,7 +1166,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--ink)"
           }
-        }
+        },
+        "$description": "ink: on --cloth  15.52 / 15.18. Promised to read on --cloth ≥ 4.5 (15.52 light, 15.18 dark); --cloth-pale ≥ 4.5 (16.82 light, 13.79 dark); --cloth-shade ≥ 4.5 (14.46 light, 15.90 dark); --rojo-soft ≥ 4.5 (14.22 light, 11.76 dark); --anil-soft ≥ 4.5 (13.78 light, 11.44 dark); --verde-soft ≥ 4.5 (14.09 light, 11.33 dark); --oro-soft ≥ 4.5 (15.09 light, 11.47 dark); --ink-soft ≥ 4.5 (14.30 light, 11.82 dark); --danger-soft ≥ 4.5 (14.22 light, 11.76 dark); --accent-soft ≥ 4.5 (15.09 light, 11.47 dark); --selected ≥ 4.5 (15.09 light, 11.47 dark); --cloth-deep ≥ 4.5 (12.84 light, 11.66 dark). Promised to carry --on-ink ≥ 4.5 (16.82 light, 13.79 dark); --on-ink-muted ≥ 4.5 (8.36 light, 6.56 dark); --oro ≥ 4.5 (9.34 light); --on-ink-accent ≥ 4.5 (9.34 light, 5.67 dark)."
       },
       "ink-2": {
         "$type": "color",
@@ -1007,7 +1187,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--ink-2)"
           }
-        }
+        },
+        "$description": "ink: on --cloth   8.80 / 10.45. Promised to read on --cloth ≥ 4.5 (8.80 light, 10.45 dark); --cloth-pale ≥ 4.5 (9.54 light, 9.49 dark); --cloth-shade ≥ 4.5 (8.19 light, 10.94 dark); --rojo-soft ≥ 4.5 (8.06 light, 8.09 dark); --anil-soft ≥ 4.5 (7.81 light, 7.87 dark); --verde-soft ≥ 4.5 (7.98 light, 7.79 dark); --oro-soft ≥ 4.5 (8.56 light, 7.89 dark); --ink-soft ≥ 4.5 (8.11 light, 8.13 dark); --danger-soft ≥ 4.5 (8.06 light, 8.09 dark); --accent-soft ≥ 4.5 (8.56 light, 7.89 dark); --selected ≥ 4.5 (8.56 light, 7.89 dark); --cloth-deep ≥ 4.5 (7.28 light, 8.02 dark)."
       },
       "ink-muted": {
         "$type": "color",
@@ -1030,7 +1211,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--ink-muted)"
           }
-        }
+        },
+        "$description": "ink: on --cloth   5.19 /  6.58   (floor: 4.83 on --cloth-shade, light). Promised to read on --cloth ≥ 4.5 (5.19 light, 6.58 dark); --cloth-pale ≥ 4.5 (5.62 light, 5.98 dark); --cloth-shade ≥ 4.5 (4.83 light, 6.89 dark); --rojo-soft ≥ 4.5 (4.75 light, 5.10 dark); --anil-soft ≥ 4.5 (4.61 light, 4.96 dark); --verde-soft ≥ 4.5 (4.71 light, 4.91 dark); --oro-soft ≥ 4.5 (5.05 light, 4.98 dark); --ink-soft ≥ 4.5 (4.78 light, 5.13 dark); --danger-soft ≥ 4.5 (4.75 light, 5.10 dark); --accent-soft ≥ 4.5 (5.05 light, 4.98 dark); --selected ≥ 4.5 (5.05 light, 4.98 dark)."
       },
       "keyline": {
         "$type": "color",
@@ -1052,7 +1234,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--keyline)"
           }
-        }
+        },
+        "$description": "keylines."
       },
       "keyline-soft": {
         "$type": "color",
@@ -1073,7 +1256,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--keyline-soft)"
           }
-        }
+        },
+        "$description": "keylines."
       },
       "rojo": {
         "$type": "color",
@@ -1097,7 +1281,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--rojo)"
           }
-        }
+        },
+        "$description": "the four layers: 5.04 / 5.85   --anil  7.35 / 7.49   --verde  5.59 / 8.15. Promised to read on --cloth ≥ 4.5 (5.04 light, 5.85 dark); --cloth-pale ≥ 4.5 (5.46 light, 5.31 dark); --cloth-shade ≥ 3 (4.70 light, 6.12 dark); --rojo-soft ≥ 3 (4.62 light, 4.53 dark). Promised to carry --on-layer ≥ 4.5 (5.46 light, 5.31 dark)."
       },
       "rojo-deep": {
         "$type": "color",
@@ -1119,7 +1304,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--rojo-deep)"
           }
-        }
+        },
+        "$description": "the four layers: hover / pressed: one step further from the ground. Promised to read on --cloth ≥ 4.5 (6.75 light, 7.78 dark); --cloth-pale ≥ 4.5 (7.32 light, 7.06 dark); --rojo-soft ≥ 4.5 (6.19 light, 6.02 dark). Promised to carry --on-layer ≥ 4.5 (7.32 light, 7.06 dark)."
       },
       "anil": {
         "$type": "color",
@@ -1143,7 +1329,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--anil)"
           }
-        }
+        },
+        "$description": "the four layers. Promised to read on --cloth ≥ 4.5 (7.35 light, 7.49 dark); --cloth-pale ≥ 4.5 (7.96 light, 6.80 dark); --anil-soft ≥ 4.5 (6.52 light, 5.64 dark); --cloth-shade ≥ 3 (6.84 light, 7.84 dark). Promised to carry --on-layer ≥ 4.5 (7.96 light, 6.80 dark)."
       },
       "verde": {
         "$type": "color",
@@ -1167,7 +1354,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--verde)"
           }
-        }
+        },
+        "$description": "the four layers. Promised to read on --cloth ≥ 4.5 (5.59 light, 8.15 dark); --cloth-pale ≥ 4.5 (6.06 light, 7.40 dark); --verde-soft ≥ 4.5 (5.07 light, 6.08 dark); --cloth-shade ≥ 3 (5.21 light, 8.53 dark). Promised to carry --on-layer ≥ 4.5 (6.06 light, 7.40 dark)."
       },
       "oro": {
         "$type": "color",
@@ -1190,7 +1378,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--oro)"
           }
-        }
+        },
+        "$description": "the four layers: 1.66 / 10.12 — gold is never text on light cloth. It is a field colour and a mark there; on an ink panel it measures 9.34. Promised to read on --cloth ≥ 4.5 (10.12 dark); --ink ≥ 4.5 (9.34 light). Promised to carry --on-oro ≥ 4.5 (9.34 light, 9.19 dark)."
       },
       "on-layer": {
         "$type": "color",
@@ -1211,7 +1400,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--on-layer)"
           }
-        }
+        },
+        "$description": "the four layers. Promised to read on --rojo ≥ 4.5 (5.46 light, 5.31 dark); --rojo-deep ≥ 4.5 (7.32 light, 7.06 dark); --anil ≥ 4.5 (7.96 light, 6.80 dark); --verde ≥ 4.5 (6.06 light, 7.40 dark); --danger ≥ 4.5 (5.46 light, 5.31 dark); --danger-strong ≥ 4.5 (7.32 light, 7.06 dark)."
       },
       "on-oro": {
         "$type": "color",
@@ -1231,9 +1421,34 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--on-oro)"
           }
-        }
+        },
+        "$description": "the four layers. Promised to read on --oro ≥ 4.5 (9.34 light, 9.19 dark)."
       },
       "danger": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.949,
+            0.4078,
+            0.3608
+          ],
+          "hex": "#f2685c"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "SHAPE_FILL",
+            "STROKE_COLOR",
+            "EFFECT_COLOR",
+            "FRAME_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--danger)"
+          }
+        },
+        "$description": "status. Promised to read on --cloth ≥ 4.5 (5.04 light, 5.85 dark); --cloth-pale ≥ 4.5 (5.46 light, 5.31 dark); --danger-soft ≥ 3 (4.62 light, 4.53 dark). Promised to carry --on-layer ≥ 4.5 (5.46 light, 5.31 dark)."
+      },
+      "danger-strong": {
         "$type": "color",
         "$value": {
           "colorSpace": "srgb",
@@ -1246,14 +1461,14 @@
         },
         "$extensions": {
           "com.figma.scopes": [
-            "SHAPE_FILL",
-            "STROKE_COLOR",
-            "EFFECT_COLOR"
+            "FRAME_FILL",
+            "SHAPE_FILL"
           ],
           "com.figma.codeSyntax": {
-            "WEB": "var(--danger)"
+            "WEB": "var(--danger-strong)"
           }
-        }
+        },
+        "$description": "status. Promised to carry --on-layer ≥ 4.5 (7.32 light, 7.06 dark)."
       },
       "success": {
         "$type": "color",
@@ -1275,7 +1490,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--success)"
           }
-        }
+        },
+        "$description": "status. Promised to read on --cloth ≥ 4.5 (5.59 light, 8.15 dark); --cloth-pale ≥ 4.5 (6.06 light, 7.40 dark)."
       },
       "warn": {
         "$type": "color",
@@ -1297,7 +1513,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--warn)"
           }
-        }
+        },
+        "$description": "status. Promised to read on --cloth ≥ 4.5 (4.60 light, 9.18 dark); --cloth-pale ≥ 4.5 (4.99 light, 8.34 dark); --cloth-shade ≥ 3 (4.29 light, 9.61 dark); --oro-soft ≥ 3 (4.47 light, 6.94 dark)."
       },
       "info": {
         "$type": "color",
@@ -1319,7 +1536,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--info)"
           }
-        }
+        },
+        "$description": "status. Promised to read on --cloth ≥ 4.5 (7.35 light, 7.49 dark); --cloth-pale ≥ 4.5 (7.96 light, 6.80 dark)."
       },
       "ink-danger": {
         "$type": "color",
@@ -1339,7 +1557,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--ink-danger)"
           }
-        }
+        },
+        "$description": "status. Promised to read on --cloth ≥ 4.5 (6.75 light, 7.78 dark); --cloth-pale ≥ 4.5 (7.32 light, 7.06 dark); --danger-soft ≥ 4.5 (6.19 light, 6.02 dark); --ink-soft ≥ 4.5 (6.22 light, 6.05 dark)."
       },
       "ink-success": {
         "$type": "color",
@@ -1359,7 +1578,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--ink-success)"
           }
-        }
+        },
+        "$description": "status. Promised to read on --ink-soft ≥ 4.5 (5.15 light, 6.34 dark)."
       },
       "ink-warn": {
         "$type": "color",
@@ -1379,7 +1599,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--ink-warn)"
           }
-        }
+        },
+        "$description": "status."
       },
       "ink-info": {
         "$type": "color",
@@ -1399,7 +1620,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--ink-info)"
           }
-        }
+        },
+        "$description": "status."
       },
       "rojo-soft": {
         "$type": "color",
@@ -1420,7 +1642,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--rojo-soft)"
           }
-        }
+        },
+        "$description": "washes. Promised to carry --ink ≥ 4.5 (14.22 light, 11.76 dark); --ink-2 ≥ 4.5 (8.06 light, 8.09 dark); --ink-muted ≥ 4.5 (4.75 light, 5.10 dark); --rojo-deep ≥ 4.5 (6.19 light, 6.02 dark); --rojo ≥ 3 (4.62 light, 4.53 dark)."
       },
       "anil-soft": {
         "$type": "color",
@@ -1441,7 +1664,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--anil-soft)"
           }
-        }
+        },
+        "$description": "washes. Promised to carry --ink ≥ 4.5 (13.78 light, 11.44 dark); --ink-2 ≥ 4.5 (7.81 light, 7.87 dark); --ink-muted ≥ 4.5 (4.61 light, 4.96 dark); --anil ≥ 4.5 (6.52 light, 5.64 dark)."
       },
       "verde-soft": {
         "$type": "color",
@@ -1462,7 +1686,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--verde-soft)"
           }
-        }
+        },
+        "$description": "washes. Promised to carry --ink ≥ 4.5 (14.09 light, 11.33 dark); --ink-2 ≥ 4.5 (7.98 light, 7.79 dark); --ink-muted ≥ 4.5 (4.71 light, 4.91 dark); --verde ≥ 4.5 (5.07 light, 6.08 dark)."
       },
       "oro-soft": {
         "$type": "color",
@@ -1483,7 +1708,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--oro-soft)"
           }
-        }
+        },
+        "$description": "washes. Promised to carry --ink ≥ 4.5 (15.09 light, 11.47 dark); --ink-2 ≥ 4.5 (8.56 light, 7.89 dark); --ink-muted ≥ 4.5 (5.05 light, 4.98 dark); --warn ≥ 3 (4.47 light, 6.94 dark)."
       },
       "ink-soft": {
         "$type": "color",
@@ -1504,7 +1730,30 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--ink-soft)"
           }
-        }
+        },
+        "$description": "washes. Promised to carry --ink ≥ 4.5 (14.30 light, 11.82 dark); --ink-2 ≥ 4.5 (8.11 light, 8.13 dark); --ink-muted ≥ 4.5 (4.78 light, 5.13 dark); --ink-success ≥ 4.5 (5.15 light, 6.34 dark); --ink-danger ≥ 4.5 (6.22 light, 6.05 dark)."
+      },
+      "danger-soft": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2078,
+            0.1647,
+            0.1765
+          ],
+          "hex": "#352a2d"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--danger-soft)"
+          }
+        },
+        "$description": "washes. Promised to carry --ink ≥ 4.5 (14.22 light, 11.76 dark); --ink-2 ≥ 4.5 (8.06 light, 8.09 dark); --ink-muted ≥ 4.5 (4.75 light, 5.10 dark); --ink-danger ≥ 4.5 (6.19 light, 6.02 dark); --danger ≥ 3 (4.62 light, 4.53 dark)."
       },
       "ink-on-tint": {
         "$type": "color",
@@ -1524,7 +1773,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--ink-on-tint)"
           }
-        }
+        },
+        "$description": "washes."
       },
       "rojo-on-shade": {
         "$type": "color",
@@ -1544,7 +1794,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--rojo-on-shade)"
           }
-        }
+        },
+        "$description": "washes. Promised to read on --cloth-shade ≥ 4.5 (6.29 light, 8.14 dark)."
       },
       "rojo-rule": {
         "$type": "color",
@@ -1566,7 +1817,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--rojo-rule)"
           }
-        }
+        },
+        "$description": "washes."
       },
       "on-ink": {
         "$type": "color",
@@ -1587,7 +1839,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--on-ink)"
           }
-        }
+        },
+        "$description": "on an ink panel. Promised to read on --ink ≥ 4.5 (16.82 light, 13.79 dark)."
       },
       "on-ink-muted": {
         "$type": "color",
@@ -1607,7 +1860,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--on-ink-muted)"
           }
-        }
+        },
+        "$description": "on an ink panel. Promised to read on --ink ≥ 4.5 (8.36 light, 6.56 dark)."
       },
       "on-ink-accent": {
         "$type": "color",
@@ -1627,7 +1881,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--on-ink-accent)"
           }
-        }
+        },
+        "$description": "on an ink panel. Promised to read on --ink ≥ 4.5 (9.34 light, 5.67 dark)."
       },
       "keyline-on-ink": {
         "$type": "color",
@@ -1649,7 +1904,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--keyline-on-ink)"
           }
-        }
+        },
+        "$description": "on an ink panel."
       },
       "scrim": {
         "$type": "color",
@@ -1671,7 +1927,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--scrim)"
           }
-        }
+        },
+        "$description": "over arbitrary pixels. Promised to carry --on-scrim ≥ 4.5 (null light, null dark); --on-scrim-muted ≥ 4.5 (null light, null dark)."
       },
       "on-scrim": {
         "$type": "color",
@@ -1691,7 +1948,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--on-scrim)"
           }
-        }
+        },
+        "$description": "over arbitrary pixels. Promised to read on --scrim ≥ 4.5 (null light, null dark)."
       },
       "on-scrim-muted": {
         "$type": "color",
@@ -1712,7 +1970,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--on-scrim-muted)"
           }
-        }
+        },
+        "$description": "over arbitrary pixels. Promised to read on --scrim ≥ 4.5 (null light, null dark)."
       },
       "backdrop": {
         "$type": "color",
@@ -1734,7 +1993,97 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--backdrop)"
           }
-        }
+        },
+        "$description": "over arbitrary pixels."
+      },
+      "accent": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.9412,
+            0.7373,
+            0.2275
+          ],
+          "hex": "#f0bc3a"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR",
+            "EFFECT_COLOR"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--accent)"
+          }
+        },
+        "$description": "accent and selection. Promised to carry --on-accent ≥ 4.5 (9.34 light, 9.19 dark)."
+      },
+      "on-accent": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1176,
+            0.1294,
+            0.149
+          ],
+          "hex": "#1e2126"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "TEXT_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--on-accent)"
+          }
+        },
+        "$description": "accent and selection. Promised to read on --accent ≥ 4.5 (9.34 light, 9.19 dark)."
+      },
+      "accent-soft": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1882,
+            0.1843,
+            0.1725
+          ],
+          "hex": "#302f2c"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--accent-soft)"
+          }
+        },
+        "$description": "accent and selection. Promised to carry --ink ≥ 4.5 (15.09 light, 11.47 dark); --ink-2 ≥ 4.5 (8.56 light, 7.89 dark); --ink-muted ≥ 4.5 (5.05 light, 4.98 dark)."
+      },
+      "selected": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1882,
+            0.1843,
+            0.1725
+          ],
+          "hex": "#302f2c"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--selected)"
+          }
+        },
+        "$description": "accent and selection. Promised to carry --ink ≥ 4.5 (15.09 light, 11.47 dark); --ink-2 ≥ 4.5 (8.56 light, 7.89 dark); --ink-muted ≥ 4.5 (5.05 light, 4.98 dark)."
       },
       "band": {
         "$type": "color",
@@ -1756,7 +2105,8 @@
           "com.figma.codeSyntax": {
             "WEB": "var(--band)"
           }
-        }
+        },
+        "$description": "the cut."
       }
     }
   },
@@ -1791,7 +2141,8 @@
             "value": 1.5,
             "unit": "px"
           }
-        }
+        },
+        "$description": "the cut."
       },
       "focus-ring": {
         "$type": "shadow",
@@ -1877,7 +2228,8 @@
               "unit": "px"
             }
           }
-        ]
+        ],
+        "$description": "the cut."
       },
       "focus-ring-inset": {
         "$type": "shadow",
@@ -1938,7 +2290,8 @@
             },
             "inset": true
           }
-        ]
+        ],
+        "$description": "the cut."
       },
       "elevation-raised": {
         "$type": "shadow",
@@ -1969,7 +2322,40 @@
             "value": -10,
             "unit": "px"
           }
-        }
+        },
+        "$description": "elevation: anchored to something on the page: a menu, a select list, a popover, a tooltip, a toast."
+      },
+      "elevation-overlay": {
+        "$type": "shadow",
+        "$value": {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0784,
+              0.0863,
+              0.102
+            ],
+            "alpha": 0.42,
+            "hex": "#14161a"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 28,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 64,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -18,
+            "unit": "px"
+          }
+        },
+        "$description": "elevation: takes the page away: a dialog, a drawer, the command palette."
       }
     },
     "dark": {
@@ -2001,7 +2387,8 @@
             "value": 1.5,
             "unit": "px"
           }
-        }
+        },
+        "$description": "the cut."
       },
       "focus-ring": {
         "$type": "shadow",
@@ -2087,7 +2474,8 @@
               "unit": "px"
             }
           }
-        ]
+        ],
+        "$description": "the cut."
       },
       "focus-ring-inset": {
         "$type": "shadow",
@@ -2148,7 +2536,8 @@
             },
             "inset": true
           }
-        ]
+        ],
+        "$description": "the cut."
       },
       "elevation-raised": {
         "$type": "shadow",
@@ -2179,7 +2568,40 @@
             "value": -10,
             "unit": "px"
           }
-        }
+        },
+        "$description": "elevation: anchored to something on the page: a menu, a select list, a popover, a tooltip, a toast."
+      },
+      "elevation-overlay": {
+        "$type": "shadow",
+        "$value": {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0.0431,
+              0.0471,
+              0.0549
+            ],
+            "alpha": 0.88,
+            "hex": "#0b0c0e"
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 28,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 64,
+            "unit": "px"
+          },
+          "spread": {
+            "value": -18,
+            "unit": "px"
+          }
+        },
+        "$description": "elevation: takes the page away: a dialog, a drawer, the command palette."
       }
     }
   },
@@ -2192,7 +2614,8 @@
         "system-ui",
         "Helvetica Neue",
         "sans-serif"
-      ]
+      ],
+      "$description": "voices."
     },
     "ui": {
       "$type": "fontFamily",
@@ -2202,7 +2625,8 @@
         "system-ui",
         "Helvetica Neue",
         "sans-serif"
-      ]
+      ],
+      "$description": "voices."
     },
     "text": {
       "$type": "fontFamily",
@@ -2212,7 +2636,8 @@
         "Iowan Old Style",
         "Georgia",
         "serif"
-      ]
+      ],
+      "$description": "voices."
     },
     "mono": {
       "$type": "fontFamily",
@@ -2223,7 +2648,8 @@
         "SF Mono",
         "Menlo",
         "monospace"
-      ]
+      ],
+      "$description": "voices."
     }
   },
   "text": {
@@ -2233,119 +2659,198 @@
       "$value": {
         "value": 11,
         "unit": "px"
-      }
+      },
+      "$description": "type scale: label caps, set expanded and tracked."
     },
     "xs": {
       "$type": "dimension",
       "$value": {
         "value": 12,
         "unit": "px"
-      }
+      },
+      "$description": "type scale."
     },
     "sm": {
       "$type": "dimension",
       "$value": {
         "value": 13,
         "unit": "px"
-      }
+      },
+      "$description": "type scale."
     },
     "base": {
       "$type": "dimension",
       "$value": {
         "value": 14,
         "unit": "px"
-      }
+      },
+      "$description": "type scale."
     },
     "lg": {
       "$type": "dimension",
       "$value": {
         "value": 16,
         "unit": "px"
-      }
+      },
+      "$description": "type scale."
     },
     "xl": {
       "$type": "dimension",
       "$value": {
         "value": 20,
         "unit": "px"
-      }
+      },
+      "$description": "type scale."
     },
     "2xl": {
       "$type": "dimension",
       "$value": {
         "value": 26,
         "unit": "px"
-      }
+      },
+      "$description": "type scale."
     },
     "3xl": {
       "$type": "dimension",
       "$value": {
         "value": 36,
         "unit": "px"
-      }
+      },
+      "$description": "type scale."
     },
     "4xl": {
       "$type": "dimension",
       "$value": {
         "value": 52,
         "unit": "px"
-      }
+      },
+      "$description": "type scale."
     },
     "5xl": {
       "$type": "dimension",
       "$value": {
         "value": 76,
         "unit": "px"
-      }
+      },
+      "$description": "type scale."
+    }
+  },
+  "text-line-height": {
+    "$description": "The line height a bare text-* utility sets, as a multiple of its size. 2xs has none: the label register sets its own.",
+    "xs": {
+      "$type": "number",
+      "$value": 1.3333
+    },
+    "sm": {
+      "$type": "number",
+      "$value": 1.4286
+    },
+    "base": {
+      "$type": "number",
+      "$value": 1.5
+    },
+    "lg": {
+      "$type": "number",
+      "$value": 1.5556
+    },
+    "xl": {
+      "$type": "number",
+      "$value": 1.4
+    },
+    "2xl": {
+      "$type": "number",
+      "$value": 1.3333
+    },
+    "3xl": {
+      "$type": "number",
+      "$value": 1.2
+    },
+    "4xl": {
+      "$type": "number",
+      "$value": 1.1111
+    },
+    "5xl": {
+      "$type": "number",
+      "$value": 1
     }
   },
   "leading": {
     "$description": "Line height, as a multiple of the font size.",
+    "reading": {
+      "$type": "number",
+      "$value": 1.6,
+      "$description": "type scale: long-form prose at reading size, and code blocks."
+    },
     "body": {
       "$type": "number",
-      "$value": 1.55
+      "$value": 1.55,
+      "$description": "type scale."
     },
     "snug": {
       "$type": "number",
-      "$value": 1.25
+      "$value": 1.25,
+      "$description": "type scale."
+    },
+    "heading": {
+      "$type": "number",
+      "$value": 1.15,
+      "$description": "type scale: a section heading: two lines that still read as one shape."
     },
     "tight": {
       "$type": "number",
-      "$value": 1.04
+      "$value": 1.04,
+      "$description": "type scale."
     }
   },
   "tracking": {
     "$description": "Letter spacing as a multiple of the font size (CSS em). DTCG dimensions are px or rem only, and tracking must scale with the type.",
     "display": {
       "$type": "number",
-      "$value": -0.02
+      "$value": -0.02,
+      "$description": "type scale: A heading under display size: the same pull, halved.."
+    },
+    "heading": {
+      "$type": "number",
+      "$value": -0.01,
+      "$description": "type scale."
     },
     "label": {
       "$type": "number",
-      "$value": 0.14
+      "$value": 0.14,
+      "$description": "type scale."
+    },
+    "figures": {
+      "$type": "number",
+      "$value": 0.04,
+      "$description": "type scale."
     },
     "normal": {
       "$type": "number",
-      "$value": 0
+      "$value": 0,
+      "$description": "type scale."
     }
   },
   "wdth": {
     "$description": "Archivo's and Martian Mono's width axis (font-variation-settings 'wdth').",
     "body": {
       "$type": "number",
-      "$value": 100
+      "$value": 100,
+      "$description": "type scale."
     },
     "display": {
       "$type": "number",
-      "$value": 118
+      "$value": 118,
+      "$description": "type scale."
     },
     "label": {
       "$type": "number",
-      "$value": 116
+      "$value": 116,
+      "$description": "type scale."
     },
     "mono": {
       "$type": "number",
-      "$value": 87.5
+      "$value": 87.5,
+      "$description": "type scale."
     }
   },
   "radius": {
@@ -2354,49 +2859,56 @@
       "$value": {
         "value": 0,
         "unit": "px"
-      }
+      },
+      "$description": "shape."
     },
     "xs": {
       "$type": "dimension",
       "$value": {
         "value": 0,
         "unit": "px"
-      }
+      },
+      "$description": "shape."
     },
     "sm": {
       "$type": "dimension",
       "$value": {
         "value": 0,
         "unit": "px"
-      }
+      },
+      "$description": "shape."
     },
     "md": {
       "$type": "dimension",
       "$value": {
         "value": 0,
         "unit": "px"
-      }
+      },
+      "$description": "shape."
     },
     "lg": {
       "$type": "dimension",
       "$value": {
         "value": 0,
         "unit": "px"
-      }
+      },
+      "$description": "shape."
     },
     "xl": {
       "$type": "dimension",
       "$value": {
         "value": 0,
         "unit": "px"
-      }
+      },
+      "$description": "shape."
     },
     "2xl": {
       "$type": "dimension",
       "$value": {
         "value": 0,
         "unit": "px"
-      }
+      },
+      "$description": "shape."
     }
   },
   "size": {
@@ -2405,14 +2917,73 @@
       "$value": {
         "value": 1.5,
         "unit": "px"
-      }
+      },
+      "$description": "elevation."
     },
     "cut-reveal": {
       "$type": "dimension",
       "$value": {
         "value": 5,
         "unit": "px"
-      }
+      },
+      "$description": "elevation."
+    },
+    "rule-w": {
+      "$type": "dimension",
+      "$value": {
+        "value": 1,
+        "unit": "px"
+      },
+      "$description": "edges: a decorative divider: a keyline between rows or panes."
+    },
+    "bar-w": {
+      "$type": "dimension",
+      "$value": {
+        "value": 3,
+        "unit": "px"
+      },
+      "$description": "edges: the current item, or the region a status owns: a heavy line on one edge."
+    },
+    "focus-gap": {
+      "$type": "dimension",
+      "$value": {
+        "value": 2,
+        "unit": "px"
+      },
+      "$description": "edges: the cloth between the keyline and the focus ring's outer ink."
+    }
+  },
+  "z": {
+    "$description": "The stacking order (z-index), lowest first. Written z-(--z-popover).",
+    "lift": {
+      "$type": "number",
+      "$value": 1,
+      "$description": "stacking: one item over its neighbours inside a component: a focused calendar day, a tab list over its panel's top edge."
+    },
+    "sticky": {
+      "$type": "number",
+      "$value": 10,
+      "$description": "stacking: a sticky table header, an app bar, a form's action bar."
+    },
+    "shell": {
+      "$type": "number",
+      "$value": 40,
+      "$description": "stacking: the application shell's sheet on a phone, and its backdrop."
+    },
+    "overlay": {
+      "$type": "number",
+      "$value": 50,
+      "$description": "stacking: what takes the page away: dialogs, drawers, the palette."
+    },
+    "popover": {
+      "$type": "number",
+      "$value": 60,
+      "$description": "stacking: what is anchored to something, inside an overlay or not: menus, selects, popovers, tooltips, date pickers."
+    },
+    "toast": {
+      "$type": "number",
+      "$value": 70,
+      "$description": "stacking: above everything: a toast has to read over a dialog."
     }
   },
   "motion": {
@@ -2421,21 +2992,24 @@
       "$value": {
         "value": 120,
         "unit": "ms"
-      }
+      },
+      "$description": "motion."
     },
     "base": {
       "$type": "duration",
       "$value": {
         "value": 220,
         "unit": "ms"
-      }
+      },
+      "$description": "motion."
     },
     "slow": {
       "$type": "duration",
       "$value": {
         "value": 420,
         "unit": "ms"
-      }
+      },
+      "$description": "motion."
     },
     "ease-cut": {
       "$type": "cubicBezier",
@@ -2444,7 +3018,8 @@
         0,
         0,
         1
-      ]
+      ],
+      "$description": "motion."
     }
   },
   "container": {
@@ -2454,77 +3029,88 @@
       "$value": {
         "value": 1180,
         "unit": "px"
-      }
+      },
+      "$description": "layout."
     },
     "wide": {
       "$type": "dimension",
       "$value": {
         "value": 1440,
         "unit": "px"
-      }
+      },
+      "$description": "layout."
     },
     "xs": {
       "$type": "dimension",
       "$value": {
         "value": 20,
         "unit": "rem"
-      }
+      },
+      "$description": "layout."
     },
     "sm": {
       "$type": "dimension",
       "$value": {
         "value": 24,
         "unit": "rem"
-      }
+      },
+      "$description": "layout."
     },
     "md": {
       "$type": "dimension",
       "$value": {
         "value": 28,
         "unit": "rem"
-      }
+      },
+      "$description": "layout."
     },
     "lg": {
       "$type": "dimension",
       "$value": {
         "value": 32,
         "unit": "rem"
-      }
+      },
+      "$description": "layout."
     },
     "xl": {
       "$type": "dimension",
       "$value": {
         "value": 36,
         "unit": "rem"
-      }
+      },
+      "$description": "layout."
     },
     "2xl": {
       "$type": "dimension",
       "$value": {
         "value": 42,
         "unit": "rem"
-      }
+      },
+      "$description": "layout."
     },
     "3xl": {
       "$type": "dimension",
       "$value": {
         "value": 48,
         "unit": "rem"
-      }
+      },
+      "$description": "layout."
     },
     "4xl": {
       "$type": "dimension",
       "$value": {
         "value": 56,
         "unit": "rem"
-      }
+      },
+      "$description": "layout."
     },
     "5xl": {
       "$type": "dimension",
       "$value": {
         "value": 64,
         "unit": "rem"
-      }
+      },
+      "$description": "layout."
     },
     "reading": {
       "$type": "number",
@@ -2539,42 +3125,48 @@
       "$value": {
         "value": 40,
         "unit": "rem"
-      }
+      },
+      "$description": "layout."
     },
     "md": {
       "$type": "dimension",
       "$value": {
         "value": 48,
         "unit": "rem"
-      }
+      },
+      "$description": "layout."
     },
     "nav": {
       "$type": "dimension",
       "$value": {
         "value": 57.5,
         "unit": "rem"
-      }
+      },
+      "$description": "layout."
     },
     "lg": {
       "$type": "dimension",
       "$value": {
         "value": 64,
         "unit": "rem"
-      }
+      },
+      "$description": "layout."
     },
     "xl": {
       "$type": "dimension",
       "$value": {
         "value": 80,
         "unit": "rem"
-      }
+      },
+      "$description": "layout."
     },
     "2xl": {
       "$type": "dimension",
       "$value": {
         "value": 96,
         "unit": "rem"
-      }
+      },
+      "$description": "layout."
     }
   },
   "density": {
@@ -2585,84 +3177,128 @@
         "$value": {
           "value": 0.25,
           "unit": "rem"
-        }
+        },
+        "$description": "layout."
       },
       "text-2xs": {
         "$type": "dimension",
         "$value": {
           "value": 11,
           "unit": "px"
-        }
+        },
+        "$description": "type scale: label caps, set expanded and tracked."
       },
       "text-xs": {
         "$type": "dimension",
         "$value": {
           "value": 12,
           "unit": "px"
-        }
+        },
+        "$description": "type scale."
       },
       "text-sm": {
         "$type": "dimension",
         "$value": {
           "value": 13,
           "unit": "px"
-        }
+        },
+        "$description": "type scale."
       },
       "text-base": {
         "$type": "dimension",
         "$value": {
           "value": 14,
           "unit": "px"
-        }
+        },
+        "$description": "type scale."
       },
       "text-lg": {
         "$type": "dimension",
         "$value": {
           "value": 16,
           "unit": "px"
-        }
+        },
+        "$description": "type scale."
       },
       "text-xl": {
         "$type": "dimension",
         "$value": {
           "value": 20,
           "unit": "px"
-        }
+        },
+        "$description": "type scale."
       },
       "control-h": {
         "$type": "dimension",
         "$value": {
           "value": 36,
           "unit": "px"
-        }
+        },
+        "$description": "density."
       },
       "control-h-sm": {
         "$type": "dimension",
         "$value": {
           "value": 28,
           "unit": "px"
-        }
+        },
+        "$description": "density."
       },
       "control-h-lg": {
         "$type": "dimension",
         "$value": {
           "value": 44,
           "unit": "px"
-        }
+        },
+        "$description": "density."
       },
       "control-px": {
         "$type": "dimension",
         "$value": {
           "value": 14,
           "unit": "px"
-        }
+        },
+        "$description": "density."
       },
       "row-h": {
         "$type": "dimension",
         "$value": {
           "value": 40,
           "unit": "px"
-        }
+        },
+        "$description": "density."
+      },
+      "icon-xs": {
+        "$type": "dimension",
+        "$value": {
+          "value": 12,
+          "unit": "px"
+        },
+        "$description": "density: a check inside a 16px box, a sort arrow."
+      },
+      "icon-sm": {
+        "$type": "dimension",
+        "$value": {
+          "value": 14,
+          "unit": "px"
+        },
+        "$description": "density: beside small text: a chip, a disclosure marker."
+      },
+      "icon": {
+        "$type": "dimension",
+        "$value": {
+          "value": 16,
+          "unit": "px"
+        },
+        "$description": "density: the default: a button, a menu item, a field."
+      },
+      "icon-lg": {
+        "$type": "dimension",
+        "$value": {
+          "value": 18,
+          "unit": "px"
+        },
+        "$description": "density: a feature glyph: a callout, an empty state, the palette."
       }
     },
     "compact": {
@@ -2671,84 +3307,128 @@
         "$value": {
           "value": 0.21875,
           "unit": "rem"
-        }
+        },
+        "$description": "layout."
       },
       "text-2xs": {
         "$type": "dimension",
         "$value": {
           "value": 11,
           "unit": "px"
-        }
+        },
+        "$description": "type scale: label caps, set expanded and tracked."
       },
       "text-xs": {
         "$type": "dimension",
         "$value": {
           "value": 11.5,
           "unit": "px"
-        }
+        },
+        "$description": "type scale."
       },
       "text-sm": {
         "$type": "dimension",
         "$value": {
           "value": 12.5,
           "unit": "px"
-        }
+        },
+        "$description": "type scale."
       },
       "text-base": {
         "$type": "dimension",
         "$value": {
           "value": 13,
           "unit": "px"
-        }
+        },
+        "$description": "type scale."
       },
       "text-lg": {
         "$type": "dimension",
         "$value": {
           "value": 15,
           "unit": "px"
-        }
+        },
+        "$description": "type scale."
       },
       "text-xl": {
         "$type": "dimension",
         "$value": {
           "value": 18,
           "unit": "px"
-        }
+        },
+        "$description": "type scale."
       },
       "control-h": {
         "$type": "dimension",
         "$value": {
           "value": 28,
           "unit": "px"
-        }
+        },
+        "$description": "density."
       },
       "control-h-sm": {
         "$type": "dimension",
         "$value": {
           "value": 24,
           "unit": "px"
-        }
+        },
+        "$description": "density."
       },
       "control-h-lg": {
         "$type": "dimension",
         "$value": {
           "value": 36,
           "unit": "px"
-        }
+        },
+        "$description": "density."
       },
       "control-px": {
         "$type": "dimension",
         "$value": {
           "value": 10,
           "unit": "px"
-        }
+        },
+        "$description": "density."
       },
       "row-h": {
         "$type": "dimension",
         "$value": {
           "value": 30,
           "unit": "px"
-        }
+        },
+        "$description": "density."
+      },
+      "icon-xs": {
+        "$type": "dimension",
+        "$value": {
+          "value": 11,
+          "unit": "px"
+        },
+        "$description": "density: a check inside a 16px box, a sort arrow."
+      },
+      "icon-sm": {
+        "$type": "dimension",
+        "$value": {
+          "value": 12,
+          "unit": "px"
+        },
+        "$description": "density: beside small text: a chip, a disclosure marker."
+      },
+      "icon": {
+        "$type": "dimension",
+        "$value": {
+          "value": 14,
+          "unit": "px"
+        },
+        "$description": "density: the default: a button, a menu item, a field."
+      },
+      "icon-lg": {
+        "$type": "dimension",
+        "$value": {
+          "value": 16,
+          "unit": "px"
+        },
+        "$description": "density: a feature glyph: a callout, an empty state, the palette."
       }
     },
     "spacious": {
@@ -2757,84 +3437,128 @@
         "$value": {
           "value": 0.25,
           "unit": "rem"
-        }
+        },
+        "$description": "layout."
       },
       "text-2xs": {
         "$type": "dimension",
         "$value": {
           "value": 11,
           "unit": "px"
-        }
+        },
+        "$description": "type scale: label caps, set expanded and tracked."
       },
       "text-xs": {
         "$type": "dimension",
         "$value": {
           "value": 13,
           "unit": "px"
-        }
+        },
+        "$description": "type scale."
       },
       "text-sm": {
         "$type": "dimension",
         "$value": {
           "value": 15,
           "unit": "px"
-        }
+        },
+        "$description": "type scale."
       },
       "text-base": {
         "$type": "dimension",
         "$value": {
           "value": 17,
           "unit": "px"
-        }
+        },
+        "$description": "type scale."
       },
       "text-lg": {
         "$type": "dimension",
         "$value": {
           "value": 20,
           "unit": "px"
-        }
+        },
+        "$description": "type scale."
       },
       "text-xl": {
         "$type": "dimension",
         "$value": {
           "value": 26,
           "unit": "px"
-        }
+        },
+        "$description": "type scale."
       },
       "control-h": {
         "$type": "dimension",
         "$value": {
           "value": 48,
           "unit": "px"
-        }
+        },
+        "$description": "density."
       },
       "control-h-sm": {
         "$type": "dimension",
         "$value": {
           "value": 36,
           "unit": "px"
-        }
+        },
+        "$description": "density."
       },
       "control-h-lg": {
         "$type": "dimension",
         "$value": {
           "value": 56,
           "unit": "px"
-        }
+        },
+        "$description": "density."
       },
       "control-px": {
         "$type": "dimension",
         "$value": {
           "value": 22,
           "unit": "px"
-        }
+        },
+        "$description": "density."
       },
       "row-h": {
         "$type": "dimension",
         "$value": {
           "value": 52,
           "unit": "px"
-        }
+        },
+        "$description": "density."
+      },
+      "icon-xs": {
+        "$type": "dimension",
+        "$value": {
+          "value": 13,
+          "unit": "px"
+        },
+        "$description": "density: a check inside a 16px box, a sort arrow."
+      },
+      "icon-sm": {
+        "$type": "dimension",
+        "$value": {
+          "value": 15,
+          "unit": "px"
+        },
+        "$description": "density: beside small text: a chip, a disclosure marker."
+      },
+      "icon": {
+        "$type": "dimension",
+        "$value": {
+          "value": 18,
+          "unit": "px"
+        },
+        "$description": "density: the default: a button, a menu item, a field."
+      },
+      "icon-lg": {
+        "$type": "dimension",
+        "$value": {
+          "value": 20,
+          "unit": "px"
+        },
+        "$description": "density: a feature glyph: a callout, an empty state, the palette."
       }
     }
   }

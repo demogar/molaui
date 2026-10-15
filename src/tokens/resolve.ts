@@ -19,18 +19,27 @@ export type ThemeName = 'light' | 'dark'
  * `:root` (`:root { … }`, `:root, [data-theme] { … }`), at any `@layer`
  * depth. The colour tokens and the length tokens are separate rules, because
  * only the colours are redeclared on `[data-theme]`; see tokens.css.
+ *
+ * A rule inside `@media` is skipped: its values hold only when the reader
+ * asks for them (`prefers-contrast: more` deepens --keyline), so they are
+ * not the token's value, and reading them made the decorative keyline
+ * measure as a control edge.
  */
 export function parseRootDeclarations(css: string): Map<string, string> {
   const stripped = css.replace(/\/\*[\s\S]*?\*\//g, '')
   const decls = new Map<string, string>()
+  const open: string[] = []
   let preludeStart = 0
   for (let i = 0; i < stripped.length; i++) {
     const ch = stripped[i]
+    if (ch === '}') open.pop()
     if (ch === '}' || ch === ';') preludeStart = i + 1
     if (ch !== '{') continue
-    const selectors = stripped.slice(preludeStart, i).split(',').map((s) => s.trim())
+    const prelude = stripped.slice(preludeStart, i).trim()
+    open.push(prelude)
+    const selectors = prelude.split(',').map((s) => s.trim())
     preludeStart = i + 1
-    if (!selectors.includes(':root')) continue
+    if (!selectors.includes(':root') || open.some((p) => p.startsWith('@media'))) continue
     const end = stripped.indexOf('}', i)
     for (const m of stripped.slice(i + 1, end).matchAll(/(--[a-z0-9-]+)\s*:\s*([^;]+);/g)) {
       decls.set(m[1]!, m[2]!.replace(/\s+/g, ' ').trim())

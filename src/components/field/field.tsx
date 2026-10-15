@@ -117,7 +117,7 @@ export function Field({
           role="alert"
           className="flex items-start gap-2 text-xs leading-snug font-medium text-ink-danger"
         >
-          <span aria-hidden className="mt-[0.3em] size-2 shrink-0 bg-rojo shadow-cut" />
+          <span aria-hidden className="mt-[0.3em] size-2 shrink-0 bg-danger shadow-cut" />
           <span>{error}</span>
         </span>
       ) : null}

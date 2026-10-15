@@ -34,7 +34,8 @@ lists the scopes.
 | `--oro` | the four layers | `#edb01f` | `#f0bc3a` | surface, mark, edge: `bg-oro` `fill-oro` `border-oro` `decoration-oro` |
 | `--on-layer` | the four layers | `#f6f7f2` | `#1e2126` | text, mark: `text-on-layer` `bg-on-layer` `fill-on-layer` |
 | `--on-oro` | the four layers | `#14161a` | `#1e2126` | text: `text-on-oro` |
-| `--danger` | status | `#9e1e24` | `#ff8a7e` | mark, edge: `bg-danger` `fill-danger` `border-danger` `decoration-danger` |
+| `--danger` | status | `#c0272d` | `#f2685c` | mark, edge, surface: `bg-danger` `fill-danger` `border-danger` `decoration-danger` |
+| `--danger-strong` | status | `#9e1e24` | `#ff8a7e` | surface: `bg-danger-strong` |
 | `--success` | status | `#0b6b4b` | `#4cc493` | mark, edge: `bg-success` `fill-success` `border-success` `decoration-success` |
 | `--warn` | status | `#8a6410` | `#e0b45a` | mark, edge: `bg-warn` `fill-warn` `border-warn` `decoration-warn` |
 | `--info` | status | `#1b4b8f` | `#86a8ee` | mark, edge: `bg-info` `fill-info` `border-info` `decoration-info` |
@@ -47,6 +48,7 @@ lists the scopes.
 | `--verde-soft` | washes | `#dce6dc` | `#253232` | surface: `bg-verde-soft` |
 | `--oro-soft` | washes | `#f5ead0` | `#302f2c` | surface: `bg-oro-soft` |
 | `--ink-soft` | washes | `#e4e5e1` | `#2a2d31` | surface: `bg-ink-soft` |
+| `--danger-soft` | washes | `#f3e0d9` | `#352a2d` | surface: `bg-danger-soft` |
 | `--ink-on-tint` | washes | `#3d4147` | `#c4c8bd` | text: `text-ink-on-tint` |
 | `--rojo-on-shade` | washes | `#9e1e24` | `#ff8a7e` | text: `text-rojo-on-shade` |
 | `--rojo-rule` | washes | `color-mix(in oklab, var(--rojo) 45%, transparent)` | `color-mix(in oklab, var(--rojo) 45%, transparent)` | edge: `border-rojo-rule` `decoration-rojo-rule` |
@@ -58,13 +60,27 @@ lists the scopes.
 | `--on-scrim` | over arbitrary pixels | `#f6f7f2` | `#f6f7f2` | text: `text-on-scrim` |
 | `--on-scrim-muted` | over arbitrary pixels | `color-mix(in oklab, #f6f7f2 78%, transparent)` | `color-mix(in oklab, #f6f7f2 78%, transparent)` | text: `text-on-scrim-muted` |
 | `--backdrop` | over arbitrary pixels | `color-mix(in oklab, var(--cloth) 82%, transparent)` | `color-mix(in oklab, var(--cloth) 82%, transparent)` | overlay: `bg-backdrop` |
+| `--accent` | accent and selection | `#edb01f` | `#f0bc3a` | surface, mark, edge: `bg-accent` `fill-accent` `border-accent` `decoration-accent` |
+| `--on-accent` | accent and selection | `#14161a` | `#1e2126` | text: `text-on-accent` |
+| `--accent-soft` | accent and selection | `#f5ead0` | `#302f2c` | surface: `bg-accent-soft` |
+| `--selected` | accent and selection | `#f5ead0` | `#302f2c` | surface: `bg-selected` |
 | `--band` | the cut | `#edb01f` | `#f0bc3a` | edge, mark: set with `band-*` |
 | `--cut` | the cut | `0 0 0 var(--cut-w) var(--ink)` | `0 0 0 var(--cut-w) var(--ink)` |  |
-| `--focus-ring` | the cut | `0 0 0 var(--cut-w) var(--ink), 0 0 0 calc(var(--cut-w) + 2px) var(--cloth-pale), 0 0 0 calc(var(--cut-w) + 5px) var(--ink)` | `0 0 0 var(--cut-w) var(--ink), 0 0 0 calc(var(--cut-w) + 2px) var(--cloth-pale), 0 0 0 calc(var(--cut-w) + 5px) var(--ink)` |  |
+| `--focus-ring` | the cut | `0 0 0 var(--cut-w) var(--ink), 0 0 0 calc(var(--cut-w) + var(--focus-gap)) var(--cloth-pale), 0 0 0 calc(var(--cut-w) + var(--focus-gap) + 3px) var(--ink)` | `0 0 0 var(--cut-w) var(--ink), 0 0 0 calc(var(--cut-w) + var(--focus-gap)) var(--cloth-pale), 0 0 0 calc(var(--cut-w) + var(--focus-gap) + 3px) var(--ink)` |  |
 | `--focus-ring-inset` | the cut | `inset 0 0 0 2px var(--ink), inset 0 0 0 3.5px var(--cloth-pale)` | `inset 0 0 0 2px var(--ink), inset 0 0 0 3.5px var(--cloth-pale)` |  |
 | `--elevation-raised` | elevation | `0 14px 34px -10px light-dark( color-mix(in oklab, #14161a 34%, transparent), color-mix(in oklab, #0b0c0e 80%, transparent) )` | `0 14px 34px -10px light-dark( color-mix(in oklab, #14161a 34%, transparent), color-mix(in oklab, #0b0c0e 80%, transparent) )` |  |
+| `--elevation-overlay` | elevation | `0 28px 64px -18px light-dark( color-mix(in oklab, #14161a 42%, transparent), color-mix(in oklab, #0b0c0e 88%, transparent) )` | `0 28px 64px -18px light-dark( color-mix(in oklab, #14161a 42%, transparent), color-mix(in oklab, #0b0c0e 88%, transparent) )` |  |
 | `--cut-w` | elevation | `1.5px` | `1.5px` |  |
 | `--cut-reveal` | elevation | `5px` | `5px` |  |
+| `--rule-w` | edges | `1px` | `1px` |  |
+| `--bar-w` | edges | `3px` | `3px` |  |
+| `--focus-gap` | edges | `2px` | `2px` |  |
+| `--z-lift` | stacking | `1` | `1` |  |
+| `--z-sticky` | stacking | `10` | `10` |  |
+| `--z-shell` | stacking | `40` | `40` |  |
+| `--z-overlay` | stacking | `50` | `50` |  |
+| `--z-popover` | stacking | `60` | `60` |  |
+| `--z-toast` | stacking | `70` | `70` |  |
 | `--motion-cut` | motion | `120ms` | `120ms` |  |
 | `--motion-base` | motion | `220ms` | `220ms` |  |
 | `--motion-slow` | motion | `420ms` | `420ms` |  |
@@ -73,6 +89,10 @@ lists the scopes.
 | `--control-h-lg` | density | `44px` | `44px` |  |
 | `--control-px` | density | `14px` | `14px` |  |
 | `--row-h` | density | `40px` | `40px` |  |
+| `--icon-xs` | density | `12px` | `12px` |  |
+| `--icon-sm` | density | `14px` | `14px` |  |
+| `--icon` | density | `16px` | `16px` |  |
+| `--icon-lg` | density | `18px` | `18px` |  |
 
 ## Reading the values
 

@@ -135,7 +135,7 @@ export function PromptInput({
       data-status={status}
       className={cn(
         'flex flex-col bg-cloth-pale shadow-cut transition-shadow',
-        'focus-within:shadow-[var(--focus-ring)]',
+        'focus-within:focus-ring',
         disabled && 'bg-cloth-shade',
         className,
       )}
@@ -163,7 +163,7 @@ export function PromptInput({
         onChange={(event) => setValue(event.target.value)}
         onKeyDown={onKeyDown}
         className={cn(
-          'block w-full resize-none bg-transparent px-3.5 pt-3 pb-2 font-ui text-base leading-[1.5] text-ink',
+          'block w-full resize-none bg-transparent px-3.5 pt-3 pb-2 font-ui text-base leading-body text-ink',
           'placeholder:text-ink-muted focus:outline-none focus-visible:shadow-none scroll-cloth',
           'disabled:cursor-not-allowed disabled:text-ink-muted',
         )}
@@ -173,7 +173,7 @@ export function PromptInput({
         <p id={hintId} data-part="hint" className="m-0 flex items-center gap-2 font-ui text-xs text-ink-muted">
           {offline ? (
             <span className="flex items-center gap-1.5 text-ink-warn">
-              <WifiOff aria-hidden className="size-3.5" />
+              <WifiOff aria-hidden className="size-(--icon-sm)" />
               Offline — your draft is kept
             </span>
           ) : (

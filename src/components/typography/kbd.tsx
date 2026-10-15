@@ -20,7 +20,7 @@ export function Kbd({ className, ...props }: React.ComponentProps<'kbd'>) {
       className={cn(
         'inline-flex h-[1.6em] min-w-[1.6em] items-center justify-center rounded-none px-[0.4em]',
         'bg-cloth-pale font-ui text-[0.78em] font-semibold leading-none text-ink-2 tabular',
-        'shadow-[0_0_0_1px_var(--ink-muted),0_2px_0_0_var(--ink-muted)]',
+        'keycap',
         className,
       )}
       {...props}

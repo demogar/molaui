@@ -56,7 +56,7 @@ export const panelVariants = cva('relative min-w-0 rounded-none', {
   },
   compoundVariants: [
     // An ink panel's keyline is its own ground: the edge has to be cloth to exist.
-    { tone: 'ink', edge: 'cut', class: 'shadow-[0_0_0_1.5px_var(--keyline-on-ink)]' },
+    { tone: 'ink', edge: 'cut', class: 'cut-keyline-on-ink' },
   ],
   defaultVariants: { tone: 'pale', edge: 'cut', padding: 'md', band: 'oro' },
 })

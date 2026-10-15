@@ -63,7 +63,7 @@ export function Table({
         className={cn(
           'relative w-full overflow-auto scroll-cloth',
           framed && 'bg-cloth-pale shadow-cut',
-          'focus-visible:shadow-[var(--focus-ring)]',
+          'focus-visible:focus-ring',
           frameClassName,
         )}
       >
@@ -129,7 +129,7 @@ export function TableFooter({ className, ...props }: React.ComponentProps<'tfoot
       data-slot="table-footer"
       data-part="footer"
       className={cn(
-        'font-semibold [&_td]:bg-cloth-shade [&_td]:shadow-[inset_0_1.5px_0_var(--ink)]',
+        'font-semibold [&_td]:bg-cloth-shade [&_td]:cut-t',
         className,
       )}
       {...props}
@@ -157,11 +157,10 @@ export function TableRow({ selected = false, className, ...props }: TableRowProp
       aria-selected={selected || undefined}
       className={cn(
         'transition-colors',
-        '[&>td]:shadow-[inset_0_-1px_0_var(--keyline-soft)]',
+        '[&>td]:rule-b-soft',
         'hover:[&>td]:bg-ink-soft',
-        'data-selected:[&>td]:bg-oro-soft data-selected:[&>td]:forced-selected',
-        'data-selected:[&>td:first-child]:shadow-[inset_3px_0_0_var(--ink),inset_0_-1px_0_var(--keyline-soft)]',
-        'rtl:data-selected:[&>td:first-child]:shadow-[inset_-3px_0_0_var(--ink),inset_0_-1px_0_var(--keyline-soft)]',
+        'data-selected:[&>td]:bg-selected data-selected:[&>td]:forced-selected',
+        'data-selected:[&>td:first-child]:bar-start-ink',
         className,
       )}
       {...props}
@@ -204,9 +203,9 @@ export function TableHead({
       className={cn(
         'h-(--row-h) bg-cloth-pale px-3 align-middle',
         'rotulo whitespace-nowrap text-ink-2',
-        'shadow-[inset_0_-1.5px_0_var(--ink)]',
+        'cut-b',
         numeric ? 'text-end' : 'text-start',
-        stickyHeader && 'sticky top-0 z-10',
+        stickyHeader && 'sticky top-0 z-(--z-sticky)',
         className,
       )}
       {...props}
@@ -226,7 +225,7 @@ export function TableHead({
           <Glyph
             aria-hidden
             className={cn(
-              'size-3 shrink-0 transition-colors',
+              'size-(--icon-xs) shrink-0 transition-colors',
               sort === 'none' ? 'text-ink-muted group-hover/sort:text-ink' : 'text-ink',
             )}
           />
@@ -356,7 +355,7 @@ export function TableSkeletonRows({ rows = 5, columns }: { rows?: number; column
       {Array.from({ length: rows }, (_, r) => (
         <tr key={r} data-slot="table-skeleton-row" aria-hidden className="relative">
           {Array.from({ length: columns }, (_, c) => (
-            <td key={c} className="h-(--row-h) px-3 align-middle shadow-[inset_0_-1px_0_var(--keyline-soft)]">
+            <td key={c} className="h-(--row-h) px-3 align-middle rule-b-soft">
               <span className={cn('block h-2.5 bg-cloth-deep relleno-field', widths[(r + c * 2) % widths.length])} />
               {c === 0 ? <span className={cn(skeletonShimmer, 'absolute inset-x-0 top-0 bottom-px')} /> : null}
             </td>
@@ -395,7 +394,7 @@ export function TableCheckbox({ indeterminate = false, className, ref: refProp, 
           'peer absolute inset-0 m-0 size-full cursor-pointer appearance-none rounded-none',
           'bg-cloth-pale shadow-cut transition-colors',
           'checked:bg-ink indeterminate:bg-ink',
-          'focus-visible:shadow-[var(--focus-ring)]',
+          'focus-visible:focus-ring',
           'disabled:cursor-not-allowed disabled:bg-cloth-shade',
         )}
         {...props}
@@ -404,12 +403,12 @@ export function TableCheckbox({ indeterminate = false, className, ref: refProp, 
       <Check
         aria-hidden
         strokeWidth={3}
-        className="pointer-events-none relative size-3 text-on-ink opacity-0 peer-checked:opacity-100 peer-indeterminate:opacity-0"
+        className="pointer-events-none relative size-(--icon-xs) text-on-ink opacity-0 peer-checked:opacity-100 peer-indeterminate:opacity-0"
       />
       <Minus
         aria-hidden
         strokeWidth={3}
-        className="pointer-events-none absolute size-3 text-on-ink opacity-0 peer-indeterminate:opacity-100"
+        className="pointer-events-none absolute size-(--icon-xs) text-on-ink opacity-0 peer-indeterminate:opacity-100"
       />
     </span>
   )

@@ -123,8 +123,19 @@
     /* ── status ───────────────────────────────────────────────────────
      * Mapped onto the layers rather than invented, so an error is the same red
      * the system already owns. --warn is gold darkened (light) until it can carry
-     * text on cloth: 4.60 / 9.18. Info is añil. */
-    --danger: var(--rojo-deep);
+     * text on cloth: 4.60 / 9.18. Info is añil.
+     *
+     * Danger is the one role with a full set, because on a product surface
+     * rojo may only be used through it (docs/adr/0008-the-rojo-register.md):
+     * a status mark, a bar or a band is --danger; a filled region that carries
+     * words is --danger with --on-layer on it (5.46 / 5.31); pressed is
+     * --danger-strong; a region that belongs to the failure is --danger-soft;
+     * the words are --ink-danger. --danger was --rojo-deep until 2026-10,
+     * which made it the one status tone that was not its own layer, and the
+     * components drew their danger marks in --rojo directly instead: the role
+     * existed and nothing used it. */
+    --danger: var(--rojo);
+    --danger-strong: var(--rojo-deep);
     --success: var(--verde);
     --warn: light-dark(#8a6410, #e0b45a);
     --info: var(--anil);
@@ -132,8 +143,9 @@
     /* Status INK, as distinct from status colour. On a filled layer panel no
      * status hue survives — --danger reaches 1.08:1 on añil — so the `on-layer`
      * utility collapses these to --on-layer and the state is carried by the
-     * mark and the words, never by the hue alone. */
-    --ink-danger: var(--danger);
+     * mark and the words, never by the hue alone. Danger's words are a step
+     * deeper than its mark, so they read on its wash too: 6.19 / 6.02. */
+    --ink-danger: var(--rojo-deep);
     --ink-success: var(--success);
     --ink-warn: var(--warn);
     --ink-info: var(--info);
@@ -162,6 +174,9 @@
       color-mix(in oklab, var(--cloth-pale) 90%, var(--oro))
     );
     --ink-soft: color-mix(in oklab, var(--cloth-pale) 93%, var(--ink));
+    /* The failure's own region: a failed tool call, an error callout, a
+     * removed line in a diff. */
+    --danger-soft: var(--rojo-soft);
 
     /* A label on a wash: the wash eats the contrast --ink-muted was measured
      * against, so tinted regions take one step darker ink. */
@@ -199,6 +214,21 @@
     /* Behind a modal: the page recedes toward its own ground, not toward grey. */
     --backdrop: color-mix(in oklab, var(--cloth) 82%, transparent);
 
+    /* ── accent and selection ─────────────────────────────────────────
+     * Gold is the system's accent: the band a control reveals under the hand,
+     * the texture of work in progress, selected text. Named apart from --oro
+     * so an app can re-accent without repainting a layer, and so a component
+     * that means "the accent" says so rather than naming a hue.
+     *   --on-accent on --accent  9.34 / 9.19
+     * --selected is the ground of an item chosen for an action (a selected
+     * table row, the bulk-action bar): the gold wash, so the whole ink ramp
+     * reads on it. A chosen VALUE is an ink fill and the current LOCATION is a
+     * shade with a bar; Foundations/Layers names all three. */
+    --accent: var(--oro);
+    --on-accent: var(--on-oro);
+    --accent-soft: var(--oro-soft);
+    --selected: var(--accent-soft);
+
     /* ── the cut ──────────────────────────────────────────────────────
      * The signature. A cut shape is bounded by ink, then a revealed band of the
      * layer beneath, then ink again — concentric, never offset. An offset block
@@ -209,14 +239,14 @@
      * a custom property substitutes its var()s where it is DECLARED, so a ring
      * built on :root would bake in this file's --cut-reveal and silently ignore
      * any element that narrowed it. */
-    --band: var(--oro);
+    --band: var(--accent);
     --cut: 0 0 0 var(--cut-w) var(--ink);
 
     /* Focus is a third band, two-tone so it survives on any ground: cloth gap,
      * then ink. 15.52 / 15.18 on the page. */
     --focus-ring:
-      0 0 0 var(--cut-w) var(--ink), 0 0 0 calc(var(--cut-w) + 2px) var(--cloth-pale),
-      0 0 0 calc(var(--cut-w) + 5px) var(--ink);
+      0 0 0 var(--cut-w) var(--ink), 0 0 0 calc(var(--cut-w) + var(--focus-gap)) var(--cloth-pale),
+      0 0 0 calc(var(--cut-w) + var(--focus-gap) + 3px) var(--ink);
     /* The same two tones drawn inward, for an item that sits inside a clipping
      * or framed container — a tab in a scrolling list, a row inside a tool call,
      * a diff hunk header — where the outer ring would be shaved off or would
@@ -226,13 +256,24 @@
     --focus-ring-inset: inset 0 0 0 2px var(--ink), inset 0 0 0 3.5px var(--cloth-pale);
 
     /* ── elevation ────────────────────────────────────────────────────
-     * The only blur in the system, and only for what genuinely floats: menus,
-     * popovers, dialogs, toasts. In the dark theme a shadow is invisible on a
-     * near-black ground, so floating surfaces also keep their keyline. */
+     * The only blur in the system, and only for what genuinely floats. In the
+     * dark theme a shadow is invisible on a near-black ground, so floating
+     * surfaces also keep their keyline. Two levels, in step with --z-*: one
+     * level used to serve menus, popovers, dialogs and toasts, so a select
+     * opened inside a dialog cast the dialog's own shadow and the two read as
+     * one sheet.
+     *   raised   anchored to something on the page: a menu, a select list, a
+     *            popover, a tooltip, a toast
+     *   overlay  takes the page away: a dialog, a drawer, the command palette */
     --elevation-raised: 0 14px 34px -10px
       light-dark(
         color-mix(in oklab, #14161a 34%, transparent),
         color-mix(in oklab, #0b0c0e 80%, transparent)
+      );
+    --elevation-overlay: 0 28px 64px -18px
+      light-dark(
+        color-mix(in oklab, #14161a 42%, transparent),
+        color-mix(in oklab, #0b0c0e 88%, transparent)
       );
   }
 
@@ -241,6 +282,39 @@
      * :root only, so a theme attribute never resets them. */
     --cut-w: 1.5px;
     --cut-reveal: 5px;
+
+    /* ── edges ────────────────────────────────────────────────────────
+     * The other widths an edge is drawn at, each with one job, so a component
+     * names the job rather than the pixel. They used to be typed in place: the
+     * 3px bar 28 times, the 1.5px cut 24 times. The edge utilities in
+     * cloth.css (`rule-*`, `cut-*`, `bar-*`) draw with them.
+     *   --rule-w     a decorative divider: a keyline between rows or panes
+     *   --bar-w      the current item, or the region a status owns: a heavy
+     *                line on one edge
+     *   --focus-gap  the cloth between the keyline and the focus ring's outer
+     *                ink */
+    --rule-w: 1px;
+    --bar-w: 3px;
+    --focus-gap: 2px;
+
+    /* ── stacking ─────────────────────────────────────────────────────
+     * Every floating surface sat at z-50, so a popover inside a dialog, or a
+     * select inside a drawer, was above it only because it came later in the
+     * document. Named steps instead, each above the one before:
+     *   lift     one item over its neighbours inside a component: a focused
+     *            calendar day, a tab list over its panel's top edge
+     *   sticky   a sticky table header, an app bar, a form's action bar
+     *   shell    the application shell's sheet on a phone, and its backdrop
+     *   overlay  what takes the page away: dialogs, drawers, the palette
+     *   popover  what is anchored to something, inside an overlay or not:
+     *            menus, selects, popovers, tooltips, date pickers
+     *   toast    above everything: a toast has to read over a dialog */
+    --z-lift: 1;
+    --z-sticky: 10;
+    --z-shell: 40;
+    --z-overlay: 50;
+    --z-popover: 60;
+    --z-toast: 70;
 
     /* ── motion ───────────────────────────────────────────────────────
      * Cloth settling under a hand: fast in, no float, no overshoot. */
@@ -259,6 +333,19 @@
     --control-h-lg: 44px;
     --control-px: 14px;
     --row-h: 40px;
+
+    /* Glyph sizes. An icon follows the text beside it, so each density moves
+     * them with its type scale; written `size-(--icon)`. They were spacing
+     * steps (`size-4`, `size-3.5`), which compact re-scaled by accident of
+     * --spacing and spacious left at the product size beside 17px text.
+     *   --icon-xs  a check inside a 16px box, a sort arrow
+     *   --icon-sm  beside small text: a chip, a disclosure marker
+     *   --icon     the default: a button, a menu item, a field
+     *   --icon-lg  a feature glyph: a callout, an empty state, the palette */
+    --icon-xs: 12px;
+    --icon-sm: 14px;
+    --icon: 16px;
+    --icon-lg: 18px;
   }
 }
 
@@ -281,9 +368,16 @@
   --control-h-lg: 36px;
   --control-px: 10px;
   --row-h: 30px;
+  --icon-xs: 11px;
+  --icon-sm: 12px;
+  --icon: 14px;
+  --icon-lg: 16px;
 }
 
-/* The editorial metric the system was born at: 17px reading copy. */
+/* The editorial metric the system was born at: 17px reading copy. The
+ * spacing unit is NOT re-scaled here, on purpose: the editorial site was laid
+ * out on a 4px unit, and spacious exists to reproduce it exactly (ADR 0005,
+ * amended 2026-10-14). Glyphs do move, because they follow the text. */
 [data-density='spacious'] {
   --text-xs: 13px;
   --text-sm: 15px;
@@ -295,4 +389,33 @@
   --control-h-lg: 56px;
   --control-px: 22px;
   --row-h: 52px;
+  --icon-xs: 13px;
+  --icon-sm: 15px;
+  --icon: 18px;
+  --icon-lg: 20px;
+}
+
+/* ── when the reader asks for more ────────────────────────────────────────
+ * More contrast: the decorative keyline is 1.43:1 on the page, fine as
+ * decoration and nothing more. Someone who has asked their system for more
+ * contrast gets dividers they can see: --ink-muted, measured at 3:1 as a
+ * graphic on every cloth. On [data-theme] too, for the reason the colour
+ * tokens are. */
+@media (prefers-contrast: more) {
+  @layer theme {
+    :root,
+    [data-theme] {
+      --keyline: var(--ink-muted);
+      --keyline-soft: var(--ink-muted);
+    }
+  }
+}
+
+/* On paper a dark theme is a page of black ink, and some print engines drop
+ * a box-shadow keyline on a dark ground. Print in the light theme. */
+@media print {
+  :root,
+  [data-theme] {
+    color-scheme: light;
+  }
 }

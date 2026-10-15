@@ -26,7 +26,7 @@ import { type Variants } from '../../lib/variants'
 export const chipVariants = cva(
   [
     'group/chip relative inline-flex items-center gap-1.5 cursor-pointer select-none',
-    'rounded-none shadow-cut band-oro [--cut-reveal:3px]',
+    'rounded-none shadow-cut band-accent [--cut-reveal:3px]',
     'font-ui text-sm text-ink-2 bg-cloth-pale',
     'transition-[background-color,box-shadow,color]',
     // Hover is scoped to the unchecked state: a checked chip is cloth on ink,
@@ -34,9 +34,9 @@ export const chipVariants = cva(
     'hover:not-has-checked:cut-band hover:not-has-checked:text-ink',
     'has-checked:bg-ink has-checked:text-on-ink has-checked:forced-selected',
     // The focus ring is itself a two-tone band, so it stands in for the keyline.
-    'has-focus-visible:shadow-[var(--focus-ring)] has-focus-visible:forced-focus',
+    'has-focus-visible:focus-ring has-focus-visible:forced-focus',
     'has-disabled:pointer-events-none has-disabled:bg-cloth-shade has-disabled:text-ink-muted',
-    '[&_svg]:size-3.5 [&_svg]:shrink-0',
+    '[&_svg]:size-(--icon-sm) [&_svg]:shrink-0',
   ],
   {
     variants: {
@@ -44,7 +44,7 @@ export const chipVariants = cva(
         /** Filter chips: one line, never wraps. */
         default: 'h-(--control-h-sm) px-[calc(var(--control-px)*0.85)] leading-none whitespace-nowrap',
         /** Longer labels, which do wrap. */
-        comfortable: 'min-h-(--control-h) px-(--control-px) py-2 leading-[1.2]',
+        comfortable: 'min-h-(--control-h) px-(--control-px) py-2 leading-snug',
       },
     },
     defaultVariants: { size: 'default' },

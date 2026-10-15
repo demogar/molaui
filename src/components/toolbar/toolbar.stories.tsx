@@ -44,7 +44,7 @@ export const RunActions: Story = {
         <ToolbarButton icon={<Link2 />}>Share trace</ToolbarButton>
       </ToolbarGroup>
       <ToolbarSeparator />
-      <ToolbarButton icon={<Trash2 />} variant="ghost" className="text-rojo-deep">
+      <ToolbarButton icon={<Trash2 />} variant="ghost" className="text-ink-danger">
         Delete
       </ToolbarButton>
     </Toolbar>

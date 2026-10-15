@@ -79,7 +79,7 @@ One destination. Active is an ink bar on the leading edge plus a washed ground a
 | `active` | `boolean` | `false` | The current page. Sets `aria-current="page"`. |
 | `count` | `number` |  | A count beside the label: open items, failures. |
 | `countLabel` | `string` |  | Read with the count: "3 failed". Without it the number is read alone. |
-| `countTone` | `"neutral" \| "attention"` | `neutral` | `attention` fills the count in rojo — for things that need a person, not for totals. |
+| `countTone` | `"neutral" \| "attention"` | `neutral` | `attention` fills the count in the danger colour — for failures that need a person, not for totals. |
 | `icon` | `ReactNode` |  |  |
 
 ### `NavSection` (component)

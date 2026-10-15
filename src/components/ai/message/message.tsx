@@ -26,7 +26,7 @@ const roleBand = cva('', {
   variants: {
     role: {
       user: 'band-cloth before:bg-ink',
-      assistant: 'band-rojo',
+      assistant: 'band-accent before:cut-thin',
       system: 'band-anil',
       tool: 'band-verde',
     },
@@ -126,7 +126,7 @@ export function Message({
             data-part="author"
             className={cn(
               'flex min-w-0 items-center gap-2 rotulo text-ink-2',
-              'before:h-[3px] before:w-4 before:shrink-0 before:bg-[var(--band)] before:content-[""]',
+              'before:h-(--bar-w) before:w-4 before:shrink-0 before:bg-[var(--band)] before:content-[""]',
               roleBand({ role }),
               // A tool's name is a machine literal, not a label: set in mono,
               // in its own case, and allowed to break — `query_rollout` in
@@ -156,7 +156,7 @@ export function Message({
             <div
               role="alert"
               data-part="error"
-              className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-3 bg-rojo-soft px-4 py-3 shadow-[inset_3px_0_0_var(--rojo)] rtl:shadow-[inset_-3px_0_0_var(--rojo)]"
+              className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-3 bg-danger-soft px-4 py-3 bar-start-danger"
             >
               <div className="min-w-0 flex-1">
                 <p className="m-0 font-ui text-sm font-semibold text-ink">The response stopped before it finished.</p>

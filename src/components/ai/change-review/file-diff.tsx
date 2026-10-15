@@ -183,12 +183,12 @@ function Hunk({ hunk, layout, defaultOpen, first }: { hunk: DiffHunk; layout: 'u
         className={cn(
           'group/hunk flex w-full min-h-(--control-h-sm) items-center gap-2 bg-cloth-shade px-3 py-1 text-start',
           'transition-colors hover:bg-ink-soft',
-          'focus-visible:shadow-[var(--focus-ring-inset)]',
+          'focus-visible:focus-ring-inset',
         )}
       >
         <Plus
           aria-hidden
-          className="size-3.5 shrink-0 text-ink-muted transition-transform duration-(--motion-base) group-data-[panel-open]/hunk:rotate-45"
+          className="size-(--icon-sm) shrink-0 text-ink-muted transition-transform duration-(--motion-base) group-data-[panel-open]/hunk:rotate-45"
         />
         <span dir="ltr" className="shrink-0 whitespace-nowrap literal text-xs text-ink-2">
           @@ -{hunk.oldStart},{oldCount} +{hunk.newStart},{newCount} @@
@@ -213,7 +213,7 @@ function Hunk({ hunk, layout, defaultOpen, first }: { hunk: DiffHunk; layout: 'u
 
 const WASH: Record<DiffLine['kind'], string> = {
   add: 'bg-verde-soft',
-  remove: 'bg-rojo-soft',
+  remove: 'bg-danger-soft',
   context: '',
 }
 const GLYPH: Record<DiffLine['kind'], string> = { add: '+', remove: '−', context: '' }

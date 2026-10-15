@@ -38,7 +38,8 @@ export const UnderABlock: Story = {
 export const Bands: Story = {
   render: () => (
     <div className="flex flex-col gap-4">
-      <Rotulo band="rojo">Rojo — the default on cloth</Rotulo>
+      <Rotulo band="ink">Ink — the default on cloth</Rotulo>
+      <Rotulo band="rojo">Rojo — editorial pages only</Rotulo>
       <Rotulo band="anil">Añil</Rotulo>
       <Rotulo band="verde">Verde</Rotulo>
       <div className="on-ink p-4">
@@ -48,7 +49,7 @@ export const Bands: Story = {
   ),
   parameters: {
     docs: {
-      description: { story: 'Gold measures 1.66:1 on light cloth and the mark disappears, so gold bands are for ink panels.' },
+      description: { story: 'Ink is the default: gold measures 1.66:1 on light cloth and the mark disappears, so gold bands are for ink panels, and on a product screen rojo means danger (ADR 0008), so a red band belongs on an editorial page.' },
     },
   },
 }

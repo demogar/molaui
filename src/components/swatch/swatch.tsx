@@ -42,8 +42,8 @@ export const swatchVariants = cva('inline-block shrink-0 forced-ink', {
       info: 'bg-anil',
       success: 'bg-verde',
       warn: 'bg-warn',
-      danger: 'bg-rojo',
-      accent: 'bg-oro shadow-[0_0_0_1px_var(--ink)]',
+      danger: 'bg-danger',
+      accent: 'bg-accent cut-thin',
     },
     size: {
       sm: 'size-2',

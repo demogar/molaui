@@ -369,8 +369,8 @@ export function SettingsPage({
             <div
               data-dirty={dirty || undefined}
               className={cn(
-                'sticky bottom-0 z-10 -mx-4 flex flex-wrap items-center gap-x-4 gap-y-3 bg-cloth-pale px-4 py-3 sm:mx-0',
-                'shadow-[inset_0_1.5px_0_var(--ink)]',
+                'sticky bottom-0 z-(--z-sticky) -mx-4 flex flex-wrap items-center gap-x-4 gap-y-3 bg-cloth-pale px-4 py-3 sm:mx-0',
+                'cut-t',
                 // Forced colours drop box-shadows; without an edge the fields
                 // would scroll under the bar with nothing between them.
                 'forced-colors:border-t-2',
@@ -381,7 +381,7 @@ export function SettingsPage({
                   aria-hidden
                   className={cn(
                     'size-2 shrink-0',
-                    errorCount > 0 ? 'bg-rojo forced-ink' : dirty ? 'bg-oro forced-ink' : 'bg-transparent shadow-cut',
+                    errorCount > 0 ? 'bg-danger forced-ink' : dirty ? 'bg-oro forced-ink' : 'bg-transparent shadow-cut',
                   )}
                 />
                 <span
@@ -499,7 +499,7 @@ function SettingsSection({
         <p className="mt-1.5 mb-0 text-sm text-ink-2">{description}</p>
       </div>
       <div className="min-w-0 bg-cloth-pale shadow-cut">
-        {danger ? <div aria-hidden className="relleno h-2 band-rojo" /> : null}
+        {danger ? <div aria-hidden className="relleno h-2 band-danger" /> : null}
         <div className="flex flex-col gap-5 p-5">{children}</div>
       </div>
     </section>

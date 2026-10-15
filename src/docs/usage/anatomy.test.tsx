@@ -92,7 +92,7 @@ describe('anatomy', () => {
     const { container } = await renderStory('AI/Tool call', anatomy.story)
     const root = anatomyRoot(container, anatomy)!
     const own = partUtilities(partElement(root, ROOT_PART)!, false)
-    expect(own).toEqual(expect.arrayContaining(['shadow-cut', 'band-oro', 'cut-band']))
+    expect(own).toEqual(expect.arrayContaining(['bg-cloth-pale', 'band-accent', 'cut-band']))
     // Layout classes are how a part is placed, not what it is made of.
     expect(own).not.toContain('relative')
     // A nested component's classes belong to its own part.

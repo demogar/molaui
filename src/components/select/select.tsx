@@ -58,7 +58,7 @@ export function SelectTrigger({
         fieldControlClasses,
         fieldControlSizes[size],
         'flex cursor-default items-center justify-between gap-3 text-start',
-        'focus-visible:shadow-[var(--focus-ring)] data-popup-open:shadow-[var(--focus-ring)]',
+        'focus-visible:focus-ring data-popup-open:focus-ring',
         'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
         className,
       )}
@@ -70,7 +70,7 @@ export function SelectTrigger({
           className="min-w-0 truncate data-placeholder:text-ink-muted"
         />
       )}
-      <SelectPrimitive.Icon className="flex shrink-0 text-ink-muted [&_svg]:size-4">
+      <SelectPrimitive.Icon className="flex shrink-0 text-ink-muted [&_svg]:size-(--icon)">
         <ChevronsUpDown aria-hidden />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
@@ -89,7 +89,7 @@ export function SelectContent({ className, sideOffset = 6, children, ...props }:
       <SelectPrimitive.Positioner
         sideOffset={sideOffset}
         alignItemWithTrigger={false}
-        className="z-50 outline-none"
+        className="z-(--z-popover) outline-none"
       >
         <SelectPrimitive.Popup
           data-slot="select-content"
@@ -149,7 +149,7 @@ export function SelectItem({ className, children, description, ...props }: Selec
       className={cn(optionClasses, className)}
       {...props}
     >
-      <SelectPrimitive.ItemIndicator className="col-start-1 flex [&_svg]:size-3.5">
+      <SelectPrimitive.ItemIndicator className="col-start-1 flex [&_svg]:size-(--icon-sm)">
         <Check aria-hidden strokeWidth={2.5} />
       </SelectPrimitive.ItemIndicator>
       <span className="col-start-2 min-w-0">

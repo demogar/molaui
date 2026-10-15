@@ -235,8 +235,8 @@ export function RunError({
       className={cn(
         'flex flex-col gap-3 px-4 py-3.5',
         alarm
-          ? 'bg-rojo-soft shadow-[inset_3px_0_0_var(--rojo)] rtl:shadow-[inset_-3px_0_0_var(--rojo)]'
-          : 'bg-cloth-shade shadow-[inset_3px_0_0_var(--ink-muted)] rtl:shadow-[inset_-3px_0_0_var(--ink-muted)]',
+          ? 'bg-danger-soft bar-start-danger'
+          : 'bg-cloth-shade bar-start-ink-muted',
         // Forced colours drop the wash and the rule; a keyline keeps the panel a panel.
         'forced-colors:outline forced-colors:outline-1 forced-colors:-outline-offset-1',
         className,
@@ -281,7 +281,7 @@ export function RunError({
             <Button
               size="sm"
               variant={alarm ? 'primary' : 'secondary'}
-              icon={<StepForward className="rtl:-scale-x-100" />}
+              icon={<StepForward className="flip-rtl" />}
               disabled={blocked}
               onClick={onRetryFromStep}
               aria-describedby={headlineId}
@@ -360,7 +360,7 @@ export function PartialOutput({ note, className, children, ...props }: PartialOu
       <p className="m-0 rotulo text-ink-muted">Partial output</p>
       <div className="min-w-0">{children}</div>
       <p className="m-0 flex items-center gap-2 font-ui text-xs text-ink-muted">
-        <span aria-hidden className="h-[1.5px] w-6 shrink-0 bg-ink-muted forced-ink" />
+        <span aria-hidden className="h-(--cut-w) w-6 shrink-0 bg-ink-muted forced-ink" />
         {note ?? 'Output stops here. The rest never arrived.'}
       </p>
     </div>

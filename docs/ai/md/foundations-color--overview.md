@@ -41,10 +41,10 @@ other. In the dark theme they are lifted until they carry text on the dark groun
 
 | Token | Role | Light | Dark |
 | --- | --- | --- | --- |
-| `--rojo` | Danger, destructive actions, the brand mark. | `#c0272d` | `#f2685c` |
+| `--rojo` | Danger, through the danger role, on a product screen. The editorial accent in Prose. | `#c0272d` | `#f2685c` |
 | `--anil` | Information, links in tools, selection. | `#1b4b8f` | `#86a8ee` |
 | `--verde` | Success, healthy, approved. | `#0b6b4b` | `#4cc493` |
-| `--oro` | The revealed band. A field and a mark — never text on light cloth. | `#edb01f` | `#f0bc3a` |
+| `--oro` | The accent: the revealed band. A field and a mark — never text on light cloth. | `#edb01f` | `#f0bc3a` |
 
 ## Washes
 
@@ -60,6 +60,25 @@ ink ramp stays legal on every wash**.
 | `--oro-soft` | Highlight, waiting-for-approval. | `#f5ead0` | `#302f2c` |
 | `--ink-soft` | Hover on ghost controls, inline code ground. | `#e4e5e1` | `#2a2d31` |
 
+## Roles: danger, accent, selection
+
+A layer says what a thing is made of; a role says what it means. Components use the role, so the
+meaning is in the code and an app can re-dye a role without repainting a layer. **On a product
+screen rojo is used only through the danger role**: a red rótulo band, list marker or agent name
+beside a red FAILED mark made the failure one red thing among several
+([ADR 0008](https://demogar.github.io/molaui/?path=/docs/decisions-0008-the-rojo-register--overview)). The
+editorial accent (rojo links and list markers in `Prose`) is the one exception, and a test holds
+the components to it.
+
+| Token | Role | Light | Dark |
+| --- | --- | --- | --- |
+| `--danger` | A failed or destructive thing: a status mark, a bar, the danger button’s fill. | `#c0272d` | `#f2685c` |
+| `--danger-strong` | The danger button, pressed. | `#9e1e24` | `#ff8a7e` |
+| `--danger-soft` | A region that belongs to a failure: an error callout, a failed tool call. | `#f3e0d9` | `#352a2d` |
+| `--accent` | The band a control reveals, the working texture, selected text. | `#edb01f` | `#f0bc3a` |
+| `--accent-soft` | A region that belongs to the accent. | `#f5ead0` | `#302f2c` |
+| `--selected` | An item chosen for an action: a selected row, the bulk-action bar. | `#f5ead0` | `#302f2c` |
+
 ## Pairings that ship
 
 Real text on real grounds, in both themes. 4.5 is the bar for text, 3 for a UI boundary.
@@ -73,7 +92,10 @@ Contrast ratios, computed from tokens.css:
 | `--ink-muted` | `--oro-soft` | 5.05 | 4.98 |
 | `--rojo` | `--cloth` | 5.04 | 5.85 |
 | `--warn` | `--cloth` | 4.60 | 9.18 |
-| `--on-layer` | `--rojo` | 5.46 | 5.31 |
+| `--on-layer` | `--danger` | 5.46 | 5.31 |
+| `--ink-danger` | `--danger-soft` | 6.19 | 6.02 |
+| `--on-accent` | `--accent` | 9.34 | 9.19 |
+| `--ink-muted` | `--selected` | 5.05 | 4.98 |
 | `--on-layer` | `--anil` | 7.96 | 6.80 |
 | `--on-layer` | `--verde` | 6.06 | 7.40 |
 | `--on-oro` | `--oro` | 9.34 | 9.19 |
@@ -100,7 +122,7 @@ on a filled panel.
 | --- | --- | --- | --- |
 | `surface` | A ground that carries content: a page, a panel, a card, a wash, a filled layer. | `bg-` | `FRAME_FILL` `SHAPE_FILL` |
 | `text` | The colour of words, and of icons that inherit `currentColor`. | `text-` `placeholder-` `caret-` | `TEXT_FILL` |
-| `edge` | A line: a keyline, a divider, an underline, a current-item bar, the revealed band of a cut. Mola draws most edges with `box-shadow`. | `border-` `border-x-` `border-y-` `border-t-` `border-b-` `border-s-` `border-e-` `border-l-` `border-r-` `divide-` `outline-` `ring-` `decoration-` `stroke-` | `STROKE_COLOR` `EFFECT_COLOR` |
+| `edge` | A line: a keyline, a divider, an underline, a current-item bar, the revealed band of a cut. Mola draws most edges with `box-shadow`. | `border-` `border-x-` `border-y-` `border-t-` `border-b-` `border-s-` `border-e-` `border-l-` `border-r-` `divide-` `outline-` `ring-` `decoration-` `stroke-` `cut-` `bar-start-` `bar-bottom-` | `STROKE_COLOR` `EFFECT_COLOR` |
 | `mark` | A small filled graphic that is not a region: a status dot, a swatch key, a switch thumb, a rule drawn as a 1px box. | `bg-` `fill-` `stroke-` | `SHAPE_FILL` |
 | `overlay` | A translucent fill over content the system cannot know: a scrim over an image, the backdrop behind a modal. | `bg-` | `FRAME_FILL` `SHAPE_FILL` |
 

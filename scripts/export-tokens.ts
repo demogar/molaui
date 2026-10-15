@@ -24,15 +24,22 @@
  *     it is written or compared, so a value no importer accepts fails here
  *     rather than in someone's design tool.
  *
+ * Every token carries a `$description`: the section of tokens.css it sits in
+ * and its own note, and for a colour the contrast it is promised at, with
+ * the ratio measured in each theme. Those ratios lived only in the CSS
+ * comments, which a designer importing the file into Figma never sees.
+ *
  *   npm run tokens          writes tokens/mola.tokens.json
  *   npm run tokens:check    fails if the committed file is stale or invalid (CI)
  */
 import { readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
-import { type RGB, toHex } from '../src/tokens/color'
+import { contrast, type RGB, toHex } from '../src/tokens/color'
 import { validateDtcg } from '../src/tokens/dtcg'
-import { parseRootDeclarations, resolveTranslucent, type ThemeName } from '../src/tokens/resolve'
+import { pairingsOf } from '../src/tokens/pairings'
+import { parseRootDeclarations, resolveTranslucent, token, type ThemeName } from '../src/tokens/resolve'
+import { tokenRows } from '../src/tokens/rows'
 import { figmaScopesOf } from '../src/tokens/scopes'
 
 const root = resolve(import.meta.dirname, '..')
@@ -72,6 +79,118 @@ function themeLiterals(): Map<string, string> {
   return new Map([...body.matchAll(/(--[a-z0-9-]+(?:-\*)?)\s*:\s*([^;]+);/g)].map((m) => [m[1]!, m[2]!.trim()]))
 }
 const theme = themeLiterals()
+
+/* ── descriptions ───────────────────────────────────────────────────── */
+
+const rows = new Map(tokenRows(tokensCss, decls).map((r) => [r.name, r]))
+/** theme.css notes: the trailing comment on a declaration's line. */
+const themeNotes = new Map(
+  [...themeCss.matchAll(/^\s*(--[a-z0-9-]+)\s*:[^;]*;\s*\/\*\s*(.+?)\s*\*\//gm)].map((m) => [m[1]!, m[2]!]),
+)
+
+/** theme.css's section heading for each declaration, as tokenRows gives tokens.css's. */
+const themeGroups = (() => {
+  const out = new Map<string, string>()
+  let group = ''
+  for (const line of themeCss.split('\n')) {
+    const heading = line.match(/\/\*\s*──\s*([^─]+?)\s*─/)
+    if (heading) group = heading[1]!.replace(/:.*$/, '').trim()
+    const decl = line.match(/^\s*(--[a-z0-9-]+)\s*:/)
+    if (decl && group && !out.has(decl[1]!)) out.set(decl[1]!, group)
+  }
+  return out
+})()
+
+const ratio = (fg: string, bg: string, themeName: ThemeName) => {
+  try {
+    return contrast(token(fg, themeName, decls), token(bg, themeName, decls)).toFixed(2)
+  } catch {
+    return null
+  }
+}
+
+/** One pairing from one side, measured in the themes it holds in: `--cloth ≥ 4.5 (15.52 light, 15.18 dark)`. */
+function measured(fg: string, bg: string, other: string, min: number, themes?: ThemeName[]) {
+  const shown = (themes ?? (['light', 'dark'] as ThemeName[])).map((t) => `${ratio(fg, bg, t)} ${t}`).join(', ')
+  return `${other} ≥ ${min} (${shown})`
+}
+
+/**
+ * The legend lines in tokens.css's section comments, by section: a line that
+ * starts with a key, two spaces, then its text (`--rule-w     a decorative
+ * divider`, `lift     one item over its neighbours`), with the indented lines
+ * that continue it. A key is a token's name or the last part of it (`lift`
+ * is --z-lift), looked up only inside the token's own section, because two
+ * sections both have an `overlay`.
+ */
+const legends = (() => {
+  const out = new Map<string, Map<string, string>>()
+  let group = ''
+  let entry: { key: string; text: string[]; indent: number } | null = null
+  const close = () => {
+    if (!entry) return
+    const map = out.get(group) ?? new Map<string, string>()
+    map.set(entry.key, entry.text.join(' ').replace(/\s*\*\/\s*$/, ''))
+    out.set(group, map)
+    entry = null
+  }
+  for (const line of tokensCss.split('\n')) {
+    const heading = line.match(/\/\*\s*──\s*([^─]+?)\s*─/)
+    if (heading) {
+      close()
+      group = heading[1]!.replace(/:.*$/, '').trim()
+      continue
+    }
+    const start = /^\s*\*(\s+)(--[a-z0-9-]+|[a-z][a-z0-9-]*)\s{2,}(\S.*)$/.exec(line)
+    if (start) {
+      close()
+      entry = { key: start[2]!, text: [start[3]!.trim()], indent: start[1]!.length + start[2]!.length + 2 }
+      continue
+    }
+    const more = /^\s*\*(\s+)(\S.*)$/.exec(line)
+    if (entry && more && more[1]!.length >= entry.indent) entry.text.push(more[2]!.trim())
+    else close()
+  }
+  close()
+  return out
+})()
+
+function legend(name: string, group: string): string | undefined {
+  const map = legends.get(group)
+  if (!map) return undefined
+  if (map.has(name)) return map.get(name)
+  const hit = [...map.keys()].filter((k) => !k.startsWith('--') && name.endsWith(`-${k}`)).sort((a, b) => b.length - a.length)[0]
+  return hit ? map.get(hit) : undefined
+}
+
+function description(name: string): string | undefined {
+  const row = rows.get(name)
+  const parts: string[] = []
+  if (row) {
+    const note = row.note ?? legend(name, row.group)
+    parts.push(note ? `${row.group}: ${note.replace(/\.$/, '')}.` : `${row.group}.`)
+  }
+  else if (themeGroups.has(name)) {
+    const note = themeNotes.get(name)
+    parts.push(note ? `${themeGroups.get(name)!}: ${note}.` : `${themeGroups.get(name)!}.`)
+  }
+  const { on, under } = pairingsOf(name)
+  const direct = (list: typeof on, mine: 'fg' | 'bg') =>
+    list
+      .filter((p) => decls.has(p.token))
+      .map((p) => (mine === 'fg' ? measured(name, p.token, p.token, p.min, p.themes) : measured(p.token, name, p.token, p.min, p.themes)))
+  const reads = direct(on, 'fg')
+  const carries = direct(under, 'bg')
+  if (reads.length) parts.push(`Promised to read on ${reads.join('; ')}.`)
+  if (carries.length) parts.push(`Promised to carry ${carries.join('; ')}.`)
+  return parts.length ? parts.join(' ') : undefined
+}
+
+/** `{ $type, $value }`, with the token's description when it has one. */
+function described(name: string, t: Token): Token {
+  const d = description(name)
+  return d ? { ...t, $description: d } : t
+}
 
 const claimed = new Set<string>()
 const claim = (source: string, name: string) => claimed.add(`${source} ${name}`)
@@ -218,7 +337,7 @@ function shadow(raw: string, themeName: ThemeName) {
   return layers.length === 1 ? layers[0] : layers
 }
 
-const SHADOWS = new Set(['--cut', '--focus-ring', '--focus-ring-inset', '--elevation-raised'])
+const SHADOWS = new Set(['--cut', '--focus-ring', '--focus-ring-inset', '--elevation-raised', '--elevation-overlay'])
 
 /* ── groups ─────────────────────────────────────────────────────────── */
 
@@ -236,7 +355,7 @@ function colours(themeName: ThemeName): Group {
     const layer = resolveTranslucent(decls.get(name)!, themeName, decls)
     if (!layer) continue // reported as unclaimed below
     claim('tokens.css', name)
-    out[name.slice(2)] = { $type: 'color', $value: colorValue(layer), $extensions: figma(name) }
+    out[name.slice(2)] = described(name, { $type: 'color', $value: colorValue(layer), $extensions: figma(name) })
   }
   return out
 }
@@ -245,7 +364,7 @@ function shadows(themeName: ThemeName): Group {
   const out: Group = {}
   for (const name of SHADOWS) {
     claim('tokens.css', name)
-    out[name.slice(2)] = { $type: 'shadow', $value: shadow(decls.get(name)!, themeName) }
+    out[name.slice(2)] = described(name, { $type: 'shadow', $value: shadow(decls.get(name)!, themeName) })
   }
   return out
 }
@@ -255,9 +374,9 @@ function fromTheme(prefix: string, $type: string, make: (raw: string) => unknown
   const out: Group = {}
   if (describe) out.$description = describe
   for (const [name, raw] of theme) {
-    if (!name.startsWith(`--${prefix}-`) || name.endsWith('-*') || except.includes(name)) continue
+    if (!name.startsWith(`--${prefix}-`) || name.endsWith('-*') || name.includes('--', 2) || except.includes(name)) continue
     claim('theme.css', name)
-    out[name.slice(prefix.length + 3)] = { $type, $value: make(raw) }
+    out[name.slice(prefix.length + 3)] = described(name, { $type, $value: make(raw) })
   }
   return out
 }
@@ -277,7 +396,7 @@ function densities(): Group {
       const raw = overrides?.get(name) ?? comfortableValue(name)
       if (raw === undefined) throw new Error(`${name} has no comfortable value to fall back on`)
       if (overrides?.has(name)) claim(source, name)
-      out[name.slice(2)] = { $type: 'dimension', $value: dimension(raw) }
+      out[name.slice(2)] = described(name, { $type: 'dimension', $value: dimension(raw) })
     }
     return out
   }
@@ -298,7 +417,28 @@ function single(source: 'tokens.css' | 'theme.css', name: string, $type: string,
   const raw = source === 'tokens.css' ? decls.get(name) : theme.get(name)
   if (raw === undefined) throw new Error(`${source} declares no ${name}`)
   claim(source, name)
-  return { $type, $value: make(raw) }
+  return described(name, { $type, $value: make(raw) })
+}
+
+/** `1.5`, `calc(1.25 / 0.875)`: a unitless line height, evaluated. */
+function ratioValue(raw: string): number {
+  const v = raw.trim()
+  const m = /^calc\(\s*([\d.]+)\s*\/\s*([\d.]+)\s*\)$/.exec(v)
+  return round(m ? Number(m[1]) / Number(m[2]) : number(v))
+}
+
+/** The line height each `--text-*` size carries (`--text-sm--line-height`). */
+function lineHeights(): Group {
+  const out: Group = {
+    $description: 'The line height a bare text-* utility sets, as a multiple of its size. 2xs has none: the label register sets its own.',
+  }
+  for (const [name, raw] of theme) {
+    const m = /^--text-([a-z0-9]+)--line-height$/.exec(name)
+    if (!m) continue
+    claim('theme.css', name)
+    out[m[1]!] = { $type: 'number', $value: ratioValue(raw) }
+  }
+  return out
 }
 
 const doc = {
@@ -312,6 +452,7 @@ const doc = {
   },
   font: fromTheme('font', 'fontFamily', fontFamily),
   text: fromTheme('text', 'dimension', dimension, 'The comfortable type scale; density modes re-scale 2xs to xl.'),
+  'text-line-height': lineHeights(),
   leading: fromTheme('leading', 'number', number, 'Line height, as a multiple of the font size.'),
   tracking: fromTheme(
     'tracking',
@@ -330,6 +471,15 @@ const doc = {
   size: {
     'cut-w': single('tokens.css', '--cut-w', 'dimension', dimension),
     'cut-reveal': single('tokens.css', '--cut-reveal', 'dimension', dimension),
+    'rule-w': single('tokens.css', '--rule-w', 'dimension', dimension),
+    'bar-w': single('tokens.css', '--bar-w', 'dimension', dimension),
+    'focus-gap': single('tokens.css', '--focus-gap', 'dimension', dimension),
+  },
+  z: {
+    $description: 'The stacking order (z-index), lowest first. Written z-(--z-popover).',
+    ...Object.fromEntries(
+      [...decls.keys()].filter((n) => n.startsWith('--z-')).map((n) => [n.slice(4), single('tokens.css', n, 'number', number)]),
+    ),
   },
   motion: {
     'cut': single('tokens.css', '--motion-cut', 'duration', duration),

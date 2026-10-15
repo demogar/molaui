@@ -177,7 +177,7 @@ export function ToolbarInput({ icon, className, wrapperClassName, ...props }: To
   return (
     <span className={cn('relative flex min-w-0 items-center', wrapperClassName)}>
       {icon !== false ? (
-        <span aria-hidden className="pointer-events-none absolute inset-s-2 grid text-ink-muted [&_svg]:size-3.5">
+        <span aria-hidden className="pointer-events-none absolute inset-s-2 grid text-ink-muted [&_svg]:size-(--icon-sm)">
           {icon ?? <Search />}
         </span>
       ) : null}

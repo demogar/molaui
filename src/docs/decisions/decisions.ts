@@ -94,6 +94,15 @@ const NOTES: Record<string, Notes> = {
       'Foundations/Motion': 'A bare transition runs on --motion-cut and the cut curve, not on Tailwind’s 150ms default.',
     },
   },
+  '0008': {
+    name: 'The rojo register',
+    decided:
+      'On a product screen rojo means danger and nothing else, used through the danger role. The editorial accent is gold or ink; rojo stays editorial in Prose.',
+    governs: {
+      'Foundations/Color': 'Rojo is danger on a product screen, through the danger role; the accent is gold, by name.',
+      'Foundations/The cut': 'A red seam is band-danger: rojo is only ever danger on a product screen.',
+    },
+  },
 }
 
 export interface Decision extends Notes {

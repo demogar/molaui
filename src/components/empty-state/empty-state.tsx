@@ -22,7 +22,7 @@ import { type Variants } from '../../lib/variants'
  *
  *   empty          nothing exists yet — the action creates the first one
  *   no-results     things exist, the filter hides them — the action clears it
- *   error          the panel could not load — the action retries; rojo seam
+ *   error          the panel could not load — the action retries; danger seam
  *   no-permission  it exists and is not yours to see — say who can grant it
  *
  * The icon is a small ink square-cut glyph, not an illustration. An
@@ -36,7 +36,7 @@ export const emptyStateVariants = cva(
       variant: {
         empty: 'band-cloth',
         'no-results': 'band-cloth',
-        error: 'band-rojo',
+        error: 'band-danger',
         'no-permission': 'band-oro',
       },
       size: {
@@ -97,7 +97,7 @@ export function EmptyState({
       ) : null}
       <div data-part="plate" className="flex max-w-sm flex-col items-center bg-cloth-pale px-6 py-5 text-center shadow-cut">
         {icon !== false ? (
-          <span aria-hidden data-part="icon" className="mb-3 grid size-9 place-items-center bg-ink text-on-ink [&_svg]:size-[18px]">
+          <span aria-hidden data-part="icon" className="mb-3 grid size-9 place-items-center bg-ink text-on-ink [&_svg]:size-(--icon-lg)">
             {icon ?? <Icon strokeWidth={2} />}
           </span>
         ) : null}

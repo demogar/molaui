@@ -68,7 +68,7 @@ export function Tooltip({
     <TooltipPrimitive.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
       <TooltipPrimitive.Trigger delay={delay} render={children} />
       <TooltipPrimitive.Portal>
-        <TooltipPrimitive.Positioner side={side} align={align} sideOffset={6} className="z-50">
+        <TooltipPrimitive.Positioner side={side} align={align} sideOffset={6} className="z-(--z-popover)">
           <TooltipPrimitive.Popup
             data-slot="tooltip"
             className={cn(
@@ -91,7 +91,7 @@ export function Tooltip({
                 {shortcut.map((key, i) => (
                   <kbd
                     key={i}
-                    className="inline-grid h-[18px] min-w-[18px] place-items-center px-1 font-ui text-2xs font-semibold text-on-ink-muted shadow-[0_0_0_1px_var(--keyline-on-ink)]"
+                    className="inline-grid h-[18px] min-w-[18px] place-items-center px-1 font-ui text-2xs font-semibold text-on-ink-muted rule-ring"
                   >
                     {key}
                   </kbd>

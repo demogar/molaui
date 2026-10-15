@@ -20,9 +20,9 @@ import { cn } from '../../lib/cn'
 export const headingVariants = cva('m-0 font-display wdth-display', {
   variants: {
     size: {
-      1: 'text-2xl font-bold leading-[1.1] tracking-display',
-      2: 'text-xl font-bold leading-[1.15] tracking-[-0.015em]',
-      3: 'text-lg font-semibold leading-snug tracking-[-0.01em]',
+      1: 'text-2xl font-bold leading-heading tracking-display',
+      2: 'text-xl font-bold leading-heading tracking-heading',
+      3: 'text-lg font-semibold leading-snug tracking-heading',
       4: 'text-base font-semibold leading-snug',
     },
   },

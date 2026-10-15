@@ -35,7 +35,7 @@ export const buttonVariants = cva(
     'rounded-none [--cut-reveal:3px] select-none',
     'font-ui font-semibold uppercase leading-none tracking-label wdth-label',
     'transition-[background-color,box-shadow,color]',
-    'focus-visible:shadow-[var(--focus-ring)]',
+    'focus-visible:focus-ring',
     '[&_svg]:pointer-events-none [&_svg]:shrink-0',
     // Not `opacity-50`: fading a cut shape fades its keyline with it, and its
     // label lands near 2:1 — which axe never reports, because disabled
@@ -46,18 +46,18 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         primary: [
-          'bg-ink text-on-ink band-oro shadow-cut',
+          'bg-ink text-on-ink band-accent shadow-cut',
           'hover:cut-band',
           'data-disabled:shadow-cut',
         ],
         secondary: [
-          'bg-cloth-pale text-ink band-oro shadow-cut',
+          'bg-cloth-pale text-ink band-accent shadow-cut',
           'hover:cut-band',
           'data-disabled:shadow-cut',
         ],
         danger: [
-          'bg-rojo text-on-layer band-rojo shadow-cut',
-          'hover:bg-rojo-deep hover:cut-band',
+          'bg-danger text-on-layer band-danger shadow-cut',
+          'hover:bg-danger-strong hover:cut-band',
           'data-disabled:shadow-cut',
         ],
         // Ghost has no keyline to keep, so disabled leaves the ground alone and
@@ -69,9 +69,9 @@ export const buttonVariants = cva(
         ],
       },
       size: {
-        sm: 'h-(--control-h-sm) px-[calc(var(--control-px)*0.75)] text-2xs [&_svg]:size-3.5',
-        md: 'h-(--control-h) px-(--control-px) text-xs [&_svg]:size-4',
-        lg: 'h-(--control-h-lg) px-[calc(var(--control-px)*1.4)] text-sm [&_svg]:size-4',
+        sm: 'h-(--control-h-sm) px-[calc(var(--control-px)*0.75)] text-2xs [&_svg]:size-(--icon-sm)',
+        md: 'h-(--control-h) px-(--control-px) text-xs [&_svg]:size-(--icon)',
+        lg: 'h-(--control-h-lg) px-[calc(var(--control-px)*1.4)] text-sm [&_svg]:size-(--icon)',
       },
     },
     defaultVariants: { variant: 'primary', size: 'md' },
@@ -124,7 +124,7 @@ export function Button({
       {children}
       {withArrow ? <ButtonArrow /> : null}
       {loading ? (
-        <span aria-hidden className="absolute inset-x-0 bottom-0 h-[3px] band-oro relleno-working" />
+        <span aria-hidden className="absolute inset-x-0 bottom-0 h-(--bar-w) band-accent relleno-working" />
       ) : null}
     </ButtonPrimitive>
   )
@@ -135,7 +135,7 @@ export function ButtonArrow() {
   return (
     <ArrowRight
       aria-hidden
-      className="transition-transform group-hover/button:translate-x-[3px] rtl:-scale-x-100 rtl:group-hover/button:-translate-x-[3px]"
+      className="transition-transform group-hover/button:translate-x-[3px] flip-rtl rtl:group-hover/button:-translate-x-[3px]"
     />
   )
 }

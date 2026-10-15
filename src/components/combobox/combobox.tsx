@@ -94,7 +94,7 @@ const popupClasses = [
 // them out of the order): the keyboard opens the list with ArrowDown and
 // clears with Backspace, so the buttons are for the pointer.
 const endButtonClasses =
-  'grid size-6 shrink-0 place-items-center text-ink-muted transition-colors hover:bg-ink-soft hover:text-ink data-disabled:pointer-events-none [&_svg]:size-4'
+  'grid size-6 shrink-0 place-items-center text-ink-muted transition-colors hover:bg-ink-soft hover:text-ink data-disabled:pointer-events-none [&_svg]:size-(--icon)'
 
 const statusRowClasses = 'flex items-center gap-2.5 px-2 py-2 text-sm text-ink-muted'
 
@@ -107,7 +107,7 @@ function StatusLine({ loading, status, empty }: { loading?: boolean; status?: Re
         {loading ? (
           <div className={statusRowClasses}>
             <span aria-hidden className="relative h-2 w-6 shrink-0 overflow-hidden bg-cloth-shade shadow-cut">
-              <span className="absolute inset-0 band-oro relleno-working" />
+              <span className="absolute inset-0 band-accent relleno-working" />
             </span>
             Searching…
           </div>
@@ -135,7 +135,7 @@ function OptionRow({ option }: { option: ComboboxOption }) {
       data-slot="combobox-item"
       className={cn(optionClasses)}
     >
-      <ComboboxPrimitive.ItemIndicator className="col-start-1 flex [&_svg]:size-3.5">
+      <ComboboxPrimitive.ItemIndicator className="col-start-1 flex [&_svg]:size-(--icon-sm)">
         <Check aria-hidden strokeWidth={2.5} />
       </ComboboxPrimitive.ItemIndicator>
       <span className="col-start-2 min-w-0">
@@ -282,8 +282,8 @@ export function Combobox(props: ComboboxProps) {
     fieldControlClasses,
     fieldControlSizes[size],
     'flex items-center gap-1 cursor-text pe-1.5',
-    'focus-within:shadow-[var(--focus-ring)] focus-within:hover:shadow-[var(--focus-ring)]',
-    'has-[[aria-invalid=true]]:band-rojo has-[[aria-invalid=true]]:cut-band',
+    'focus-within:focus-ring focus-within:hover:focus-ring',
+    'has-[[aria-invalid=true]]:band-danger has-[[aria-invalid=true]]:cut-band',
     'has-[[aria-invalid=true]]:focus-within:cut-band-focus',
     'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
     label ? undefined : className,
@@ -433,7 +433,7 @@ export function Combobox(props: ComboboxProps) {
         field
       )}
       <ComboboxPrimitive.Portal>
-        <ComboboxPrimitive.Positioner sideOffset={6} className="z-50 outline-none">
+        <ComboboxPrimitive.Positioner sideOffset={6} className="z-(--z-popover) outline-none">
           <ComboboxPrimitive.Popup
             data-slot="combobox-content"
             aria-busy={loading || undefined}
@@ -545,7 +545,7 @@ export function Autocomplete({
         input
       )}
       <AutocompletePrimitive.Portal>
-        <AutocompletePrimitive.Positioner sideOffset={6} className="z-50 outline-none">
+        <AutocompletePrimitive.Positioner sideOffset={6} className="z-(--z-popover) outline-none">
           <AutocompletePrimitive.Popup
             data-slot="autocomplete-content"
             aria-busy={loading || undefined}

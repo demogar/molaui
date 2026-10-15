@@ -46,7 +46,7 @@ const itemClasses = [
   // highlighted: --ink-muted on the ink fill measures 2.99:1. Named here, the
   // pair is inverse muted ink (8.36 / 6.56) instead of a variant-order guess.
   'data-disabled:data-highlighted:text-on-ink-muted',
-  '[&_svg]:size-4 [&_svg]:shrink-0',
+  '[&_svg]:size-(--icon) [&_svg]:shrink-0',
 ]
 
 export interface MenuContentProps extends Omit<MenuPrimitive.Popup.Props, 'className'> {
@@ -72,7 +72,7 @@ export function MenuContent({
         align={align}
         sideOffset={sideOffset}
         alignOffset={alignOffset}
-        className="z-50 outline-none"
+        className="z-(--z-popover) outline-none"
       >
         <MenuPrimitive.Popup
           data-slot="menu"
@@ -89,7 +89,7 @@ export function MenuShortcut({ className, ...props }: React.ComponentProps<'span
   return (
     <span
       className={cn(
-        'ms-auto ps-4 font-ui text-xs tabular-nums tracking-[0.04em] text-ink-muted group-data-highlighted/item:text-on-ink-muted',
+        'ms-auto ps-4 font-ui text-xs tabular-nums tracking-figures text-ink-muted group-data-highlighted/item:text-on-ink-muted',
         className,
       )}
       {...props}
@@ -112,7 +112,7 @@ export function MenuItem({ className, icon, shortcut, tone = 'default', children
       data-slot="menu-item"
       className={cn(
         itemClasses,
-        tone === 'danger' && 'text-ink-danger data-highlighted:bg-rojo data-highlighted:text-on-layer',
+        tone === 'danger' && 'text-ink-danger data-highlighted:bg-danger data-highlighted:text-on-layer',
         className,
       )}
       {...props}
@@ -148,7 +148,7 @@ export function MenuCheckboxItem({ className, shortcut, children, closeOnClick =
     >
       <span aria-hidden className="grid size-4 shrink-0 place-items-center">
         <MenuPrimitive.CheckboxItemIndicator>
-          <Check className="size-3.5!" strokeWidth={2.5} />
+          <Check className="size-(--icon-sm)!" strokeWidth={2.5} />
         </MenuPrimitive.CheckboxItemIndicator>
       </span>
       <span className="min-w-0 flex-1 truncate">{children}</span>
@@ -171,7 +171,7 @@ export function MenuRadioItem({ className, children, closeOnClick = false, ...pr
       {...props}
     >
       <span aria-hidden className="grid size-4 shrink-0 place-items-center">
-        <span className="size-2.5 shadow-[0_0_0_1.5px_currentColor]">
+        <span className="size-2.5 cut-current">
           <MenuPrimitive.RadioItemIndicator className="block size-full bg-current" />
         </span>
       </span>
@@ -211,7 +211,7 @@ export function MenuSubmenuTrigger({ className, icon, children, ...props }: Menu
         </span>
       ) : null}
       <span className="min-w-0 flex-1 truncate">{children}</span>
-      <ChevronRight aria-hidden className="-me-1 ms-auto text-ink-muted rtl:-scale-x-100 group-data-highlighted/item:text-on-ink-muted" />
+      <ChevronRight aria-hidden className="-me-1 ms-auto text-ink-muted flip-rtl group-data-highlighted/item:text-on-ink-muted" />
     </MenuPrimitive.SubmenuTrigger>
   )
 }

@@ -77,7 +77,7 @@ export function RunStatusGlyph({
     case 'queued':
       return <span aria-hidden data-part="glyph" data-status={status} className={cn(base, 'bg-cloth-pale', className)} />
     case 'running':
-      return <span aria-hidden data-part="glyph" data-status={status} className={cn(base, 'band-oro relleno-working', className)} />
+      return <span aria-hidden data-part="glyph" data-status={status} className={cn(base, 'band-accent relleno-working', className)} />
     case 'streaming':
       return <span aria-hidden data-part="glyph" data-status={status} className={cn(base, 'band-anil relleno-working', className)} />
     case 'waiting':
@@ -93,7 +93,7 @@ export function RunStatusGlyph({
       return <span aria-hidden data-part="glyph" data-status={status} className={cn(base, 'bg-verde', className)} />
     case 'failed':
       return (
-        <span aria-hidden data-part="glyph" data-status={status} className={cn(base, 'bg-rojo text-on-layer', className)}>
+        <span aria-hidden data-part="glyph" data-status={status} className={cn(base, 'bg-danger text-on-layer', className)}>
           <svg viewBox="0 0 10 10" className="absolute inset-0 size-full">
             <path d="M2.5 2.5l5 5M7.5 2.5l-5 5" stroke="currentColor" strokeWidth="1.6" />
           </svg>
@@ -113,7 +113,7 @@ export function RunStatusGlyph({
           aria-hidden
           data-part="glyph"
           data-status={status}
-          className={cn(base, 'bg-cloth-pale', 'after:absolute after:inset-x-0 after:bottom-0 after:h-[30%] after:bg-rojo', className)}
+          className={cn(base, 'bg-cloth-pale', 'after:absolute after:inset-x-0 after:bottom-0 after:h-[30%] after:bg-danger', className)}
         />
       )
   }

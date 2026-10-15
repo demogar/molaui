@@ -55,16 +55,16 @@ export function Reasoning({
       >
         <Plus
           aria-hidden
-          className="size-3.5 shrink-0 transition-transform duration-(--motion-base) group-data-[panel-open]/trigger:rotate-45"
+          className="size-(--icon-sm) shrink-0 transition-transform duration-(--motion-base) group-data-[panel-open]/trigger:rotate-45"
         />
-        {thinking ? <span aria-hidden className="inline-block h-[9px] w-5 band-oro relleno-working shadow-cut" /> : null}
+        {thinking ? <span aria-hidden className="inline-block h-[9px] w-5 band-accent relleno-working shadow-cut" /> : null}
         <span>
           {summary}
           {thinking && ms !== undefined ? <span className="tabular"> · {formatDuration(ms)}</span> : null}
         </span>
       </Collapsible.Trigger>
       <Collapsible.Panel className="overflow-hidden">
-        <div className="mt-2 border-s-[3px] border-keyline ps-4">
+        <div className="mt-2 border-s-(length:--bar-w) border-keyline ps-4">
           <StreamingText
             text={text}
             status={thinking ? 'streaming' : 'done'}

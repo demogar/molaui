@@ -43,17 +43,21 @@
   }
 
   ::selection {
-    background-color: var(--oro);
-    color: var(--on-oro);
+    background-color: var(--accent);
+    color: var(--on-accent);
   }
 
+  /* Ink, not rojo. These were the editorial site's rojo, and on a product
+   * screen they put the danger colour in every text field's caret and every
+   * list's bullets (docs/adr/0008-the-rojo-register.md). Prose, the editorial
+   * register, sets its own rojo markers. */
   :root {
-    accent-color: var(--rojo);
-    caret-color: var(--rojo);
+    accent-color: var(--ink);
+    caret-color: var(--ink);
   }
 
   ::marker {
-    color: var(--rojo);
+    color: var(--ink-muted);
   }
 
   a {

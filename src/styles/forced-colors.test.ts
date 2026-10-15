@@ -18,12 +18,14 @@ import { describe, expect, it } from 'vitest'
 const EXEMPT: Record<string, string> = {
   'relleno-field': 'a faint texture under content; full-strength CanvasText stripes would compete with the words',
   'cut-band-focus': 'only ever added to a field that already has a cut, whose forced outline stays',
+  'focus-ring': 'focus is drawn by the base layer under forced colours: an important outline on every :focus-visible',
+  'focus-ring-inset': 'as focus-ring',
 }
 
 const css = readFileSync(resolve(import.meta.dirname, 'cloth.css'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '')
 
 function utilities(): { name: string; body: string }[] {
-  return [...css.matchAll(/@utility ([\w-]+) \{/g)].map((m) => {
+  return [...css.matchAll(/@utility ([\w-]+\*?) \{/g)].map((m) => {
     let depth = 0
     let i = m.index + m[0].length - 1
     for (; i < css.length; i++) {

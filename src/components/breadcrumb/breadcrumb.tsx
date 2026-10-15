@@ -40,7 +40,7 @@ export interface BreadcrumbProps extends Omit<React.ComponentProps<'nav'>, 'chil
 }
 
 const linkClasses =
-  'text-ink-2 no-underline decoration-ink-muted hover:text-ink hover:underline focus-visible:shadow-[var(--focus-ring)] focus-visible:outline-none'
+  'text-ink-2 no-underline decoration-ink-muted hover:text-ink hover:underline focus-visible:focus-ring focus-visible:outline-none'
 
 export function Breadcrumb({ items, renderLink, className, ...props }: BreadcrumbProps) {
   return (

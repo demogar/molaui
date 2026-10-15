@@ -37,8 +37,19 @@ const styles = resolve(root, 'src/styles')
 const theme = readFileSync(resolve(styles, 'theme.css'), 'utf8')
 const COLORS = [...theme.matchAll(/--color-([a-z0-9-]+):/g)].map((m) => m[1]!)
 
-/** `cn()` before merge.ts, exactly. */
-const reference = extendTailwindMerge({
+/** The edge slots of cloth.css, one group per side; an edge and a shadow replace each other. */
+const EDGES = {
+  'edge-focus': ['focus-ring', 'focus-ring-inset'],
+  'edge-ring': [{ cut: [...COLORS, 'current', 'thin', 'tab', 'gap'] }, 'rule-ring', 'keycap'],
+  'edge-s': [{ 'bar-start': COLORS }, 'rule-s', 'rule-s-soft', 'cut-s'],
+  'edge-e': ['rule-e', 'rule-e-soft', 'cut-e'],
+  'edge-t': ['rule-t', 'rule-t-soft', 'cut-t'],
+  'edge-b': [{ 'bar-bottom': COLORS }, 'rule-b', 'rule-b-soft', 'cut-b'],
+}
+const EDGE_IDS = Object.keys(EDGES) as (keyof typeof EDGES)[]
+
+/** `cn()` as tailwind-merge would configure it: before merge.ts, plus Mola's own utilities. */
+const reference = extendTailwindMerge<keyof typeof EDGES | 'band' | 'panel' | 'relleno' | 'diente' | 'wdth' | 'forced-role'>({
   extend: {
     classGroups: {
       'font-size': [{ text: ['2xs', '5xl'] }],
@@ -50,11 +61,23 @@ const reference = extendTailwindMerge({
       fill: [{ fill: COLORS }],
       stroke: [{ stroke: COLORS }],
       'font-family': [{ font: ['display', 'ui', 'text', 'mono'] }, 'literal'],
-      leading: [{ leading: ['body', 'snug', 'tight'] }],
-      tracking: [{ tracking: ['display', 'label'] }],
-      shadow: [{ shadow: ['cut', 'raised', 'floating'] }],
+      'fvn-spacing': ['tabular'],
+      leading: [{ leading: ['reading', 'body', 'snug', 'heading', 'tight'] }],
+      tracking: [{ tracking: ['display', 'heading', 'label', 'figures', 'normal'] }],
+      shadow: [{ shadow: ['cut', 'raised', 'floating', 'overlay'] }, 'cut', 'cut-band', 'cut-band-focus'],
       ease: [{ ease: ['cut'] }],
       'max-w': [{ 'max-w': ['page', 'wide', 'reading'] }],
+      ...EDGES,
+      band: [{ band: ['oro', 'rojo', 'anil', 'verde', 'ink', 'cloth', 'accent', 'danger'] }],
+      panel: ['on-ink', 'on-layer'],
+      relleno: ['relleno', 'relleno-field', 'relleno-working'],
+      diente: ['diente', 'diente-up'],
+      wdth: ['wdth-display', 'wdth-label'],
+      'forced-role': ['forced-ink', 'forced-selected', 'forced-on-selected'],
+    },
+    conflictingClassGroups: {
+      shadow: EDGE_IDS,
+      ...Object.fromEntries(EDGE_IDS.map((id) => [id, ['shadow' as const]])),
     },
   },
 })
@@ -82,6 +105,7 @@ const FORMS = [
   'hover:p-2', 'focus:hover:p-3', 'hover:focus:p-4', 'md:hover:p-1', 'before:hover:p-1', 'hover:before:p-1',
   '[&>*]:p-1', '[&>*]:hover:p-2', 'hover:[&>*]:p-3', 'group-hover/item:p-2', 'dark:md:text-sm', 'md:dark:text-xs',
   'data-[x]:p-2', 'cut', 'relleno', 'rotulo', 'forced-ink', 'not-a-utility',
+  'cut-band', 'cut-ink', 'cut-t', 'rule-b', 'bar-start-danger', 'bar-bottom-accent', 'focus-ring', 'band-accent', 'on-layer', 'wdth-label', 'tabular',
 ]
 
 let compiled: (candidates: string[]) => (string | null)[]
@@ -181,7 +205,7 @@ describe('merge agrees with tailwind-merge', () => {
 
 describe('merge', () => {
   it('keeps what is not a utility, in place', () => {
-    expect(merge('cut p-2 relleno p-4 cut')).toBe('cut relleno p-4 cut')
+    expect(merge('rotulo p-2 group p-4 rotulo')).toBe('rotulo group p-4 rotulo')
   })
 
   it('scopes a group by its variants, in any order, and by !', () => {

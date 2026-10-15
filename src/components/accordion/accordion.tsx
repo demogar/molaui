@@ -40,7 +40,7 @@ export function Accordion({ className, ...props }: AccordionProps) {
   return (
     <AccordionPrimitive.Root
       data-slot="accordion"
-      className={cn('shadow-[inset_0_1.5px_0_var(--ink),inset_0_-1.5px_0_var(--ink)]', className)}
+      className={cn('cut-t cut-b', className)}
       {...props}
     />
   )
@@ -64,12 +64,12 @@ const triggerClasses = [
   'group/trigger flex w-full cursor-pointer items-center gap-3 px-2 py-3.5 text-start outline-none',
   'font-ui text-base font-semibold text-ink',
   'transition-colors hover:bg-ink-soft',
-  'focus-visible:shadow-[var(--focus-ring)]',
+  'focus-visible:focus-ring',
   'data-disabled:cursor-default data-disabled:text-ink-muted data-disabled:hover:bg-transparent',
 ]
 
 const markerClasses =
-  'ms-auto size-4 shrink-0 text-ink-2 transition-transform duration-(--motion-base) group-data-panel-open/trigger:rotate-45'
+  'ms-auto size-(--icon) shrink-0 text-ink-2 transition-transform duration-(--motion-base) group-data-panel-open/trigger:rotate-45'
 
 export interface AccordionTriggerProps extends Omit<AccordionPrimitive.Trigger.Props, 'className'> {
   className?: string
@@ -129,14 +129,14 @@ export function CollapsibleTrigger({ className, children, ...props }: Collapsibl
       className={cn(
         'group/trigger -mx-1.5 inline-flex cursor-pointer items-center gap-1.5 px-1.5 py-1 font-ui text-sm font-semibold text-ink outline-none',
         'transition-colors hover:bg-ink-soft',
-        'focus-visible:shadow-[var(--focus-ring)]',
+        'focus-visible:focus-ring',
         className,
       )}
       {...props}
     >
       <Plus
         aria-hidden
-        className="size-3.5 shrink-0 text-ink-2 transition-transform duration-(--motion-base) group-data-panel-open/trigger:rotate-45"
+        className="size-(--icon-sm) shrink-0 text-ink-2 transition-transform duration-(--motion-base) group-data-panel-open/trigger:rotate-45"
       />
       {children}
     </CollapsiblePrimitive.Trigger>

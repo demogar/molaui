@@ -81,14 +81,14 @@ export function SearchInput({
             type="button"
             aria-label={clearLabel}
             onClick={clear}
-            className="-me-1 grid size-6 place-items-center text-ink-muted transition-colors hover:bg-ink-soft hover:text-ink [&_svg]:size-3.5"
+            className="-me-1 grid size-6 place-items-center text-ink-muted transition-colors hover:bg-ink-soft hover:text-ink [&_svg]:size-(--icon-sm)"
           >
             <X aria-hidden />
           </button>
         ) : shortcut ? (
           <kbd
             aria-hidden
-            className="inline-flex h-5 min-w-5 items-center justify-center px-1.5 font-ui text-2xs font-semibold text-ink-2 bg-cloth-shade shadow-[0_0_0_1px_var(--keyline)] wdth-label"
+            className="inline-flex h-5 min-w-5 items-center justify-center px-1.5 font-ui text-2xs font-semibold text-ink-2 bg-cloth-shade rule-ring wdth-label"
           >
             {shortcut}
           </kbd>

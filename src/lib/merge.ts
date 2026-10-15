@@ -30,6 +30,14 @@
  * is left alone: such a class is kept, as it would be if it were not a
  * utility, and two of them passed together both survive.
  *
+ * Mola's own utilities (cloth.css) are at the end of the table, each in the
+ * group of what it sets: `cn('band-oro', 'band-danger')`, `cn('cut',
+ * 'cut-band')` and `cn('on-ink', 'on-layer')` used to keep both classes and
+ * leave the winner to the order of the stylesheet. The edge utilities are one
+ * group per side, a slot each (see "edges" in cloth.css): `cut-t cut-b` adds
+ * up, `rule-b cut-b` keeps the second, and since every edge writes the whole
+ * `box-shadow`, an edge and a `shadow-*` replace each other.
+ *
  * None of this is held by the comment. `merge.test.ts` keeps tailwind-merge as
  * a dev dependency, configured as `cn()` configured it, and on every pair of
  * utilities the source writes, and on one of every shape Tailwind compiles
@@ -167,11 +175,11 @@ font>font-family: (family-name) [family-name] W
 =fvn-ordinal: ordinal
 =fvn-slashed-zero: slashed-zero
 =fvn-figure: lining-nums oldstyle-nums
-=fvn-spacing: proportional-nums tabular-nums
+=fvn-spacing: proportional-nums tabular-nums tabular
 =fvn-fraction: diagonal-fractions stacked-fractions
-tracking: tighter|tight|normal|wide|wider|widest|display|label V A
+tracking: tighter|tight|normal|wide|wider|widest|display|heading|label|figures V A
 line-clamp: N none V [number]N
-leading: none|tight|snug|normal|relaxed|loose|body ${SPACE}
+leading: none|tight|snug|normal|relaxed|loose|reading|body|heading ${SPACE}
 list>list-style-type: disc|decimal|none V A
 text>text-alignment: left|center|right|justify|start|end
 text>text-color: *
@@ -220,7 +228,7 @@ outline>outline-style: ${STYLE}
 outline-offset: ${NUM}
 outline>outline-w: ${BORDER_W}
 outline>outline-color: *
-shadow: |inner|none|cut|raised|floating T (shadow)* [shadow]S
+shadow: |inner|none|cut|raised|floating|overlay T (shadow)* [shadow]S
 shadow>shadow-color: *
 ring>ring-w: ${BORDER_W}
 ring>ring-w-inset: inset
@@ -254,6 +262,22 @@ fill: none *
 stroke>stroke-w: N (length) [length]L [number]N
 stroke: none *
 forced-color-adjust: auto|none
+=shadow: cut cut-band cut-band-focus
+band: oro|rojo|anil|verde|ink|cloth|accent|danger
+=panel: on-ink on-layer
+=relleno: relleno relleno-field relleno-working
+=diente: diente diente-up
+=wdth: wdth-display wdth-label
+=forced-role: forced-ink forced-selected forced-on-selected
+=edge-focus: focus-ring focus-ring-inset
+=edge-ring: cut-current cut-thin cut-tab cut-gap rule-ring keycap
+cut>edge-ring: *
+=edge-s: rule-s rule-s-soft cut-s
+bar-start>edge-s: *
+=edge-e: rule-e rule-e-soft cut-e
+=edge-t: rule-t rule-t-soft cut-t
+=edge-b: rule-b rule-b-soft cut-b
+bar-bottom>edge-b: *
 `
 
 /** Utilities that are one word, or a fixed phrase. */
@@ -305,7 +329,9 @@ rounded-e: rounded-se rounded-ee
 rounded-t: rounded-tl rounded-tr
 rounded-r: rounded-tr rounded-br
 rounded-b: rounded-br rounded-bl
-rounded-l: rounded-tl rounded-bl`.split('\n')) {
+rounded-l: rounded-tl rounded-bl
+shadow: edge-focus edge-ring edge-s edge-e edge-t edge-b
+edge-focus edge-ring edge-s edge-e edge-t edge-b: shadow`.split('\n')) {
   const [ids, others] = line.split(': ') as [string, string]
   for (const id of ids.split(' ')) CONFLICTS[id] = others.split(' ')
 }

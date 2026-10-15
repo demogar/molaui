@@ -48,10 +48,10 @@ other. In the dark theme they are lifted until they carry text on the dark groun
 
 <SwatchGrid
   swatches={[
-    { token: '--rojo', role: 'Danger, destructive actions, the brand mark.' },
+    { token: '--rojo', role: 'Danger, through the danger role, on a product screen. The editorial accent in Prose.' },
     { token: '--anil', role: 'Information, links in tools, selection.' },
     { token: '--verde', role: 'Success, healthy, approved.' },
-    { token: '--oro', role: 'The revealed band. A field and a mark — never text on light cloth.' },
+    { token: '--oro', role: 'The accent: the revealed band. A field and a mark — never text on light cloth.' },
   ]}
 />
 
@@ -71,6 +71,27 @@ ink ramp stays legal on every wash**.
   ]}
 />
 
+## Roles: danger, accent, selection
+
+A layer says what a thing is made of; a role says what it means. Components use the role, so the
+meaning is in the code and an app can re-dye a role without repainting a layer. **On a product
+screen rojo is used only through the danger role**: a red rótulo band, list marker or agent name
+beside a red FAILED mark made the failure one red thing among several
+([ADR 0008](?path=/docs/decisions-0008-the-rojo-register--overview)). The
+editorial accent (rojo links and list markers in `Prose`) is the one exception, and a test holds
+the components to it.
+
+<SwatchGrid
+  swatches={[
+    { token: '--danger', role: 'A failed or destructive thing: a status mark, a bar, the danger button’s fill.' },
+    { token: '--danger-strong', role: 'The danger button, pressed.' },
+    { token: '--danger-soft', role: 'A region that belongs to a failure: an error callout, a failed tool call.', on: '--ink-muted' },
+    { token: '--accent', role: 'The band a control reveals, the working texture, selected text.' },
+    { token: '--accent-soft', role: 'A region that belongs to the accent.', on: '--ink-muted' },
+    { token: '--selected', role: 'An item chosen for an action: a selected row, the bulk-action bar.', on: '--ink-muted' },
+  ]}
+/>
+
 ## Pairings that ship
 
 Real text on real grounds, in both themes. 4.5 is the bar for text, 3 for a UI boundary.
@@ -82,7 +103,10 @@ Real text on real grounds, in both themes. 4.5 is the bar for text, 3 for a UI b
     ['--ink-muted', '--oro-soft'],
     ['--rojo', '--cloth'],
     ['--warn', '--cloth'],
-    ['--on-layer', '--rojo'],
+    ['--on-layer', '--danger'],
+    ['--ink-danger', '--danger-soft'],
+    ['--on-accent', '--accent'],
+    ['--ink-muted', '--selected'],
     ['--on-layer', '--anil'],
     ['--on-layer', '--verde'],
     ['--on-oro', '--oro'],

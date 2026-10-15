@@ -39,9 +39,9 @@ import { fieldControlClasses, fieldControlSizes } from '../field/field-control'
 
 const dialogPopupVariants = cva(
   [
-    'fixed top-1/2 left-1/2 z-50 flex max-h-[calc(100dvh-2rem)] w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col',
+    'fixed top-1/2 left-1/2 z-(--z-overlay) flex max-h-[calc(100dvh-2rem)] w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col',
     'bg-cloth-pale text-ink rounded-none outline-none',
-    'shadow-floating',
+    'shadow-overlay',
     'transition-[opacity,translate,scale] duration-(--motion-base)',
     'data-starting-style:opacity-0 data-starting-style:scale-[0.98] data-starting-style:translate-y-[calc(-50%+6px)]',
     'data-ending-style:opacity-0 data-ending-style:scale-[0.98] data-ending-style:duration-(--motion-cut)',
@@ -59,7 +59,7 @@ const dialogPopupVariants = cva(
 )
 
 const backdropClasses = [
-  'fixed inset-0 z-50 bg-backdrop',
+  'fixed inset-0 z-(--z-overlay) bg-backdrop',
   'transition-opacity duration-(--motion-base)',
   'data-starting-style:opacity-0 data-ending-style:opacity-0',
 ]
@@ -326,7 +326,7 @@ export function AlertDialog({
                   role="alert"
                   className="m-0 flex items-start gap-2 text-sm leading-snug font-medium text-ink-danger"
                 >
-                  <span aria-hidden className="mt-[0.4em] size-2 shrink-0 bg-rojo shadow-cut" />
+                  <span aria-hidden className="mt-[0.4em] size-2 shrink-0 bg-danger shadow-cut" />
                   <span>{error}</span>
                 </p>
               ) : null
@@ -374,7 +374,7 @@ export function AlertDialog({
                     fieldControlClasses,
                     fieldControlSizes.md,
                     'literal',
-                    tone === 'danger' ? 'band-rojo' : 'band-oro',
+                    tone === 'danger' ? 'band-danger' : 'band-accent',
                   )}
                 />
               </form>

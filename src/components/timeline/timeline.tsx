@@ -37,10 +37,10 @@ export interface TimelineItem {
 const NODE: Record<TimelineTone, string> = {
   neutral: 'bg-cloth-pale shadow-cut',
   success: 'bg-verde',
-  danger: 'bg-rojo',
-  warn: 'bg-oro shadow-[0_0_0_1px_var(--ink)]',
+  danger: 'bg-danger',
+  warn: 'bg-oro cut-thin',
   info: 'bg-anil',
-  active: 'band-oro relleno-working shadow-cut',
+  active: 'band-accent relleno-working shadow-cut',
 }
 
 export interface TimelineProps {
@@ -88,7 +88,7 @@ export function Timeline({
                 className={cn(
                   'm-0 font-display wdth-display text-ink',
                   size === 'editorial'
-                    ? 'mt-1 text-xl leading-[1.2] font-normal tracking-[-0.01em]'
+                    ? 'mt-1 text-xl leading-heading font-normal tracking-heading'
                     : 'text-sm leading-snug font-semibold',
                 )}
               >
@@ -98,7 +98,7 @@ export function Timeline({
                 <div
                   className={cn(
                     'mt-1 text-ink-2',
-                    size === 'editorial' ? 'font-text text-base leading-[1.55]' : 'text-sm',
+                    size === 'editorial' ? 'font-text text-base leading-body' : 'text-sm',
                   )}
                 >
                   {item.description}
@@ -123,8 +123,8 @@ export interface StepListItem {
 const stepListVariants = cva('m-0 list-none p-0', {
   variants: {
     tone: {
-      default: 'shadow-[inset_0_1.5px_0_var(--ink)]',
-      inverse: 'on-ink shadow-[inset_0_1.5px_0_var(--keyline-on-ink)] px-5',
+      default: 'cut-t',
+      inverse: 'on-ink rule-t px-5',
     },
   },
 })
@@ -160,20 +160,20 @@ export function StepList({
           key={item.id ?? i}
           className={cn(
             'grid grid-cols-1 gap-1 py-4 sm:gap-4',
-            tone === 'inverse'
-              ? 'shadow-[inset_0_-1px_0_var(--keyline-on-ink)]'
-              : 'shadow-[inset_0_-1px_0_var(--keyline)]',
+            // On the inverse panel `on-ink` has already turned --keyline
+            // into --keyline-on-ink, so one rule serves both tones.
+            'rule-b',
             wideLabel ? 'sm:grid-cols-[7rem_1fr]' : 'sm:grid-cols-[2.5rem_1fr]',
           )}
         >
           <span
             aria-hidden={item.label === undefined ? true : undefined}
             className={cn(
-              'pt-0.5 font-ui text-sm font-semibold tabular-nums tracking-[0.04em]',
+              'pt-0.5 font-ui text-sm font-semibold tabular-nums tracking-figures',
               // Not gold on the inverse panel: in the dark theme that panel is
               // bleached cotton, where gold measures 1.49:1. Full --on-ink is
               // the only ink measured on the inverse ground in both themes.
-              tone === 'inverse' ? 'text-on-ink' : 'text-rojo',
+              tone === 'inverse' ? 'text-on-ink' : 'text-ink',
               item.label !== undefined && 'pt-1 text-xs uppercase tracking-label wdth-label',
             )}
           >

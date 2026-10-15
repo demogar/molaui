@@ -46,9 +46,9 @@ export function Switch({
       data-slot="switch"
       className={cn(
         'group/switch relative inline-flex h-5 w-9 shrink-0 items-center rounded-none p-[3px]',
-        'bg-cloth-shade shadow-cut band-oro [--cut-reveal:2px]',
+        'bg-cloth-shade shadow-cut band-accent [--cut-reveal:2px]',
         'transition-[background-color,box-shadow]',
-        'hover:cut-band focus-visible:shadow-[var(--focus-ring)]',
+        'hover:cut-band focus-visible:focus-ring',
         'data-checked:bg-verde data-checked:forced-selected',
         'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:hover:shadow-cut',
         !label && className,
@@ -62,7 +62,7 @@ export function Switch({
         className={cn(
           'block size-3.5 rounded-none bg-ink forced-ink',
           'transition-transform duration-(--motion-base)',
-          'data-checked:translate-x-4 rtl:data-checked:-translate-x-4 data-checked:bg-on-layer data-checked:shadow-[0_0_0_1.5px_var(--ink)] data-checked:forced-on-selected',
+          'data-checked:translate-x-4 rtl:data-checked:-translate-x-4 data-checked:bg-on-layer data-checked:cut-ink data-checked:forced-on-selected',
           'data-disabled:bg-ink-muted',
         )}
       />

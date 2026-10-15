@@ -23,7 +23,7 @@ export const gridVariants = cva('grid', {
       default: 'gap-6',
       wide: 'gap-x-6 gap-y-8',
       /** Cells share keylines, like a table cut from one panel. */
-      seamless: 'gap-[1.5px] bg-ink shadow-cut',
+      seamless: 'gap-(--cut-w) bg-ink shadow-cut',
     },
   },
   defaultVariants: { cols: 'thirds', gap: 'default' },

@@ -10,6 +10,6 @@ import { cn } from '../../lib/cn'
  */
 export function Meta({ className, ...props }: React.ComponentProps<'p'>) {
   return (
-    <p className={cn('m-0 font-ui text-xs tabular tracking-[0.02em] text-ink-muted', className)} {...props} />
+    <p className={cn('m-0 font-ui text-xs tabular tracking-figures text-ink-muted', className)} {...props} />
   )
 }

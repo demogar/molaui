@@ -22,7 +22,7 @@ export function Pullquote({ children, cite, className }: PullquoteProps) {
     <figure className={cn('m-0 band-oro', className)}>
       <div className="relleno" aria-hidden="true" />
       <blockquote className="m-0">
-        <p className="m-0 pt-5 font-text text-[clamp(20px,2.2vw,28px)]/[1.32] italic text-ink">{children}</p>
+        <p className="m-0 pt-5 font-text text-[clamp(20px,2.2vw,28px)]/snug italic text-ink">{children}</p>
       </blockquote>
       {cite ? <figcaption className="mt-4 rotulo text-ink-muted">{cite}</figcaption> : null}
     </figure>

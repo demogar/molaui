@@ -301,7 +301,7 @@ export function FieldChanges({ title, changes, headingLevel = 4, className, ...p
             </dt>
             <dd className="m-0 flex flex-wrap items-center gap-2">
               <Value side="before" value={change.before} />
-              <span aria-hidden className="font-ui text-sm text-ink-muted rtl:-scale-x-100">
+              <span aria-hidden className="font-ui text-sm text-ink-muted flip-rtl">
                 →
               </span>
               <Value side="after" value={change.after} />
@@ -319,7 +319,7 @@ function Value({ side, value }: { side: 'before' | 'after'; value: React.ReactNo
     <span
       className={cn(
         'inline-flex min-w-0 px-1.5 py-0.5 literal text-xs [overflow-wrap:anywhere]',
-        missing ? 'text-ink-muted' : side === 'before' ? 'bg-rojo-soft text-ink' : 'bg-verde-soft text-ink',
+        missing ? 'text-ink-muted' : side === 'before' ? 'bg-danger-soft text-ink' : 'bg-verde-soft text-ink',
         !missing && side === 'before' && 'line-through decoration-ink-muted',
       )}
     >

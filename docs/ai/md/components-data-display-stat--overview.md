@@ -59,7 +59,7 @@ Each story is a live example in Storybook.
 
 ### `Sparkline` (component)
 
-An ink polyline — no fill, no gradient, no axis. A sparkline is the shape of the recent past and nothing more; the moment it grows a gridline it is a chart pretending to be a glyph. The last point is a square cut out in rojo (it is the "now" the figure beside it states), drawn as a square because a blade does not cut circles.
+An ink polyline — no fill, no gradient, no axis. A sparkline is the shape of the recent past and nothing more; the moment it grows a gridline it is a chart pretending to be a glyph. The last point is a square cut out in gold (it is the "now" the figure beside it states), drawn as a square because a blade does not cut circles.
 
 ### `Stat` (component)
 
@@ -69,7 +69,7 @@ An ink polyline — no fill, no gradient, no axis. A sparkline is the shape of t
 | `value` (required) | `ReactNode` |  |  |
 | `delta` | `StatDelta` |  |  |
 | `hint` | `ReactNode` |  | A line of context under the figure. |
-| `trend` | `number[]` |  | The recent series, oldest first. Drawn in ink with the latest point cut out in rojo. |
+| `trend` | `number[]` |  | The recent series, oldest first. Drawn in ink with the latest point cut out in the accent. |
 | `unit` | `ReactNode` |  | Set smaller beside the figure: "ms", "runs", "%". |
 
 ### `StatGroup` (component)

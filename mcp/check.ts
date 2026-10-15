@@ -434,7 +434,7 @@ const NOT_COLOR: Record<string, RegExp> = {
   accent: /^auto$/,
   caret: /^auto$/,
   placeholder: /^shown$/,
-  shadow: /^(?:\d?xs|sm|md|lg|\d?xl|inner|cut|raised|floating)$/,
+  shadow: /^(?:\d?xs|sm|md|lg|\d?xl|inner|cut|raised|floating|overlay)$/,
   'text-shadow': /^(?:\d?xs|sm|md|lg|\d?xl|none)$/,
   'drop-shadow': /^(?:\d?xs|sm|md|lg|\d?xl|none)$/,
   'inset-shadow': /^(?:\d?xs|sm|none)$/,
@@ -734,7 +734,7 @@ function findAll(source: string, ctx: CheckContext, options: CheckOptions = {}):
       el.name === 'a'
         ? 'For a link underline, use `underline decoration-keyline underline-offset-4`; for a link styled as a control, `shadow-cut` or the Mola `Button`.'
         : isIntrinsic(el)
-        ? 'Use `shadow-cut` (`shadow-floating` on an overlay), or better, the Mola component, which draws its own edge.'
+        ? 'Use `shadow-cut` (`shadow-floating` on a popup, `shadow-overlay` on a dialog or drawer), or better, the Mola component, which draws its own edge.'
         : `Remove it: ${el.name} draws its own \`shadow-cut\` edge.`,
     )
   }

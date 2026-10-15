@@ -278,7 +278,7 @@ one folder below the project root (`src/app.css`). It points Tailwind at the pac
 JavaScript: without it Tailwind never sees the classes the components use, and they render unstyled.
 
 Every token is then a utility in your app too: `bg-cloth-pale`, `text-ink-muted`, `shadow-cut`,
-`relleno`, `cut-band band-rojo`.
+`relleno`, `cut-band band-danger`, `rule-b`, `z-(--z-popover)`.
 
 The import also closes Tailwind's own scales where Mola has an answer: the default colour palette,
 radii, shadows, blurs, easings, animations, line heights, letter spacing, font families and the
