@@ -273,6 +273,7 @@ export const NON_COMPONENT_SCOPES: Record<string, string> = {
   visual: 'visual regression baselines',
   release: 'the release process',
   mcp: 'the mola-ui-mcp server, which serves the docs rather than rendering a component',
+  eslint: 'the @demogar/mola-ui/eslint plugin, which checks code against the design rules rather than rendering a component',
   storybook: 'the Storybook site itself, such as its loading and theming',
   'known-gaps': 'the Known gaps page',
   'whats-new': "the What's new pages",

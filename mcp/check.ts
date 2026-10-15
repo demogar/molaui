@@ -39,6 +39,11 @@ export interface Finding {
   rule: number
   severity: Severity
   line: number
+  /**
+   * 1-based column where the finding starts, so an editor (the ESLint plugin,
+   * eslint/plugin.ts) can underline the class rather than the whole line.
+   */
+  column: number
   /** The source line, trimmed. */
   excerpt: string
   message: string
@@ -564,7 +569,7 @@ const REASON = /\S+\s+\S+\s+\S+/
 export function checkCode(source: string, ctx: CheckContext, options: CheckOptions = {}): Finding[] {
   const findings = findAll(source, ctx, options)
   const lines = source.split('\n')
-  const allows: { line: number; rules: number[]; used: boolean }[] = []
+  const allows: { line: number; column: number; rules: number[]; used: boolean }[] = []
   const problems: Finding[] = []
   for (const m of source.matchAll(DIRECTIVE)) {
     const line = source.slice(0, m.index).split('\n').length
@@ -576,13 +581,14 @@ export function checkCode(source: string, ctx: CheckContext, options: CheckOptio
         rule: rules[0] && rules[0] <= 14 ? rules[0] : 0,
         severity: 'error',
         line,
+        column: m.index - source.lastIndexOf('\n', m.index - 1),
         excerpt,
         message: 'A `check_code: allow` without a rule number and a reason is ignored: an exception has to say why.',
         fix: 'Write `// check_code: allow rule N — why this breaks the rule on purpose`, or fix the finding instead.',
       })
       continue
     }
-    allows.push({ line, rules, used: false })
+    allows.push({ line, column: m.index - source.lastIndexOf('\n', m.index - 1), rules, used: false })
   }
   const kept = findings.filter((f) => {
     const allow = allows.find((a) => (f.line === a.line || f.line === a.line + 1) && a.rules.includes(f.rule))
@@ -594,6 +600,7 @@ export function checkCode(source: string, ctx: CheckContext, options: CheckOptio
       rule: a.rules[0]!,
       severity: 'warn',
       line: a.line,
+      column: a.column,
       excerpt: lines[a.line - 1]!.trim(),
       message: `\`check_code: allow rule ${a.rules.join(', ')}\` matches no finding on this line or the next.`,
       fix: 'Remove it, or move it to the line just above the code it excuses.',
@@ -624,7 +631,7 @@ function findAll(source: string, ctx: CheckContext, options: CheckOptions = {}):
     if (seen.has(key)) return
     seen.add(key)
     const text = lines[line - 1]!.trim()
-    findings.push({ rule, severity, line, excerpt: text.length > 160 ? `${text.slice(0, 157)}…` : text, message, fix })
+    findings.push({ rule, severity, line, column: pos - starts[line - 1]! + 1, excerpt: text.length > 160 ? `${text.slice(0, 157)}…` : text, message, fix })
   }
   const known = (names: string[]) => names.filter((x) => ctx.exports.has(x))
 

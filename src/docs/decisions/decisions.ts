@@ -121,6 +121,14 @@ const NOTES: Record<string, Notes> = {
       'Foundations/Layers and elevation': 'A Panel or Placeholder picks its ground with `layer`, the word this page uses; `tone` is kept for status.',
     },
   },
+  '0011': {
+    name: 'Lint rules in the package',
+    decided:
+      'The check_code rules ship as an ESLint plugin at @demogar/mola-ui/eslint, built from the same checker as the MCP tool, rather than as a separate package that could fall out of step with the manifest.',
+    governs: {
+      'Mola UI/Getting started': 'The lint rules are a subpath of the package, so they always know the exports and tokens of the version you installed.',
+    },
+  },
 }
 
 export interface Decision extends Notes {

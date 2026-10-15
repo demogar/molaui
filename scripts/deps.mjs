@@ -13,7 +13,9 @@
 // dependencies to the whole installed closure. That overstates the bin, which
 // rolldown tree-shakes down to the stdio server, but deciding which advisory
 // sits in the shaken-out part is a judgement, and a judgement belongs in
-// ACCEPTED below with its reason, not in a filter.
+// ACCEPTED below with its reason, not in a filter. The ESLint plugin
+// (vite.eslint.config.ts, dist/eslint/) ships too, but bundles no package:
+// deps.test.ts holds its imports to Node's builtins and its own files.
 //
 // The licence half is offline and runs in the unit suite (scripts/deps.test.ts).
 // The audit half needs the registry, so it is this script, and it has to cope

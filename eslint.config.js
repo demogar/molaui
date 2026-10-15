@@ -47,5 +47,10 @@ export default tseslint.config(
     languageOptions: { sourceType: 'commonjs', globals: globals.node },
     rules: { '@typescript-eslint/no-require-imports': 'off' },
   },
+  {
+    // The ESLint plugin fixture's check script runs in Node.
+    files: ['test/consumers/**/*.mjs'],
+    languageOptions: { globals: globals.node },
+  },
   ...storybook.configs['flat/recommended'],
 )
