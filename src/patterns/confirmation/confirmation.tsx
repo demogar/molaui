@@ -210,11 +210,20 @@ export function ApiKeysScreen({
                   const revoked = key.state === 'revoked'
                   return (
                     <TableRow key={key.id}>
+                      {/* Name and badge stay on one line. Inline, the table
+                          squeezed this column first: the name broke over two
+                          lines and the badge landed on the row's edge. Letting
+                          the badge wrap under the name with a gap still put it
+                          on the edge, because a row is one line tall; a table
+                          too wide for the screen scrolls sideways instead,
+                          with the scroll-edge cue, as every Mola table does. */}
                       <TableCell>
-                        <span className="font-medium">{key.name}</span>
-                        <Badge tone={key.environment === 'live' ? 'accent' : 'neutral'} variant="soft" className="ms-2">
-                          {ENV_LABEL[key.environment]}
-                        </Badge>
+                        <span className="flex items-center gap-2 whitespace-nowrap">
+                          <span className="font-medium">{key.name}</span>
+                          <Badge tone={key.environment === 'live' ? 'accent' : 'neutral'} variant="soft">
+                            {ENV_LABEL[key.environment]}
+                          </Badge>
+                        </span>
                       </TableCell>
                       <TableCell>
                         <Code>{key.hint}</Code>
