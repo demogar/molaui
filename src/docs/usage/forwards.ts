@@ -80,6 +80,7 @@ export const FORWARDS: Record<string, Forward> = {
   KbdChord: { element: '<kbd data-slot="kbd-chord">' },
   Label: { element: '<label data-slot="label">' },
   Lead: { element: '<p data-slot="lead">' },
+  Listbox: { element: '<div data-slot="listbox">' },
   Menu: { element: null },
   MenuCheckboxItem: { element: '<div data-slot="menu-checkbox-item">' },
   MenuContent: { element: '<div data-slot="menu">' },
@@ -165,6 +166,7 @@ export const FORWARDS: Record<string, Forward> = {
   TabsList: { element: '<div data-slot="tabs-list">' },
   TabsPanel: { element: '<div data-slot="tabs-panel">' },
   TabsTab: { element: '<button data-slot="tabs-tab">' },
+  TagGroup: { element: '<div data-slot="tag-group">' },
   Text: { element: '<p data-slot="text">' },
   Textarea: { element: '<textarea data-slot="textarea">' },
   Thread: { element: '<section data-slot="thread">' },
@@ -184,5 +186,6 @@ export const FORWARDS: Record<string, Forward> = {
   Tooltip: { element: '<div data-slot="tooltip">' },
   TooltipProvider: { element: null },
   Topbar: { element: '<header data-slot="topbar">' },
+  Tree: { element: '<div data-slot="tree">' },
   UncertaintyNote: { element: '<aside data-slot="uncertainty-note">' },
 }

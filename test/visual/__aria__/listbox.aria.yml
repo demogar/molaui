@@ -1,0 +1,5 @@
+- listbox "Models to compare":
+  - option "Cayuco Swift" [selected]
+  - option "Cayuco Steady"
+  - option "Cayuco Deep" [selected]
+  - option "Cayuco Classic" [disabled]

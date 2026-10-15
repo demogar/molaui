@@ -1310,6 +1310,49 @@ export interface LabelProps extends React_2.ComponentProps<'label'> {
 export function Lead(input: React_2.ComponentProps<'p'>): React_2.JSX.Element;
 
 // @public
+export function Listbox<V extends string = string>(props: ListboxProps<V>): React_2.JSX.Element;
+
+// @public (undocumented)
+export interface ListboxCommonProps<V extends string = string> extends Omit<React_2.ComponentProps<'div'>, 'defaultValue' | 'onChange' | 'children' | 'aria-label' | 'aria-labelledby'> {
+    disabled?: boolean;
+    options: ListboxOption<V>[];
+}
+
+// @public (undocumented)
+export interface ListboxMultipleProps<V extends string = string> extends ListboxCommonProps<V> {
+    defaultValue?: V[];
+    multiple: true;
+    onValueChange?: (value: V[]) => void;
+    value?: V[];
+}
+
+// @public
+export interface ListboxOption<V extends string = string> {
+    description?: React_2.ReactNode;
+    disabled?: boolean;
+    label: React_2.ReactNode;
+    // (undocumented)
+    value: V;
+}
+
+// @public
+export type ListboxProps<V extends string = string> = (ListboxSingleProps<V> | ListboxMultipleProps<V>) & ({
+    'aria-label': string;
+    'aria-labelledby'?: string;
+} | {
+    'aria-label'?: string;
+    'aria-labelledby': string;
+});
+
+// @public (undocumented)
+export interface ListboxSingleProps<V extends string = string> extends ListboxCommonProps<V> {
+    defaultValue?: V | null;
+    multiple?: false;
+    onValueChange?: (value: V | null) => void;
+    value?: V | null;
+}
+
+// @public
 export function matchesAccept(file: {
     name: string;
     type: string;
@@ -2291,6 +2334,39 @@ export interface TabsTabProps extends Omit<Tabs_2.Tab.Props, 'className'> {
 // @public
 export type TabsVariant = 'underline' | 'panel';
 
+// @public
+export function TagGroup(input: TagGroupProps): React_2.JSX.Element;
+
+// @public (undocumented)
+export interface TagGroupBaseProps extends Omit<React_2.ComponentProps<'div'>, 'defaultValue' | 'onChange' | 'children' | 'aria-label' | 'aria-labelledby'> {
+    defaultValue?: string[];
+    disabled?: boolean;
+    empty?: React_2.ReactNode;
+    items: TagGroupItem[];
+    onRemove?: (value: string) => void;
+    onValueChange?: (value: string[]) => void;
+    removeLabel?: (label: string) => string;
+    selectionMode?: 'none' | 'single' | 'multiple';
+    value?: string[];
+}
+
+// @public
+export interface TagGroupItem {
+    disabled?: boolean;
+    label: string;
+    // (undocumented)
+    value: string;
+}
+
+// @public
+export type TagGroupProps = TagGroupBaseProps & ({
+    'aria-label': string;
+    'aria-labelledby'?: string;
+} | {
+    'aria-label'?: string;
+    'aria-labelledby': string;
+});
+
 // @public (undocumented)
 function Text_2(input: TextProps): React_2.JSX.Element;
 export { Text_2 as Text }
@@ -2578,6 +2654,39 @@ export interface TopbarProps extends Omit<React_2.ComponentProps<'header'>, 'chi
     end?: React_2.ReactNode;
     start?: React_2.ReactNode;
 }
+
+// @public
+export function Tree(input: TreeProps): React_2.JSX.Element;
+
+// @public (undocumented)
+export interface TreeBaseProps extends Omit<React_2.ComponentProps<'div'>, 'defaultValue' | 'onChange' | 'children' | 'aria-label' | 'aria-labelledby'> {
+    defaultExpanded?: string[];
+    defaultValue?: string | null;
+    expanded?: string[];
+    items: TreeNode[];
+    onExpandedChange?: (expanded: string[]) => void;
+    onValueChange?: (value: string | null) => void;
+    value?: string | null;
+}
+
+// @public
+export interface TreeNode {
+    children?: TreeNode[];
+    disabled?: boolean;
+    icon?: React_2.ReactNode;
+    label: React_2.ReactNode;
+    // (undocumented)
+    value: string;
+}
+
+// @public
+export type TreeProps = TreeBaseProps & ({
+    'aria-label': string;
+    'aria-labelledby'?: string;
+} | {
+    'aria-label'?: string;
+    'aria-labelledby': string;
+});
 
 // @public
 export function UncertaintyNote(input: UncertaintyNoteProps): React_2.JSX.Element;

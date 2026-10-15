@@ -92,6 +92,10 @@ Types: `BreadcrumbItem`, `BreadcrumbLinkRender`, `BreadcrumbProps`
 - [Tabs](https://demogar.github.io/molaui/md/components-navigation-tabs--overview.md)
 - [App shell](https://demogar.github.io/molaui/md/components-layout-app-shell--overview.md)
 
+### Pages that send readers here
+
+- [Tree](https://demogar.github.io/molaui/md/components-navigation-tree--overview.md)
+
 ### Used in
 
 - [Agent hand-off](https://demogar.github.io/molaui/md/patterns-agent-hand-off--overview.md) (pattern)

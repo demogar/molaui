@@ -189,6 +189,38 @@ export const ANATOMY: Record<string, Anatomy> = {
       { part: 'actions', name: 'Actions', does: 'Copy, regenerate and rating. Shown on hover or focus, always on touch, and never while streaming.', story: 'Conversation' },
     ],
   },
+  'Components/Forms/Listbox': {
+    story: 'Multiple',
+    slot: 'listbox',
+    parts: [
+      { part: 'root', name: 'List', does: 'The cut box the options sit in. It scrolls when given a height, and holds one tab stop.' },
+      { part: 'option', name: 'Option', does: 'One choice. A chosen one takes the ink fill; focus is a ring drawn inside it.' },
+      { part: 'mark', name: 'Mark', does: 'In a multiple list, a square that fills when chosen, so the state is never the colour alone.' },
+      { part: 'label', name: 'Label', does: 'The option’s name, and what type-ahead matches.' },
+      { part: 'description', name: 'Description', does: 'An optional second line, read as the option’s description.' },
+    ],
+  },
+  'Components/Forms/Tag group': {
+    story: 'SelectAndRemove',
+    slot: 'tag-group',
+    parts: [
+      { part: 'tag', name: 'Tag', does: 'One value: a focusable row, cut like a chip. Selected, it takes the ink fill.' },
+      { part: 'check', name: 'Check', does: 'Marks a selected tag, beside the ink fill.' },
+      { part: 'label', name: 'Label', does: 'The tag’s text, and its accessible name.' },
+      { part: 'remove', name: 'Remove', does: 'The ×: a button named “Remove <label>”, out of the tab order because the tag answers Delete.' },
+      { part: 'empty', name: 'Empty text', does: 'What the group says when it has no tags.', story: 'Empty' },
+    ],
+  },
+  'Components/Navigation/Tree': {
+    story: 'Default',
+    slot: 'tree',
+    parts: [
+      { part: 'item', name: 'Item', does: 'One treeitem, indented by its level. The selected one is a shade with an ink bar.' },
+      { part: 'marker', name: 'Marker', does: 'The plus on a branch, which turns into a cross when it is open.' },
+      { part: 'icon', name: 'Icon', does: 'An optional leading icon, hidden from assistive technology.' },
+      { part: 'label', name: 'Label', does: 'The item’s name, and what type-ahead matches.' },
+    ],
+  },
 }
 
 /** The slots that own parts, so a nested component’s parts stay its own. */
