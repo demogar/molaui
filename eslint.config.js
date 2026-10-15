@@ -19,6 +19,25 @@ export default tseslint.config(
     },
   },
   {
+    // Every test renders in React strict mode (#81): src/test/render.tsx turns
+    // it on and re-exports Testing Library, so it is the only door in.
+    files: ['**/*.{ts,tsx}'],
+    ignores: ['src/test/render.tsx'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@testing-library/react',
+              message: "Import from '@/test/render', which renders in React strict mode.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ['scripts/**/*.mjs'],
     languageOptions: { globals: { ...globals.node, ...globals.browser } },
   },

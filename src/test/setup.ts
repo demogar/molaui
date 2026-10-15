@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/vitest'
 
-import { cleanup } from '@testing-library/react'
+import { cleanup } from '@/test/render'
 import { afterEach } from 'vitest'
 
 /**

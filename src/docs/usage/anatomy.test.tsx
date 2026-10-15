@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
 import { composeStories, setProjectAnnotations } from '@storybook/react-vite'
-import { act, render } from '@testing-library/react'
+import { act, render } from '@/test/render'
 import type * as React from 'react'
 import { describe, expect, it } from 'vitest'
 

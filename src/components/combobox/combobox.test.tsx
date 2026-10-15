@@ -1,5 +1,5 @@
 import { DirectionProvider } from '@base-ui/react/direction-provider'
-import { render, screen, within } from '@testing-library/react'
+import { render, screen, within } from '@/test/render'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
