@@ -410,8 +410,10 @@ coding agent can look components up through it instead of guessing props. It ans
 same generated manifest as these pages, for the version installed in your project. Its tools:
 
 - `list_components` and `get_component`: props, usage, accessibility, anatomy, where it is used
-  and its examples. `get_component` takes a page name ("Date picker") or an export ("IconButton").
-- `search`: components, patterns, tokens and rules, by words.
+  and its examples. `get_component` takes a page name ("Date picker") or an export ("IconButton"),
+  and `brief: true` for only the summary, usage, props and what you must handle.
+- `search`: components, patterns, tokens and rules, by name or by the job ("loading state",
+  "confirm a destructive action").
 - `get_tokens`: every token with its role and its value in both themes, filtered by text.
 - `get_rules`: the design rules, each with its reason, and the setup.
 - `get_pattern`: a whole screen, what it is built from and its states.

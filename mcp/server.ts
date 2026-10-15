@@ -2,8 +2,8 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { z } from 'zod'
 
 import { checkCode, contextFrom } from './check'
-import type { Component, Data, Pattern } from './data'
-import { checkMarkdown, componentLine, componentMarkdown, patternMarkdown, rulesMarkdown, tokensMarkdown } from './format'
+import type { Alternative, Component, Data, Pattern } from './data'
+import { checkMarkdown, componentBrief, componentLine, componentMarkdown, patternMarkdown, rulesMarkdown, tokensMarkdown } from './format'
 
 /**
  * A read-only MCP server over the generated agent docs.
@@ -69,49 +69,116 @@ interface Hit {
   score: number
 }
 
+/** Words that carry no meaning in a query ("how do I show a loading state"), so they need not match. */
+const STOPWORDS = new Set('a an and are as at be by can do for from get how i in is it make my need of on or show should that the this to use want what when where which with without you'.split(' '))
+
+/** A crude stem, so "loading" finds "loads" and "uploading" finds "upload"; "progress" keeps its double s. */
+function stem(term: string) {
+  for (const [suffix, by] of [['ies', 'y'], ['ing', ''], ['ed', ''], ['s', '']] as const) {
+    if (term.endsWith(suffix) && !term.endsWith('ss') && term.length - suffix.length >= 3) return term.slice(0, -suffix.length) + by
+  }
+  return term
+}
+
+const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+/** A name matches anywhere in it ("picker" in "DatePicker"); prose matches at the start of a word, so "load" is not found in "download". */
+type Field = [value: string | undefined, weight: number, mode?: 'name']
+
 /**
  * Term matching with weights: a hit in a name outranks one in a summary,
- * which outranks one in the prose. Every term must match somewhere, so
- * "dialog destructive" narrows rather than widens.
+ * which outranks a "when to use" phrase, which outranks the prose. Every
+ * meaningful term must match somewhere, so "dialog destructive" narrows
+ * rather than widens.
+ *
+ * Agents search by the job ("loading state", "confirm a destructive action"),
+ * not by the name, and the jobs are written down twice in the usage guidance:
+ * a page's "when to use" lines, and every other page's "when not to" lines,
+ * which name the page to use instead. Before, both sat in the prose at weight
+ * 1, and the "when not to" lines counted for the page that rejects the job:
+ * "loading state" ranked Button and File upload above Progress, because
+ * Progress's own guidance says to use Skeleton for loading content. Now a
+ * "when to use" line weighs 3, a "when not to" line counts for the page it
+ * points to (also 3), and a term the guidance repeats, or a query that sits
+ * in one of those phrases, earns more.
  */
 export function search(data: Data, query: string, limit = 10): Hit[] {
-  const terms = query.toLowerCase().split(/\s+/).filter(Boolean)
+  const words = query.toLowerCase().split(/\s+/).filter(Boolean)
+  const meaningful = words.filter((w) => !STOPWORDS.has(w))
+  const terms = (meaningful.length ? meaningful : words).map((w) => ({ raw: w, re: new RegExp(`(^|[^a-z0-9])${escape(stem(w))}`) }))
   if (!terms.length) return []
-  const score = (fields: [string | undefined, number][]) => {
+  const phrase = words.join(' ')
+  const matches = ([value, , mode]: Field, term: (typeof terms)[number]) => {
+    const v = value?.toLowerCase()
+    if (!v) return false
+    return mode === 'name' ? v.includes(term.raw) || key(v).includes(key(term.raw)) : term.re.test(v)
+  }
+  /**
+   * `jobs` are the page's usage phrases. Beyond the best field per term, a
+   * term the guidance repeats earns a little more (a page whose jobs say
+   * "loading" four times is about loading), and a query whose terms all sit
+   * in one phrase, or appear in it word for word, earns a bonus.
+   */
+  const score = (fields: Field[], jobs: string[] = [], summary?: string) => {
     let total = 0
     for (const term of terms) {
-      const best = Math.max(0, ...fields.map(([value, weight]) => (value?.toLowerCase().includes(term) ? weight : 0)))
+      const best = Math.max(0, ...fields.map((f) => (matches(f, term) ? f[1] : 0)))
       if (!best) return 0
-      total += best
+      const repeated = jobs.filter((j) => matches([j, 0], term)).length
+      total += best + Math.max(0, Math.min(3, repeated) - 1)
     }
+    const phrases = summary ? [summary, ...jobs] : jobs
+    if (terms.length > 1 && phrases.some((p) => p.toLowerCase().includes(phrase))) total += 5
+    else if (terms.length > 1 && phrases.some((p) => terms.every((t) => matches([p, 0], t)))) total += 3
     return total
   }
+
+  // "When not to" lines, credited to the page they point to.
+  const redirected = new Map<string, string[]>()
+  const pointTo = (avoid: Alternative[] | undefined) => {
+    for (const a of avoid ?? []) if (a.use) redirected.set(a.use, [...(redirected.get(a.use) ?? []), a.when])
+  }
+  for (const c of data.manifest.components) pointTo(c.usage?.avoid)
+  for (const p of data.manifest.patterns) pointTo(p.guidance?.avoid)
+
   const hits: Hit[] = []
   for (const c of data.manifest.components) {
-    const s = score([
-      [c.name, 10],
-      [c.exports.map((x) => x.name).join(' '), 8],
-      [c.summary, 4],
-      [c.title, 3],
-      [c.exports.flatMap((x) => x.props?.map((p) => p.name) ?? []).join(' '), 2],
-      [[c.description, ...(c.usage?.use ?? []), ...(c.usage?.avoid.map((a) => a.when) ?? []), ...(c.accessibility?.handles ?? [])].join(' '), 1],
-    ])
+    const jobs = [...(c.usage?.use ?? []), ...(redirected.get(c.title) ?? [])]
+    const s = score(
+      [
+        [c.name, 10, 'name'],
+        [c.exports.map((x) => x.name).join(' '), 8, 'name'],
+        [c.summary, 4],
+        [c.title, 3, 'name'],
+        [jobs.join(' '), 3],
+        [c.exports.flatMap((x) => x.props?.map((p) => p.name) ?? []).join(' '), 2, 'name'],
+        [[c.description, ...(c.accessibility?.handles ?? [])].join(' '), 1],
+      ],
+      jobs,
+      c.summary,
+    )
     if (s) hits.push({ kind: 'component', name: c.name, line: `${c.summary ?? ''} ${c.docs}`, score: s })
   }
   for (const p of data.manifest.patterns) {
-    const s = score([
-      [p.title.split('/').at(-1), 10],
-      [p.guidance?.summary ?? p.summary, 4],
-      [[p.description, ...(p.guidance?.use ?? [])].join(' '), 1],
-    ])
+    const jobs = [...(p.guidance?.use ?? []), ...(redirected.get(p.title) ?? [])]
+    const s = score(
+      [
+        [p.title.split('/').at(-1), 10, 'name'],
+        [p.guidance?.summary ?? p.summary, 4],
+        [jobs.join(' '), 3],
+        [p.description, 1],
+      ],
+      jobs,
+      p.guidance?.summary ?? p.summary,
+    )
     if (s) hits.push({ kind: 'pattern', name: p.title.split('/').at(-1)!, line: `${p.guidance?.summary ?? p.summary ?? p.kind} ${p.docs}`, score: s })
   }
   for (const t of data.tokens.tokens) {
     const s = score([
-      [t.name, 6],
+      [t.name, 6, 'name'],
       [t.note, 3],
-      [t.group, 2],
-      [[...(t.scopes ?? []), ...(t.utilities ?? [])].join(' '), 2],
+      [t.group, 2, 'name'],
+      [[...(t.scopes ?? []), ...(t.utilities ?? [])].join(' '), 2, 'name'],
     ])
     const scoped = t.scopes ? `; ${t.scopes.join(', ')}${t.utilities?.length ? `: ${t.utilities.join(' ')}` : ''}` : ''
     if (s) hits.push({ kind: 'token', name: t.name, line: `${[t.group, t.note].filter(Boolean).join(': ')}; light ${t.light}, dark ${t.dark}${scoped}`, score: s })
@@ -130,7 +197,7 @@ export function createServer(data: Data) {
     {
       instructions: [
         `Docs for ${manifest.name} ${data.version}, the design system installed in this project, read from its generated manifest.`,
-        'Call get_rules before writing UI, then get_component for each component you use: never guess a prop.',
+        'Call get_rules before writing UI, then get_component for each component you use (brief: true when you only need the props and usage): never guess a prop.',
         'Use search when you know the job but not the component, get_tokens for colours and sizes, and get_pattern for whole screens.',
         'Before handing UI code back, run it through check_code and fix what it finds.',
       ].join(' '),
@@ -168,14 +235,17 @@ export function createServer(data: Data) {
     {
       title: 'Get a component',
       description:
-        'One component page: summary, usage (when to use, when not to, do and don’t), props of every export, accessibility, anatomy, where it is used, and links to its examples. Accepts a page name ("Date picker") or an export ("IconButton").',
-      inputSchema: { name: z.string().min(1).describe('Component or export name, e.g. "Button", "IconButton", "date picker".') },
+        'One component page: summary, usage (when to use, when not to, do and don’t), props of every export, accessibility, anatomy, where it is used, and links to its examples. Accepts a page name ("Date picker") or an export ("IconButton"). With brief, only the summary, when to use and not, each export’s props on one line and what you must handle for accessibility, at a fraction of the size.',
+      inputSchema: {
+        name: z.string().min(1).describe('Component or export name, e.g. "Button", "IconButton", "date picker".'),
+        brief: z.boolean().optional().describe('Only what writing the code needs: summary, usage, props without descriptions, and what you handle. Default false.'),
+      },
       annotations: READ_ONLY,
     },
-    async ({ name }) => {
+    async ({ name, brief }) => {
       const found = findComponent(data, name)
       if (!found) return miss(`No component or export named "${name}". Close matches: ${suggest(manifest.components.map((c) => c.name), name)}.`)
-      return text(componentMarkdown(found.page, data, found.via))
+      return text((brief ? componentBrief : componentMarkdown)(found.page, data, found.via))
     },
   )
 
@@ -183,7 +253,8 @@ export function createServer(data: Data) {
     'search',
     {
       title: 'Search the docs',
-      description: 'Search components, patterns, tokens and rules by words. Every word must match; names rank above summaries and prose.',
+      description:
+        'Search components, patterns, tokens and rules by name or by the job ("loading state", "confirm a destructive action"). Every meaningful word must match; names rank above summaries, summaries above the usage guidance’s when-to-use phrases, and those above prose.',
       inputSchema: {
         query: z.string().min(1).describe('Words to look for, e.g. "confirm destructive", "loading", "oro".'),
         limit: z.number().int().min(1).max(50).optional().describe('At most this many results (default 10).'),

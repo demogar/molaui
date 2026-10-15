@@ -176,9 +176,10 @@ Mola UI documents itself for coding agents as well as for people, from the same 
 - **[`llms.txt`](llms.txt)**, also served from the
   [Storybook root](https://demogar.github.io/molaui/llms.txt): the index, in the
   [llms.txt](https://llmstxt.org) format. It points to one file per topic,
-  [`llms-components.txt`](llms-components.txt), [`llms-tokens.txt`](llms-tokens.txt) and
-  [`llms-patterns.txt`](llms-patterns.txt), and to [`llms-full.txt`](llms-full.txt) for an agent
-  that reads one file.
+  [`llms-components.txt`](llms-components.txt), [`llms-tokens.txt`](llms-tokens.txt),
+  [`llms-patterns.txt`](llms-patterns.txt) and [`llms-rules.txt`](llms-rules.txt) (the design
+  rules alone, numbered as `check_code` cites them), and to [`llms-full.txt`](llms-full.txt) for
+  an agent that reads one file.
 - **A Markdown version of every docs page**, at `md/<page id>.md` on the Storybook site (the
   [Button page](https://demogar.github.io/molaui/?path=/docs/components-actions-button--overview)
   is [`md/components-actions-button--overview.md`](https://demogar.github.io/molaui/md/components-actions-button--overview.md)).

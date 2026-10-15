@@ -23,6 +23,7 @@ const SOURCES = [
   'llms-components.txt',
   'llms-tokens.txt',
   'llms-patterns.txt',
+  'llms-rules.txt',
   'docs/ai/components.json',
   ...walk(join(repoRoot, 'docs/ai/md'), (name) => name.endsWith('.md')).map((path) => relative(repoRoot, path)),
   ...walk(join(repoRoot, 'src'), (name) => /\.(mdx|tsx?)$/.test(name)).map((path) => relative(repoRoot, path)),

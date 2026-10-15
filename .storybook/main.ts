@@ -9,7 +9,7 @@ const config: StorybookConfig = {
   // Copy for LLM button on a component page copies its twin.
   staticDirs: [
     '../public',
-    ...['llms.txt', 'llms-full.txt', 'llms-components.txt', 'llms-tokens.txt', 'llms-patterns.txt'].map((file) => ({
+    ...['llms.txt', 'llms-full.txt', 'llms-components.txt', 'llms-tokens.txt', 'llms-patterns.txt', 'llms-rules.txt'].map((file) => ({
       from: `../${file}`,
       to: `/${file}`,
     })),

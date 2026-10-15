@@ -81,9 +81,10 @@ Read the one you need rather than all of them. Every docs page also has a Markdo
 - [Components](https://demogar.github.io/molaui/llms-components.txt): every component's usage, props, accessibility, anatomy and where it is used
 - [Tokens](https://demogar.github.io/molaui/llms-tokens.txt): every design token with its role and its value in the light and the dark theme; each colour's scopes and the only utilities valid for it; every promised contrast pairing
 - [Patterns](https://demogar.github.io/molaui/llms-patterns.txt): whole screens, what each is built from, and its states
+- [Rules](https://demogar.github.io/molaui/llms-rules.txt): the design rules alone, numbered as `check_code` cites them, with the lifecycle phases
 - [Full text](https://demogar.github.io/molaui/llms-full.txt): all of the above except the tokens, in one file
 
-An MCP server with the same data ships in the package: `npx -y --package @demogar/mola-ui mola-ui-mcp`. Its tools are `list_components`, `get_component`, `search`, `get_tokens`, `get_rules`, `get_pattern` and `check_code`, which reviews code you wrote against the design rules and returns each finding with its line, rule and fix.
+An MCP server with the same data ships in the package: `npx -y --package @demogar/mola-ui mola-ui-mcp`. Its tools are `list_components`, `get_component` (with `brief: true` for the summary, usage and props alone), `search`, `get_tokens`, `get_rules`, `get_pattern` and `check_code`, which reviews code you wrote against the design rules and returns each finding with its line, rule and fix.
 
 ## Actions
 

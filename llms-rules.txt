@@ -1,0 +1,32 @@
+# Mola UI: rules
+
+> The design rules every screen built with Mola UI is reviewed against, each with its reason, from `src/docs/usage/rules.ts`. The MCP server's `check_code` cites them by these numbers. Part of the agent docs for `@demogar/mola-ui`; the index is https://demogar.github.io/molaui/llms.txt.
+
+## Rules
+
+1. Interactive edges use `shadow-cut` (or `shadow-floating` on overlays), never `border`. `border-keyline` is for decorative dividers only. A box-shadow edge can grow a revealed band on hover without moving its neighbours, and the named utilities keep an outline in forced-colours mode.
+2. Radius is zero. `rounded-full` only for something that is genuinely a dot. The system is cut cloth: nothing in it is rounded.
+3. State is never colour alone: glyph, word and colour, in that order of importance. It has to survive colour blindness, a greyscale screenshot and forced colours.
+4. Disabled is stated, not faded. No `opacity-*` on a disabled control. Opacity fades the keyline and the label to about 2:1, a failure axe does not report because disabled controls are exempt.
+5. Colours come from tokens, each through a utility its scope allows (surface `bg-`, text `text-`, edge `border-`/`decoration-`, mark `bg-`/`fill-`). No hex, rgb or arbitrary colour values outside `tokens.css`. Every token pairing has a measured contrast ratio in both themes; a colour outside the token file, or a token outside its scope (`text-cloth-pale` compiles), was never measured.
+6. Theme and density are attributes (`data-theme`, `data-density`) on `<html>` or a subtree, not props or React context. Dialogs and menus portal to `<body>` and must inherit them. No component takes a density prop.
+7. Lay out with logical properties: `ps-`/`pe-`, `ms-`/`me-`, `inset-s-`/`inset-e-`, `text-start`/`text-end`. `dir="rtl"` then mirrors the layout with no second set of classes.
+8. Typefaces have roles: Archivo (`font-ui`) for the interface, Alegreya (`font-text`) for prose from a person or a model, Martian Mono (`literal`) only for machine literals. A reader can tell from the letterforms whether the product, a person or the machine is speaking.
+9. Labels are sentence case; buttons start with a verb and name the object (“Cancel run”, not “OK”). A button that names its consequence can be chosen without reading the surrounding text.
+10. Unknown duration is the relleno working state, never a spinner; elapsed time counts up instead of a progress bar inventing a percentage. Model work has no knowable total, and a bar that stalls at 90% is a lie.
+11. Anything that writes to the world waits for a person, with the choices given equal weight (`ToolCall` approval, `ChangeReview`). An agent’s action is only as safe as the decision in front of it.
+12. Use the components for behaviour. Do not re-implement focus trapping, roving focus or typeahead; the components are built on Base UI. A maintained primitive gets keyboard and screen-reader behaviour right in more cases than a local copy.
+13. Check a component’s lifecycle phase before building on it. Stable is covered by semver, Experimental may change in a minor release, and Deprecated names its replacement: use that instead. A screen built on a component that is about to change or go is built twice.
+14. Do what each component’s accessibility section leaves to you, usually an accessible name or a label. The component handles roles, focus and announcements. Axe catches a missing name only on the screens it is run on; the component cannot know what its button is for.
+
+## Lifecycle phases
+
+Every component has one phase. Stable unless its page says otherwise.
+
+- Experimental: Its API may change in a minor release, without a deprecation first.
+- Stable: Semantic versioning applies: nothing breaks without a deprecation first.
+- Deprecated: It still works and warns in development. It will be removed; move to its replacement.
+
+## Theme, density and direction
+
+Attributes on `<html>` or a subtree, never props: `data-theme` (light, dark), `data-density` (compact, comfortable, spacious), `dir` (ltr, rtl). Leave `data-theme` off to follow the OS.

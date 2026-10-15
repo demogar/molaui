@@ -10,6 +10,7 @@
  *   llms-components.txt,      the same split by topic, and a Markdown twin of
  *   llms-tokens.txt,          every docs page in docs/ai/md/ (see
  *   llms-patterns.txt,        scripts/agent-docs.ts)
+ *   llms-rules.txt
  *   docs/ai/md/<id>.md
  *   docs/ai/tokens.json       every token with its role and both theme values,
  *                             and each colour's scopes and promised pairings,
@@ -587,9 +588,10 @@ Read the one you need rather than all of them. Every docs page also has a Markdo
 - [Components](${SITE}llms-components.txt): every component's usage, props, accessibility, anatomy and where it is used
 - [Tokens](${SITE}llms-tokens.txt): every design token with its role and its value in the light and the dark theme; each colour's scopes and the only utilities valid for it; every promised contrast pairing
 - [Patterns](${SITE}llms-patterns.txt): whole screens, what each is built from, and its states
+- [Rules](${SITE}llms-rules.txt): the design rules alone, numbered as \`check_code\` cites them, with the lifecycle phases
 - [Full text](${SITE}llms-full.txt): all of the above except the tokens, in one file
 
-An MCP server with the same data ships in the package: \`npx -y --package ${pkg.name} mola-ui-mcp\`. Its tools are \`list_components\`, \`get_component\`, \`search\`, \`get_tokens\`, \`get_rules\`, \`get_pattern\` and \`check_code\`, which reviews code you wrote against the design rules and returns each finding with its line, rule and fix.
+An MCP server with the same data ships in the package: \`npx -y --package ${pkg.name} mola-ui-mcp\`. Its tools are \`list_components\`, \`get_component\` (with \`brief: true\` for the summary, usage and props alone), \`search\`, \`get_tokens\`, \`get_rules\`, \`get_pattern\` and \`check_code\`, which reviews code you wrote against the design rules and returns each finding with its line, rule and fix.
 
 ${categories.map((c) => `## ${c}\n\n${byLayer('components').filter((e) => e.category === c).map(linkLine).join('\n')}`).join('\n\n')}
 
@@ -712,6 +714,31 @@ ${byLayer('ai').map(fullEntry).join('\n')}`
 const patternsText = `${topicHeader('patterns', 'Whole Cayuco screens composed from the components, with nothing written for them. They live in `src/patterns/` and are not part of the package: copy one and adapt it.')}
 ${showcases.filter((s) => s.guidance).map(patternEntry).join('\n')}`
 
+/**
+ * The rules on their own. They head every other llms file, but an agent that
+ * reviews a screen, or keeps the rules in its context while it works, should
+ * not have to fetch the 240 KB llms-full.txt, or the index with its long
+ * component list, to get a page of rules. Numbered, because check_code cites "rule 4" and the number has
+ * to mean the same thing here.
+ */
+const rulesText = `${topicHeader('rules', 'The design rules every screen built with Mola UI is reviewed against, each with its reason, from `src/docs/usage/rules.ts`. The MCP server\'s `check_code` cites them by these numbers.')}
+## Rules
+
+${RULES.map((r, i) => `${i + 1}. ${r.rule} ${r.why}`).join('\n')}
+
+## Lifecycle phases
+
+Every component has one phase. Stable unless its page says otherwise.
+
+${(Object.keys(PHASES) as Phase[]).map((p) => `- ${PHASES[p].label}: ${PHASES[p].promise}`).join('\n')}
+
+## Theme, density and direction
+
+Attributes on \`<html>\` or a subtree, never props: ${Object.entries(manifest.tokens.attributes)
+  .map(([attr, values]) => `\`${attr}\` (${values.join(', ')})`)
+  .join(', ')}. Leave \`data-theme\` off to follow the OS.
+`
+
 const mdx = mdxPages()
 const twins: [string, string][] = [
   ...sorted.map((e) => [e.title, componentTwin(e, SITE)] as const),
@@ -730,6 +757,7 @@ const outputs: [string, string][] = [
   ['llms-components.txt', componentsText],
   ['llms-tokens.txt', tokensText(topicHeader('tokens', 'Every design token in `src/styles/tokens.css`, with its role, its value in each theme, and for a colour its scopes, its utilities and the pairings it is promised.'))],
   ['llms-patterns.txt', patternsText],
+  ['llms-rules.txt', rulesText],
   ['docs/ai/tokens.json', `${JSON.stringify(tokensJson(), null, 2)}\n`],
   ...twins,
   [
