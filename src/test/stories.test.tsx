@@ -5,6 +5,7 @@ import type * as React from 'react'
 import { describe, expect, it } from 'vitest'
 
 import * as preview from '../../.storybook/preview'
+import { foundModules } from './found'
 
 /**
  * Every story is a test.
@@ -23,7 +24,7 @@ import * as preview from '../../.storybook/preview'
 setProjectAnnotations(preview.default)
 
 type StoryModule = Record<string, unknown>
-const modules = import.meta.glob<StoryModule>('../**/*.stories.tsx', { eager: true })
+const modules = foundModules(import.meta.glob<StoryModule>('../**/*.stories.tsx', { eager: true }), 40, 'stories files')
 
 const AXE_OPTIONS: axe.RunOptions = {
   rules: {

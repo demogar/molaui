@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest'
 import config from '../../.storybook/main'
 import pkg from '../../package.json'
 import { docsId } from '../docs/usage/links'
+import { found } from './found'
 import { knownIds, mdxTitles, repoRoot, storyTitles, walk } from './story-index'
 
 /**
@@ -25,10 +26,10 @@ const SOURCES = [
   'llms-patterns.txt',
   'llms-rules.txt',
   'docs/ai/components.json',
-  ...walk(join(repoRoot, 'docs/ai/md'), (name) => name.endsWith('.md')).map((path) => relative(repoRoot, path)),
-  ...walk(join(repoRoot, 'src'), (name) => /\.(mdx|tsx?)$/.test(name)).map((path) => relative(repoRoot, path)),
-  ...walk(join(repoRoot, 'skills'), (name) => name.endsWith('.md')).map((path) => relative(repoRoot, path)),
-  ...walk(join(repoRoot, 'codemods'), (name) => name.endsWith('.md')).map((path) => relative(repoRoot, path)),
+  ...found(walk(join(repoRoot, 'docs/ai/md'), (name) => name.endsWith('.md')), 50, 'Markdown twins').map((path) => relative(repoRoot, path)),
+  ...found(walk(join(repoRoot, 'src'), (name) => /\.(mdx|tsx?)$/.test(name)), 200, 'sources under src/').map((path) => relative(repoRoot, path)),
+  ...found(walk(join(repoRoot, 'skills'), (name) => name.endsWith('.md')), 1, 'skill Markdown').map((path) => relative(repoRoot, path)),
+  ...found(walk(join(repoRoot, 'codemods'), (name) => name.endsWith('.md')), 1, 'codemod READMEs').map((path) => relative(repoRoot, path)),
 ]
 
 const LINK = /path=\/(?:docs|story)\/([a-z0-9-]+)/g
@@ -93,7 +94,7 @@ describe('links to files the site serves', () => {
 
 describe('Markdown twins', () => {
   const ids = [...new Set([...storyTitles, ...mdxTitles].map(docsId))].sort()
-  const twins = readdirSync(join(repoRoot, 'docs/ai/md')).filter((name) => name.endsWith('.md'))
+  const twins = found(readdirSync(join(repoRoot, 'docs/ai/md')).filter((name) => name.endsWith('.md')), 50, 'Markdown twins')
 
   it('are served for every docs page id', () => {
     const missing = ids.filter((id) => {

@@ -5,6 +5,7 @@ import { render, screen, within } from '@/test/render'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
+import { found } from '../../test/found'
 import { toHex } from '../../tokens/color'
 import { resolveColor } from '../../tokens/resolve'
 import { USAGE } from '../usage/guidance'
@@ -94,7 +95,7 @@ describe('Spacing page', () => {
 describe('Iconography page', () => {
   it('lists exactly the Lucide icons the shipped components import', () => {
     const imported = new Set<string>()
-    for (const file of walk(join(root, 'src/components'))) {
+    for (const file of found(walk(join(root, 'src/components')), 100, 'component sources')) {
       if (file.includes('_story-data')) continue
       const text = readFileSync(file, 'utf8')
       for (const m of text.matchAll(/import \{([^}]+)\} from 'lucide-react'/g)) {

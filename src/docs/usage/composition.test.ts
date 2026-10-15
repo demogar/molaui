@@ -4,6 +4,7 @@ import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 
 import manifest from '../../../docs/ai/components.json'
+import { found } from '../../test/found'
 import { repoRoot, walk } from '../../test/story-index'
 import { builtFrom, componentImports, compositionFiles } from './composition'
 import { COMPOSITIONS, usedIn } from './composition-data'
@@ -43,7 +44,7 @@ describe('componentImports', () => {
  */
 describe('composition', () => {
   const pageOf = new Map(manifest.components.flatMap((entry) => entry.exports.map((x) => [x.name, entry.title] as const)))
-  const storyFiles = walk(join(repoRoot, 'src'), (name) => name.endsWith('.stories.tsx')).map((path) => path.slice(repoRoot.length + 1))
+  const storyFiles = found(walk(join(repoRoot, 'src'), (name) => name.endsWith('.stories.tsx')), 40, 'stories files').map((path) => path.slice(repoRoot.length + 1))
   const titleOf = (file: string) => read(file).match(/title: '([^']+)'/)?.[1] ?? ''
 
   it('matches the imports of every pattern and showcase', () => {

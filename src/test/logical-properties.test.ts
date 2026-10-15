@@ -3,6 +3,8 @@ import { join, relative, resolve } from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
+import { found } from './found'
+
 /**
  * Components and patterns are laid out in logical properties — `ps-`/`pe-`,
  * `ms-`/`me-`, `inset-s-`/`inset-e-`, `text-start`/`text-end`, `border-s` —
@@ -59,7 +61,7 @@ function stripComments(source: string) {
 describe('logical properties', () => {
   it('components, patterns and styles use no physical left/right utilities or properties', () => {
     const offenders: string[] = []
-    for (const path of ['components', 'patterns', 'styles'].flatMap((dir) => walk(join(root, dir)))) {
+    for (const path of found(['components', 'patterns', 'styles'].flatMap((dir) => walk(join(root, dir))), 100, 'component, pattern and style sources')) {
       const rel = relative(root, path)
       const source = stripComments(readFileSync(path, 'utf8'))
       const patterns = rel.endsWith('.css') ? [PHYSICAL_CSS] : [PHYSICAL_CLASS, PHYSICAL_STYLE]

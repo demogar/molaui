@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest'
 
 import preview from '../../../.storybook/preview'
 import pkg from '../../../package.json'
+import { found } from '../../test/found'
 import { repoRoot, storyTitles, walk } from '../../test/story-index'
 import {
   changesFor,
@@ -178,7 +179,7 @@ describe('scope map', () => {
 })
 
 describe("What's new", () => {
-  const pages = walk(join(repoRoot, 'src/docs/whats-new'), (name) => name.endsWith('.mdx')).map((path) => {
+  const pages = found(walk(join(repoRoot, 'src/docs/whats-new'), (name) => name.endsWith('.mdx')), 2, "What's new pages").map((path) => {
     const text = readFileSync(path, 'utf8')
     return {
       path,

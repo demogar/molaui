@@ -28,6 +28,9 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test
+      # npm audit on what ships; retries, and warns rather than fails when the
+      # registry is unreachable (scripts/deps.mjs says why).
+      - run: npm run deps:audit
       - run: npm run tokens:check
       - run: npm run manifest:check
       - run: npm run evidence:check

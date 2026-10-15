@@ -7,6 +7,7 @@ import type * as React from 'react'
 import { describe, expect, it } from 'vitest'
 
 import * as preview from '../../../.storybook/preview'
+import { foundModules } from '../../test/found'
 import { utilityReader } from '../blocks/anatomy-utilities'
 import { ANATOMY, anatomyRoot, ownedParts, partElement, pinnedParts, ROOT_PART } from './anatomy'
 import { isShowcase } from './showcases'
@@ -26,7 +27,7 @@ const styles = (name: string) => readFileSync(resolve(import.meta.dirname, '../.
 const { partUtilities } = utilityReader(styles('cloth.css'), styles('theme.css'))
 
 type StoryModule = { default: { title: string } } & Record<string, unknown>
-const modules = Object.values(import.meta.glob<StoryModule>('../../**/*.stories.tsx', { eager: true }))
+const modules = Object.values(foundModules(import.meta.glob<StoryModule>('../../**/*.stories.tsx', { eager: true }), 40, 'stories files'))
 
 function storiesOf(title: string) {
   const mod = modules.find((m) => m.default.title === title)

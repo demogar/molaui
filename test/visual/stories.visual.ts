@@ -3,6 +3,7 @@ import { resolve } from 'node:path'
 
 import { expect, type Page, test } from '@playwright/test'
 
+import { found } from '../../src/test/found'
 import { DOCS_SHOTS } from './docs-pages'
 import { NOW, settle } from './helpers'
 import { mine } from './shard'
@@ -35,7 +36,11 @@ const index = JSON.parse(
  *   not the fake clock's; about one run in four, "Jump to latest" showed.
  */
 const UNSTABLE = new Set(['ai-streaming-text--long-answer', 'ai-message--thread-stick-to-bottom'])
-const stories = Object.values(index.entries).filter((e) => e.type === 'story' && !UNSTABLE.has(e.id))
+const stories = found(
+  Object.values(index.entries).filter((e) => e.type === 'story' && !UNSTABLE.has(e.id)),
+  150,
+  'stories in storybook-static/index.json',
+)
 const firstOfEach = stories.filter((s, i) => stories.findIndex((t) => t.title === s.title) === i)
 
 interface Mode {

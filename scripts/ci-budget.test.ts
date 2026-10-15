@@ -4,6 +4,7 @@ import { resolve } from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
+import { found } from '../src/test/found'
 import runs from './fixtures/ci-runs.json'
 // @ts-expect-error -- a plain .mjs script with no declaration file
 import { BUDGET_SECONDS, judge } from './ci-budget.mjs'
@@ -42,7 +43,7 @@ describe('ci budget', () => {
     // CONTRIBUTING.md, "Visual baselines": plain files while the set is small;
     // past 50 MB the trade-off against LFS changes, so it fails to ask again.
     const dir = resolve(import.meta.dirname, '../test/visual/__screenshots__/linux')
-    const bytes = readdirSync(dir).reduce((sum, f) => sum + statSync(resolve(dir, f)).size, 0)
+    const bytes = found(readdirSync(dir), 100, 'visual baselines').reduce((sum, f) => sum + statSync(resolve(dir, f)).size, 0)
     expect(bytes).toBeLessThan(50 * 1024 * 1024)
   })
 

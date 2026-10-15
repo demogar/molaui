@@ -3,6 +3,7 @@ import { join, relative, resolve } from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
+import { found } from '../test/found'
 import { PAIRS } from './pairings'
 import { parseRootDeclarations } from './resolve'
 import { tokenRows } from './rows'
@@ -33,7 +34,7 @@ function walk(dir: string): string[] {
     return /\.tsx?$/.test(name) && !/\.(stories|test)\.tsx?$/.test(name) ? [path] : []
   })
 }
-const files = [...walk(join(src, 'components')), ...walk(join(src, 'patterns'))]
+const files = found([...walk(join(src, 'components')), ...walk(join(src, 'patterns'))], 100, 'component and pattern sources')
 const source = (file: string) =>
   readFileSync(file, 'utf8')
     .replace(/\/\*[\s\S]*?\*\//g, '')
