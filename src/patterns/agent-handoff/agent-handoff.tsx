@@ -261,7 +261,19 @@ export function AgentHandoffScreen({
 
               {outcome === 'waiting' ? (
                 <>
-                  <Message role="assistant" author={h.agent} model={h.model} timestamp={at(h, 9)} className="py-0">
+                  {/* Message draws a keyline above every message but a first
+                      child, as the seam between turns of a thread. Here it
+                      follows the card's heading, so the seam had nothing to
+                      separate, and with the padding taken out the author
+                      label sat on the line. The heading already opens the
+                      card; the message needs neither. */}
+                  <Message
+                    role="assistant"
+                    author={h.agent}
+                    model={h.model}
+                    timestamp={at(h, 9)}
+                    className="border-t-0 py-0"
+                  >
                     <p className="m-0 font-text text-base leading-body text-ink">{h.reason}</p>
                     <Confidence level="high" basis={h.confidenceBasis} className="mt-3" />
                   </Message>
