@@ -63,16 +63,17 @@ A model's answer written in Markdown, streamed and rendered in Mola's typography
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `text` (required) | `string` |  | The Markdown received so far. Grows; never rewritten from the top. |
-| `doneAnnouncement` | `string` | `Response complete.` | Spoken once when a stream that was running completes. |
-| `errorAnnouncement` | `string` | `Response stopped with an error.` | Spoken once when a stream that was running fails. |
+| `doneAnnouncement` | `string` |  | Spoken once when a stream that was running completes. |
+| `errorAnnouncement` | `string` |  | Spoken once when a stream that was running fails. |
 | `headingLevel` | `2 \| 3 \| 4` | `3` | The heading level a `#` becomes; `##` is one deeper, and so on, never past 6. Defaults to 3, for an answer under a page and a section heading. The look follows the depth in the Markdown, not the level, so the same answer looks the same wherever it is placed. |
+| `messages` | `MessagesOverride<MarkdownMessages>` |  | Words for translation: the default done and error announcements. Keys left out come from `MessagesProvider`, then English. The new-tab cue on an absolute link is `link.newTab`, shared with Link. |
 | `renderCitation` | `((n: number) => ReactNode)` |  | How an inline `[n]` marker renders, usually `citationRenderer(sources)`. Without it the marker stays as text. Pass a stable function (module scope or `useMemo`): finished blocks skip re-rendering only while it stays the same. |
 | `status` | `StreamStatus` | `done` | Where the stream is. `streaming` shows the caret, sets `aria-busy` and closes markers still open at the end; the move from `streaming` to `done` or `error` is announced once. Defaults to `done`. |
 | `variant` | `"default" \| "muted"` | `default` | `muted` for text the reader may skim — reasoning, not the answer. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="markdown">`.
 
-Types: `MarkdownProps`
+Types: `MarkdownMessages`, `MarkdownProps`
 
 ## Accessibility
 
