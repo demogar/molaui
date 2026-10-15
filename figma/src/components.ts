@@ -119,7 +119,15 @@ export function variableIndex(collections: CollectionSpec[]) {
 
 /* ── the kit ───────────────────────────────────────────────────────── */
 
-const STATES = ['rest', 'hover', 'focus-visible'] as const
+/**
+ * Pointer and focus states, drawn because a designer needs them and no prop
+ * sets them (`nonApi` in the map). Pressed is `:active` in code: the band
+ * closed with ink on a cut shape, the cut drawn inward on an edgeless one
+ * (cloth.css, "the states a cut shape can be in"). A text field has no
+ * pressed look, so it has no pressed variant.
+ */
+const STATES = ['rest', 'hover', 'pressed', 'focus-visible'] as const
+const FIELD_STATES = ['rest', 'hover', 'focus-visible'] as const
 type State = (typeof STATES)[number] | 'disabled'
 const BOOL = ['false', 'true']
 
@@ -215,6 +223,11 @@ export function buildComponents(manifest: Manifest, collections: CollectionSpec[
   ]
   const focusRing = () => [ring(6.5, C('ink')), ring(3.5, C('cloth-pale')), ring(cutW(), C('ink'))]
   const focusInset = () => [ring(3.5, C('cloth-pale'), 'INNER_SHADOW'), ring(2, C('ink'), 'INNER_SHADOW')]
+  /** Pressed on a control with no edge: the ink cut, drawn inward (`cut-press`). */
+  const cutPress = () => [ring(cutW(), C('ink'), 'INNER_SHADOW')]
+  /** Disabled primary and danger (`cut-inner`): the keyline, then a band of the role inside a gap of the disabled ground. */
+  const focusGap = values.get('Scale/focus-gap') as number
+  const cutInner = (band: string) => [ring(cutW(), C('ink')), ring(focusGap + cutWidth, C(band), 'INNER_SHADOW'), ring(S('focus-gap'), C('disabled'), 'INNER_SHADOW')]
 
   const frame = (name: string, o: Omit<FrameNodeSpec, 'kind' | 'name' | 'children' | 'layout'> & { layout?: FrameNodeSpec['layout'] }, children: FrameNodeSpec['children']): FrameNodeSpec => ({
     kind: 'frame',
@@ -313,13 +326,20 @@ export function buildComponents(manifest: Manifest, collections: CollectionSpec[
   const BUTTON_TEXT: Record<string, string> = { sm: '2xs', md: 'xs', lg: 'sm' }
   const BUTTON_H: Record<string, string> = { sm: 'control-h-sm', md: 'control-h', lg: 'control-h-lg' }
   const buttonSurface = (variant: string, state: State): Pick<FrameNodeSpec, 'fill' | 'effects'> => {
-    if (state === 'disabled') return variant === 'ghost' ? { fill: C('cloth-pale', 0), effects: [] } : { fill: C('cloth-shade'), effects: cut() }
+    if (state === 'disabled') {
+      if (variant === 'ghost') return { fill: C('cloth-pale', 0), effects: [] }
+      // Primary and danger keep a thin band of their role, so the panel's main
+      // action and a destructive one stay recognisable while disabled.
+      return { fill: C('disabled'), effects: variant === 'primary' ? cutInner('ink') : variant === 'danger' ? cutInner('danger') : cut() }
+    }
     if (variant === 'ghost') {
       if (state === 'hover') return { fill: C('ink-soft'), effects: [] }
+      if (state === 'pressed') return { fill: C('ink-soft'), effects: cutPress() }
       return { fill: C('cloth-pale', 0), effects: state === 'focus-visible' ? focusRing() : [] }
     }
-    const fill = C(variant === 'danger' && state === 'hover' ? 'danger-strong' : BUTTON_FILL[variant]!)
+    const fill = C(variant === 'danger' && (state === 'hover' || state === 'pressed') ? 'danger-strong' : BUTTON_FILL[variant]!)
     if (state === 'hover') return { fill, effects: cutBand(variant === 'danger' ? 'danger' : 'accent', 3) }
+    if (state === 'pressed') return { fill, effects: cutBand('ink', 3) }
     return { fill, effects: state === 'focus-visible' ? focusRing() : cut() }
   }
   const buttonInk = (variant: string, state: State) => C(state === 'disabled' ? 'ink-muted' : BUTTON_INK[variant]!)
@@ -330,7 +350,7 @@ export function buildComponents(manifest: Manifest, collections: CollectionSpec[
     { name: 'disabled', values: BOOL },
     { name: 'state', values: [...STATES] },
   ]
-  const DISABLED_NOTE = 'Base UI button prop; drawn stated, not faded: shade field, muted ink, keyline kept.'
+  const DISABLED_NOTE = 'Base UI button prop; drawn stated, not faded: the disabled ground, muted ink, the keyline kept, and a thin band of the role on primary and danger.'
   add(
     {
       name: 'Button',
@@ -403,7 +423,7 @@ export function buildComponents(manifest: Manifest, collections: CollectionSpec[
   const FIELD_PX: Record<string, Num> = { sm: controlPx(0.75), md: D('control-px'), lg: controlPx(1.15) }
   const FIELD_TEXT: Record<string, string> = { sm: 'sm', md: 'base', lg: 'lg' }
   const fieldSurface = (state: State, invalid: boolean): Pick<FrameNodeSpec, 'fill' | 'effects'> => {
-    if (state === 'disabled') return { fill: C('cloth-shade'), effects: cut() }
+    if (state === 'disabled') return { fill: C('disabled'), effects: cut() }
     if (invalid) return { fill: C('cloth-pale'), effects: state === 'focus-visible' ? [...cutBand('danger', 3), ...focusInset()] : cutBand('danger', 3) }
     if (state === 'hover') return { fill: C('cloth-pale'), effects: cutBand('accent', 3) }
     return { fill: C('cloth-pale'), effects: state === 'focus-visible' ? focusRing() : cut() }
@@ -413,7 +433,7 @@ export function buildComponents(manifest: Manifest, collections: CollectionSpec[
     { name: 'size', values: axisValues('Input', 'size') },
     { name: 'aria-invalid', values: BOOL },
     { name: 'disabled', values: BOOL },
-    { name: 'state', values: [...STATES] },
+    { name: 'state', values: [...FIELD_STATES] },
   ]
   add(
     {
@@ -451,7 +471,7 @@ export function buildComponents(manifest: Manifest, collections: CollectionSpec[
         'aria-invalid': { values: BOOL, inherited: 'Set by Field when it has an error; the rojo band stays under focus.' },
         disabled: { values: BOOL, inherited: 'HTML input prop; drawn stated, not faded.' },
       },
-      nonApi: { state: [...STATES] },
+      nonApi: { state: [...FIELD_STATES] },
       notDrawn: { trailing: 'Draw it beside the value by hand for now.', placeholder: 'Set the value text in ink-muted.', className: 'Code only.' },
     },
   )
@@ -459,7 +479,7 @@ export function buildComponents(manifest: Manifest, collections: CollectionSpec[
   const triggerAxes = [
     { name: 'size', values: axisValues('SelectTrigger', 'size') },
     { name: 'disabled', values: BOOL },
-    { name: 'state', values: [...STATES] },
+    { name: 'state', values: [...FIELD_STATES] },
   ]
   add(
     {
@@ -488,7 +508,7 @@ export function buildComponents(manifest: Manifest, collections: CollectionSpec[
     },
     {
       axes: { size: { values: triggerAxes[0]!.values }, disabled: { values: BOOL, inherited: 'Base UI Select.Trigger prop; drawn stated, not faded.' } },
-      nonApi: { state: [...STATES] },
+      nonApi: { state: [...FIELD_STATES] },
       notDrawn: { placeholder: 'Set the text in ink-muted.', className: 'Code only.' },
       extra: ['Inside a Select, the popup is not drawn yet: Select, SelectContent and SelectItem are pending in the component map.'],
     },
@@ -546,7 +566,8 @@ export function buildComponents(manifest: Manifest, collections: CollectionSpec[
     { name: 'description', type: 'TEXT', default: 'Tokens appear as the model writes them.' },
     { name: 'has description', type: 'BOOLEAN', default: false, nonApi: true },
   ]
-  const boxEffects = (state: State, band = 'accent') => (state === 'hover' ? cutBand(band, 2) : state === 'focus-visible' ? focusRing() : cut())
+  const boxEffects = (state: State) =>
+    state === 'hover' ? cutBand('accent', 2) : state === 'pressed' ? cutBand('ink', 2) : state === 'focus-visible' ? focusRing() : cut()
   /** The box sits in a span one line of label tall, so it centres on the first line. */
   const firstLine = (child: FrameNodeSpec): FrameNodeSpec =>
     frame('control', { height: Math.round(((values.get('Density/text-base') as number) * LINE.snug) / 100 * 100) / 100, sizing: { h: 'HUG', v: 'FIXED' }, align: { main: 'MIN', cross: 'CENTER' } }, [child])
@@ -565,7 +586,7 @@ export function buildComponents(manifest: Manifest, collections: CollectionSpec[
       variants: grid(checkboxAxes, (p) => restWhenDisabled(p) && !(p.checked === 'true' && p.indeterminate === 'true')).map((p): VariantSpec => {
         const state = stateOf(p)
         const on = p.checked === 'true' || p.indeterminate === 'true'
-        const fill = state === 'disabled' ? C(on ? 'cloth-deep' : 'cloth-shade') : C(on ? 'ink' : 'cloth-pale')
+        const fill = state === 'disabled' ? C(on ? 'cloth-deep' : 'disabled') : C(on ? 'ink' : 'cloth-pale')
         const mark = state === 'disabled' ? C('ink-2') : C('on-ink')
         return {
           props: p,
@@ -612,7 +633,7 @@ export function buildComponents(manifest: Manifest, collections: CollectionSpec[
                 height: space(4),
                 sizing: { h: 'FIXED', v: 'FIXED' },
                 align: { main: 'CENTER', cross: 'CENTER' },
-                fill: C(state === 'disabled' ? 'cloth-shade' : 'cloth-pale'),
+                fill: C(state === 'disabled' ? 'disabled' : 'cloth-pale'),
                 effects: boxEffects(state),
               }, p.checked === 'true' ? [dot] : []),
             ),
@@ -658,7 +679,7 @@ export function buildComponents(manifest: Manifest, collections: CollectionSpec[
           sizing: { h: 'FIXED', v: 'FIXED' },
           padding: pad(3, 3),
           align: { main: on ? 'MAX' : 'MIN', cross: 'CENTER' },
-          fill: C(state === 'disabled' ? 'cloth-shade' : on ? 'verde' : 'cloth-shade'),
+          fill: C(state === 'disabled' ? 'disabled' : on ? 'verde' : 'cloth-shade'),
           effects: boxEffects(state),
         }, [thumb])
         const start = p.labelPosition === 'start'
@@ -777,9 +798,11 @@ export function buildComponents(manifest: Manifest, collections: CollectionSpec[
         const state = stateOf(p)
         const on = p.checked === 'true'
         const sm = p.size === 'sm'
-        const fill = C(state === 'disabled' ? 'cloth-shade' : on ? 'ink' : 'cloth-pale')
-        const ink = C(state === 'disabled' ? 'ink-muted' : on ? 'on-ink' : state === 'hover' ? 'ink' : 'ink-2')
-        const effects = state === 'focus-visible' ? focusRing() : state === 'hover' && !on ? cutBand('accent', 3) : cut()
+        const fill = C(state === 'disabled' ? 'disabled' : on ? 'ink' : 'cloth-pale')
+        const pointer = state === 'hover' || state === 'pressed'
+        const ink = C(state === 'disabled' ? 'ink-muted' : on ? 'on-ink' : pointer ? 'ink' : 'ink-2')
+        const effects =
+          state === 'focus-visible' ? focusRing() : pointer && !on ? cutBand(state === 'pressed' ? 'ink' : 'accent', 3) : cut()
         return {
           props: p,
           root: frame('Chip', {
@@ -891,17 +914,22 @@ export function buildComponents(manifest: Manifest, collections: CollectionSpec[
         const state = stateOf(p)
         const on = p.selected === 'true'
         const panel = p.variant === 'panel'
-        const ink = C(state === 'disabled' ? 'ink-muted' : on || state === 'hover' ? 'ink' : 'ink-2')
-        let fill: Paint = C('cloth-pale', 0)
+        const pointer = state === 'hover' || state === 'pressed'
+        const ink = C(state === 'disabled' ? 'ink-muted' : on || pointer ? 'ink' : 'ink-2')
+        // An underline tab is edgeless: a wash on hover and press, transparent otherwise.
+        let fill: Paint = C(pointer ? 'ink-soft' : 'cloth-pale', pointer ? undefined : 0)
         let effects: EffectLayer[] = []
         if (panel) {
-          fill = C(on ? 'cloth-pale' : state === 'hover' ? 'cloth-deep' : 'cloth-shade')
+          fill = C(on ? 'cloth-pale' : pointer ? 'cloth-deep' : 'cloth-shade')
           // cut-tab: keylines on three sides, and the band above the active
           // tab with its own keyline, drawn as offset copies of the tab.
           if (on) effects = [ring(0, C('ink'), 'DROP_SHADOW', 0, -(reveal + cutWidth * 2)), ring(0, C('accent'), 'DROP_SHADOW', 0, -(reveal + cutWidth)), ring(0, C('ink'), 'DROP_SHADOW', -cutWidth, 0), ring(0, C('ink'), 'DROP_SHADOW', cutWidth, 0), ring(0, C('ink'), 'DROP_SHADOW', 0, -cutWidth)]
         } else if (on) {
           effects = [ring(0, C('ink'), 'INNER_SHADOW', 0, -barW)]
         }
+        // Pressed is the inward cut, except on the active tab, whose own edge is the same slot.
+        if (state === 'pressed' && !on) effects = [...effects, ...cutPress()]
+        if (state === 'disabled') fill = C('disabled')
         if (state === 'focus-visible') effects = [...effects, ...focusInset()]
         return {
           props: p,

@@ -64,10 +64,13 @@ Checkbox, Radio, Switch, Badge, Chip, Callout, TabsTab and Panel, plus lucide ic
   names, and their values are the code's exact strings (`variant=danger`, `size=sm`), read from
   `docs/ai/components.json`. An axis that is not a prop of that export (a Base UI or HTML prop,
   or Tabs' `variant` on a tab) says where it comes from in the component map.
-- **States a designer needs but no prop sets** (`state=rest|hover|focus-visible`, a tab's
-  `selected`) are marked `nonApi` in the map. Nobody should go looking for a `state` prop.
+- **States a designer needs but no prop sets** (`state=rest|hover|pressed|focus-visible`, a
+  tab's `selected`) are marked `nonApi` in the map. Nobody should go looking for a `state` prop.
+  Pressed is `:active` in code: the band closed with ink on a cut shape, the cut drawn inward on
+  an edgeless one. Text fields have no pressed look, so they have no pressed variant.
   `disabled=true` is drawn at rest only, because a disabled control looks the same whatever
-  the pointer does.
+  the pointer does. It is stated, not faded: the `disabled` ground, muted ink and the keyline,
+  and primary and danger buttons keep a thin band of their role.
 - **Everything is bound.** Fills, effect colours, padding, gap, heights and font sizes are
   bound to variables, and the font family is bound to `font-ui`. No component carries a
   literal colour. The build fails if one would.

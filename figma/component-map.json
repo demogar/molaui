@@ -126,7 +126,7 @@
             "false",
             "true"
           ],
-          "inherited": "Base UI button prop; drawn stated, not faded: shade field, muted ink, keyline kept."
+          "inherited": "Base UI button prop; drawn stated, not faded: the disabled ground, muted ink, the keyline kept, and a thin band of the role on primary and danger."
         }
       },
       "properties": {
@@ -138,6 +138,7 @@
         "state": [
           "rest",
           "hover",
+          "pressed",
           "focus-visible"
         ],
         "has icon": "BOOLEAN"
@@ -245,6 +246,7 @@
         "state": [
           "rest",
           "hover",
+          "pressed",
           "focus-visible"
         ],
         "has description": "BOOLEAN"
@@ -294,6 +296,7 @@
         "state": [
           "rest",
           "hover",
+          "pressed",
           "focus-visible"
         ],
         "has count": "BOOLEAN"
@@ -538,7 +541,7 @@
             "false",
             "true"
           ],
-          "inherited": "Base UI button prop; drawn stated, not faded: shade field, muted ink, keyline kept."
+          "inherited": "Base UI button prop; drawn stated, not faded: the disabled ground, muted ink, the keyline kept, and a thin band of the role on primary and danger."
         }
       },
       "properties": {
@@ -548,6 +551,7 @@
         "state": [
           "rest",
           "hover",
+          "pressed",
           "focus-visible"
         ]
       },
@@ -884,6 +888,7 @@
         "state": [
           "rest",
           "hover",
+          "pressed",
           "focus-visible"
         ],
         "has description": "BOOLEAN"
@@ -1160,6 +1165,7 @@
         "state": [
           "rest",
           "hover",
+          "pressed",
           "focus-visible"
         ],
         "has description": "BOOLEAN"
@@ -1272,6 +1278,7 @@
         "state": [
           "rest",
           "hover",
+          "pressed",
           "focus-visible"
         ],
         "has count": "BOOLEAN"
