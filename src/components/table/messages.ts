@@ -48,6 +48,12 @@ export interface DataTableMessages {
   pages: string
   /** The pager's landmark name with a `label`. `{label}` is the table's label. */
   labelledPages: string
+  /** A column's resize handle. `{name}` is the column's name. */
+  resize: string
+  /** The disclosure column's hidden header. */
+  details: string
+  /** A row's disclosure button, when `expandLabel` is not set. `{id}` is the row's id. */
+  detailsOf: string
   /** DataTableColumnMenu's button. */
   columns: string
   /** The heading inside the column menu. */
@@ -71,6 +77,9 @@ export const dataTableMessages: DataTableMessages = {
   rangeOf: '{range} of {total} {noun}',
   pages: 'Pages',
   labelledPages: '{label} pages',
+  resize: 'Resize {name}',
+  details: 'Details',
+  detailsOf: 'Details of row {id}',
   columns: 'Columns',
   showColumns: 'Show columns',
 }
