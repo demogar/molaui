@@ -408,7 +408,7 @@ export interface ChangeReviewProps extends Omit<React_2.ComponentProps<'section'
 export function Checkbox(input: CheckboxProps): React_2.JSX.Element;
 
 // @public
-export const checkboxBoxClasses: readonly ["relative inline-grid size-4 shrink-0 place-items-center rounded-none", "bg-cloth-pale shadow-cut band-accent [--cut-reveal:2px]", "transition-[background-color,box-shadow]", "hover:cut-band", "focus-visible:focus-ring", "data-checked:bg-ink data-checked:text-on-ink data-indeterminate:bg-ink data-indeterminate:text-on-ink", "data-invalid:band-danger data-invalid:cut-band aria-invalid:band-danger aria-invalid:cut-band", "data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut", "data-disabled:data-checked:bg-cloth-deep data-disabled:data-checked:text-ink-2", "data-disabled:data-indeterminate:bg-cloth-deep data-disabled:data-indeterminate:text-ink-2"];
+export const checkboxBoxClasses: readonly ["relative inline-grid size-4 shrink-0 place-items-center rounded-none", "bg-cloth-pale shadow-cut band-accent [--cut-reveal:2px]", "transition-[background-color,box-shadow]", "hover:cut-band active:cut-band active:band-ink", "focus-visible:focus-ring", "data-checked:bg-ink data-checked:text-on-ink data-indeterminate:bg-ink data-indeterminate:text-on-ink", "data-invalid:band-danger data-invalid:cut-band aria-invalid:band-danger aria-invalid:cut-band", "data-disabled:cursor-not-allowed data-disabled:bg-disabled data-disabled:text-ink-muted data-disabled:hover:shadow-cut", "data-disabled:data-checked:bg-cloth-deep data-disabled:data-checked:text-ink-2", "data-disabled:data-indeterminate:bg-cloth-deep data-disabled:data-indeterminate:text-ink-2"];
 
 // @public
 export function CheckboxGroup(input: CheckboxGroupProps): React_2.JSX.Element;
@@ -1091,7 +1091,7 @@ export interface FieldChangesProps extends Omit<React_2.ComponentProps<'section'
 }
 
 // @public
-export const fieldControlClasses: readonly ["w-full min-w-0 rounded-none border-0 bg-cloth-pale", "font-ui text-ink", "shadow-cut band-accent [--cut-reveal:3px]", "placeholder:text-ink-muted", "transition-[box-shadow,background-color]", "hover:cut-band", "focus:outline-none focus:focus-ring", "aria-invalid:band-danger aria-invalid:cut-band", "aria-invalid:focus:cut-band-focus", "disabled:cursor-not-allowed disabled:bg-cloth-shade disabled:text-ink-muted disabled:hover:shadow-cut", "[&:is(input,textarea):read-only]:bg-cloth-shade"];
+export const fieldControlClasses: readonly ["w-full min-w-0 rounded-none border-0 bg-cloth-pale", "font-ui text-ink", "shadow-cut band-accent [--cut-reveal:3px]", "placeholder:text-ink-muted", "transition-[box-shadow,background-color]", "hover:cut-band", "focus:outline-none focus:focus-ring", "aria-invalid:band-danger aria-invalid:cut-band", "aria-invalid:focus:cut-band-focus", "disabled:cursor-not-allowed disabled:bg-disabled disabled:text-ink-muted disabled:hover:shadow-cut", "[&:is(input,textarea):read-only:not(:disabled)]:bg-cloth-shade"];
 
 // @public
 export interface FieldControlProps {

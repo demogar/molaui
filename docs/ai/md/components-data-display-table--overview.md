@@ -64,6 +64,7 @@ Each story is a live example in Storybook.
 - [EmptyPrimitive](https://demogar.github.io/molaui/?path=/story/components-data-display-table--empty-primitive)
 - [ExpandableRows](https://demogar.github.io/molaui/?path=/story/components-data-display-table--expandable-rows)
 - [FrozenFirstColumn](https://demogar.github.io/molaui/?path=/story/components-data-display-table--frozen-first-column)
+- [HardStates](https://demogar.github.io/molaui/?path=/story/components-data-display-table--hard-states)
 - [Loading](https://demogar.github.io/molaui/?path=/story/components-data-display-table--loading)
 - [NoResults](https://demogar.github.io/molaui/?path=/story/components-data-display-table--no-results)
 - [NoResultsOnAPhone](https://demogar.github.io/molaui/?path=/story/components-data-display-table--no-results-on-a-phone)
@@ -271,7 +272,7 @@ Types: `TableCellProps`, `TableCheckboxProps`, `TableEmptyProps`, `TableHeadProp
 
 ### Testing status
 
-- Automated, jsdom: each of its 18 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 19 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.
