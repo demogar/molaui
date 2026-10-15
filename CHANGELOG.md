@@ -1,5 +1,66 @@
 # Changelog
 
+## [0.7.0](https://github.com/demogar/molaui/compare/v0.6.0...v0.7.0) (2026-10-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* one prop vocabulary, open prop bags, router links and one controllable hook ([#146](https://github.com/demogar/molaui/issues/146))
+* close small api and token defects (toast timeout, sparkline, keys, variant nulls, forced colours, browser floor) ([#128](https://github.com/demogar/molaui/issues/128))
+* close the wave-0 p1 defects (release gate, check:all, focus ring, overlay keys, prop merging) ([#122](https://github.com/demogar/molaui/issues/122))
+* **tokens:** a consumer importing @demogar/mola-ui/tailwind.css into their own Tailwind build loses Tailwind's default palette, radii, shadows, easings, animations, line heights, tracking, font families and container steps above 5xl. max-w-prose is replaced by max-w-reading. The token file's value shapes changed to DTCG 2025.10.
+* **package:** @base-ui/react is a peer dependency. npm 7+ and pnpm 8+ install it automatically; under yarn or pnpm with auto-install-peers off, add @base-ui/react ^1.9.0 to the app, as every install line already says.
+
+### Features
+
+* add form, form error summary, fieldset and stepper ([#157](https://github.com/demogar/molaui/issues/157)) ([491a84e](https://github.com/demogar/molaui/commit/491a84e8b579aeb9ff0594011bde263fa6c9413b))
+* add link and link button, and localisable built-in strings ([#163](https://github.com/demogar/molaui/issues/163)) ([583a1d1](https://github.com/demogar/molaui/commit/583a1d1678d5a0ce25778ba27db6ce6a3a836587))
+* add listbox, tag group and tree ([#153](https://github.com/demogar/molaui/issues/153)) ([6db099b](https://github.com/demogar/molaui/commit/6db099b939b904ad3d767e7fdd19c3b7ab60feda))
+* add relativetime, timepicker and datetimepicker ([#154](https://github.com/demogar/molaui/issues/154)) ([ec03a95](https://github.com/demogar/molaui/commit/ec03a953c3d6ab26ad4d2c7a989f39fc1f1f7802))
+* **data-table:** add virtual rows, column resize, row expansion, a frozen first column and rows on a phone ([#161](https://github.com/demogar/molaui/issues/161)) ([387bb5b](https://github.com/demogar/molaui/commit/387bb5b35b64544f14bef0ef4fcc07875f459b81))
+* **eslint:** ship the check_code rules as @demogar/mola-ui/eslint ([#147](https://github.com/demogar/molaui/issues/147)) ([7d133cd](https://github.com/demogar/molaui/commit/7d133cd398cb904a51bc97aea1de4072fb93f5fe))
+* **figma:** add a figma kit plugin generated from the tokens and the manifest ([#165](https://github.com/demogar/molaui/issues/165)) ([3e126c5](https://github.com/demogar/molaui/commit/3e126c59d45fbd916cd58d62006485f4438c317c))
+* **markdown,side-by-side-diff:** add a streaming markdown renderer that keeps citations, and a side-by-side diff ([#158](https://github.com/demogar/molaui/issues/158)) ([6fe2922](https://github.com/demogar/molaui/commit/6fe2922b08230eb4becac6db0ccf52495331c45a))
+* **mcp:** brief get_component, job-aware search and llms-rules.txt ([#138](https://github.com/demogar/molaui/issues/138)) ([782f3cc](https://github.com/demogar/molaui/commit/782f3cce48ee6ac74a40fe669f1c3b34703672e3)), closes [#95](https://github.com/demogar/molaui/issues/95)
+* one prop vocabulary, open prop bags, router links and one controllable hook ([#146](https://github.com/demogar/molaui/issues/146)) ([c493d04](https://github.com/demogar/molaui/commit/c493d04937f3949120112cd4f3139fd916e2baf5))
+* one vocabulary for pressed and disabled, a button states matrix, and hard-states stories ([#162](https://github.com/demogar/molaui/issues/162)) ([0408e77](https://github.com/demogar/molaui/commit/0408e778f8813e058631c615ac7a3b32fe5b4729))
+* **patterns:** show every pattern state in a story, and move the agent console and form example under patterns ([#160](https://github.com/demogar/molaui/issues/160)) ([2aec7f2](https://github.com/demogar/molaui/commit/2aec7f22c5ae9b680d553c6fdaf8f82a4f02df38))
+* **shell:** add a banner, a notification centre, and a shortcuts dialog with usehotkeys ([#156](https://github.com/demogar/molaui/issues/156)) ([f262538](https://github.com/demogar/molaui/commit/f2625389d01e97336bd344dc6d9f7f1f20668e3b))
+* ship vs code snippets, and add a codemod index, a proposal template and a roadmap page ([#148](https://github.com/demogar/molaui/issues/148)) ([e22cbfb](https://github.com/demogar/molaui/commit/e22cbfbff23f8abd15658f58142de128151143af))
+* **styles:** add components.css for existing apps and document the first-run setup, with counts generated from the source ([#126](https://github.com/demogar/molaui/issues/126)) ([97618c5](https://github.com/demogar/molaui/commit/97618c58df452e179899ac26b4491ec3e3fc1892))
+* **tokens:** name the edges, stacking, glyphs and type pairs, and hold rojo to the danger role ([#139](https://github.com/demogar/molaui/issues/139)) ([6737f9b](https://github.com/demogar/molaui/commit/6737f9bfc052532c130a84b2b5e0f694957fdfe6))
+
+
+### Bug Fixes
+
+* **a11y:** name popup listboxes, keep the asterisk out of names, and reflow every story at spacious 320px ([#152](https://github.com/demogar/molaui/issues/152)) ([81ec7c0](https://github.com/demogar/molaui/commit/81ec7c08c1159afe575c06f327a9f068e8dbd7b0))
+* **ai:** render clocks after hydration and test toast timers and thread scrolling ([#125](https://github.com/demogar/molaui/issues/125)) ([b971920](https://github.com/demogar/molaui/commit/b9719204607b3c0413a5a9d629cdce96221be01e))
+* **badge:** give every status tone its own shape and close the small accessibility defects ([#133](https://github.com/demogar/molaui/issues/133)) ([b43be94](https://github.com/demogar/molaui/commit/b43be942c8ad35a2a382a11c96340082ac5dda20))
+* close small api and token defects (toast timeout, sparkline, keys, variant nulls, forced colours, browser floor) ([#128](https://github.com/demogar/molaui/issues/128)) ([2dd0060](https://github.com/demogar/molaui/commit/2dd0060ceab2b18d6fc832036f638c01e2997a84))
+* close the wave-0 p1 defects (release gate, check:all, focus ring, overlay keys, prop merging) ([#122](https://github.com/demogar/molaui/issues/122)) ([9f36126](https://github.com/demogar/molaui/commit/9f3612621d656963502c9bad3d882cd0cea065c2))
+* **command:** name groups by index-based ids and announce result counts ([#120](https://github.com/demogar/molaui/issues/120)) ([5a92ac1](https://github.com/demogar/molaui/commit/5a92ac1285260530f5ae777de4ed644ad1c271bf))
+* **docs:** make docs pages follow the toolbar theme and take rojo out of the chrome ([#135](https://github.com/demogar/molaui/issues/135)) ([633c5eb](https://github.com/demogar/molaui/commit/633c5eb5e357a553708acec062988ba6da68905f))
+* **docs:** parse every changelog section and scope the 0.7.0 release writes ([#141](https://github.com/demogar/molaui/issues/141)) ([38c5270](https://github.com/demogar/molaui/commit/38c5270fb737ea91a29c4412024a0874d9b989e6))
+* **figma:** fall back to single-mode collections on figma's starter plan ([#167](https://github.com/demogar/molaui/issues/167)) ([fced51f](https://github.com/demogar/molaui/commit/fced51f6146f0cb7f465082aab46c18072b0d9d3)), closes [#118](https://github.com/demogar/molaui/issues/118)
+* **layout:** reflow at 320px and spacious density, with a scroll-edge cue and an audit gate ([#129](https://github.com/demogar/molaui/issues/129)) ([feec088](https://github.com/demogar/molaui/commit/feec0889c00e8e77c2a2aab43f41d78fe7ea03a1))
+* **package:** take base ui as a peer dependency, resolve require() and regenerate the api report on dependabot bumps ([#121](https://github.com/demogar/molaui/issues/121)) ([61db69f](https://github.com/demogar/molaui/commit/61db69f2a3ab408e11fa06832d418be562eec36d))
+* **patterns:** drop the hand-off message's seam under the card heading ([#132](https://github.com/demogar/molaui/issues/132)) ([dd867bc](https://github.com/demogar/molaui/commit/dd867bc7da8729175cbd6b9a5e147568b30b9cf7))
+* **shortcuts,kbd,command,tooltip,menu,field:** keep keyboard shortcuts left to right in a right-to-left page ([#166](https://github.com/demogar/molaui/issues/166)) ([f0c5ef2](https://github.com/demogar/molaui/commit/f0c5ef2502d4e5bda0878ebcc87b436dd1a56a35))
+* **storybook:** let changelog entries with several scopes wrap on a phone ([#168](https://github.com/demogar/molaui/issues/168)) ([ead8b26](https://github.com/demogar/molaui/commit/ead8b2655a661b57f07e2ea4e830a4028abf2673))
+* **table:** stop the bulk bar clipping its actions' cut and focus ring ([#131](https://github.com/demogar/molaui/issues/131)) ([0f0e5a3](https://github.com/demogar/molaui/commit/0f0e5a3edc36e52a56cf84610e4e8c459050de0c))
+* **tokens:** close tailwind's default namespaces and make the dtcg export valid ([#123](https://github.com/demogar/molaui/issues/123)) ([a170ddc](https://github.com/demogar/molaui/commit/a170ddc98447ff457bc3a06ab00adce77bd780a4))
+
+
+### Performance
+
+* drop tailwind-merge from the bundle and cut layout transitions, shimmers and table restyles ([#137](https://github.com/demogar/molaui/issues/137)) ([921d577](https://github.com/demogar/molaui/commit/921d577a8a75265dc447a586190e2b1c4df3238e))
+
+
+### Documentation
+
+* **components:** document every public prop and fail the manifest on an undocumented one ([#149](https://github.com/demogar/molaui/issues/149)) ([f97ccc2](https://github.com/demogar/molaui/commit/f97ccc274f1a7df10b0defd84b2ec23c8ed987b9))
+* **foundations:** add theming, responsive, data visualisation and migration pages, and reorder getting started ([#151](https://github.com/demogar/molaui/issues/151)) ([333fb5b](https://github.com/demogar/molaui/commit/333fb5bc51fc943170ad7ff141c494dc2ef97891))
+
 ## [0.6.0](https://github.com/demogar/molaui/compare/v0.5.0...v0.6.0) (2026-10-14)
 
 
