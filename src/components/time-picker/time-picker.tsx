@@ -150,7 +150,7 @@ function toDraft(value: TimeString | null | undefined, layout: TimeLayout): Draf
 const PART: Record<TimeSegment, string> = { hour: 'hour', minute: 'minute', dayPeriod: 'day-period' }
 
 const segmentClasses = cn(
-  'h-full min-w-0 border-0 bg-transparent p-0 text-center tabular [font-size:inherit] text-ink',
+  'col-start-1 row-start-1 h-full w-full min-w-0 border-0 bg-transparent p-0 text-center tabular [font-size:inherit] text-ink',
   'outline-none placeholder:text-ink-muted selection:bg-transparent',
   'focus:bg-selected focus:text-ink focus:forced-selected focus:shadow-none',
   'disabled:cursor-not-allowed disabled:text-ink-muted',
@@ -352,7 +352,6 @@ export function TimePicker({
     minute: messages.minute,
     dayPeriod: messages.dayPeriod,
   }
-  const periodWidth = Math.max(...layout.dayPeriods.map((word) => word.length), 2) + 1
 
   return (
     <div data-slot="time-picker" className={cn('flex flex-col gap-2', wrapperClassName)}>
@@ -403,12 +402,28 @@ export function TimePicker({
             const shown = display(segment)
             return (
               <React.Fragment key={segment}>
+                {/* Each segment is as wide as what it shows, so "5:30" reads
+                    as one time rather than "5 :30". The width comes from an
+                    invisible copy of the text in the same grid cell, not from
+                    a count of characters: `ch` is the width of a Latin zero,
+                    and "오후" is twice as wide as two of them. The day period
+                    is as wide as its longer word, so switching does not move
+                    the icon. */}
+                <span className="inline-grid">
+                  {(segment === 'dayPeriod' ? layout.dayPeriods : [shown || '––']).map((word) => (
+                    <span key={word} aria-hidden className="invisible col-start-1 row-start-1 px-[0.125em] whitespace-pre">
+                      {word}
+                    </span>
+                  ))}
                 <input
                   ref={(node) => {
                     segmentRefs.current[segment] = node
                   }}
                   id={segmentId}
                   type="text"
+                  // The smallest intrinsic width, so the sizer beside it, not
+                  // the browser's default of twenty characters, sets the cell.
+                  size={1}
                   role="spinbutton"
                   data-part={PART[segment]}
                   inputMode={segment === 'dayPeriod' ? 'text' : 'numeric'}
@@ -438,9 +453,9 @@ export function TimePicker({
                     const typed = event.target.value.slice(-1)
                     if (typed) typeKey(segment, index, typed)
                   }}
-                  style={{ width: `${segment === 'dayPeriod' ? periodWidth : 2.25}ch` }}
                   className={segmentClasses}
                 />
+                </span>
                 {layout.literals[index + 1] ? (
                   <span aria-hidden className="self-center whitespace-pre text-ink-muted">
                     {layout.literals[index + 1]}

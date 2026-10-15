@@ -80,7 +80,7 @@ function DeployDemo() {
   const [value, setValue] = useState<Date | null>(new Date(2026, 9, 7, 9, 30))
   return (
     <div className="grid max-w-md gap-3">
-      <Field label="Deploy the new model at" hint="Deploys start from 9:00 today, Cayuco time.">
+      <Field label="Deploy the new model at" hint="Deploys start from 09:00 today, Cayuco time.">
         {(control) => (
           <DateTimePicker
             {...control}
@@ -107,7 +107,7 @@ export const DateAndTime: Story = {
     docs: {
       description: {
         story:
-          '`DateTimePicker` composes DatePicker and TimePicker: the calendar, its typed date and `open` / `onOpenChange` are DatePicker\'s own. The value is one `Date` in local time, `null` until both halves are filled, and submits as `yyyy-mm-ddThh:mm`. `min` is a moment: days before it are unavailable, and a time before 9:00 on 6 October is refused under both halves.',
+          '`DateTimePicker` composes DatePicker and TimePicker: the calendar, its typed date and `open` / `onOpenChange` are DatePicker\'s own. The value is one `Date` in local time, `null` until both halves are filled, and submits as `yyyy-mm-ddThh:mm`. `min` is a moment: days before it are unavailable, and a time before 09:00 on 6 October is refused under both halves.',
       },
     },
   },
