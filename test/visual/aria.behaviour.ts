@@ -77,6 +77,35 @@ const CASES: Case[] = [
       await expect(pages.locator('[aria-current]')).toHaveCount(1)
     },
   },
+  // The long-table features (#104). A disclosure per row whose detail row is
+  // the next row of the same table; resize handles that are separators with a
+  // value; and the stacked phone layout, which must still be a table.
+  {
+    name: 'data-table-expandable',
+    story: 'components-data-display-table--expandable-rows',
+    target: (page) => page.getByRole('table', { name: 'Agent runs' }),
+    also: async (page) => {
+      const open = page.locator('[aria-expanded="true"]')
+      await expect(open).toHaveCount(1)
+      const detail = page.locator(`[id="${await open.getAttribute('aria-controls')}"]`)
+      await expect(detail).toHaveAttribute('data-slot', 'data-table-detail')
+    },
+  },
+  {
+    name: 'data-table-resizable',
+    story: 'components-data-display-table--resizable-columns',
+    target: (page) => page.getByRole('table', { name: 'Agent runs' }),
+    also: async (page) => {
+      // The ARIA YAML does not carry a separator's value.
+      await expect(page.getByRole('separator', { name: 'Resize Agent' })).toHaveAttribute('aria-valuenow', '224')
+      await expect(page.getByRole('separator')).toHaveCount(7)
+    },
+  },
+  {
+    name: 'data-table-stacked',
+    story: 'components-data-display-table--rows-on-a-phone',
+    target: (page) => page.getByRole('table', { name: 'Agent runs' }),
+  },
   { name: 'command-palette', story: 'components-overlays-command-palette--default' },
   {
     name: 'date-picker',

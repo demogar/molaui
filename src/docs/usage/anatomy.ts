@@ -159,6 +159,8 @@ export const ANATOMY: Record<string, Anatomy> = {
       { part: 'row', name: 'Row', does: 'A row at the density’s row height, with a soft keyline under it.', nth: 1 },
       { part: 'footer', name: 'Footer', does: 'Totals, on a shaded ground under an ink rule.' },
       { part: 'caption', name: 'Caption', does: 'What the table shows, under it, read by screen readers as its name.' },
+      { part: 'resizer', name: 'Resize handle', does: 'A focusable separator on a header’s trailing edge, dragged or moved with the arrow keys.', story: 'ResizableColumns' },
+      { part: 'detail', name: 'Detail row', does: 'What an expanded row shows, on the shaded ground under it.', story: 'ExpandableRows' },
     ],
   },
   'Components/Data display/Stat': {

@@ -3,6 +3,7 @@ import * as React from 'react'
 
 import { Badge, type BadgeTone } from '../badge'
 import { Button } from '../button'
+import { DescriptionList } from '../description-list'
 import { type AgentRun, formatDuration, formatRelative, makeAgentRuns, type RunStatus } from './agent-runs.fixture'
 import { DataTable, type DataTableColumn, type DataTableSort } from './data-table'
 import {
@@ -581,7 +582,210 @@ export const Virtualized: Story = {
     docs: {
       description: {
         story:
-          'Ten thousand rows, about sixty in the DOM. `DataTable` does not virtualize: most internal tables are paged, and a virtual list changes how find-in-page, printing and screen readers see the data, so it should be a decision per screen, not a default. The path is the primitives: render the rows in view between two spacer rows sized in `--row-h` (density fixes every row’s height, so the arithmetic is a division), and set `aria-rowcount` on the table and `aria-rowindex` on each row so assistive tech reports “row 4,211 of 10,001” instead of the 60 it can see. For rows of varying height, use `@tanstack/react-virtual` (`useVirtualizer` with the frame as its scroll element) in the same structure; it is not a dependency of this package, because the fixed-height case needs none.',
+          'Ten thousand rows with the primitives, for rows `DataTable` cannot window: the same structure, by hand. Render the rows in view between two spacer rows sized in `--row-h` (density fixes every row’s height, so the arithmetic is a division), and set `aria-rowcount` on the table and `aria-rowindex` on each row so assistive tech reports “row 4,211 of 10,001” instead of the 60 it can see. `DataTable` does this itself with `virtualize` (see *Data table — ten thousand runs*); reach for the primitives when rows vary in height, with `@tanstack/react-virtual` (`useVirtualizer` with the frame as its scroll element) in the same structure. It is not a dependency of this package, because the fixed-height case needs none.',
+      },
+    },
+  },
+}
+
+function TenThousandRunsDemo() {
+  const [selection, setSelection] = React.useState<Set<string>>(new Set())
+  return (
+    <DataTable
+      label="Ten thousand agent runs"
+      noun={{ one: 'run', other: 'runs' }}
+      columns={columns}
+      rows={bigRuns}
+      getRowId={(run) => run.id}
+      rowLabel={(run) => `Select ${run.id}`}
+      selectable
+      selection={selection}
+      onSelectionChange={setSelection}
+      bulkActions={() => (
+        <Button size="sm" variant="secondary">
+          Export
+        </Button>
+      )}
+      defaultSort={{ key: 'startedAt', direction: 'descending' }}
+      virtualize
+      stickyHeader
+      framed
+      frameClassName="h-[28rem]"
+      className="min-w-[56rem]"
+    />
+  )
+}
+
+export const TenThousandRuns: Story = {
+  name: 'Data table — ten thousand runs',
+  render: () => <TenThousandRunsDemo />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`virtualize` renders the rows in view, and eight more on each side, between two spacer rows: ten thousand runs, about forty rows in the DOM. It stays a real table. Sorting, selection and the column menu work on every row, `aria-rowcount` and `aria-rowindex` give a screen reader the true position (“row 4,211 of 10,001”), the row holding focus stays rendered when it is scrolled away, and the margin means Tab always finds the next row’s checkbox. What a virtual table cannot do: the browser’s find-in-page, a screen reader’s browse mode and printing reach only the rows in the DOM, so give a table this long a filter. It is off by default for that reason: page a table unless the reader really scrolls through thousands of rows. Rows are one height because density fixes `--row-h`; no dependency is needed for that, so none was added.',
+      },
+    },
+  },
+}
+
+const resizeColumns: DataTableColumn<AgentRun>[] = columns.map((column) =>
+  column.key === 'id' ? { ...column, minWidth: 112 } : column.key === 'agent' ? { ...column, minWidth: 120 } : column,
+)
+
+export const ResizableColumns: Story = {
+  name: 'Resizable columns',
+  render: () => (
+    <DataTable
+      label="Agent runs"
+      noun={{ one: 'run', other: 'runs' }}
+      columns={resizeColumns}
+      rows={runs.slice(0, 8)}
+      getRowId={(run) => run.id}
+      resizableColumns
+      defaultColumnWidths={{ id: 152, agent: 224, status: 144, model: 176, tokens: 112, cost: 104, duration: 128 }}
+      framed
+    />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Each header but the last has a handle on its trailing edge: a focusable separator (`role="separator"`, its width as `aria-valuenow`), so it is a tab stop of its own beside the sort button. Drag it, or focus it and press ←/→ (16px, 64px with Shift), Home for the narrowest and End for the widest. In right-to-left the handle is on the left edge and the arrow pointing away from the column widens it. The last column takes the room that is left, so moving one edge moves only that edge until the table runs out of room, then the frame scrolls. The first resize fixes every column at the width it is drawn at, so nothing else jumps; `onColumnWidthsChange` reports all of them to remember between visits.',
+      },
+    },
+  },
+}
+
+function RunDetail({ run }: { run: AgentRun }) {
+  return (
+    <DescriptionList
+      layout="grid"
+      className="max-w-2xl"
+      items={[
+        { term: 'Run', detail: run.id, literal: true },
+        { term: 'Model', detail: run.model, literal: true },
+        { term: 'Tokens', detail: run.status === 'queued' ? '—' : integer.format(run.tokens) },
+        { term: 'Started', detail: run.startedAt.toUTCString() },
+      ]}
+    />
+  )
+}
+
+export const ExpandableRows: Story = {
+  name: 'Expandable rows',
+  render: () => (
+    <DataTable
+      label="Agent runs"
+      noun={{ one: 'run', other: 'runs' }}
+      columns={columns.filter((c) => c.key !== 'model')}
+      rows={runs.slice(0, 6)}
+      getRowId={(run) => run.id}
+      rowLabel={(run) => `Select ${run.id}`}
+      selectable
+      renderExpanded={(run) => <RunDetail run={run} />}
+      canExpand={(run) => run.status !== 'queued'}
+      expandLabel={(run) => `Details of ${run.id}`}
+      defaultExpanded={[runs[1]!.id]}
+      framed
+      className="min-w-[52rem]"
+    />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`renderExpanded` adds a disclosure button at the start of each row and a detail row under it while open: a native button with `aria-expanded`, and `aria-controls` pointing at the detail row once it exists. Enter or Space toggles it. The marker is the system’s one disclosure marker, a plus that turns into a cross (ADR 0006). The detail sits on the shaded ground, one step down, so it reads as belonging to the row above rather than as a row of its own. `canExpand` leaves the button off a row with nothing to show (the queued run).',
+      },
+    },
+  },
+}
+
+function FrozenDemo() {
+  const ref = React.useRef<HTMLDivElement>(null)
+  React.useLayoutEffect(() => {
+    const frame = ref.current?.querySelector<HTMLElement>('[data-slot="table-frame"]')
+    if (!frame) return
+    // Partway, so both the frozen column and a column sliding under it show.
+    const toMiddle = () => {
+      frame.scrollLeft = (getComputedStyle(frame).direction === 'rtl' ? -1 : 1) * 260
+    }
+    toMiddle()
+    if (typeof ResizeObserver === 'undefined') return
+    const observer = new ResizeObserver(toMiddle)
+    if (frame.firstElementChild) observer.observe(frame.firstElementChild)
+    return () => observer.disconnect()
+  }, [])
+  return (
+    <div ref={ref} className="max-w-[24.375rem]">
+      <DataTable
+        label="Agent runs"
+        columns={columns}
+        rows={runs.slice(0, 6)}
+        getRowId={(run) => run.id}
+        rowLabel={(run) => `Select ${run.id}`}
+        selectable
+        defaultSelection={[runs[2]!.id]}
+        stickyFirstColumn
+        framed
+      />
+    </div>
+  )
+}
+
+export const FrozenFirstColumn: Story = {
+  name: 'Frozen first column',
+  render: () => <FrozenDemo />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`stickyFirstColumn` keeps the checkbox and the identifying column in place while the rest scrolls under them, here at a phone’s width and scrolled partway. The frozen part ends in an ink cut (`cut-e`), the same blade edge as the header rule: it is structural, where the fixed part stops, and it is a box-shadow on the cell, so it travels with the sticky cell and keeps the row’s soft rule beside it. The frozen cells carry the frame’s ground, so a hovered or selected row still washes them. Logical insets: in right-to-left they freeze on the right, where that scroll starts. Keep the frozen column narrow, an id rather than a name, or a phone has little room left for the rest.',
+      },
+    },
+  },
+}
+
+function RowsOnAPhoneDemo() {
+  const [selection, setSelection] = React.useState<Set<string>>(new Set([runs[2]!.id]))
+  return (
+    <div className="max-w-[24.375rem]">
+      <DataTable
+        label="Agent runs"
+        noun={{ one: 'run', other: 'runs' }}
+        columns={columns.filter((c) => ['id', 'agent', 'status', 'cost', 'startedAt'].includes(c.key))}
+        rows={runs.slice(0, 4)}
+        getRowId={(run) => run.id}
+        rowLabel={(run) => `Select ${run.id}`}
+        selectable
+        selection={selection}
+        onSelectionChange={setSelection}
+        bulkActions={() => (
+          <>
+            <Button size="sm" variant="secondary">
+              Re-run
+            </Button>
+            <Button size="sm" variant="danger">
+              Cancel runs
+            </Button>
+          </>
+        )}
+        stackWhenNarrow
+        framed
+        className="min-w-[44rem]"
+      />
+    </div>
+  )
+}
+
+export const RowsOnAPhone: Story = {
+  name: 'Rows on a phone',
+  render: () => <RowsOnAPhoneDemo />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`stackWhenNarrow` is for action tables used on a phone, where the action is the point and scrolling sideways to find a row’s status is the obstacle. Below a 36rem container each row becomes a block: the checkbox at the start, and each value on a line of its own with its column’s name beside it. The header becomes a bar of what can be pressed, select-all and the sort buttons; the other headers are kept for screen readers, since every line now shows its label. It is a container query, so a table in a narrow side panel stacks too, and it keeps its table semantics, with explicit roles because changing a table’s display has made some browsers drop them. Not combined with `virtualize`: stacked rows vary in height.',
       },
     },
   },

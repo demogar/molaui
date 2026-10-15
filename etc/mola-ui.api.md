@@ -680,6 +680,9 @@ export interface DataTableColumn<Row> {
     // (undocumented)
     key: string;
     label?: string;
+    maxWidth?: number;
+    minWidth?: number;
+    resizable?: boolean;
     // (undocumented)
     sortable?: boolean;
     sortValue?: (row: Row) => SortValue;
@@ -704,14 +707,20 @@ export type DataTableEmpty = Pick<EmptyStateProps, 'title' | 'description' | 'ac
 // @public (undocumented)
 export interface DataTableProps<Row> extends Omit<React_2.ComponentProps<'table'>, 'children' | 'aria-label'> {
     bulkActions?: (context: DataTableBulkContext) => React_2.ReactNode;
+    canExpand?: (row: Row) => boolean;
     caption?: React_2.ReactNode;
     columnMenu?: boolean;
     columns: DataTableColumn<Row>[];
+    columnWidths?: Readonly<Record<string, number>>;
+    defaultColumnWidths?: Readonly<Record<string, number>>;
+    defaultExpanded?: Iterable<string>;
     defaultHiddenColumns?: Iterable<string>;
     defaultPage?: number;
     defaultSelection?: Iterable<string>;
     defaultSort?: DataTableSort;
     empty?: React_2.ReactNode | DataTableEmpty;
+    expanded?: ReadonlySet<string>;
+    expandLabel?: (row: Row) => string;
     frameClassName?: string;
     framed?: boolean;
     getRowId: (row: Row) => string;
@@ -723,6 +732,8 @@ export interface DataTableProps<Row> extends Omit<React_2.ComponentProps<'table'
         one: string;
         other: string;
     };
+    onColumnWidthsChange?: (widths: Record<string, number>) => void;
+    onExpandedChange?: (expanded: Set<string>) => void;
     onHiddenColumnsChange?: (hidden: Set<string>) => void;
     onPageChange?: (page: number) => void;
     onSelectionChange?: (selection: Set<string>) => void;
@@ -730,13 +741,18 @@ export interface DataTableProps<Row> extends Omit<React_2.ComponentProps<'table'
     page?: number;
     pageSize?: number;
     paginationVariant?: 'compact' | 'pages';
+    renderExpanded?: (row: Row) => React_2.ReactNode;
+    resizableColumns?: boolean;
     rowCount?: number;
     rowLabel?: (row: Row) => string;
     rows: Row[];
     selectable?: boolean;
     selection?: ReadonlySet<string>;
     sort?: DataTableSort | null;
+    stackWhenNarrow?: boolean;
+    stickyFirstColumn?: boolean;
     stickyHeader?: boolean;
+    virtualize?: boolean;
     wrapperClassName?: string;
 }
 
@@ -2535,6 +2551,7 @@ export function TableHeader(input: React_2.ComponentProps<'thead'>): React_2.JSX
 export interface TableHeadProps extends React_2.ComponentProps<'th'> {
     numeric?: boolean;
     onSort?: () => void;
+    resizer?: React_2.ReactNode;
     sort?: TableSortDirection;
 }
 

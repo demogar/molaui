@@ -562,11 +562,13 @@ export const USAGE: Record<string, Usage> = {
     ],
   },
   'Components/Data display/Table': {
-    summary: 'Table primitives for rows of records, and DataTable for columns as data with sorting, selection, column visibility and pages.',
+    summary: 'Table primitives for rows of records, and DataTable for columns as data with sorting, selection, column visibility, pages, virtual rows, resizing, expansion and a frozen first column.',
     use: [
       'Comparing many records with the same fields, such as runs, documents or evaluations.',
       'Sorting, selection, bulk actions and pages on client or server data, with DataTable.',
-      'A layout DataTable does not cover, such as virtualised rows, with the primitives.',
+      'Thousands of rows a reader scrolls through, with `virtualize`, and a filter beside it, because find-in-page reaches only the rows in view.',
+      'An action table used on a phone, with `stackWhenNarrow`, so each row is a block instead of a row that scrolls sideways.',
+      'A layout DataTable does not cover, such as virtual rows of varying height, with the primitives.',
     ],
     avoid: [
       { when: 'The properties of one record.', use: 'Components/Data display/Description list' },
@@ -581,6 +583,14 @@ export const USAGE: Record<string, Usage> = {
       {
         do: 'Show the no-results empty row with Clear filters when filters hide every row.',
         dont: 'Tell someone to create their first run when a filter is hiding the runs they have.',
+      },
+      {
+        do: 'Page a table by default, and virtualize only one the reader really scrolls through.',
+        dont: 'Virtualize every table, so find-in-page and printing miss most of every one.',
+      },
+      {
+        do: 'Freeze a narrow identifying column, such as the run id.',
+        dont: 'Freeze a wide name column, leaving a phone no room for the rest.',
       },
     ],
     content: [

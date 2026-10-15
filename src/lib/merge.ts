@@ -147,6 +147,7 @@ col-span>col-start-end: full I V A
 row>row-start-end: auto I V A
 row-span>row-start-end: full I V A
 col-start col-end row-start row-end: I auto V A
+grid-flow: row|col|dense|row-dense|col-dense
 gap gap-x gap-y: ${SPACE}
 justify>justify-content: ${MAIN}|normal
 content>align-content: normal|${MAIN}
@@ -239,6 +240,7 @@ opacity: ${NUM}
 filter: |none V A
 border>border-collapse: collapse|separate
 border-spacing border-spacing-x border-spacing-y: ${SPACE}
+=table-layout: table-auto table-fixed
 transition: |all|colors|opacity|shadow|transform|none V A
 duration: N initial V A
 ease: linear|initial|in|out|in-out|cut V A
@@ -258,6 +260,7 @@ touch-pan>touch-x: x|left|right
 touch-pan>touch-y: y|up|down
 =touch-pz: touch-pinch-zoom
 select: none|text|all|auto
+${withSides('scroll-p')}: ${SPACE}
 fill: none *
 stroke>stroke-w: N (length) [length]L [number]N
 stroke: none *
@@ -336,7 +339,7 @@ edge-focus edge-ring edge-s edge-e edge-t edge-b: shadow`.split('\n')) {
   for (const id of ids.split(' ')) CONFLICTS[id] = others.split(' ')
 }
 /** `p` covers every side; `px` the inline sides; `py` the block sides. */
-for (const key of ['p', 'm', 'border-w-', 'border-color-']) {
+for (const key of ['p', 'm', 'scroll-p', 'border-w-', 'border-color-']) {
   CONFLICTS[key.replace(/-$/, '')] = SIDES.map((s) => key + s)
   CONFLICTS[key + 'x'] = [key + 's', key + 'e', key + 'r', key + 'l']
   CONFLICTS[key + 'y'] = [key + 'bs', key + 'be', key + 't', key + 'b']

@@ -98,7 +98,7 @@
     "aiComponents": 14,
     "aiParts": 25,
     "pages": 78,
-    "stories": 359,
+    "stories": 364,
     "summary": "64 components and 14 AI components (78 documented pages)"
   },
   "tokens": {
@@ -6311,13 +6311,15 @@
       "category": "Data display",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-data-display-table--overview",
       "phase": "stable",
-      "summary": "Table primitives for rows of records, and DataTable for columns as data with sorting, selection, column visibility and pages.",
+      "summary": "Table primitives for rows of records, and DataTable for columns as data with sorting, selection, column visibility, pages, virtual rows, resizing, expansion and a frozen first column.",
       "description": "Tables are read for hours, so every choice is about the eye travelling down a column. Rows take their height from `--row-h` (switch **Density**: compact fits ~40% more runs on a laptop screen). Numbers are right-aligned in tabular figures. Row dividers are quiet `--keyline-soft`; the header rule is ink — the one structural edge, where labels stop and data starts. Header labels sit in the rótulo register so they never read as a first row of data.",
       "usage": {
         "use": [
           "Comparing many records with the same fields, such as runs, documents or evaluations.",
           "Sorting, selection, bulk actions and pages on client or server data, with DataTable.",
-          "A layout DataTable does not cover, such as virtualised rows, with the primitives."
+          "Thousands of rows a reader scrolls through, with `virtualize`, and a filter beside it, because find-in-page reaches only the rows in view.",
+          "An action table used on a phone, with `stackWhenNarrow`, so each row is a block instead of a row that scrolls sideways.",
+          "A layout DataTable does not cover, such as virtual rows of varying height, with the primitives."
         ],
         "avoid": [
           {
@@ -6341,6 +6343,14 @@
           {
             "do": "Show the no-results empty row with Clear filters when filters hide every row.",
             "dont": "Tell someone to create their first run when a filter is hiding the runs they have."
+          },
+          {
+            "do": "Page a table by default, and virtualize only one the reader really scrolls through.",
+            "dont": "Virtualize every table, so find-in-page and printing miss most of every one."
+          },
+          {
+            "do": "Freeze a narrow identifying column, such as the run id.",
+            "dont": "Freeze a wide name column, leaving a phone no room for the rest."
           }
         ],
         "content": [
@@ -6384,18 +6394,51 @@
               "Escape"
             ],
             "action": "Closes the column menu and returns focus to the Columns button."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Expands or collapses the focused row’s details, with `renderExpanded`."
+          },
+          {
+            "keys": [
+              "ArrowLeft",
+              "ArrowRight"
+            ],
+            "action": "On a column resize handle, moves the column’s edge by 16px. In right-to-left the edge is on the left, and the arrow pointing away from the column widens it."
+          },
+          {
+            "keys": [
+              "Shift+ArrowLeft",
+              "Shift+ArrowRight"
+            ],
+            "action": "On a column resize handle, moves the edge by 64px."
+          },
+          {
+            "keys": [
+              "Home",
+              "End"
+            ],
+            "action": "On a column resize handle, makes the column its narrowest or its widest."
           }
         ],
         "handles": [
           "Puts the scrolling frame in the tab order only when the table overflows it.",
           "Sets `aria-sort` on the sorted column only, and `aria-selected` on selected rows.",
           "Uses native checkboxes, and announces the selection count once through a polite status.",
-          "Marks a loading `DataTable` with `aria-busy` and hides its skeleton rows from assistive tech."
+          "Marks a loading `DataTable` with `aria-busy` and hides its skeleton rows from assistive tech.",
+          "With `virtualize`, sets `aria-rowcount` and `aria-rowindex` so the full count is heard, and keeps the focused row rendered while it is scrolled away.",
+          "Makes each column resize handle a focusable separator with its width as `aria-valuenow`, so it can be found and moved without a pointer.",
+          "Gives each row’s disclosure button `aria-expanded`, and `aria-controls` pointing at its detail row while open.",
+          "Keeps table semantics in the stacked phone layout, with explicit roles, and hides the repeated cell labels from assistive tech, which already hears the column header."
         ],
         "you": [
           "Name the table with `label` or `aria-label`, or a `caption`.",
-          "Give `rowLabel` so each row checkbox says which row it selects.",
-          "Mark figure columns `numeric`, on the header and the cells alike."
+          "Give `rowLabel` so each row checkbox says which row it selects, and `expandLabel` so each disclosure button says which row it opens.",
+          "Mark figure columns `numeric`, on the header and the cells alike.",
+          "Give a virtual table a filter or search: find-in-page and a screen reader’s browse mode reach only the rows in view."
         ]
       },
       "anatomy": {
@@ -6430,6 +6473,18 @@
             "name": "Caption",
             "does": "What the table shows, under it, read by screen readers as its name.",
             "selector": "[data-part=\"caption\"]"
+          },
+          {
+            "part": "resizer",
+            "name": "Resize handle",
+            "does": "A focusable separator on a header’s trailing edge, dragged or moved with the arrow keys.",
+            "selector": "[data-part=\"resizer\"]"
+          },
+          {
+            "part": "detail",
+            "name": "Detail row",
+            "does": "What an expanded row shows, on the shaded ground under it.",
+            "selector": "[data-part=\"detail\"]"
           }
         ]
       },
@@ -6595,6 +6650,12 @@
               "description": "Called when the header's sort control is pressed. The page decides the next direction; only used with `sort`."
             },
             {
+              "name": "resizer",
+              "type": "ReactNode",
+              "required": false,
+              "description": "A column resize handle, drawn after the label and outside the sort control, so the two are separate tab stops. DataTable passes its own with `resizableColumns`; give the header `relative` (or keep it sticky) so the handle can sit on its trailing edge."
+            },
+            {
               "name": "sort",
               "type": "TableSortDirection",
               "required": false,
@@ -6690,6 +6751,12 @@
               "description": "Actions for the selected rows, shown in the bar above the table while any are selected."
             },
             {
+              "name": "canExpand",
+              "type": "((row: Row) => boolean)",
+              "required": false,
+              "description": "Whether a row has anything to expand. Rows that return `false` get no button."
+            },
+            {
               "name": "caption",
               "type": "ReactNode",
               "required": false,
@@ -6701,6 +6768,24 @@
               "required": false,
               "default": "false",
               "description": "Adds a \"Columns\" menu to the bar above the table."
+            },
+            {
+              "name": "columnWidths",
+              "type": "Readonly<Record<string, number>>",
+              "required": false,
+              "description": "Controlled column widths in pixels, by column key. Pair with `onColumnWidthsChange`."
+            },
+            {
+              "name": "defaultColumnWidths",
+              "type": "Readonly<Record<string, number>>",
+              "required": false,
+              "description": "Column widths in pixels at the start, by key, when the table owns them."
+            },
+            {
+              "name": "defaultExpanded",
+              "type": "Iterable<string>",
+              "required": false,
+              "description": "Row ids expanded at the start when the table owns expansion."
             },
             {
               "name": "defaultHiddenColumns",
@@ -6732,6 +6817,18 @@
               "type": "ReactNode | DataTableEmpty",
               "required": false,
               "description": "What shows when there are no rows: an empty state as data (title, description, kind, actions), or a node that becomes its description. Use `kind: \"no- results\"` when filters emptied it."
+            },
+            {
+              "name": "expanded",
+              "type": "ReadonlySet<string>",
+              "required": false,
+              "description": "Controlled expanded rows, by id. Pair with `onExpandedChange`."
+            },
+            {
+              "name": "expandLabel",
+              "type": "((row: Row) => string)",
+              "required": false,
+              "description": "How a row's disclosure button is named, e.g. `(run) => \\`Details of ${run.id}\\``."
             },
             {
               "name": "frameClassName",
@@ -6780,6 +6877,18 @@
               "description": "What a row is, for counts: `{ one: 'run', other: 'runs' }`."
             },
             {
+              "name": "onColumnWidthsChange",
+              "type": "((widths: Record<string, number>) => void)",
+              "required": false,
+              "description": "Called with every column's width after a resize — to remember the layout between visits. The first resize fixes each column at its rendered width."
+            },
+            {
+              "name": "onExpandedChange",
+              "type": "((expanded: Set<string>) => void)",
+              "required": false,
+              "description": "Called with the new set of expanded row ids."
+            },
+            {
               "name": "onHiddenColumnsChange",
               "type": "((hidden: Set<string>) => void)",
               "required": false,
@@ -6823,6 +6932,19 @@
               "description": "`compact` (the default) is previous/next with the range; `pages` numbers the pages, for a table where jumping matters more than stepping."
             },
             {
+              "name": "renderExpanded",
+              "type": "((row: Row) => ReactNode)",
+              "required": false,
+              "description": "What a row shows when it is expanded. Setting it adds a disclosure button at the start of each row, and a detail row under it while open."
+            },
+            {
+              "name": "resizableColumns",
+              "type": "boolean",
+              "required": false,
+              "default": "false",
+              "description": "Puts a resize handle on the trailing edge of each column header but the last, which takes the room that is left. Drag it, or focus it and use the arrow keys; in right-to-left the keys follow the edge."
+            },
+            {
               "name": "rowCount",
               "type": "number",
               "required": false,
@@ -6854,11 +6976,32 @@
               "description": "Controlled sort. `null` is \"no sort\"; leave undefined to let the table own it."
             },
             {
+              "name": "stackWhenNarrow",
+              "type": "boolean",
+              "required": false,
+              "default": "false",
+              "description": "Below a 36rem container, draws each row as a block of label and value pairs instead of a row that scrolls sideways — for action tables used on a phone. The header stays as a bar of the sort and select-all controls. The table keeps its table semantics."
+            },
+            {
+              "name": "stickyFirstColumn",
+              "type": "boolean",
+              "required": false,
+              "default": "false",
+              "description": "Keeps the first visible column, and the checkbox and disclosure columns before it, in place while the table scrolls sideways, with an ink edge where the frozen part ends."
+            },
+            {
               "name": "stickyHeader",
               "type": "boolean",
               "required": false,
               "default": "false",
               "description": "Keeps the header row visible while the body scrolls. Give the frame a height with `frameClassName`."
+            },
+            {
+              "name": "virtualize",
+              "type": "boolean",
+              "required": false,
+              "default": "false",
+              "description": "Renders only the rows in view, plus a margin, between two spacer rows, and sets `aria-rowcount` and `aria-rowindex` so assistive tech still hears the full count. Give the frame a height with `frameClassName`. The rows that are not rendered cannot be found with the browser's find-in-page, reached in a screen reader's browse mode or printed, so pair a long virtual table with a filter. Not combined with `stackWhenNarrow`, whose rows vary in height."
             },
             {
               "name": "wrapperClassName",
@@ -6996,6 +7139,16 @@
           "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-table--empty-primitive"
         },
         {
+          "name": "ExpandableRows",
+          "id": "components-data-display-table--expandable-rows",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-table--expandable-rows"
+        },
+        {
+          "name": "FrozenFirstColumn",
+          "id": "components-data-display-table--frozen-first-column",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-table--frozen-first-column"
+        },
+        {
           "name": "Loading",
           "id": "components-data-display-table--loading",
           "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-table--loading"
@@ -7021,6 +7174,16 @@
           "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-table--primitives"
         },
         {
+          "name": "ResizableColumns",
+          "id": "components-data-display-table--resizable-columns",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-table--resizable-columns"
+        },
+        {
+          "name": "RowsOnAPhone",
+          "id": "components-data-display-table--rows-on-a-phone",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-table--rows-on-a-phone"
+        },
+        {
           "name": "ScrolledToTheEnd",
           "id": "components-data-display-table--scrolled-to-the-end",
           "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-table--scrolled-to-the-end"
@@ -7039,6 +7202,11 @@
           "name": "SkeletonRows",
           "id": "components-data-display-table--skeleton-rows",
           "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-table--skeleton-rows"
+        },
+        {
+          "name": "TenThousandRuns",
+          "id": "components-data-display-table--ten-thousand-runs",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-table--ten-thousand-runs"
         },
         {
           "name": "Virtualized",

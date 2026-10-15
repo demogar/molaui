@@ -43,16 +43,23 @@ export default [
     limit: '4.5 kB',
     modifyRolldownConfig: reactOnly,
   },
+  // The stylesheets grow with the components too, and are raised the same
+  // way. 17.5 kB left no room for the audit's third wave: main measured
+  // 17.33 kB once the Markdown renderer and the side-by-side diff had
+  // landed, and DataTable's long-table features (#104) add 0.39 kB, most of
+  // it the stacked phone layout's container-query rules. Both files carry
+  // the same components, so they move together, to the larger one's figure
+  // plus ten per cent.
   {
     name: 'styles.css',
     path: 'dist/mola-ui.css',
     rolldown: false,
-    limit: '17.5 kB',
+    limit: '19.5 kB',
   },
   {
     name: 'components.css',
     path: 'dist/mola-ui-components.css',
     rolldown: false,
-    limit: '17.5 kB',
+    limit: '19.5 kB',
   },
 ]

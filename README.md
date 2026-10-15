@@ -276,7 +276,7 @@ run takes about three minutes.
   `light-dark()`, `var()`, OKLab `color-mix()` — and asserts each promised pairing. It caught a real
   dark-theme failure during the build (muted ink on the gold wash, 4.00:1) before any screen did.
 - **No hex outside `tokens.css`**, enforced by a test.
-- **Every story is a test**: all 359 stories render through the real Storybook config and pass axe
+- **Every story is a test**: all 364 stories render through the real Storybook config and pass axe
   in the unit suite; `scripts/audit.mjs` re-runs axe *with colour contrast* in a real browser in both
   themes, checks every story for horizontal overflow at 390px and reflow at 320px (no text clipped
   or painted over, nothing scrolling sideways without the scroll-edge cue, every story again at
