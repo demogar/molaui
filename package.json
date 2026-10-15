@@ -37,7 +37,7 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "mola-ui-mcp": "./dist/mcp/mola-ui-mcp.js"
+    "mola-ui-mcp": "dist/mcp/mola-ui-mcp.js"
   },
   "exports": {
     ".": {
