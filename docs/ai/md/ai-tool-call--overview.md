@@ -114,13 +114,13 @@ Types: `ToolCallGroupMessages`, `ToolCallMessages`, `ToolCallApproval`, `ToolCal
 
 | Key | What happens |
 | --- | --- |
-| Tab | Moves to the call’s header, then to Approve, Deny, Retry call and the payload’s buttons when open. A call that waits for approval or has failed is held open, so its header is not a stop. |
+| Tab | Moves to the call’s header, then to Approve, Deny, Retry call and the payload’s buttons when open; the header is a stop even while the call is held open. |
 | Enter or Space | Opens or closes the call from its header, or activates the focused button. |
 | ArrowUp or ArrowDown or ArrowLeft or ArrowRight | Scrolls a focused arguments or result block. |
 
 ### Mola handles
 
-- The header is a button with `aria-expanded`, and a failed call or one waiting for approval opens itself.
+- The header is a button with `aria-expanded`, and a failed call or one waiting for approval opens itself; held open, the header stays focusable and is `aria-disabled`, so its name and status are still a stop.
 - A failure is an alert with the error verbatim, except inside an `AgentRun` that has already raised it.
 - Status is a glyph, a word and a colour, and Approve and Deny are buttons of the same weight.
 - `ToolCallGroup` is a group named “N tools in parallel”, or by its `label`.

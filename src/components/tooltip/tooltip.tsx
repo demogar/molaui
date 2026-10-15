@@ -4,6 +4,7 @@ import { Tooltip as TooltipPrimitive } from '@base-ui/react/tooltip'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { useControllable } from '../../lib/use-controllable'
 
 /**
  * A tooltip is the inverse panel at its smallest: ink ground, cloth type. It
@@ -124,8 +125,9 @@ export function Tooltip({
   const popupId = props.id ?? generatedId
   // Base UI owns the open state; this mirrors it so the trigger is described
   // only while the popup it points at exists.
-  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen ?? false)
-  const isOpen = open ?? uncontrolledOpen
+  // Base UI's own `onOpenChange` is called below with its details, so the
+  // hook is told nothing to report.
+  const [isOpen, setIsOpen] = useControllable({ value: open, defaultValue: defaultOpen ?? false })
   // Joined with the trigger's own description, not replacing it.
   const ownDescription = (children.props as { 'aria-describedby'?: string })['aria-describedby']
   const describedBy = [ownDescription, isOpen ? popupId : undefined].filter(Boolean).join(' ') || undefined
@@ -136,7 +138,7 @@ export function Tooltip({
       defaultOpen={defaultOpen}
       disabled={disabled}
       onOpenChange={(next, details) => {
-        setUncontrolledOpen(next)
+        setIsOpen(next)
         onOpenChange?.(next, details)
       }}
     >

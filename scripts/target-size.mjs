@@ -53,8 +53,11 @@ function measure(min) {
 
   // A control inside a <label> is hit anywhere on the label, so the label's
   // box is the target when it is larger.
+  // The same for a segment of a date or time field (a spinbutton in a
+  // `role="group"` box): pressing anywhere in the box focuses a segment, as
+  // pressing a native input's padding would, so the box is the target.
   const box = (el) => {
-    const label = el.closest('label')
+    const label = el.closest('label') ?? (el.getAttribute('role') === 'spinbutton' ? el.closest('[role="group"]') : null)
     const own = el.getBoundingClientRect()
     if (!label || label === el) return own
     const l = label.getBoundingClientRect()

@@ -102,6 +102,9 @@ describe('ToolCall', () => {
     render(
       <ToolCall name="update_flag" status="waiting" approval={{ reason: 'Writes to production.', onApprove, onDeny }} />,
     )
+    // The held-open header is the first stop, then the decision.
+    await userEvent.tab()
+    expect(screen.getByRole('button', { name: /update_flag/ })).toHaveFocus()
     await userEvent.tab()
     expect(screen.getByRole('button', { name: 'Approve' })).toHaveFocus()
     await userEvent.keyboard('{Enter}')
