@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.7.2](https://github.com/demogar/molaui/compare/v0.7.1...v0.7.2) (2026-10-15)
+
+
+### Bug Fixes
+
+* **patterns:** keep the api key name and its badge on one line ([#177](https://github.com/demogar/molaui/issues/177)) ([ed1298b](https://github.com/demogar/molaui/commit/ed1298bcb774991a2b60b4c8186181d86066d413))
+* **storybook:** make every docs contents entry scroll to its section ([#179](https://github.com/demogar/molaui/issues/179)) ([ba5e094](https://github.com/demogar/molaui/commit/ba5e0946e790ef0a3893b7effcec99bf64183833))
+
 ## [0.7.1](https://github.com/demogar/molaui/compare/v0.7.0...v0.7.1) (2026-10-15)
 
 
