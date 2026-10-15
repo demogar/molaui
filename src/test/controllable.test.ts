@@ -4,6 +4,8 @@ import { join, relative, resolve } from 'node:path'
 import ts from 'typescript'
 import { describe, expect, it } from 'vitest'
 
+import { found } from './found'
+
 /**
  * Controlled-or-uncontrolled state goes through `useControllable`
  * (src/lib/use-controllable.ts), never a hand-rolled copy.
@@ -42,20 +44,20 @@ function walk(dir: string): string[] {
 }
 
 function mentionsDefault(node: ts.Node, sf: ts.SourceFile): boolean {
-  let found = false
+  let seen = false
   const visit = (n: ts.Node) => {
-    if (found) return
-    if (ts.isIdentifier(n) && /^default[A-Z]/.test(n.text)) found = true
+    if (seen) return
+    if (ts.isIdentifier(n) && /^default[A-Z]/.test(n.text)) seen = true
     else ts.forEachChild(n, visit)
   }
   visit(node)
-  return found || /\bdefault[A-Z]\w*/.test(node.getText(sf))
+  return seen || /\bdefault[A-Z]\w*/.test(node.getText(sf))
 }
 
 /** `file:line what` for each hand-rolled controllable pair. */
 export function findHandRolled(fileName: string, source: string): string[] {
   const sf = ts.createSourceFile(fileName, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX)
-  const found: string[] = []
+  const hits: string[] = []
   const at = (node: ts.Node) => `${fileName}:${sf.getLineAndCharacterOfPosition(node.getStart(sf)).line + 1}`
 
   const visit = (node: ts.Node) => {
@@ -63,7 +65,7 @@ export function findHandRolled(fileName: string, source: string): string[] {
       const callee = node.expression.getText(sf)
       const arg = node.arguments[0]
       if (/(^|\.)useState$/.test(callee) && arg && mentionsDefault(arg, sf)) {
-        found.push(`${at(node)} useState seeded from ${arg.getText(sf)}`)
+        hits.push(`${at(node)} useState seeded from ${arg.getText(sf)}`)
       }
     }
     if (
@@ -72,12 +74,12 @@ export function findHandRolled(fileName: string, source: string): string[] {
       ts.isIdentifier(node.name) &&
       node.name.text === 'useControllable'
     ) {
-      found.push(`${at(node)} declares its own useControllable`)
+      hits.push(`${at(node)} declares its own useControllable`)
     }
     ts.forEachChild(node, visit)
   }
   visit(sf)
-  return found
+  return hits
 }
 
 describe('controllable state has one implementation', () => {
@@ -98,11 +100,11 @@ describe('controllable state has one implementation', () => {
   })
 
   it('no component seeds state from a default* prop or defines its own useControllable', () => {
-    const found = walk(join(root, 'components')).flatMap((file) => {
+    const handRolled = found(walk(join(root, 'components')), 40, 'component sources').flatMap((file) => {
       const name = relative(root, file)
       return name in EXEMPT ? [] : findHandRolled(name, readFileSync(file, 'utf8'))
     })
-    expect(found).toEqual([])
+    expect(handRolled).toEqual([])
   })
 
   it('every exemption still names a file that needs it', () => {
