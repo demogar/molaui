@@ -7,6 +7,7 @@ on:
     types: [opened, edited, reopened, synchronize]
 
 permissions:
+  contents: read
   pull-requests: read
 
 jobs:
@@ -35,3 +36,20 @@ jobs:
           subjectPattern: ^(?:Bump |(?![A-Z])).+$
           subjectPatternError: |
             The subject "{subject}" must start with a lowercase letter.
+      # The scope must be declared in src/docs/usage/changes.ts. That file's
+      # test only sees a scope once release-please writes it into the release
+      # PR, so an undeclared one used to fail the release instead of the PR
+      # that introduced it (#141, #143). A title with no scope passes.
+      - uses: actions/checkout@v7
+        with:
+          sparse-checkout: |
+            scripts
+            src/docs/usage
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+      # The title goes through the environment, never into the script text,
+      # so a title cannot inject shell.
+      - run: node scripts/pr-scope.mjs "$TITLE"
+        env:
+          TITLE: ${{ github.event.pull_request.title }}

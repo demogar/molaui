@@ -16,7 +16,11 @@
  * folder behind five pages. A scope that is not a component (docs, theme,
  * tokens) is listed in NON_COMPONENT_SCOPES with the reason, and
  * changes.test.ts fails on any scope in CHANGELOG.md that is in neither, so a
- * new scope cannot silently drop entries from a page.
+ * new scope cannot silently drop entries from a page. That test only sees a
+ * scope once release-please has written it into the release PR, the one PR
+ * whose failure blocks a release (#141), so the `Conventional PR title`
+ * workflow also runs titleScopeError() on every pull request title
+ * (scripts/pr-scope.mjs) and fails the PR that brings the scope in.
  *
  * Some entries were merged under a cross-cutting scope even though their
  * subject names components, such as `feat(components): add combobox, date
@@ -253,12 +257,16 @@ export const NON_COMPONENT_SCOPES: Record<string, string> = {
   tokens: 'design tokens, documented on the Foundations pages',
   theme: 'theming across the whole system',
   docs: 'the documentation site',
+  adr: 'the architecture decision records in docs/adr',
   foundations: 'the Foundations pages',
   patterns: 'whole Cayuco screens, which are not components',
   stories: 'story fixtures and demo data',
   readme: 'the README',
   lib: 'internal helpers such as cn()',
   deps: 'dependency updates',
+  'deps-dev': "Dependabot's development dependency updates",
+  dependabot: 'the Dependabot configuration',
+  main: "release-please's release pull request, scoped by its branch",
   scripts: 'build and audit scripts',
   tooling: 'build, lint and test tooling',
   ci: 'continuous integration',
@@ -340,3 +348,39 @@ export function isReleased(version: string, current: string) {
 
 /** The minor line a version belongs to: "0.4.2" → "0.4". */
 export const minorOf = (version: string) => version.split('.').slice(0, 2).join('.')
+
+const TITLE = /^\w+(?:\(([^)]*)\))?!?: /
+
+/**
+ * The scopes of a conventional-commit title (`feat(a,b): …` gives a and b),
+ * split on commas as the changelog parser splits them. A title with no scope,
+ * or one that is not conventional at all, has none: the title's shape is the
+ * semantic-PR action's check, not this one.
+ */
+export function titleScopes(title: string): string[] {
+  const scope = TITLE.exec(title)?.[1]
+  return scope
+    ? scope
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean)
+    : []
+}
+
+/**
+ * Why a pull request title's scope would fail the next release, or undefined
+ * when every scope is declared. The message names the file and both tables,
+ * because the fix is to declare the scope (or drop it), not to rename it to
+ * whatever happens to pass.
+ */
+export function titleScopeError(title: string): string | undefined {
+  const unknown = titleScopes(title).filter((s) => !(s in SCOPE_PAGES) && !(s in NON_COMPONENT_SCOPES))
+  if (unknown.length === 0) return undefined
+  const list = unknown.map((s) => `"${s}"`).join(', ')
+  return (
+    `Unknown scope ${list} in the pull request title. Declare it in src/docs/usage/changes.ts: ` +
+    `in SCOPE_PAGES with the component pages it changes, or in NON_COMPONENT_SCOPES with what it covers. ` +
+    `Or use a declared scope, or none. An undeclared scope reaches no component page, and the release PR ` +
+    `that carries it into CHANGELOG.md fails changes.test.ts.`
+  )
+}

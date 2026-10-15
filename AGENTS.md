@@ -16,6 +16,9 @@ changelog. CI runs a `Conventional PR title` check and fails the PR otherwise.
 
 - `type` is one of: `feat`, `fix`, `perf`, `refactor`, `docs`, `test`, `build`,
   `ci`, `chore`, `revert`. Scope by area: `feat(button):`, `fix(tokens):`.
+- A scope must be declared in `src/docs/usage/changes.ts` (`SCOPE_PAGES` for
+  component pages, `NON_COMPONENT_SCOPES` otherwise); the check fails an
+  undeclared one. Declare a new scope in the same PR, or leave the scope out.
 - The subject must start with a lowercase letter.
 - Add `!` after the type (`feat(tokens)!: …`) for breaking changes — a renamed
   token or removed prop is breaking.

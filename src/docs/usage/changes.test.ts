@@ -16,6 +16,8 @@ import {
   pagesFor,
   parseChangelog,
   SCOPE_PAGES,
+  titleScopeError,
+  titleScopes,
   unknownScopes,
   unknownSections,
 } from './changes'
@@ -175,6 +177,44 @@ describe('scope map', () => {
 
   it('never declares a scope as both a component and not one', () => {
     expect(Object.keys(SCOPE_PAGES).filter((scope) => scope in NON_COMPONENT_SCOPES)).toEqual([])
+  })
+})
+
+/**
+ * The same tables, checked on the pull request title (scripts/pr-scope.mjs in
+ * pr-title.yml), so a new scope fails the PR that introduces it instead of the
+ * release PR that first carries it into CHANGELOG.md.
+ */
+describe('pull request title scopes', () => {
+  it('reads the scopes of a conventional title, split on commas', () => {
+    expect(titleScopes('feat(button): add a size')).toEqual(['button'])
+    expect(titleScopes('feat(tokens)!: rename rojo')).toEqual(['tokens'])
+    expect(titleScopes('fix(dialog, menu): close on escape')).toEqual(['dialog', 'menu'])
+    expect(titleScopes('feat: no scope')).toEqual([])
+    expect(titleScopes('Not conventional at all')).toEqual([])
+  })
+
+  it('accepts declared scopes, component or not, and a title with no scope', () => {
+    expect(titleScopeError('feat(button): add a size')).toBeUndefined()
+    expect(titleScopeError('ci(scripts): measure the critical path')).toBeUndefined()
+    expect(titleScopeError('docs: fix a typo')).toBeUndefined()
+    expect(titleScopeError('fix(tokens)!: hold rojo to danger')).toBeUndefined()
+  })
+
+  it('accepts the titles the bots write', () => {
+    expect(titleScopeError('chore(main): release 0.7.0')).toBeUndefined()
+    expect(titleScopeError('build(deps-dev): Bump vitest from 5.0.2 to 5.0.3')).toBeUndefined()
+    expect(titleScopeError('build(deps): Bump @base-ui/react')).toBeUndefined()
+    expect(titleScopeError('ci: bump the actions group with 2 updates')).toBeUndefined()
+  })
+
+  it('fails an unknown scope and says where to declare it', () => {
+    const error = titleScopeError('feat(widget, button): add a widget')
+    expect(error).toMatch(/Unknown scope "widget"/)
+    expect(error).not.toMatch(/"button"/)
+    expect(error).toMatch(/src\/docs\/usage\/changes\.ts/)
+    expect(error).toMatch(/SCOPE_PAGES/)
+    expect(error).toMatch(/NON_COMPONENT_SCOPES/)
   })
 })
 
