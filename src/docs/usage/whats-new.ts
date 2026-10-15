@@ -14,7 +14,7 @@ import { minorOf } from './changes'
  * request after it, and must be there before the next release's PR (see the
  * test for why not in the release PR itself).
  */
-export const WHATS_NEW = ['0.6.0', '0.5.0', '0.4.0', '0.3.0', '0.2.0'] as const
+export const WHATS_NEW = ['0.7.0', '0.6.0', '0.5.0', '0.4.0', '0.3.0', '0.2.0'] as const
 
 /** The stories title of a What's new page. MDX needs it as a literal, so the test compares the two. */
 export const whatsNewTitle = (version: string) => `Mola UI/What's new/${minorOf(version)}`
