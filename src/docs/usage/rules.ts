@@ -23,7 +23,7 @@ export const RULES: Rule[] = [
     why: 'It has to survive colour blindness, a greyscale screenshot and forced colours.',
   },
   {
-    rule: 'Disabled is stated, not faded. No `opacity-*` on a disabled control.',
+    rule: 'Disabled is stated, not faded. No `opacity-*` on a disabled control; a disabled control of your own stands on `bg-disabled` with `text-ink-muted` and keeps its keyline.',
     why: 'Opacity fades the keyline and the label to about 2:1, a failure axe does not report because disabled controls are exempt.',
   },
   {

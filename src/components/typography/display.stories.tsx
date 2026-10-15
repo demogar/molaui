@@ -25,7 +25,7 @@ export const Default: Story = {}
 export const OnInkPanelWithCut: Story = {
   render: (args) => (
     <div className="on-ink p-10">
-      <Display {...args} className="display-cut band-oro text-on-oro">
+      <Display {...args} className="display-cut band-ink-accent text-ink">
         Agents, cut to size.
       </Display>
     </div>
@@ -34,7 +34,7 @@ export const OnInkPanelWithCut: Story = {
     docs: {
       description: {
         story:
-          '`display-cut` — the signature. Shape, revealed gold band, ink edge: the layer order of a real mola. The fill is `on-oro`, because it is read against the band, not the panel (9.34:1 light, 9.19:1 dark). Allowed on filled panels only; on light cloth it reads as a comic-book sticker, not appliqué. One per page.',
+          '`display-cut` — the signature. Shape, revealed gold band, ink edge: the layer order of a real mola. On an ink panel the letter is cut through to the panel, so its fill is the panel’s own ink (`text-ink`) and the band is `band-ink-accent`: gold on the light theme’s dark panel, gold taken down on the dark theme’s cotton one, so the fill reads against the band in both (9.34:1 light, 5.67:1 dark). With `band-oro` the fill had to be dark in both themes, so the letters were hollow in light and solid in dark. Allowed on filled panels only; on light cloth it reads as a comic-book sticker, not appliqué. One per page.',
       },
     },
   },

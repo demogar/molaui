@@ -58,8 +58,9 @@ export const Grounds: Story = {
           </Text>
           <Rotulo
             className="mt-4"
-            band={layer === 'ink' ? 'oro' : ['pale', 'cloth', 'shade'].includes(layer) ? 'rojo' : 'cloth'}
-            plain={layer === 'oro'}
+            // Gold on gold vanishes, so the oro ground takes an ink band, the
+            // mark ADR 0008 names for a gold field.
+            band={layer === 'ink' ? 'oro' : layer === 'oro' ? 'ink' : ['pale', 'cloth', 'shade'].includes(layer) ? 'rojo' : 'cloth'}
           >
             Label
           </Rotulo>

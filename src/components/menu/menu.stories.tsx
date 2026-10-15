@@ -18,6 +18,8 @@ import {
   MenuSubmenuTrigger,
   MenuTrigger,
 } from './menu'
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
+import { DirectionProvider } from '../../lib/direction'
 
 const meta = {
   title: 'Components/Overlays/Menu',
@@ -130,6 +132,81 @@ export const CheckboxAndRadio: Story = {
       description: {
         story:
           'Toggling does not close the menu — column toggles are chosen several at a time. The radio mark is a filled square: a dot would be the only round thing in the system.',
+      },
+    },
+  },
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <Menu>
+          <MenuTrigger
+            render={
+              <Button variant="secondary" size="sm">
+                Actions for the refund triage run <ChevronDown />
+              </Button>
+            }
+          />
+          <MenuContent>
+            <MenuItem icon={<GitBranch />}>Fork from the last step that succeeded</MenuItem>
+            <MenuItem icon={<Download />}>Export the transcript with every tool call as Markdown</MenuItem>
+          </MenuContent>
+        </Menu>
+      </HardState>
+      <HardState state="rtl">
+        <DirectionProvider direction="rtl">
+          <Menu defaultOpen>
+            <MenuTrigger
+              render={
+                <IconButton label="إجراءات التشغيل" variant="secondary" size="sm">
+                  <MoreHorizontal />
+                </IconButton>
+              }
+            />
+            <MenuContent dir="rtl" lang="ar" align="start">
+              <MenuItem icon={<Pencil />} shortcut="E">
+                إعادة التسمية
+              </MenuItem>
+              <MenuItem icon={<Copy />}>تكرار</MenuItem>
+              <MenuItem icon={<Archive />}>أرشفة</MenuItem>
+              <MenuSeparator />
+              <MenuItem icon={<Trash2 />} tone="danger">
+                حذف التشغيل
+              </MenuItem>
+            </MenuContent>
+          </Menu>
+        </DirectionProvider>
+      </HardState>
+      <HardState state="disabled">
+        <div className="flex flex-wrap items-center gap-3">
+          <Menu>
+            <MenuTrigger
+              disabled
+              render={
+                <IconButton label="Run actions" variant="secondary" size="sm">
+                  <MoreHorizontal />
+                </IconButton>
+              }
+            />
+            <MenuContent>
+              <MenuItem>Rename</MenuItem>
+            </MenuContent>
+          </Menu>
+          <span className="text-sm text-ink-muted">Actions are available once the run is saved.</span>
+        </div>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      story: { inline: false, height: '520px' },
+      description: {
+        story:
+          'A menu is modal, so the right-to-left one is the one shown open: inside `DirectionProvider` the icons, shortcuts and submenu side mirror and the danger item still highlights in rojo. A long item label wraps inside the menu’s width rather than stretching it across the page; a trigger that cannot open yet is disabled and says why beside it, as a disabled item inside an open menu does (Row actions). A menu has no error state: an action that fails reports where its result would have appeared.',
       },
     },
   },

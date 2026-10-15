@@ -150,7 +150,7 @@ export function NavItem({
   const classes = cn(
     'relative flex h-(--control-h) items-center gap-2.5 px-3 text-sm text-ink-2 no-underline',
     'transition-colors',
-    'hover:bg-ink-soft hover:text-ink',
+    'hover:bg-ink-soft hover:text-ink active:cut-press',
     'aria-[current=page]:bg-ink-soft aria-[current=page]:font-semibold aria-[current=page]:text-ink',
     'aria-[current=page]:bar-start-ink',
     'aria-[current=page]:forced-selected',

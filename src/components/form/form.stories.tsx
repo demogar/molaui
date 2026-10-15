@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 import { Button } from '../button'
 import { Checkbox, CheckboxGroup } from '../checkbox'
 import { Field, Input } from '../field'
@@ -185,6 +186,69 @@ export const WithoutSummary: Story = {
       description: {
         story:
           'One field needs no summary. Without one, the form moves focus to the first invalid control after the submit, and the field’s error keeps `role="alert"`, because it is the only announcement there is.',
+      },
+    },
+  },
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <Form aria-label="Delivery limits" className="flex flex-col gap-4" onSubmit={(event) => event.preventDefault()}>
+          <FormErrorSummary description="Nothing has been saved yet." />
+          <Field
+            label="Address Cayuco posts the signed delivery receipt to after every successful run"
+            required
+            error="Enter an https:// address; Cayuco does not deliver signed receipts over plain http."
+          >
+            {(control) => <Input {...control} type="url" dir="ltr" defaultValue="http://hooks.cayuco.example/receipts/refund-triage" />}
+          </Field>
+        </Form>
+      </HardState>
+      <HardState state="rtl">
+        <Form aria-label="إعادة تسمية الوكيل" className="flex flex-col gap-4" onSubmit={(event) => event.preventDefault()}>
+          <Field label="اسم الوكيل" required>
+            {(control) => <Input {...control} defaultValue="وكيل الدعم" />}
+          </Field>
+          <Button type="submit" className="self-start">
+            حفظ
+          </Button>
+        </Form>
+      </HardState>
+      <HardState state="disabled">
+        <Form aria-label="Legacy limits" className="flex flex-col gap-4" onSubmit={(event) => event.preventDefault()}>
+          <Fieldset legend="Legacy limits" description="Managed by the Cayuco platform team." disabled>
+            <Field label="Requests per minute">
+              {(control) => <Input {...control} disabled defaultValue="600" />}
+            </Field>
+          </Fieldset>
+          <Button type="submit" disabled className="self-start">
+            Save limits
+          </Button>
+        </Form>
+      </HardState>
+      <HardState state="error">
+        <Form aria-label="New webhook" className="flex flex-col gap-4" onSubmit={(event) => event.preventDefault()}>
+          <FormErrorSummary description="Nothing has been saved yet." />
+          <Field label="Name" required error="Name the webhook, so the delivery log can say which one fired.">
+            {(control) => <Input {...control} defaultValue="" autoComplete="off" />}
+          </Field>
+          <CheckboxGroup legend="Events" error="Choose at least one event, or the webhook never fires.">
+            <Checkbox value="run.failed" label={<span className="literal">run.failed</span>} />
+            <Checkbox value="run.succeeded" label={<span className="literal">run.succeeded</span>} />
+          </CheckboxGroup>
+        </Form>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A long label and a long error wrap inside a phone’s width, and the summary’s link repeats both, so its line wraps too rather than truncating the reason. In right to left the summary, labels and the submit button align to the right. A disabled fieldset disables its controls and the submit says it is disabled rather than fading. The error cell is the summary with a field error and a group error, each a link to its control.',
       },
     },
   },

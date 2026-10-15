@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 import { DirectionProvider } from '../../lib/direction'
 import { Field } from '../field/field'
 import { NumberInput } from './number-input'
@@ -185,4 +186,59 @@ export const Sizes: Story = {
       <NumberInput aria-label="Large" size="lg" locale="en-US" defaultValue={8} />
     </div>
   ),
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <Field
+          label="Tokens every workspace on the plan may spend in a calendar month"
+          hint="Shared by every agent in the workspace; runs stop when it is reached."
+        >
+          {(control) => (
+            <NumberInput {...control} locale="en-US" min={0} largeStep={1_000_000} defaultValue={125_000_000} unit="tokens a month" />
+          )}
+        </Field>
+      </HardState>
+      <HardState state="rtl">
+        <DirectionProvider direction="rtl">
+          <Field label="مهلة التشغيل">
+            {(control) => (
+              <NumberInput
+                {...control}
+                locale="ar-EG"
+                min={1}
+                max={900}
+                defaultValue={300}
+                unit="ثانية"
+                incrementLabel="زيادة"
+                decrementLabel="إنقاص"
+              />
+            )}
+          </Field>
+        </DirectionProvider>
+      </HardState>
+      <HardState state="disabled">
+        <Field label="Seats" hint="Set by your plan.">
+          {(control) => <NumberInput {...control} locale="en-US" defaultValue={25} disabled />}
+        </Field>
+      </HardState>
+      <HardState state="error">
+        <Field label="Concurrent runs" required error="The workspace allows at most 8 concurrent runs.">
+          {(control) => <NumberInput {...control} locale="en-US" min={1} defaultValue={12} unit="runs" />}
+        </Field>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A nine-digit value with a long unit at a phone’s width: the value sits against its unit and the field keeps room for the longest number its bounds allow. In right to left, inside `DirectionProvider`, the steppers move to the start and the digits are Arabic-Indic. Disabled is the disabled ground with disabled steppers. The error keeps the value, so the person can see what broke the rule.',
+      },
+    },
+  },
 }

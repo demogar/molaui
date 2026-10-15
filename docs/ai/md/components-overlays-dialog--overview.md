@@ -51,6 +51,7 @@ Each story is a live example in Storybook.
 - [ConfirmFails](https://demogar.github.io/molaui/?path=/story/components-overlays-dialog--confirm-fails)
 - [Default](https://demogar.github.io/molaui/?path=/story/components-overlays-dialog--default)
 - [DestructiveConfirm](https://demogar.github.io/molaui/?path=/story/components-overlays-dialog--destructive-confirm)
+- [HardStates](https://demogar.github.io/molaui/?path=/story/components-overlays-dialog--hard-states)
 - [LongContent](https://demogar.github.io/molaui/?path=/story/components-overlays-dialog--long-content)
 - [Sizes](https://demogar.github.io/molaui/?path=/story/components-overlays-dialog--sizes)
 - [TypedConfirmation](https://demogar.github.io/molaui/?path=/story/components-overlays-dialog--typed-confirmation)
@@ -144,7 +145,7 @@ Types: `AlertDialogProps`, `DialogBand`, `DialogContentProps`
 
 ### Testing status
 
-- Automated, jsdom: each of its 6 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 7 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

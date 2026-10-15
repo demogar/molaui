@@ -125,7 +125,7 @@ export function SegmentedControl<V extends string = string>({
             // but the first, so the seams never double.
             'not-first:cut-s',
             'transition-[background-color,color]',
-            'hover:bg-ink-soft hover:text-ink',
+            'hover:bg-ink-soft hover:text-ink active:cut-press',
             'data-pressed:bg-ink data-pressed:text-on-ink data-pressed:hover:bg-ink data-pressed:hover:text-on-ink data-pressed:forced-selected',
             'focus-visible:z-(--z-lift) focus-visible:focus-ring',
             'data-disabled:cursor-not-allowed data-disabled:text-ink-muted data-disabled:hover:bg-transparent',

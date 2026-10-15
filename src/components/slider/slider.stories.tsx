@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
+import { DirectionProvider } from '../../lib/direction'
 import { Slider } from './slider'
 
 const meta = {
@@ -78,4 +80,41 @@ export const Disabled: Story = {
       <Slider {...args} />
     </div>
   ),
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <Slider
+          label="Share of new workspaces that get the retrained refund-triage agent"
+          defaultValue={25}
+          min={0}
+          max={100}
+          step={5}
+          formatValue={(text) => `${text}% of new workspaces`}
+          minLabel="Nobody yet"
+          maxLabel="Every new workspace"
+        />
+      </HardState>
+      <HardState state="rtl">
+        <DirectionProvider direction="rtl">
+          <Slider label="درجة الحرارة" defaultValue={0.7} min={0} max={1} step={0.05} minLabel="دقيق" maxLabel="مبدع" />
+        </DirectionProvider>
+      </HardState>
+      <HardState state="disabled">
+        <Slider label="Temperature" disabled defaultValue={0.7} min={0} max={1} step={0.05} minLabel="Precise" maxLabel="Creative" />
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A long label wraps and the printed value wraps beside it rather than overlapping; the end labels sit under their ends. In right to left, inside `DirectionProvider`, the minimum is at the right and the ink span grows leftward. Disabled keeps its keyline, its value and its span, in muted ink. There is no error cell: a slider can only hold a value inside its own bounds, so there is no invalid value for it to show.',
+      },
+    },
+  },
 }

@@ -9,7 +9,7 @@ export function Hero() {
     <div className="sb-unstyled not-prose mb-12" data-theme="light">
       <div className="on-ink px-8 pt-14 pb-10 sm:px-12">
         <p className="m-0 font-display text-[clamp(56px,9vw,112px)]/[0.95] font-extrabold tracking-display wdth-display text-on-ink">
-          <span className="display-cut band-oro text-ink">Mola</span> UI
+          <span className="display-cut band-ink-accent text-ink">Mola</span> UI
         </p>
         <p className="mt-8 mb-0 max-w-[34rem] font-text text-xl/[1.4] text-on-ink">
           A design system cut like a mola: flat layers, hard keylines, revealed bands. Built for the

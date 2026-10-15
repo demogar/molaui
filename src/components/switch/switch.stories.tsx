@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 import { Switch } from './switch'
 
 const meta = {
@@ -53,4 +54,41 @@ export const SettingsList: Story = {
       ))}
     </div>
   ),
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <Switch
+          label="Log every tool argument, including free text the customer typed into the conversation"
+          description="Stored for 30 days and visible to anyone with access to the run."
+          labelPosition="start"
+          wrapperClassName="grid w-full"
+        />
+      </HardState>
+      <HardState state="rtl">
+        <div className="grid gap-4">
+          <Switch label="بث الردود" defaultChecked />
+          <Switch label="السماح بالبحث في الويب" />
+        </div>
+      </HardState>
+      <HardState state="disabled">
+        <div className="grid gap-4">
+          <Switch label="Allow web search" disabled description="Turned off for this workspace by an admin." />
+          <Switch label="Stream responses" disabled defaultChecked />
+        </div>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A long label wraps and the switch keeps its size at the end of the row. In right to left the thumb travels the other way: on is at the left. A disabled switch keeps its keyline and its position, and says why. There is no error cell: a switch takes effect the moment it is pressed, so there is nothing to submit and nothing to validate.',
+      },
+    },
+  },
 }

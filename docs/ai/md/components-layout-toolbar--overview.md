@@ -44,6 +44,7 @@ One tab stop for the whole row: Tab enters, arrow keys move, Tab leaves. A table
 Each story is a live example in Storybook.
 
 - [FilterBar](https://demogar.github.io/molaui/?path=/story/components-layout-toolbar--filter-bar)
+- [HardStates](https://demogar.github.io/molaui/?path=/story/components-layout-toolbar--hard-states)
 - [IconOnly](https://demogar.github.io/molaui/?path=/story/components-layout-toolbar--icon-only)
 - [Overflow](https://demogar.github.io/molaui/?path=/story/components-layout-toolbar--overflow)
 - [RunActions](https://demogar.github.io/molaui/?path=/story/components-layout-toolbar--run-actions)
@@ -185,7 +186,7 @@ Types: `ToolbarButtonProps`, `ToolbarInputProps`, `ToolbarOverflowItem`, `Toolba
 
 ### Testing status
 
-- Automated, jsdom: each of its 5 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 6 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

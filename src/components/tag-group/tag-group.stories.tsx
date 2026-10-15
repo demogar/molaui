@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 import { Button } from '../button'
+import { Fieldset } from '../form/fieldset'
 import { TagGroup, type TagGroupItem } from './tag-group'
 
 const labels: TagGroupItem[] = [
@@ -136,6 +138,66 @@ export const Disabled: Story = {
     docs: {
       description: {
         story: 'A locked set keeps every tag readable and loses its × buttons: a remove button that does nothing is a broken promise.',
+      },
+    },
+  },
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <TagGroup
+          aria-label="Dataset labels"
+          onRemove={() => {}}
+          items={[
+            { value: 'long', label: 'Refund escalations reviewed by the trust and safety team in the third quarter' },
+            { value: 'pii', label: 'Contains PII' },
+          ]}
+        />
+      </HardState>
+      <HardState state="rtl">
+        <TagGroup
+          aria-label="تسميات مجموعة البيانات"
+          selectionMode="multiple"
+          defaultValue={['billing']}
+          onRemove={() => {}}
+          removeLabel={(label) => `إزالة ${label}`}
+          items={[
+            { value: 'billing', label: 'الفوترة' },
+            { value: 'retention', label: 'الاحتفاظ' },
+            { value: 'review', label: 'مراجعة الربع الثالث' },
+          ]}
+        />
+      </HardState>
+      <HardState state="disabled">
+        <div className="grid gap-3">
+          <TagGroup
+            aria-label="Tools the agent may call"
+            selectionMode="multiple"
+            defaultValue={['search']}
+            items={[
+              { value: 'search', label: 'Search documents' },
+              { value: 'refund', label: 'Issue refund', disabled: true },
+            ]}
+          />
+          <TagGroup aria-label="Locked labels" disabled onRemove={() => {}} items={labels.slice(0, 3)} />
+        </div>
+      </HardState>
+      <HardState state="error">
+        <Fieldset legend="Dataset labels" error="Add at least one label, so the dataset shows up in a report.">
+          <TagGroup aria-label="Dataset labels" items={[]} empty="No labels yet." />
+        </Fieldset>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A tag longer than a phone is wide truncates inside its one-line height rather than pushing the row past the edge, and its × stays visible at the end. In right to left the tags run from the right, the check leads and the × trails at the left, and the remove buttons are named in Arabic through `removeLabel`. A locked tag keeps its place and name on the disabled ground; a disabled group loses its × buttons. A tag group fails as a group: the error belongs to the fieldset around it, and `empty` still says what is missing in words.',
       },
     },
   },

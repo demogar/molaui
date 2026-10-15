@@ -43,6 +43,7 @@ The − and + steppers sit inside the keyline at the end, so a number field is o
 Each story is a live example in Storybook.
 
 - [Default](https://demogar.github.io/molaui/?path=/story/components-forms-number-input--default)
+- [HardStates](https://demogar.github.io/molaui/?path=/story/components-forms-number-input--hard-states)
 - [InvalidAndDisabled](https://demogar.github.io/molaui/?path=/story/components-forms-number-input--invalid-and-disabled)
 - [Locales](https://demogar.github.io/molaui/?path=/story/components-forms-number-input--locales)
 - [RunLimits](https://demogar.github.io/molaui/?path=/story/components-forms-number-input--run-limits)
@@ -105,7 +106,7 @@ Types: `NumberInputProps`
 
 ### Testing status
 
-- Automated, jsdom: each of its 6 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 7 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

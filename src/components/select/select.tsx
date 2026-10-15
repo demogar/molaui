@@ -70,7 +70,7 @@ export function SelectTrigger({
         fieldControlSizes[size],
         'flex cursor-default items-center justify-between gap-3 text-start',
         'focus-visible:focus-ring data-popup-open:focus-ring',
-        'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
+        'data-disabled:cursor-not-allowed data-disabled:bg-disabled data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
         className,
       )}
       {...props}

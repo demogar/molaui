@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
+import { Fieldset } from '../form/fieldset'
 import { Listbox } from './listbox'
 
 const regions = [
@@ -135,6 +137,76 @@ export const Disabled: Story = {
       description: {
         story:
           'A disabled list keeps its options readable and its value shown, on the shaded ground, and leaves the tab order, as a disabled native list does.',
+      },
+    },
+  },
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <Listbox
+          aria-label="Escalation policy"
+          defaultValue="page"
+          options={[
+            {
+              value: 'page',
+              label: 'Page the on-call owner of the agent and pause every run in the workspace',
+              description: 'pty-1 · applies to production and staging workspaces alike',
+            },
+            { value: 'notify', label: 'Notify the team channel and keep the remaining runs going' },
+          ]}
+        />
+      </HardState>
+      <HardState state="rtl">
+        <Listbox
+          aria-label="المنطقة الأساسية"
+          defaultValue="pty"
+          className="w-full max-w-64"
+          options={[
+            { value: 'pty', label: 'مدينة بنما', description: 'pty-1 · أساسية' },
+            { value: 'dav', label: 'دافيد', description: 'dav-1 · نسخة متماثلة' },
+            { value: 'col', label: 'كولون', description: 'col-1 · نسخة متماثلة' },
+          ]}
+        />
+      </HardState>
+      <HardState state="disabled">
+        <Listbox
+          aria-label="Models to compare"
+          multiple
+          defaultValue={['swift' as string]}
+          className="w-full max-w-72"
+          options={[
+            { value: 'swift', label: 'Cayuco Swift', description: '32k context · fastest' },
+            { value: 'classic', label: 'Cayuco Classic', description: 'Retired for new evaluations', disabled: true },
+          ]}
+        />
+      </HardState>
+      <HardState state="error">
+        <Fieldset legend="Topics the agent may answer" error="Choose at least one topic.">
+          <Listbox
+            aria-label="Topics the agent may answer"
+            aria-invalid
+            multiple
+            className="w-full max-w-64"
+            options={[
+              { value: 'billing', label: 'Billing' },
+              { value: 'retention', label: 'Retention' },
+              { value: 'security', label: 'Security' },
+            ]}
+          />
+        </Fieldset>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Long option labels truncate on one line and their descriptions with them, so the list keeps its rhythm; the whole text is still the accessible name. In right to left the check moves to the start and the selected row’s fill and focus ring mirror. A disabled option stays in the list and in the tab order with its reason. A list fails as a group: the error belongs to the fieldset around it, under its legend.',
       },
     },
   },

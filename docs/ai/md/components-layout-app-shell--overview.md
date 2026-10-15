@@ -44,6 +44,7 @@ Each story is a live example in Storybook.
 
 - [Cayuco](https://demogar.github.io/molaui/?path=/story/components-layout-app-shell--cayuco)
 - [CollapsedRail](https://demogar.github.io/molaui/?path=/story/components-layout-app-shell--collapsed-rail)
+- [HardStates](https://demogar.github.io/molaui/?path=/story/components-layout-app-shell--hard-states)
 - [Mobile](https://demogar.github.io/molaui/?path=/story/components-layout-app-shell--mobile)
 - [WithNotices](https://demogar.github.io/molaui/?path=/story/components-layout-app-shell--with-notices)
 

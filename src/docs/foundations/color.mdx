@@ -23,7 +23,7 @@ in both themes — lighter on light, lighter on dark — so "raised" means the s
   swatches={[
     { token: '--cloth', role: 'The page.', on: '--ink' },
     { token: '--cloth-pale', role: 'Raised: cards, inputs, menus, dialogs.', on: '--ink' },
-    { token: '--cloth-shade', role: 'One step down: table headers, wells, disabled fields.', on: '--ink' },
+    { token: '--cloth-shade', role: 'One step down: table headers and wells. A disabled control has its own ground, --disabled.', on: '--ink' },
     { token: '--cloth-deep', role: 'The deepest cloth before a layer takes over.', on: '--ink' },
   ]}
 />
@@ -89,6 +89,7 @@ the components to it.
     { token: '--accent', role: 'The band a control reveals, the working texture, selected text.' },
     { token: '--accent-soft', role: 'A region that belongs to the accent.', on: '--ink-muted' },
     { token: '--selected', role: 'An item chosen for an action: a selected row, the bulk-action bar.', on: '--ink-muted' },
+    { token: '--disabled', role: 'A control that cannot be used: one step down from the page in light, one step up in dark, under muted ink and a kept keyline.', on: '--ink-muted' },
   ]}
 />
 
@@ -107,6 +108,7 @@ Real text on real grounds, in both themes. 4.5 is the bar for text, 3 for a UI b
     ['--ink-danger', '--danger-soft'],
     ['--on-accent', '--accent'],
     ['--ink-muted', '--selected'],
+    ['--ink-muted', '--disabled'],
     ['--on-layer', '--anil'],
     ['--on-layer', '--verde'],
     ['--on-oro', '--oro'],

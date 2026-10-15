@@ -4,6 +4,7 @@ import * as React from 'react'
 import { Badge, type BadgeTone } from '../badge'
 import { Button } from '../button'
 import { DescriptionList } from '../description-list'
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 import { type AgentRun, formatDuration, formatRelative, makeAgentRuns, type RunStatus } from './agent-runs.fixture'
 import { DataTable, type DataTableColumn, type DataTableSort } from './data-table'
 import {
@@ -11,6 +12,7 @@ import {
   TableBody,
   TableCaption,
   TableCell,
+  TableCheckbox,
   TableEmpty,
   TableFooter,
   TableHead,
@@ -786,6 +788,109 @@ export const RowsOnAPhone: Story = {
       description: {
         story:
           '`stackWhenNarrow` is for action tables used on a phone, where the action is the point and scrolling sideways to find a row’s status is the obstacle. Below a 36rem container each row becomes a block: the checkbox at the start, and each value on a line of its own with its column’s name beside it. The header becomes a bar of what can be pressed, select-all and the sort buttons; the other headers are kept for screen readers, since every line now shows its label. It is a container query, so a table in a narrow side panel stacks too, and it keeps its table semantics, with explicit roles because changing a table’s display has made some browsers drop them. Not combined with `virtualize`: stacked rows vary in height.',
+      },
+    },
+  },
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <Table framed aria-label="Spend by agent">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Agent</TableHead>
+              <TableHead numeric>Runs in the last seven days</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell>Abuse-report triage for Starter workspaces created in the last fourteen days</TableCell>
+              <TableCell numeric>2,118</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Weekly digest</TableCell>
+              <TableCell numeric>412</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </HardState>
+      <HardState state="rtl">
+        <Table framed aria-label="الإنفاق حسب النموذج">
+          <TableHeader>
+            <TableRow>
+              <TableHead>النموذج</TableHead>
+              <TableHead numeric>التشغيلات</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow selected>
+              <TableCell className="literal">cayuco-deep-3</TableCell>
+              <TableCell numeric>412</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="literal">cayuco-swift-2</TableCell>
+              <TableCell numeric>9,670</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </HardState>
+      <HardState state="disabled">
+        <Table framed aria-label="API keys">
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-10">
+                <span className="sr-only">Select</span>
+              </TableHead>
+              <TableHead>Key</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell>
+                <TableCheckbox aria-label="Select support-ops reader" />
+              </TableCell>
+              <TableCell>support-ops reader</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                <TableCheckbox aria-label="Select workspace owner key" aria-describedby="table-hard-owner" disabled />
+              </TableCell>
+              <TableCell>
+                workspace owner key
+                <span id="table-hard-owner" className="block text-xs text-ink-muted">
+                  The owner key cannot be revoked in bulk.
+                </span>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </HardState>
+      <HardState state="error">
+        <Table framed aria-label="Agent runs, failed to load">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Run</TableHead>
+              <TableHead numeric>Duration</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableEmpty colSpan={2} kind="error" title="Runs could not be loaded">
+              The warehouse did not answer within 30 seconds. Earlier filters are kept.
+            </TableEmpty>
+          </TableBody>
+        </Table>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'At a phone’s width a long agent name wraps in its cell, a long header stays on one line in the label register, and when that is wider than the column allows the frame scrolls sideways inside itself, with the scroll-edge cue, rather than widening the page; in right to left the columns reverse, figures align to the new end and a selected row’s bar moves to the right edge, while model names stay left-to-right literals; a row that cannot be selected keeps its checkbox, disabled, with the reason beside it; the error is the empty row in its error kind, the headers kept so the reader still knows what would have been here.',
       },
     },
   },

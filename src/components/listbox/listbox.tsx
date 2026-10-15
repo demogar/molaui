@@ -289,7 +289,7 @@ export function Listbox<V extends string = string>(props: ListboxProps<V>) {
       data-disabled={disabled ? '' : undefined}
       className={cn(
         'flex min-w-0 flex-col overflow-y-auto scroll-cloth bg-cloth-pale p-1 text-ink shadow-cut',
-        disabled && 'bg-cloth-shade',
+        disabled && 'bg-disabled',
         className,
       )}
       {...rest}

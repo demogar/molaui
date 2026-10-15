@@ -41,6 +41,7 @@ Machine text — the one place the system admits a monospace (Martian Mono, narr
 
 Each story is a live example in Storybook.
 
+- [HardStates](https://demogar.github.io/molaui/?path=/story/components-data-display-code--hard-states)
 - [Inline](https://demogar.github.io/molaui/?path=/story/components-data-display-code--inline)
 - [QueryWithLineNumbers](https://demogar.github.io/molaui/?path=/story/components-data-display-code--query-with-line-numbers)
 - [ScrollsInside](https://demogar.github.io/molaui/?path=/story/components-data-display-code--scrolls-inside)
@@ -102,7 +103,7 @@ Types: `CodeBlockProps`, `CodeLanguage`, `JsonToken`, `JsonTokenKind`
 
 ### Testing status
 
-- Automated, jsdom: each of its 6 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 7 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

@@ -50,7 +50,7 @@ export function Input({ className, size = 'md', leading, trailing, disabled, ...
         'focus-within:focus-ring focus-within:hover:focus-ring',
         'has-[[aria-invalid=true]]:band-danger has-[[aria-invalid=true]]:cut-band',
         'has-[[aria-invalid=true]]:focus-within:cut-band-focus',
-        'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
+        'data-disabled:cursor-not-allowed data-disabled:bg-disabled data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
         // Read-only was styled on the bare input only; the box carries it now.
         'has-[input:read-only]:bg-cloth-shade',
         '[&_svg]:size-(--icon) [&_svg]:shrink-0',

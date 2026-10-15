@@ -335,7 +335,7 @@ export function Combobox(props: ComboboxProps) {
     'focus-within:focus-ring focus-within:hover:focus-ring',
     'has-[[aria-invalid=true]]:band-danger has-[[aria-invalid=true]]:cut-band',
     'has-[[aria-invalid=true]]:focus-within:cut-band-focus',
-    'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
+    'data-disabled:cursor-not-allowed data-disabled:bg-disabled data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
     className,
   )
 
@@ -391,7 +391,7 @@ export function Combobox(props: ComboboxProps) {
                   className={cn(
                     chipVariants(),
                     'cursor-default gap-1 text-ink outline-none',
-                    disabled ? 'bg-cloth-shade text-ink-muted' : readOnly ? undefined : 'pe-0.5',
+                    disabled ? 'bg-disabled text-ink-muted' : readOnly ? undefined : 'pe-0.5',
                     // The keyboard is on this chip: Backspace will remove it.
                     'data-highlighted:bg-ink data-highlighted:text-on-ink data-highlighted:forced-selected',
                     'focus-within:bg-ink focus-within:text-on-ink',

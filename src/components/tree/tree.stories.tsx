@@ -3,6 +3,8 @@ import { FileCode, FileText, Folder } from 'lucide-react'
 import { useState } from 'react'
 
 import { Tree, type TreeNode } from './tree'
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
+import { DirectionProvider } from '../../lib/direction'
 
 const files: TreeNode[] = [
   {
@@ -148,6 +150,74 @@ export const Collapsed: Story = {
     docs: {
       description: {
         story: 'Every branch closed and nothing selected: Tab lands on the first item. A closed branch’s children are not rendered, so the page holds only what a person can see.',
+      },
+    },
+  },
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <Tree
+          aria-label="Knowledge base, long titles"
+          className="w-full"
+          defaultExpanded={['refunds']}
+          defaultValue="refunds/partial"
+          items={[
+            {
+              value: 'refunds',
+              label: 'Refunds, chargebacks and disputed payments',
+              children: [
+                { value: 'refunds/partial', label: 'When an agent may issue a partial refund without asking a person' },
+                { value: 'refunds/limits', label: 'Limits per account and per day' },
+              ],
+            },
+          ]}
+        />
+      </HardState>
+      <HardState state="rtl">
+        <DirectionProvider direction="rtl">
+          <Tree
+            aria-label="الملفات المعدّلة"
+            className="w-full max-w-72"
+            defaultExpanded={['src']}
+            defaultValue="src/policy"
+            items={[
+              {
+                value: 'src',
+                label: 'المصدر',
+                icon: <Folder />,
+                children: [
+                  { value: 'src/policy', label: 'السياسة', icon: <FileCode /> },
+                  { value: 'src/schedule', label: 'الجدول', icon: <FileCode /> },
+                ],
+              },
+              { value: 'docs', label: 'المستندات', icon: <Folder />, children: [] },
+            ]}
+          />
+        </DirectionProvider>
+      </HardState>
+      <HardState state="disabled">
+        <Tree
+          aria-label="Files changed, one locked"
+          className="w-full max-w-72"
+          defaultValue="src/index.ts"
+          items={[
+            { value: 'src/index.ts', label: 'index.ts', icon: <FileCode /> },
+            { value: 'src/billing/invoice.ts', label: 'invoice.ts · locked by review', icon: <FileCode />, disabled: true },
+          ]}
+        />
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A long title truncates on one line, as a row in a scrolling sidebar has to, and keeps its full text for type-ahead; in right to left the indent, the bar and the arrow keys mirror; a disabled item is shown and focusable, muted, and says why in its label. A tree has no error state: a branch whose children fail to load says so in what it shows.',
       },
     },
   },

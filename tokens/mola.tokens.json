@@ -113,7 +113,7 @@
             "WEB": "var(--ink)"
           }
         },
-        "$description": "ink: on --cloth  15.52 / 15.18. Promised to read on --cloth ≥ 4.5 (15.52 light, 15.18 dark); --cloth-pale ≥ 4.5 (16.82 light, 13.79 dark); --cloth-shade ≥ 4.5 (14.46 light, 15.90 dark); --rojo-soft ≥ 4.5 (14.22 light, 11.76 dark); --anil-soft ≥ 4.5 (13.78 light, 11.44 dark); --verde-soft ≥ 4.5 (14.09 light, 11.33 dark); --oro-soft ≥ 4.5 (15.09 light, 11.47 dark); --ink-soft ≥ 4.5 (14.30 light, 11.82 dark); --danger-soft ≥ 4.5 (14.22 light, 11.76 dark); --accent-soft ≥ 4.5 (15.09 light, 11.47 dark); --selected ≥ 4.5 (15.09 light, 11.47 dark); --cloth-deep ≥ 4.5 (12.84 light, 11.66 dark). Promised to carry --on-ink ≥ 4.5 (16.82 light, 13.79 dark); --on-ink-muted ≥ 4.5 (8.36 light, 6.56 dark); --oro ≥ 4.5 (9.34 light); --on-ink-accent ≥ 4.5 (9.34 light, 5.67 dark)."
+        "$description": "ink: on --cloth  15.52 / 15.18. Promised to read on --cloth ≥ 4.5 (15.52 light, 15.18 dark); --cloth-pale ≥ 4.5 (16.82 light, 13.79 dark); --cloth-shade ≥ 4.5 (14.46 light, 15.90 dark); --rojo-soft ≥ 4.5 (14.22 light, 11.76 dark); --anil-soft ≥ 4.5 (13.78 light, 11.44 dark); --verde-soft ≥ 4.5 (14.09 light, 11.33 dark); --oro-soft ≥ 4.5 (15.09 light, 11.47 dark); --ink-soft ≥ 4.5 (14.30 light, 11.82 dark); --danger-soft ≥ 4.5 (14.22 light, 11.76 dark); --accent-soft ≥ 4.5 (15.09 light, 11.47 dark); --selected ≥ 4.5 (15.09 light, 11.47 dark); --disabled ≥ 4.5 (14.46 light, 10.97 dark); --cloth-deep ≥ 4.5 (12.84 light, 11.66 dark). Promised to carry --on-ink ≥ 4.5 (16.82 light, 13.79 dark); --on-ink-muted ≥ 4.5 (8.36 light, 6.56 dark); --oro ≥ 4.5 (9.34 light); --on-ink-accent ≥ 4.5 (9.34 light, 5.67 dark)."
       },
       "ink-2": {
         "$type": "color",
@@ -134,7 +134,7 @@
             "WEB": "var(--ink-2)"
           }
         },
-        "$description": "ink: on --cloth   8.80 / 10.45. Promised to read on --cloth ≥ 4.5 (8.80 light, 10.45 dark); --cloth-pale ≥ 4.5 (9.54 light, 9.49 dark); --cloth-shade ≥ 4.5 (8.19 light, 10.94 dark); --rojo-soft ≥ 4.5 (8.06 light, 8.09 dark); --anil-soft ≥ 4.5 (7.81 light, 7.87 dark); --verde-soft ≥ 4.5 (7.98 light, 7.79 dark); --oro-soft ≥ 4.5 (8.56 light, 7.89 dark); --ink-soft ≥ 4.5 (8.11 light, 8.13 dark); --danger-soft ≥ 4.5 (8.06 light, 8.09 dark); --accent-soft ≥ 4.5 (8.56 light, 7.89 dark); --selected ≥ 4.5 (8.56 light, 7.89 dark); --cloth-deep ≥ 4.5 (7.28 light, 8.02 dark)."
+        "$description": "ink: on --cloth   8.80 / 10.45. Promised to read on --cloth ≥ 4.5 (8.80 light, 10.45 dark); --cloth-pale ≥ 4.5 (9.54 light, 9.49 dark); --cloth-shade ≥ 4.5 (8.19 light, 10.94 dark); --rojo-soft ≥ 4.5 (8.06 light, 8.09 dark); --anil-soft ≥ 4.5 (7.81 light, 7.87 dark); --verde-soft ≥ 4.5 (7.98 light, 7.79 dark); --oro-soft ≥ 4.5 (8.56 light, 7.89 dark); --ink-soft ≥ 4.5 (8.11 light, 8.13 dark); --danger-soft ≥ 4.5 (8.06 light, 8.09 dark); --accent-soft ≥ 4.5 (8.56 light, 7.89 dark); --selected ≥ 4.5 (8.56 light, 7.89 dark); --disabled ≥ 4.5 (8.19 light, 7.55 dark); --cloth-deep ≥ 4.5 (7.28 light, 8.02 dark)."
       },
       "ink-muted": {
         "$type": "color",
@@ -158,7 +158,7 @@
             "WEB": "var(--ink-muted)"
           }
         },
-        "$description": "ink: on --cloth   5.19 /  6.58   (floor: 4.83 on --cloth-shade, light). Promised to read on --cloth ≥ 4.5 (5.19 light, 6.58 dark); --cloth-pale ≥ 4.5 (5.62 light, 5.98 dark); --cloth-shade ≥ 4.5 (4.83 light, 6.89 dark); --rojo-soft ≥ 4.5 (4.75 light, 5.10 dark); --anil-soft ≥ 4.5 (4.61 light, 4.96 dark); --verde-soft ≥ 4.5 (4.71 light, 4.91 dark); --oro-soft ≥ 4.5 (5.05 light, 4.98 dark); --ink-soft ≥ 4.5 (4.78 light, 5.13 dark); --danger-soft ≥ 4.5 (4.75 light, 5.10 dark); --accent-soft ≥ 4.5 (5.05 light, 4.98 dark); --selected ≥ 4.5 (5.05 light, 4.98 dark)."
+        "$description": "ink: on --cloth   5.19 /  6.58   (floor: 4.83 on --cloth-shade, light). Promised to read on --cloth ≥ 4.5 (5.19 light, 6.58 dark); --cloth-pale ≥ 4.5 (5.62 light, 5.98 dark); --cloth-shade ≥ 4.5 (4.83 light, 6.89 dark); --rojo-soft ≥ 4.5 (4.75 light, 5.10 dark); --anil-soft ≥ 4.5 (4.61 light, 4.96 dark); --verde-soft ≥ 4.5 (4.71 light, 4.91 dark); --oro-soft ≥ 4.5 (5.05 light, 4.98 dark); --ink-soft ≥ 4.5 (4.78 light, 5.13 dark); --danger-soft ≥ 4.5 (4.75 light, 5.10 dark); --accent-soft ≥ 4.5 (5.05 light, 4.98 dark); --selected ≥ 4.5 (5.05 light, 4.98 dark); --disabled ≥ 4.5 (4.83 light, 4.76 dark)."
       },
       "keyline": {
         "$type": "color",
@@ -1031,6 +1031,28 @@
         },
         "$description": "accent and selection. Promised to carry --ink ≥ 4.5 (15.09 light, 11.47 dark); --ink-2 ≥ 4.5 (8.56 light, 7.89 dark); --ink-muted ≥ 4.5 (5.05 light, 4.98 dark)."
       },
+      "disabled": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8941,
+            0.9059,
+            0.8627
+          ],
+          "hex": "#e4e7dc"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--disabled)"
+          }
+        },
+        "$description": "disabled. Promised to carry --ink ≥ 4.5 (14.46 light, 10.97 dark); --ink-2 ≥ 4.5 (8.19 light, 7.55 dark); --ink-muted ≥ 4.5 (4.83 light, 4.76 dark)."
+      },
       "band": {
         "$type": "color",
         "$value": {
@@ -1167,7 +1189,7 @@
             "WEB": "var(--ink)"
           }
         },
-        "$description": "ink: on --cloth  15.52 / 15.18. Promised to read on --cloth ≥ 4.5 (15.52 light, 15.18 dark); --cloth-pale ≥ 4.5 (16.82 light, 13.79 dark); --cloth-shade ≥ 4.5 (14.46 light, 15.90 dark); --rojo-soft ≥ 4.5 (14.22 light, 11.76 dark); --anil-soft ≥ 4.5 (13.78 light, 11.44 dark); --verde-soft ≥ 4.5 (14.09 light, 11.33 dark); --oro-soft ≥ 4.5 (15.09 light, 11.47 dark); --ink-soft ≥ 4.5 (14.30 light, 11.82 dark); --danger-soft ≥ 4.5 (14.22 light, 11.76 dark); --accent-soft ≥ 4.5 (15.09 light, 11.47 dark); --selected ≥ 4.5 (15.09 light, 11.47 dark); --cloth-deep ≥ 4.5 (12.84 light, 11.66 dark). Promised to carry --on-ink ≥ 4.5 (16.82 light, 13.79 dark); --on-ink-muted ≥ 4.5 (8.36 light, 6.56 dark); --oro ≥ 4.5 (9.34 light); --on-ink-accent ≥ 4.5 (9.34 light, 5.67 dark)."
+        "$description": "ink: on --cloth  15.52 / 15.18. Promised to read on --cloth ≥ 4.5 (15.52 light, 15.18 dark); --cloth-pale ≥ 4.5 (16.82 light, 13.79 dark); --cloth-shade ≥ 4.5 (14.46 light, 15.90 dark); --rojo-soft ≥ 4.5 (14.22 light, 11.76 dark); --anil-soft ≥ 4.5 (13.78 light, 11.44 dark); --verde-soft ≥ 4.5 (14.09 light, 11.33 dark); --oro-soft ≥ 4.5 (15.09 light, 11.47 dark); --ink-soft ≥ 4.5 (14.30 light, 11.82 dark); --danger-soft ≥ 4.5 (14.22 light, 11.76 dark); --accent-soft ≥ 4.5 (15.09 light, 11.47 dark); --selected ≥ 4.5 (15.09 light, 11.47 dark); --disabled ≥ 4.5 (14.46 light, 10.97 dark); --cloth-deep ≥ 4.5 (12.84 light, 11.66 dark). Promised to carry --on-ink ≥ 4.5 (16.82 light, 13.79 dark); --on-ink-muted ≥ 4.5 (8.36 light, 6.56 dark); --oro ≥ 4.5 (9.34 light); --on-ink-accent ≥ 4.5 (9.34 light, 5.67 dark)."
       },
       "ink-2": {
         "$type": "color",
@@ -1188,7 +1210,7 @@
             "WEB": "var(--ink-2)"
           }
         },
-        "$description": "ink: on --cloth   8.80 / 10.45. Promised to read on --cloth ≥ 4.5 (8.80 light, 10.45 dark); --cloth-pale ≥ 4.5 (9.54 light, 9.49 dark); --cloth-shade ≥ 4.5 (8.19 light, 10.94 dark); --rojo-soft ≥ 4.5 (8.06 light, 8.09 dark); --anil-soft ≥ 4.5 (7.81 light, 7.87 dark); --verde-soft ≥ 4.5 (7.98 light, 7.79 dark); --oro-soft ≥ 4.5 (8.56 light, 7.89 dark); --ink-soft ≥ 4.5 (8.11 light, 8.13 dark); --danger-soft ≥ 4.5 (8.06 light, 8.09 dark); --accent-soft ≥ 4.5 (8.56 light, 7.89 dark); --selected ≥ 4.5 (8.56 light, 7.89 dark); --cloth-deep ≥ 4.5 (7.28 light, 8.02 dark)."
+        "$description": "ink: on --cloth   8.80 / 10.45. Promised to read on --cloth ≥ 4.5 (8.80 light, 10.45 dark); --cloth-pale ≥ 4.5 (9.54 light, 9.49 dark); --cloth-shade ≥ 4.5 (8.19 light, 10.94 dark); --rojo-soft ≥ 4.5 (8.06 light, 8.09 dark); --anil-soft ≥ 4.5 (7.81 light, 7.87 dark); --verde-soft ≥ 4.5 (7.98 light, 7.79 dark); --oro-soft ≥ 4.5 (8.56 light, 7.89 dark); --ink-soft ≥ 4.5 (8.11 light, 8.13 dark); --danger-soft ≥ 4.5 (8.06 light, 8.09 dark); --accent-soft ≥ 4.5 (8.56 light, 7.89 dark); --selected ≥ 4.5 (8.56 light, 7.89 dark); --disabled ≥ 4.5 (8.19 light, 7.55 dark); --cloth-deep ≥ 4.5 (7.28 light, 8.02 dark)."
       },
       "ink-muted": {
         "$type": "color",
@@ -1212,7 +1234,7 @@
             "WEB": "var(--ink-muted)"
           }
         },
-        "$description": "ink: on --cloth   5.19 /  6.58   (floor: 4.83 on --cloth-shade, light). Promised to read on --cloth ≥ 4.5 (5.19 light, 6.58 dark); --cloth-pale ≥ 4.5 (5.62 light, 5.98 dark); --cloth-shade ≥ 4.5 (4.83 light, 6.89 dark); --rojo-soft ≥ 4.5 (4.75 light, 5.10 dark); --anil-soft ≥ 4.5 (4.61 light, 4.96 dark); --verde-soft ≥ 4.5 (4.71 light, 4.91 dark); --oro-soft ≥ 4.5 (5.05 light, 4.98 dark); --ink-soft ≥ 4.5 (4.78 light, 5.13 dark); --danger-soft ≥ 4.5 (4.75 light, 5.10 dark); --accent-soft ≥ 4.5 (5.05 light, 4.98 dark); --selected ≥ 4.5 (5.05 light, 4.98 dark)."
+        "$description": "ink: on --cloth   5.19 /  6.58   (floor: 4.83 on --cloth-shade, light). Promised to read on --cloth ≥ 4.5 (5.19 light, 6.58 dark); --cloth-pale ≥ 4.5 (5.62 light, 5.98 dark); --cloth-shade ≥ 4.5 (4.83 light, 6.89 dark); --rojo-soft ≥ 4.5 (4.75 light, 5.10 dark); --anil-soft ≥ 4.5 (4.61 light, 4.96 dark); --verde-soft ≥ 4.5 (4.71 light, 4.91 dark); --oro-soft ≥ 4.5 (5.05 light, 4.98 dark); --ink-soft ≥ 4.5 (4.78 light, 5.13 dark); --danger-soft ≥ 4.5 (4.75 light, 5.10 dark); --accent-soft ≥ 4.5 (5.05 light, 4.98 dark); --selected ≥ 4.5 (5.05 light, 4.98 dark); --disabled ≥ 4.5 (4.83 light, 4.76 dark)."
       },
       "keyline": {
         "$type": "color",
@@ -2084,6 +2106,28 @@
           }
         },
         "$description": "accent and selection. Promised to carry --ink ≥ 4.5 (15.09 light, 11.47 dark); --ink-2 ≥ 4.5 (8.56 light, 7.89 dark); --ink-muted ≥ 4.5 (5.05 light, 4.98 dark)."
+      },
+      "disabled": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.1843,
+            0.1961,
+            0.2118
+          ],
+          "hex": "#2f3236"
+        },
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--disabled)"
+          }
+        },
+        "$description": "disabled. Promised to carry --ink ≥ 4.5 (14.46 light, 10.97 dark); --ink-2 ≥ 4.5 (8.19 light, 7.55 dark); --ink-muted ≥ 4.5 (4.83 light, 4.76 dark)."
       },
       "band": {
         "$type": "color",

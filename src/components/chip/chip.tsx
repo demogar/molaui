@@ -33,10 +33,12 @@ export const chipVariants = cva(
     // Hover is scoped to the unchecked state: a checked chip is cloth on ink,
     // and revealing a band around it would fight the fill it just took.
     'hover:not-has-checked:cut-band hover:not-has-checked:text-ink',
+    // Pressed closes the band with ink, the moment before the chip fills.
+    'active:not-has-checked:cut-band active:band-ink',
     'has-checked:bg-ink has-checked:text-on-ink has-checked:forced-selected',
     // The focus ring is itself a two-tone band, so it stands in for the keyline.
     'has-focus-visible:focus-ring has-focus-visible:forced-focus',
-    'has-disabled:pointer-events-none has-disabled:bg-cloth-shade has-disabled:text-ink-muted',
+    'has-disabled:pointer-events-none has-disabled:bg-disabled has-disabled:text-ink-muted',
     '[&_svg]:size-(--icon-sm) [&_svg]:shrink-0',
   ],
   {

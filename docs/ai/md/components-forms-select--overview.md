@@ -42,6 +42,7 @@ Each story is a live example in Storybook.
 
 - [Default](https://demogar.github.io/molaui/?path=/story/components-forms-select--default)
 - [GroupedInField](https://demogar.github.io/molaui/?path=/story/components-forms-select--grouped-in-field)
+- [HardStates](https://demogar.github.io/molaui/?path=/story/components-forms-select--hard-states)
 - [InvalidAndDisabled](https://demogar.github.io/molaui/?path=/story/components-forms-select--invalid-and-disabled)
 - [Placeholder](https://demogar.github.io/molaui/?path=/story/components-forms-select--placeholder)
 - [Sizes](https://demogar.github.io/molaui/?path=/story/components-forms-select--sizes)
@@ -157,7 +158,7 @@ Types: `SelectContentProps`, `SelectItemProps`, `SelectOption`, `SelectOptionGro
 
 ### Testing status
 
-- Automated, jsdom: each of its 5 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 6 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

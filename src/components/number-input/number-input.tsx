@@ -127,8 +127,11 @@ export interface NumberInputProps
 const stepperClasses = [
   'grid h-full aspect-square shrink-0 place-items-center text-ink-2 select-none',
   'transition-colors',
-  'hover:bg-ink-soft hover:text-ink active:bg-ink active:text-on-ink',
-  'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:bg-cloth-shade data-disabled:active:bg-cloth-shade data-disabled:active:text-ink-muted',
+  // Pressed was an ink fill, which is what a chosen value looks like
+  // (Foundations/Layers); a stepper chooses nothing, so it takes the pressed
+  // cut every edgeless control takes.
+  'hover:bg-ink-soft hover:text-ink active:bg-ink-soft active:cut-press',
+  'data-disabled:cursor-not-allowed data-disabled:bg-disabled data-disabled:text-ink-muted data-disabled:hover:bg-disabled data-disabled:active:bg-disabled data-disabled:active:shadow-none',
   '[&_svg]:size-(--icon-sm)',
 ] as const
 
@@ -226,7 +229,7 @@ export function NumberInput({
         'focus-within:focus-ring focus-within:hover:focus-ring',
         'has-[[aria-invalid=true]]:band-danger has-[[aria-invalid=true]]:cut-band',
         'has-[[aria-invalid=true]]:focus-within:cut-band-focus',
-        'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
+        'data-disabled:cursor-not-allowed data-disabled:bg-disabled data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
         className,
       )}
     >
@@ -236,7 +239,14 @@ export function NumberInput({
         {...mergeProps<'input'>({ onKeyDown }, inputProps)}
         aria-describedby={describedBy}
         style={minChars ? { minWidth: `${minChars}ch` } : undefined}
-        className="h-full w-0 min-w-0 flex-1 border-0 bg-transparent p-0 [font-size:inherit] text-ink tabular-nums outline-none placeholder:text-ink-muted focus:shadow-none focus-visible:shadow-none disabled:cursor-not-allowed disabled:text-ink-muted"
+        className={cn(
+          'h-full w-0 min-w-0 flex-1 border-0 bg-transparent p-0 [font-size:inherit] text-ink tabular-nums outline-none placeholder:text-ink-muted focus:shadow-none focus-visible:shadow-none disabled:cursor-not-allowed disabled:text-ink-muted',
+          // A figure carries its unit (Foundations/Content), so with one the
+          // value sits against it: "12 runs", not "12" at one end of the field
+          // and "runs" at the other. Tabular, so the digits do not jitter as it
+          // steps.
+          unit && 'text-end',
+        )}
       />
       {unit ? (
         <span id={unitId} className="shrink-0 text-sm text-ink-muted">

@@ -148,7 +148,7 @@ export function PromptInput({
       className={cn(
         'flex flex-col bg-cloth-pale shadow-cut transition-shadow',
         'focus-within:focus-ring',
-        disabled && 'bg-cloth-shade',
+        disabled && 'bg-disabled',
         className,
       )}
       {...props}

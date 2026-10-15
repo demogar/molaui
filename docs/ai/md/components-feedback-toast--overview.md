@@ -43,6 +43,7 @@ Something happened somewhere other than where the operator is looking. Tone is a
 Each story is a live example in Storybook.
 
 - [AllTones](https://demogar.github.io/molaui/?path=/story/components-feedback-toast--all-tones)
+- [HardStates](https://demogar.github.io/molaui/?path=/story/components-feedback-toast--hard-states)
 - [RunningToResult](https://demogar.github.io/molaui/?path=/story/components-feedback-toast--running-to-result)
 - [Stacking](https://demogar.github.io/molaui/?path=/story/components-feedback-toast--stacking)
 
@@ -92,7 +93,7 @@ Types: `ToastOptions`, `ToastProviderProps`, `ToastTone`
 
 ### Testing status
 
-- Automated, jsdom: each of its 3 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 4 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

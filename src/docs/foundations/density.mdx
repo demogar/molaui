@@ -54,6 +54,11 @@ padding do not ([ADR 0005](?path=/docs/decisions-0005-density-is-a-surface--over
   the drift density exists to stop.
 - **Nest it when one part of a screen is denser.** A comfortable settings page can hold a compact
   audit log. The attribute works on any element, and its children follow the nearest one.
+- **A data table is a compact or comfortable surface.** Spacious grows a table's rows, type and
+  padding, but not its column widths, so agent names that fit at comfortable truncate at spacious
+  and a run log starts to read like a settings list. Under a spacious page, nest the table and its
+  toolbar in `data-density="comfortable"`. Density-scaled column widths were considered and left
+  out: a column's width belongs to its content, not to the density.
 - **Let people choose.** Density is a preference as much as a product decision. Offer it beside
   the theme, and put it on `<html>` so menus and dialogs, which portal to `<body>`, follow it.
 - **Spacious still reflows at 320px.** A larger density is no excuse for sideways scrolling, because

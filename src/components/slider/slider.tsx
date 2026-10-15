@@ -80,9 +80,10 @@ export function Slider({
             className={cn(
               'size-4 rounded-none bg-cloth-pale shadow-cut band-accent [--cut-reveal:3px]',
               'transition-[box-shadow]',
-              'hover:cut-band data-dragging:cut-band',
+              // Held is pressed: the band closes with ink while the thumb is dragged.
+              'hover:cut-band data-dragging:cut-band data-dragging:band-ink',
               'has-focus-visible:focus-ring has-focus-visible:forced-focus',
-              'data-disabled:bg-cloth-shade data-disabled:hover:shadow-cut',
+              'data-disabled:bg-disabled data-disabled:hover:shadow-cut',
             )}
           />
           ))}

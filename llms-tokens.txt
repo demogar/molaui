@@ -109,6 +109,12 @@ Every colour token has one or more scopes (`src/tokens/scopes.ts`). Tailwind wil
 | `--accent-soft` |  | `#f5ead0` | `#302f2c` | surface: `bg-accent-soft` |
 | `--selected` |  | `#f5ead0` | `#302f2c` | surface: `bg-selected` |
 
+### disabled
+
+| Token | Role | Light | Dark | Use as |
+| --- | --- | --- | --- | --- |
+| `--disabled` |  | `#e4e7dc` | `#2f3236` | surface: `bg-disabled` |
+
 ### the cut
 
 | Token | Role | Light | Dark | Use as |
@@ -238,6 +244,9 @@ Every foreground and ground the system promises, with the contrast it owes: 4.5 
 | `--on-ink-muted` | `--ink` | 4.5 | both |
 | `--oro` | `--ink` | 4.5 | light |
 | `--on-ink-accent` | `--ink` | 4.5 | both |
+| `--ink` | `--disabled` | 4.5 | both |
+| `--ink-2` | `--disabled` | 4.5 | both |
+| `--ink-muted` | `--disabled` | 4.5 | both |
 | `--rojo-on-shade` | `--cloth-shade` | 4.5 | both |
 | `--ink` | `--cloth-deep` | 4.5 | both |
 | `--ink-2` | `--cloth-deep` | 4.5 | both |

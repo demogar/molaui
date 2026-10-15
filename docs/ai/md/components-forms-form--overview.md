@@ -54,6 +54,7 @@ Each story is a live example in Storybook.
 
 - [Default](https://demogar.github.io/molaui/?path=/story/components-forms-form--default)
 - [FieldsetGroup](https://demogar.github.io/molaui/?path=/story/components-forms-form--fieldset-group)
+- [HardStates](https://demogar.github.io/molaui/?path=/story/components-forms-form--hard-states)
 - [WithErrors](https://demogar.github.io/molaui/?path=/story/components-forms-form--with-errors)
 - [WithoutSummary](https://demogar.github.io/molaui/?path=/story/components-forms-form--without-summary)
 
@@ -117,7 +118,7 @@ Types: `FormProps`, `FormErrorSummaryProps`, `FieldsetProps`
 
 ### Testing status
 
-- Automated, jsdom: each of its 4 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 5 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Columns3, LayoutList, Table2 } from 'lucide-react'
 import { useState } from 'react'
 
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 import { SegmentedControl } from './segmented-control'
 
 const meta = {
@@ -89,5 +90,67 @@ export const Disabled: Story = {
       { value: 'board', label: 'Board', disabled: true },
       { value: 'timeline', label: 'Timeline' },
     ],
+  },
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <SegmentedControl
+          aria-label="Group runs by"
+          fill
+          defaultValue="agent"
+          options={[
+            { value: 'agent', label: 'Agent and version' },
+            { value: 'workspace', label: 'Workspace and region' },
+            { value: 'outcome', label: 'Outcome and failure reason' },
+          ]}
+        />
+      </HardState>
+      <HardState state="rtl">
+        <SegmentedControl
+          aria-label="العرض"
+          defaultValue="table"
+          options={[
+            { value: 'table', label: 'جدول', icon: <Table2 /> },
+            { value: 'board', label: 'لوحة', icon: <Columns3 /> },
+            { value: 'list', label: 'قائمة', icon: <LayoutList /> },
+          ]}
+        />
+      </HardState>
+      <HardState state="disabled">
+        <div className="flex flex-col items-start gap-3">
+          <SegmentedControl
+            aria-label="View"
+            defaultValue="table"
+            options={[
+              { value: 'table', label: 'Table' },
+              { value: 'board', label: 'Board', disabled: true },
+              { value: 'timeline', label: 'Timeline' },
+            ]}
+          />
+          <SegmentedControl
+            aria-label="Density"
+            disabled
+            defaultValue="compact"
+            options={[
+              { value: 'compact', label: 'Compact' },
+              { value: 'comfortable', label: 'Comfortable' },
+            ]}
+          />
+        </div>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Long segment labels at a phone’s width truncate inside their segment, and filled segments share the width, so the control never pushes past the edge. In right to left the first option sits at the right and the slits mirror. A disabled segment keeps its place in the row; a disabled control keeps its chosen segment, with muted cloth on the ink. There is no error cell: a segmented control always holds one of its options, so it has no invalid value to show.',
+      },
+    },
   },
 }

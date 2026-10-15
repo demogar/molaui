@@ -453,7 +453,7 @@ export function TableCheckbox({ indeterminate = false, className, ref: refProp, 
           'bg-cloth-pale shadow-cut transition-colors',
           'checked:bg-ink indeterminate:bg-ink',
           'focus-visible:focus-ring',
-          'disabled:cursor-not-allowed disabled:bg-cloth-shade',
+          'disabled:cursor-not-allowed disabled:bg-disabled',
         )}
         {...props}
         ref={mergedRef}

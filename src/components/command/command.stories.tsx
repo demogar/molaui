@@ -6,6 +6,7 @@ import { fn } from 'storybook/test'
 import { Button } from '../button'
 import { KbdChord } from '../typography'
 import { type CommandGroup, CommandPalette, useCommandShortcut } from './command'
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 
 const groups: CommandGroup[] = [
   {
@@ -101,5 +102,93 @@ export const NoMatches: Story = {
         renderEmpty={() => 'No commands yet — this workspace has no agents.'}
       />
     )
+  },
+}
+
+const longGroups: CommandGroup[] = [
+  {
+    heading: 'Agents',
+    items: [
+      {
+        id: 'long-1',
+        label: 'refund-and-chargeback-triage-agent-for-the-support-region',
+        description: 'Reviews a refund request, checks the account’s history and escalates to a person',
+        icon: <Bot />,
+        onSelect: () => {},
+      },
+    ],
+  },
+]
+
+const arabicGroups: CommandGroup[] = [
+  {
+    heading: 'إجراءات',
+    items: [
+      { id: 'ar-run', label: 'بدء تشغيل جديد', icon: <Play />, shortcut: ['⌘', 'R'], onSelect: () => {} },
+      { id: 'ar-theme', label: 'تبديل المظهر الداكن', icon: <Moon />, onSelect: () => {} },
+      { id: 'ar-purge', label: 'مسح فهرس المعرفة', icon: <Trash2 />, description: 'للمالكين فقط', disabled: true, onSelect: () => {} },
+    ],
+  },
+  {
+    heading: 'انتقال إلى',
+    items: [
+      { id: 'ar-esc', label: 'التصعيدات', icon: <LifeBuoy />, onSelect: () => {} },
+      { id: 'ar-settings', label: 'الإعدادات', icon: <Settings />, onSelect: () => {} },
+    ],
+  },
+]
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <CommandPalette
+          label="Command palette, long names"
+          groups={longGroups}
+          trigger={
+            <Button variant="secondary" icon={<Search />}>
+              Search agents, runs and settings
+            </Button>
+          }
+        />
+      </HardState>
+      <HardState state="rtl">
+        <CommandPalette
+          defaultOpen
+          dir="rtl"
+          lang="ar"
+          label="لوحة الأوامر"
+          placeholder="اكتب أمرًا أو ابحث…"
+          groups={arabicGroups}
+          trigger={
+            <Button variant="secondary" icon={<Search />}>
+              بحث
+            </Button>
+          }
+        />
+      </HardState>
+      <HardState state="disabled">
+        <div className="flex flex-col items-start gap-2">
+          <Button variant="secondary" icon={<Search />} disabled aria-describedby="command-hard-disabled-reason">
+            Search
+          </Button>
+          <p id="command-hard-disabled-reason" className="m-0 text-sm text-ink-muted">
+            Search is available once the workspace has loaded.
+          </p>
+        </div>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  args: { open: undefined },
+  parameters: {
+    docs: {
+      story: { inline: false, height: '560px' },
+      description: {
+        story:
+          'Only one modal can be open, so the right-to-left palette is the one shown open: the search icon, the shortcuts and the descriptions mirror, and a disabled command (“Owners only”) is shown, muted and stated, never hidden. A long agent name breaks anywhere rather than widening the palette; a trigger that cannot open yet is disabled and says why. The palette has no error state: a command that fails reports where its result would have appeared, and “no matches” is the empty state, not an error.',
+      },
+    },
   },
 }

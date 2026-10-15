@@ -5,6 +5,7 @@ import { fn } from 'storybook/test'
 import { ANSWER } from '../_story-data/fixtures'
 import { SEGMENT_ERROR, cutClean, partial } from '../_story-data/run-script'
 import { StreamingText } from '../streaming-text'
+import { HardState, HardStates as HardStatesFrame } from '../../../docs/blocks/hard-states'
 
 import { PartialOutput, RunError } from './run-error'
 
@@ -91,4 +92,52 @@ export const PartialAnswer: Story = {
       <StreamingText text={cutClean(partial(ANSWER, 0.45))} status="done" className="text-base" />
     </PartialOutput>
   ),
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => {
+    const shared = { runId: 'run_01JA4R7M2KQ8', at: Date.parse('2026-10-05T14:01:55.812Z'), onRetry: fn(), onRetryFromStep: fn() }
+    return (
+      <HardStatesFrame>
+        <HardState state="long-label">
+          <RunError
+            {...shared}
+            step="Break the ticket rate down by plan, signup cohort and help panel variant for every Starter workspace"
+            stepNumber={4}
+            stepCount={5}
+            tool="query_warehouse"
+            error={SEGMENT_ERROR}
+          />
+        </HardState>
+        <HardState state="rtl">
+          <RunError {...shared} step="قراءة لوحة المؤشرات" stepNumber={2} stepCount={5} tool="fetch_dashboard" error="deadline exceeded after 30s" />
+        </HardState>
+        <HardState state="disabled">
+          <Countdown
+            {...shared}
+            seconds={120}
+            kind="timed_out"
+            step="Read the guardrail dashboard"
+            stepNumber={3}
+            stepCount={5}
+            tool="fetch_dashboard"
+            error="deadline exceeded after 30s"
+          />
+        </HardState>
+        <HardState state="error">
+          <RunError {...shared} step="Write the answer" stepNumber={5} stepCount={5} tool={undefined} error="500 internal_error: upstream model unavailable" />
+        </HardState>
+      </HardStatesFrame>
+    )
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A long step name wraps in the headline and the error literal breaks anywhere rather than widening the panel; in right to left the headline and the buttons mirror while the error text stays left to right, so a right-to-left page cannot reorder it; disabled is a manual cooldown, the buttons waiting with the line above them saying for how long; the error is a plain failure with all three ways back.',
+      },
+    },
+  },
 }

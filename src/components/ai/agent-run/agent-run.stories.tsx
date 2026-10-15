@@ -4,6 +4,7 @@ import * as React from 'react'
 import { fn } from 'storybook/test'
 
 import { Button } from '../../button'
+import { HardState, HardStates as HardStatesFrame } from '../../../docs/blocks/hard-states'
 import {
   RECOVERY_FAILS_AT,
   RECOVERY_LENGTH,
@@ -268,6 +269,65 @@ export const FailureAndRecovery: Story = {
       description: {
         story:
           'The scripted run, with a warehouse query that is denied on its first attempt. The run stops at step 4 and says so above the timeline; the plan and the two queries that already succeeded keep their output. **Retry from step 4** carries on from that step — steps 1–3 are not run again — and the run completes. **Retry run** starts from nothing.',
+      },
+    },
+  },
+}
+
+function HardStatesRuns() {
+  // Relative to when the story opens, as in TimedOut: the retry waits out a
+  // cooldown, so it is disabled for the whole of a screenshot.
+  const [retryAt] = React.useState(() => Date.now() + 120_000)
+  const base = { runId: 'run_01JA4R7M2KQ8', model: 'cayuco-deep-3', startedAt: BASE, usage: USAGE, onCancel: fn(), onRetry: fn() }
+  return (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <AgentRun
+          {...base}
+          name="Cayuco research agent for the quarterly Starter plan onboarding and help panel rollout review"
+          status="succeeded"
+          endedAt={BASE + RUN_LENGTH}
+          steps={staticSteps('succeeded')}
+        />
+      </HardState>
+      <HardState state="rtl">
+        <AgentRun {...base} name="وكيل البحث" status="succeeded" endedAt={BASE + RUN_LENGTH} steps={staticSteps('succeeded')} />
+      </HardState>
+      <HardState state="disabled">
+        <AgentRun
+          {...base}
+          name="Cayuco triage agent"
+          status="timed_out"
+          endedAt={BASE + 35_400}
+          steps={staticSteps('timed_out')}
+          failure={{ stepId: 'answer', kind: 'timed_out', error: 'deadline exceeded after 30s (stream idle 12.4s)', retryAt }}
+          onRetryFromStep={fn()}
+        />
+      </HardState>
+      <HardState state="error">
+        <AgentRun
+          {...base}
+          name="Cayuco research agent"
+          status="failed"
+          endedAt={BASE + 5812}
+          steps={staticSteps('failed')}
+          failure={SEGMENT_FAILURE}
+          onRetryFromStep={fn()}
+        />
+      </HardState>
+    </HardStatesFrame>
+  )
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => <HardStatesRuns />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A run name far longer than a header wraps instead of pushing the status and clock off the panel; in right to left the spine, the step nodes and the durations change sides; disabled is the retry waiting out a cooldown, with the sentence above it saying for how long; the error is a failed step, its reason ahead of the steps.',
       },
     },
   },

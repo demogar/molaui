@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 import { Field } from '../field/field'
 import { Select, type SelectOptionGroup } from './select'
 
@@ -102,4 +103,62 @@ export const InvalidAndDisabled: Story = {
       <Select label="Locked" items={environments} defaultValue="production" disabled />
     </div>
   ),
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <Field label="Model the agent falls back to when the primary model is unavailable">
+          {(control) => (
+            <Select
+              {...control}
+              defaultValue="steady-long"
+              items={[
+                {
+                  value: 'steady-long',
+                  label: 'Cayuco Steady 3 with extended context for long support transcripts',
+                  description: 'Balanced · 200k context · default for refund escalations',
+                },
+                { value: 'swift', label: 'Cayuco Swift 2', description: 'Fast · classification' },
+              ]}
+            />
+          )}
+        </Field>
+      </HardState>
+      <HardState state="rtl">
+        <Field label="المنطقة">
+          {(control) => (
+            <Select
+              {...control}
+              placeholder="اختر منطقة"
+              defaultValue="production"
+              items={[
+                { value: 'production', label: 'الإنتاج' },
+                { value: 'staging', label: 'التجهيز' },
+              ]}
+            />
+          )}
+        </Field>
+      </HardState>
+      <HardState state="disabled">
+        <Select label="Environment" items={environments} defaultValue="production" disabled />
+      </HardState>
+      <HardState state="error">
+        <Field label="Region" required error="Pick where this agent runs.">
+          {(control) => <Select {...control} items={environments} placeholder="Choose a region" />}
+        </Field>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A long chosen label truncates inside the trigger, so the chevrons keep their place at the end; the whole label is in the popup. In right to left the chevrons move to the start. Disabled is the disabled ground with muted text and chevrons. The error states which choice is missing, with a placeholder that names the object rather than the default ellipsis.',
+      },
+    },
+  },
 }

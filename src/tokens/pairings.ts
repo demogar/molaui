@@ -54,6 +54,10 @@ export const PAIRS: Pair[] = [
   ['--on-ink-muted', '--ink', 4.5],
   ['--oro', '--ink', 4.5, ['light']],
   ['--on-ink-accent', '--ink', 4.5],
+  // The disabled ground: muted ink is the disabled label, and the keyline
+  // stays, because a disabled control is stated, not faded.
+  ...inks.map((i): Pair => [i, '--disabled', 4.5]),
+  ['--ink', '--disabled', 3],
   // A tinted label.
   ['--rojo-on-shade', '--cloth-shade', 4.5],
   // The deepest cloth carries text too: a hovered tab, a disabled checked box.

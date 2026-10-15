@@ -265,15 +265,15 @@ fill: none *
 stroke>stroke-w: N (length) [length]L [number]N
 stroke: none *
 forced-color-adjust: auto|none
-=shadow: cut cut-band cut-band-focus
-band: oro|rojo|anil|verde|ink|cloth|accent|danger
+=shadow: cut cut-band cut-band-focus cut-inner
+band: oro|rojo|anil|verde|ink|cloth|accent|danger|ink-accent
 =panel: on-ink on-layer
 =relleno: relleno relleno-field relleno-working
 =diente: diente diente-up
 =wdth: wdth-display wdth-label
 =forced-role: forced-ink forced-selected forced-on-selected
 =edge-focus: focus-ring focus-ring-inset
-=edge-ring: cut-current cut-thin cut-tab cut-gap rule-ring keycap
+=edge-ring: cut-current cut-thin cut-press cut-tab cut-gap rule-ring keycap
 cut>edge-ring: *
 =edge-s: rule-s rule-s-soft cut-s
 bar-start>edge-s: *

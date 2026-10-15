@@ -23,6 +23,7 @@ interface Entry {
   id: string
   title: string
   type: 'story' | 'docs'
+  tags?: string[]
 }
 const index = JSON.parse(
   readFileSync(resolve(import.meta.dirname, '../../storybook-static/index.json'), 'utf8'),
@@ -43,6 +44,16 @@ const stories = found(
   'stories in storybook-static/index.json',
 )
 const firstOfEach = stories.filter((s, i) => stories.findIndex((t) => t.title === s.title) === i)
+/**
+ * A hard-states story (src/docs/usage/hard-states.ts) is photographed in the
+ * light theme only. It already holds its own right-to-left, disabled and
+ * error cells in one picture, so the dark copy would repeat states the
+ * component's other stories hold in dark, and forty-odd more screenshots in
+ * both themes put the visual shards past the CI budget (240s) the rest of
+ * the run is held to.
+ */
+const hardStates = (story: Entry) => story.tags?.includes('hard-states') ?? false
+if (firstOfEach.some(hardStates)) throw new Error('a hard-states story is the first story of its component; it belongs at the end')
 
 interface Mode {
   name: string
@@ -149,7 +160,9 @@ const patternModes: Mode[] = [{ name: 'spacious', theme: 'light', density: 'spac
 
 /** Every screenshot in a fixed order, which `mine()` deals across shards. */
 const shots = [
-  ...everyStory.flatMap((mode) => stories.map((story) => ({ mode, story }))),
+  ...everyStory.flatMap((mode) =>
+    stories.filter((story) => mode.name === 'light' || !hardStates(story)).map((story) => ({ mode, story })),
+  ),
   ...representative.flatMap((mode) => (mode.forced ? [...firstOfEach, ...forcedToo] : firstOfEach).map((story) => ({ mode, story }))),
   ...patternModes.flatMap((mode) => patterns.map((story) => ({ mode, story }))),
 ]

@@ -60,6 +60,7 @@ The root carries `data-slot="tool-call"`; each part carries its `data-part`.
 Each story is a live example in Storybook.
 
 - [Failed](https://demogar.github.io/molaui/?path=/story/ai-tool-call--failed)
+- [HardStates](https://demogar.github.io/molaui/?path=/story/ai-tool-call--hard-states)
 - [NeedsApproval](https://demogar.github.io/molaui/?path=/story/ai-tool-call--needs-approval)
 - [Open](https://demogar.github.io/molaui/?path=/story/ai-tool-call--open)
 - [ParallelCalls](https://demogar.github.io/molaui/?path=/story/ai-tool-call--parallel-calls)
@@ -129,7 +130,7 @@ Types: `ToolCallApproval`, `ToolCallGroupProps`, `ToolCallProps`
 
 ### Testing status
 
-- Automated, jsdom: each of its 7 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 8 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

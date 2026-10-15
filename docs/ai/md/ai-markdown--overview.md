@@ -47,6 +47,7 @@ A model’s answer written in Markdown, streamed and rendered in Mola’s typogr
 Each story is a live example in Storybook.
 
 - [Complete](https://demogar.github.io/molaui/?path=/story/ai-markdown--complete)
+- [HardStates](https://demogar.github.io/molaui/?path=/story/ai-markdown--hard-states)
 - [MidStream](https://demogar.github.io/molaui/?path=/story/ai-markdown--mid-stream)
 - [Muted](https://demogar.github.io/molaui/?path=/story/ai-markdown--muted)
 - [OpenFence](https://demogar.github.io/molaui/?path=/story/ai-markdown--open-fence)
@@ -96,7 +97,7 @@ Types: `MarkdownProps`
 
 ### Testing status
 
-- Automated, jsdom: each of its 6 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 7 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

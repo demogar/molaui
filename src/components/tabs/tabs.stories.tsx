@@ -3,6 +3,8 @@ import { Coins, FileText, ListTree, ScrollText } from 'lucide-react'
 
 import { useScrollEdge } from '../../lib/scroll-edge'
 import { Tabs, TabsList, TabsPanel, TabsTab } from './tabs'
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
+import { DirectionProvider } from '../../lib/direction'
 
 /** Source that scrolls sideways on a phone, with the scroll-edge cue. */
 function Snippet({ children }: { children: string }) {
@@ -48,10 +50,13 @@ export const Underline: Story = {
         <TabsTab value="logs" icon={<ScrollText />} count={1203}>
           Logs
         </TabsTab>
-        <TabsTab value="replay" disabled>
+        <TabsTab value="replay" disabled aria-describedby="tabs-replay-reason">
           Replay
         </TabsTab>
       </TabsList>
+      <p id="tabs-replay-reason" className="mt-2 mb-0 text-xs text-ink-muted">
+        Replay is available once the run finishes.
+      </p>
       <TabsPanel value="trace">
         <p className={body}>14 steps, 6 tool calls, 2 retries.</p>
       </TabsPanel>
@@ -105,5 +110,82 @@ export const Overflowing: Story = {
   ),
   parameters: {
     docs: { description: { story: 'The list scrolls inside itself rather than wrapping into two rows of tabs; the focus ring is drawn inside each tab so the scroll clip never shaves it.' } },
+  },
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <Tabs defaultValue="escalations">
+          <TabsList>
+            <TabsTab value="escalations" count={1203}>
+              Escalated to a person
+            </TabsTab>
+            <TabsTab value="retries">Retried after a tool failure</TabsTab>
+            <TabsTab value="tokens">Token usage by step</TabsTab>
+          </TabsList>
+          <TabsPanel value="escalations">
+            <p className={body}>1,203 runs handed to a person this week.</p>
+          </TabsPanel>
+        </Tabs>
+      </HardState>
+      <HardState state="rtl">
+        <DirectionProvider direction="rtl">
+          <Tabs defaultValue="trace">
+            <TabsList>
+              <TabsTab value="trace" icon={<ListTree />} count={14}>
+                التتبّع
+              </TabsTab>
+              <TabsTab value="output" icon={<FileText />}>
+                المخرجات
+              </TabsTab>
+              <TabsTab value="cost" icon={<Coins />}>
+                التكلفة
+              </TabsTab>
+            </TabsList>
+            <TabsPanel value="trace">
+              <p className={body}>١٤ خطوة و٦ استدعاءات أدوات.</p>
+            </TabsPanel>
+          </Tabs>
+          <Tabs variant="panel" defaultValue="ts">
+            <TabsList>
+              <TabsTab value="ts">TypeScript</TabsTab>
+              <TabsTab value="py">Python</TabsTab>
+            </TabsList>
+            <TabsPanel value="ts">
+              <p className={body}>مثال على إنشاء تشغيل.</p>
+            </TabsPanel>
+          </Tabs>
+        </DirectionProvider>
+      </HardState>
+      <HardState state="disabled">
+        <Tabs defaultValue="trace">
+          <TabsList>
+            <TabsTab value="trace">Trace</TabsTab>
+            <TabsTab value="output">Output</TabsTab>
+            <TabsTab value="replay" disabled aria-describedby="tabs-hard-replay-reason">
+              Replay
+            </TabsTab>
+          </TabsList>
+          <p id="tabs-hard-replay-reason" className="mt-2 mb-0 text-xs text-ink-muted">
+            Replay is available once the run finishes.
+          </p>
+          <TabsPanel value="trace">
+            <p className={body}>Still running: step 9 of about 14.</p>
+          </TabsPanel>
+        </Tabs>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Long labels keep one row and scroll inside the list, as the Overflowing story says, rather than wrapping into two rows of tabs; in right to left the order, the icons, the counts and the indicator mirror, in both variants; a disabled tab takes the disabled ground and says why beside the list. Tabs have no error state: a view that fails to load shows its failure in its panel.',
+      },
+    },
   },
 }

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import * as React from 'react'
 
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 import { Field } from '../field/field'
 import { FileUpload, type FileUploadItem, type UploadContext } from './file-upload'
 
@@ -247,5 +248,77 @@ export const Disabled: Story = {
         )}
       </Field>
     </div>
+  ),
+}
+
+const LONG_NAME = 'cayuco-support-transcripts-refund-escalations-2026-q3-export-final-reviewed.jsonl'
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A file name with no spaces, longer than a phone is wide, truncates inside the row (the whole name is its title) rather than pushing the zone past the edge, and the failed row keeps its full reason under it. In right to left the glyph, the Browse button and the row actions change sides; the built-in sentences stay English here, and a translated page passes its own through `messages`. Disabled is the disabled ground with a disabled button. The error comes from `Field`, as it does for every control.',
+      },
+    },
+  },
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <Field label="Evaluation datasets for the quarterly refund-escalation review">
+          {(control) => (
+            <FileUpload
+              {...control}
+              multiple
+              accept=".jsonl,.csv"
+              maxSize={25 * MB}
+              defaultFiles={[
+                {
+                  id: 'long-1',
+                  name: LONG_NAME,
+                  size: 18.2 * MB,
+                  file: demoFile(LONG_NAME, 18.2 * MB),
+                  status: 'failed',
+                  error: 'The server closed the connection at 61%. Retry to send it again.',
+                },
+              ]}
+            />
+          )}
+        </Field>
+      </HardState>
+      <HardState state="rtl">
+        <Field label="مستندات قاعدة المعرفة">
+          {(control) => (
+            <FileUpload
+              {...control}
+              multiple
+              accept=".pdf,.md"
+              maxSize={50 * MB}
+              defaultFiles={[
+                {
+                  id: 'rtl-1',
+                  name: 'سياسة الاسترداد.pdf',
+                  size: 2.1 * MB,
+                  file: demoFile('سياسة الاسترداد.pdf', 2.1 * MB, 'application/pdf'),
+                  status: 'done',
+                },
+              ]}
+            />
+          )}
+        </Field>
+      </HardState>
+      <HardState state="disabled">
+        <Field label="Knowledge base documents" hint="Uploads are paused while the index rebuilds.">
+          {(control) => <FileUpload {...control} disabled accept=".pdf,.md" maxSize={50 * MB} />}
+        </Field>
+      </HardState>
+      <HardState state="error">
+        <Field label="Evaluation dataset" required error="Attach a dataset before starting the evaluation run.">
+          {(control) => <FileUpload {...control} accept=".jsonl,.csv" maxSize={25 * MB} />}
+        </Field>
+      </HardState>
+    </HardStatesFrame>
   ),
 }

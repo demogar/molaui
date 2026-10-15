@@ -173,6 +173,7 @@ export const COLOR_SCOPES: Record<string, Entry> = {
   '--on-accent': { scopes: ['text'] },
   '--accent-soft': { scopes: ['surface'] },
   '--selected': { scopes: ['surface'] },
+  '--disabled': { scopes: ['surface'], why: 'The ground of a disabled control; its label is --ink-muted.' },
 
   // ── status
   '--danger': {

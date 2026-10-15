@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 import { Checkbox, CheckboxGroup } from './checkbox'
 
 const meta = {
@@ -76,4 +77,46 @@ export const Horizontal: Story = {
       <Checkbox value="failure" label="Failure" />
     </CheckboxGroup>
   ),
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <Checkbox
+          label="Retry every failed tool call before marking the run as failed and paging the on-call owner"
+          description="Up to three attempts per call, with exponential backoff between them, capped at the run’s step budget."
+          defaultChecked
+        />
+      </HardState>
+      <HardState state="rtl">
+        <CheckboxGroup legend="الأدوات" defaultValue={['search']}>
+          <Checkbox value="search" label="البحث في المستندات" />
+          <Checkbox value="retry" label="إعادة محاولة الاستدعاءات الفاشلة" description="حتى ثلاث محاولات." />
+        </CheckboxGroup>
+      </HardState>
+      <HardState state="disabled">
+        <div className="grid gap-3">
+          <Checkbox label="Log tool arguments" disabled />
+          <Checkbox label="Stream partial output" disabled defaultChecked />
+        </div>
+      </HardState>
+      <HardState state="error">
+        <CheckboxGroup legend="Notify on" error="Choose at least one event to be notified about.">
+          <Checkbox value="start" label="Start" />
+          <Checkbox value="failure" label="Failure" />
+        </CheckboxGroup>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A long label wraps beside the box, which stays on the first line rather than centring on the paragraph. In right to left the box moves to the start, at the right. Disabled keeps its keyline and its check. A checkbox fails as part of a group: the error sits under the legend, where a tall group cannot push it out of view.',
+      },
+    },
+  },
 }

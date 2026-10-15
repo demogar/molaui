@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
 import { Button } from '../../button'
+import { HardState, HardStates as HardStatesFrame } from '../../../docs/blocks/hard-states'
 import { ANSWER, SOURCES } from '../_story-data/fixtures'
 import { useSimulatedStream } from '../_story-data/simulate'
 import { StreamingText } from '../streaming-text'
@@ -128,6 +129,44 @@ export const WithoutSnippet: Story = {
     docs: {
       description: {
         story: 'A source with no passage and no read time still says what it is and where it lives; the card simply has fewer rows.',
+      },
+    },
+  },
+}
+
+const ARABIC: Source = {
+  id: 6,
+  title: 'سياسة اللعب النظيف',
+  href: 'https://example.com/docs/policies/fair-play',
+  domain: 'docs.cayuco.internal',
+  snippet: 'تُراجع كل حالة يدويًا قبل إغلاق الحساب.',
+  retrievedAt: '2026-10-05T14:02:08Z',
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <SourceList sources={[LONG]} />
+      </HardState>
+      <HardState state="rtl">
+        <SourceList sources={[ARABIC]} />
+      </HardState>
+      <HardState state="error">
+        <p className="m-0 font-text text-lg text-ink">
+          The rollout review is due on 19 October
+          <Citation n={9} />, two weeks after the change.
+        </p>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A long title wraps and a long passage is shown whole at a phone’s width; in right to left the number and the passage change sides while the domain stays a left-to-right literal; the error is a marker with no matching source, which stays a plain marker rather than opening an empty card. Sources have no disabled state: a source that was read cannot be switched off, only left out.',
       },
     },
   },

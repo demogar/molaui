@@ -6,6 +6,7 @@ import { fn } from 'storybook/test'
 import { Button } from '../button'
 import { Field, Input } from '../field'
 import { AlertDialog, Dialog, DialogClose, DialogContent, DialogTrigger } from './dialog'
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 
 const meta = {
   title: 'Components/Overlays/Dialog',
@@ -183,6 +184,84 @@ export const ConfirmFails: Story = {
       description: {
         story:
           'When `onConfirm` rejects, the dialog stays open and `error` says why, starting with what did not happen. It sits over the buttons, next to the confirm that failed, drawn as a field error is: the rojo cut square, the words, the danger ink. It is a `role="alert"`, announced once when it appears, and it describes the confirm button, so focus there reads the reason with the verb. It is hidden while a retry is pending, so a second failure is announced again.',
+      },
+    },
+  },
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <Dialog>
+          <DialogTrigger render={<Button variant="secondary">Rename the help panel rollout for new workspaces</Button>} />
+          <DialogContent
+            title="Rename the help panel rollout for new workspaces in the Cayuco support region"
+            description="The slug stays the same, so links to this rollout keep working."
+            footer={
+              <>
+                <DialogClose render={<Button variant="ghost">Keep the current name</Button>} />
+                <DialogClose render={<Button>Save the new name</Button>} />
+              </>
+            }
+          >
+            <Field label="Name">{(control) => <Input {...control} defaultValue="Help panel for new workspaces — v2" />}</Field>
+          </DialogContent>
+        </Dialog>
+      </HardState>
+      <HardState state="rtl">
+        <Dialog defaultOpen>
+          <DialogTrigger render={<Button variant="secondary">إعادة تسمية الوكيل</Button>} />
+          <DialogContent
+            dir="rtl"
+            lang="ar"
+            title="إعادة تسمية الوكيل"
+            description="يبقى المعرّف كما هو، فتستمر الروابط في العمل."
+            footer={
+              <>
+                <DialogClose render={<Button variant="ghost">إلغاء</Button>} />
+                <DialogClose render={<Button>حفظ الاسم</Button>} />
+              </>
+            }
+          >
+            <Field label="الاسم">{(control) => <Input {...control} defaultValue="وكيل المعرفة" />}</Field>
+          </DialogContent>
+        </Dialog>
+      </HardState>
+      <HardState state="disabled">
+        <div className="flex flex-col items-start gap-2">
+          <Button variant="danger" icon={<Trash2 />} disabled aria-describedby="dialog-hard-disabled-reason">
+            Delete run
+          </Button>
+          <p id="dialog-hard-disabled-reason" className="m-0 text-sm text-ink-muted">
+            A run can be deleted once it has stopped.
+          </p>
+        </div>
+      </HardState>
+      <HardState state="error">
+        <AlertDialog
+          trigger={
+            <Button variant="danger" icon={<Trash2 />}>
+              Delete run
+            </Button>
+          }
+          title="Delete this run?"
+          description="Its trace, tool calls and outputs are removed for everyone. This cannot be undone."
+          confirmLabel="Delete run"
+          error={TIMEOUT}
+          onConfirm={fn()}
+        />
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      story: { inline: false, height: '520px' },
+      description: {
+        story:
+          'Only one modal can be open, so the right-to-left dialog is the one shown open: the close button moves to the other corner, the footer order mirrors and the field’s label and text run from the right. The others wait behind their triggers: a long title wraps inside the dialog rather than widening it, a trigger that cannot open yet is disabled and says why beside it, and an alert dialog whose confirm failed opens with the reason over its buttons (as in Confirm fails).',
       },
     },
   },
