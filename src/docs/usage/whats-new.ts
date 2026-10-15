@@ -9,10 +9,10 @@ import { minorOf } from './changes'
  *
  * changes.test.ts checks that every version here has a page with the matching
  * title, that the sidebar lists them in this order, and that every released
- * one is in CHANGELOG.md. It also fails when CHANGELOG.md has a minor release
- * with no page here, because the readable layer fell a release behind once
- * (it stopped at 0.4 while 0.5 shipped). Write the page in the release pull
- * request, before it merges; until then it says "Unreleased".
+ * one is in CHANGELOG.md. It also fails when a minor in CHANGELOG.md older
+ * than the newest has no page here: the page for a release lands in the pull
+ * request after it, and must be there before the next release's PR (see the
+ * test for why not in the release PR itself).
  */
 export const WHATS_NEW = ['0.6.0', '0.5.0', '0.4.0', '0.3.0', '0.2.0'] as const
 

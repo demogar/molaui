@@ -236,6 +236,10 @@ Releases are automated with [release-please](https://github.com/googleapis/relea
    `main`) and re-run the `Publish package` job. It then tests and builds the tagged commit and publishes
    [`@demogar/mola-ui`](https://www.npmjs.com/package/@demogar/mola-ui) to npm, with provenance,
    and to GitHub Packages.
+4. The What's new page for the minor that was just released (`src/docs/whats-new/<minor>.mdx`,
+   listed in `WHATS_NEW`) lands in the next pull request to `main`, not in the release PR. The
+   release PR passes without it. `changes.test.ts` requires a page for every released minor
+   except the newest, so a missing page turns the *next* release PR red.
 
 ### The release PR needs `RELEASE_PLEASE_TOKEN`
 
