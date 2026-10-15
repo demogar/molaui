@@ -1,0 +1,84 @@
+name: Proposal
+description: Propose a new component, token, pattern or a change to how the system looks or behaves
+title: "Proposal: "
+labels: [proposal]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A proposal is agreed before code is written. Read "What belongs in the system" in
+        CONTRIBUTING.md first, and check the Roadmap page (https://demogar.github.io/molaui/?path=/docs/mola-ui-roadmap--overview):
+        what you need may already be planned or under consideration. If so, add your use case to
+        its issue instead of opening a new one.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What are you proposing?
+      options:
+        - A new component
+        - A new variant, state or prop on an existing component
+        - A new token, or a change to one
+        - A new pattern (a whole screen built from existing components)
+        - A change to a rule or a decision record (docs/adr/)
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What are you building, and what does the system not cover today? Describe the job, not the solution.
+    validations:
+      required: true
+  - type: textarea
+    id: use-case-1
+    attributes:
+      label: First use case
+      description: A real screen that needs this. Three times is a pattern; one or two is a local component that should live in the product until it proves itself.
+    validations:
+      required: true
+  - type: textarea
+    id: use-case-2
+    attributes:
+      label: Second use case
+      description: A different screen, ideally in a different product or part of the product.
+    validations:
+      required: true
+  - type: textarea
+    id: use-case-3
+    attributes:
+      label: Third use case
+    validations:
+      required: true
+  - type: textarea
+    id: existing
+    attributes:
+      label: What exists today
+      description: The local versions already in use, if any (extract, don't invent), and why the closest existing Mola component does not fit.
+  - type: textarea
+    id: states
+    attributes:
+      label: States it needs
+      description: Empty, loading, error, disabled, long content, right-to-left, narrow screens. Say which apply and what each should show.
+  - type: textarea
+    id: accessibility
+    attributes:
+      label: Keyboard and screen readers
+      description: The WAI-ARIA pattern it follows, if any, and the Base UI primitive that could provide the behaviour.
+  - type: checkboxes
+    id: rules
+    attributes:
+      label: Fits the design rules
+      description: The rules in CONTRIBUTING.md and the Principles page. Explain any you think it should break in "The problem".
+      options:
+        - label: Interactive edges are a cut (`shadow-cut`), not a border, and corners are square.
+        - label: State is shown by a glyph and a word as well as a colour.
+        - label: Disabled is stated, not faded.
+        - label: Uses the existing tokens, or names the new token and the contrast pairing it needs.
+  - type: dropdown
+    id: contribute
+    attributes:
+      label: Would you build it?
+      options:
+        - Yes, once the design is agreed
+        - I can help with part of it
+        - No, I'm raising the need

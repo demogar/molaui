@@ -6,7 +6,8 @@ Markdown version of https://demogar.github.io/molaui/?path=/docs/mola-ui-known-g
 
 We'd rather tell you than have you find out. These are the limits of Mola UI as it ships today,
 each checked against the code, with where it stands. When one is closed, it comes off this page
-in the same pull request.
+in the same pull request. What is planned beyond them is on the
+[Roadmap](https://demogar.github.io/molaui/?path=/docs/mola-ui-roadmap--overview).
 
 ## Accessibility
 

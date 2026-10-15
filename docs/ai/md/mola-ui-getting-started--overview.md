@@ -120,6 +120,19 @@ export function RenameAgent() {
 }
 ```
 
+### Snippets for VS Code
+
+The package ships a snippet for every component page. Copy the file into your project once:
+
+```bash
+mkdir -p .vscode && cp node_modules/@demogar/mola-ui/snippets/mola-ui.code-snippets .vscode/
+```
+
+Then type `mola-` in a `.tsx` file: `mola-button`, `mola-dialog`, `mola-field`. Each snippet is
+taken from a story on the component's page, so it is markup the docs show and the tests check,
+and Tab moves through its words. Its description has the import line to add. Copy the file again
+after you upgrade, since the snippets follow the stories.
+
 ## How to read a component page
 
 Every component page has the same sections in the same order, so you always know where to look.

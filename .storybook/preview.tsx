@@ -83,7 +83,9 @@ const preview: Preview = {
             'Choosing a component',
             'Principles',
             'Versioning',
+            'Codemods',
             'Known gaps',
+            'Roadmap',
             'References',
             // Newest first, as WHATS_NEW in src/docs/usage/whats-new.ts; changes.test.ts holds the two together.
             "What's new",

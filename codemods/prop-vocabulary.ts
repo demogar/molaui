@@ -43,6 +43,37 @@ import ts from 'typescript'
 
 export const PACKAGE = '@demogar/mola-ui'
 
+/**
+ * What this codemod migrates, for the codemod index (Mola UI / Codemods).
+ * `codemods/index.test.ts` holds the index row, the `deprecate()` calls and
+ * this record to the same versions. ToolbarOverflow's `items[].tone` is not
+ * here: it is an object prop, so it is listed on the page as a deprecation
+ * without a codemod.
+ */
+export const meta = {
+  change: 'One meaning each for `tone`, `variant`, `kind` and `size` (ADR 0010): `<Panel tone>` → `layer`, `<EmptyState variant>` → `kind`, `<Chip size="comfortable">` → `size="md"`, `<Heading size>` → `visualLevel` and the rest listed in the file',
+  deprecations: [
+    'panel-tone',
+    'placeholder-tone',
+    'step-list-tone',
+    'text-tone-${tone}',
+    'text-size-base',
+    'prose-size-base',
+    'heading-size',
+    'container-size',
+    'chip-size-${size}',
+    'timeline-size',
+    'empty-state-variant',
+    'table-empty-variant',
+    'streaming-text-tone',
+    'progress-tone-ink',
+    'menu-item-tone-default',
+    'nav-item-count-tone-attention',
+  ],
+  deprecated: '0.7.0',
+  removed: '1.0.0',
+}
+
 /** A new literal under the same (or renamed) prop, another prop altogether, or `null` to drop it. */
 type Replacement = string | { prop: string; value: string | true } | null
 

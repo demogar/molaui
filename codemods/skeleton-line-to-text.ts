@@ -24,6 +24,18 @@ import ts from 'typescript'
 
 export const PACKAGE = '@demogar/mola-ui'
 
+/**
+ * What this codemod migrates, for the codemod index (Mola UI / Codemods).
+ * `codemods/index.test.ts` holds the index row, the `deprecate()` call and
+ * this record to the same versions, so none of the three can drift.
+ */
+export const meta = {
+  change: '`<Skeleton shape="line">` → `<Skeleton shape="text">`',
+  deprecations: ['skeleton-shape-line'],
+  deprecated: '0.2.0',
+  removed: '1.0.0',
+}
+
 export interface Result {
   output: string
   changes: number
