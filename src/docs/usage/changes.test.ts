@@ -131,6 +131,19 @@ describe('CHANGELOG.md', () => {
     expect(unknownScopes(parseChangelog(FIXTURE))).toEqual([])
   })
 
+  // The release PR is the first place a new heading would appear, and it is
+  // the one PR whose failure blocks a release; read the headings
+  // release-please will write from its config, so a renamed section fails
+  // here, on the PR that renames it.
+  it('knows every section heading release-please is configured to write', () => {
+    const config = JSON.parse(readFileSync(join(repoRoot, 'release-please-config.json'), 'utf8')) as {
+      'changelog-sections': { section: string }[]
+    }
+    const sections = config['changelog-sections'].map((s) => s.section)
+    expect(sections.length).toBeGreaterThan(0)
+    expect(unknownSections(sections.map((s) => `### ${s}`).join('\n'))).toEqual([])
+  })
+
   it('uses only section headings the parser knows', () => {
     expect(unknownSections(raw)).toEqual([])
     expect(unknownSections(FIXTURE)).toEqual([])
