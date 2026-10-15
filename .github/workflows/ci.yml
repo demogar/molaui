@@ -87,7 +87,11 @@ jobs:
         with:
           playwright: 'true'
       - run: npm run build-storybook -- --quiet
-      - run: npm run visual -- --shard=${{ matrix.shard }}/4
+      # Dealt round-robin by test/visual/shard.ts, not Playwright's --shard,
+      # which cut the list into contiguous runs of uneven cost.
+      - run: npm run visual
+        env:
+          VISUAL_SHARD: ${{ matrix.shard }}/4
       # The report holds expected, actual and diff for every failure. To
       # accept an intended change, see "Visual baselines" in CONTRIBUTING.md.
       - uses: actions/upload-artifact@v7
@@ -97,6 +101,15 @@ jobs:
           path: |
             playwright-report
             test-results/visual
+          if-no-files-found: ignore
+      # Per-test durations, for checking the split against real costs (the
+      # audit writes its own into audit.json).
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: visual-timings-${{ matrix.shard }}
+          path: reports/visual
+          retention-days: 7
           if-no-files-found: ignore
 
   visual:
@@ -125,6 +138,28 @@ jobs:
           restore-keys: consumers-${{ runner.os }}-
       - run: npm run build
       - run: npm run consumers
+
+  # The three-to-four-minute target, checked rather than remembered: fails
+  # when the first job's start to the last job's end is over four minutes,
+  # and writes every job's time and the spread between shards to the run
+  # summary. Not a required check (a slow GitHub day should not block a
+  # merge), but a red one on the pull request that made CI slower.
+  budget:
+    name: CI budget
+    needs: [gates, audit, visual, consumers]
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          sparse-checkout: scripts
+      # The runner's own Node is enough for one fetch; no setup, no modules.
+      - run: node scripts/ci-budget.mjs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
   deploy:
     name: Publish Storybook

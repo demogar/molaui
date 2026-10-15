@@ -258,6 +258,9 @@ const loadsBrokenImage = (job) => job.id.includes('broken-image') || job.id === 
 
 const browser = await chromium.launch()
 const failures = []
+// How long each page took, so the shard split can be checked against real
+// costs (written to audit.json, slowest first).
+const timings = []
 let done = 0
 const started = Date.now()
 
@@ -278,6 +281,7 @@ async function worker(queue) {
     if (!page) await fresh()
     else if (page.viewportSize().width !== WIDE.width) await page.setViewportSize(WIDE)
     errors = []
+    const begun = Date.now()
     let timer
     const limit = new Promise((_, reject) => {
       timer = setTimeout(() => reject(new Error(`timed out after ${PAGE_TIMEOUT / 1000}s`)), PAGE_TIMEOUT + 5_000)
@@ -297,6 +301,7 @@ async function worker(queue) {
     // in CI as a DNS error on the callout docs page). A fresh tab keeps the
     // error with the job that caused it.
     if (loadsBrokenImage(job)) await fresh()
+    timings.push({ id: job.id, viewMode: job.viewMode, theme: job.theme, ms: Date.now() - begun })
     done++
     if (done % 100 === 0) console.log(`  ${done}/${mine.length} pages`)
   }
@@ -320,7 +325,9 @@ if (lines.length) console.log(lines.join('\n'))
 
 if (outDir) {
   mkdirSync(outDir, { recursive: true })
-  writeFileSync(join(outDir, 'audit.json'), JSON.stringify({ summary, stories: stories.length, docs: docs.length, failures }, null, 2))
+  timings.sort((a, b) => b.ms - a.ms)
+  const report = { summary, stories: stories.length, docs: docs.length, failures, timings }
+  writeFileSync(join(outDir, 'audit.json'), JSON.stringify(report, null, 2))
   writeFileSync(join(outDir, 'audit.md'), `# Browser audit\n\n${summary}\n\n${lines.map((l) => `- ${l}`).join('\n')}\n`)
 }
 process.exit(failures.length ? 1 : 0)

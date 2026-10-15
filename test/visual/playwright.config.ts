@@ -26,7 +26,11 @@ export default defineConfig({
   // in the summary instead of blocking the pull request.
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI
-    ? [['github'], ['html', { outputFolder: '../../playwright-report', open: 'never' }]]
+    ? [
+        ['github'],
+        ['html', { outputFolder: '../../playwright-report', open: 'never' }],
+        ['json', { outputFile: '../../reports/visual/results.json' }],
+      ]
     : [['list'], ['html', { outputFolder: '../../playwright-report', open: 'never' }]],
   timeout: 60_000,
   expect: {

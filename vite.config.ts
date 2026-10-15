@@ -80,6 +80,10 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
+    // Each test file still gets its own context, but jsdom is created once
+    // per worker instead of once per file. With the default `threads` pool,
+    // building jsdom 87 times was 40% of the run (vitest's own report).
+    pool: 'vmThreads',
     setupFiles: ['./src/test/setup.ts'],
     include: ['src/**/*.test.{ts,tsx}', 'codemods/**/*.test.ts', 'scripts/**/*.test.ts', 'mcp/**/*.test.ts'],
     css: false,
