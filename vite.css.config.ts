@@ -3,6 +3,8 @@ import { resolve } from 'node:path'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'vite'
 
+import { BROWSER_FLOOR } from './vite.config'
+
 /**
  * dist/mola-ui-components.css, the `components.css` entry: the stylesheet for
  * an app that already has page styles, without the document-wide preflight
@@ -20,6 +22,8 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: false,
     target: 'es2022',
+    // The same floor as the library stylesheet (see vite.config.ts).
+    cssTarget: [...BROWSER_FLOOR],
     copyPublicDir: false,
     rolldownOptions: {
       input: { 'mola-ui-components': resolve(import.meta.dirname, 'src/styles/components.css') },
