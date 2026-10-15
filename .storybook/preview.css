@@ -62,3 +62,16 @@
     overflow-x: auto;
   }
 }
+
+/* The table of contents scrolls inside a fixed column (Storybook's nav has
+ * `overflow-y: auto`, which clips sideways too), so the system's outer focus
+ * ring was shaved to a heavy box with its ends cut off. Each link is a block
+ * the width of its row, ringed inward the way an item in a scrolling list is
+ * (tabs, sidebar rows), with a little padding so the ring clears the text. */
+.sbdocs-toc--custom .toc-link {
+  display: block;
+  padding: 2px 6px;
+}
+.sbdocs-toc--custom .toc-link:focus-visible {
+  @apply focus-ring-inset;
+}

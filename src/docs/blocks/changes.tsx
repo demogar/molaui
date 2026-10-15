@@ -153,7 +153,7 @@ export function ChangesSection({ page }: { page: PageData }) {
   if (!page.changes.length) return null
   return (
     <section data-changes className="sb-unstyled not-prose my-10 grid gap-4 font-ui text-sm text-ink">
-      <h2 className="m-0 text-xl font-bold text-ink">Changes</h2>
+      <h2 id="changes" className="m-0 text-xl font-bold text-ink">Changes</h2>
       <p className="m-0 text-ink-2">
         Read from the{' '}
         <a href="?path=/docs/mola-ui-changelog--overview" target="_top" className={link}>
