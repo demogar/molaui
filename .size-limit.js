@@ -11,11 +11,18 @@
 const reactOnly = (config) => ({ ...config, external: /^(react|react-dom)($|\/)/ })
 
 export default [
+  // The whole library, so it grows with every component added, and is raised
+  // in a commit of its own with the measurement. 165 kB (#137) was set with
+  // no room for the audit's wave of new components: main measured 162.6 kB
+  // when Listbox, Tag group, Tree and the time pickers had landed, and the
+  // form primitives and the Markdown renderer each crossed it alone. The two
+  // small entries below are what a consumer pays and the real guard on bloat;
+  // they do not move with this one.
   {
     name: 'Everything (import *)',
     path: 'dist/index.js',
     import: '*',
-    limit: '165 kB',
+    limit: '180 kB',
     modifyRolldownConfig: reactOnly,
   },
   {
