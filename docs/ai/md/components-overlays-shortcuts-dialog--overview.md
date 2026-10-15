@@ -61,10 +61,11 @@ Each story is a live example in Storybook.
 | `footer` | `ReactNode` |  | Action row under the body: right-aligned, or stacked full width with the last action on top when the row is under 24rem. Usually a `ghost` cancel and one primary. |
 | `hideClose` | `boolean` |  | Hide the corner close button. Only when the footer carries an explicit way out. |
 | `hotkey` | `string \| false` | `?` | The key that opens it, listed with the rest; `?` by default. `false` binds none. |
+| `messages` | `MessagesOverride<ShortcutsDialogMessages>` |  | Words for translation: the title, its own binding's label and the empty sentence. Keys left out come from `MessagesProvider`, then English. The key names come from the provider's `hotkeys` table. |
 | `onOpenChange` | `((open: boolean) => void)` |  | Called when the dialog opens or closes: the hotkey, the trigger, Escape, Close. |
 | `open` | `boolean` |  | Whether the dialog is open, when the page owns that. |
 | `size` | `"sm" \| "md" \| "lg"` | `sm` | The popup's maximum width: `sm` for a short question, `md` (default) for a form, `lg` for a table or a long review. |
-| `title` | `ReactNode` | `Keyboard shortcuts` | The dialog's title and accessible name. Defaults to “Keyboard shortcuts”. |
+| `title` | `ReactNode` |  | The dialog's title and accessible name. Defaults to “Keyboard shortcuts” (`messages.title`). |
 | `trigger` | `ReactElement<unknown, string \| JSXElementConstructor<any>>` |  | Rendered as the button that opens the dialog, e.g. a help `IconButton` in the top bar. |
 
 Also accepts the props of `DialogPopupProps`.
@@ -105,7 +106,7 @@ Bind `keys` (see hotkeys.ts for the grammar) to `handler` on the window, and lis
 
 Every shortcut bound under the nearest provider, in the order they were bound. Empty without one.
 
-Types: `HotkeyPlatform`, `ShortcutsDialogProps`, `HotkeysProviderProps`, `RegisteredHotkey`, `UseHotkeysOptions`
+Types: `HotkeysMessages`, `ShortcutsDialogMessages`, `HotkeyPlatform`, `ShortcutsDialogProps`, `HotkeysProviderProps`, `RegisteredHotkey`, `UseHotkeysOptions`
 
 ## Accessibility
 

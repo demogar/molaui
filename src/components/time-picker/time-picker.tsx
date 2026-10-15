@@ -5,11 +5,13 @@ import * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { joinIds, mergeProps } from '../../lib/merge-props'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { useControllable } from '../../lib/use-controllable'
 import { useLabelFor } from '../../lib/use-label-for'
 import { DateError } from '../date-picker/date-picker'
 import { type DateLocale } from '../date-picker/date-utils'
 import { type FieldControlSize, fieldControlSizes } from '../field/field-control'
+import { type TimePickerMessages, timePickerMessages } from './messages'
 import {
   formatTime,
   fromDisplayHour,
@@ -81,28 +83,7 @@ import {
  * takes `wrapperClassName`.
  */
 
-export interface TimePickerMessages {
-  hour: string
-  minute: string
-  dayPeriod: string
-  /** What a screen reader hears for a segment with nothing in it. */
-  empty: string
-  incomplete: string
-  /** `formatted` is `min` as the locale writes it. */
-  tooEarly: (formatted: string) => string
-  /** `formatted` is `max` as the locale writes it. */
-  tooLate: (formatted: string) => string
-}
-
-const DEFAULT_MESSAGES: TimePickerMessages = {
-  hour: 'Hour',
-  minute: 'Minute',
-  dayPeriod: 'AM/PM',
-  empty: 'Empty',
-  incomplete: 'Enter the hour and the minutes.',
-  tooEarly: (formatted) => `Choose ${formatted} or later.`,
-  tooLate: (formatted) => `Choose ${formatted} or earlier.`,
-}
+export type { TimePickerMessages } from './messages'
 
 export interface TimePickerProps
   extends Omit<React.ComponentProps<'div'>, 'defaultValue' | 'onChange' | 'children' | 'role'> {
@@ -138,8 +119,8 @@ export interface TimePickerProps
   required?: boolean
   /** Given to the first segment, so a `<label for>` (as `Field` writes it) focuses it. */
   id?: string
-  /** The segment names and the sentences, for translation. */
-  messages?: Partial<TimePickerMessages>
+  /** Words for translation: the segment names and the sentences. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<TimePickerMessages>
   /** Classes for the outer element that holds the field and its error. */
   wrapperClassName?: string
 }
@@ -170,7 +151,7 @@ export function TimePicker({
   value: valueProp,
   defaultValue = null,
   onValueChange,
-  locale,
+  locale: localeProp,
   hourCycle,
   minuteStep = 1,
   min,
@@ -192,7 +173,8 @@ export function TimePicker({
   const uid = React.useId()
   const groupId = `${uid}-group`
   const errorId = `${uid}-error`
-  const messages = { ...DEFAULT_MESSAGES, ...messagesProp }
+  const [messages, f] = useMessages('timePicker', timePickerMessages, messagesProp)
+  const locale = localeProp ?? f.locale
   const layout = React.useMemo(() => getTimeLayout(locale, hourCycle), [locale, hourCycle])
   const [lo, hi] = hourRange(layout.hourCycle)
   const twelve = layout.order.includes('dayPeriod')
@@ -238,11 +220,11 @@ export function TimePicker({
     const earliest = parseTime(min)
     const latest = parseTime(max)
     if (earliest && minutesOf(time) < minutesOf(earliest)) {
-      setError(messages.tooEarly(formatTime(earliest, locale, hourCycle)))
+      setError(f.format(messages.tooEarly, { time: formatTime(earliest, locale, hourCycle) }))
       return
     }
     if (latest && minutesOf(time) > minutesOf(latest)) {
-      setError(messages.tooLate(formatTime(latest, locale, hourCycle)))
+      setError(f.format(messages.tooLate, { time: formatTime(latest, locale, hourCycle) }))
       return
     }
     setError(null)

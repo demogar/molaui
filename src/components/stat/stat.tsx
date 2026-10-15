@@ -4,6 +4,8 @@ import { ArrowDownRight, ArrowUpRight, Minus } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
+import { type StatMessages, statMessages } from './messages'
 
 /**
  * A KPI tile: label, figure, change, and optionally the shape of the recent
@@ -54,6 +56,8 @@ export interface StatProps extends Omit<React.ComponentProps<'div'>, 'children'>
   trend?: number[]
   /** A line of context under the figure. */
   hint?: React.ReactNode
+  /** Words for translation: the change, read as one sentence to a screen reader. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<StatMessages>
 }
 
 const SENTIMENT_TONE = {
@@ -62,13 +66,7 @@ const SENTIMENT_TONE = {
   neutral: 'text-ink-2',
 } as const
 
-const SENTIMENT_WORD = {
-  positive: 'an improvement',
-  negative: 'a regression',
-  neutral: '',
-} as const
-
-export function Stat({ label, value, unit, delta, trend, hint, className, ...props }: StatProps) {
+export function Stat({ label, value, unit, delta, trend, hint, messages, className, ...props }: StatProps) {
   const inGroup = React.useContext(StatGroupContext)
 
   const tile = (
@@ -98,7 +96,7 @@ export function Stat({ label, value, unit, delta, trend, hint, className, ...pro
             </span>
           ) : null}
         </span>
-        {delta ? <StatDeltaLine delta={delta} /> : null}
+        {delta ? <StatDeltaLine delta={delta} messages={messages} /> : null}
         {hint ? <span data-part="hint" className="text-xs text-ink-muted">{hint}</span> : null}
       </dd>
     </div>
@@ -107,11 +105,13 @@ export function Stat({ label, value, unit, delta, trend, hint, className, ...pro
   return inGroup ? tile : <dl className="m-0">{tile}</dl>
 }
 
-function StatDeltaLine({ delta }: { delta: StatDelta }) {
+function StatDeltaLine({ delta, messages }: { delta: StatDelta; messages: MessagesOverride<StatMessages> | undefined }) {
+  const [t, f] = useMessages('stat', statMessages, messages)
   const sentiment = delta.sentiment ?? 'neutral'
   const Glyph = delta.direction === 'up' ? ArrowUpRight : delta.direction === 'down' ? ArrowDownRight : Minus
-  const word = delta.direction === 'up' ? 'Up' : delta.direction === 'down' ? 'Down' : 'Unchanged at'
-  const spoken = [`${word} ${delta.value}`, delta.period, SENTIMENT_WORD[sentiment]].filter(Boolean).join(', ')
+  const moved = delta.direction === 'up' ? t.up : delta.direction === 'down' ? t.down : t.unchanged
+  const judged = sentiment === 'positive' ? t.positive : sentiment === 'negative' ? t.negative : ''
+  const spoken = [f.format(moved, { value: String(delta.value) }), delta.period, judged].filter(Boolean).join(', ')
 
   return (
     <span data-part="delta" className="flex items-center gap-1.5 text-xs">

@@ -178,7 +178,7 @@ describe('Stepper', () => {
         label="Pasos"
         steps={STEPS}
         defaultStep="model"
-        messages={{ back: 'Atrás', continue: 'Continuar', stepOf: (p, t) => `Paso ${p} de ${t}`, states: { complete: 'Hecho' } }}
+        messages={{ back: 'Atrás', continue: 'Continuar', stepOf: 'Paso {position} de {total}', states: { complete: 'Hecho' } }}
       >
         {() => null}
       </Stepper>,

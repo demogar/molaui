@@ -69,6 +69,7 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| `messages` | `MessagesOverride<LabelMessages>` |  | Words for translation: the "Optional" tag. Keys left out come from `MessagesProvider`, then English. |
 | `optional` | `boolean` | `false` | Renders the "Optional" tag. |
 | `required` | `boolean` | `false` | Renders the required asterisk. Does NOT set `required` on any control. |
 
@@ -116,7 +117,8 @@ The filter box that heads every list in an internal tool.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `clearLabel` | `string` | `Clear search` | Accessible name for the clear button. |
+| `clearLabel` | `string` |  | Accessible name for the clear button. |
+| `messages` | `MessagesOverride<SearchInputMessages>` |  | Words for translation: the clear button's default name and the default placeholder. Keys left out come from `MessagesProvider`, then English. |
 | `onClear` | `(() => void)` |  | Called after the clear button empties the field. |
 | `shortcut` | `string` |  | The keyboard shortcut that focuses this field, shown as a key cap while the field is empty — e.g. `⌘K` or `/`. Display only: binding the key is the page's job, because only the page knows what else is listening. |
 | `size` | `"sm" \| "md" \| "lg"` |  | Height and type from the density tokens. |
@@ -131,7 +133,7 @@ The one class list every text control shares — Input, Textarea, the Select tri
 
 Height, padding and type per size. Every value is a density token, so the same `md` input is 28px in a compact table filter and 48px in a spacious form without a prop changing.
 
-Types: `LabelProps`, `FieldControlProps`, `FieldProps`, `FieldControlSize`, `InputProps`, `TextareaProps`, `SearchInputProps`
+Types: `LabelMessages`, `SearchInputMessages`, `LabelProps`, `FieldControlProps`, `FieldProps`, `FieldControlSize`, `InputProps`, `TextareaProps`, `SearchInputProps`
 
 ## Accessibility
 

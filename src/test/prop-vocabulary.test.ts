@@ -50,6 +50,7 @@ const PRESENTATION = [
   'compact',
   'full',
   'inline',
+  'standalone',
   'editorial',
 ]
 

@@ -50,6 +50,7 @@ Each story is a live example in Storybook.
 | `onPageChange` (required) | `(page: number) => void` |  | Called with the 1-based page a person asked for. The page is controlled: set `page` from it, or from the router if pages are addressable. |
 | `page` (required) | `number` |  | 1-based. |
 | `pageCount` (required) | `number` |  | How many pages there are. The next button is disabled on the last. |
+| `messages` | `MessagesOverride<PaginationMessages>` |  | Words for translation: the landmark's name, the buttons and the range text. Keys left out come from `MessagesProvider`, then English. |
 | `pageSize` | `number` |  | For the compact range text: rows per page and the total row count. |
 | `siblings` | `number` | `1` | Pages either side of the current one in the `pages` variant. |
 | `total` | `number` |  | Total row count for the `compact` range text. Without it, or without `pageSize`, the text falls back to "Page 3 of 26". |
@@ -61,7 +62,7 @@ Each story is a live example in Storybook.
 
 The visible slots for `page` of `pageCount` (both 1-based). Always `5 + 2 × siblings` long once it needs ellipses.
 
-Types: `PageRangeItem`, `PaginationProps`
+Types: `PaginationMessages`, `PageRangeItem`, `PaginationProps`
 
 ## Accessibility
 

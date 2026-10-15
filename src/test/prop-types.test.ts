@@ -20,6 +20,7 @@ import { describe, expect, it } from 'vitest'
  */
 const NO_ELEMENT = new Set([
   'DirectionProvider',
+  'MessagesProvider',
   'ToastProvider',
   'HotkeysProvider',
   'TooltipProvider',

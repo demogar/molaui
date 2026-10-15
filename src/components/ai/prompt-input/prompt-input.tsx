@@ -4,8 +4,15 @@ import { ArrowUp, Square, WifiOff } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../../lib/messages'
 import { useControllable } from '../../../lib/use-controllable'
 import { Button } from '../../button'
+import {
+  type AttachmentChipMessages,
+  type PromptInputMessages,
+  attachmentChipMessages,
+  promptInputMessages,
+} from './messages'
 
 export interface PromptInputProps
   extends Omit<React.ComponentProps<'form'>, 'onSubmit' | 'onChange' | 'children'> {
@@ -40,7 +47,7 @@ export interface PromptInputProps
    */
   submitOn?: 'enter' | 'mod-enter'
   /**
-   * Defaults to "Ask anything…". It is a hint, never the name: `label` is what
+   * Defaults to "Ask anything…" (`messages.placeholder`). It is a hint, never the name: `label` is what
    * assistive tech announces.
    */
   placeholder?: string
@@ -58,6 +65,8 @@ export interface PromptInputProps
    * editable and says why.
    */
   disabled?: boolean
+  /** Words for translation: the placeholder, the hints, the estimate and the buttons. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<PromptInputMessages>
 }
 
 /**
@@ -93,15 +102,17 @@ export function PromptInput({
   onStop,
   status = 'idle',
   submitOn = 'enter',
-  placeholder = 'Ask anything…',
+  placeholder,
   maxRows = 10,
   attachments,
   toolbar,
   showEstimate = true,
   disabled = false,
+  messages,
   className,
   ...props
 }: PromptInputProps) {
+  const [t, f] = useMessages('promptInput', promptInputMessages, messages)
   const [value, setValue] = useControllable({ value: valueProp, defaultValue, onChange: onValueChange })
   const textareaRef = React.useRef<HTMLTextAreaElement>(null)
   const fieldId = React.useId()
@@ -139,7 +150,7 @@ export function PromptInput({
     send()
   }
 
-  const shortcut = submitOn === 'enter' ? 'Enter to send, Shift+Enter for a new line' : '⌘/Ctrl+Enter to send'
+  const shortcut = submitOn === 'enter' ? t.enterToSend : t.modEnterToSend
 
   return (
     <form
@@ -170,7 +181,7 @@ export function PromptInput({
         rows={1}
         value={value}
         disabled={disabled}
-        placeholder={placeholder}
+        placeholder={placeholder ?? t.placeholder}
         aria-describedby={hintId}
         onChange={(event) => setValue(event.target.value)}
         onKeyDown={onKeyDown}
@@ -191,27 +202,27 @@ export function PromptInput({
           {offline ? (
             <span className="flex items-center gap-1.5 text-ink-warn">
               <WifiOff aria-hidden className="size-(--icon-sm)" />
-              Offline — your draft is kept
+              {t.offline}
             </span>
           ) : (
             <span className="hidden sm:inline">{shortcut}</span>
           )}
           {showEstimate && value.length > 0 ? (
-            // A fixed locale, as in Chip: the runtime's default differs between
-            // the server and the browser, which is a hydration mismatch, and the
-            // words around the figure are English anyway.
-            <span className="tabular" aria-label={`About ${estimate.toLocaleString('en-US')} tokens`}>
-              ~{estimate.toLocaleString('en-US')} tok
+            // The provider's locale or a fixed one, as in Chip: the runtime's
+            // default differs between the server and the browser, which is a
+            // hydration mismatch.
+            <span className="tabular" aria-label={f.format(t.estimateSpoken, { count: f.number(estimate) })}>
+              {f.format(t.estimate, { count: f.number(estimate) })}
             </span>
           ) : null}
         </p>
         {generating ? (
           <Button data-part="stop" type="button" size="sm" variant="secondary" icon={<Square className="fill-current" />} onClick={onStop}>
-            Stop
+            {t.stop}
           </Button>
         ) : (
           <Button data-part="send" type="submit" size="sm" icon={<ArrowUp />} disabled={!canSend}>
-            Send
+            {t.send}
           </Button>
         )}
       </div>
@@ -232,10 +243,13 @@ export interface AttachmentChipProps extends React.ComponentProps<'span'> {
    * attachment that cannot be removed.
    */
   onRemove?: () => void
+  /** Words for translation: the remove button's name. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<AttachmentChipMessages>
 }
 
 /** A file or context item attached to the next prompt. The filename is a literal. */
-export function AttachmentChip({ name, detail, onRemove, className, ...props }: AttachmentChipProps) {
+export function AttachmentChip({ name, detail, onRemove, messages, className, ...props }: AttachmentChipProps) {
+  const [t, f] = useMessages('attachmentChip', attachmentChipMessages, messages)
   return (
     <span
       data-slot="attachment-chip"
@@ -247,7 +261,7 @@ export function AttachmentChip({ name, detail, onRemove, className, ...props }: 
       {onRemove ? (
         <button
           type="button"
-          aria-label={`Remove ${name}`}
+          aria-label={f.format(t.remove, { name })}
           onClick={onRemove}
           className="grid size-5 place-items-center text-ink-2 hover:bg-ink-soft hover:text-ink"
         >

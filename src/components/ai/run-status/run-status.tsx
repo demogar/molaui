@@ -4,7 +4,9 @@ import { cva } from 'class-variance-authority'
 import type * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../../lib/messages'
 
+import { type RunStatusMessages, runStatusMessages } from './messages'
 import { formatDuration, useElapsed } from './use-elapsed'
 
 /**
@@ -22,16 +24,13 @@ export type RunStatusValue =
   | 'cancelled'
   | 'timed_out'
 
-export const RUN_STATUS_LABEL: Record<RunStatusValue, string> = {
-  queued: 'Queued',
-  running: 'Running',
-  streaming: 'Streaming',
-  waiting: 'Needs approval',
-  succeeded: 'Succeeded',
-  failed: 'Failed',
-  cancelled: 'Cancelled',
-  timed_out: 'Timed out',
-}
+// The English word for each status, kept as an export for code that read it
+// before the words became translatable; the components read
+// `runStatus.statuses` through `MessagesProvider` instead. A line comment, not
+// JSDoc, and a copy: Storybook's docgen annotates a documented export as if it
+// were a component, and it wrote `displayName` and `__docgenInfo` into the
+// shared table, which the stories read as two more statuses.
+export const RUN_STATUS_LABEL: Record<RunStatusValue, string> = { ...runStatusMessages.statuses }
 
 /** Work is still open: the clock is ticking and the operator can cancel. */
 export function isActiveStatus(status: RunStatusValue): boolean {
@@ -143,6 +142,8 @@ export interface RunStatusProps extends Omit<React.ComponentProps<'span'>, 'chil
   durationMs?: number
   /** `label`: the rótulo register, for headers. `inline`: sentence case, for rows and running text. */
   register?: 'label' | 'inline'
+  /** Words for translation: the word for each status. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<RunStatusMessages>
 }
 
 /**
@@ -161,9 +162,11 @@ export function RunStatus({
   endedAt,
   durationMs,
   register = 'label',
+  messages,
   className,
   ...props
 }: RunStatusProps) {
+  const [t] = useMessages('runStatus', runStatusMessages, messages)
   const active = isActiveStatus(status)
   // A finished status with no end time has no honest duration to show, so the
   // clock is frozen (passing the start as the end stops the interval) and hidden.
@@ -183,7 +186,7 @@ export function RunStatus({
       {...props}
     >
       <RunStatusGlyph status={status} className={register === 'label' ? 'size-[11px]' : undefined} />
-      <span data-part="label" className={labelVariants({ status })}>{label ?? RUN_STATUS_LABEL[status]}</span>
+      <span data-part="label" className={labelVariants({ status })}>{label ?? t.statuses[status]}</span>
       {shown !== undefined ? (
         <span data-part="duration" className="tabular text-ink-muted normal-case tracking-normal">{formatDuration(shown)}</span>
       ) : null}

@@ -4,13 +4,17 @@ import { ArrowDown } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../../lib/messages'
 import { Button } from '../../button'
+import { type ThreadMessages, threadMessages } from './messages'
 
 export interface ThreadProps extends React.ComponentProps<'section'> {
   /** Names the region. Required: a transcript is a landmark worth finding. */
   label: string
   /** Distance from the bottom, in px, that still counts as "at the bottom". */
   stickThreshold?: number
+  /** Words for translation: the jump button and the scrolling area's name. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<ThreadMessages>
 }
 
 /**
@@ -30,7 +34,8 @@ export interface ThreadProps extends React.ComponentProps<'section'> {
  * of a streaming answer aloud. The thread is a plain labelled region; the
  * streaming text inside announces its own completion once.
  */
-export function Thread({ label, stickThreshold = 48, className, children, ...props }: ThreadProps) {
+export function Thread({ label, stickThreshold = 48, messages, className, children, ...props }: ThreadProps) {
+  const [t, f] = useMessages('thread', threadMessages, messages)
   const scrollRef = React.useRef<HTMLDivElement>(null)
   const contentRef = React.useRef<HTMLDivElement>(null)
   const atBottomRef = React.useRef(true)
@@ -66,7 +71,7 @@ export function Thread({ label, stickThreshold = 48, className, children, ...pro
         ref={scrollRef}
         onScroll={onScroll}
         tabIndex={0}
-        aria-label={`${label} transcript`}
+        aria-label={f.format(t.transcript, { label })}
         className="scroll-cloth min-h-0 flex-1 overflow-y-auto [overflow-anchor:none] focus-visible:focus-ring-inset"
       >
         <div ref={contentRef} className="px-1">
@@ -86,7 +91,7 @@ export function Thread({ label, stickThreshold = 48, className, children, ...pro
               scrollToBottom('smooth')
             }}
           >
-            Jump to latest
+            {t.jumpToLatest}
           </Button>
         </div>
       ) : null}

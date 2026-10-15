@@ -58,14 +58,15 @@ Each story is a live example in Storybook.
 | --- | --- | --- | --- |
 | `allowOutOfRange` | `boolean` |  | Keep a typed value outside `min`/`max` instead of clamping it on commit, so form validation can say why it is wrong. Off by default; the steppers still stop at the bounds. |
 | `allowWheelScrub` | `boolean` |  | Let the wheel change a focused, hovered field. Off by default; see above. |
-| `decrementLabel` | `string` | `Decrease` | Accessible name of the − stepper. Defaults to "Decrease"; translate it with the page. |
+| `decrementLabel` | `string` |  | Accessible name of the − stepper. Defaults to "Decrease"; translate it with the page. |
 | `defaultValue` | `number` |  | The number on first render, uncontrolled. Omitted, the field starts empty. |
 | `format` | `NumberFormatOptions` |  | `Intl.NumberFormat` options: grouping, decimals, a unit or a currency. |
-| `incrementLabel` | `string` | `Increase` | Accessible names of the steppers. |
+| `incrementLabel` | `string` |  | Accessible names of the steppers. |
 | `label` | `ReactNode` |  | Visible label above the field. Omit inside `Field`, which renders its own. |
 | `largeStep` | `number` | `10` | Shift+Arrow and PageUp/PageDown step. |
 | `locale` | `LocalesArgument` |  | BCP 47 tag for parsing and formatting. `undefined` uses the runtime's locale. |
 | `max` | `number` |  | The highest value. Stepping and committed values clamp to it, and the increase stepper is disabled there; End jumps to it. |
+| `messages` | `MessagesOverride<NumberInputMessages>` |  | Words for translation: the steppers' default names. Keys left out come from `MessagesProvider`, then English. |
 | `min` | `number` |  | The lowest value. Stepping and committed values clamp to it, and the decrease stepper is disabled there; Home jumps to it. |
 | `onValueChange` | `((value: number \| null) => void)` |  | Called as the number changes, typed or stepped, with `null` when the field is emptied. For a save or a request, use `onValueCommitted`, which does not fire per keystroke. |
 | `onValueCommitted` | `((value: number \| null, eventDetails: NumberFieldRootCommitEventDetails) => void)` |  | Called when the value is committed: on blur, Enter or a stepper press, not per keystroke. |
@@ -79,7 +80,7 @@ Each story is a live example in Storybook.
 
 `className` goes to `<div data-slot="number-input">`; `ref`, `id` and the other DOM props go to `<input>`.
 
-Types: `NumberInputProps`
+Types: `NumberInputMessages`, `NumberInputProps`
 
 ## Accessibility
 

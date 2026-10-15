@@ -69,6 +69,7 @@ A block of machine text — a tool call's arguments, a query, a log tail.
 | `language` | `CodeLanguage` | `text` | Shown as a tag in the header. Only `json` is tokenized; everything else is plain. |
 | `lineNumbers` | `boolean` | `false` | A gutter of line numbers that stays put as the code scrolls sideways. Hidden from assistive tech and never copied. Off by default; turn it on when someone will cite a line. |
 | `maxHeight` | `string` |  | Scroll inside after this height (any CSS length). |
+| `messages` | `MessagesOverride<CodeBlockMessages>` |  | Words for translation: the wrap and copy buttons and the copy announcement. Keys left out come from `MessagesProvider`, then English. |
 | `wrap` | `boolean` | `false` | Start with long lines wrapped. The reader can toggle it. |
 
 `className`, `ref`, `id` and the other DOM props go to `<figure data-slot="code-block">`.
@@ -77,7 +78,7 @@ A block of machine text — a tool call's arguments, a query, a log tail.
 
 ### `JSON_TOKEN_CLASS` (constant)
 
-Types: `CodeBlockProps`, `CodeLanguage`, `JsonToken`, `JsonTokenKind`
+Types: `CodeBlockMessages`, `CodeBlockProps`, `CodeLanguage`, `JsonToken`, `JsonTokenKind`
 
 ## Accessibility
 

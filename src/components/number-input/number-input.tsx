@@ -6,9 +6,11 @@ import * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { mergeProps } from '../../lib/merge-props'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { useControllable } from '../../lib/use-controllable'
 import { type FieldControlSize, fieldControlClasses, fieldControlSizes } from '../field/field-control'
 import { Label } from '../field/label'
+import { type NumberInputMessages, numberInputMessages } from './messages'
 
 /**
  * A number you can type, step and trust: a token budget, a retry count, a
@@ -122,6 +124,8 @@ export interface NumberInputProps
   incrementLabel?: string
   /** Accessible name of the − stepper. Defaults to "Decrease"; translate it with the page. */
   decrementLabel?: string
+  /** Words for translation: the steppers' default names. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<NumberInputMessages>
 }
 
 const stepperClasses = [
@@ -156,9 +160,10 @@ export function NumberInput({
   allowWheelScrub,
   snapOnStep,
   format,
-  locale,
-  incrementLabel = 'Increase',
-  decrementLabel = 'Decrease',
+  locale: localeProp,
+  incrementLabel,
+  decrementLabel,
+  messages,
   'aria-describedby': ariaDescribedBy,
   required,
   disabled,
@@ -167,6 +172,8 @@ export function NumberInput({
   form,
   ...inputProps
 }: NumberInputProps) {
+  const [t, f] = useMessages('numberInput', numberInputMessages, messages)
+  const locale = localeProp ?? f.locale
   const uid = React.useId()
   const inputId = id ?? `${uid}-input`
   const unitId = `${uid}-unit`
@@ -255,11 +262,11 @@ export function NumberInput({
       ) : null}
       <span className="flex h-full shrink-0 items-stretch">
         <span aria-hidden className="w-px bg-keyline forced-ink" />
-        <NumberFieldPrimitive.Decrement aria-label={decrementLabel} className={cn(stepperClasses)}>
+        <NumberFieldPrimitive.Decrement aria-label={decrementLabel ?? t.decrease} className={cn(stepperClasses)}>
           <Minus aria-hidden strokeWidth={2.5} />
         </NumberFieldPrimitive.Decrement>
         <span aria-hidden className="w-px bg-keyline forced-ink" />
-        <NumberFieldPrimitive.Increment aria-label={incrementLabel} className={cn(stepperClasses)}>
+        <NumberFieldPrimitive.Increment aria-label={incrementLabel ?? t.increase} className={cn(stepperClasses)}>
           <Plus aria-hidden strokeWidth={2.5} />
         </NumberFieldPrimitive.Increment>
       </span>

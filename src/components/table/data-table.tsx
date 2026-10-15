@@ -4,6 +4,7 @@ import { Columns3, Plus, X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, type PluralMessage, useMessages } from '../../lib/messages'
 import { useMergedRefs } from '../../lib/merge-props'
 import { useScrollEdge } from '../../lib/scroll-edge'
 import { useControllable } from '../../lib/use-controllable'
@@ -11,6 +12,7 @@ import { Button, IconButton } from '../button'
 import type { EmptyStateProps } from '../empty-state'
 import { Menu, MenuCheckboxItem, MenuContent, MenuGroup, MenuGroupLabel, MenuTrigger } from '../menu'
 import { Pagination } from '../pagination'
+import { type DataTableMessages, dataTableMessages } from './messages'
 import {
   Table,
   TableBody,
@@ -120,8 +122,14 @@ export interface DataTableProps<Row> extends Omit<React.ComponentProps<'table'>,
    * room: a visible name helps every reader, not only assistive tech.
    */
   caption?: React.ReactNode
-  /** What a row is, for counts: `{ one: 'run', other: 'runs' }`. */
-  noun?: { one: string; other: string }
+  /**
+   * What a row is, for counts: `{ one: 'run', other: 'runs' }`. Any plural
+   * category a language needs may be given (`few`, `many`); `other` is
+   * required.
+   */
+  noun?: PluralMessage
+  /** Words for translation: the counts, the selection names, the empty heading and the column menu. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<DataTableMessages>
 
   /** Sorting and paging are done by the server: rows are one page, already sorted. */
   manual?: boolean
@@ -290,8 +298,6 @@ function isEmptyData(empty: unknown): empty is DataTableEmpty {
   return typeof empty === 'object' && empty !== null && !React.isValidElement(empty) && 'title' in empty
 }
 
-const fmt = (n: number) => n.toLocaleString('en-US')
-
 const NO_ROWS: ReadonlySet<string> = new Set()
 
 function columnName<Row>(column: DataTableColumn<Row>): string {
@@ -367,7 +373,8 @@ export function DataTable<Row>({
   getRowId,
   label,
   caption,
-  noun = { one: 'row', other: 'rows' },
+  noun: nounProp,
+  messages,
   manual = false,
   sort: controlledSort,
   defaultSort,
@@ -412,6 +419,9 @@ export function DataTable<Row>({
   ref,
   ...props
 }: DataTableProps<Row>) {
+  const [t, f] = useMessages('dataTable', dataTableMessages, messages)
+  const fmt = f.number
+  const noun = nounProp ?? t.noun
   const bulkEdge = useScrollEdge<HTMLDivElement>()
   const tableRef = React.useRef<HTMLTableElement>(null)
   const setTable = useMergedRefs(tableRef, ref)
@@ -653,7 +663,7 @@ export function DataTable<Row>({
       <div
         role="separator"
         aria-orientation="vertical"
-        aria-label={`Resize ${columnName(column)}`}
+        aria-label={f.format(t.resize, { name: columnName(column) })}
         aria-valuenow={shownWidth(column)}
         aria-valuemin={min}
         aria-valuemax={max}
@@ -686,11 +696,11 @@ export function DataTable<Row>({
 
   const columnCount = visibleColumns.length + leadCount
   const selectedCount = selection.size
-  const nounFor = (n: number) => (n === 1 ? noun.one : noun.other)
+  const nounFor = (n: number) => f.plural(noun, n)
 
   const emptyProps: DataTableEmpty = isEmptyData(empty)
     ? empty
-    : { title: 'Nothing here yet', description: empty as React.ReactNode }
+    : { title: t.empty, description: empty as React.ReactNode }
 
   // ── frozen columns ──
   const frozenGround = framed ? 'bg-cloth-pale' : 'bg-cloth'
@@ -737,7 +747,7 @@ export function DataTable<Row>({
         {selectable ? (
           <TableCell role={role('cell')} className={cn('w-11 pe-0', stickyFirstColumn && [frozenBody, frozenLead, selectInset], stack && STACK.lead)}>
             <TableCheckbox
-              aria-label={rowLabel ? rowLabel(row) : `Select row ${id}`}
+              aria-label={rowLabel ? rowLabel(row) : f.format(t.selectRow, { id })}
               checked={isSelected}
               onChange={() => toggleRow(id)}
             />
@@ -753,7 +763,7 @@ export function DataTable<Row>({
               <IconButton
                 variant="ghost"
                 size="sm"
-                label={expandLabel ? expandLabel(row) : `Details of row ${id}`}
+                label={expandLabel ? expandLabel(row) : f.format(t.detailsOf, { id })}
                 aria-expanded={isOpen}
                 aria-controls={isOpen ? detailId : undefined}
                 onClick={() => toggleExpanded(id)}
@@ -887,11 +897,11 @@ export function DataTable<Row>({
                 aria-label={
                   allSelected
                     ? paginated
-                      ? 'Deselect all rows on this page'
-                      : 'Deselect all rows'
+                      ? t.deselectAllOnPage
+                      : t.deselectAll
                     : paginated
-                      ? 'Select all rows on this page'
-                      : 'Select all rows'
+                      ? t.selectAllOnPage
+                      : t.selectAll
                 }
                 checked={allSelected}
                 indeterminate={selectedOnPage > 0 && !allSelected}
@@ -905,7 +915,7 @@ export function DataTable<Row>({
               role={role('columnheader')}
               className={cn('w-11 pe-0', stickyFirstColumn && [frozenHead, frozenLead, expandInset], stack && [STACK.headCell, '@max-xl/data-table:sr-only'])}
             >
-              <span className="sr-only">Details</span>
+              <span className="sr-only">{t.details}</span>
             </TableHead>
           ) : null}
           {visibleColumns.map((column) => {
@@ -983,8 +993,8 @@ export function DataTable<Row>({
   const status = selectable ? (
     <p role="status" className="sr-only">
       {selectedCount > 0
-        ? `${fmt(selectedCount)} of ${fmt(total)} ${nounFor(total)} selected`
-        : `No ${noun.other} selected`}
+        ? f.format(t.selectedOf, { selected: fmt(selectedCount), total: fmt(total), noun: nounFor(total) })
+        : f.format(t.noneSelected, { noun: noun.other })}
     </p>
   ) : null
 
@@ -1016,10 +1026,10 @@ export function DataTable<Row>({
               {/* `dir="auto"`: a count that opens with a digit is otherwise
                   reordered in a right-to-left page, "runs selected 3". */}
               <span dir="auto" className="shrink-0 text-sm tabular-nums text-ink">
-                <span className="font-semibold">{fmt(selectedCount)}</span> {nounFor(selectedCount)} selected
+                {f.nodes(t.selected, { count: <span className="font-semibold">{fmt(selectedCount)}</span>, noun: nounFor(selectedCount) })}
               </span>
               <Button variant="ghost" size="sm" icon={<X />} onClick={clearSelection}>
-                Clear
+                {t.clear}
               </Button>
               {/* On a narrow screen the actions scroll inside the bar rather
                   than wrapping it: the bar's height is the promise that the
@@ -1037,17 +1047,13 @@ export function DataTable<Row>({
             </div>
           ) : (
             <p className="m-0 min-w-0 flex-1 text-sm tabular-nums text-ink-2">
-              {loading ? (
-                'Loading…'
-              ) : (
-                <>
-                  <span className="font-semibold text-ink">{fmt(total)}</span> {nounFor(total)}
-                </>
-              )}
+              {loading
+                ? t.loading
+                : f.nodes(t.total, { count: <span className="font-semibold text-ink">{fmt(total)}</span>, noun: nounFor(total) })}
             </p>
           )}
           {columnMenu ? (
-            <DataTableColumnMenu columns={columns} hidden={hidden} onToggle={toggleColumn} />
+            <DataTableColumnMenu columns={columns} hidden={hidden} onToggle={toggleColumn} messages={messages} />
           ) : null}
         </div>
       ) : null}
@@ -1058,14 +1064,19 @@ export function DataTable<Row>({
             // The compact pager says its range itself; the numbered one only
             // says where you are, so the range goes beside it.
             <p dir="auto" className="m-0 me-auto text-sm tabular-nums text-ink-2">
-              <span className="font-semibold text-ink">
-                {fmt((currentPage - 1) * pageSize + 1)}–{fmt(Math.min(currentPage * pageSize, total))}
-              </span>{' '}
-              of {fmt(total)} {nounFor(total)}
+              {f.nodes(t.rangeOf, {
+                range: (
+                  <span className="font-semibold text-ink">
+                    {fmt((currentPage - 1) * pageSize + 1)}–{fmt(Math.min(currentPage * pageSize, total))}
+                  </span>
+                ),
+                total: fmt(total),
+                noun: nounFor(total),
+              })}
             </p>
           ) : null}
           <Pagination
-            aria-label={label ? `${label} pages` : 'Pages'}
+            aria-label={label ? f.format(t.labelledPages, { label }) : t.pages}
             variant={paginationVariant}
             page={currentPage}
             pageCount={pageCount}
@@ -1096,6 +1107,8 @@ export interface DataTableColumnMenuProps<Row> extends Omit<React.ComponentProps
    * stays open, because columns are chosen several at a time.
    */
   onToggle: (key: string, visible: boolean) => void
+  /** Words for translation: the button and the menu's heading. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<DataTableMessages>
 }
 
 /**
@@ -1106,16 +1119,17 @@ export interface DataTableColumnMenuProps<Row> extends Omit<React.ComponentProps
  * still says it exists.
  */
 /** `className`, `ref` and the rest of the DOM props go to the "Columns" button. */
-export function DataTableColumnMenu<Row>({ columns, hidden, onToggle, ...props }: DataTableColumnMenuProps<Row>) {
+export function DataTableColumnMenu<Row>({ columns, hidden, onToggle, messages, ...props }: DataTableColumnMenuProps<Row>) {
+  const [t] = useMessages('dataTable', dataTableMessages, messages)
   const visibleCount = columns.filter((c) => !hidden.has(c.key)).length
   return (
     <Menu>
       <MenuTrigger render={<Button {...props} variant="secondary" size="sm" icon={<Columns3 />} />}>
-        Columns
+        {t.columns}
       </MenuTrigger>
       <MenuContent align="end">
         <MenuGroup>
-          <MenuGroupLabel>Show columns</MenuGroupLabel>
+          <MenuGroupLabel>{t.showColumns}</MenuGroupLabel>
           {columns.map((column) => {
             const visible = !hidden.has(column.key)
             const name = columnName(column)

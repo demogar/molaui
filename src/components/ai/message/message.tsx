@@ -5,17 +5,12 @@ import { Check, Copy, RotateCcw, ThumbsDown, ThumbsUp } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../../lib/messages'
 import { useHydrated } from '../../../lib/use-hydrated'
 import { Button, IconButton } from '../../button'
+import { type MessageMessages, messageMessages } from './messages'
 
 export type MessageRole = 'user' | 'assistant' | 'system' | 'tool'
-
-const ROLE_LABEL: Record<MessageRole, string> = {
-  user: 'You',
-  assistant: 'Assistant',
-  system: 'System',
-  tool: 'Tool',
-}
 
 /**
  * The band before each role label — the rótulo's cut mark — is the only place
@@ -70,6 +65,8 @@ export interface MessageProps extends Omit<React.ComponentProps<'article'>, 'rol
   onFeedback?: (value: 'up' | 'down') => void
   /** The rating already given, if any. */
   feedback?: 'up' | 'down'
+  /** Words for translation: the role labels, the error block and the actions. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<MessageMessages>
 }
 
 /**
@@ -110,14 +107,16 @@ export function Message({
   onRetry,
   onFeedback,
   feedback,
+  messages,
   className,
   children,
   ...props
 }: MessageProps) {
-  const name = author ?? ROLE_LABEL[role]
+  const [t, f] = useMessages('message', messageMessages, messages)
+  const name = author ?? t.roles[role]
   const time = timestamp ? new Date(timestamp) : undefined
   const hydrated = useHydrated()
-  const shownTime = time && (timeZone !== undefined || hydrated) ? formatTime(time, timeZone) : undefined
+  const shownTime = time && (timeZone !== undefined || hydrated) ? formatTime(time, f.locale, timeZone) : undefined
   // On error, Retry moves into the error block, so retry alone leaves the
   // action row with nothing in it: an empty row and a margin under the error.
   const hasActions =
@@ -171,12 +170,12 @@ export function Message({
               className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-3 bg-danger-soft px-4 py-3 bar-start-danger"
             >
               <div className="min-w-0 flex-1">
-                <p className="m-0 font-ui text-sm font-semibold text-ink">The response stopped before it finished.</p>
+                <p className="m-0 font-ui text-sm font-semibold text-ink">{t.stopped}</p>
                 {error ? <p className="m-0 mt-1 literal text-xs text-ink-on-tint [overflow-wrap:anywhere]">{error}</p> : null}
               </div>
               {onRetry ? (
                 <Button size="sm" variant="secondary" icon={<RotateCcw />} onClick={onRetry}>
-                  Retry
+                  {t.retry}
                 </Button>
               ) : null}
             </div>
@@ -188,6 +187,7 @@ export function Message({
               onRetry={status === 'error' ? undefined : onRetry}
               onFeedback={onFeedback}
               feedback={feedback}
+              t={t}
             />
           ) : null}
         </div>
@@ -201,7 +201,8 @@ function MessageActions({
   onRetry,
   onFeedback,
   feedback,
-}: Pick<MessageProps, 'copyText' | 'onRetry' | 'onFeedback' | 'feedback'>) {
+  t,
+}: Pick<MessageProps, 'copyText' | 'onRetry' | 'onFeedback' | 'feedback'> & { t: MessageMessages }) {
   const [copied, setCopied] = React.useState(false)
 
   React.useEffect(() => {
@@ -223,7 +224,7 @@ function MessageActions({
         <IconButton
           size="sm"
           variant="ghost"
-          label={copied ? 'Copied' : 'Copy response'}
+          label={copied ? t.copied : t.copy}
           onClick={() => {
             void navigator.clipboard?.writeText(copyText).then(() => setCopied(true))
           }}
@@ -232,7 +233,7 @@ function MessageActions({
         </IconButton>
       ) : null}
       {onRetry ? (
-        <IconButton size="sm" variant="ghost" label="Regenerate" onClick={onRetry}>
+        <IconButton size="sm" variant="ghost" label={t.regenerate} onClick={onRetry}>
           <RotateCcw />
         </IconButton>
       ) : null}
@@ -241,7 +242,7 @@ function MessageActions({
           <IconButton
             size="sm"
             variant="ghost"
-            label="Good response"
+            label={t.goodResponse}
             aria-pressed={feedback === 'up'}
             className="aria-pressed:bg-ink-soft aria-pressed:text-ink-success"
             onClick={() => onFeedback('up')}
@@ -251,7 +252,7 @@ function MessageActions({
           <IconButton
             size="sm"
             variant="ghost"
-            label="Bad response"
+            label={t.badResponse}
             aria-pressed={feedback === 'down'}
             className="aria-pressed:bg-ink-soft aria-pressed:text-ink-danger"
             onClick={() => onFeedback('down')}
@@ -262,15 +263,16 @@ function MessageActions({
       ) : null}
       {/* Copy confirmation for screen readers: the icon swap alone is silent. */}
       <span role="status" className="sr-only">
-        {copied ? 'Copied to clipboard' : ''}
+        {copied ? t.copiedAnnouncement : ''}
       </span>
     </div>
   )
 }
 
-// 'en-US' for the same reason as PromptInput's estimate: the runtime default
-// differs between server and browser. The time zone is the reader's own
-// unless one is passed, and a reader's own zone is known only in the browser.
-function formatTime(date: Date, timeZone?: string) {
-  return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZone })
+// The provider's locale, else 'en-US' for the same reason as PromptInput's
+// estimate: the runtime default differs between server and browser. The time
+// zone is the reader's own unless one is passed, and a reader's own zone is
+// known only in the browser.
+function formatTime(date: Date, locale: string | undefined, timeZone?: string) {
+  return date.toLocaleTimeString(locale ?? 'en-US', { hour: '2-digit', minute: '2-digit', timeZone })
 }

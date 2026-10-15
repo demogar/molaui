@@ -64,7 +64,7 @@ Each story is a live example in Storybook.
 | `maxConcurrent` | `number` | `2` | How many `onUpload` calls run at once. |
 | `maxFiles` | `number` |  | Total files in the list, including ones already there. |
 | `maxSize` | `number` |  | Bytes, per file. |
-| `messages` | `Partial<FileUploadMessages>` |  | Copy, for another language. Merged over the English defaults. |
+| `messages` | `{ list?: string; status?: MessagesOverride<{ attached: string; queued: string; uploading: string; done: string; failed: string; }> \| Record<FileUploadStatus, string>; ... 19 more ...; constraints?: ((types: string \| null, limit: string \| null, maxFiles: number \| undefined) => string \| null) \|...` |  | Words for translation: every prompt, status word, button name and announcement, as templates. Keys left out come from `MessagesProvider`, then English. A function in a key (the shape before 0.7.0) still works, and is deprecated. |
 | `multiple` | `boolean` | `false` | Accept several files, added to the list. Off by default: a new file replaces the one there and cancels its upload. |
 | `name` | `string` |  | Submitted with a form when there is no `onUpload`. |
 | `onFilesChange` | `((files: FileUploadItem[]) => void)` |  | Every change to the list: added, progressed, finished, failed, removed. |
@@ -75,6 +75,8 @@ Each story is a live example in Storybook.
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="file-upload">`.
 
 ### `defaultFileUploadMessages` (constant)
+
+The English words as functions.
 
 ### `describeAccept` (function)
 
@@ -92,7 +94,7 @@ Whether a file matches an `accept` string, using the rules the native picker use
 
 Splits a batch into the files that pass and the ones that do not, each with the one rule it broke. Type is checked before size, because "wrong kind of file" is the more useful thing to hear about a 2 GB video dropped on a CSV field. Count is checked last and in order, so the first files chosen are the ones kept.
 
-Types: `FileUploadItem`, `FileUploadMessages`, `FileUploadProps`, `FileUploadStatus`, `UploadContext`, `FileRejection`, `FileRejectionReason`, `FileValidationOptions`
+Types: `FileUploadMessageTemplates`, `FileUploadItem`, `FileUploadMessageFunctions`, `FileUploadMessages`, `FileUploadProps`, `FileUploadStatus`, `UploadContext`, `FileRejection`, `FileRejectionReason`, `FileValidationOptions`
 
 ## Accessibility
 

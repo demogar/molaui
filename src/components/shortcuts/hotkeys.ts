@@ -1,3 +1,7 @@
+import { formatMessage } from '../../lib/messages'
+
+import { type HotkeysMessages, hotkeysMessages } from './messages'
+
 /**
  * The grammar of a hotkey, and the three questions every keydown has to
  * answer before it runs one: does it match, is the person typing, and how is
@@ -141,41 +145,6 @@ export function isTypingTarget(target: EventTarget | null): boolean {
   return el.isContentEditable || el.closest('[contenteditable]:not([contenteditable="false"]), [role="textbox"], [role="searchbox"]') !== null
 }
 
-const APPLE_GLYPH = { mod: '⌘', meta: '⌘', ctrl: '⌃', alt: '⌥', shift: '⇧' } as const
-const OTHER_GLYPH = { mod: 'Ctrl', meta: 'Win', ctrl: 'Ctrl', alt: 'Alt', shift: 'Shift' } as const
-const APPLE_WORD = { mod: 'Command', meta: 'Command', ctrl: 'Control', alt: 'Option', shift: 'Shift' } as const
-const OTHER_WORD = { mod: 'Control', meta: 'Windows', ctrl: 'Control', alt: 'Alt', shift: 'Shift' } as const
-
-const KEY_GLYPH: Record<string, string> = {
-  escape: 'Esc',
-  enter: '↵',
-  ' ': 'Space',
-  arrowup: '↑',
-  arrowdown: '↓',
-  arrowleft: '←',
-  arrowright: '→',
-  backspace: '⌫',
-  delete: 'Del',
-  tab: 'Tab',
-}
-
-const KEY_WORD: Record<string, string> = {
-  escape: 'Escape',
-  enter: 'Enter',
-  ' ': 'Space',
-  arrowup: 'Up arrow',
-  arrowdown: 'Down arrow',
-  arrowleft: 'Left arrow',
-  arrowright: 'Right arrow',
-  backspace: 'Backspace',
-  delete: 'Delete',
-  tab: 'Tab',
-  '?': 'Question mark',
-  '/': 'Slash',
-  '.': 'Period',
-  ',': 'Comma',
-}
-
 function keyName(key: string, table: Record<string, string>) {
   if (table[key]) return table[key]
   if (/^f\d{1,2}$/.test(key)) return key.toUpperCase()
@@ -200,15 +169,15 @@ function modifiersOf(chord: Chord, platform: HotkeyPlatform) {
  * platform's own order (⌃⌥⇧⌘ on a Mac, Ctrl+Alt+Shift elsewhere). Shift is left off a symbol that
  * already needs it: `?` is printed `?`, not `⇧ ?`.
  */
-export function formatHotkey(keys: string, platform: HotkeyPlatform): string[][] {
-  const glyphs = platform === 'apple' ? APPLE_GLYPH : OTHER_GLYPH
-  return parseHotkey(keys).map((chord) => [...modifiersOf(chord, platform).map((m) => glyphs[m]), keyName(chord.key, KEY_GLYPH)])
+export function formatHotkey(keys: string, platform: HotkeyPlatform, words: HotkeysMessages = hotkeysMessages): string[][] {
+  const glyphs = platform === 'apple' ? words.appleGlyphs : words.otherGlyphs
+  return parseHotkey(keys).map((chord) => [...modifiersOf(chord, platform).map((m) => glyphs[m]), keyName(chord.key, words.keyGlyphs)])
 }
 
 /** The same keys in words, for a screen reader: "Command K", "G, then D". A glyph like ⌘ is read as "place of interest sign", or not at all. */
-export function describeHotkey(keys: string, platform: HotkeyPlatform): string {
-  const words = platform === 'apple' ? APPLE_WORD : OTHER_WORD
+export function describeHotkey(keys: string, platform: HotkeyPlatform, words: HotkeysMessages = hotkeysMessages): string {
+  const names = platform === 'apple' ? words.appleWords : words.otherWords
   return parseHotkey(keys)
-    .map((chord) => [...modifiersOf(chord, platform).map((m) => words[m]), keyName(chord.key, KEY_WORD)].join(' '))
-    .join(', then ')
+    .map((chord) => [...modifiersOf(chord, platform).map((m) => names[m]), keyName(chord.key, words.keyWords)].join(' '))
+    .reduce((first, next) => formatMessage(words.then, { first, next }))
 }

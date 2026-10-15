@@ -18,6 +18,9 @@
  * `Intl` itself; nothing here quietly substitutes `en-US`.
  */
 
+import { formatMessage } from '../../lib/messages'
+import { type DateEntryMessages, type DateRangePickerMessages, dateRangePickerMessages } from './messages'
+
 export type DateLocale = Intl.LocalesArgument
 
 /** Midnight, local time, on the same calendar day. */
@@ -271,34 +274,48 @@ export interface DateRangePreset {
  * The presets an analytics screen reaches for. "Last 7 days" includes today:
  * it is the seven days you can see on the chart, ending now.
  */
-export const defaultRangePresets: DateRangePreset[] = [
-  { label: 'Last 7 days', range: (t) => ({ start: addDays(t, -6), end: t }) },
-  { label: 'Last 30 days', range: (t) => ({ start: addDays(t, -29), end: t }) },
-  { label: 'Last 90 days', range: (t) => ({ start: addDays(t, -89), end: t }) },
-  { label: 'This month', range: (t) => ({ start: startOfMonth(t), end: t }) },
-  {
-    label: 'Last month',
-    range: (t) => {
-      const previous = addMonths(startOfMonth(t), -1)
-      return { start: previous, end: endOfMonth(previous) }
-    },
+const PRESET_RANGES: Record<PresetKey, DateRangePreset['range']> = {
+  last7Days: (t) => ({ start: addDays(t, -6), end: t }),
+  last30Days: (t) => ({ start: addDays(t, -29), end: t }),
+  last90Days: (t) => ({ start: addDays(t, -89), end: t }),
+  thisMonth: (t) => ({ start: startOfMonth(t), end: t }),
+  lastMonth: (t) => {
+    const previous = addMonths(startOfMonth(t), -1)
+    return { start: previous, end: endOfMonth(previous) }
   },
-]
+}
+
+type PresetKey = keyof DateRangePickerMessages['presetLabels']
+
+/**
+ * Which message names each default preset, so DateRangePicker can show it in
+ * the provider's words. Keyed by the preset object rather than by a field on
+ * it: `DateRangePreset` is public, and a caller's preset carries its own label.
+ */
+export const defaultPresetKeys = new Map<DateRangePreset, PresetKey>()
+
+export const defaultRangePresets: DateRangePreset[] = (Object.keys(PRESET_RANGES) as PresetKey[]).map((key) => {
+  const preset = { label: dateRangePickerMessages.presetLabels[key], range: PRESET_RANGES[key] }
+  defaultPresetKeys.set(preset, key)
+  return preset
+})
 
 /* ── typed entry, shared by both pickers ────────────────────────────── */
 
 export interface DateRules {
   locale: DateLocale
+  /** The refusal sentences, from the picker's messages. */
+  messages: DateEntryMessages
   min?: Date | null
   max?: Date | null
   isDateDisabled?: (date: Date) => boolean
 }
 
 /** Why a real day cannot be chosen, as a sentence — or null when it can. */
-export function unavailableReason(date: Date, { locale, min, max, isDateDisabled }: DateRules): string | null {
-  if (min && compareDays(date, min) < 0) return `Choose ${formatLongDate(min, locale, false)} or later.`
-  if (max && compareDays(date, max) > 0) return `Choose ${formatLongDate(max, locale, false)} or earlier.`
-  if (isDateDisabled?.(date)) return `${formatLongDate(date, locale)} is not available. Choose another day.`
+export function unavailableReason(date: Date, { locale, min, max, isDateDisabled, messages }: DateRules): string | null {
+  if (min && compareDays(date, min) < 0) return formatMessage(messages.tooEarly, { date: formatLongDate(min, locale, false) })
+  if (max && compareDays(date, max) > 0) return formatMessage(messages.tooLate, { date: formatLongDate(max, locale, false) })
+  if (isDateDisabled?.(date)) return formatMessage(messages.unavailable, { date: formatLongDate(date, locale) })
   return null
 }
 
@@ -312,9 +329,9 @@ export type TypedDateResult = { ok: true; date: Date | null } | { ok: false; mes
  * of the range picker refuse a date with the same sentence. `subject` is
  * what the format message tells the person to retype — "it" beside one
  * input, "the start date" where two sit side by side and "it" would be
- * ambiguous.
+ * ambiguous. `notADate` is that message, with `{typed}` and `{pattern}`.
  */
-export function readTypedDate(text: string, rules: DateRules, subject = 'it'): TypedDateResult {
+export function readTypedDate(text: string, rules: DateRules, notADate: string): TypedDateResult {
   const typed = text.trim()
   if (!typed) return { ok: true, date: null }
   const parsed = parseInputDate(typed, rules.locale)
@@ -323,8 +340,8 @@ export function readTypedDate(text: string, rules: DateRules, subject = 'it'): T
       ok: false,
       message:
         parsed.reason === 'format'
-          ? `“${typed}” is not a date. Type ${subject} as ${getDatePattern(rules.locale).pattern}.`
-          : `${typed} does not exist in the calendar. Check the day and month.`,
+          ? formatMessage(notADate, { typed, pattern: getDatePattern(rules.locale).pattern })
+          : formatMessage(rules.messages.notInCalendar, { typed }),
     }
   }
   const why = unavailableReason(parsed.date, rules)

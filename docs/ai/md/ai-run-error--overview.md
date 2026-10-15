@@ -65,6 +65,7 @@ Output that stopped arriving before it was finished — kept, and marked.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| `messages` | `MessagesOverride<PartialOutputMessages>` |  | Words for translation: the label and the default note. Keys left out come from `MessagesProvider`, then English. |
 | `note` | `ReactNode` |  | What cut it short, in words. Defaults to a plain statement. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="partial-output">`.
@@ -81,6 +82,7 @@ What stopped a run, said plainly, with the way back next to it.
 | `error` | `string` |  | The error, verbatim. |
 | `kind` | `RunErrorKind` | `failed` | Why the run stopped, which sets the headline, the plain sentence and the glyph. Defaults to `failed`; `cancelled` is not an error, so it offers no copy action. |
 | `message` | `ReactNode` |  | Replaces the plain sentence under the headline. |
+| `messages` | `MessagesOverride<RunErrorMessages>` |  | Words for translation: the status words, the sentences, the countdown, the buttons and the copied details. Keys left out come from `MessagesProvider`, then English. |
 | `onRetry` | `(() => void)` |  | Runs the whole run again from the start. Shows *Retry run*, disabled until `retryAt` passes. |
 | `onRetryFromStep` | `(() => void)` |  | Re-runs from the step that stopped, keeping the work before it, so it takes the stronger button when both retries are offered. Disabled until `retryAt` passes. |
 | `retryAt` | `number \| Date` |  | When a retry is allowed (or will happen). Shows a countdown. |
@@ -94,7 +96,7 @@ What stopped a run, said plainly, with the way back next to it.
 
 ### `formatRunErrorDetails` (function)
 
-The plain-text block *Copy error details* puts on the clipboard: everything a ticket needs, one fact per line.
+The plain-text block *Copy error details* puts on the clipboard: everything a ticket needs, one fact per line. In English unless `messages` (a full RunError table, `defaultMessages.runError` with your keys) says otherwise: this is a plain function, so it cannot read `MessagesProvider`.
 
 ### `formatCountdown` (function)
 
@@ -104,7 +106,7 @@ The plain-text block *Copy error details* puts on the clipboard: everything a ti
 
 Milliseconds left until `until`, ticking while there is time left and stopping at zero. `undefined` without a target.
 
-Types: `PartialOutputProps`, `RunErrorKind`, `RunErrorProps`
+Types: `PartialOutputMessages`, `RunErrorMessages`, `PartialOutputProps`, `RunErrorKind`, `RunErrorProps`
 
 ## Accessibility
 

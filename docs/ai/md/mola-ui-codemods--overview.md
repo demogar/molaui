@@ -47,6 +47,11 @@ deprecation that is still live.
   `tone: "neutral"`. The tone sits inside the `items` array, which a codemod can't follow
   reliably, so change it by hand when the warning names it. The same goes for DataTable's
   `empty={{ variant }}`, which warns as `table-empty-variant` and becomes `empty={{ kind }}`.
+- `file-upload-message-functions`: a function in `FileUpload`'s `messages` becomes a template
+  string (`remove: (name) => \`Quitar ${name}\`` becomes `remove: 'Quitar {name}'`). A function
+  body can say anything, so rewriting it into a template is a translator's job, not a
+  script's. The [Internationalisation](https://demogar.github.io/molaui/?path=/docs/foundations-internationalisation--overview)
+  page lists every key and its placeholders.
 
 ## How this page stays complete
 

@@ -7,11 +7,13 @@ import { Check, ChevronsUpDown, X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { nameListbox } from '../../lib/listbox-name'
 import { chipVariants } from '../chip/chip'
 import { type FieldControlSize, fieldControlClasses, fieldControlSizes } from '../field/field-control'
 import { Label } from '../field/label'
 import { optionClasses, optionDescriptionClasses } from '../select/select'
+import { type AutocompleteMessages, type ComboboxMessages, autocompleteMessages, comboboxMessages } from './messages'
 
 /**
  * A select you can type into, for the lists too long to scroll: a model
@@ -100,7 +102,17 @@ const endButtonClasses =
 
 const statusRowClasses = 'flex items-center gap-2.5 px-2 py-2 text-sm text-ink-muted'
 
-function StatusLine({ loading, status, empty }: { loading?: boolean; status?: React.ReactNode; empty: React.ReactNode }) {
+function StatusLine({
+  loading,
+  status,
+  empty,
+  searching,
+}: {
+  loading?: boolean
+  status?: React.ReactNode
+  empty: React.ReactNode
+  searching: string
+}) {
   return (
     <>
       {/* Both regions stay mounted — Base UI announces changes to their
@@ -111,7 +123,7 @@ function StatusLine({ loading, status, empty }: { loading?: boolean; status?: Re
             <span aria-hidden className="relative h-2 w-6 shrink-0 overflow-hidden bg-cloth-shade shadow-cut">
               <span className="absolute inset-0 band-accent relleno-working" />
             </span>
-            Searching…
+            {searching}
           </div>
         ) : status ? (
           <div className={statusRowClasses}>{status}</div>
@@ -230,6 +242,8 @@ export interface ComboboxCommonProps
   clearLabel?: string
   /** Accessible name of the button that opens the list. */
   triggerLabel?: string
+  /** Words for translation: the status lines, the button names and the chip hint. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<ComboboxMessages>
 }
 
 export interface ComboboxSingleProps extends ComboboxCommonProps {
@@ -300,14 +314,15 @@ export function Combobox(props: ComboboxProps) {
     id,
     className,
     wrapperClassName,
-    emptyMessage = 'No matches',
+    emptyMessage,
     loading = false,
     status,
     filter,
     onInputValueChange,
     locale,
-    clearLabel = 'Clear selection',
-    triggerLabel = 'Show options',
+    clearLabel,
+    triggerLabel,
+    messages,
     'aria-describedby': ariaDescribedBy,
     // Taken out so the rest is only the input's DOM props.
     multiple: _multiple,
@@ -322,7 +337,8 @@ export function Combobox(props: ComboboxProps) {
   const lookup = useOptionCache(items)
   // The chips sit before the input in reading order, so the key that reaches
   // them is the one pointing backwards: Left in LTR, Right in RTL.
-  const backKey = useDirection() === 'rtl' ? 'Right' : 'Left'
+  const [t, f] = useMessages('combobox', comboboxMessages, messages)
+  const backKey = useDirection() === 'rtl' ? t.keyRight : t.keyLeft
   const grouped = isGrouped(items)
 
   const inputClasses =
@@ -341,10 +357,10 @@ export function Combobox(props: ComboboxProps) {
 
   const endButtons = disabled || readOnly ? null : (
     <>
-      <ComboboxPrimitive.Clear aria-label={clearLabel} className={endButtonClasses}>
+      <ComboboxPrimitive.Clear aria-label={clearLabel ?? t.clear} className={endButtonClasses}>
         <X aria-hidden />
       </ComboboxPrimitive.Clear>
-      <ComboboxPrimitive.Trigger aria-label={triggerLabel} className={endButtonClasses}>
+      <ComboboxPrimitive.Trigger aria-label={triggerLabel ?? t.showOptions} className={endButtonClasses}>
         <ChevronsUpDown aria-hidden />
       </ComboboxPrimitive.Trigger>
     </>
@@ -358,7 +374,7 @@ export function Combobox(props: ComboboxProps) {
     readOnly,
     required,
     name,
-    locale,
+    locale: locale ?? f.locale,
     filter,
     isItemEqualToValue: (a: ComboboxOption, b: ComboboxOption) => a.value === b.value,
     itemToStringLabel: (option: ComboboxOption) => option.label,
@@ -370,7 +386,7 @@ export function Combobox(props: ComboboxProps) {
   let root: (children: React.ReactNode) => React.ReactNode
 
   if (props.multiple) {
-    const { value, defaultValue, onValueChange, removeLabel = (l: string) => `Remove ${l}` } = props
+    const { value, defaultValue, onValueChange, removeLabel = (name: string) => f.format(t.remove, { name }) } = props
     const pad = 'calc((var(--control-h) - var(--control-h-sm)) / 2)'
     field = (
       <ComboboxPrimitive.InputGroup
@@ -381,7 +397,7 @@ export function Combobox(props: ComboboxProps) {
         <ComboboxPrimitive.Value>
           {(selected: ComboboxOption[]) => (
             <ComboboxPrimitive.Chips
-              aria-label={selected.length > 0 ? 'Selected' : undefined}
+              aria-label={selected.length > 0 ? t.selected : undefined}
               className="flex min-w-0 flex-1 flex-wrap items-center gap-(--chip-pad)"
             >
               {selected.map((option) => (
@@ -421,7 +437,7 @@ export function Combobox(props: ComboboxProps) {
               />
               {selected.length > 0 ? (
                 <span id={`${uid}-chips-hint`} hidden>
-                  {`${selected.length} selected. Press ${backKey} Arrow from the start of the field to reach them.`}
+                  {f.plural(t.chipsHint, selected.length, { key: backKey })}
                 </span>
               ) : null}
             </ComboboxPrimitive.Chips>
@@ -485,7 +501,7 @@ export function Combobox(props: ComboboxProps) {
             aria-busy={loading || undefined}
             className={cn(popupClasses)}
           >
-            <StatusLine loading={loading} status={status} empty={emptyMessage} />
+            <StatusLine loading={loading} status={status} empty={emptyMessage ?? t.noMatches} searching={t.searching} />
             <OptionList grouped={grouped} inputId={inputId} />
           </ComboboxPrimitive.Popup>
         </ComboboxPrimitive.Positioner>
@@ -543,6 +559,8 @@ export interface AutocompleteProps
   status?: React.ReactNode
   /** Locale for the built-in matching. Omitted, the runtime's locale is used. */
   locale?: Intl.LocalesArgument
+  /** Words for translation: the status line while loading. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<AutocompleteMessages>
 }
 
 /**
@@ -573,8 +591,10 @@ export function Autocomplete({
   status,
   locale,
   autoComplete = 'off',
+  messages,
   ...inputProps
 }: AutocompleteProps) {
+  const [t, f] = useMessages('autocomplete', autocompleteMessages, messages)
   const uid = React.useId()
   const inputId = id ?? `${uid}-input`
   const options = React.useMemo(
@@ -604,7 +624,7 @@ export function Autocomplete({
       readOnly={readOnly}
       required={required}
       name={name}
-      locale={locale}
+      locale={locale ?? f.locale}
     >
       {label ? (
         <div data-slot="autocomplete-field" className={cn('flex flex-col gap-2', wrapperClassName)}>
@@ -623,7 +643,7 @@ export function Autocomplete({
             aria-busy={loading || undefined}
             className={cn(popupClasses, 'empty:hidden')}
           >
-            <StatusLine loading={loading} status={status} empty={emptyMessage} />
+            <StatusLine loading={loading} status={status} empty={emptyMessage} searching={t.searching} />
             <AutocompletePrimitive.List
               ref={(list) => nameListbox(list, inputId)}
               className="outline-none data-empty:hidden"

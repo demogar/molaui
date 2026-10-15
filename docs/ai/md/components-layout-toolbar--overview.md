@@ -109,7 +109,8 @@ Actions that fold into a "More" menu when the row runs out of room.
 | --- | --- | --- | --- |
 | `items` (required) | `ToolbarOverflowItem[]` |  | In priority order: the first items stay visible longest. |
 | `align` | `"start" \| "end"` | `end` | Which end of the free space the buttons hug. |
-| `moreLabel` | `string` | `More actions` | The name of the menu button that collects what does not fit. |
+| `messages` | `MessagesOverride<ToolbarOverflowMessages>` |  | Words for translation: the menu button's label and name. Keys left out come from `MessagesProvider`, then English. |
+| `moreLabel` | `string` |  | The name of the menu button that collects what does not fit. "More actions" (`messages.moreActions`) by default. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="toolbar-overflow">`.
 
@@ -158,7 +159,7 @@ Also accepts the props of `ToggleGroupProps`.
 
 A row of related controls with `role="toolbar"` and one tab stop: Tab enters the toolbar, the arrow keys move inside it, Tab leaves. In a dense tool a table header can carry ten controls, and ten tab stops between the page title and the first row is a keyboard user's afternoon.
 
-Types: `ToolbarButtonProps`, `ToolbarInputProps`, `ToolbarOverflowItem`, `ToolbarOverflowProps`, `ToolbarProps`, `ToolbarSeparatorProps`, `ToolbarToggleGroupProps`, `ToolbarToggleProps`
+Types: `ToolbarOverflowMessages`, `ToolbarButtonProps`, `ToolbarInputProps`, `ToolbarOverflowItem`, `ToolbarOverflowProps`, `ToolbarProps`, `ToolbarSeparatorProps`, `ToolbarToggleGroupProps`, `ToolbarToggleProps`
 
 ## Accessibility
 

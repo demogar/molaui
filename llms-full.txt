@@ -2,7 +2,7 @@
 
 > A design system cut like a mola: flat layers, hard keylines, revealed bands. React components for dense internal tools and AI-native interfaces. Published as `@demogar/mola-ui`: React 19, Base UI for behaviour, Tailwind v4 for styling, design tokens as CSS custom properties.
 
-64 components and 14 AI components (78 documented pages).
+65 components and 14 AI components (79 documented pages).
 
 Install and set up:
 
@@ -84,7 +84,7 @@ When to use:
 - Icon-only actions in dense rows and toolbars, with IconButton and its required label.
 
 When not to:
-- Going to another page or URL. Use a link: an a element, or your router’s link styled with buttonVariants.
+- Going to another page or URL. Use LinkButton.
 - A row of related actions above a table or canvas, with one tab stop. Use Toolbar.
 - More actions on one object than deserve a button each. Use Menu.
 - Choosing between views, where the pressed state stays. Use Segmented control.
@@ -112,7 +112,7 @@ Mola handles:
 You handle:
 - Write a label that names the action with a verb: Deploy, Save changes.
 - Give every `IconButton` a `label`; the icon is not a name.
-- Use a link styled with `buttonVariants` when the control goes somewhere rather than does something.
+- Use `LinkButton` when the control goes somewhere rather than does something.
 
 #### `Button` (component)
 
@@ -218,6 +218,7 @@ Overlapping tiles, each separated from the next by a ring of the page ground ins
 | --- | --- | --- | --- |
 | `label` (required) | `string` |  | Names the group: "Reviewers", "On call". |
 | `max` | `number` | `4` | Show at most this many; the rest collapse into a "+n" tile. |
+| `messages` | `MessagesOverride<AvatarGroupMessages>` |  | Words for translation: the "+n" tile's name. Keys left out come from `MessagesProvider`, then English. |
 | `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` | `md` | Every tile's size, the "+n" tile's included; it overrides the size set on each child, so the row stays even. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="avatar-group">`.
@@ -228,7 +229,7 @@ Overlapping tiles, each separated from the next by a ring of the page ground ins
 
 #### `initials` (function)
 
-Types: `AvatarGroupProps`, `AvatarLayer`, `AvatarProps`
+Types: `AvatarGroupMessages`, `AvatarGroupProps`, `AvatarLayer`, `AvatarProps`
 
 ### Code
 
@@ -291,6 +292,7 @@ A block of machine text — a tool call's arguments, a query, a log tail.
 | `language` | `CodeLanguage` | `text` | Shown as a tag in the header. Only `json` is tokenized; everything else is plain. |
 | `lineNumbers` | `boolean` | `false` | A gutter of line numbers that stays put as the code scrolls sideways. Hidden from assistive tech and never copied. Off by default; turn it on when someone will cite a line. |
 | `maxHeight` | `string` |  | Scroll inside after this height (any CSS length). |
+| `messages` | `MessagesOverride<CodeBlockMessages>` |  | Words for translation: the wrap and copy buttons and the copy announcement. Keys left out come from `MessagesProvider`, then English. |
 | `wrap` | `boolean` | `false` | Start with long lines wrapped. The reader can toggle it. |
 
 `className`, `ref`, `id` and the other DOM props go to `<figure data-slot="code-block">`.
@@ -299,7 +301,7 @@ A block of machine text — a tool call's arguments, a query, a log tail.
 
 #### `JSON_TOKEN_CLASS` (constant)
 
-Types: `CodeBlockProps`, `CodeLanguage`, `JsonToken`, `JsonTokenKind`
+Types: `CodeBlockMessages`, `CodeBlockProps`, `CodeLanguage`, `JsonToken`, `JsonTokenKind`
 
 Used in: Confirmation
 
@@ -397,7 +399,7 @@ You handle:
 | `date` (required) | `string \| number \| Date` |  | The moment: a `Date`, epoch milliseconds, or an ISO 8601 string. |
 | `format` | `"long" \| "short" \| "narrow"` | `long` | `long` "3 minutes ago", `short` "3 min. ago", `narrow` "3m ago" (in English). |
 | `live` | `boolean` | `true` | Keep the text current while the tab is visible. Ignored when `now` is given. |
-| `locale` | `LocalesArgument` |  | BCP 47 tag for the words and digits. `undefined` uses the runtime's locale. |
+| `locale` | `LocalesArgument` |  | BCP 47 tag for the words and digits. Left out, `MessagesProvider`'s locale, then the runtime's. |
 | `now` | `number \| Date` |  | The moment to measure from. Given, the text renders on the server and does not tick; omitted, it uses the browser's clock from hydration on. |
 | `numeric` | `"auto" \| "always"` | `auto` | `auto` writes "yesterday" and "now" where the locale has them; `always` writes "1 day ago". |
 | `timeZone` | `string` |  | The zone for the exact moment in `title`, and in the server text when `now` is omitted. |
@@ -475,6 +477,7 @@ Anatomy:
 | `value` (required) | `ReactNode` |  | The figure itself, already formatted: "1,284", "97.8". Put the unit in `unit` rather than in the string. |
 | `delta` | `StatDelta` |  | The change since a reference period. State both which way it moved (`direction`, the glyph) and whether that is good (`sentiment`, the colour): up is not always good news. |
 | `hint` | `ReactNode` |  | A line of context under the figure. |
+| `messages` | `MessagesOverride<StatMessages>` |  | Words for translation: the change, read as one sentence to a screen reader. Keys left out come from `MessagesProvider`, then English. |
 | `trend` | `number[]` |  | The recent series, oldest first. Drawn in ink with the latest point cut out in the accent. |
 | `unit` | `ReactNode` |  | Set smaller beside the figure: "ms", "runs", "%". |
 
@@ -490,7 +493,7 @@ Tiles cut from one panel rather than four floating cards: one ink keyline around
 
 `className`, `ref`, `id` and the other DOM props go to `<dl data-slot="stat-group">`.
 
-Types: `SparklineProps`, `StatDelta`, `StatGroupProps`, `StatProps`
+Types: `StatMessages`, `SparklineProps`, `StatDelta`, `StatGroupProps`, `StatProps`
 
 Used in: List and detail
 
@@ -664,7 +667,8 @@ A native checkbox, drawn as a cut square. Native, so space toggles it, forms sub
 | `colSpan` (required) | `number` |  | How many columns the row spans: all of them, including a checkbox column, or the empty state sits in the first cell. |
 | `actions` | `ReactNode` |  | One or two buttons; for a filtered table, the one that clears the filters. |
 | `kind` | `"empty" \| "no-results" \| "error" \| "no-permission"` |  | Why it is empty, as on `EmptyState`: `empty` (the default), `no-results` when filters emptied it, `error`, or `no-permission`. |
-| `title` | `ReactNode` | `Nothing here yet` | The empty state's heading. Defaults to "Nothing here yet"; the children become its description. |
+| `messages` | `MessagesOverride<TableMessages>` |  | Words for translation: the default heading. Keys left out come from `MessagesProvider`, then English. |
+| `title` | `ReactNode` |  | The empty state's heading. Defaults to "Nothing here yet"; the children become its description. |
 | `variant` (deprecated) | `"empty" \| "no-results" \| "error" \| "no-permission"` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `kind`, as on `EmptyState`. |
 
 `className`, `ref`, `id` and the other DOM props go to `<tr data-slot="table-empty">`.
@@ -734,7 +738,8 @@ Renders no element of its own, so it takes no `className` or `ref`.
 | `label` | `string` |  | Names the table for assistive tech when there is no visible caption. |
 | `loading` | `boolean` | `false` | Shows skeleton rows at the real row height in place of the body and says "Loading…" in the bar, so the table does not jump when the data lands. |
 | `manual` | `boolean` | `false` | Sorting and paging are done by the server: rows are one page, already sorted. |
-| `noun` | `{ one: string; other: string; }` | `{ one: 'row', other: 'rows' }` | What a row is, for counts: `{ one: 'run', other: 'runs' }`. |
+| `messages` | `MessagesOverride<DataTableMessages>` |  | Words for translation: the counts, the selection names, the empty heading and the column menu. Keys left out come from `MessagesProvider`, then English. |
+| `noun` | `PluralMessage` |  | What a row is, for counts: `{ one: 'run', other: 'runs' }`. Any plural category a language needs may be given (`few`, `many`); `other` is required. |
 | `onColumnWidthsChange` | `((widths: Record<string, number>) => void)` |  | Called with every column's width after a resize — to remember the layout between visits. The first resize fixes each column at its rendered width. |
 | `onExpandedChange` | `((expanded: Set<string>) => void)` |  | Called with the new set of expanded row ids. |
 | `onHiddenColumnsChange` | `((hidden: Set<string>) => void)` |  | Called with the new set of hidden column keys — to remember the choice between visits. |
@@ -768,10 +773,11 @@ Renders no element of its own, so it takes no `className` or `ref`.
 | `columns` (required) | `DataTableColumn<Row>[]` |  | Every column, hidden or not, so the menu can list them all. A column with `hideable: false` shows checked and disabled. |
 | `hidden` (required) | `ReadonlySet<string>` |  | The keys of the columns currently hidden. The last visible column cannot be hidden. |
 | `onToggle` (required) | `(key: string, visible: boolean) => void` |  | Called with a column's key and whether it should now be visible. The menu stays open, because columns are chosen several at a time. |
+| `messages` | `MessagesOverride<DataTableMessages>` |  | Words for translation: the button and the menu's heading. Keys left out come from `MessagesProvider`, then English. |
 
 `className`, `ref`, `id` and the other DOM props go to `<button data-slot="button">`.
 
-Types: `TableCellProps`, `TableCheckboxProps`, `TableEmptyProps`, `TableHeadProps`, `TableProps`, `TableRowProps`, `TableSkeletonRowsProps`, `TableSortDirection`, `DataTableBulkContext`, `DataTableColumn`, `DataTableColumnMenuProps`, `DataTableEmpty`, `DataTableProps`, `DataTableSort`, `SortValue`
+Types: `DataTableMessages`, `TableMessages`, `TableCellProps`, `TableCheckboxProps`, `TableEmptyProps`, `TableHeadProps`, `TableProps`, `TableRowProps`, `TableSkeletonRowsProps`, `TableSortDirection`, `DataTableBulkContext`, `DataTableColumn`, `DataTableColumnMenuProps`, `DataTableEmpty`, `DataTableProps`, `DataTableSort`, `SortValue`
 
 Used in: Confirmation, Empty states, Filtered table, List and detail
 
@@ -910,6 +916,7 @@ You handle:
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `level` | `"essential" \| "highly" \| "detour" \| "time"` |  | How strongly the recommendation is made, from `essential` (gold) down to `time`. Each level brings its own label; pass children only to reword it. |
+| `messages` | `MessagesOverride<RecommendationBadgeMessages>` |  | Words for translation: the label of each level. Keys left out come from `MessagesProvider`, then English. |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="recommendation-badge">`.
 
@@ -935,7 +942,7 @@ A status mark. Small, flat, cut — a scrap of the layer that says what state so
 
 The editorial recommendation scale of the editorial system this grew out of — kept as lineage, and because "how strongly do we stand behind this" is a scale a support or knowledge tool also has. Gold is the layer a mola reveals last and least, so gold is `essential`.
 
-Types: `BadgeProps`, `BadgeTone`, `RecommendationBadgeProps`, `RecommendationLevel`, `StatusDotProps`
+Types: `RecommendationBadgeMessages`, `BadgeProps`, `BadgeTone`, `RecommendationBadgeProps`, `RecommendationLevel`, `StatusDotProps`
 
 Used in: Agent hand-off, Confirmation, Empty states, Filtered table, List and detail
 
@@ -1002,7 +1009,8 @@ Anatomy:
 | `action` | `ReactNode` |  | One follow-up, usually a `Button` at `size="sm"` or a link: “View status”. |
 | `announce` | `boolean` | `false` | Say the message once, politely, when the banner appears. Only for a banner that appears during the session because something changed; one that is there when the page loads is read in order, and announcing it talks over the page's own title. |
 | `icon` | `ReactNode` |  | Replace the tone's icon, or `false` for none. |
-| `label` | `string` | `Announcement` | The landmark's name, “Announcement” by default. Name it for what it is when there is more than one kind: “Maintenance”. |
+| `label` | `string` |  | The landmark's name, “Announcement” (`messages.label`) by default. Name it for what it is when there is more than one kind: “Maintenance”. |
+| `messages` | `MessagesOverride<BannerMessages>` |  | Words for translation: the landmark's name, the dismiss button and the tone words read before the message. Keys left out come from `MessagesProvider`, then English. |
 | `onDismiss` | `(() => void)` |  | Renders a Dismiss button. The caller owns whether the banner comes back, and when. |
 | `title` | `ReactNode` |  | A few words in bold before the message: “Scheduled maintenance”. |
 | `tone` | `"neutral" \| "info" \| "success" \| "warn" \| "danger"` |  | The status of the condition, carried by the wash, the foot edge and the icon; `info` by default. The message still says it in words. |
@@ -1013,7 +1021,7 @@ Anatomy:
 
 A condition of the whole application, said once across the top of it: maintenance tonight, the workspace is read-only, the connection dropped.
 
-Types: `BannerProps`, `BannerTone`
+Types: `BannerMessages`, `BannerProps`, `BannerTone`
 
 ### Callout
 
@@ -1080,6 +1088,7 @@ Anatomy:
 | `actions` | `ReactNode` |  | Buttons under the body. Usually one secondary, at `size="sm"`. |
 | `headingLevel` | `2 \| 3 \| 4 \| 5` | `3` | The heading element for `title`. |
 | `icon` | `ReactNode` |  | Replace the tone's default mark — the icon, or in `flat` the square swatch — or `false` for none. |
+| `messages` | `MessagesOverride<CalloutMessages>` |  | Words for translation: the dismiss button's name. Keys left out come from `MessagesProvider`, then English. |
 | `onDismiss` | `(() => void)` |  | Renders a dismiss button. The caller owns whether it comes back. |
 | `title` | `ReactNode` |  | A short heading that states the message. With it the callout becomes a region named by the title; without it, it is plain content and the body has to stand alone. |
 | `tone` | `"neutral" \| "info" \| "success" \| "warn" \| "danger"` |  | The status of the message, carried by the seam (or the swatch), the wash and the tone's icon; `info` by default. The title still has to say it in words. |
@@ -1091,7 +1100,7 @@ Anatomy:
 
 A message that belongs to a region of the page — "this agent is using a deprecated model", "billing is in read-only mode" — rather than to a moment, which is a toast's job.
 
-Types: `CalloutProps`, `CalloutTone`, `CalloutVariant`
+Types: `CalloutMessages`, `CalloutProps`, `CalloutTone`, `CalloutVariant`
 
 Used in: Agent hand-off, Confirmation, List and detail
 
@@ -1234,9 +1243,10 @@ The bell for the top bar's `end`, and the list in a popover under it. `className
 | --- | --- | --- | --- |
 | `notifications` (required) | `NotificationItem[]` |  | Newest first. |
 | `defaultOpen` | `boolean` | `false` | Open on first render. |
-| `empty` | `ReactNode` |  | Shown when there is nothing. Defaults to “No notifications yet.” |
+| `empty` | `ReactNode` |  | Shown when there is nothing. Defaults to “No notifications yet.” (`messages.empty`) |
 | `footer` | `ReactNode` |  | Under the list: usually a link to a full notifications page, “View all”. |
-| `label` | `string` | `Notifications` | The popover's title and the bell's name, “Notifications” by default. |
+| `label` | `string` |  | The popover's title and the bell's name, “Notifications” (`messages.label`) by default. |
+| `messages` | `MessagesOverride<NotificationsMessages>` |  | Words for translation: the defaults above, the unread and tone words, Mark all as read and the bell's name. Keys left out come from `MessagesProvider`, then English. |
 | `onMarkAllRead` | `(() => void)` |  | Called when the operator presses Mark all as read. The button shows only while something is unread. |
 | `onMarkRead` | `((id: string) => void)` |  | Called with an item's id when its action runs. |
 | `onOpenChange` | `((open: boolean) => void)` |  | Called when the popover opens or closes. |
@@ -1251,13 +1261,14 @@ The list on its own, for a full notifications page or a panel the page places it
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `notifications` (required) | `NotificationItem[]` |  | Newest first. |
-| `empty` | `ReactNode` | `No notifications yet.` | Shown when there is nothing. Defaults to “No notifications yet.” |
-| `label` | `string` | `Notifications` | The list's accessible name, “Notifications” by default. |
+| `empty` | `ReactNode` |  | Shown when there is nothing. Defaults to “No notifications yet.” (`messages.empty`) |
+| `label` | `string` |  | The list's accessible name, “Notifications” (`messages.label`) by default. |
+| `messages` | `MessagesOverride<NotificationsMessages>` |  | Words for translation: the defaults above, the unread and tone words, Mark all as read and the bell's name. Keys left out come from `MessagesProvider`, then English. |
 | `onMarkRead` | `((id: string) => void)` |  | Called with an item's id when its action runs. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="notification-list">`.
 
-Types: `NotificationCentreProps`, `NotificationItem`, `NotificationListProps`, `NotificationTone`
+Types: `NotificationsMessages`, `NotificationCentreProps`, `NotificationItem`, `NotificationListProps`, `NotificationTone`
 
 ### Placeholder
 
@@ -1295,13 +1306,14 @@ The slot where something will go and has not yet: a photograph that has not been
 | --- | --- | --- | --- |
 | `alt` (required) | `string` |  | Announced in place of the missing content. |
 | `name` (required) | `string` |  | What it would show — "Account logo", "Tickets by plan". |
-| `label` | `string` | `Placeholder` | The kind of thing that goes here — "Image", "Chart", "Preview". |
+| `label` | `string` |  | The kind of thing that goes here — "Image", "Chart", "Preview". |
 | `layer` | `"shade" \| "deep"` |  | The cloth it is cut from: `shade` by default, `deep` on a shaded panel, where `shade` would vanish. |
+| `messages` | `MessagesOverride<PlaceholderMessages>` |  | Words for translation: the default label. Keys left out come from `MessagesProvider`, then English. |
 | `tone` (deprecated) | `"default" \| "deep"` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `layer`: `default` is `shade`, `deep` is `deep`. A ground is a layer, as on `Panel`; `tone` is a status. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="placeholder">`.
 
-Types: `PlaceholderProps`
+Types: `PlaceholderMessages`, `PlaceholderProps`
 
 ### Progress
 
@@ -1505,11 +1517,12 @@ You handle:
 
 #### `ToastProvider` (component)
 
-Mount once near the root. Renders the viewport, bottom-right, into a portal.
+Mount once near the root, inside `MessagesProvider` if the app has one. Renders the viewport, bottom-right, into a portal.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `limit` | `number` | `3` | Toasts kept visible at once; older ones fold away. |
+| `messages` | `MessagesOverride<ToastMessages>` |  | Words for translation: the close button and the tone words read before a title. Keys left out come from `MessagesProvider`, then English. The toasts render here, so a `MessagesProvider` must sit above this one, not inside it. |
 | `timeout` | `number` | `5000` | Default auto-dismiss, ms. Also the timeout a running toast starts when `update()` turns it into a result. |
 
 Renders no element of its own, so it takes no `className` or `ref`.
@@ -1518,7 +1531,7 @@ Renders no element of its own, so it takes no `className` or `ref`.
 
 The toast API. Call from anywhere inside a `ToastProvider`.
 
-Types: `ToastOptions`, `ToastProviderProps`, `ToastTone`
+Types: `ToastMessages`, `ToastOptions`, `ToastProviderProps`, `ToastTone`
 
 Used in: Confirmation, Settings page
 
@@ -1739,6 +1752,7 @@ Free text with suggestions: a run label, a tag, a search. The typed text is the 
 | `label` | `ReactNode` |  | A visible label above the input. Omit it inside `Field`, which renders its own, and spread Field's control props onto this component instead. |
 | `loading` | `boolean` | `false` | Suggestions are on their way: the popup shows the working texture and "Searching…" and the list is marked busy. Set it while a server search is in flight. |
 | `locale` | `LocalesArgument` |  | Locale for the built-in matching. Omitted, the runtime's locale is used. |
+| `messages` | `MessagesOverride<AutocompleteMessages>` |  | Words for translation: the status line while loading. Keys left out come from `MessagesProvider`, then English. |
 | `name` | `string` |  | Form field name. The typed text is what submits, not a suggestion's value. |
 | `onValueChange` | `((value: string) => void)` |  | Every change to the text, typed or chosen. |
 | `placeholder` | `string` |  | Shown in the empty input. A hint at what to type, never the label: it disappears on the first keystroke. |
@@ -1766,6 +1780,7 @@ Free text with suggestions: a run label, a tag, a search. The typed text is the 
 | `label` | `ReactNode` |  | A visible label above the field. Omit it inside `Field`, which renders its own, and spread Field's control props onto this component instead. |
 | `loading` | `boolean` |  | Results are on their way: the popup shows the working texture and "Searching…". |
 | `locale` | `LocalesArgument` |  | Locale for the built-in matching. Omitted, the runtime's locale is used. |
+| `messages` | `MessagesOverride<ComboboxMessages>` |  | Words for translation: the status lines, the button names and the chip hint. Keys left out come from `MessagesProvider`, then English. |
 | `multiple` | `boolean` |  | Omit, or `false`, for a single choice. Set `true` to pick several, shown as removable chips in the field. Pick several options, shown as removable chips in the field. Values become `string[]`. |
 | `name` | `string` |  | Form field name. The selected option's `value` is submitted under it (one entry per value with `multiple`). |
 | `onInputValueChange` | `((query: string) => void)` |  | What is typed, as it is typed: the hook for a server search. |
@@ -1782,7 +1797,7 @@ Free text with suggestions: a run label, a tag, a search. The typed text is the 
 
 `className` goes to `<div data-slot="combobox">`; `ref`, `id` and the other DOM props go to `<input>`.
 
-Types: `AutocompleteProps`, `ComboboxCommonProps`, `ComboboxItems`, `ComboboxMultipleProps`, `ComboboxOption`, `ComboboxOptionGroup`, `ComboboxProps`, `ComboboxSingleProps`
+Types: `AutocompleteMessages`, `ComboboxMessages`, `AutocompleteProps`, `ComboboxCommonProps`, `ComboboxItems`, `ComboboxMultipleProps`, `ComboboxOption`, `ComboboxOptionGroup`, `ComboboxProps`, `ComboboxSingleProps`
 
 Used in: Form example, Filtered table
 
@@ -1848,6 +1863,7 @@ You handle:
 | `isDateDisabled` | `((date: Date) => boolean)` |  | Days that exist but cannot be chosen: weekends in a freeze, public holidays. |
 | `locale` | `LocalesArgument` |  | BCP 47 tag. `undefined` uses the runtime's locale, as Intl does. |
 | `max` | `Date \| null` |  | The latest day that can be chosen, inclusive. Later days are disabled, and focus never moves past it. |
+| `messages` | `MessagesOverride<CalendarMessages>` |  | Words for translation: the month buttons' names. Keys left out come from `MessagesProvider`, then English. |
 | `min` | `Date \| null` |  | The earliest day that can be chosen, inclusive. Earlier days are disabled, and focus never moves before it. |
 | `onSelect` | `((date: Date) => void)` |  | Called with the day a person chose. Range logic belongs to the caller. |
 | `renderHeading` | `((props: { id: string; className: string; children: ReactNode; }) => ReactNode)` |  | Render the heading as the popup's title instead of a plain element. |
@@ -1868,6 +1884,7 @@ You handle:
 | `isDateDisabled` | `((date: Date) => boolean)` |  | Days inside `min`–`max` that still cannot be chosen: weekends in a freeze, public holidays. Disabled in the grid, and refused when typed with a sentence naming the day. |
 | `locale` | `LocalesArgument` |  | BCP 47 tag for names, digits, typed order and week start. `undefined` uses the runtime's locale. |
 | `max` | `Date \| null` |  | The latest day that can be chosen, inclusive; only the day counts, not the time. Later days are disabled in the grid and refused when typed, with a sentence naming the limit. |
+| `messages` | `MessagesOverride<DatePickerMessages>` |  | Words for translation: the calendar button's name, the format line and the sentences a refused date is stated with. Keys left out come from `MessagesProvider`, then English. The calendar's own words come from the provider's `calendar` table. |
 | `min` | `Date \| null` |  | The earliest day that can be chosen, inclusive; only the day counts, not the time. Earlier days are disabled in the grid and refused when typed, with a sentence naming the limit. |
 | `name` | `string` |  | Submitted as `yyyy-mm-dd`, whatever the display locale. |
 | `onOpenChange` | `((open: boolean) => void)` |  | Called when the calendar opens or closes, by the button, Escape, a pick or a press outside. |
@@ -1893,13 +1910,14 @@ You handle:
 | `isDateDisabled` | `((date: Date) => boolean)` |  | Days inside `min`–`max` that cannot be an end of the range: public holidays, a freeze. Disabled in the grid and refused when typed. |
 | `locale` | `LocalesArgument` |  | BCP 47 tag for names, digits, typed order, week start and how the period is written on the trigger. `undefined` uses the runtime's locale. |
 | `max` | `Date \| null` |  | The latest day either end can be, inclusive. Later days are disabled in the grid and refused when typed. |
+| `messages` | `MessagesOverride<DateRangePickerMessages>` |  | Words for translation: the inputs' labels, the status line, the default presets' labels and the sentences a refused date is stated with. Keys left out come from `MessagesProvider`, then English. The calendar's own words come from the provider's `calendar` table. |
 | `min` | `Date \| null` |  | The earliest day either end can be, inclusive. Earlier days are disabled in the grid and refused when typed. |
 | `name` | `string` |  | Submitted as `<name>-start` and `<name>-end`, `yyyy-mm-dd`. |
 | `onOpenChange` | `((open: boolean) => void)` |  | Called when the popup opens or closes. A range pressed on the grid or a preset closes it; a range completed by typing leaves it open, so the person sees it drawn. |
 | `onValueChange` | `((value: DateRange) => void)` |  | Called with the whole range once both ends are chosen, pressed or typed, when a preset is picked, and with both ends `null` when both typed dates are cleared. |
 | `open` | `boolean` |  | Whether the calendar is open, when the page owns that. |
-| `placeholder` | `string` | `Choose a period` | The trigger's text while no range is chosen. Defaults to "Choose a period". |
-| `presets` | `DateRangePreset[]` | `[   { label: 'Last 7 days', range: (t) => ({ start: addDays(t, -6), end: t }) },   { label: 'Last 30 days', range: (t) => ({ start: addDays(t, -29), end: t }) },   { label: 'Last 90 days', range: (t) => ({ start: addDays(t, -89), end: t }) },   { label: 'This month', range: (t) => ({ start: startOfMonth(t), end: t }) },   {     label: 'Last month',     range: (t) => {       const previous = addMonths(startOfMonth(t), -1)       return { start: previous, end: endOfMonth(previous) }     },   }, ]` | Pass `[]` for none. |
+| `placeholder` | `string` |  | The trigger's text while no range is chosen. Defaults to "Choose a period" (`messages.placeholder`). |
+| `presets` | `DateRangePreset[]` | `(Object.keys(PRESET_RANGES) as PresetKey[]).map((key) => {   const preset = { label: dateRangePickerMessages.presetLabels[key], range: PRESET_RANGES[key] }   defaultPresetKeys.set(preset, key)   return preset })` | Pass `[]` for none. |
 | `required` | `boolean` |  | Marks the trigger `aria-required`. Inside `Field`, the label carries the required mark. |
 | `size` | `"sm" \| "md" \| "lg"` | `md` | Trigger height, shared with Input and Select so the picker lines up in a form row. Defaults to `md`; density rescales every size. |
 | `today` | `Date` |  | Inject "now" for stable stories and tests. Pass it when server rendering too: today's date, and with it the starting month, depends on the zone it is computed in, and the grid cannot wait for hydration without arriving blank. The server's date, passed down, keeps both renders on one day. |
@@ -1916,13 +1934,11 @@ You handle:
 
 #### `defaultRangePresets` (constant)
 
-The presets an analytics screen reaches for. "Last 7 days" includes today: it is the seven days you can see on the chart, ending now.
-
 #### `getDatePattern` (function)
 
 The typed format for a locale, read from `formatToParts` rather than from a table of locales — so it is right for any locale the engine knows, and the guidance shown under the field can never disagree with what is accepted. The letters are Latin (DD, MM, YYYY) in every locale: it is the convention people recognise as a format, where translated letters are not.
 
-Types: `CalendarProps`, `DatePickerProps`, `DateRangePickerProps`, `DateLocale`, `DatePart`, `DatePattern`, `DateRange`, `DateRangePreset`
+Types: `CalendarMessages`, `DatePickerMessages`, `DateRangePickerMessages`, `DateEntryMessages`, `CalendarProps`, `DatePickerProps`, `DateRangePickerProps`, `DateLocale`, `DatePart`, `DatePattern`, `DateRange`, `DateRangePreset`
 
 Used in: Form example, Filtered table
 
@@ -1985,6 +2001,7 @@ Anatomy:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| `messages` | `MessagesOverride<LabelMessages>` |  | Words for translation: the "Optional" tag. Keys left out come from `MessagesProvider`, then English. |
 | `optional` | `boolean` | `false` | Renders the "Optional" tag. |
 | `required` | `boolean` | `false` | Renders the required asterisk. Does NOT set `required` on any control. |
 
@@ -2032,7 +2049,8 @@ The filter box that heads every list in an internal tool.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `clearLabel` | `string` | `Clear search` | Accessible name for the clear button. |
+| `clearLabel` | `string` |  | Accessible name for the clear button. |
+| `messages` | `MessagesOverride<SearchInputMessages>` |  | Words for translation: the clear button's default name and the default placeholder. Keys left out come from `MessagesProvider`, then English. |
 | `onClear` | `(() => void)` |  | Called after the clear button empties the field. |
 | `shortcut` | `string` |  | The keyboard shortcut that focuses this field, shown as a key cap while the field is empty — e.g. `⌘K` or `/`. Display only: binding the key is the page's job, because only the page knows what else is listening. |
 | `size` | `"sm" \| "md" \| "lg"` |  | Height and type from the density tokens. |
@@ -2047,7 +2065,7 @@ The one class list every text control shares — Input, Textarea, the Select tri
 
 Height, padding and type per size. Every value is a density token, so the same `md` input is 28px in a compact table filter and 48px in a spacious form without a prop changing.
 
-Types: `LabelProps`, `FieldControlProps`, `FieldProps`, `FieldControlSize`, `InputProps`, `TextareaProps`, `SearchInputProps`
+Types: `LabelMessages`, `SearchInputMessages`, `LabelProps`, `FieldControlProps`, `FieldProps`, `FieldControlSize`, `InputProps`, `TextareaProps`, `SearchInputProps`
 
 Used in: Form example, Agent hand-off, Empty states, Filtered table, Settings page
 
@@ -2106,7 +2124,7 @@ You handle:
 | `maxConcurrent` | `number` | `2` | How many `onUpload` calls run at once. |
 | `maxFiles` | `number` |  | Total files in the list, including ones already there. |
 | `maxSize` | `number` |  | Bytes, per file. |
-| `messages` | `Partial<FileUploadMessages>` |  | Copy, for another language. Merged over the English defaults. |
+| `messages` | `{ list?: string; status?: MessagesOverride<{ attached: string; queued: string; uploading: string; done: string; failed: string; }> \| Record<FileUploadStatus, string>; ... 19 more ...; constraints?: ((types: string \| null, limit: string \| null, maxFiles: number \| undefined) => string \| null) \|...` |  | Words for translation: every prompt, status word, button name and announcement, as templates. Keys left out come from `MessagesProvider`, then English. A function in a key (the shape before 0.7.0) still works, and is deprecated. |
 | `multiple` | `boolean` | `false` | Accept several files, added to the list. Off by default: a new file replaces the one there and cancels its upload. |
 | `name` | `string` |  | Submitted with a form when there is no `onUpload`. |
 | `onFilesChange` | `((files: FileUploadItem[]) => void)` |  | Every change to the list: added, progressed, finished, failed, removed. |
@@ -2117,6 +2135,8 @@ You handle:
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="file-upload">`.
 
 #### `defaultFileUploadMessages` (constant)
+
+The English words as functions.
 
 #### `describeAccept` (function)
 
@@ -2134,7 +2154,7 @@ Whether a file matches an `accept` string, using the rules the native picker use
 
 Splits a batch into the files that pass and the ones that do not, each with the one rule it broke. Type is checked before size, because "wrong kind of file" is the more useful thing to hear about a 2 GB video dropped on a CSV field. Count is checked last and in order, so the first files chosen are the ones kept.
 
-Types: `FileUploadItem`, `FileUploadMessages`, `FileUploadProps`, `FileUploadStatus`, `UploadContext`, `FileRejection`, `FileRejectionReason`, `FileValidationOptions`
+Types: `FileUploadMessageTemplates`, `FileUploadItem`, `FileUploadMessageFunctions`, `FileUploadMessages`, `FileUploadProps`, `FileUploadStatus`, `UploadContext`, `FileRejection`, `FileRejectionReason`, `FileValidationOptions`
 
 Used in: Form example
 
@@ -2209,7 +2229,8 @@ Anatomy:
 | --- | --- | --- | --- |
 | `description` | `ReactNode` |  | A sentence under the heading: what happens next, or what is kept. |
 | `headingLevel` | `2 \| 3 \| 4` | `2` | The heading element. Match the form's outline; `h2` by default. |
-| `title` | `ReactNode \| ((count: number) => ReactNode)` | `(count: number) => (count === 1 ? '1 field needs fixing' : `${count} fields need fixing`)` | The heading, which is also the summary's accessible name and what a screen reader says when it takes focus. Pass a function to word it for the count, or to translate it. Defaults to “1 field needs fixing” / “3 fields need fixing”. |
+| `messages` | `MessagesOverride<FormErrorSummaryMessages>` |  | Words for translation: the default heading, by count. Keys left out come from `MessagesProvider`, then English. |
+| `title` | `ReactNode \| ((count: number) => ReactNode)` |  | The heading, which is also the summary's accessible name and what a screen reader says when it takes focus. Pass a function to word it for the count. Defaults to “1 field needs fixing” / “3 fields need fixing” (`messages.title`, which is where a translation goes). |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="form-error-summary">`.
 
@@ -2224,7 +2245,7 @@ Anatomy:
 
 `className`, `ref`, `id` and the other DOM props go to `<fieldset data-slot="fieldset">`.
 
-Types: `FormProps`, `FormErrorSummaryProps`, `FieldsetProps`
+Types: `FormErrorSummaryMessages`, `FormProps`, `FormErrorSummaryProps`, `FieldsetProps`
 
 Used in: Form example, Settings page
 
@@ -2353,14 +2374,15 @@ You handle:
 | --- | --- | --- | --- |
 | `allowOutOfRange` | `boolean` |  | Keep a typed value outside `min`/`max` instead of clamping it on commit, so form validation can say why it is wrong. Off by default; the steppers still stop at the bounds. |
 | `allowWheelScrub` | `boolean` |  | Let the wheel change a focused, hovered field. Off by default; see above. |
-| `decrementLabel` | `string` | `Decrease` | Accessible name of the − stepper. Defaults to "Decrease"; translate it with the page. |
+| `decrementLabel` | `string` |  | Accessible name of the − stepper. Defaults to "Decrease"; translate it with the page. |
 | `defaultValue` | `number` |  | The number on first render, uncontrolled. Omitted, the field starts empty. |
 | `format` | `NumberFormatOptions` |  | `Intl.NumberFormat` options: grouping, decimals, a unit or a currency. |
-| `incrementLabel` | `string` | `Increase` | Accessible names of the steppers. |
+| `incrementLabel` | `string` |  | Accessible names of the steppers. |
 | `label` | `ReactNode` |  | Visible label above the field. Omit inside `Field`, which renders its own. |
 | `largeStep` | `number` | `10` | Shift+Arrow and PageUp/PageDown step. |
 | `locale` | `LocalesArgument` |  | BCP 47 tag for parsing and formatting. `undefined` uses the runtime's locale. |
 | `max` | `number` |  | The highest value. Stepping and committed values clamp to it, and the increase stepper is disabled there; End jumps to it. |
+| `messages` | `MessagesOverride<NumberInputMessages>` |  | Words for translation: the steppers' default names. Keys left out come from `MessagesProvider`, then English. |
 | `min` | `number` |  | The lowest value. Stepping and committed values clamp to it, and the decrease stepper is disabled there; Home jumps to it. |
 | `onValueChange` | `((value: number \| null) => void)` |  | Called as the number changes, typed or stepped, with `null` when the field is emptied. For a save or a request, use `onValueCommitted`, which does not fire per keystroke. |
 | `onValueCommitted` | `((value: number \| null, eventDetails: NumberFieldRootCommitEventDetails) => void)` |  | Called when the value is committed: on blur, Enter or a stepper press, not per keystroke. |
@@ -2374,7 +2396,7 @@ You handle:
 
 `className` goes to `<div data-slot="number-input">`; `ref`, `id` and the other DOM props go to `<input>`.
 
-Types: `NumberInputProps`
+Types: `NumberInputMessages`, `NumberInputProps`
 
 Used in: Form example, Settings page
 
@@ -2571,9 +2593,10 @@ The one-line form, for the nine selects in ten that are a label and a list. The 
 | `defaultValue` | `string \| null` |  | The option `value` selected on first render, uncontrolled. `null` or omitted shows the `placeholder`. |
 | `disabled` | `boolean` |  | Stated, not faded: the trigger goes to the shaded cloth and the list cannot open. |
 | `label` | `ReactNode` |  | A visible label rendered above the trigger. Omit it when the select sits inside `Field`, which renders its own — and spread Field's control props onto this component instead. |
+| `messages` | `MessagesOverride<SelectMessages>` |  | Words for translation: the default placeholder. Keys left out come from `MessagesProvider`, then English. |
 | `name` | `string` |  | Form field name. The selected option's `value` is submitted under it through a hidden input. |
 | `onValueChange` | `((value: V \| null) => void)` |  | Called with the chosen option's `value` when the selection changes. |
-| `placeholder` | `ReactNode` | `Select…` | Shown in the trigger while nothing is selected: "Choose a model". Not a label; the field still needs one. |
+| `placeholder` | `ReactNode` |  | Shown in the trigger while nothing is selected: "Choose a model". Not a label; the field still needs one. |
 | `required` | `boolean` |  | Marks the select required for form validation, and the `label`, when there is one, with the required mark. |
 | `rootProps` | `Omit<Props<V, false>, "defaultValue" \| "children" \| "value" \| "items" \| "onValueChange">` |  | Props for Base UI's `Select.Root`, for what the one-line form does not name: `open`, `onOpenChange`, `modal`, `readOnly`. |
 | `size` | `"sm" \| "md" \| "lg"` | `md` | Trigger height, shared with Input so a select lines up in a form row. Defaults to `md`; density rescales every size. |
@@ -2640,7 +2663,7 @@ Also accepts the props of `NativeButtonProps`, `SelectTriggerProps`.
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="select-value">`.
 
-Types: `SelectContentProps`, `SelectItemProps`, `SelectOption`, `SelectOptionGroup`, `SelectProps`, `SelectTriggerProps`
+Types: `SelectMessages`, `SelectContentProps`, `SelectItemProps`, `SelectOption`, `SelectOptionGroup`, `SelectProps`, `SelectTriggerProps`
 
 Used in: Form example, Settings page
 
@@ -2825,16 +2848,17 @@ Anatomy:
 | `items` (required) | `TagGroupItem[]` |  | The tags, in order. The group shows them; your state owns them. |
 | `defaultValue` | `string[]` |  | The tags selected at first, when the group keeps its own selection. |
 | `disabled` | `boolean` | `false` | No tag can be removed or selected; they stay readable. |
-| `empty` | `ReactNode` | `None` | What the group says when it has no tags. Kept as text, so an empty group is never a blank gap. |
+| `empty` | `ReactNode` |  | What the group says when it has no tags. Kept as text, so an empty group is never a blank gap. |
+| `messages` | `MessagesOverride<TagGroupMessages>` |  | Words for translation: the remove buttons' default name and the empty text. Keys left out come from `MessagesProvider`, then English. |
 | `onRemove` | `((value: string) => void)` |  | Makes the tags removable: an × on each, and Delete or Backspace on the focused one. The group does not own the list; remove the item in your state and focus moves to its neighbour. |
 | `onValueChange` | `((value: string[]) => void)` |  | Called with every selected tag, in the order of `items`, when the selection changes. |
-| `removeLabel` | `((label: string) => string)` | `(label) => `Remove ${label}`` | Accessible name of each remove button. |
+| `removeLabel` | `((label: string) => string)` |  | Accessible name of each remove button. |
 | `selectionMode` | `"none" \| "multiple" \| "single"` | `none` | `none` (the default) for a set you only read or edit, `single` or `multiple` for a choice. |
 | `value` | `string[]` |  | The selected tags. With `single`, at most one. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="tag-group">`.
 
-Types: `TagGroupBaseProps`, `TagGroupItem`, `TagGroupProps`
+Types: `TagGroupMessages`, `TagGroupBaseProps`, `TagGroupItem`, `TagGroupProps`
 
 ### Time picker
 
@@ -2902,7 +2926,7 @@ Anatomy:
 | `isDateDisabled` | `((date: Date) => boolean)` |  | Days inside `min`–`max` that still cannot be chosen, as on DatePicker. |
 | `locale` | `LocalesArgument` |  | BCP 47 tag for names, digits, the typed date order, the clock and the week start. |
 | `max` | `Date \| null` |  | The latest moment, inclusive. Later days are unavailable in the calendar, and a later time on the same day is refused with a sentence under both halves. |
-| `messages` | `Partial<DateTimePickerMessages>` |  | The words "Date" and "Time" that name each half, and TimePicker's segment names and sentences, for translation. |
+| `messages` | `MessagesOverride<DateTimePickerMessages>` |  | Words for translation: "Date" and "Time", which name each half, and the time half's segment names and sentences. Keys left out come from `MessagesProvider`, then English. The date half's words come from the provider's `datePicker` table. |
 | `min` | `Date \| null` |  | The earliest moment, inclusive. Earlier days are unavailable in the calendar, and an earlier time on the same day is refused with a sentence under both halves. |
 | `minuteStep` | `number` |  | Minutes per Up or Down press in the minute segment. |
 | `name` | `string` |  | Submitted as `yyyy-mm-ddThh:mm`, local time, as `<input type="datetime-local">` writes it. |
@@ -2927,7 +2951,7 @@ Anatomy:
 | `id` | `string` |  | Given to the first segment, so a `<label for>` (as `Field` writes it) focuses it. |
 | `locale` | `LocalesArgument` |  | BCP 47 tag for the clock (12- or 24-hour), the day-period words and the digits. `undefined` uses the runtime's locale. |
 | `max` | `string \| null` |  | The latest allowed time, `HH:mm`. |
-| `messages` | `Partial<TimePickerMessages>` |  | The segment names and the sentences, for translation. |
+| `messages` | `MessagesOverride<TimePickerMessages>` |  | Words for translation: the segment names and the sentences. Keys left out come from `MessagesProvider`, then English. |
 | `min` | `string \| null` |  | The earliest allowed time, `HH:mm`. |
 | `minuteStep` | `number` | `1` | Minutes per Up or Down press in the minute segment; typing still takes any minute. |
 | `name` | `string` |  | Submitted as `HH:mm`, whatever the display locale. |
@@ -2943,7 +2967,7 @@ Anatomy:
 
 Everything locale-specific about writing a time, read from `Intl` rather than from a table: whether the clock is 12- or 24-hour (es-PA writes `9:05 p. m.`, es-ES `21:05`), where the day period goes, and what separates the hour from the minute (`21.05` in Finnish).
 
-Types: `DateTimePickerMessages`, `DateTimePickerProps`, `TimePickerMessages`, `TimePickerProps`, `TimeLayout`, `TimeSegment`, `TimeString`
+Types: `DateTimePickerMessages`, `TimePickerMessages`, `DateTimePickerProps`, `TimePickerProps`, `TimeLayout`, `TimeSegment`, `TimeString`
 
 ## Layout
 
@@ -3001,6 +3025,7 @@ You handle:
 | `topbar` (required) | `ReactNode` |  | The bar across the top, usually a `Topbar`. It stays put while `<main>` scrolls, so the switcher and search are never lost. |
 | `banner` | `ReactNode` |  | A condition of the whole application, usually a `Banner`: drawn full width above the top bar, so it pushes the frame down rather than covering it. After the skip link in reading order, so the way to the content stays first. |
 | `defaultSidebarCollapsed` | `boolean` | `false` | Start with the desktop sidebar collapsed to its icon rail. Defaults to `false`; ignored below 920px, where the sidebar is a sheet. |
+| `messages` | `MessagesOverride<AppShellMessages>` |  | Words for translation: the skip link, the phone sheet's heading and close button, and SidebarToggle's names, which read them from here. Keys left out come from `MessagesProvider`, then English. |
 | `onSidebarCollapsedChange` | `((collapsed: boolean) => void)` |  | Called when the desktop sidebar collapses or expands — to remember the choice between visits. |
 | `sidebarCollapsed` | `boolean` |  | Controlled collapse of the desktop sidebar. |
 
@@ -3059,7 +3084,7 @@ One destination. Active is an ink bar on the leading edge plus a washed ground a
 
 #### `SidebarContext` (constant)
 
-Types: `AppShellProps`, `SidebarContextValue`, `SidebarToggleProps`, `TopbarProps`, `NavItemProps`, `NavSectionProps`, `SidebarProps`
+Types: `AppShellMessages`, `AppShellProps`, `SidebarContextValue`, `SidebarToggleProps`, `TopbarProps`, `NavItemProps`, `NavSectionProps`, `SidebarProps`
 
 Used in: Settings page
 
@@ -3515,7 +3540,8 @@ Actions that fold into a "More" menu when the row runs out of room.
 | --- | --- | --- | --- |
 | `items` (required) | `ToolbarOverflowItem[]` |  | In priority order: the first items stay visible longest. |
 | `align` | `"start" \| "end"` | `end` | Which end of the free space the buttons hug. |
-| `moreLabel` | `string` | `More actions` | The name of the menu button that collects what does not fit. |
+| `messages` | `MessagesOverride<ToolbarOverflowMessages>` |  | Words for translation: the menu button's label and name. Keys left out come from `MessagesProvider`, then English. |
+| `moreLabel` | `string` |  | The name of the menu button that collects what does not fit. "More actions" (`messages.moreActions`) by default. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="toolbar-overflow">`.
 
@@ -3564,7 +3590,7 @@ Also accepts the props of `ToggleGroupProps`.
 
 A row of related controls with `role="toolbar"` and one tab stop: Tab enters the toolbar, the arrow keys move inside it, Tab leaves. In a dense tool a table header can carry ten controls, and ten tab stops between the page title and the first row is a keyboard user's afternoon.
 
-Types: `ToolbarButtonProps`, `ToolbarInputProps`, `ToolbarOverflowItem`, `ToolbarOverflowProps`, `ToolbarProps`, `ToolbarSeparatorProps`, `ToolbarToggleGroupProps`, `ToolbarToggleProps`
+Types: `ToolbarOverflowMessages`, `ToolbarButtonProps`, `ToolbarInputProps`, `ToolbarOverflowItem`, `ToolbarOverflowProps`, `ToolbarProps`, `ToolbarSeparatorProps`, `ToolbarToggleGroupProps`, `ToolbarToggleProps`
 
 Used in: Filtered table
 
@@ -3729,6 +3755,7 @@ You handle:
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `items` (required) | `BreadcrumbItem[]` |  | The trail, root first. The last item is the current page and renders as text whether or not it has an `href`; pass a long id through `middleTruncate` so both ends survive. |
+| `messages` | `MessagesOverride<BreadcrumbMessages>` |  | Words for translation: the landmark's name. Keys left out come from `MessagesProvider`, then English. `aria-label` still wins. |
 | `renderLink` | `BreadcrumbLinkRender` |  | The element each link crumb renders as: your router's `<Link />`, or a function returning one. |
 
 `className`, `ref`, `id` and the other DOM props go to `<nav data-slot="breadcrumb">`.
@@ -3737,9 +3764,90 @@ You handle:
 
 `run_8f3a2b91c21e` → `run_8f3a…c21e`. Both ends survive; the middle is what nobody reads.
 
-Types: `BreadcrumbItem`, `BreadcrumbLinkRender`, `BreadcrumbProps`
+Types: `BreadcrumbMessages`, `BreadcrumbItem`, `BreadcrumbLinkRender`, `BreadcrumbProps`
 
 Used in: Agent hand-off, Confirmation, Empty states
+
+### Link
+
+https://demogar.github.io/molaui/?path=/docs/components-navigation-link--overview
+
+Going somewhere: Link for text, in a sentence or on its own, and LinkButton for a navigation cut like a button.
+
+Phase: Experimental. Its API may change in a minor release, without a deprecation first.
+
+When to use:
+- A place in a sentence, with the inline variant: “Open the run history to restore one.”
+- A link set on its own under a list or in a card’s foot, with standalone: “View all runs”.
+- The main way forward when it is a navigation, with LinkButton: “Open run”, “Read the guide”.
+- A page outside the app, with external, which opens a new tab and says so.
+
+When not to:
+- Doing something on this page: saving, deleting, opening a dialog. Use Button.
+- A destination in the app’s sidebar. Use NavItem.
+- The path back up from the current page. Use Breadcrumb.
+- A numbered source an answer cites. Use Citation.
+
+- Do: Pass render your router’s link, as an element (<NextLink href="/runs" />) or a function that returns one.
+- Don’t: Wrap a Button in a link, or put onClick navigation on a Button; a link opens in a new tab, shows its address and is announced as a link.
+- Do: Use external for a page that leaves the app, so the arrow and the hidden “(opens in a new tab)” go with it.
+- Don’t: Open a link in the app in a new tab; it breaks Back for everyone and strands a screen reader user.
+
+Content:
+- Name the destination, not the gesture: “run history”, never “click here” or “this link”.
+- In a sentence, link the words that name the place, not the whole sentence.
+
+Keyboard:
+- Tab: Moves focus to the link.
+- Enter: Follows the link. Space does not, even on a LinkButton: it is a link, and Space scrolls the page.
+
+Mola handles:
+- Renders an `<a>` (or your router’s link, through `render`), so it is announced as a link, opens in a new tab on a middle click and shows its address.
+- Underlines `inline` links at all times, so a link in a sentence is not told apart by colour alone.
+- With `external` or `target="_blank"`, adds `rel="noopener noreferrer"`, the up-right arrow and a hidden “(opens in a new tab)” after the label, from `messages.link.newTab`.
+- Hides the glyphs from assistive technology, so the label is the name.
+
+You handle:
+- Write link text that names the destination on its own, since screen readers list links out of context.
+- Make sure the element you pass to `render` renders an `<a>` with an `href`, and forwards the props and ref it receives.
+- Use a `Button` that says why, not a link, when the destination is not available yet; a link cannot be disabled.
+
+#### `Link` (component)
+
+Text that goes somewhere: in a sentence (`inline`, underlined) or on its own (`standalone`). `className`, `ref` and the rest of the DOM props go to the `<a>`, or to the element `render` returns.
+
+- `variant`: `inline`, `standalone` (default `inline`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  | Classes for the link, merged with `cn()` so yours win a conflict. |
+| `external` | `boolean` |  | The link leaves the app: it opens in a new tab with `rel="noopener noreferrer"`, marked by the up-right arrow and a hidden "(opens in a new tab)". `target="_blank"` turns the same marks on. |
+| `messages` | `MessagesOverride<LinkMessages>` |  | Words for translation: the hidden new-tab cue. Keys left out come from `MessagesProvider`, then English. |
+| `variant` | `"inline" \| "standalone"` |  | `inline` sits in a sentence and is always underlined, because colour alone cannot pick a link out of the words around it (WCAG 1.4.1). It takes the font of the text it sits in. `standalone` stands on its own ("View all runs" under a list) in the UI face, and underlines on hover: its place says it is a link. |
+
+`className`, `ref`, `id` and the other DOM props go to `<a data-slot="link">`.
+
+#### `LinkButton` (component)
+
+A link that looks like a button, for the main way forward that is a navigation: "Open run", "Read the guide". It is still an `<a>`, so it opens in a new tab on a middle click, shows its address on hover, and Space does not press it. It has no `disabled`: a link cannot be disabled, so render a `Button` that says why instead.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  | Classes for the link, merged with `cn()` so yours win a conflict. |
+| `external` | `boolean` |  | The link leaves the app: it opens in a new tab with `rel="noopener noreferrer"`, marked by the up-right arrow and a hidden "(opens in a new tab)". `target="_blank"` turns the same marks on. |
+| `icon` | `ReactNode` |  | Leading icon. Decorative: the label is the accessible name. |
+| `messages` | `MessagesOverride<LinkMessages>` |  | Words for translation: the hidden new-tab cue. Keys left out come from `MessagesProvider`, then English. |
+| `size` | `"sm" \| "md" \| "lg"` |  | The control height. Density already re-scales every size, so reach for a different one only to set a button apart from its neighbours, not to make a whole screen compact. |
+| `variant` | `"secondary" \| "primary" \| "ghost"` |  | The weight of the way forward, as on Button. There is no `danger`: going somewhere destroys nothing, and the rojo button keeps meaning that it does. |
+| `withArrow` | `boolean` | `false` | Trailing arrow that slides 3px on hover, as Button's does: for a link that moves you on in a flow. |
+
+`className`, `ref`, `id` and the other DOM props go to `<a data-slot="link-button">`.
+
+#### `linkVariants` (function)
+
+A link: it goes somewhere. A button does something. The audit found "use a link styled with `buttonVariants`" on three pages and no component to do it with, so each caller rebuilt the classes, the arrow and the new-tab cue, and most left the cue out.
+
+Types: `LinkMessages`, `LinkButtonProps`, `LinkExternalProps`, `LinkProps`
 
 ### Pagination
 
@@ -3784,6 +3892,7 @@ You handle:
 | `onPageChange` (required) | `(page: number) => void` |  | Called with the 1-based page a person asked for. The page is controlled: set `page` from it, or from the router if pages are addressable. |
 | `page` (required) | `number` |  | 1-based. |
 | `pageCount` (required) | `number` |  | How many pages there are. The next button is disabled on the last. |
+| `messages` | `MessagesOverride<PaginationMessages>` |  | Words for translation: the landmark's name, the buttons and the range text. Keys left out come from `MessagesProvider`, then English. |
 | `pageSize` | `number` |  | For the compact range text: rows per page and the total row count. |
 | `siblings` | `number` | `1` | Pages either side of the current one in the `pages` variant. |
 | `total` | `number` |  | Total row count for the `compact` range text. Without it, or without `pageSize`, the text falls back to "Page 3 of 26". |
@@ -3795,7 +3904,7 @@ You handle:
 
 The visible slots for `page` of `pageCount` (both 1-based). Always `5 + 2 × siblings` long once it needs ellipses.
 
-Types: `PageRangeItem`, `PaginationProps`
+Types: `PaginationMessages`, `PageRangeItem`, `PaginationProps`
 
 ### Stepper
 
@@ -3863,7 +3972,7 @@ Anatomy:
 | `steps` (required) | `StepperStep[]` |  | The steps, in the order they are done. |
 | `defaultStep` | `string` |  | The step to open on, uncontrolled. The first step by default. |
 | `headingLevel` | `2 \| 3` | `2` | The level of the panel heading; match the page outline. `h2` by default. |
-| `messages` | `(Partial<Omit<StepperMessages, "states">> & { states?: Partial<Record<StepperStepState, string>>; })` |  | Words, for translation. Any key not given keeps its English default. |
+| `messages` | `MessagesOverride<StepperMessages>` |  | Words for translation: the buttons, the "Step 2 of 4" line and the state words. Keys left out come from `MessagesProvider`, then English. |
 | `onComplete` | `(() => void)` |  | Called after the last step's `onStepSubmit` passes. |
 | `onStepChange` | `((step: string) => void)` |  | Called with the new step's id when Continue, Back or a step in the list changes it. |
 | `onStepSubmit` | `((step: string, event: FormEvent<HTMLFormElement>) => boolean \| void \| Promise<boolean \| void>)` |  | Runs when Continue or Finish is pressed, with the step's id and the submit event. Validate here; return `false` (or a promise of `false`) to stay on the step. While a promise is pending, Continue shows it is working. |
@@ -4096,10 +4205,11 @@ You handle:
 | --- | --- | --- | --- |
 | `groups` (required) | `CommandGroup[]` |  | The commands, in headed groups. Filtered as the person types; label-prefix matches come first within a group, and empty groups are dropped. |
 | `defaultOpen` | `boolean` | `false` | Open on first render, for a palette that owns its own state. |
-| `label` | `string` | `Command palette` | Accessible name of the dialog. |
+| `label` | `string` |  | Accessible name of the dialog. Defaults to "Command palette" (`messages.label`). |
+| `messages` | `MessagesOverride<CommandPaletteMessages>` |  | Words for translation: the defaults above, the key hints, the empty sentence and the result count. Keys left out come from `MessagesProvider`, then English. |
 | `onOpenChange` | `((open: boolean) => void)` |  | Called when the palette opens or closes: the trigger, Escape, a press outside, or choosing an item, which closes it before the item runs. |
 | `open` | `boolean` |  | Whether the palette is open, when the page owns that (it usually does, to bind ⌘K). |
-| `placeholder` | `string` | `Type a command or search…` | Shown in the empty search input. Defaults to "Type a command or search…". |
+| `placeholder` | `string` |  | Shown in the empty search input. Defaults to "Type a command or search…" (`messages.placeholder`). |
 | `renderEmpty` | `((query: string) => ReactNode)` |  | Shown when nothing matches. Receives the query. |
 | `trigger` | `ReactElement<unknown, string \| JSXElementConstructor<any>>` |  | Rendered as the button that opens the palette, e.g. a `SearchInput`-shaped `Button`. |
 
@@ -4113,7 +4223,7 @@ The groups and items that match `query`, empty groups dropped, label-prefix matc
 
 Opens the palette on ⌘K on a Mac and Ctrl-K everywhere else, from anywhere on the page, a search field included. Ctrl as well as ⌘, because half of every internal team is on Windows or Linux and a shortcut that silently does nothing there is worse than none.
 
-Types: `CommandGroup`, `CommandItem`, `CommandPaletteProps`
+Types: `CommandPaletteMessages`, `CommandGroup`, `CommandItem`, `CommandPaletteProps`
 
 ### Dialog
 
@@ -4180,11 +4290,12 @@ The confirmation for an action that destroys something. Built on Base UI's Alert
 | `description` (required) | `ReactNode` |  | What happens if the operator confirms, and whether it can be undone. Required: a destructive confirm with no consequence stated is a guess. |
 | `onConfirm` (required) | `() => void \| Promise<void>` |  | May return a promise. While it is pending the confirm button shows its working strip, both buttons stop accepting presses, and the dialog stays open; it closes when the promise resolves and stays open if it rejects, so the operator can see the failure where they caused it. |
 | `title` (required) | `ReactNode` |  | The question, naming the thing: "Delete run #4182?". It is the dialog's accessible name. |
-| `cancelLabel` | `string` | `Cancel` | The safe answer's label, "Cancel" by default. It takes focus when the dialog opens, so a reflexive Enter cancels. |
+| `cancelLabel` | `string` |  | The safe answer's label, "Cancel" (`messages.cancel`) by default. It takes focus when the dialog opens, so a reflexive Enter cancels. |
 | `confirmationText` | `string` |  | When set, the confirm button stays disabled until this exact string is typed — the run id, the project slug. For actions that cannot be undone and that a muscle-memory Enter could otherwise fire. |
 | `defaultOpen` | `boolean` |  | Opens the dialog on first render without controlling it afterwards. |
 | `error` | `ReactNode` |  | Why the last confirm failed, starting with what did not happen: "Not revoked. The server didn't answer." Shown between the body and the buttons, announced once when it appears, and linked to the confirm button so it is read again when focus is there. Hidden while a retry is pending. Clear it when the dialog opens for something else. |
 | `finalFocus` | `boolean \| RefObject<HTMLElement \| null> \| ((closeType: InteractionType) => boolean \| void \| HTMLElement \| null)` |  | Where focus goes when the dialog closes: Base UI's `finalFocus`. By default it returns to the trigger, which is right after Cancel. After a confirm that removed the trigger (a deleted row's button), return the element a reader would carry on from: the next row's action, or the list's heading. A function receives how the dialog was closed. |
+| `messages` | `MessagesOverride<AlertDialogMessages>` |  | Words for translation: the default cancel label and the confirmation field's label. Keys left out come from `MessagesProvider`, then English. |
 | `onOpenChange` | `((open: boolean) => void)` |  | Called with the next open state on every open and close, Cancel and Escape included. |
 | `open` | `boolean` |  | Whether the dialog is open, when you control it: to open it from somewhere other than `trigger`, or to close it after an async confirm of your own. |
 | `tone` | `"neutral" \| "danger"` | `danger` | `danger` cuts the seam in rojo and arms the confirm button in red. |
@@ -4212,6 +4323,7 @@ Renders no element of its own, so it takes no `className` or `ref`.
 | `description` | `ReactNode` |  | A line under the title, read as the dialog's accessible description when it opens. Say what the dialog is for; leave instructions to the body. |
 | `footer` | `ReactNode` |  | Action row under the body: right-aligned, or stacked full width with the last action on top when the row is under 24rem. Usually a `ghost` cancel and one primary. |
 | `hideClose` | `boolean` | `false` | Hide the corner close button. Only when the footer carries an explicit way out. |
+| `messages` | `MessagesOverride<DialogMessages>` |  | Words for translation: the close button's name. Keys left out come from `MessagesProvider`, then English. |
 | `size` | `"sm" \| "md" \| "lg"` |  | The popup's maximum width: `sm` for a short question, `md` (default) for a form, `lg` for a table or a long review. |
 
 Also accepts the props of `DialogPopupProps`.
@@ -4226,7 +4338,7 @@ Also accepts the props of `DialogPopupProps`.
 
 A modal is a panel cut out of the page and laid on top of it, so it is the one place a seam earns the full relleno: an 11px strip of the layer colour slit with ink along its top edge. In the source mola that strip is how a panel announces where one layer ends and the next begins; here it is how a dialog says "you are now inside something" without a title bar or a tint. Gold by default, rojo on a destructive confirm — the band is the only place the dialog's intent shows before a word is read.
 
-Types: `AlertDialogProps`, `DialogBand`, `DialogContentProps`
+Types: `AlertDialogMessages`, `DialogMessages`, `AlertDialogProps`, `DialogBand`, `DialogContentProps`
 
 Used in: Confirmation, Settings page
 
@@ -4297,6 +4409,7 @@ Renders no element of its own, so it takes no `className` or `ref`.
 | `description` | `ReactNode` |  | A line under the title, read as the drawer's accessible description when it opens. |
 | `footer` | `ReactNode` |  | Action row pinned under the scrolling body, behind a keyline. Usually a `ghost` cancel and one primary. |
 | `hideClose` | `boolean` | `false` | Hide the close button. Only when the footer carries an explicit way out. |
+| `messages` | `MessagesOverride<DrawerMessages>` |  | Words for translation: the close button's name. Keys left out come from `MessagesProvider`, then English. |
 | `size` | `"sm" \| "md" \| "lg"` | `md` | Width of a side drawer, or height of a bottom sheet. Always capped by the viewport. |
 
 Also accepts the props of `DrawerPopupProps`.
@@ -4307,7 +4420,7 @@ Also accepts the props of `DrawerPopupProps`.
 
 `className`, `ref`, `id` and the other DOM props go to `<button data-slot="drawer-trigger">`.
 
-Types: `DrawerBand`, `DrawerContentProps`, `DrawerProps`, `DrawerSide`
+Types: `DrawerMessages`, `DrawerBand`, `DrawerContentProps`, `DrawerProps`, `DrawerSide`
 
 Used in: Filtered table
 
@@ -4591,10 +4704,11 @@ You handle:
 | `footer` | `ReactNode` |  | Action row under the body: right-aligned, or stacked full width with the last action on top when the row is under 24rem. Usually a `ghost` cancel and one primary. |
 | `hideClose` | `boolean` |  | Hide the corner close button. Only when the footer carries an explicit way out. |
 | `hotkey` | `string \| false` | `?` | The key that opens it, listed with the rest; `?` by default. `false` binds none. |
+| `messages` | `MessagesOverride<ShortcutsDialogMessages>` |  | Words for translation: the title, its own binding's label and the empty sentence. Keys left out come from `MessagesProvider`, then English. The key names come from the provider's `hotkeys` table. |
 | `onOpenChange` | `((open: boolean) => void)` |  | Called when the dialog opens or closes: the hotkey, the trigger, Escape, Close. |
 | `open` | `boolean` |  | Whether the dialog is open, when the page owns that. |
 | `size` | `"sm" \| "md" \| "lg"` | `sm` | The popup's maximum width: `sm` for a short question, `md` (default) for a form, `lg` for a table or a long review. |
-| `title` | `ReactNode` | `Keyboard shortcuts` | The dialog's title and accessible name. Defaults to “Keyboard shortcuts”. |
+| `title` | `ReactNode` |  | The dialog's title and accessible name. Defaults to “Keyboard shortcuts” (`messages.title`). |
 | `trigger` | `ReactElement<unknown, string \| JSXElementConstructor<any>>` |  | Rendered as the button that opens the dialog, e.g. a help `IconButton` in the top bar. |
 
 Also accepts the props of `DialogPopupProps`.
@@ -4635,7 +4749,7 @@ Bind `keys` (see hotkeys.ts for the grammar) to `handler` on the window, and lis
 
 Every shortcut bound under the nearest provider, in the order they were bound. Empty without one.
 
-Types: `HotkeyPlatform`, `ShortcutsDialogProps`, `HotkeysProviderProps`, `RegisteredHotkey`, `UseHotkeysOptions`
+Types: `HotkeysMessages`, `ShortcutsDialogMessages`, `HotkeyPlatform`, `ShortcutsDialogProps`, `HotkeysProviderProps`, `RegisteredHotkey`, `UseHotkeysOptions`
 
 ### Tooltip
 
@@ -5144,6 +5258,7 @@ A long-running agent run, as a timeline.
 | `endedAt` | `number \| Date` |  | When the run ended. Freezes the header clock; omit while the run is still going. |
 | `failure` | `AgentRunFailure` |  | Shown while the run is failed, timed out or cancelled: what stopped it, in words and verbatim, with the ways back. It takes over the header's *Retry run*, so the retry sits next to the reason for it. |
 | `headingLevel` | `2 \| 3` | `3` | Heading level for the run's name. Defaults to 3; use 2 when the run is the page's main subject. |
+| `messages` | `MessagesOverride<AgentRunMessages>` |  | Words for translation: step kinds, status announcements, the header buttons and the copy button. Keys left out come from `MessagesProvider`, then English. |
 | `model` | `string` |  | The model identifier, set as a literal. |
 | `onCancel` | `(() => void)` |  | Stops the run. Shows a Cancel run button while the run is active; omit to offer no way to stop it from here. |
 | `onRetry` | `(() => void)` |  | Runs it again from the start. Shows Retry run once the run has failed, timed out or been cancelled; when `failure` is set the retry moves into the failure panel, next to the reason. |
@@ -5154,7 +5269,7 @@ A long-running agent run, as a timeline.
 
 `className`, `ref`, `id` and the other DOM props go to `<section data-slot="agent-run">`.
 
-Types: `AgentRunFailure`, `AgentRunProps`, `AgentStep`, `AgentStepKind`
+Types: `AgentRunMessages`, `AgentRunFailure`, `AgentRunProps`, `AgentStep`, `AgentStepKind`
 
 Used in: Agent console, Agent hand-off
 
@@ -5212,6 +5327,7 @@ You handle:
 | --- | --- | --- | --- |
 | `added` (required) | `number` |  | Lines added. Shown as "+n" and said as "n lines added". |
 | `removed` (required) | `number` |  | Lines removed. Shown as "−n" and said as "n lines removed". |
+| `messages` | `MessagesOverride<ChangeCountMessages>` |  | Words for translation: the sentence a screen reader hears. Keys left out come from `MessagesProvider`, then English. |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="change-count">`.
 
@@ -5227,6 +5343,7 @@ An agent proposes a change; a person reviews it and decides.
 | `decision` | `ChangeDecision \| null` |  | Controlled decision. `null` means undecided. |
 | `defaultDecision` | `ChangeDecision \| null` | `null` | Uncontrolled starting decision. |
 | `headingLevel` | `2 \| 3` | `3` | Heading level for the proposal's title. Defaults to 3; use 2 when the review is the page's main subject. |
+| `messages` | `MessagesOverride<ChangeReviewMessages>` |  | Words for translation: the decisions, the reason field and the header labels. Keys left out come from `MessagesProvider`, then English. |
 | `model` | `string` |  | The model identifier, set as a literal. |
 | `onDecide` | `((status: ChangeDecisionStatus, reason: string) => void)` |  | Called with a valid decision only: never for a rejection without a reason. |
 | `reviewer` | `string` |  | Who decided, shown with the outcome — "M. Herrera". |
@@ -5243,6 +5360,7 @@ A change to a record rather than a file: a feature flag, a customer's plan, a sc
 | `changes` (required) | `readonly FieldChange[]` |  | The fields that changed, each as before → after. Leave out the fields that did not change: the list is the change, not the record. |
 | `title` (required) | `ReactNode` |  | What the record is — "Feature flag help_panel_v2". |
 | `headingLevel` | `3 \| 4 \| 5` | `4` | Heading level for the record's title. Defaults to 4, under a `ChangeReview` heading. |
+| `messages` | `MessagesOverride<FieldChangesMessages>` |  | Words for translation: the count and the before/after words. Keys left out come from `MessagesProvider`, then English. |
 
 `className`, `ref`, `id` and the other DOM props go to `<section data-slot="field-changes">`.
 
@@ -5259,6 +5377,7 @@ One file's change, as a reviewer reads it.
 | `hunks` | `readonly (DiffHunk \| DiffHunkInput)[]` |  | Or the hunks, structured. Wins over `diff`. |
 | `kind` | `FileChangeKind` | `modified` | What happened to the file, shown as a mark and a word in the header. Defaults to `modified`; a `renamed` file with no hunks says so instead of showing an empty diff. |
 | `layout` | `"unified" \| "split"` | `unified` | `unified` is one column of lines. `split` sets old against new side by side once the diff's container is 48rem wide, and stays unified below that — a phone has no room for two columns of code. |
+| `messages` | `MessagesOverride<FileDiffMessages>` |  | Words for translation: the kind of change, the rename and the words said before each changed line. Keys left out come from `MessagesProvider`, then English. |
 | `previousPath` | `string` |  | The path before a rename. |
 
 `className`, `ref`, `id` and the other DOM props go to `<section data-slot="file-diff">`.
@@ -5275,7 +5394,7 @@ Two versions of a text → the hunks between them, numbered, with `context` unch
 
 Parse the hunks of one file's unified diff. File headers (`diff --git`, `index`, `---`, `+++`) are skipped — the path is `FileDiff`'s own prop — and so is `\ No newline at end of file`, which is a fact about bytes, not a line anyone reviews.
 
-Types: `ChangeCountProps`, `ChangeDecision`, `ChangeDecisionStatus`, `ChangeReviewProps`, `FieldChange`, `FieldChangesProps`, `FileChangeKind`, `FileDiffProps`, `DiffHunk`, `DiffHunkInput`, `DiffLine`, `DiffLineKind`
+Types: `ChangeCountMessages`, `ChangeReviewMessages`, `FieldChangesMessages`, `FileDiffMessages`, `ChangeCountProps`, `ChangeDecision`, `ChangeDecisionStatus`, `ChangeReviewProps`, `FieldChange`, `FieldChangesProps`, `FileChangeKind`, `FileDiffProps`, `DiffHunk`, `DiffHunkInput`, `DiffLine`, `DiffLineKind`
 
 Changes:
 - 0.3.0 (2026-10-06), feature: add change approval, citation cards and run recovery [#13](https://github.com/demogar/molaui/issues/13)
@@ -5324,6 +5443,7 @@ How sure the system is, in three steps and in words.
 | --- | --- | --- | --- |
 | `level` (required) | `ConfidenceLevel` |  | How strong the support is: three coarse steps, shown as filled segments and a word, never a percentage the model cannot honestly claim. |
 | `basis` | `string` |  | What the confidence rests on — "3 sources agree", "single source". |
+| `messages` | `MessagesOverride<ConfidenceMessages>` |  | Words for translation: the word for each level. Keys left out come from `MessagesProvider`, then English. |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="confidence">`.
 
@@ -5334,11 +5454,12 @@ Where the model flags its own doubt, in the answer, next to the claim.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `action` | `ReactNode` |  | An action that resolves it — "Open the dashboard". |
-| `title` | `string` | `The model is unsure` | The short claim — "Unverified figure". Defaults to "The model is unsure". |
+| `messages` | `MessagesOverride<UncertaintyNoteMessages>` |  | Words for translation: the default title. Keys left out come from `MessagesProvider`, then English. |
+| `title` | `string` |  | The short claim — "Unverified figure". Defaults to "The model is unsure" (`messages.title`). |
 
 `className`, `ref`, `id` and the other DOM props go to `<aside data-slot="uncertainty-note">`.
 
-Types: `ConfidenceLevel`, `ConfidenceProps`, `UncertaintyNoteProps`
+Types: `ConfidenceMessages`, `UncertaintyNoteMessages`, `ConfidenceLevel`, `ConfidenceProps`, `UncertaintyNoteProps`
 
 Used in: Agent console, Agent hand-off
 
@@ -5390,16 +5511,17 @@ A model's answer written in Markdown, streamed and rendered in Mola's typography
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `text` (required) | `string` |  | The Markdown received so far. Grows; never rewritten from the top. |
-| `doneAnnouncement` | `string` | `Response complete.` | Spoken once when a stream that was running completes. |
-| `errorAnnouncement` | `string` | `Response stopped with an error.` | Spoken once when a stream that was running fails. |
+| `doneAnnouncement` | `string` |  | Spoken once when a stream that was running completes. |
+| `errorAnnouncement` | `string` |  | Spoken once when a stream that was running fails. |
 | `headingLevel` | `2 \| 3 \| 4` | `3` | The heading level a `#` becomes; `##` is one deeper, and so on, never past 6. Defaults to 3, for an answer under a page and a section heading. The look follows the depth in the Markdown, not the level, so the same answer looks the same wherever it is placed. |
+| `messages` | `MessagesOverride<MarkdownMessages>` |  | Words for translation: the default done and error announcements. Keys left out come from `MessagesProvider`, then English. The new-tab cue on an absolute link is `link.newTab`, shared with Link. |
 | `renderCitation` | `((n: number) => ReactNode)` |  | How an inline `[n]` marker renders, usually `citationRenderer(sources)`. Without it the marker stays as text. Pass a stable function (module scope or `useMemo`): finished blocks skip re-rendering only while it stays the same. |
 | `status` | `StreamStatus` | `done` | Where the stream is. `streaming` shows the caret, sets `aria-busy` and closes markers still open at the end; the move from `streaming` to `done` or `error` is announced once. Defaults to `done`. |
 | `variant` | `"default" \| "muted"` | `default` | `muted` for text the reader may skim — reasoning, not the answer. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="markdown">`.
 
-Types: `MarkdownProps`
+Types: `MarkdownMessages`, `MarkdownProps`
 
 ### Message
 
@@ -5466,6 +5588,7 @@ One turn of a conversation.
 | `copyText` | `string` |  | Copies this text. Omit to hide the copy action. |
 | `error` | `string` |  | The error, verbatim from the system. Shown as a literal — operators paste it into tickets. |
 | `feedback` | `"up" \| "down"` |  | The rating already given, if any. |
+| `messages` | `MessagesOverride<MessageMessages>` |  | Words for translation: the role labels, the error block and the actions. Keys left out come from `MessagesProvider`, then English. |
 | `model` | `string` |  | The model that produced it. A machine identifier, so it is set as a literal. |
 | `onFeedback` | `((value: "up" \| "down") => void)` |  | Called with the reader's rating. Omit to hide the rating actions. |
 | `onRetry` | `(() => void)` |  | Regenerates the turn. Shows Retry among the actions, or in the error block when `status` is `error`; omit to hide it. |
@@ -5482,11 +5605,12 @@ The scrolling transcript.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `label` (required) | `string` |  | Names the region. Required: a transcript is a landmark worth finding. |
+| `messages` | `MessagesOverride<ThreadMessages>` |  | Words for translation: the jump button and the scrolling area's name. Keys left out come from `MessagesProvider`, then English. |
 | `stickThreshold` | `number` | `48` | Distance from the bottom, in px, that still counts as "at the bottom". |
 
 `className`, `ref`, `id` and the other DOM props go to `<section data-slot="thread">`.
 
-Types: `MessageProps`, `MessageRole`, `ThreadProps`
+Types: `MessageMessages`, `ThreadMessages`, `MessageProps`, `MessageRole`, `ThreadProps`
 
 Used in: Agent console, Agent hand-off
 
@@ -5551,6 +5675,7 @@ A file or context item attached to the next prompt. The filename is a literal.
 | --- | --- | --- | --- |
 | `name` (required) | `string` |  | The file or item's name, set as a literal and used in the remove button's name ("Remove report.csv"). |
 | `detail` | `string` |  | e.g. "CSV · 48 KB". |
+| `messages` | `MessagesOverride<AttachmentChipMessages>` |  | Words for translation: the remove button's name. Keys left out come from `MessagesProvider`, then English. |
 | `onRemove` | `(() => void)` |  | Takes the attachment off the next prompt. Shows a remove button; omit for an attachment that cannot be removed. |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="attachment-chip">`.
@@ -5567,9 +5692,10 @@ The composer.
 | `defaultValue` | `string` |  | The starting draft when the composer owns it. Defaults to empty; the field clears itself after a send. |
 | `disabled` | `boolean` | `false` | Locks the composer, for a conversation the reader may not write to. To stop sending for a while, use `status="offline"` instead, which keeps the draft editable and says why. |
 | `maxRows` | `number` | `10` | Rows before the field scrolls instead of growing. |
+| `messages` | `MessagesOverride<PromptInputMessages>` |  | Words for translation: the placeholder, the hints, the estimate and the buttons. Keys left out come from `MessagesProvider`, then English. |
 | `onStop` | `(() => void)` |  | Called by the stop button while `status` is `generating`. |
 | `onValueChange` | `((value: string) => void)` |  | Called on every keystroke with the whole draft, untrimmed. |
-| `placeholder` | `string` | `Ask anything…` | Defaults to "Ask anything…". It is a hint, never the name: `label` is what assistive tech announces. |
+| `placeholder` | `string` |  | Defaults to "Ask anything…" (`messages.placeholder`). It is a hint, never the name: `label` is what assistive tech announces. |
 | `showEstimate` | `boolean` | `true` | Show the rough token estimate. |
 | `status` | `"idle" \| "generating" \| "offline"` | `idle` | `generating`: a response is streaming. The field stays editable — the operator can draft the next prompt — and the send button becomes stop. `offline`: sending is impossible. The draft is kept, and the reason is said. |
 | `submitOn` | `"enter" \| "mod-enter"` | `enter` | `enter`: Enter sends, Shift+Enter is a newline — chat convention. `mod-enter`: ⌘/Ctrl+Enter sends, Enter is a newline — for long prompts, where an accidental send costs a model run. |
@@ -5578,7 +5704,7 @@ The composer.
 
 `className`, `ref`, `id` and the other DOM props go to `<form data-slot="prompt-input">`.
 
-Types: `AttachmentChipProps`, `PromptInputProps`
+Types: `AttachmentChipMessages`, `PromptInputMessages`, `AttachmentChipProps`, `PromptInputProps`
 
 Used in: Agent console
 
@@ -5627,12 +5753,13 @@ The model's thinking, behind a disclosure.
 | `defaultOpen` | `boolean` | `false` | Start with the reasoning shown. Closed by default, because reasoning is evidence for when the answer looks wrong, not the answer. |
 | `durationMs` | `number` |  | A known duration, when there are no timestamps. |
 | `endedAt` | `number \| Date` |  | When the thinking ended. Freezes the clock; omit while the model is still thinking. |
+| `messages` | `MessagesOverride<ReasoningMessages>` |  | Words for translation: the summary line and the announcement when it finishes. Keys left out come from `MessagesProvider`, then English. |
 | `startedAt` | `number \| Date` |  | When the thinking started. Gives the summary line its clock: live while streaming, "Thought for 12.4s" once done. |
 | `status` | `"streaming" \| "done"` | `done` | `streaming` while the model is still thinking. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="reasoning">`.
 
-Types: `ReasoningProps`
+Types: `ReasoningMessages`, `ReasoningProps`
 
 Used in: Agent console
 
@@ -5685,6 +5812,7 @@ Output that stopped arriving before it was finished — kept, and marked.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| `messages` | `MessagesOverride<PartialOutputMessages>` |  | Words for translation: the label and the default note. Keys left out come from `MessagesProvider`, then English. |
 | `note` | `ReactNode` |  | What cut it short, in words. Defaults to a plain statement. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="partial-output">`.
@@ -5701,6 +5829,7 @@ What stopped a run, said plainly, with the way back next to it.
 | `error` | `string` |  | The error, verbatim. |
 | `kind` | `RunErrorKind` | `failed` | Why the run stopped, which sets the headline, the plain sentence and the glyph. Defaults to `failed`; `cancelled` is not an error, so it offers no copy action. |
 | `message` | `ReactNode` |  | Replaces the plain sentence under the headline. |
+| `messages` | `MessagesOverride<RunErrorMessages>` |  | Words for translation: the status words, the sentences, the countdown, the buttons and the copied details. Keys left out come from `MessagesProvider`, then English. |
 | `onRetry` | `(() => void)` |  | Runs the whole run again from the start. Shows *Retry run*, disabled until `retryAt` passes. |
 | `onRetryFromStep` | `(() => void)` |  | Re-runs from the step that stopped, keeping the work before it, so it takes the stronger button when both retries are offered. Disabled until `retryAt` passes. |
 | `retryAt` | `number \| Date` |  | When a retry is allowed (or will happen). Shows a countdown. |
@@ -5714,7 +5843,7 @@ What stopped a run, said plainly, with the way back next to it.
 
 #### `formatRunErrorDetails` (function)
 
-The plain-text block *Copy error details* puts on the clipboard: everything a ticket needs, one fact per line.
+The plain-text block *Copy error details* puts on the clipboard: everything a ticket needs, one fact per line. In English unless `messages` (a full RunError table, `defaultMessages.runError` with your keys) says otherwise: this is a plain function, so it cannot read `MessagesProvider`.
 
 #### `formatCountdown` (function)
 
@@ -5724,7 +5853,7 @@ The plain-text block *Copy error details* puts on the clipboard: everything a ti
 
 Milliseconds left until `until`, ticking while there is time left and stopping at zero. `undefined` without a target.
 
-Types: `PartialOutputProps`, `RunErrorKind`, `RunErrorProps`
+Types: `PartialOutputMessages`, `RunErrorMessages`, `PartialOutputProps`, `RunErrorKind`, `RunErrorProps`
 
 Changes:
 - 0.3.0 (2026-10-06), feature: add change approval, citation cards and run recovery [#13](https://github.com/demogar/molaui/issues/13)
@@ -5777,6 +5906,7 @@ Glyph + word + colour, always all three. State is never carried by colour alone:
 | `durationMs` | `number` |  | A known duration, for a finished step that has no timestamps. |
 | `endedAt` | `number \| Date` |  | When it ended. Freezes the clock; omit while the work is open. |
 | `label` | `string` |  | Override the word — e.g. "Thinking" for a running reasoning step. The glyph stays. |
+| `messages` | `MessagesOverride<RunStatusMessages>` |  | Words for translation: the word for each status. Keys left out come from `MessagesProvider`, then English. |
 | `register` | `"inline" \| "label"` | `label` | `label`: the rótulo register, for headers. `inline`: sentence case, for rows and running text. |
 | `startedAt` | `number \| Date` |  | When the work started. With it, an elapsed clock follows the label. |
 
@@ -5814,7 +5944,7 @@ Work is over and will not change again without a retry.
 
 Milliseconds since `startedAt`, ticking while the work is still open.
 
-Types: `RunStatusGlyphProps`, `RunStatusProps`, `RunStatusValue`
+Types: `RunStatusMessages`, `RunStatusGlyphProps`, `RunStatusProps`, `RunStatusValue`
 
 Used in: Agent hand-off
 
@@ -5878,17 +6008,18 @@ Two versions of one text, side by side: the old in one pane, the new in the othe
 | --- | --- | --- | --- |
 | `title` (required) | `ReactNode` |  | What is being compared, as a heading: “System prompt, triage agent”. |
 | `after` | `string` |  | The text after the change. |
-| `afterLabel` | `string` | `After` | The new pane's name. Defaults to “After”. |
+| `afterLabel` | `string` |  | The new pane's name. Defaults to “After” (`messages.after`). |
 | `before` | `string` |  | The text before the change. With `after`, the diff is worked out for you. |
-| `beforeLabel` | `string` | `Before` | The old pane's name, shown above it and naming its scroll region. Defaults to “Before”. |
+| `beforeLabel` | `string` |  | The old pane's name, shown above it and naming its scroll region. Defaults to “Before” (`messages.before`). |
 | `context` | `number` | `3` | Unchanged lines kept around each change when the diff is worked out from `before` and `after`. Defaults to 3. |
 | `diff` | `string` |  | Or one unified diff, as `git diff` prints it. Wins over `before` and `after`. |
 | `headingLevel` | `3 \| 4 \| 5` | `4` | Heading level for the title. Defaults to 4, under a `ChangeReview` heading. |
 | `hunks` | `readonly (DiffHunk \| DiffHunkInput)[]` |  | Or the hunks, structured. Wins over `diff`. |
+| `messages` | `MessagesOverride<SideBySideDiffMessages>` |  | Words for translation: the pane names, the empty sentence and the words said before each changed line. Keys left out come from `MessagesProvider`, then English. |
 
 `className`, `ref`, `id` and the other DOM props go to `<section data-slot="side-by-side-diff">`.
 
-Types: `SideBySideDiffProps`
+Types: `SideBySideDiffMessages`, `SideBySideDiffProps`
 
 ### Sources
 
@@ -5940,6 +6071,7 @@ An inline citation marker: a small cut chip with the source's number.
 | --- | --- | --- | --- |
 | `n` (required) | `number` |  | The source's number, matching its place in the `SourceList`. Shown as "[n]"; the link defaults to `#source-n`. |
 | `cardSide` | `"bottom" \| "top"` | `top` | Which side of the marker the card opens on. |
+| `messages` | `MessagesOverride<SourcesMessages>` |  | Words for translation: the marker's name and the preview card's link and read time. Keys left out come from `MessagesProvider`, then English. |
 | `render` | `ReactElement<unknown, string \| JSXElementConstructor<any>> \| ((props: DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>) => ReactElement<...>)` |  | The element the marker renders as: your router's `<Link />` when `href` points inside the app, or a function returning one. Base UI's render prop, so the marker's classes, name and handlers are merged onto it. |
 | `source` | `Source` |  | The source this marker points at. With it, hovering or focusing the marker opens a preview card — title, domain, the passage used — so the claim can be checked without leaving the sentence. |
 | `title` | `string` |  | The source's title, for the accessible name. "[2]" alone tells a screen reader nothing. Defaults to `source.title`. |
@@ -5953,6 +6085,7 @@ The sources an answer drew on, as an ordered list whose numbers match the inline
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `sources` (required) | `readonly Source[]` |  | The sources the answer drew on, in citation order, so each card's number matches its inline marker. |
+| `messages` | `MessagesOverride<SourcesMessages>` |  | Words for translation: the read time. Keys left out come from `MessagesProvider`, then English. |
 | `timeZone` | `string` |  | IANA zone the read times are shown in, such as `"UTC"`. Without it they are the reader's own and appear only after hydration, because the server cannot know the reader's zone. |
 
 `className`, `ref`, `id` and the other DOM props go to `<ol data-slot="source-list">`.
@@ -5961,7 +6094,7 @@ The sources an answer drew on, as an ordered list whose numbers match the inline
 
 A `renderCitation` for `StreamingText`, built from the same array the `SourceList` renders, so marker [2] opens source 2 and links to its card.
 
-Types: `CitationProps`, `Source`, `SourceListProps`
+Types: `SourcesMessages`, `CitationProps`, `Source`, `SourceListProps`
 
 Used in: Agent console
 
@@ -6015,8 +6148,9 @@ Text that arrives a token at a time.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `text` (required) | `string` |  | Everything received so far. Grows; never rewritten from the top. |
-| `doneAnnouncement` | `string` | `Response complete.` | Spoken once when a stream that was running completes. |
-| `errorAnnouncement` | `string` | `Response stopped with an error.` | Spoken once when a stream that was running fails. |
+| `doneAnnouncement` | `string` |  | Spoken once when a stream that was running completes. |
+| `errorAnnouncement` | `string` |  | Spoken once when a stream that was running fails. |
+| `messages` | `MessagesOverride<StreamingTextMessages>` |  | Words for translation: the default done and error announcements. Keys left out come from `MessagesProvider`, then English. |
 | `renderCitation` | `((n: number) => ReactNode)` |  | How an inline `[n]` marker renders. Without it the marker stays as text. Pass a stable function (module scope or `useCallback`): finished blocks skip re-rendering only while it stays the same. |
 | `status` | `StreamStatus` | `done` | Where the stream is. `streaming` shows the caret and sets `aria-busy`; the move from `streaming` to `done` or `error` is announced once. Defaults to `done`. |
 | `tone` (deprecated) | `"default" \| "muted"` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `variant`, which takes the same values: a muted ink is a presentation, and `tone` is a status. |
@@ -6028,7 +6162,7 @@ Text that arrives a token at a time.
 
 #### `parseInline` (function)
 
-Types: `CaretProps`, `StreamStatus`, `StreamingTextProps`, `Block`, `InlineRun`
+Types: `StreamingTextMessages`, `CaretProps`, `StreamStatus`, `StreamingTextProps`, `Block`, `InlineRun`
 
 Used in: Agent console
 
@@ -6073,13 +6207,14 @@ What a run consumed.
 | `cached` | `number` |  | Input tokens served from cache — cheaper, and worth knowing about. |
 | `contextWindow` | `number` |  | The model's context window. With it, a meter shows how full the context is. |
 | `costUsd` | `number` |  | Cost in USD, if the platform knows it. |
+| `messages` | `MessagesOverride<TokenUsageMessages>` |  | Words for translation: the terms, the warnings and the meter's name and reading. Keys left out come from `MessagesProvider`, then English. |
 | `variant` | `"full" \| "inline"` | `full` | `full`: a definition list and meter. `inline`: one line, for a run header. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="token-usage">`.
 
 #### `contextLevel` (function)
 
-Types: `TokenUsageProps`
+Types: `TokenUsageMessages`, `TokenUsageProps`
 
 Used in: Agent console
 
@@ -6151,6 +6286,7 @@ One tool invocation: what the model asked a system to do, with what, and what ca
 | `durationMs` | `number` |  | A known duration, for a finished call that has no timestamps. |
 | `endedAt` | `number \| Date` |  | When the call ended. Freezes the clock; omit while the call is open. |
 | `error` | `string` |  | The error, verbatim. |
+| `messages` | `MessagesOverride<ToolCallMessages>` |  | Words for translation: the payload labels, the error and approval sentences and their buttons. Keys left out come from `MessagesProvider`, then English. |
 | `onOpenChange` | `((open: boolean) => void)` |  | Called when the reader opens or closes the details. |
 | `onRetry` | `(() => void)` |  | Calls the tool again. Shows Retry beside the error once the call has failed; omit when the run, not the call, owns retrying. |
 | `open` | `boolean` |  | Whether the details are expanded, when the page owns that. Waiting and failed calls are always expanded. |
@@ -6168,10 +6304,11 @@ Calls the model made at the same time. Drawn as a bracket on the left — one in
 | --- | --- | --- | --- |
 | `count` (required) | `number` |  | How many calls ran together. Used for the default label, "N tools in parallel". |
 | `label` | `string` |  | Defaults to "N tools in parallel". |
+| `messages` | `MessagesOverride<ToolCallGroupMessages>` |  | Words for translation: the default label. Keys left out come from `MessagesProvider`, then English. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="tool-call-group">`.
 
-Types: `ToolCallApproval`, `ToolCallGroupProps`, `ToolCallProps`
+Types: `ToolCallGroupMessages`, `ToolCallMessages`, `ToolCallApproval`, `ToolCallGroupProps`, `ToolCallProps`
 
 Used in: Agent console, Agent hand-off
 
@@ -6435,4 +6572,11 @@ Accessibility:
 - `DirectionProvider` (component, @base-ui/react): Enables RTL behavior for Base UI components.
 - `useDirection` (hook, @base-ui/react)
 - `TextDirection` (type, @base-ui/react)
+- `MessagesProvider` (component, src/lib/messages.tsx): Words and a locale for every Mola component below it, portals included. Nested providers merge, so a section can reword one component without restating the app's whole table. Renders no element of its own.
+- `formatMessage` (function, src/lib/messages.tsx): `format('Step {position} of {total}', { position: 2, total: 4 })` → `'Step 2 of 4'`. An unknown name is left as written.
+- `MessagesOverride` (type, src/lib/messages.tsx): Any key may be left out, at any depth. A plural object is replaced whole, not merged: a language with only `other` must not inherit English's `one`.
+- `MessagesProviderProps` (type, src/lib/messages.tsx)
+- `PluralMessage` (type, src/lib/messages.tsx): A message with a count, keyed by plural category. `other` is required; every language has it.
+- `defaultMessages` (constant, src/lib/default-messages.ts)
 - `useScrollEdge` (hook, src/lib/scroll-edge.ts): Keeps `data-overflow-end` on a sideways-scrolling element while there is more past its trailing edge, for the `scroll-edge` utility to draw its cue from. Also marks the element `data-scroll-edge`, so the browser audit can tell a region meant to scroll from a layout that overflows by accident.
+- `MolaMessages` (type, src/lib/default-messages.ts)

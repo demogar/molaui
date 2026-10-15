@@ -67,6 +67,7 @@ Overlapping tiles, each separated from the next by a ring of the page ground ins
 | --- | --- | --- | --- |
 | `label` (required) | `string` |  | Names the group: "Reviewers", "On call". |
 | `max` | `number` | `4` | Show at most this many; the rest collapse into a "+n" tile. |
+| `messages` | `MessagesOverride<AvatarGroupMessages>` |  | Words for translation: the "+n" tile's name. Keys left out come from `MessagesProvider`, then English. |
 | `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` | `md` | Every tile's size, the "+n" tile's included; it overrides the size set on each child, so the row stays even. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="avatar-group">`.
@@ -77,7 +78,7 @@ Overlapping tiles, each separated from the next by a ring of the page ground ins
 
 ### `initials` (function)
 
-Types: `AvatarGroupProps`, `AvatarLayer`, `AvatarProps`
+Types: `AvatarGroupMessages`, `AvatarGroupProps`, `AvatarLayer`, `AvatarProps`
 
 ## Accessibility
 

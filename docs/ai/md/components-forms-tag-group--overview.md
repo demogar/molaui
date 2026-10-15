@@ -71,16 +71,17 @@ Each story is a live example in Storybook.
 | `items` (required) | `TagGroupItem[]` |  | The tags, in order. The group shows them; your state owns them. |
 | `defaultValue` | `string[]` |  | The tags selected at first, when the group keeps its own selection. |
 | `disabled` | `boolean` | `false` | No tag can be removed or selected; they stay readable. |
-| `empty` | `ReactNode` | `None` | What the group says when it has no tags. Kept as text, so an empty group is never a blank gap. |
+| `empty` | `ReactNode` |  | What the group says when it has no tags. Kept as text, so an empty group is never a blank gap. |
+| `messages` | `MessagesOverride<TagGroupMessages>` |  | Words for translation: the remove buttons' default name and the empty text. Keys left out come from `MessagesProvider`, then English. |
 | `onRemove` | `((value: string) => void)` |  | Makes the tags removable: an × on each, and Delete or Backspace on the focused one. The group does not own the list; remove the item in your state and focus moves to its neighbour. |
 | `onValueChange` | `((value: string[]) => void)` |  | Called with every selected tag, in the order of `items`, when the selection changes. |
-| `removeLabel` | `((label: string) => string)` | `(label) => `Remove ${label}`` | Accessible name of each remove button. |
+| `removeLabel` | `((label: string) => string)` |  | Accessible name of each remove button. |
 | `selectionMode` | `"none" \| "multiple" \| "single"` | `none` | `none` (the default) for a set you only read or edit, `single` or `multiple` for a choice. |
 | `value` | `string[]` |  | The selected tags. With `single`, at most one. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="tag-group">`.
 
-Types: `TagGroupBaseProps`, `TagGroupItem`, `TagGroupProps`
+Types: `TagGroupMessages`, `TagGroupBaseProps`, `TagGroupItem`, `TagGroupProps`
 
 ## Accessibility
 

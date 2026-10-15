@@ -5,10 +5,12 @@ import { Bell } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { useMergedRefs } from '../../lib/merge-props'
 import { useControllable } from '../../lib/use-controllable'
 import { Button, IconButton } from '../button'
 import { floatingSurface } from '../popover/surface'
+import { type NotificationsMessages, notificationsMessages } from './messages'
 
 /**
  * Where a notification goes after its toast has gone: the record of what
@@ -69,12 +71,12 @@ const MARK: Record<NotificationTone, string> = {
   info: 'bg-info',
 }
 
-const SR_TONE: Record<NotificationTone, string | null> = {
+const SR_TONE: Record<NotificationTone, 'success' | 'warn' | 'danger' | null> = {
   neutral: null,
   info: null,
-  success: 'Success: ',
-  warn: 'Warning: ',
-  danger: 'Error: ',
+  success: 'success',
+  warn: 'warn',
+  danger: 'danger',
 }
 
 export interface NotificationListProps extends Omit<React.ComponentProps<'div'>, 'children'> {
@@ -82,10 +84,12 @@ export interface NotificationListProps extends Omit<React.ComponentProps<'div'>,
   notifications: NotificationItem[]
   /** Called with an item's id when its action runs. */
   onMarkRead?: (id: string) => void
-  /** Shown when there is nothing. Defaults to “No notifications yet.” */
+  /** Shown when there is nothing. Defaults to “No notifications yet.” (`messages.empty`) */
   empty?: React.ReactNode
-  /** The list's accessible name, “Notifications” by default. */
+  /** The list's accessible name, “Notifications” (`messages.label`) by default. */
   label?: string
+  /** Words for translation: the defaults above, the unread and tone words, Mark all as read and the bell's name. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<NotificationsMessages>
 }
 
 /**
@@ -96,19 +100,21 @@ export interface NotificationListProps extends Omit<React.ComponentProps<'div'>,
 export function NotificationList({
   notifications,
   onMarkRead,
-  empty = 'No notifications yet.',
-  label = 'Notifications',
+  empty,
+  label,
+  messages,
   className,
   ...props
 }: NotificationListProps) {
+  const [t] = useMessages('notifications', notificationsMessages, messages)
   return (
     <div {...props} data-slot="notification-list" className={cn('min-w-0', className)}>
       {notifications.length === 0 ? (
         <p className="m-0 px-4 py-8 text-center text-sm text-ink-2">
-          {empty}
+          {empty ?? t.empty}
         </p>
       ) : (
-        <ul aria-label={label} className="m-0 list-none p-0">
+        <ul aria-label={label ?? t.label} className="m-0 list-none p-0">
           {notifications.map((item) => {
             const tone = item.tone ?? 'neutral'
             const unread = !item.read
@@ -122,15 +128,23 @@ export function NotificationList({
                 <span aria-hidden data-part="tone" className={cn('mt-[5px] size-2.5 shrink-0', MARK[tone])} />
                 <div className="min-w-0 flex-1">
                   <p data-part="title" className={cn('m-0 text-sm leading-snug text-ink', unread ? 'font-semibold' : 'font-normal')}>
-                    {unread ? <span className="sr-only">Unread. </span> : null}
-                    {SR_TONE[tone] ? <span className="sr-only">{SR_TONE[tone]}</span> : null}
+                    {unread ? (
+                      <span className="sr-only">
+                        {t.unread}{' '}
+                      </span>
+                    ) : null}
+                    {SR_TONE[tone] ? (
+                      <span className="sr-only">
+                        {t[SR_TONE[tone]]}{' '}
+                      </span>
+                    ) : null}
                     {item.title}
                   </p>
                   {item.description ? <div className="mt-0.5 text-sm text-ink-2">{item.description}</div> : null}
                   <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1.5">
                     {unread ? (
                       <span aria-hidden data-part="unread" className="rotulo text-ink">
-                        New
+                        {t.new}
                       </span>
                     ) : null}
                     <time data-part="time" dateTime={item.dateTime} className="text-xs tabular-nums text-ink-muted">
@@ -171,7 +185,7 @@ export interface NotificationCentreProps extends Omit<NotificationListProps, 'la
   onMarkAllRead?: () => void
   /** Under the list: usually a link to a full notifications page, “View all”. */
   footer?: React.ReactNode
-  /** The popover's title and the bell's name, “Notifications” by default. */
+  /** The popover's title and the bell's name, “Notifications” (`messages.label`) by default. */
   label?: string
 }
 
@@ -191,11 +205,14 @@ export function NotificationCentre({
   onOpenChange,
   footer,
   empty,
-  label = 'Notifications',
+  label: labelProp,
+  messages,
   className,
   ref,
   ...props
 }: NotificationCentreProps) {
+  const [t, f] = useMessages('notifications', notificationsMessages, messages)
+  const label = labelProp ?? t.label
   const [open, setOpen] = useControllable({ value: openProp, defaultValue: defaultOpen, onChange: onOpenChange })
   const popupRef = React.useRef<HTMLDivElement>(null)
   const mergedRef = useMergedRefs(ref, popupRef)
@@ -207,14 +224,14 @@ export function NotificationCentre({
           <IconButton
             variant="ghost"
             size="sm"
-            label={unread ? `${label}, ${unread} unread` : label}
+            label={unread ? f.plural(t.bellUnread, unread, { label }) : label}
             data-slot="notification-centre-trigger"
             className="relative"
           >
             <Bell />
             {unread ? (
               <span className="absolute -top-0.5 -end-0.5 flex h-4 min-w-4 items-center justify-center bg-ink px-1 font-ui text-2xs font-semibold leading-none text-on-ink tabular-nums">
-                {unread > MAX_COUNT ? `${MAX_COUNT}+` : unread}
+                {unread > MAX_COUNT ? f.format(t.overflow, { max: MAX_COUNT }) : unread}
               </span>
             ) : null}
           </IconButton>
@@ -245,7 +262,7 @@ export function NotificationCentre({
                     onMarkAllRead()
                   }}
                 >
-                  Mark all as read
+                  {t.markAllRead}
                 </Button>
               ) : null}
             </div>
@@ -254,6 +271,7 @@ export function NotificationCentre({
               onMarkRead={onMarkRead}
               empty={empty}
               label={label}
+              messages={messages}
               className="scroll-cloth min-h-0 flex-1 overflow-y-auto"
             />
             {footer ? <div className="shrink-0 px-4 py-2.5 text-sm rule-t">{footer}</div> : null}

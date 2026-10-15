@@ -75,6 +75,7 @@ A long-running agent run, as a timeline.
 | `endedAt` | `number \| Date` |  | When the run ended. Freezes the header clock; omit while the run is still going. |
 | `failure` | `AgentRunFailure` |  | Shown while the run is failed, timed out or cancelled: what stopped it, in words and verbatim, with the ways back. It takes over the header's *Retry run*, so the retry sits next to the reason for it. |
 | `headingLevel` | `2 \| 3` | `3` | Heading level for the run's name. Defaults to 3; use 2 when the run is the page's main subject. |
+| `messages` | `MessagesOverride<AgentRunMessages>` |  | Words for translation: step kinds, status announcements, the header buttons and the copy button. Keys left out come from `MessagesProvider`, then English. |
 | `model` | `string` |  | The model identifier, set as a literal. |
 | `onCancel` | `(() => void)` |  | Stops the run. Shows a Cancel run button while the run is active; omit to offer no way to stop it from here. |
 | `onRetry` | `(() => void)` |  | Runs it again from the start. Shows Retry run once the run has failed, timed out or been cancelled; when `failure` is set the retry moves into the failure panel, next to the reason. |
@@ -85,7 +86,7 @@ A long-running agent run, as a timeline.
 
 `className`, `ref`, `id` and the other DOM props go to `<section data-slot="agent-run">`.
 
-Types: `AgentRunFailure`, `AgentRunProps`, `AgentStep`, `AgentStepKind`
+Types: `AgentRunMessages`, `AgentRunFailure`, `AgentRunProps`, `AgentStep`, `AgentStepKind`
 
 ## Accessibility
 

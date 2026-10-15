@@ -77,17 +77,18 @@ Two versions of one text, side by side: the old in one pane, the new in the othe
 | --- | --- | --- | --- |
 | `title` (required) | `ReactNode` |  | What is being compared, as a heading: “System prompt, triage agent”. |
 | `after` | `string` |  | The text after the change. |
-| `afterLabel` | `string` | `After` | The new pane's name. Defaults to “After”. |
+| `afterLabel` | `string` |  | The new pane's name. Defaults to “After” (`messages.after`). |
 | `before` | `string` |  | The text before the change. With `after`, the diff is worked out for you. |
-| `beforeLabel` | `string` | `Before` | The old pane's name, shown above it and naming its scroll region. Defaults to “Before”. |
+| `beforeLabel` | `string` |  | The old pane's name, shown above it and naming its scroll region. Defaults to “Before” (`messages.before`). |
 | `context` | `number` | `3` | Unchanged lines kept around each change when the diff is worked out from `before` and `after`. Defaults to 3. |
 | `diff` | `string` |  | Or one unified diff, as `git diff` prints it. Wins over `before` and `after`. |
 | `headingLevel` | `3 \| 4 \| 5` | `4` | Heading level for the title. Defaults to 4, under a `ChangeReview` heading. |
 | `hunks` | `readonly (DiffHunk \| DiffHunkInput)[]` |  | Or the hunks, structured. Wins over `diff`. |
+| `messages` | `MessagesOverride<SideBySideDiffMessages>` |  | Words for translation: the pane names, the empty sentence and the words said before each changed line. Keys left out come from `MessagesProvider`, then English. |
 
 `className`, `ref`, `id` and the other DOM props go to `<section data-slot="side-by-side-diff">`.
 
-Types: `SideBySideDiffProps`
+Types: `SideBySideDiffMessages`, `SideBySideDiffProps`
 
 ## Accessibility
 

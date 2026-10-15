@@ -1,6 +1,10 @@
+'use client'
+
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
+import { type LabelMessages, labelMessages } from './messages'
 
 /**
  * A field label in the rótulo register: Archivo pushed out along its width
@@ -31,15 +35,19 @@ export interface LabelProps extends React.ComponentProps<'label'> {
   required?: boolean
   /** Renders the "Optional" tag. */
   optional?: boolean
+  /** Words for translation: the "Optional" tag. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<LabelMessages>
 }
 
 export function Label({
   className,
   required = false,
   optional = false,
+  messages,
   children,
   ...props
 }: LabelProps) {
+  const [t] = useMessages('label', labelMessages, messages)
   return (
     <label
       data-slot="label"
@@ -55,7 +63,7 @@ export function Label({
         <>
           {' '}
           <span className="ms-1.5 rotulo font-medium tracking-figures text-ink-muted normal-case">
-            Optional
+            {t.optional}
           </span>
         </>
       ) : null}

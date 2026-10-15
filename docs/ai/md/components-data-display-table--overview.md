@@ -127,7 +127,8 @@ A native checkbox, drawn as a cut square. Native, so space toggles it, forms sub
 | `colSpan` (required) | `number` |  | How many columns the row spans: all of them, including a checkbox column, or the empty state sits in the first cell. |
 | `actions` | `ReactNode` |  | One or two buttons; for a filtered table, the one that clears the filters. |
 | `kind` | `"empty" \| "no-results" \| "error" \| "no-permission"` |  | Why it is empty, as on `EmptyState`: `empty` (the default), `no-results` when filters emptied it, `error`, or `no-permission`. |
-| `title` | `ReactNode` | `Nothing here yet` | The empty state's heading. Defaults to "Nothing here yet"; the children become its description. |
+| `messages` | `MessagesOverride<TableMessages>` |  | Words for translation: the default heading. Keys left out come from `MessagesProvider`, then English. |
+| `title` | `ReactNode` |  | The empty state's heading. Defaults to "Nothing here yet"; the children become its description. |
 | `variant` (deprecated) | `"empty" \| "no-results" \| "error" \| "no-permission"` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `kind`, as on `EmptyState`. |
 
 `className`, `ref`, `id` and the other DOM props go to `<tr data-slot="table-empty">`.
@@ -197,7 +198,8 @@ Renders no element of its own, so it takes no `className` or `ref`.
 | `label` | `string` |  | Names the table for assistive tech when there is no visible caption. |
 | `loading` | `boolean` | `false` | Shows skeleton rows at the real row height in place of the body and says "Loading…" in the bar, so the table does not jump when the data lands. |
 | `manual` | `boolean` | `false` | Sorting and paging are done by the server: rows are one page, already sorted. |
-| `noun` | `{ one: string; other: string; }` | `{ one: 'row', other: 'rows' }` | What a row is, for counts: `{ one: 'run', other: 'runs' }`. |
+| `messages` | `MessagesOverride<DataTableMessages>` |  | Words for translation: the counts, the selection names, the empty heading and the column menu. Keys left out come from `MessagesProvider`, then English. |
+| `noun` | `PluralMessage` |  | What a row is, for counts: `{ one: 'run', other: 'runs' }`. Any plural category a language needs may be given (`few`, `many`); `other` is required. |
 | `onColumnWidthsChange` | `((widths: Record<string, number>) => void)` |  | Called with every column's width after a resize — to remember the layout between visits. The first resize fixes each column at its rendered width. |
 | `onExpandedChange` | `((expanded: Set<string>) => void)` |  | Called with the new set of expanded row ids. |
 | `onHiddenColumnsChange` | `((hidden: Set<string>) => void)` |  | Called with the new set of hidden column keys — to remember the choice between visits. |
@@ -231,10 +233,11 @@ Renders no element of its own, so it takes no `className` or `ref`.
 | `columns` (required) | `DataTableColumn<Row>[]` |  | Every column, hidden or not, so the menu can list them all. A column with `hideable: false` shows checked and disabled. |
 | `hidden` (required) | `ReadonlySet<string>` |  | The keys of the columns currently hidden. The last visible column cannot be hidden. |
 | `onToggle` (required) | `(key: string, visible: boolean) => void` |  | Called with a column's key and whether it should now be visible. The menu stays open, because columns are chosen several at a time. |
+| `messages` | `MessagesOverride<DataTableMessages>` |  | Words for translation: the button and the menu's heading. Keys left out come from `MessagesProvider`, then English. |
 
 `className`, `ref`, `id` and the other DOM props go to `<button data-slot="button">`.
 
-Types: `TableCellProps`, `TableCheckboxProps`, `TableEmptyProps`, `TableHeadProps`, `TableProps`, `TableRowProps`, `TableSkeletonRowsProps`, `TableSortDirection`, `DataTableBulkContext`, `DataTableColumn`, `DataTableColumnMenuProps`, `DataTableEmpty`, `DataTableProps`, `DataTableSort`, `SortValue`
+Types: `DataTableMessages`, `TableMessages`, `TableCellProps`, `TableCheckboxProps`, `TableEmptyProps`, `TableHeadProps`, `TableProps`, `TableRowProps`, `TableSkeletonRowsProps`, `TableSortDirection`, `DataTableBulkContext`, `DataTableColumn`, `DataTableColumnMenuProps`, `DataTableEmpty`, `DataTableProps`, `DataTableSort`, `SortValue`
 
 ## Accessibility
 

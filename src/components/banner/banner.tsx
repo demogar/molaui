@@ -5,8 +5,10 @@ import { CircleAlert, CircleCheck, Info, TriangleAlert, X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { type Variants } from '../../lib/variants'
 import { IconButton } from '../button'
+import { type BannerMessages, bannerMessages } from './messages'
 
 /**
  * A condition of the whole application, said once across the top of it:
@@ -78,12 +80,12 @@ const ICON_INK: Record<BannerTone, string> = {
 }
 
 /** Said before the message, hidden: the icon is not read, and the tone has to be heard as well as seen. */
-const SR_TONE: Record<BannerTone, string | null> = {
+const SR_TONE: Record<BannerTone, keyof BannerMessages | null> = {
   neutral: null,
   info: null,
-  success: 'Success: ',
-  warn: 'Warning: ',
-  danger: 'Error: ',
+  success: 'success',
+  warn: 'warn',
+  danger: 'danger',
 }
 
 export interface BannerProps extends Omit<React.ComponentProps<'section'>, 'title'>, Variants<typeof bannerVariants> {
@@ -102,8 +104,10 @@ export interface BannerProps extends Omit<React.ComponentProps<'section'>, 'titl
    * talks over the page's own title.
    */
   announce?: boolean
-  /** The landmark's name, “Announcement” by default. Name it for what it is when there is more than one kind: “Maintenance”. */
+  /** The landmark's name, “Announcement” (`messages.label`) by default. Name it for what it is when there is more than one kind: “Maintenance”. */
   label?: string
+  /** Words for translation: the landmark's name, the dismiss button and the tone words read before the message. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<BannerMessages>
 }
 
 /** `className`, `ref` and the rest of the DOM props go to the `<section>`, the strip itself. */
@@ -114,11 +118,13 @@ export function Banner({
   onDismiss,
   icon,
   announce = false,
-  label = 'Announcement',
+  label,
+  messages,
   className,
   children,
   ...props
 }: BannerProps) {
+  const [words] = useMessages('banner', bannerMessages, messages)
   const t = tone ?? 'info'
   const Icon = ICON[t]
   const message = React.useRef<HTMLParagraphElement>(null)
@@ -131,7 +137,7 @@ export function Banner({
 
   return (
     <section
-      aria-label={label}
+      aria-label={label ?? words.label}
       {...props}
       data-slot="banner"
       data-tone={t}
@@ -143,7 +149,11 @@ export function Banner({
         </span>
       )}
       <p ref={message} data-part="message" className="m-0 min-w-0 flex-1 basis-60 text-sm leading-snug">
-        {SR_TONE[t] ? <span className="sr-only">{SR_TONE[t]}</span> : null}
+        {SR_TONE[t] ? (
+          <span className="sr-only">
+            {words[SR_TONE[t]]}{' '}
+          </span>
+        ) : null}
         {/* A real space after the title, not a margin: the text is read and
             announced as one string, and a margin reads as "lostChanges". */}
         {title ? (
@@ -161,7 +171,7 @@ export function Banner({
         </div>
       ) : null}
       {onDismiss ? (
-        <IconButton data-part="dismiss" label="Dismiss" variant="ghost" size="sm" onClick={onDismiss} className="-me-1 shrink-0">
+        <IconButton data-part="dismiss" label={words.dismiss} variant="ghost" size="sm" onClick={onDismiss} className="-me-1 shrink-0">
           <X />
         </IconButton>
       ) : null}

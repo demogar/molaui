@@ -77,6 +77,7 @@ Each story is a live example in Storybook.
 | `actions` | `ReactNode` |  | Buttons under the body. Usually one secondary, at `size="sm"`. |
 | `headingLevel` | `2 \| 3 \| 4 \| 5` | `3` | The heading element for `title`. |
 | `icon` | `ReactNode` |  | Replace the tone's default mark — the icon, or in `flat` the square swatch — or `false` for none. |
+| `messages` | `MessagesOverride<CalloutMessages>` |  | Words for translation: the dismiss button's name. Keys left out come from `MessagesProvider`, then English. |
 | `onDismiss` | `(() => void)` |  | Renders a dismiss button. The caller owns whether it comes back. |
 | `title` | `ReactNode` |  | A short heading that states the message. With it the callout becomes a region named by the title; without it, it is plain content and the body has to stand alone. |
 | `tone` | `"neutral" \| "info" \| "success" \| "warn" \| "danger"` |  | The status of the message, carried by the seam (or the swatch), the wash and the tone's icon; `info` by default. The title still has to say it in words. |
@@ -88,7 +89,7 @@ Each story is a live example in Storybook.
 
 A message that belongs to a region of the page — "this agent is using a deprecated model", "billing is in read-only mode" — rather than to a moment, which is a toast's job.
 
-Types: `CalloutProps`, `CalloutTone`, `CalloutVariant`
+Types: `CalloutMessages`, `CalloutProps`, `CalloutTone`, `CalloutVariant`
 
 ## Accessibility
 

@@ -6,8 +6,10 @@ import { X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { Button, IconButton } from '../button'
 import { useHotkeys } from '../shortcuts/use-hotkeys'
+import { type ToastMessages, toastMessages } from './messages'
 
 /**
  * Something happened somewhere other than where the operator is looking.
@@ -59,13 +61,15 @@ const MARK: Record<ToastTone, string> = {
   running: 'bg-oro animate-mola-pulse',
 }
 
-const SR_TONE: Record<ToastTone, string | null> = {
+// Read before the title, so a toast's tone is not colour alone. Neutral and
+// info need no word: they are the ordinary case.
+const SR_TONE: Record<ToastTone, keyof ToastMessages | null> = {
   neutral: null,
-  success: 'Success: ',
-  danger: 'Error: ',
-  warn: 'Warning: ',
+  success: 'success',
+  danger: 'danger',
+  warn: 'warn',
   info: null,
-  running: 'In progress: ',
+  running: 'running',
 }
 
 function toManagerOptions({ title, description, tone = 'neutral', action, timeout, id }: ToastOptions) {
@@ -142,23 +146,32 @@ export interface ToastProviderProps {
   limit?: number
   /** Default auto-dismiss, ms. Also the timeout a running toast starts when `update()` turns it into a result. */
   timeout?: number
+  /**
+   * Words for translation: the close button and the tone words read before a
+   * title. Keys left out come from `MessagesProvider`, then English. The
+   * toasts render here, so a `MessagesProvider` must sit above this one, not
+   * inside it.
+   */
+  messages?: MessagesOverride<ToastMessages>
 }
 
 /**
- * Mount once near the root. Renders the viewport, bottom-right, into a portal.
+ * Mount once near the root, inside `MessagesProvider` if the app has one.
+ * Renders the viewport, bottom-right, into a portal.
  *
  * Inside a `HotkeysProvider` it lists F6, the key Base UI binds to move focus
  * to the stack, in the shortcuts dialog. Listed, not bound: Base UI already
  * listens for it, and a second listener would move focus twice.
  */
-export function ToastProvider({ children, limit = 3, timeout = 5000 }: ToastProviderProps) {
-  useHotkeys('f6', null, { label: 'Move focus to new notifications' })
+export function ToastProvider({ children, limit = 3, timeout = 5000, messages }: ToastProviderProps) {
+  const [t] = useMessages('toast', toastMessages, messages)
+  useHotkeys('f6', null, { label: t.focusShortcut })
   return (
     <ToastPrimitive.Provider limit={limit} timeout={timeout}>
       {children}
       <ToastPrimitive.Portal>
         <ToastPrimitive.Viewport className="fixed inset-e-4 bottom-4 z-(--z-toast) w-[calc(100vw-2rem)] outline-none sm:inset-e-6 sm:bottom-6 sm:w-[24rem]">
-          <ToastList />
+          <ToastList messages={messages} />
         </ToastPrimitive.Viewport>
       </ToastPrimitive.Portal>
     </ToastPrimitive.Provider>
@@ -192,13 +205,15 @@ const stackClasses = [
   '[transition:transform_var(--motion-slow)_var(--ease-cut),opacity_var(--motion-base),height_var(--motion-cut)]',
 ]
 
-function ToastList() {
+function ToastList({ messages }: { messages: MessagesOverride<ToastMessages> | undefined }) {
   const { toasts } = ToastPrimitive.useToastManager()
+  const [t] = useMessages('toast', toastMessages, messages)
   // The stack sits at the inline end, so it is dismissed by swiping toward
   // that edge: right in LTR, left in RTL. Never across the page.
   const swipeDirection: ('left' | 'right' | 'down')[] = useDirection() === 'rtl' ? ['left', 'down'] : ['right', 'down']
   return toasts.map((toast) => {
     const tone = (toast.type ?? 'neutral') as ToastTone
+    const word = SR_TONE[tone]
     return (
       <ToastPrimitive.Root
         key={toast.id}
@@ -213,7 +228,7 @@ function ToastList() {
           <span aria-hidden className={cn('mt-[5px] size-2.5 shrink-0', MARK[tone])} />
           <div className="min-w-0 flex-1">
             <ToastPrimitive.Title className="m-0 font-ui text-sm font-semibold leading-snug">
-              {SR_TONE[tone] ? <span className="sr-only">{SR_TONE[tone]}</span> : null}
+              {word ? <span className="sr-only">{t[word]}{' '}</span> : null}
               {toast.title}
             </ToastPrimitive.Title>
             <ToastPrimitive.Description className="mt-0.5 mb-0 text-sm text-ink-2 empty:hidden" />
@@ -232,7 +247,7 @@ function ToastList() {
           <ToastPrimitive.Close
             aria-hidden={false}
             render={
-              <IconButton label="Dismiss" variant="ghost" size="sm">
+              <IconButton label={t.dismiss} variant="ghost" size="sm">
                 <X />
               </IconButton>
             }

@@ -632,6 +632,16 @@
       "page": "Components/Typography/Lead",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-typography-lead--overview"
     },
+    "Link": {
+      "status": "pending",
+      "page": "Components/Navigation/Link",
+      "docs": "https://demogar.github.io/molaui/?path=/docs/components-navigation-link--overview"
+    },
+    "LinkButton": {
+      "status": "pending",
+      "page": "Components/Navigation/Link",
+      "docs": "https://demogar.github.io/molaui/?path=/docs/components-navigation-link--overview"
+    },
     "Listbox": {
       "status": "pending",
       "page": "Components/Forms/Listbox",

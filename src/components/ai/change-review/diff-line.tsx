@@ -1,3 +1,8 @@
+'use client'
+
+import * as React from 'react'
+
+import { fileDiffMessages } from './messages'
 import type { DiffLine } from './parse-diff'
 
 /**
@@ -12,7 +17,13 @@ export const LINE_WASH: Record<DiffLine['kind'], string> = {
   context: '',
 }
 export const LINE_GLYPH: Record<DiffLine['kind'], string> = { add: '+', remove: '−', context: '' }
-export const LINE_SPOKEN: Record<DiffLine['kind'], string> = { add: 'Added: ', remove: 'Removed: ', context: '' }
+
+/**
+ * The hidden words, from the messages of the diff around the line. A context
+ * rather than a prop, because FileDiff and SideBySideDiff each pass lines
+ * through three layers of rows and cells to reach here.
+ */
+export const LineWords = React.createContext<{ added: string; removed: string }>(fileDiffMessages)
 
 /** Line numbers: hidden from a screen reader and from a copy. */
 export const GUTTER = 'select-none text-end tabular text-ink-muted'
@@ -23,9 +34,15 @@ export const GUTTER = 'select-none text-end tabular text-ink-muted'
  * zero-width space so its row keeps its height.
  */
 export function LineCode({ line, className }: { line: DiffLine; className?: string }) {
+  const words = React.useContext(LineWords)
+  const spoken = line.kind === 'add' ? words.added : line.kind === 'remove' ? words.removed : ''
   return (
     <span className={className}>
-      {LINE_SPOKEN[line.kind] ? <span className="sr-only">{LINE_SPOKEN[line.kind]}</span> : null}
+      {spoken ? (
+        <span className="sr-only">
+          {spoken}{' '}
+        </span>
+      ) : null}
       <span dir="ltr">{line.text === '' ? '​' : line.text}</span>
     </span>
   )

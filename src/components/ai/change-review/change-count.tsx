@@ -1,15 +1,19 @@
+'use client'
+
 import type * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../../lib/messages'
+import { type ChangeCountMessages, changeCountMessages } from './messages'
 
 export interface ChangeCountProps extends Omit<React.ComponentProps<'span'>, 'children'> {
   /** Lines added. Shown as "+n" and said as "n lines added". */
   added: number
   /** Lines removed. Shown as "−n" and said as "n lines removed". */
   removed: number
+  /** Words for translation: the sentence a screen reader hears. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<ChangeCountMessages>
 }
-
-const plural = (n: number, one: string, many: string) => `${n.toLocaleString('en-US')} ${n === 1 ? one : many}`
 
 /**
  * "+12 −3": the size of a change, at a glance.
@@ -19,15 +23,16 @@ const plural = (n: number, one: string, many: string) => `${n.toLocaleString('en
  * a sentence is said instead: "12 lines added, 3 removed". The figures are
  * `dir="ltr"` so a right-to-left page does not turn "+12" into "12+".
  */
-export function ChangeCount({ added, removed, className, ...props }: ChangeCountProps) {
+export function ChangeCount({ added, removed, messages, className, ...props }: ChangeCountProps) {
+  const [t, f] = useMessages('changeCount', changeCountMessages, messages)
   return (
     <span data-slot="change-count" className={cn('inline-flex items-baseline font-ui text-xs font-semibold tabular', className)} {...props}>
       <span aria-hidden dir="ltr" className="inline-flex gap-2">
-        <span className="text-ink-success">+{added.toLocaleString('en-US')}</span>
-        <span className="text-ink-danger">−{removed.toLocaleString('en-US')}</span>
+        <span className="text-ink-success">+{f.number(added)}</span>
+        <span className="text-ink-danger">−{f.number(removed)}</span>
       </span>
       <span className="sr-only">
-        {plural(added, 'line', 'lines')} added, {plural(removed, 'line', 'lines')} removed
+        {f.format(t.summary, { added: f.plural(t.lines, added), removed: f.plural(t.lines, removed) })}
       </span>
     </span>
   )

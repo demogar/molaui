@@ -70,6 +70,7 @@ Renders no element of its own, so it takes no `className` or `ref`.
 | `description` | `ReactNode` |  | A line under the title, read as the drawer's accessible description when it opens. |
 | `footer` | `ReactNode` |  | Action row pinned under the scrolling body, behind a keyline. Usually a `ghost` cancel and one primary. |
 | `hideClose` | `boolean` | `false` | Hide the close button. Only when the footer carries an explicit way out. |
+| `messages` | `MessagesOverride<DrawerMessages>` |  | Words for translation: the close button's name. Keys left out come from `MessagesProvider`, then English. |
 | `size` | `"sm" \| "md" \| "lg"` | `md` | Width of a side drawer, or height of a bottom sheet. Always capped by the viewport. |
 
 Also accepts the props of `DrawerPopupProps`.
@@ -80,7 +81,7 @@ Also accepts the props of `DrawerPopupProps`.
 
 `className`, `ref`, `id` and the other DOM props go to `<button data-slot="drawer-trigger">`.
 
-Types: `DrawerBand`, `DrawerContentProps`, `DrawerProps`, `DrawerSide`
+Types: `DrawerMessages`, `DrawerBand`, `DrawerContentProps`, `DrawerProps`, `DrawerSide`
 
 ## Accessibility
 

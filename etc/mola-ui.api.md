@@ -77,11 +77,23 @@ export interface AgentRunFailure extends Pick<RunErrorProps, 'kind' | 'tool' | '
     stepId?: string;
 }
 
+// @public
+export interface AgentRunMessages {
+    announce: Record<RunStatusValue, string>;
+    cancelRun: string;
+    copyRunId: string;
+    kinds: Record<AgentStepKind, string>;
+    retryRun: string;
+    runIdCopied: string;
+    steps: string;
+}
+
 // @public (undocumented)
 export interface AgentRunProps extends Omit<React_2.ComponentProps<'section'>, 'children'> {
     endedAt?: number | Date;
     failure?: AgentRunFailure;
     headingLevel?: 2 | 3;
+    messages?: MessagesOverride<AgentRunMessages>;
     model?: string;
     name: string;
     onCancel?: () => void;
@@ -121,6 +133,12 @@ export type AgentStepKind = 'reasoning' | 'tool' | 'message' | 'handoff' | 'appr
 // @public
 export function AlertDialog(input: AlertDialogProps): React_2.JSX.Element;
 
+// @public
+export interface AlertDialogMessages {
+    cancel: string;
+    typeToConfirm: string;
+}
+
 // @public (undocumented)
 export interface AlertDialogProps extends Omit<React_2.ComponentProps<'div'>, 'title' | 'children' | 'role'> {
     cancelLabel?: string;
@@ -130,6 +148,7 @@ export interface AlertDialogProps extends Omit<React_2.ComponentProps<'div'>, 't
     description: React_2.ReactNode;
     error?: React_2.ReactNode;
     finalFocus?: AlertDialog_2.Popup.Props['finalFocus'];
+    messages?: MessagesOverride<AlertDialogMessages>;
     onConfirm: () => void | Promise<void>;
     onOpenChange?: (open: boolean) => void;
     open?: boolean;
@@ -141,12 +160,24 @@ export interface AlertDialogProps extends Omit<React_2.ComponentProps<'div'>, 't
 // @public (undocumented)
 export function AppShell(input: AppShellProps): React_2.JSX.Element;
 
+// @public
+export interface AppShellMessages {
+    closeNavigation: string;
+    collapseSidebar: string;
+    expandSidebar: string;
+    navigation: string;
+    openNavigation: string;
+    skipLinks: string;
+    skipToContent: string;
+}
+
 // @public (undocumented)
 export interface AppShellProps extends Omit<React_2.ComponentProps<'div'>, 'children'> {
     banner?: React_2.ReactNode;
     // (undocumented)
     children: React_2.ReactNode;
     defaultSidebarCollapsed?: boolean;
+    messages?: MessagesOverride<AppShellMessages>;
     onSidebarCollapsedChange?: (collapsed: boolean) => void;
     sidebar: React_2.ReactNode;
     sidebarCollapsed?: boolean;
@@ -156,15 +187,26 @@ export interface AppShellProps extends Omit<React_2.ComponentProps<'div'>, 'chil
 // @public
 export function AttachmentChip(input: AttachmentChipProps): React_2.JSX.Element;
 
+// @public
+export interface AttachmentChipMessages {
+    remove: string;
+}
+
 // @public (undocumented)
 export interface AttachmentChipProps extends React_2.ComponentProps<'span'> {
     detail?: string;
+    messages?: MessagesOverride<AttachmentChipMessages>;
     name: string;
     onRemove?: () => void;
 }
 
 // @public
 export function Autocomplete(input: AutocompleteProps): React_2.JSX.Element;
+
+// @public
+export interface AutocompleteMessages {
+    searching: string;
+}
 
 // @public (undocumented)
 export interface AutocompleteProps extends Omit<React_2.ComponentProps<'input'>, 'value' | 'defaultValue' | 'onChange' | 'size' | 'children' | 'type'> {
@@ -175,6 +217,7 @@ export interface AutocompleteProps extends Omit<React_2.ComponentProps<'input'>,
     label?: React_2.ReactNode;
     loading?: boolean;
     locale?: Intl.LocalesArgument;
+    messages?: MessagesOverride<AutocompleteMessages>;
     name?: string;
     onValueChange?: (value: string) => void;
     placeholder?: string;
@@ -192,10 +235,16 @@ export function Avatar(input: AvatarProps): React_2.JSX.Element;
 // @public
 export function AvatarGroup(input: AvatarGroupProps): React_2.JSX.Element;
 
+// @public
+export interface AvatarGroupMessages {
+    more: PluralMessage;
+}
+
 // @public (undocumented)
 export interface AvatarGroupProps extends React_2.ComponentProps<'div'> {
     label: string;
     max?: number;
+    messages?: MessagesOverride<AvatarGroupMessages>;
     size?: AvatarProps['size'];
 }
 
@@ -214,7 +263,7 @@ export interface AvatarProps extends Omit<React_2.ComponentProps<'span'>, 'child
 
 // @public (undocumented)
 export const avatarVariants: (props?: ({
-    size?: "xs" | "sm" | "md" | "lg" | "xl" | null | undefined;
+    size?: "sm" | "md" | "lg" | "xs" | "xl" | null | undefined;
 } & ClassProp) | undefined) => string;
 
 // @public (undocumented)
@@ -231,12 +280,21 @@ export type BadgeTone = NonNullable<Variants<typeof badgeVariants>['tone']>;
 
 // @public
 export const badgeVariants: (props?: ({
-    tone?: "neutral" | "danger" | "success" | "warn" | "info" | "accent" | null | undefined;
+    tone?: "danger" | "warn" | "neutral" | "success" | "info" | "accent" | null | undefined;
     variant?: "solid" | "soft" | "outline" | null | undefined;
 } & ClassProp) | undefined) => string;
 
 // @public
 export function Banner(input: BannerProps): React_2.JSX.Element;
+
+// @public
+export interface BannerMessages {
+    danger: string;
+    dismiss: string;
+    label: string;
+    success: string;
+    warn: string;
+}
 
 // @public (undocumented)
 export interface BannerProps extends Omit<React_2.ComponentProps<'section'>, 'title'>, Variants<typeof bannerVariants> {
@@ -244,6 +302,7 @@ export interface BannerProps extends Omit<React_2.ComponentProps<'section'>, 'ti
     announce?: boolean;
     icon?: React_2.ReactNode | false;
     label?: string;
+    messages?: MessagesOverride<BannerMessages>;
     onDismiss?: () => void;
     title?: React_2.ReactNode;
 }
@@ -253,7 +312,7 @@ export type BannerTone = NonNullable<Variants<typeof bannerVariants>['tone']>;
 
 // @public
 export const bannerVariants: (props?: ({
-    tone?: "neutral" | "danger" | "success" | "warn" | "info" | null | undefined;
+    tone?: "danger" | "warn" | "neutral" | "success" | "info" | null | undefined;
 } & ClassProp) | undefined) => string;
 
 // @public (undocumented)
@@ -284,9 +343,15 @@ export type BreadcrumbLinkRender = React_2.ReactElement | ((props: React_2.Compo
     className: string;
 }) => React_2.ReactElement);
 
+// @public
+export interface BreadcrumbMessages {
+    label: string;
+}
+
 // @public (undocumented)
 export interface BreadcrumbProps extends Omit<React_2.ComponentProps<'nav'>, 'children'> {
     items: BreadcrumbItem[];
+    messages?: MessagesOverride<BreadcrumbMessages>;
     renderLink?: BreadcrumbLinkRender;
 }
 
@@ -309,12 +374,18 @@ export interface ButtonProps extends Omit<Button_2.Props, 'className'>, Variants
 
 // @public
 export const buttonVariants: (props?: ({
-    variant?: "secondary" | "danger" | "primary" | "ghost" | null | undefined;
+    variant?: "primary" | "secondary" | "danger" | "ghost" | null | undefined;
     size?: "sm" | "md" | "lg" | null | undefined;
 } & ClassProp) | undefined) => string;
 
 // @public (undocumented)
 export function Calendar(input: CalendarProps): React_2.JSX.Element;
+
+// @public
+export interface CalendarMessages {
+    nextMonth: string;
+    previousMonth: string;
+}
 
 // @public
 export interface CalendarProps extends Omit<React_2.ComponentProps<'div'>, 'onSelect' | 'children'> {
@@ -325,6 +396,7 @@ export interface CalendarProps extends Omit<React_2.ComponentProps<'div'>, 'onSe
     isDateDisabled?: (date: Date) => boolean;
     locale?: DateLocale;
     max?: Date | null;
+    messages?: MessagesOverride<CalendarMessages>;
     min?: Date | null;
     onSelect?: (date: Date) => void;
     renderHeading?: (props: {
@@ -341,11 +413,17 @@ export interface CalendarProps extends Omit<React_2.ComponentProps<'div'>, 'onSe
 // @public (undocumented)
 export function Callout(input: CalloutProps): React_2.JSX.Element;
 
+// @public
+export interface CalloutMessages {
+    dismiss: string;
+}
+
 // @public (undocumented)
 export interface CalloutProps extends Omit<React_2.ComponentProps<'div'>, 'title'>, Variants<typeof calloutVariants> {
     actions?: React_2.ReactNode;
     headingLevel?: 2 | 3 | 4 | 5;
     icon?: React_2.ReactNode | false;
+    messages?: MessagesOverride<CalloutMessages>;
     onDismiss?: () => void;
     title?: React_2.ReactNode;
 }
@@ -358,7 +436,7 @@ export type CalloutVariant = NonNullable<Variants<typeof calloutVariants>['varia
 
 // @public
 export const calloutVariants: (props?: ({
-    tone?: "neutral" | "danger" | "success" | "warn" | "info" | null | undefined;
+    tone?: "danger" | "warn" | "neutral" | "success" | "info" | null | undefined;
     variant?: "flat" | "seam" | null | undefined;
 } & ClassProp) | undefined) => string;
 
@@ -371,9 +449,16 @@ export type CaretProps = Omit<React_2.ComponentProps<'span'>, 'children'>;
 // @public
 export function ChangeCount(input: ChangeCountProps): React_2.JSX.Element;
 
+// @public
+export interface ChangeCountMessages {
+    lines: PluralMessage;
+    summary: string;
+}
+
 // @public (undocumented)
 export interface ChangeCountProps extends Omit<React_2.ComponentProps<'span'>, 'children'> {
     added: number;
+    messages?: MessagesOverride<ChangeCountMessages>;
     removed: number;
 }
 
@@ -390,6 +475,19 @@ export type ChangeDecisionStatus = 'approved' | 'changes_requested' | 'rejected'
 // @public
 export function ChangeReview(input: ChangeReviewProps): React_2.JSX.Element;
 
+// @public
+export interface ChangeReviewMessages {
+    actions: Record<ChangeDecisionStatus, string>;
+    decidedBy: string;
+    decision: string;
+    decisions: Record<ChangeDecisionStatus, string>;
+    missingReason: Record<Exclude<ChangeDecisionStatus, 'approved'>, string>;
+    proposedBy: string;
+    proposedChange: string;
+    reason: string;
+    reasonHint: string;
+}
+
 // @public (undocumented)
 export interface ChangeReviewProps extends Omit<React_2.ComponentProps<'section'>, 'children' | 'title'> {
     agent: string;
@@ -397,6 +495,7 @@ export interface ChangeReviewProps extends Omit<React_2.ComponentProps<'section'
     decision?: ChangeDecision | null;
     defaultDecision?: ChangeDecision | null;
     headingLevel?: 2 | 3;
+    messages?: MessagesOverride<ChangeReviewMessages>;
     model?: string;
     onDecide?: (status: ChangeDecisionStatus, reason: string | undefined) => void;
     reviewer?: string;
@@ -460,6 +559,7 @@ export function Citation(input: CitationProps): React_2.JSX.Element;
 // @public (undocumented)
 export interface CitationProps extends Omit<React_2.ComponentProps<'a'>, 'children'> {
     cardSide?: 'top' | 'bottom';
+    messages?: MessagesOverride<SourcesMessages>;
     n: number;
     render?: React_2.ReactElement | ((props: React_2.ComponentProps<'a'>) => React_2.ReactElement);
     source?: Source;
@@ -478,6 +578,15 @@ export function Code(input: React_2.ComponentProps<'code'>): React_2.JSX.Element
 // @public
 export function CodeBlock(input: CodeBlockProps): React_2.JSX.Element;
 
+// @public
+export interface CodeBlockMessages {
+    copied: string;
+    copiedAnnouncement: string;
+    copy: string;
+    unwrap: string;
+    wrap: string;
+}
+
 // @public (undocumented)
 export interface CodeBlockProps extends Omit<React_2.ComponentProps<'figure'>, 'children'> {
     code: string;
@@ -486,6 +595,7 @@ export interface CodeBlockProps extends Omit<React_2.ComponentProps<'figure'>, '
     language?: CodeLanguage;
     lineNumbers?: boolean;
     maxHeight?: string;
+    messages?: MessagesOverride<CodeBlockMessages>;
     wrap?: boolean;
 }
 
@@ -524,6 +634,7 @@ export interface ComboboxCommonProps extends Omit<React_2.ComponentProps<'input'
     label?: React_2.ReactNode;
     loading?: boolean;
     locale?: Intl.LocalesArgument;
+    messages?: MessagesOverride<ComboboxMessages>;
     name?: string;
     onInputValueChange?: (query: string) => void;
     placeholder?: string;
@@ -537,6 +648,19 @@ export interface ComboboxCommonProps extends Omit<React_2.ComponentProps<'input'
 
 // @public
 export type ComboboxItems = ComboboxOption[] | ComboboxOptionGroup[];
+
+// @public
+export interface ComboboxMessages {
+    chipsHint: PluralMessage;
+    clear: string;
+    keyLeft: string;
+    keyRight: string;
+    noMatches: string;
+    remove: string;
+    searching: string;
+    selected: string;
+    showOptions: string;
+}
 
 // @public (undocumented)
 export interface ComboboxMultipleProps extends ComboboxCommonProps {
@@ -608,11 +732,25 @@ export interface CommandItem {
 // @public
 export function CommandPalette(input: CommandPaletteProps): React_2.JSX.Element;
 
+// @public
+export interface CommandPaletteMessages {
+    commands: string;
+    escape: string;
+    label: string;
+    move: string;
+    noMatches: string;
+    open: string;
+    placeholder: string;
+    results: PluralMessage;
+    select: string;
+}
+
 // @public (undocumented)
 export interface CommandPaletteProps extends Omit<React_2.ComponentProps<'div'>, 'children' | 'role'> {
     defaultOpen?: boolean;
     groups: CommandGroup[];
     label?: string;
+    messages?: MessagesOverride<CommandPaletteMessages>;
     onOpenChange?: (open: boolean) => void;
     open?: boolean;
     placeholder?: string;
@@ -626,10 +764,16 @@ export function Confidence(input: ConfidenceProps): React_2.JSX.Element;
 // @public (undocumented)
 export type ConfidenceLevel = 'high' | 'medium' | 'low';
 
+// @public
+export interface ConfidenceMessages {
+    levels: Record<ConfidenceLevel, string>;
+}
+
 // @public (undocumented)
 export interface ConfidenceProps extends Omit<React_2.ComponentProps<'span'>, 'children'> {
     basis?: string;
     level: ConfidenceLevel;
+    messages?: MessagesOverride<ConfidenceMessages>;
 }
 
 // @public (undocumented)
@@ -643,7 +787,7 @@ export interface ContainerProps extends Omit<React_2.ComponentProps<'div'>, 'wid
 
 // @public
 export const containerVariants: (props?: ({
-    width?: "page" | "prose" | "wide" | "full" | null | undefined;
+    width?: "page" | "full" | "prose" | "wide" | null | undefined;
 } & ClassProp) | undefined) => string;
 
 // @public (undocumented)
@@ -698,11 +842,37 @@ export function DataTableColumnMenu<Row>(input: DataTableColumnMenuProps<Row>): 
 export interface DataTableColumnMenuProps<Row> extends Omit<React_2.ComponentProps<'button'>, 'children' | 'onToggle' | 'hidden'> {
     columns: DataTableColumn<Row>[];
     hidden: ReadonlySet<string>;
+    messages?: MessagesOverride<DataTableMessages>;
     onToggle: (key: string, visible: boolean) => void;
 }
 
 // @public
 export type DataTableEmpty = Pick<EmptyStateProps, 'title' | 'description' | 'actions' | 'kind' | 'variant'>;
+
+// @public
+export interface DataTableMessages {
+    clear: string;
+    columns: string;
+    deselectAll: string;
+    deselectAllOnPage: string;
+    details: string;
+    detailsOf: string;
+    empty: string;
+    labelledPages: string;
+    loading: string;
+    noneSelected: string;
+    noun: PluralMessage;
+    pages: string;
+    rangeOf: string;
+    resize: string;
+    selectAll: string;
+    selectAllOnPage: string;
+    selected: string;
+    selectedOf: string;
+    selectRow: string;
+    showColumns: string;
+    total: string;
+}
 
 // @public (undocumented)
 export interface DataTableProps<Row> extends Omit<React_2.ComponentProps<'table'>, 'children' | 'aria-label'> {
@@ -728,10 +898,8 @@ export interface DataTableProps<Row> extends Omit<React_2.ComponentProps<'table'
     label?: string;
     loading?: boolean;
     manual?: boolean;
-    noun?: {
-        one: string;
-        other: string;
-    };
+    messages?: MessagesOverride<DataTableMessages>;
+    noun?: PluralMessage;
     onColumnWidthsChange?: (widths: Record<string, number>) => void;
     onExpandedChange?: (expanded: Set<string>) => void;
     onHiddenColumnsChange?: (hidden: Set<string>) => void;
@@ -765,6 +933,15 @@ export interface DataTableSort {
 }
 
 // @public
+export interface DateEntryMessages {
+    format: string;
+    notInCalendar: string;
+    tooEarly: string;
+    tooLate: string;
+    unavailable: string;
+}
+
+// @public (undocumented)
 export type DateLocale = Intl.LocalesArgument;
 
 // @public (undocumented)
@@ -780,6 +957,13 @@ export interface DatePattern {
 export function DatePicker(input: DatePickerProps): React_2.JSX.Element;
 
 // @public
+export interface DatePickerMessages extends DateEntryMessages {
+    changeDate: string;
+    chooseDate: string;
+    notADate: string;
+}
+
+// @public
 export interface DatePickerProps extends Omit<InputProps, 'value' | 'defaultValue' | 'onChange' | 'size' | 'leading' | 'trailing' | 'type' | 'children' | 'min' | 'max'> {
     defaultOpen?: boolean;
     defaultValue?: Date | null;
@@ -787,6 +971,7 @@ export interface DatePickerProps extends Omit<InputProps, 'value' | 'defaultValu
     isDateDisabled?: (date: Date) => boolean;
     locale?: DateLocale;
     max?: Date | null;
+    messages?: MessagesOverride<DatePickerMessages>;
     min?: Date | null;
     name?: string;
     onOpenChange?: (open: boolean) => void;
@@ -813,6 +998,30 @@ export interface DateRange {
 export function DateRangePicker(input: DateRangePickerProps): React_2.JSX.Element;
 
 // @public
+export interface DateRangePickerMessages extends DateEntryMessages {
+    chooseStart: string;
+    endBeforeStart: string;
+    endChosen: string;
+    endDate: string;
+    notADateEnd: string;
+    notADateStart: string;
+    placeholder: string;
+    presetLabels: {
+        last7Days: string;
+        last30Days: string;
+        last90Days: string;
+        thisMonth: string;
+        lastMonth: string;
+    };
+    presets: string;
+    rangeChosen: PluralMessage;
+    startAfterEnd: string;
+    startChosen: string;
+    startDate: string;
+    typeTheDates: string;
+}
+
+// @public
 export interface DateRangePickerProps extends Omit<React_2.ComponentProps<'button'>, 'value' | 'defaultValue' | 'onChange' | 'children' | 'type' | 'name'> {
     defaultOpen?: boolean;
     defaultValue?: DateRange;
@@ -820,6 +1029,7 @@ export interface DateRangePickerProps extends Omit<React_2.ComponentProps<'butto
     isDateDisabled?: (date: Date) => boolean;
     locale?: DateLocale;
     max?: Date | null;
+    messages?: MessagesOverride<DateRangePickerMessages>;
     min?: Date | null;
     name?: string;
     onOpenChange?: (open: boolean) => void;
@@ -850,9 +1060,7 @@ export function DateTimePicker(input: DateTimePickerProps): React_2.JSX.Element;
 
 // @public
 export interface DateTimePickerMessages extends TimePickerMessages {
-    // (undocumented)
     date: string;
-    // (undocumented)
     time: string;
 }
 
@@ -866,7 +1074,7 @@ export interface DateTimePickerProps extends Omit<React_2.ComponentProps<'div'>,
     isDateDisabled?: (date: Date) => boolean;
     locale?: DateLocale;
     max?: Date | null;
-    messages?: Partial<DateTimePickerMessages>;
+    messages?: MessagesOverride<DateTimePickerMessages>;
     min?: Date | null;
     minuteStep?: number;
     name?: string;
@@ -880,17 +1088,20 @@ export interface DateTimePickerProps extends Omit<React_2.ComponentProps<'div'>,
     weekStartsOn?: number;
 }
 
-// @public (undocumented)
-export const defaultFileUploadMessages: FileUploadMessages;
+// @public @deprecated
+export const defaultFileUploadMessages: FileUploadMessageFunctions;
 
-// @public
+// @public (undocumented)
+export const defaultMessages: MolaMessages;
+
+// @public (undocumented)
 export const defaultRangePresets: DateRangePreset[];
 
 // @public
 export function describeAccept(accept: string | undefined, locale?: Intl.LocalesArgument): string | null;
 
 // @public
-export function describeHotkey(keys: string, platform: HotkeyPlatform): string;
+export function describeHotkey(keys: string, platform: HotkeyPlatform, words?: HotkeysMessages): string;
 
 // @public
 export interface DescriptionItem {
@@ -934,6 +1145,7 @@ export interface DialogContentProps extends Omit<Dialog_2.Popup.Props, 'classNam
     description?: React_2.ReactNode;
     footer?: React_2.ReactNode;
     hideClose?: boolean;
+    messages?: MessagesOverride<DialogMessages>;
     title: React_2.ReactNode;
 }
 
@@ -941,6 +1153,11 @@ export interface DialogContentProps extends Omit<Dialog_2.Popup.Props, 'classNam
 export const dialogContentVariants: (props?: ({
     size?: "sm" | "md" | "lg" | null | undefined;
 } & ClassProp) | undefined) => string;
+
+// @public
+export interface DialogMessages {
+    close: string;
+}
 
 // @public (undocumented)
 export function DialogTrigger(props: Dialog_2.Trigger.Props): React_2.JSX.Element;
@@ -1032,8 +1249,14 @@ export interface DrawerContentProps extends Omit<Drawer_2.Popup.Props, 'classNam
     description?: React_2.ReactNode;
     footer?: React_2.ReactNode;
     hideClose?: boolean;
+    messages?: MessagesOverride<DrawerMessages>;
     size?: 'sm' | 'md' | 'lg';
     title: React_2.ReactNode;
+}
+
+// @public
+export interface DrawerMessages {
+    close: string;
 }
 
 // @public (undocumented)
@@ -1083,10 +1306,19 @@ export interface FieldChange {
 // @public
 export function FieldChanges(input: FieldChangesProps): React_2.JSX.Element;
 
+// @public
+export interface FieldChangesMessages {
+    after: string;
+    before: string;
+    fieldsChanged: PluralMessage;
+    notSet: string;
+}
+
 // @public (undocumented)
 export interface FieldChangesProps extends Omit<React_2.ComponentProps<'section'>, 'children' | 'title'> {
     changes: readonly FieldChange[];
     headingLevel?: 3 | 4 | 5;
+    messages?: MessagesOverride<FieldChangesMessages>;
     title: React_2.ReactNode;
 }
 
@@ -1147,6 +1379,16 @@ export type FileChangeKind = 'added' | 'modified' | 'deleted' | 'renamed';
 // @public
 export function FileDiff(input: FileDiffProps): React_2.JSX.Element;
 
+// @public
+export interface FileDiffMessages {
+    added: string;
+    kinds: Record<FileChangeKind, string>;
+    noChanges: string;
+    removed: string;
+    renamedOnly: string;
+    renamedTo: string;
+}
+
 // @public (undocumented)
 export interface FileDiffProps extends Omit<React_2.ComponentProps<'section'>, 'children'> {
     defaultCollapsed?: boolean;
@@ -1155,6 +1397,7 @@ export interface FileDiffProps extends Omit<React_2.ComponentProps<'section'>, '
     hunks?: readonly (DiffHunk | DiffHunkInput)[];
     kind?: FileChangeKind;
     layout?: 'unified' | 'split';
+    messages?: MessagesOverride<FileDiffMessages>;
     path: string;
     previousPath?: string;
 }
@@ -1189,8 +1432,8 @@ export interface FileUploadItem {
     type?: string;
 }
 
-// @public (undocumented)
-export interface FileUploadMessages {
+// @public @deprecated
+export interface FileUploadMessageFunctions {
     added: (accepted: number, rejected: number) => string;
     // (undocumented)
     browse: (multiple: boolean) => string;
@@ -1216,6 +1459,45 @@ export interface FileUploadMessages {
     status: Record<FileUploadStatus, string>;
 }
 
+// @public @deprecated
+export type FileUploadMessages = FileUploadMessageFunctions;
+
+// @public
+export interface FileUploadMessageTemplates {
+    added: PluralMessage;
+    atMost: PluralMessage;
+    browse: {
+        single: string;
+        multiple: string;
+    };
+    dropToAdd: PluralMessage;
+    dropToAddUnknown: string;
+    failedToUpload: string;
+    list: string;
+    notAdded: PluralMessage;
+    prompt: {
+        single: string;
+        multiple: string;
+    };
+    rejectCount: PluralMessage;
+    rejectSize: string;
+    rejectType: string;
+    remove: string;
+    removed: string;
+    retry: string;
+    retryShort: string;
+    status: {
+        attached: string;
+        queued: string;
+        uploading: string;
+        done: string;
+        failed: string;
+    };
+    uploaded: string;
+    upTo: string;
+    upToEach: string;
+}
+
 // @public (undocumented)
 export interface FileUploadProps extends Omit<React_2.ComponentProps<'div'>, 'children' | 'onChange' | 'defaultValue' | 'id' | 'aria-label' | 'aria-describedby' | 'aria-invalid'> {
     'aria-describedby'?: string;
@@ -1229,7 +1511,9 @@ export interface FileUploadProps extends Omit<React_2.ComponentProps<'div'>, 'ch
     maxConcurrent?: number;
     maxFiles?: number;
     maxSize?: number;
-    messages?: Partial<FileUploadMessages>;
+    messages?: {
+        [K in keyof FileUploadMessageTemplates | keyof FileUploadMessageFunctions]?: (K extends keyof FileUploadMessageTemplates ? MessagesOverride<FileUploadMessageTemplates>[K] : never) | (K extends keyof FileUploadMessageFunctions ? FileUploadMessageFunctions[K] : never);
+    };
     multiple?: boolean;
     name?: string;
     onFilesChange?: (files: FileUploadItem[]) => void;
@@ -1274,21 +1558,30 @@ export function formatDuration(ms: number): string;
 export function formatFileSize(bytes: number, locale?: Intl.LocalesArgument): string;
 
 // @public
-export function formatHotkey(keys: string, platform: HotkeyPlatform): string[][];
+export function formatHotkey(keys: string, platform: HotkeyPlatform, words?: HotkeysMessages): string[][];
+
+// @public
+export function formatMessage(template: string, values?: Record<string, string | number>): string;
 
 // @public
 export function formatRelativeTime(date: Date | number | string, now: Date | number, input?: Pick<RelativeTimeProps, 'locale' | 'format' | 'numeric'>): string;
 
 // @public
-export function formatRunErrorDetails(input: Pick<RunErrorProps, 'kind' | 'step' | 'stepNumber' | 'stepCount' | 'tool' | 'error' | 'runId' | 'at'>): string;
+export function formatRunErrorDetails(input: Pick<RunErrorProps, 'kind' | 'step' | 'stepNumber' | 'stepCount' | 'tool' | 'error' | 'runId' | 'at'>, messages?: RunErrorMessages): string;
 
 // @public (undocumented)
 export function FormErrorSummary(input: FormErrorSummaryProps): React_2.JSX.Element | null;
 
 // @public
+export interface FormErrorSummaryMessages {
+    title: PluralMessage;
+}
+
+// @public
 export interface FormErrorSummaryProps extends Omit<React_2.ComponentProps<'div'>, 'title' | 'children'> {
     description?: React_2.ReactNode;
     headingLevel?: 2 | 3 | 4;
+    messages?: MessagesOverride<FormErrorSummaryMessages>;
     title?: React_2.ReactNode | ((count: number) => React_2.ReactNode);
 }
 
@@ -1344,6 +1637,19 @@ export const headingVariants: (props?: ({
 
 // @public
 export type HotkeyPlatform = 'apple' | 'other';
+
+// @public
+export interface HotkeysMessages {
+    appleGlyphs: Record<'mod' | 'meta' | 'ctrl' | 'alt' | 'shift', string>;
+    appleWords: Record<'mod' | 'meta' | 'ctrl' | 'alt' | 'shift', string>;
+    general: string;
+    keyGlyphs: Record<string, string>;
+    keyWords: Record<string, string>;
+    otherGlyphs: Record<'mod' | 'meta' | 'ctrl' | 'alt' | 'shift', string>;
+    otherWords: Record<'mod' | 'meta' | 'ctrl' | 'alt' | 'shift', string>;
+    then: string;
+    thenShort: string;
+}
 
 // @public
 export function HotkeysProvider(input: HotkeysProviderProps): React_2.JSX.Element;
@@ -1437,13 +1743,54 @@ export interface KbdChordProps extends React_2.ComponentProps<'kbd'> {
 export function Label(input: LabelProps): React_2.JSX.Element;
 
 // @public
+export interface LabelMessages {
+    optional: string;
+}
+
+// @public
 export interface LabelProps extends React_2.ComponentProps<'label'> {
+    messages?: MessagesOverride<LabelMessages>;
     optional?: boolean;
     required?: boolean;
 }
 
 // @public
 export function Lead(input: React_2.ComponentProps<'p'>): React_2.JSX.Element;
+
+// @public
+export function Link(input: LinkProps): React_2.ReactElement<unknown, string | React_2.JSXElementConstructor<any>>;
+
+// @public
+export function LinkButton(input: LinkButtonProps): React_2.ReactElement<unknown, string | React_2.JSXElementConstructor<any>>;
+
+// @public (undocumented)
+export interface LinkButtonProps extends Omit<useRender.ComponentProps<'a'>, 'className'>, Pick<Variants<typeof buttonVariants>, 'size'>, LinkExternalProps {
+    className?: string;
+    icon?: React_2.ReactNode;
+    variant?: 'primary' | 'secondary' | 'ghost';
+    withArrow?: boolean;
+}
+
+// @public
+export interface LinkExternalProps {
+    external?: boolean;
+    messages?: MessagesOverride<LinkMessages>;
+}
+
+// @public
+export interface LinkMessages {
+    newTab: string;
+}
+
+// @public (undocumented)
+export interface LinkProps extends Omit<useRender.ComponentProps<'a'>, 'className'>, Variants<typeof linkVariants>, LinkExternalProps {
+    className?: string;
+}
+
+// @public
+export const linkVariants: (props?: ({
+    variant?: "inline" | "standalone" | null | undefined;
+} & ClassProp) | undefined) => string;
 
 // @public
 export function Listbox<V extends string = string>(props: ListboxProps<V>): React_2.JSX.Element;
@@ -1491,11 +1838,18 @@ export interface ListboxSingleProps<V extends string = string> extends ListboxCo
 // @public
 export function Markdown(input: MarkdownProps): React_2.JSX.Element;
 
+// @public
+export interface MarkdownMessages {
+    done: string;
+    error: string;
+}
+
 // @public (undocumented)
 export interface MarkdownProps extends Omit<React_2.ComponentProps<'div'>, 'children'> {
     doneAnnouncement?: string;
     errorAnnouncement?: string;
     headingLevel?: 2 | 3 | 4;
+    messages?: MessagesOverride<MarkdownMessages>;
     renderCitation?: (n: number) => React_2.ReactNode;
     status?: StreamStatus;
     text: string;
@@ -1588,12 +1942,26 @@ export function MenuTrigger(props: Menu_2.Trigger.Props): React_2.JSX.Element;
 // @public
 export function Message(input: MessageProps): React_2.JSX.Element;
 
+// @public
+export interface MessageMessages {
+    badResponse: string;
+    copied: string;
+    copiedAnnouncement: string;
+    copy: string;
+    goodResponse: string;
+    regenerate: string;
+    retry: string;
+    roles: Record<MessageRole, string>;
+    stopped: string;
+}
+
 // @public (undocumented)
 export interface MessageProps extends Omit<React_2.ComponentProps<'article'>, 'role'> {
     author?: string;
     copyText?: string;
     error?: string;
     feedback?: 'up' | 'down';
+    messages?: MessagesOverride<MessageMessages>;
     model?: string;
     onFeedback?: (value: 'up' | 'down') => void;
     onRetry?: () => void;
@@ -1605,6 +1973,22 @@ export interface MessageProps extends Omit<React_2.ComponentProps<'article'>, 'r
 
 // @public (undocumented)
 export type MessageRole = 'user' | 'assistant' | 'system' | 'tool';
+
+// @public
+export type MessagesOverride<T> = {
+    [K in keyof T]?: T[K] extends string ? string : T[K] extends PluralMessage ? PluralMessage : MessagesOverride<T[K]>;
+};
+
+// @public
+export function MessagesProvider(input: MessagesProviderProps): React_2.JSX.Element;
+
+// @public (undocumented)
+export interface MessagesProviderProps {
+    // (undocumented)
+    children?: React_2.ReactNode;
+    locale?: string;
+    messages?: MessagesOverride<MolaMessages>;
+}
 
 // @public
 export function Meta(input: React_2.ComponentProps<'p'>): React_2.JSX.Element;
@@ -1637,6 +2021,128 @@ export function middleTruncate(text: string, max?: number): string;
 
 // @public
 export function mixOklab(a: RGB, pct: number, b: RGB): RGB;
+
+// @public (undocumented)
+export interface MolaMessages {
+    // (undocumented)
+    agentRun: AgentRunMessages;
+    // (undocumented)
+    alertDialog: AlertDialogMessages;
+    // (undocumented)
+    appShell: AppShellMessages;
+    // (undocumented)
+    attachmentChip: AttachmentChipMessages;
+    // (undocumented)
+    autocomplete: AutocompleteMessages;
+    // (undocumented)
+    avatarGroup: AvatarGroupMessages;
+    // (undocumented)
+    banner: BannerMessages;
+    // (undocumented)
+    breadcrumb: BreadcrumbMessages;
+    // (undocumented)
+    calendar: CalendarMessages;
+    // (undocumented)
+    callout: CalloutMessages;
+    // (undocumented)
+    changeCount: ChangeCountMessages;
+    // (undocumented)
+    changeReview: ChangeReviewMessages;
+    // (undocumented)
+    codeBlock: CodeBlockMessages;
+    // (undocumented)
+    combobox: ComboboxMessages;
+    // (undocumented)
+    commandPalette: CommandPaletteMessages;
+    // (undocumented)
+    confidence: ConfidenceMessages;
+    // (undocumented)
+    dataTable: DataTableMessages;
+    // (undocumented)
+    datePicker: DatePickerMessages;
+    // (undocumented)
+    dateRangePicker: DateRangePickerMessages;
+    // (undocumented)
+    dateTimePicker: DateTimePickerMessages;
+    // (undocumented)
+    dialog: DialogMessages;
+    // (undocumented)
+    drawer: DrawerMessages;
+    // (undocumented)
+    fieldChanges: FieldChangesMessages;
+    // (undocumented)
+    fileDiff: FileDiffMessages;
+    // (undocumented)
+    fileUpload: FileUploadMessageTemplates;
+    // (undocumented)
+    formErrorSummary: FormErrorSummaryMessages;
+    // (undocumented)
+    hotkeys: HotkeysMessages;
+    // (undocumented)
+    label: LabelMessages;
+    // (undocumented)
+    link: LinkMessages;
+    // (undocumented)
+    markdown: MarkdownMessages;
+    // (undocumented)
+    message: MessageMessages;
+    // (undocumented)
+    notifications: NotificationsMessages;
+    // (undocumented)
+    numberInput: NumberInputMessages;
+    // (undocumented)
+    pagination: PaginationMessages;
+    // (undocumented)
+    partialOutput: PartialOutputMessages;
+    // (undocumented)
+    placeholder: PlaceholderMessages;
+    // (undocumented)
+    promptInput: PromptInputMessages;
+    // (undocumented)
+    reasoning: ReasoningMessages;
+    // (undocumented)
+    recommendationBadge: RecommendationBadgeMessages;
+    // (undocumented)
+    runError: RunErrorMessages;
+    // (undocumented)
+    runStatus: RunStatusMessages;
+    // (undocumented)
+    searchInput: SearchInputMessages;
+    // (undocumented)
+    select: SelectMessages;
+    // (undocumented)
+    shortcutsDialog: ShortcutsDialogMessages;
+    // (undocumented)
+    sideBySideDiff: SideBySideDiffMessages;
+    // (undocumented)
+    sources: SourcesMessages;
+    // (undocumented)
+    stat: StatMessages;
+    // (undocumented)
+    stepper: StepperMessages;
+    // (undocumented)
+    streamingText: StreamingTextMessages;
+    // (undocumented)
+    table: TableMessages;
+    // (undocumented)
+    tagGroup: TagGroupMessages;
+    // (undocumented)
+    thread: ThreadMessages;
+    // (undocumented)
+    timePicker: TimePickerMessages;
+    // (undocumented)
+    toast: ToastMessages;
+    // (undocumented)
+    tokenUsage: TokenUsageMessages;
+    // (undocumented)
+    toolbarOverflow: ToolbarOverflowMessages;
+    // (undocumented)
+    toolCall: ToolCallMessages;
+    // (undocumented)
+    toolCallGroup: ToolCallGroupMessages;
+    // (undocumented)
+    uncertaintyNote: UncertaintyNoteMessages;
+}
 
 // @public
 export function NavItem(input: NavItemProps): React_2.JSX.Element;
@@ -1698,8 +2204,23 @@ export function NotificationList(input: NotificationListProps): React_2.JSX.Elem
 export interface NotificationListProps extends Omit<React_2.ComponentProps<'div'>, 'children'> {
     empty?: React_2.ReactNode;
     label?: string;
+    messages?: MessagesOverride<NotificationsMessages>;
     notifications: NotificationItem[];
     onMarkRead?: (id: string) => void;
+}
+
+// @public
+export interface NotificationsMessages {
+    bellUnread: PluralMessage;
+    danger: string;
+    empty: string;
+    label: string;
+    markAllRead: string;
+    new: string;
+    overflow: string;
+    success: string;
+    unread: string;
+    warn: string;
 }
 
 // @public
@@ -1707,6 +2228,12 @@ export type NotificationTone = 'neutral' | 'info' | 'success' | 'warn' | 'danger
 
 // @public (undocumented)
 export function NumberInput(input: NumberInputProps): React_2.JSX.Element;
+
+// @public
+export interface NumberInputMessages {
+    decrease: string;
+    increase: string;
+}
 
 // @public
 export interface NumberInputProps extends Omit<React_2.ComponentProps<'input'>, 'value' | 'defaultValue' | 'onChange' | 'size' | 'children' | 'min' | 'max' | 'step' | 'type'> {
@@ -1720,6 +2247,7 @@ export interface NumberInputProps extends Omit<React_2.ComponentProps<'input'>, 
     largeStep?: number;
     locale?: Intl.LocalesArgument;
     max?: number;
+    messages?: MessagesOverride<NumberInputMessages>;
     min?: number;
     onValueChange?: (value: number | null) => void;
     onValueCommitted?: NumberField.Root.Props['onValueCommitted'];
@@ -1751,8 +2279,19 @@ export type PageRangeItem = number | 'ellipsis-start' | 'ellipsis-end';
 // @public (undocumented)
 export function Pagination(input: PaginationProps): React_2.JSX.Element;
 
+// @public
+export interface PaginationMessages {
+    label: string;
+    next: string;
+    page: string;
+    pageOf: string;
+    previous: string;
+    rangeOf: string;
+}
+
 // @public (undocumented)
 export interface PaginationProps extends Omit<React_2.ComponentProps<'nav'>, 'onChange'> {
+    messages?: MessagesOverride<PaginationMessages>;
     onPageChange: (page: number) => void;
     page: number;
     pageCount: number;
@@ -1781,8 +2320,8 @@ export type PanelTone = PanelLayer;
 // @public
 export const panelVariants: (props?: ({
     layer?: "ink" | "oro" | "rojo" | "anil" | "verde" | "cloth" | "pale" | "shade" | null | undefined;
-    edge?: "cut" | "none" | "band" | null | undefined;
-    padding?: "none" | "sm" | "md" | "lg" | null | undefined;
+    edge?: "none" | "cut" | "band" | null | undefined;
+    padding?: "sm" | "md" | "lg" | "none" | null | undefined;
     band?: "oro" | "rojo" | "anil" | "verde" | "cloth" | null | undefined;
 } & ClassProp) | undefined) => string;
 
@@ -1801,23 +2340,43 @@ export function parseUnifiedDiff(diff: string): DiffHunk[];
 // @public
 export function PartialOutput(input: PartialOutputProps): React_2.JSX.Element;
 
+// @public
+export interface PartialOutputMessages {
+    label: string;
+    note: string;
+}
+
 // @public (undocumented)
 export interface PartialOutputProps extends React_2.ComponentProps<'div'> {
+    messages?: MessagesOverride<PartialOutputMessages>;
     note?: React_2.ReactNode;
 }
 
 // @public
 export function Placeholder(input: PlaceholderProps): React_2.JSX.Element;
 
+// @public
+export interface PlaceholderMessages {
+    label: string;
+}
+
 // @public (undocumented)
 export interface PlaceholderProps extends React_2.ComponentProps<'div'> {
     alt: string;
     label?: string;
     layer?: 'shade' | 'deep';
+    messages?: MessagesOverride<PlaceholderMessages>;
     name: string;
     // @deprecated (undocumented)
     tone?: 'default' | 'deep';
 }
+
+// @public
+export type PluralMessage = {
+    [K in Intl.LDMLPluralRule]?: string;
+} & {
+    other: string;
+};
 
 // @public
 export const Popover: typeof Popover_2.Root;
@@ -1860,6 +2419,18 @@ export type ProgressSize = 'sm' | 'md' | 'lg';
 // @public
 export function PromptInput(input: PromptInputProps): React_2.JSX.Element;
 
+// @public
+export interface PromptInputMessages {
+    enterToSend: string;
+    estimate: string;
+    estimateSpoken: string;
+    modEnterToSend: string;
+    offline: string;
+    placeholder: string;
+    send: string;
+    stop: string;
+}
+
 // @public (undocumented)
 export interface PromptInputProps extends Omit<React_2.ComponentProps<'form'>, 'onSubmit' | 'onChange' | 'children'> {
     attachments?: React_2.ReactNode;
@@ -1867,6 +2438,7 @@ export interface PromptInputProps extends Omit<React_2.ComponentProps<'form'>, '
     disabled?: boolean;
     label: string;
     maxRows?: number;
+    messages?: MessagesOverride<PromptInputMessages>;
     onStop?: () => void;
     onSubmit: (value: string) => void;
     onValueChange?: (value: string) => void;
@@ -1922,11 +2494,20 @@ export interface RadioProps extends Omit<Radio_2.Root.Props, 'className'> {
 // @public
 export function Reasoning(input: ReasoningProps): React_2.JSX.Element;
 
+// @public
+export interface ReasoningMessages {
+    complete: string;
+    reasoning: string;
+    thinking: string;
+    thoughtFor: string;
+}
+
 // @public (undocumented)
 export interface ReasoningProps extends Omit<React_2.ComponentProps<'div'>, 'children'> {
     defaultOpen?: boolean;
     durationMs?: number;
     endedAt?: number | Date;
+    messages?: MessagesOverride<ReasoningMessages>;
     startedAt?: number | Date;
     status?: 'streaming' | 'done';
     text: string;
@@ -1938,8 +2519,21 @@ export const RECOMMENDATION_LABELS: Record<RecommendationLevel, string>;
 // @public (undocumented)
 export function RecommendationBadge(input: RecommendationBadgeProps): React_2.JSX.Element;
 
+// @public
+export interface RecommendationBadgeMessages {
+    // (undocumented)
+    detour: string;
+    // (undocumented)
+    essential: string;
+    // (undocumented)
+    highly: string;
+    // (undocumented)
+    time: string;
+}
+
 // @public (undocumented)
 export interface RecommendationBadgeProps extends React_2.ComponentProps<'span'>, Variants<typeof recommendationVariants> {
+    messages?: MessagesOverride<RecommendationBadgeMessages>;
 }
 
 // @public (undocumented)
@@ -1998,6 +2592,60 @@ export function RunError(input: RunErrorProps): React_2.JSX.Element;
 // @public
 export type RunErrorKind = 'failed' | 'rate_limited' | 'timed_out' | 'cancelled';
 
+// @public
+export interface RunErrorMessages {
+    cancelled: string;
+    canRetryAfterWait: string;
+    canRetryIn: string;
+    canRetryInTen: string;
+    canRetryNow: string;
+    copyDetails: string;
+    // (undocumented)
+    detailsAt: string;
+    detailsCopied: string;
+    // (undocumented)
+    detailsError: string;
+    // (undocumented)
+    detailsRun: string;
+    detailsStatus: string;
+    // (undocumented)
+    detailsStep: string;
+    detailsStepOf: string;
+    // (undocumented)
+    detailsTool: string;
+    failed: string;
+    failedTool: string;
+    headlines: {
+        failed: string;
+        rate_limited: string;
+        timed_out: string;
+        cancelled: string;
+    };
+    kinds: {
+        failed: string;
+        rate_limited: string;
+        timed_out: string;
+        cancelled: string;
+    };
+    minutes: PluralMessage;
+    minutesAndSeconds: string;
+    place: string;
+    rateLimited: string;
+    retryFromStep: string;
+    retryFromThisStep: string;
+    retryingAfterWait: string;
+    retryingIn: string;
+    retryingInTen: string;
+    retryingNow: string;
+    retryRun: string;
+    seconds: PluralMessage;
+    step: string;
+    stepOf: string;
+    stoppedAt: string;
+    timedOut: string;
+    timedOutTool: string;
+}
+
 // @public (undocumented)
 export interface RunErrorProps extends Omit<React_2.ComponentProps<'div'>, 'children' | 'title'> {
     at?: number | Date;
@@ -2006,6 +2654,7 @@ export interface RunErrorProps extends Omit<React_2.ComponentProps<'div'>, 'chil
     error?: string;
     kind?: RunErrorKind;
     message?: React_2.ReactNode;
+    messages?: MessagesOverride<RunErrorMessages>;
     onRetry?: () => void;
     onRetryFromStep?: () => void;
     retryAt?: number | Date;
@@ -2027,11 +2676,26 @@ export interface RunStatusGlyphProps extends Omit<React_2.ComponentProps<'span'>
     status: RunStatusValue;
 }
 
+// @public
+export interface RunStatusMessages {
+    statuses: {
+        queued: string;
+        running: string;
+        streaming: string;
+        waiting: string;
+        succeeded: string;
+        failed: string;
+        cancelled: string;
+        timed_out: string;
+    };
+}
+
 // @public (undocumented)
 export interface RunStatusProps extends Omit<React_2.ComponentProps<'span'>, 'children'> {
     durationMs?: number;
     endedAt?: number | Date;
     label?: string;
+    messages?: MessagesOverride<RunStatusMessages>;
     register?: 'label' | 'inline';
     startedAt?: number | Date;
     status: RunStatusValue;
@@ -2043,9 +2707,16 @@ export type RunStatusValue = 'queued' | 'running' | 'streaming' | 'waiting' | 's
 // @public
 export function SearchInput(input: SearchInputProps): React_2.JSX.Element;
 
+// @public
+export interface SearchInputMessages {
+    clear: string;
+    placeholder: string;
+}
+
 // @public (undocumented)
 export interface SearchInputProps extends Omit<InputProps, 'leading' | 'trailing' | 'type'> {
     clearLabel?: string;
+    messages?: MessagesOverride<SearchInputMessages>;
     onClear?: () => void;
     shortcut?: string;
 }
@@ -2137,6 +2808,11 @@ export interface SelectItemProps extends Select_2.Item.Props {
     description?: React_2.ReactNode;
 }
 
+// @public
+export interface SelectMessages {
+    placeholder: string;
+}
+
 // @public (undocumented)
 export interface SelectOption<V extends string = string> {
     // (undocumented)
@@ -2163,6 +2839,7 @@ export interface SelectProps<V extends string = string> extends Omit<SelectTrigg
     disabled?: boolean;
     items: SelectOption<V>[] | SelectOptionGroup<V>[];
     label?: React_2.ReactNode;
+    messages?: MessagesOverride<SelectMessages>;
     name?: string;
     onValueChange?: (value: V | null) => void;
     placeholder?: React_2.ReactNode;
@@ -2199,9 +2876,17 @@ export function SelectValue(props: Select_2.Value.Props): React_2.JSX.Element;
 export function ShortcutsDialog(input: ShortcutsDialogProps): React_2.JSX.Element;
 
 // @public
-export interface ShortcutsDialogProps extends Omit<DialogContentProps, 'title' | 'children'> {
+export interface ShortcutsDialogMessages {
+    empty: string;
+    show: string;
+    title: string;
+}
+
+// @public
+export interface ShortcutsDialogProps extends Omit<DialogContentProps, 'title' | 'children' | 'messages'> {
     defaultOpen?: boolean;
     hotkey?: string | false;
+    messages?: MessagesOverride<ShortcutsDialogMessages>;
     onOpenChange?: (open: boolean) => void;
     open?: boolean;
     title?: React_2.ReactNode;
@@ -2237,6 +2922,15 @@ export type SidebarToggleProps = Omit<React_2.ComponentProps<'span'>, 'children'
 // @public
 export function SideBySideDiff(input: SideBySideDiffProps): React_2.JSX.Element;
 
+// @public
+export interface SideBySideDiffMessages {
+    added: string;
+    after: string;
+    before: string;
+    noChanges: string;
+    removed: string;
+}
+
 // @public (undocumented)
 export interface SideBySideDiffProps extends Omit<React_2.ComponentProps<'section'>, 'children' | 'title'> {
     after?: string;
@@ -2247,6 +2941,7 @@ export interface SideBySideDiffProps extends Omit<React_2.ComponentProps<'sectio
     diff?: string;
     headingLevel?: 3 | 4 | 5;
     hunks?: readonly (DiffHunk | DiffHunkInput)[];
+    messages?: MessagesOverride<SideBySideDiffMessages>;
     title: React_2.ReactNode;
 }
 
@@ -2279,7 +2974,7 @@ export interface SkeletonTextProps extends React_2.ComponentProps<'div'> {
 // @public (undocumented)
 export const skeletonVariants: (props?: ({
     shape?: "line" | "text" | "block" | "avatar" | null | undefined;
-    size?: "xs" | "sm" | "md" | "lg" | "xl" | null | undefined;
+    size?: "sm" | "md" | "lg" | "xs" | "xl" | null | undefined;
 } & ClassProp) | undefined) => string;
 
 // @public (undocumented)
@@ -2316,8 +3011,18 @@ export function SourceList(input: SourceListProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface SourceListProps extends Omit<React_2.ComponentProps<'ol'>, 'children'> {
+    messages?: MessagesOverride<SourcesMessages>;
     sources: readonly Source[];
     timeZone?: string;
+}
+
+// @public
+export interface SourcesMessages {
+    citation: string;
+    citationNamed: string;
+    openSource: string;
+    openSourceDetail: string;
+    retrieved: string;
 }
 
 // @public (undocumented)
@@ -2341,8 +3046,8 @@ export interface StackProps extends React_2.ComponentProps<'div'>, Variants<type
 export const stackVariants: (props?: ({
     direction?: "row" | "column" | null | undefined;
     gap?: Gap | null | undefined;
-    align?: "center" | "start" | "end" | "stretch" | "baseline" | null | undefined;
-    justify?: "center" | "start" | "end" | "between" | null | undefined;
+    align?: "center" | "end" | "start" | "stretch" | "baseline" | null | undefined;
+    justify?: "center" | "end" | "start" | "between" | null | undefined;
     wrap?: boolean | null | undefined;
 } & ClassProp) | undefined) => string;
 
@@ -2366,11 +3071,21 @@ export interface StatGroupProps extends React_2.ComponentProps<'dl'> {
     columns?: 2 | 3 | 4 | 5;
 }
 
+// @public
+export interface StatMessages {
+    down: string;
+    negative: string;
+    positive: string;
+    unchanged: string;
+    up: string;
+}
+
 // @public (undocumented)
 export interface StatProps extends Omit<React_2.ComponentProps<'div'>, 'children'> {
     delta?: StatDelta;
     hint?: React_2.ReactNode;
     label: React_2.ReactNode;
+    messages?: MessagesOverride<StatMessages>;
     trend?: number[];
     unit?: React_2.ReactNode;
     value: React_2.ReactNode;
@@ -2412,17 +3127,18 @@ export interface StepListProps extends Omit<React_2.ComponentProps<'ol'>, 'child
 // @public (undocumented)
 export function Stepper(input: StepperProps): React_2.JSX.Element | null;
 
-// @public (undocumented)
+// @public
 export interface StepperMessages {
-    // (undocumented)
     back: string;
-    // (undocumented)
     continue: string;
-    // (undocumented)
     finish: string;
-    // (undocumented)
-    states: Record<StepperStepState, string>;
-    stepOf: (position: number, total: number) => string;
+    states: {
+        upcoming: string;
+        current: string;
+        complete: string;
+        invalid: string;
+    };
+    stepOf: string;
 }
 
 // @public (undocumented)
@@ -2431,9 +3147,7 @@ export interface StepperProps extends Omit<React_2.ComponentProps<'div'>, 'child
     defaultStep?: string;
     headingLevel?: 2 | 3;
     label: string;
-    messages?: Partial<Omit<StepperMessages, 'states'>> & {
-        states?: Partial<StepperMessages['states']>;
-    };
+    messages?: MessagesOverride<StepperMessages>;
     onComplete?: () => void;
     onStepChange?: (step: string) => void;
     onStepSubmit?: (step: string, event: React_2.FormEvent<HTMLFormElement>) => boolean | void | Promise<boolean | void>;
@@ -2455,10 +3169,17 @@ export type StepperStepState = 'upcoming' | 'current' | 'complete' | 'invalid';
 // @public
 export function StreamingText(input: StreamingTextProps): React_2.JSX.Element;
 
+// @public
+export interface StreamingTextMessages {
+    done: string;
+    error: string;
+}
+
 // @public (undocumented)
 export interface StreamingTextProps extends Omit<React_2.ComponentProps<'div'>, 'children'> {
     doneAnnouncement?: string;
     errorAnnouncement?: string;
+    messages?: MessagesOverride<StreamingTextMessages>;
     renderCitation?: (n: number) => React_2.ReactNode;
     status?: StreamStatus;
     text: string;
@@ -2482,7 +3203,7 @@ export type SwatchTone = NonNullable<Variants<typeof swatchVariants>['tone']>;
 
 // @public
 export const swatchVariants: (props?: ({
-    tone?: "neutral" | "danger" | "success" | "warn" | "info" | "accent" | null | undefined;
+    tone?: "danger" | "warn" | "neutral" | "success" | "info" | "accent" | null | undefined;
     size?: "sm" | "md" | null | undefined;
     shape?: "round" | "square" | null | undefined;
 } & ClassProp) | undefined) => string;
@@ -2533,6 +3254,7 @@ export interface TableEmptyProps extends Omit<React_2.ComponentProps<'tr'>, 'tit
     actions?: React_2.ReactNode;
     colSpan: number;
     kind?: EmptyStateProps['kind'];
+    messages?: MessagesOverride<TableMessages>;
     title?: React_2.ReactNode;
     // @deprecated (undocumented)
     variant?: EmptyStateProps['kind'];
@@ -2553,6 +3275,11 @@ export interface TableHeadProps extends React_2.ComponentProps<'th'> {
     onSort?: () => void;
     resizer?: React_2.ReactNode;
     sort?: TableSortDirection;
+}
+
+// @public
+export interface TableMessages {
+    empty: string;
 }
 
 // @public (undocumented)
@@ -2631,6 +3358,7 @@ export interface TagGroupBaseProps extends Omit<React_2.ComponentProps<'div'>, '
     disabled?: boolean;
     empty?: React_2.ReactNode;
     items: TagGroupItem[];
+    messages?: MessagesOverride<TagGroupMessages>;
     onRemove?: (value: string) => void;
     onValueChange?: (value: string[]) => void;
     removeLabel?: (label: string) => string;
@@ -2644,6 +3372,12 @@ export interface TagGroupItem {
     label: string;
     // (undocumented)
     value: string;
+}
+
+// @public
+export interface TagGroupMessages {
+    empty: string;
+    remove: string;
 }
 
 // @public
@@ -2677,10 +3411,10 @@ export interface TextProps extends Omit<React_2.HTMLAttributes<HTMLElement>, 'co
 
 // @public
 export const textVariants: (props?: ({
-    size?: "base" | "xs" | "sm" | "md" | "lg" | null | undefined;
-    variant?: "default" | "secondary" | "muted" | null | undefined;
-    tone?: 2 | "default" | "muted" | "neutral" | "danger" | "success" | null | undefined;
-    weight?: "regular" | "medium" | "semibold" | null | undefined;
+    size?: "sm" | "md" | "lg" | "base" | "xs" | null | undefined;
+    variant?: "secondary" | "default" | "muted" | null | undefined;
+    tone?: 2 | "danger" | "default" | "muted" | "neutral" | "success" | null | undefined;
+    weight?: "medium" | "regular" | "semibold" | null | undefined;
     tabular?: boolean | null | undefined;
     truncate?: boolean | null | undefined;
 } & ClassProp) | undefined) => string;
@@ -2688,9 +3422,16 @@ export const textVariants: (props?: ({
 // @public
 export function Thread(input: ThreadProps): React_2.JSX.Element;
 
+// @public
+export interface ThreadMessages {
+    jumpToLatest: string;
+    transcript: string;
+}
+
 // @public (undocumented)
 export interface ThreadProps extends React_2.ComponentProps<'section'> {
     label: string;
+    messages?: MessagesOverride<ThreadMessages>;
     stickThreshold?: number;
 }
 
@@ -2741,17 +3482,13 @@ export function TimePicker(input: TimePickerProps): React_2.JSX.Element;
 
 // @public
 export interface TimePickerMessages {
-    // (undocumented)
     dayPeriod: string;
     empty: string;
-    // (undocumented)
     hour: string;
-    // (undocumented)
     incomplete: string;
-    // (undocumented)
     minute: string;
-    tooEarly: (formatted: string) => string;
-    tooLate: (formatted: string) => string;
+    tooEarly: string;
+    tooLate: string;
 }
 
 // @public (undocumented)
@@ -2762,7 +3499,7 @@ export interface TimePickerProps extends Omit<React_2.ComponentProps<'div'>, 'de
     id?: string;
     locale?: DateLocale;
     max?: TimeString | null;
-    messages?: Partial<TimePickerMessages>;
+    messages?: MessagesOverride<TimePickerMessages>;
     min?: TimeString | null;
     minuteStep?: number;
     name?: string;
@@ -2778,6 +3515,16 @@ export type TimeSegment = 'hour' | 'minute' | 'dayPeriod';
 
 // @public
 export type TimeString = string;
+
+// @public
+export interface ToastMessages {
+    danger: string;
+    dismiss: string;
+    focusShortcut: string;
+    running: string;
+    success: string;
+    warn: string;
+}
 
 // @public (undocumented)
 export interface ToastOptions {
@@ -2804,6 +3551,7 @@ export interface ToastProviderProps {
     // (undocumented)
     children: React_2.ReactNode;
     limit?: number;
+    messages?: MessagesOverride<ToastMessages>;
     timeout?: number;
 }
 
@@ -2819,12 +3567,30 @@ export function tokenizeJson(source: string): JsonToken[];
 // @public
 export function TokenUsage(input: TokenUsageProps): React_2.JSX.Element;
 
+// @public
+export interface TokenUsageMessages {
+    atLimit: string;
+    cached: string;
+    context: string;
+    cost: string;
+    inlineInput: string;
+    inlineOutput: string;
+    input: string;
+    meterLabel: string;
+    meterValue: string;
+    meterValueAt: string;
+    meterValueNear: string;
+    nearLimit: string;
+    output: string;
+}
+
 // @public (undocumented)
 export interface TokenUsageProps extends Omit<React_2.ComponentProps<'div'>, 'children'> {
     cached?: number;
     contextWindow?: number;
     costUsd?: number;
     input: number;
+    messages?: MessagesOverride<TokenUsageMessages>;
     output: number;
     variant?: 'full' | 'inline';
 }
@@ -2874,10 +3640,17 @@ export interface ToolbarOverflowItem {
     tone?: 'neutral' | 'danger' | 'default';
 }
 
+// @public
+export interface ToolbarOverflowMessages {
+    more: string;
+    moreActions: string;
+}
+
 // @public (undocumented)
 export interface ToolbarOverflowProps extends Omit<React_2.ComponentProps<'div'>, 'children'> {
     align?: 'start' | 'end';
     items: ToolbarOverflowItem[];
+    messages?: MessagesOverride<ToolbarOverflowMessages>;
     moreLabel?: string;
 }
 
@@ -2941,10 +3714,29 @@ export interface ToolCallApproval {
 // @public
 export function ToolCallGroup(input: ToolCallGroupProps): React_2.JSX.Element;
 
+// @public
+export interface ToolCallGroupMessages {
+    label: PluralMessage;
+}
+
 // @public (undocumented)
 export interface ToolCallGroupProps extends React_2.ComponentProps<'div'> {
     count: number;
     label?: string;
+    messages?: MessagesOverride<ToolCallGroupMessages>;
+}
+
+// @public
+export interface ToolCallMessages {
+    approve: string;
+    arguments: string;
+    deny: string;
+    error: string;
+    failed: string;
+    needsApproval: string;
+    result: string;
+    retry: string;
+    timedOut: string;
 }
 
 // @public (undocumented)
@@ -2955,6 +3747,7 @@ export interface ToolCallProps extends Omit<React_2.ComponentProps<'div'>, 'chil
     durationMs?: number;
     endedAt?: number | Date;
     error?: string;
+    messages?: MessagesOverride<ToolCallMessages>;
     name: string;
     onOpenChange?: (open: boolean) => void;
     onRetry?: () => void;
@@ -3031,9 +3824,15 @@ export type TreeProps = TreeBaseProps & ({
 // @public
 export function UncertaintyNote(input: UncertaintyNoteProps): React_2.JSX.Element;
 
+// @public
+export interface UncertaintyNoteMessages {
+    title: string;
+}
+
 // @public (undocumented)
 export interface UncertaintyNoteProps extends React_2.ComponentProps<'aside'> {
     action?: React_2.ReactNode;
+    messages?: MessagesOverride<UncertaintyNoteMessages>;
     title?: string;
 }
 

@@ -75,6 +75,7 @@ Each story is a live example in Storybook.
 | `value` (required) | `ReactNode` |  | The figure itself, already formatted: "1,284", "97.8". Put the unit in `unit` rather than in the string. |
 | `delta` | `StatDelta` |  | The change since a reference period. State both which way it moved (`direction`, the glyph) and whether that is good (`sentiment`, the colour): up is not always good news. |
 | `hint` | `ReactNode` |  | A line of context under the figure. |
+| `messages` | `MessagesOverride<StatMessages>` |  | Words for translation: the change, read as one sentence to a screen reader. Keys left out come from `MessagesProvider`, then English. |
 | `trend` | `number[]` |  | The recent series, oldest first. Drawn in ink with the latest point cut out in the accent. |
 | `unit` | `ReactNode` |  | Set smaller beside the figure: "ms", "runs", "%". |
 
@@ -90,7 +91,7 @@ Tiles cut from one panel rather than four floating cards: one ink keyline around
 
 `className`, `ref`, `id` and the other DOM props go to `<dl data-slot="stat-group">`.
 
-Types: `SparklineProps`, `StatDelta`, `StatGroupProps`, `StatProps`
+Types: `StatMessages`, `SparklineProps`, `StatDelta`, `StatGroupProps`, `StatProps`
 
 ## Accessibility
 

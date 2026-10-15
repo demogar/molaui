@@ -5,7 +5,9 @@ import { cva } from 'class-variance-authority'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { type Variants } from '../../lib/variants'
+import { type AvatarGroupMessages, avatarGroupMessages } from './messages'
 
 /**
  * A person, or an agent, as a square of cut cloth.
@@ -126,6 +128,8 @@ export interface AvatarGroupProps extends React.ComponentProps<'div'> {
   max?: number
   /** Every tile's size, the "+n" tile's included; it overrides the size set on each child, so the row stays even. */
   size?: AvatarProps['size']
+  /** Words for translation: the "+n" tile's name. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<AvatarGroupMessages>
 }
 
 /**
@@ -134,7 +138,8 @@ export interface AvatarGroupProps extends React.ComponentProps<'div'> {
  * from the same layer. Without it, overlapping squares merge into one shape
  * and the count is unreadable.
  */
-export function AvatarGroup({ label, max = 4, size = 'md', className, children, ...props }: AvatarGroupProps) {
+export function AvatarGroup({ label, max = 4, size = 'md', messages, className, children, ...props }: AvatarGroupProps) {
+  const [t, f] = useMessages('avatarGroup', avatarGroupMessages, messages)
   const all = React.Children.toArray(children).filter(React.isValidElement)
   const shown = all.slice(0, max)
   const hidden = all.length - shown.length
@@ -158,7 +163,7 @@ export function AvatarGroup({ label, max = 4, size = 'md', className, children, 
         <span
           data-slot="avatar"
           role="img"
-          aria-label={`${hidden} more`}
+          aria-label={f.plural(t.more, hidden)}
           className={cn(avatarVariants({ size }), 'bg-cloth-shade font-semibold text-ink-2 tabular-nums')}
         >
           <span aria-hidden>+{hidden}</span>

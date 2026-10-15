@@ -4,8 +4,10 @@ import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
 import { deprecate } from '../../../lib/deprecate'
+import { type MessagesOverride, useMessages } from '../../../lib/messages'
 import { useScrollEdge } from '../../../lib/scroll-edge'
 
+import { type StreamingTextMessages, streamingTextMessages } from './messages'
 import { createBlockParser, type Block, type InlineRun } from './parse'
 import { useCompletionAnnouncement } from './use-completion-announcement'
 
@@ -37,6 +39,8 @@ export interface StreamingTextProps extends Omit<React.ComponentProps<'div'>, 'c
    * same values: a muted ink is a presentation, and `tone` is a status.
    */
   tone?: 'default' | 'muted'
+  /** Words for translation: the default done and error announcements. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<StreamingTextMessages>
 }
 
 /**
@@ -77,14 +81,16 @@ export interface StreamingTextProps extends Omit<React.ComponentProps<'div'>, 'c
 export function StreamingText({
   text,
   status = 'done',
-  doneAnnouncement = 'Response complete.',
-  errorAnnouncement = 'Response stopped with an error.',
+  doneAnnouncement,
+  errorAnnouncement,
   renderCitation,
   variant: variantProp,
   tone,
+  messages,
   className,
   ...props
 }: StreamingTextProps) {
+  const [t] = useMessages('streamingText', streamingTextMessages, messages)
   if (tone !== undefined) {
     deprecate('streaming-text-tone', { what: '<StreamingText tone>', instead: '<StreamingText variant>', removal: '1.0.0' })
   }
@@ -94,7 +100,7 @@ export function StreamingText({
   const blocks = React.useMemo(() => parse(text), [parse, text])
   const streaming = status === 'streaming'
 
-  const announcement = useCompletionAnnouncement(status, doneAnnouncement, errorAnnouncement)
+  const announcement = useCompletionAnnouncement(status, doneAnnouncement ?? t.done, errorAnnouncement ?? t.error)
 
   return (
     <div

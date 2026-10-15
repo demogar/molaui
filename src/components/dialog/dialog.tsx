@@ -7,11 +7,13 @@ import { X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { useControllable } from '../../lib/use-controllable'
 import { type Variants } from '../../lib/variants'
 import { slotUnlessRendered } from '../../lib/slot'
 import { Button, IconButton } from '../button'
 import { fieldControlClasses, fieldControlSizes } from '../field/field-control'
+import { type AlertDialogMessages, type DialogMessages, alertDialogMessages, dialogMessages } from './messages'
 
 /**
  * A modal is a panel cut out of the page and laid on top of it, so it is the
@@ -94,6 +96,8 @@ export interface DialogContentProps
   band?: DialogBand
   /** Hide the corner close button. Only when the footer carries an explicit way out. */
   hideClose?: boolean
+  /** Words for translation: the close button's name. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<DialogMessages>
 }
 
 export function DialogContent({
@@ -104,9 +108,11 @@ export function DialogContent({
   footer,
   band = 'oro',
   hideClose = false,
+  messages,
   children,
   ...props
 }: DialogContentProps) {
+  const [t] = useMessages('dialog', dialogMessages, messages)
   return (
     <DialogPrimitive.Portal>
       <DialogPrimitive.Backdrop className={cn(backdropClasses)} />
@@ -123,7 +129,7 @@ export function DialogContent({
             hideClose ? null : (
               <DialogPrimitive.Close
                 render={
-                  <IconButton label="Close" variant="ghost" size="sm">
+                  <IconButton label={t.close} variant="ghost" size="sm">
                     <X />
                   </IconButton>
                 }
@@ -210,7 +216,7 @@ export interface AlertDialogProps extends Omit<React.ComponentProps<'div'>, 'tit
   description: React.ReactNode
   /** The verb on the confirm button: "Delete run", never "OK". */
   confirmLabel: string
-  /** The safe answer's label, "Cancel" by default. It takes focus when the dialog opens, so a reflexive Enter cancels. */
+  /** The safe answer's label, "Cancel" (`messages.cancel`) by default. It takes focus when the dialog opens, so a reflexive Enter cancels. */
   cancelLabel?: string
   /**
    * May return a promise. While it is pending the confirm button shows its
@@ -243,6 +249,8 @@ export interface AlertDialogProps extends Omit<React.ComponentProps<'div'>, 'tit
    * list's heading. A function receives how the dialog was closed.
    */
   finalFocus?: AlertDialogPrimitive.Popup.Props['finalFocus']
+  /** Words for translation: the default cancel label and the confirmation field's label. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<AlertDialogMessages>
 }
 
 /**
@@ -282,15 +290,17 @@ export function AlertDialog({
   title,
   description,
   confirmLabel,
-  cancelLabel = 'Cancel',
+  cancelLabel,
   onConfirm,
   confirmationText,
   tone = 'danger',
   error,
   finalFocus,
+  messages,
   className,
   ...props
 }: AlertDialogProps) {
+  const [t, f] = useMessages('alertDialog', alertDialogMessages, messages)
   const [isOpen, setOpenState] = useControllable({ value: open, defaultValue: defaultOpen ?? false, onChange: onOpenChange })
   const [typed, setTyped] = React.useState('')
   const [pending, setPending] = React.useState(false)
@@ -355,7 +365,7 @@ export function AlertDialog({
                 <AlertDialogPrimitive.Close
                   ref={cancelRef}
                   disabled={pending}
-                  render={<Button variant="ghost">{cancelLabel}</Button>}
+                  render={<Button variant="ghost">{cancelLabel ?? t.cancel}</Button>}
                 />
                 <Button
                   variant={tone === 'danger' ? 'danger' : 'primary'}
@@ -377,7 +387,9 @@ export function AlertDialog({
                 }}
               >
                 <label htmlFor={inputId} className="mb-2 block text-sm text-ink-2">
-                  Type <code className="literal bg-ink-soft px-1 py-0.5 text-ink">{confirmationText}</code> to confirm.
+                  {f.nodes(t.typeToConfirm, {
+                    text: <code className="literal bg-ink-soft px-1 py-0.5 text-ink">{confirmationText}</code>,
+                  })}
                 </label>
                 <input
                   id={inputId}

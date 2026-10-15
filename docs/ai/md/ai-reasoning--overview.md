@@ -53,12 +53,13 @@ The model's thinking, behind a disclosure.
 | `defaultOpen` | `boolean` | `false` | Start with the reasoning shown. Closed by default, because reasoning is evidence for when the answer looks wrong, not the answer. |
 | `durationMs` | `number` |  | A known duration, when there are no timestamps. |
 | `endedAt` | `number \| Date` |  | When the thinking ended. Freezes the clock; omit while the model is still thinking. |
+| `messages` | `MessagesOverride<ReasoningMessages>` |  | Words for translation: the summary line and the announcement when it finishes. Keys left out come from `MessagesProvider`, then English. |
 | `startedAt` | `number \| Date` |  | When the thinking started. Gives the summary line its clock: live while streaming, "Thought for 12.4s" once done. |
 | `status` | `"streaming" \| "done"` | `done` | `streaming` while the model is still thinking. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="reasoning">`.
 
-Types: `ReasoningProps`
+Types: `ReasoningMessages`, `ReasoningProps`
 
 ## Accessibility
 

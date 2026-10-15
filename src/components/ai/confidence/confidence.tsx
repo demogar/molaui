@@ -1,16 +1,20 @@
+'use client'
+
 import { CircleHelp } from 'lucide-react'
 import type * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../../lib/messages'
 import { wrappingButtonSlot } from '../../button/wrapping-slot'
+import {
+  type ConfidenceMessages,
+  type UncertaintyNoteMessages,
+  confidenceMessages,
+  uncertaintyNoteMessages,
+} from './messages'
 
 export type ConfidenceLevel = 'high' | 'medium' | 'low'
 
-const WORD: Record<ConfidenceLevel, string> = {
-  high: 'High confidence',
-  medium: 'Medium confidence',
-  low: 'Low confidence',
-}
 const FILLED: Record<ConfidenceLevel, number> = { high: 3, medium: 2, low: 1 }
 const FILL: Record<ConfidenceLevel, string> = { high: 'bg-verde', medium: 'bg-oro', low: 'bg-danger' }
 
@@ -22,6 +26,8 @@ export interface ConfidenceProps extends Omit<React.ComponentProps<'span'>, 'chi
   level: ConfidenceLevel
   /** What the confidence rests on — "3 sources agree", "single source". */
   basis?: string
+  /** Words for translation: the word for each level. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<ConfidenceMessages>
 }
 
 /**
@@ -36,7 +42,8 @@ export interface ConfidenceProps extends Omit<React.ComponentProps<'span'>, 'chi
  * Three cut segments filled to the level, plus the word; the segments differ
  * in count, not only colour, so the meter reads in greyscale.
  */
-export function Confidence({ level, basis, className, ...props }: ConfidenceProps) {
+export function Confidence({ level, basis, messages, className, ...props }: ConfidenceProps) {
+  const [t] = useMessages('confidence', confidenceMessages, messages)
   return (
     <span data-slot="confidence" data-level={level} className={cn('inline-flex items-center gap-2 font-ui text-xs text-ink-2', className)} {...props}>
       <span aria-hidden className="inline-flex gap-[3px]">
@@ -44,17 +51,19 @@ export function Confidence({ level, basis, className, ...props }: ConfidenceProp
           <span key={i} className={cn('h-2.5 w-[7px] shadow-cut', i < FILLED[level] ? FILL[level] : 'bg-cloth-pale')} />
         ))}
       </span>
-      <span className="font-semibold text-ink">{WORD[level]}</span>
+      <span className="font-semibold text-ink">{t.levels[level]}</span>
       {basis ? <span className="text-ink-muted">· {basis}</span> : null}
     </span>
   )
 }
 
 export interface UncertaintyNoteProps extends React.ComponentProps<'aside'> {
-  /** The short claim — "Unverified figure". Defaults to "The model is unsure". */
+  /** The short claim — "Unverified figure". Defaults to "The model is unsure" (`messages.title`). */
   title?: string
   /** An action that resolves it — "Open the dashboard". */
   action?: React.ReactNode
+  /** Words for translation: the default title. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<UncertaintyNoteMessages>
 }
 
 /**
@@ -66,7 +75,9 @@ export interface UncertaintyNoteProps extends React.ComponentProps<'aside'> {
  * alarm teaches people to ignore it. The note says what to verify, and ideally
  * offers the action that verifies it.
  */
-export function UncertaintyNote({ title = 'The model is unsure', action, className, children, ...props }: UncertaintyNoteProps) {
+export function UncertaintyNote({ title: titleProp, action, messages, className, children, ...props }: UncertaintyNoteProps) {
+  const [t] = useMessages('uncertaintyNote', uncertaintyNoteMessages, messages)
+  const title = titleProp ?? t.title
   return (
     <aside
       data-slot="uncertainty-note"

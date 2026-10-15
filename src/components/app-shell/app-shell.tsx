@@ -5,8 +5,10 @@ import { Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { useControllable } from '../../lib/use-controllable'
 import { IconButton } from '../button'
+import { type AppShellMessages, appShellMessages } from './messages'
 
 /**
  * The frame an internal tool lives in: a bar across the top, navigation down
@@ -36,6 +38,8 @@ interface ShellState {
   setMobileOpen: (next: boolean) => void
   sidebarId: string
   mainId: string
+  /** AppShell's `messages`, so SidebarToggle, rendered inside the topbar, says the same words. */
+  messages: MessagesOverride<AppShellMessages> | undefined
 }
 
 const ShellContext = React.createContext<ShellState | null>(null)
@@ -83,6 +87,12 @@ export interface AppShellProps extends Omit<React.ComponentProps<'div'>, 'childr
    * between visits.
    */
   onSidebarCollapsedChange?: (collapsed: boolean) => void
+  /**
+   * Words for translation: the skip link, the phone sheet's heading and close
+   * button, and SidebarToggle's names, which read them from here. Keys left
+   * out come from `MessagesProvider`, then English.
+   */
+  messages?: MessagesOverride<AppShellMessages>
 }
 
 export function AppShell({
@@ -93,9 +103,11 @@ export function AppShell({
   sidebarCollapsed,
   defaultSidebarCollapsed = false,
   onSidebarCollapsedChange,
+  messages,
   className,
   ...props
 }: AppShellProps) {
+  const [t] = useMessages('appShell', appShellMessages, messages)
   const [collapsed, setCollapsed] = useControllable({
     value: sidebarCollapsed,
     defaultValue: defaultSidebarCollapsed,
@@ -110,6 +122,7 @@ export function AppShell({
     setMobileOpen,
     sidebarId: `${uid}-sidebar`,
     mainId: `${uid}-main`,
+    messages,
   }
 
   return (
@@ -122,7 +135,7 @@ export function AppShell({
         {/* In a landmark of its own, so it is not the one piece of the page
             outside every region — axe's `region` rule, and a screen reader's
             landmark list, both treat a stray link as lost content. */}
-        <nav aria-label="Skip links" className="contents">
+        <nav aria-label={t.skipLinks} className="contents">
           <a
             href={`#${shell.mainId}`}
             className={cn(
@@ -130,7 +143,7 @@ export function AppShell({
               'focus:not-sr-only focus:fixed focus:top-2 focus:inset-s-2',
             )}
           >
-            Skip to content
+            {t.skipToContent}
           </a>
         </nav>
         {banner}
@@ -181,10 +194,10 @@ export function AppShell({
                   up with the bar it slid over, and a visible close: Escape and a
                   backdrop tap are both invisible affordances on a phone. */}
               <div className="flex h-12 shrink-0 items-center justify-between pe-2 ps-5 cut-b">
-                <DialogPrimitive.Title className="m-0 rotulo text-ink-2">Navigation</DialogPrimitive.Title>
+                <DialogPrimitive.Title className="m-0 rotulo text-ink-2">{t.navigation}</DialogPrimitive.Title>
                 <DialogPrimitive.Close
                   render={
-                    <IconButton label="Close navigation" variant="ghost" size="sm">
+                    <IconButton label={t.closeNavigation} variant="ghost" size="sm">
                       <X />
                     </IconButton>
                   }
@@ -215,13 +228,14 @@ export type SidebarToggleProps = Omit<React.ComponentProps<'span'>, 'children'>
  */
 export function SidebarToggle({ className, ...props }: SidebarToggleProps) {
   const shell = React.useContext(ShellContext)
+  const [t] = useMessages('appShell', appShellMessages, shell?.messages)
   if (!shell) return null
   return (
     <span {...props} data-slot="sidebar-toggle" className={cn('inline-flex', className)}>
       <IconButton
         variant="ghost"
         size="sm"
-        label={shell.collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        label={shell.collapsed ? t.expandSidebar : t.collapseSidebar}
         aria-controls={shell.sidebarId}
         aria-expanded={!shell.collapsed}
         onClick={() => shell.setCollapsed(!shell.collapsed)}
@@ -232,7 +246,7 @@ export function SidebarToggle({ className, ...props }: SidebarToggleProps) {
       <IconButton
         variant="ghost"
         size="sm"
-        label="Open navigation"
+        label={t.openNavigation}
         onClick={() => shell.setMobileOpen(true)}
         className="nav:hidden"
       >

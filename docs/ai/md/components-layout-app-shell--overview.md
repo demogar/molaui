@@ -58,6 +58,7 @@ Each story is a live example in Storybook.
 | `topbar` (required) | `ReactNode` |  | The bar across the top, usually a `Topbar`. It stays put while `<main>` scrolls, so the switcher and search are never lost. |
 | `banner` | `ReactNode` |  | A condition of the whole application, usually a `Banner`: drawn full width above the top bar, so it pushes the frame down rather than covering it. After the skip link in reading order, so the way to the content stays first. |
 | `defaultSidebarCollapsed` | `boolean` | `false` | Start with the desktop sidebar collapsed to its icon rail. Defaults to `false`; ignored below 920px, where the sidebar is a sheet. |
+| `messages` | `MessagesOverride<AppShellMessages>` |  | Words for translation: the skip link, the phone sheet's heading and close button, and SidebarToggle's names, which read them from here. Keys left out come from `MessagesProvider`, then English. |
 | `onSidebarCollapsedChange` | `((collapsed: boolean) => void)` |  | Called when the desktop sidebar collapses or expands — to remember the choice between visits. |
 | `sidebarCollapsed` | `boolean` |  | Controlled collapse of the desktop sidebar. |
 
@@ -116,7 +117,7 @@ One destination. Active is an ink bar on the leading edge plus a washed ground a
 
 ### `SidebarContext` (constant)
 
-Types: `AppShellProps`, `SidebarContextValue`, `SidebarToggleProps`, `TopbarProps`, `NavItemProps`, `NavSectionProps`, `SidebarProps`
+Types: `AppShellMessages`, `AppShellProps`, `SidebarContextValue`, `SidebarToggleProps`, `TopbarProps`, `NavItemProps`, `NavSectionProps`, `SidebarProps`
 
 ## Accessibility
 
@@ -161,6 +162,7 @@ Types: `AppShellProps`, `SidebarContextValue`, `SidebarToggleProps`, `TopbarProp
 
 - [Container](https://demogar.github.io/molaui/md/components-layout-container--overview.md)
 - [Breadcrumb](https://demogar.github.io/molaui/md/components-navigation-breadcrumb--overview.md)
+- [Link](https://demogar.github.io/molaui/md/components-navigation-link--overview.md)
 - [Tree](https://demogar.github.io/molaui/md/components-navigation-tree--overview.md)
 
 ### Used in

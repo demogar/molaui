@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 
+import { useMessages } from '../../lib/messages'
 import { useHydrated } from '../../lib/use-hydrated'
 import {
   type Chord,
@@ -14,6 +15,7 @@ import {
   normalizeHotkey,
   parseHotkey,
 } from './hotkeys'
+import { hotkeysMessages } from './messages'
 
 /**
  * One registry of the page's keyboard shortcuts, and the hook that binds
@@ -144,13 +146,14 @@ export function useHotkeyPlatform(): HotkeyPlatform {
  */
 export function useHotkeyKeys(keys: string): string[] {
   const platform = useHotkeyPlatform()
-  return React.useMemo(() => formatHotkey(keys, platform).flat(), [keys, platform])
+  const [words] = useMessages('hotkeys', hotkeysMessages)
+  return React.useMemo(() => formatHotkey(keys, platform, words).flat(), [keys, platform, words])
 }
 
 export interface UseHotkeysOptions {
   /** What it does, starting with a verb. Listed in the shortcuts dialog. Required: a shortcut nobody can find is a shortcut nobody has. */
   label: string
-  /** The heading it is listed under, `General` by default. */
+  /** The heading it is listed under, `General` (`messages.hotkeys.general`) by default. */
   group?: string
   /** Bind it only while true. A disabled hotkey is also unlisted. `true` by default. */
   enabled?: boolean
@@ -178,7 +181,8 @@ export const SEQUENCE_MS = 1000
  *   useHotkeys('g r', () => navigate('/runs'), { label: 'Go to runs', group: 'Navigation' })
  */
 export function useHotkeys(keys: string, handler: ((event: KeyboardEvent) => void) | null, options: UseHotkeysOptions) {
-  const { label, group = 'General', enabled = true, inFields } = options
+  const [words] = useMessages('hotkeys', hotkeysMessages)
+  const { label, group = words.general, enabled = true, inFields } = options
   const context = React.useContext(RegistryContext)
   const registry = context?.registry
   const pinned = context?.platform

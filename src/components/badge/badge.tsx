@@ -1,8 +1,12 @@
+'use client'
+
 import { cva } from 'class-variance-authority'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { type Variants } from '../../lib/variants'
+import { type RecommendationBadgeMessages, recommendationBadgeMessages } from './messages'
 
 /**
  * A status mark. Small, flat, cut — a scrap of the layer that says what state
@@ -201,21 +205,24 @@ export const recommendationVariants = cva('inline-flex items-center rotulo px-2.
 
 export type RecommendationLevel = NonNullable<Variants<typeof recommendationVariants>['level']>
 
-export const RECOMMENDATION_LABELS: Record<RecommendationLevel, string> = {
-  essential: 'Essential',
-  highly: 'Highly recommended',
-  detour: 'Worth the detour',
-  time: 'If you have time',
-}
+// The English label of each level, kept as an export for code that read it;
+// the badge itself reads `messages.recommendationBadge`, so a translation
+// reaches it. A line comment and a copy, for the reason RUN_STATUS_LABEL
+// gives: Storybook's docgen writes into a documented exported object.
+export const RECOMMENDATION_LABELS: Record<RecommendationLevel, string> = { ...recommendationBadgeMessages }
 
 export interface RecommendationBadgeProps
   extends React.ComponentProps<'span'>,
-    Variants<typeof recommendationVariants> {}
+    Variants<typeof recommendationVariants> {
+  /** Words for translation: the label of each level. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<RecommendationBadgeMessages>
+}
 
-export function RecommendationBadge({ className, level, children, ...props }: RecommendationBadgeProps) {
+export function RecommendationBadge({ className, level, children, messages, ...props }: RecommendationBadgeProps) {
+  const [t] = useMessages('recommendationBadge', recommendationBadgeMessages, messages)
   return (
     <span data-slot="recommendation-badge" className={cn(recommendationVariants({ level }), className)} {...props}>
-      {children ?? RECOMMENDATION_LABELS[level ?? 'essential']}
+      {children ?? t[level ?? 'essential']}
     </span>
   )
 }

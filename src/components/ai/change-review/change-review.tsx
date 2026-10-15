@@ -4,10 +4,17 @@ import { Check, MessageSquareWarning, X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { type MessagesOverride, formatMessage, useMessages } from '../../../lib/messages'
 import { useControllable } from '../../../lib/use-controllable'
 import { Button } from '../../button'
 import { Field, Textarea } from '../../field'
 import { RunStatusGlyph } from '../run-status'
+import {
+  type ChangeReviewMessages,
+  type FieldChangesMessages,
+  changeReviewMessages,
+  fieldChangesMessages,
+} from './messages'
 
 export type ChangeDecisionStatus = 'approved' | 'changes_requested' | 'rejected'
 
@@ -15,23 +22,6 @@ export interface ChangeDecision {
   status: ChangeDecisionStatus
   /** Required for `rejected` and `changes_requested`; optional for `approved`. */
   reason?: string
-}
-
-const DECISION_LABEL: Record<ChangeDecisionStatus, string> = {
-  approved: 'Approved',
-  changes_requested: 'Changes requested',
-  rejected: 'Rejected',
-}
-
-const ACTION_LABEL: Record<ChangeDecisionStatus, string> = {
-  approved: 'Approve',
-  changes_requested: 'Request changes',
-  rejected: 'Reject',
-}
-
-const MISSING_REASON: Record<Exclude<ChangeDecisionStatus, 'approved'>, string> = {
-  changes_requested: 'Say what needs to change, so the agent can revise it.',
-  rejected: 'Say why you are rejecting it, so the agent does not propose it again.',
 }
 
 // The run-status mark that means the same thing, so a decision and the run
@@ -67,6 +57,8 @@ export interface ChangeReviewProps extends Omit<React.ComponentProps<'section'>,
    * is the page's main subject.
    */
   headingLevel?: 2 | 3
+  /** Words for translation: the decisions, the reason field and the header labels. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<ChangeReviewMessages>
 }
 
 /**
@@ -106,9 +98,11 @@ export function ChangeReview({
   onDecide,
   reviewer,
   headingLevel = 3,
+  messages,
   className,
   ...props
 }: ChangeReviewProps) {
+  const [t, f] = useMessages('changeReview', changeReviewMessages, messages)
   const Heading = headingLevel === 2 ? 'h2' : 'h3'
   const headingId = React.useId()
   const [decision, setDecision] = useControllable<ChangeDecision | null>({
@@ -144,14 +138,12 @@ export function ChangeReview({
       {...props}
     >
       <header className="flex flex-col gap-2 border-b border-keyline p-4">
-        <p className="m-0 rotulo text-ink-muted">Proposed change</p>
+        <p className="m-0 rotulo text-ink-muted">{t.proposedChange}</p>
         <Heading id={headingId} className="m-0 font-display text-lg leading-snug font-bold tracking-display wdth-display">
           {title}
         </Heading>
         <p className="m-0 flex flex-wrap items-baseline gap-x-2 gap-y-1 font-ui text-sm text-ink-2">
-          <span>
-            Proposed by <span className="font-semibold text-ink">{agent}</span>
-          </span>
+          <span>{f.nodes(t.proposedBy, { agent: <span className="font-semibold text-ink">{agent}</span> })}</span>
           {model ? (
             <span dir="ltr" className="literal text-xs text-ink-muted">
               {model}
@@ -165,16 +157,22 @@ export function ChangeReview({
 
       <div className="border-t border-keyline p-4">
         {decision ? (
-          <Outcome ref={outcomeRef} decision={decision} reviewer={reviewer} />
+          <Outcome ref={outcomeRef} decision={decision} reviewer={reviewer} t={t} />
         ) : (
-          <DecisionForm onDecide={decide} />
+          <DecisionForm onDecide={decide} t={t} />
         )}
       </div>
     </section>
   )
 }
 
-function DecisionForm({ onDecide }: { onDecide: (status: ChangeDecisionStatus, reason: string | undefined) => void }) {
+function DecisionForm({
+  onDecide,
+  t,
+}: {
+  onDecide: (status: ChangeDecisionStatus, reason: string | undefined) => void
+  t: ChangeReviewMessages
+}) {
   const [reason, setReason] = React.useState('')
   const [error, setError] = React.useState<string | undefined>()
   const fieldRef = React.useRef<HTMLTextAreaElement>(null)
@@ -182,7 +180,7 @@ function DecisionForm({ onDecide }: { onDecide: (status: ChangeDecisionStatus, r
   const press = (status: ChangeDecisionStatus) => {
     const trimmed = reason.trim()
     if (status !== 'approved' && trimmed === '') {
-      setError(MISSING_REASON[status])
+      setError(t.missingReason[status])
       fieldRef.current?.focus()
       return
     }
@@ -192,7 +190,7 @@ function DecisionForm({ onDecide }: { onDecide: (status: ChangeDecisionStatus, r
 
   return (
     <div className="flex flex-col gap-3">
-      <Field label="Reason" hint="Needed to reject or request changes. Optional when you approve." error={error}>
+      <Field label={t.reason} hint={t.reasonHint} error={error}>
         {(control) => (
           <Textarea
             {...control}
@@ -207,15 +205,15 @@ function DecisionForm({ onDecide }: { onDecide: (status: ChangeDecisionStatus, r
           />
         )}
       </Field>
-      <div role="group" aria-label="Decision" className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+      <div role="group" aria-label={t.decision} className="grid grid-cols-1 gap-2 sm:grid-cols-3">
         <Button variant="secondary" icon={<Check />} onClick={() => press('approved')}>
-          {ACTION_LABEL.approved}
+          {t.actions.approved}
         </Button>
         <Button variant="secondary" icon={<MessageSquareWarning />} onClick={() => press('changes_requested')}>
-          {ACTION_LABEL.changes_requested}
+          {t.actions.changes_requested}
         </Button>
         <Button variant="secondary" icon={<X />} onClick={() => press('rejected')}>
-          {ACTION_LABEL.rejected}
+          {t.actions.rejected}
         </Button>
       </div>
     </div>
@@ -226,18 +224,21 @@ function Outcome({
   ref,
   decision,
   reviewer,
+  t,
 }: {
   ref: React.Ref<HTMLDivElement>
   decision: ChangeDecision
   reviewer?: string
+  t: ChangeReviewMessages
 }) {
+
   return (
     <div ref={ref} tabIndex={-1} data-slot="change-decision" className="flex items-start gap-3 outline-none">
       <RunStatusGlyph status={DECISION_GLYPH[decision.status]} className="mt-1 size-[13px]" />
       <div className="flex min-w-0 flex-col gap-1">
         <p className="m-0 font-ui text-sm font-semibold">
-          <span className={DECISION_INK[decision.status]}>{DECISION_LABEL[decision.status]}</span>
-          {reviewer ? <span className="font-normal text-ink-2"> by {reviewer}</span> : null}
+          <span className={DECISION_INK[decision.status]}>{t.decisions[decision.status]}</span>
+          {reviewer ? <span className="font-normal text-ink-2"> {formatMessage(t.decidedBy, { reviewer })}</span> : null}
         </p>
         {decision.reason ? (
           <p className="m-0 max-w-reading font-text text-base leading-body text-ink">{decision.reason}</p>
@@ -269,6 +270,8 @@ export interface FieldChangesProps extends Omit<React.ComponentProps<'section'>,
    * heading.
    */
   headingLevel?: 3 | 4 | 5
+  /** Words for translation: the count and the before/after words. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<FieldChangesMessages>
 }
 
 /**
@@ -285,7 +288,8 @@ export interface FieldChangesProps extends Omit<React.ComponentProps<'section'>,
  * itself is hidden from a screen reader, which hears the words. A missing
  * side says "not set" rather than leaving a gap that reads as an empty string.
  */
-export function FieldChanges({ title, changes, headingLevel = 4, className, ...props }: FieldChangesProps) {
+export function FieldChanges({ title, changes, headingLevel = 4, messages, className, ...props }: FieldChangesProps) {
+  const [t, f] = useMessages('fieldChanges', fieldChangesMessages, messages)
   const Heading = `h${headingLevel}` as const
   const headingId = React.useId()
   return (
@@ -300,7 +304,7 @@ export function FieldChanges({ title, changes, headingLevel = 4, className, ...p
           {title}
         </Heading>
         <span className="font-ui text-xs tabular text-ink-muted">
-          {changes.length} {changes.length === 1 ? 'field' : 'fields'} changed
+          {f.plural(t.fieldsChanged, changes.length)}
         </span>
       </header>
       <dl className="m-0 flex flex-col">
@@ -316,11 +320,11 @@ export function FieldChanges({ title, changes, headingLevel = 4, className, ...p
               {change.field}
             </dt>
             <dd className="m-0 flex flex-wrap items-center gap-2">
-              <Value side="before" value={change.before} />
+              <Value side="before" value={change.before} t={t} />
               <span aria-hidden className="font-ui text-sm text-ink-muted flip-rtl">
                 →
               </span>
-              <Value side="after" value={change.after} />
+              <Value side="after" value={change.after} t={t} />
             </dd>
           </div>
         ))}
@@ -329,7 +333,7 @@ export function FieldChanges({ title, changes, headingLevel = 4, className, ...p
   )
 }
 
-function Value({ side, value }: { side: 'before' | 'after'; value: React.ReactNode }) {
+function Value({ side, value, t }: { side: 'before' | 'after'; value: React.ReactNode; t: FieldChangesMessages }) {
   const missing = value === undefined || value === null
   return (
     <span
@@ -339,8 +343,10 @@ function Value({ side, value }: { side: 'before' | 'after'; value: React.ReactNo
         !missing && side === 'before' && 'line-through decoration-ink-muted',
       )}
     >
-      <span className="sr-only">{side === 'before' ? 'Before: ' : 'After: '}</span>
-      {missing ? <span className="font-ui">not set</span> : <span dir="ltr">{value}</span>}
+      <span className="sr-only">
+        {side === 'before' ? t.before : t.after}{' '}
+      </span>
+      {missing ? <span className="font-ui">{t.notSet}</span> : <span dir="ltr">{value}</span>}
     </span>
   )
 }

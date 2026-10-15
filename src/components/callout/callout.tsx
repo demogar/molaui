@@ -5,10 +5,12 @@ import { CircleAlert, CircleCheck, Info, TriangleAlert, X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { type Variants } from '../../lib/variants'
 import { IconButton } from '../button'
 import { wrappingButtonSlot } from '../button/wrapping-slot'
 import { Swatch } from '../swatch'
+import { type CalloutMessages, calloutMessages } from './messages'
 
 /**
  * A message that belongs to a region of the page — "this agent is using a
@@ -119,6 +121,8 @@ export interface CalloutProps
   icon?: React.ReactNode | false
   /** The heading element for `title`. */
   headingLevel?: 2 | 3 | 4 | 5
+  /** Words for translation: the dismiss button's name. Keys left out come from `MessagesProvider`, then English. */
+  messages?: MessagesOverride<CalloutMessages>
 }
 
 export function Callout({
@@ -129,10 +133,12 @@ export function Callout({
   onDismiss,
   icon,
   headingLevel = 3,
+  messages,
   className,
   children,
   ...props
 }: CalloutProps) {
+  const [words] = useMessages('callout', calloutMessages, messages)
   const t = tone ?? 'info'
   const v = variant ?? 'seam'
   const flat = v === 'flat'
@@ -183,7 +189,7 @@ export function Callout({
           {actions ? <div data-part="actions" className={cn('mt-3 flex flex-wrap gap-2', wrappingButtonSlot)}>{actions}</div> : null}
         </div>
         {onDismiss ? (
-          <IconButton data-part="dismiss" label="Dismiss" variant="ghost" size="sm" onClick={onDismiss} className="-mt-1 -me-1.5">
+          <IconButton data-part="dismiss" label={words.dismiss} variant="ghost" size="sm" onClick={onDismiss} className="-mt-1 -me-1.5">
             <X />
           </IconButton>
         ) : null}
