@@ -3,6 +3,7 @@ import { type PropsWithChildren, useSyncExternalStore } from 'react'
 import { SET_GLOBALS, UPDATE_GLOBALS } from 'storybook/internal/core-events'
 import { addons } from 'storybook/preview-api'
 
+import { docsFrameTheme, docsPageAround } from './docs-frame'
 import { molaDarkTheme, molaTheme } from './mola-theme'
 
 /**
@@ -50,24 +51,6 @@ function apply(theme: Theme) {
 
 const themeOf = (globals: Record<string, unknown> | undefined): Theme | undefined =>
   globals?.theme === 'dark' ? 'dark' : globals?.theme === 'light' ? 'light' : undefined
-
-/** The docs page this preview is an example frame of, if it is one. */
-function docsPageAround(): Document | undefined {
-  if (window.parent === window) return undefined
-  try {
-    const parent = window.parent.document
-    return parent.getElementById('storybook-docs') ? parent : undefined
-  } catch {
-    // A cross-origin parent: an embed, not a docs page.
-    return undefined
-  }
-}
-
-/** The theme of the docs page around this example frame, if it is one. */
-export function docsFrameTheme(): Theme | undefined {
-  const theme = docsPageAround()?.documentElement.dataset.theme
-  return theme === 'light' || theme === 'dark' ? theme : undefined
-}
 
 const page = docsPageAround()
 if (page) {
