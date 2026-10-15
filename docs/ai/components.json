@@ -68,6 +68,14 @@
     {
       "rule": "A screen reflows at 320px: only a region meant to scroll sideways (a table, code, a tab or chip row) may, and it carries the `scroll-edge` utility with `useScrollEdge()` as its ref. Table, Tabs and CodeBlock already do.",
       "why": "WCAG 1.4.10 is measured at 320px, and a region that scrolls with no cue reads as complete: a table hid its Status column and its only action that way."
+    },
+    {
+      "rule": "Props share one vocabulary: `tone` is a status (`neutral`, `info`, `success`, `warn`, `danger`, `accent`), `variant` a presentation (`solid`, `outline`, `seam`), `kind` a category (`EmptyState kind=\"no-results\"`), and `size` the t-shirt scale (`xs` to `xl`).",
+      "why": "A word that means one thing on every component can be guessed instead of looked up, by a person or an agent."
+    },
+    {
+      "rule": "Every component takes `ref`, `id`, `data-*` and the other DOM props of the element it documents. `className` and `style` style the box you see (the element with the cut); `ref` and the rest go to the control you focus. A wrapper around a label has `wrapperClassName`.",
+      "why": "A `className` that moved to another element when a `label` was added changed meaning silently."
     }
   ],
   "phases": {
@@ -1629,7 +1637,17 @@
             {
               "name": "status",
               "type": "RunStatusValue",
-              "required": true
+              "required": true,
+              "values": [
+                "queued",
+                "running",
+                "streaming",
+                "waiting",
+                "succeeded",
+                "failed",
+                "cancelled",
+                "timed_out"
+              ]
             },
             {
               "name": "steps",
@@ -1691,7 +1709,10 @@
               "type": "Pick<TokenUsageProps, \"input\" | \"output\" | \"cached\" | \"costUsd\" | \"contextWindow\">",
               "required": false
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<section data-slot=\"agent-run\">"
+          }
         },
         {
           "name": "AgentRunFailure",
@@ -1880,7 +1901,10 @@
               "type": "number",
               "required": true
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<span data-slot=\"change-count\">"
+          }
         },
         {
           "name": "ChangeReview",
@@ -1949,7 +1973,10 @@
               "required": false,
               "description": "The agent's explanation of the change, in its own words. Set as prose."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<section data-slot=\"change-review\">"
+          }
         },
         {
           "name": "FieldChanges",
@@ -1974,7 +2001,10 @@
               "required": false,
               "default": "4"
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<section data-slot=\"field-changes\">"
+          }
         },
         {
           "name": "FileDiff",
@@ -2018,7 +2048,13 @@
               "name": "kind",
               "type": "FileChangeKind",
               "required": false,
-              "default": "modified"
+              "default": "modified",
+              "values": [
+                "added",
+                "modified",
+                "deleted",
+                "renamed"
+              ]
             },
             {
               "name": "layout",
@@ -2033,7 +2069,10 @@
               "required": false,
               "description": "The path before a rename."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<section data-slot=\"file-diff\">"
+          }
         },
         {
           "name": "ChangeCountProps",
@@ -2239,7 +2278,12 @@
             {
               "name": "level",
               "type": "ConfidenceLevel",
-              "required": true
+              "required": true,
+              "values": [
+                "medium",
+                "high",
+                "low"
+              ]
             },
             {
               "name": "basis",
@@ -2247,7 +2291,10 @@
               "required": false,
               "description": "What the confidence rests on — \"3 sources agree\", \"single source\"."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<span data-slot=\"confidence\">"
+          }
         },
         {
           "name": "UncertaintyNote",
@@ -2268,7 +2315,10 @@
               "default": "The model is unsure",
               "description": "The short claim — \"Unverified figure\". Defaults to \"The model is unsure\"."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<aside data-slot=\"uncertainty-note\">"
+          }
         },
         {
           "name": "ConfidenceLevel",
@@ -2451,7 +2501,13 @@
             {
               "name": "role",
               "type": "MessageRole",
-              "required": true
+              "required": true,
+              "values": [
+                "user",
+                "assistant",
+                "system",
+                "tool"
+              ]
             },
             {
               "name": "author",
@@ -2512,7 +2568,10 @@
               "required": false,
               "description": "IANA zone the time is shown in, such as `\"UTC\"` or `\"America/Panama\"`. Without it the time is the reader's own and appears only after hydration, because the server cannot know the reader's zone; pass one to have the time in the server HTML."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<article data-slot=\"message\">"
+          }
         },
         {
           "name": "Thread",
@@ -2533,7 +2592,10 @@
               "default": "48",
               "description": "Distance from the bottom, in px, that still counts as \"at the bottom\"."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<section data-slot=\"thread\">"
+          }
         },
         {
           "name": "MessageProps",
@@ -2743,7 +2805,10 @@
               "type": "(() => void)",
               "required": false
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<span data-slot=\"attachment-chip\">"
+          }
         },
         {
           "name": "PromptInput",
@@ -2837,7 +2902,10 @@
               "type": "string",
               "required": false
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<form data-slot=\"prompt-input\">"
+          }
         },
         {
           "name": "AttachmentChipProps",
@@ -2987,7 +3055,10 @@
               "default": "done",
               "description": "`streaming` while the model is still thinking."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"reasoning\">"
+          }
         },
         {
           "name": "ReasoningProps",
@@ -3105,7 +3176,10 @@
               "required": false,
               "description": "What cut it short, in words. Defaults to a plain statement."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"partial-output\">"
+          }
         },
         {
           "name": "RunError",
@@ -3143,7 +3217,13 @@
               "name": "kind",
               "type": "RunErrorKind",
               "required": false,
-              "default": "failed"
+              "default": "failed",
+              "values": [
+                "failed",
+                "cancelled",
+                "timed_out",
+                "rate_limited"
+              ]
             },
             {
               "name": "message",
@@ -3196,7 +3276,10 @@
               "required": false,
               "description": "The tool that failed, exactly as the model called it."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"run-error\">"
+          }
         },
         {
           "name": "formatRunErrorDetails",
@@ -3369,7 +3452,17 @@
             {
               "name": "status",
               "type": "RunStatusValue",
-              "required": true
+              "required": true,
+              "values": [
+                "queued",
+                "running",
+                "streaming",
+                "waiting",
+                "succeeded",
+                "failed",
+                "cancelled",
+                "timed_out"
+              ]
             },
             {
               "name": "durationMs",
@@ -3391,7 +3484,7 @@
             },
             {
               "name": "register",
-              "type": "\"label\" | \"inline\"",
+              "type": "\"inline\" | \"label\"",
               "required": false,
               "default": "label",
               "description": "`label`: the rótulo register, for headers. `inline`: sentence case, for rows and running text."
@@ -3402,14 +3495,36 @@
               "required": false,
               "description": "When the work started. With it, an elapsed clock follows the label."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<span data-slot=\"run-status\">"
+          }
         },
         {
           "name": "RunStatusGlyph",
           "kind": "component",
           "source": "src/components/ai/run-status/run-status.tsx",
-          "description": "The glyph. Square, because nothing in this system is round except a dot that has to be a dot; keylined, because every mark is a cut shape.",
-          "props": []
+          "description": "`className`, `ref` and the rest of the DOM props go to the glyph's `<span>`.",
+          "props": [
+            {
+              "name": "status",
+              "type": "RunStatusValue",
+              "required": true,
+              "values": [
+                "queued",
+                "running",
+                "streaming",
+                "waiting",
+                "succeeded",
+                "failed",
+                "cancelled",
+                "timed_out"
+              ]
+            }
+          ],
+          "forwards": {
+            "element": "<span data-slot=\"run-status-glyph\">"
+          }
         },
         {
           "name": "RUN_STATUS_LABEL",
@@ -3433,6 +3548,12 @@
           "kind": "function",
           "source": "src/components/ai/run-status/run-status.tsx",
           "description": "Work is over and will not change again without a retry."
+        },
+        {
+          "name": "RunStatusGlyphProps",
+          "kind": "type",
+          "source": "src/components/ai/run-status/run-status.tsx",
+          "description": "The glyph. Square, because nothing in this system is round except a dot that has to be a dot; keylined, because every mark is a cut shape."
         },
         {
           "name": "RunStatusProps",
@@ -3575,6 +3696,12 @@
               "description": "Which side of the marker the card opens on."
             },
             {
+              "name": "render",
+              "type": "ReactElement<unknown, string | JSXElementConstructor<any>> | ((props: DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>) => ReactElement<...>)",
+              "required": false,
+              "description": "The element the marker renders as: your router's `<Link />` when `href` points inside the app, or a function returning one. Base UI's render prop, so the marker's classes, name and handlers are merged onto it."
+            },
+            {
               "name": "source",
               "type": "Source",
               "required": false,
@@ -3586,7 +3713,10 @@
               "required": false,
               "description": "The source's title, for the accessible name. \"[2]\" alone tells a screen reader nothing. Defaults to `source.title`."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<a data-slot=\"citation\">"
+          }
         },
         {
           "name": "SourceList",
@@ -3605,7 +3735,10 @@
               "required": false,
               "description": "IANA zone the read times are shown in, such as `\"UTC\"`. Without it they are the reader's own and appear only after hydration, because the server cannot know the reader's zone."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<ol data-slot=\"source-list\">"
+          }
         },
         {
           "name": "citationRenderer",
@@ -3739,8 +3872,10 @@
           "name": "Caret",
           "kind": "component",
           "source": "src/components/ai/streaming-text/streaming-text.tsx",
-          "description": "The block caret: ink, half an em wide, the height of the x-height plus ascenders. A thin bar caret reads as a text field waiting for input; a block reads as output being written, which is the opposite thing.",
-          "props": []
+          "props": [],
+          "forwards": {
+            "element": "<span data-slot=\"caret\">"
+          }
         },
         {
           "name": "StreamingText",
@@ -3778,16 +3913,36 @@
               "name": "status",
               "type": "StreamStatus",
               "required": false,
-              "default": "done"
+              "default": "done",
+              "values": [
+                "error",
+                "streaming",
+                "done",
+                "idle"
+              ]
             },
             {
               "name": "tone",
               "type": "\"default\" | \"muted\"",
               "required": false,
-              "default": "default",
+              "deprecated": "Since 0.7.0; removed in 1.0.0. Use `variant`, which takes the same values: a muted ink is a presentation, and `tone` is a status."
+            },
+            {
+              "name": "variant",
+              "type": "\"default\" | \"muted\"",
+              "required": false,
               "description": "`muted` for text the reader may skim — reasoning, not the answer."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"streaming-text\">"
+          }
+        },
+        {
+          "name": "CaretProps",
+          "kind": "type",
+          "source": "src/components/ai/streaming-text/streaming-text.tsx",
+          "description": "The block caret: ink, half an em wide, the height of the x-height plus ascenders. A thin bar caret reads as a text field waiting for input; a block reads as output being written, which is the opposite thing."
         },
         {
           "name": "StreamStatus",
@@ -3944,7 +4099,10 @@
               "default": "full",
               "description": "`full`: a definition list and meter. `inline`: one line, for a run header."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"token-usage\">"
+          }
         },
         {
           "name": "contextLevel",
@@ -4140,7 +4298,17 @@
             {
               "name": "status",
               "type": "RunStatusValue",
-              "required": true
+              "required": true,
+              "values": [
+                "queued",
+                "running",
+                "streaming",
+                "waiting",
+                "succeeded",
+                "failed",
+                "cancelled",
+                "timed_out"
+              ]
             },
             {
               "name": "approval",
@@ -4178,9 +4346,20 @@
               "description": "The error, verbatim."
             },
             {
+              "name": "onOpenChange",
+              "type": "((open: boolean) => void)",
+              "required": false
+            },
+            {
               "name": "onRetry",
               "type": "(() => void)",
               "required": false
+            },
+            {
+              "name": "open",
+              "type": "boolean",
+              "required": false,
+              "description": "Whether the details are expanded, when the page owns that. Waiting and failed calls are always expanded."
             },
             {
               "name": "result",
@@ -4199,7 +4378,10 @@
               "required": false,
               "description": "What the call is for, in words — \"Query rollout results\". Optional; the name is always shown."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"tool-call\">"
+          }
         },
         {
           "name": "ToolCallGroup",
@@ -4218,7 +4400,10 @@
               "required": false,
               "description": "Defaults to \"N tools in parallel\"."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"tool-call-group\">"
+          }
         },
         {
           "name": "ToolCallApproval",
@@ -4420,33 +4605,22 @@
           "inherits": [
             "ButtonProps",
             "NativeButtonProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<button data-slot=\"button\">"
+          }
         },
         {
           "name": "ButtonArrow",
           "kind": "component",
           "source": "src/components/button/button.tsx",
-          "description": "The arrow micro-interaction, exported so a router `<Link>` styled with `buttonVariants` gets the same one.",
-          "variants": {
-            "variant": {
-              "values": [
-                "primary",
-                "secondary",
-                "danger",
-                "ghost"
-              ],
-              "default": "primary"
-            },
-            "size": {
-              "values": [
-                "sm",
-                "md",
-                "lg"
-              ],
-              "default": "md"
-            }
-          },
-          "props": []
+          "props": [],
+          "inherits": [
+            "LucideProps"
+          ],
+          "forwards": {
+            "element": "<svg data-slot=\"button-arrow\">"
+          }
         },
         {
           "name": "IconButton",
@@ -4473,25 +4647,34 @@
             },
             {
               "name": "size",
-              "type": "\"sm\" | \"lg\" | \"md\"",
+              "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false
             },
             {
               "name": "variant",
-              "type": "\"danger\" | \"primary\" | \"secondary\" | \"ghost\"",
+              "type": "\"secondary\" | \"danger\" | \"primary\" | \"ghost\"",
               "required": false
             }
           ],
           "inherits": [
             "ButtonProps",
             "NativeButtonProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<button data-slot=\"button\">"
+          }
         },
         {
           "name": "buttonVariants",
           "kind": "function",
           "source": "src/components/button/button.tsx",
           "description": "A button is a cut shape, so its edge is a `box-shadow` keyline rather than a `border`. The signature hover reveals a band of the layer beneath the shape, which means the edge has to grow by several pixels without moving anything around it. A border would reflow the toolbar; a shadow does not."
+        },
+        {
+          "name": "ButtonArrowProps",
+          "kind": "type",
+          "source": "src/components/button/button.tsx",
+          "description": "The arrow micro-interaction, exported so a router `<Link>` styled with `buttonVariants` gets the same one."
         },
         {
           "name": "ButtonProps",
@@ -4646,25 +4829,16 @@
               "type": "string",
               "required": false
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<span data-slot=\"avatar\">"
+          }
         },
         {
           "name": "AvatarGroup",
           "kind": "component",
           "source": "src/components/avatar/avatar.tsx",
           "description": "Overlapping tiles, each separated from the next by a ring of the page ground inside its keyline — the gap a blade leaves between two shapes cut from the same layer. Without it, overlapping squares merge into one shape and the count is unreadable.",
-          "variants": {
-            "size": {
-              "values": [
-                "xs",
-                "sm",
-                "md",
-                "lg",
-                "xl"
-              ],
-              "default": "md"
-            }
-          },
           "props": [
             {
               "name": "label",
@@ -4685,7 +4859,10 @@
               "required": false,
               "default": "md"
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"avatar-group\">"
+          }
         },
         {
           "name": "avatarLayer",
@@ -4706,6 +4883,12 @@
           "name": "AvatarGroupProps",
           "kind": "type",
           "source": "src/components/avatar/avatar.tsx"
+        },
+        {
+          "name": "AvatarLayer",
+          "kind": "type",
+          "source": "src/components/avatar/avatar.tsx",
+          "description": "The classes for the layer an avatar is cut from, chosen from the name."
         },
         {
           "name": "AvatarProps",
@@ -4836,7 +5019,10 @@
           "kind": "component",
           "source": "src/components/code/code.tsx",
           "description": "An inline machine literal: an id, a field name, a flag.",
-          "props": []
+          "props": [],
+          "forwards": {
+            "element": "<code data-slot=\"code\">"
+          }
         },
         {
           "name": "CodeBlock",
@@ -4867,7 +5053,16 @@
               "type": "CodeLanguage",
               "required": false,
               "default": "text",
-              "description": "Shown as a tag in the header. Only `json` is tokenized; everything else is plain."
+              "description": "Shown as a tag in the header. Only `json` is tokenized; everything else is plain.",
+              "values": [
+                "text",
+                "json",
+                "shell",
+                "sql",
+                "ts",
+                "python",
+                "markdown"
+              ]
             },
             {
               "name": "lineNumbers",
@@ -4888,7 +5083,10 @@
               "default": "false",
               "description": "Start with long lines wrapped. The reader can toggle it."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<figure data-slot=\"code-block\">"
+          }
         },
         {
           "name": "CodeBlockProps",
@@ -5015,6 +5213,16 @@
           "name": "DescriptionList",
           "kind": "component",
           "source": "src/components/description-list/description-list.tsx",
+          "variants": {
+            "layout": {
+              "values": [
+                "inline",
+                "stacked",
+                "grid"
+              ],
+              "default": "inline"
+            }
+          },
           "props": [
             {
               "name": "items",
@@ -5023,11 +5231,19 @@
             },
             {
               "name": "layout",
-              "type": "\"grid\" | \"inline\" | \"stacked\"",
+              "type": "\"inline\" | \"stacked\" | \"grid\"",
               "required": false,
               "default": "inline"
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<dl data-slot=\"description-list\">"
+          }
+        },
+        {
+          "name": "descriptionListVariants",
+          "kind": "function",
+          "source": "src/components/description-list/description-list.tsx"
         },
         {
           "name": "DescriptionItem",
@@ -5169,8 +5385,28 @@
           "name": "Sparkline",
           "kind": "component",
           "source": "src/components/stat/stat.tsx",
-          "description": "An ink polyline — no fill, no gradient, no axis. A sparkline is the shape of the recent past and nothing more; the moment it grows a gridline it is a chart pretending to be a glyph. The last point is a square cut out in gold (it is the \"now\" the figure beside it states), drawn as a square because a blade does not cut circles.",
-          "props": []
+          "props": [
+            {
+              "name": "values",
+              "type": "number[]",
+              "required": true
+            },
+            {
+              "name": "height",
+              "type": "number",
+              "required": false,
+              "default": "24"
+            },
+            {
+              "name": "width",
+              "type": "number",
+              "required": false,
+              "default": "72"
+            }
+          ],
+          "forwards": {
+            "element": "<svg data-slot=\"sparkline\">"
+          }
         },
         {
           "name": "Stat",
@@ -5210,7 +5446,10 @@
               "required": false,
               "description": "Set smaller beside the figure: \"ms\", \"runs\", \"%\"."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"stat\">"
+          }
         },
         {
           "name": "StatGroup",
@@ -5225,7 +5464,16 @@
               "default": "4",
               "description": "Columns when there is room for them. Tiles wrap down to two, then one."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<dl data-slot=\"stat-group\">"
+          }
+        },
+        {
+          "name": "SparklineProps",
+          "kind": "type",
+          "source": "src/components/stat/stat.tsx",
+          "description": "An ink polyline — no fill, no gradient, no axis. A sparkline is the shape of the recent past and nothing more; the moment it grows a gridline it is a chart pretending to be a glyph. The last point is a square cut out in gold (it is the \"now\" the figure beside it states), drawn as a square because a blade does not cut circles."
         },
         {
           "name": "StatDelta",
@@ -5359,7 +5607,10 @@
               "type": "\"neutral\" | \"info\" | \"success\" | \"warn\" | \"danger\" | \"accent\"",
               "required": false
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<span data-slot=\"swatch\">"
+          }
         },
         {
           "name": "swatchVariants",
@@ -5576,19 +5827,28 @@
               "default": "false",
               "description": "Keep the header row visible while the body scrolls. Give the frame a height via `frameClassName`."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<table data-slot=\"table\">"
+          }
         },
         {
           "name": "TableBody",
           "kind": "component",
           "source": "src/components/table/table.tsx",
-          "props": []
+          "props": [],
+          "forwards": {
+            "element": "<tbody data-slot=\"table-body\">"
+          }
         },
         {
           "name": "TableCaption",
           "kind": "component",
           "source": "src/components/table/table.tsx",
-          "props": []
+          "props": [],
+          "forwards": {
+            "element": "<caption data-slot=\"table-caption\">"
+          }
         },
         {
           "name": "TableCell",
@@ -5609,7 +5869,10 @@
               "default": "false",
               "description": "Cut long content to one line with an ellipsis. The full text goes in `title` when the content is a string, so it is never lost — only folded."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<td data-slot=\"table-cell\">"
+          }
         },
         {
           "name": "TableCheckbox",
@@ -5624,20 +5887,59 @@
               "default": "false",
               "description": "Some but not all rows are selected. A DOM property, not an attribute, so it is set by effect."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<input>",
+            "className": "<span data-slot=\"table-checkbox\">"
+          }
         },
         {
           "name": "TableEmpty",
           "kind": "component",
           "source": "src/components/table/table.tsx",
-          "description": "The empty state, as a row. It spans the table rather than replacing it, so the headers stay and the reader still knows what would have been here.",
-          "props": []
+          "description": "`className`, `ref` and the rest of the DOM props go to the `<tr>`.",
+          "props": [
+            {
+              "name": "colSpan",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "actions",
+              "type": "ReactNode",
+              "required": false,
+              "description": "One or two buttons; for a filtered table, the one that clears the filters."
+            },
+            {
+              "name": "kind",
+              "type": "\"empty\" | \"no-results\" | \"error\" | \"no-permission\"",
+              "required": false
+            },
+            {
+              "name": "title",
+              "type": "ReactNode",
+              "required": false,
+              "default": "Nothing here yet"
+            },
+            {
+              "name": "variant",
+              "type": "\"empty\" | \"no-results\" | \"error\" | \"no-permission\"",
+              "required": false,
+              "deprecated": "Since 0.7.0; removed in 1.0.0. Use `kind`, as on `EmptyState`."
+            }
+          ],
+          "forwards": {
+            "element": "<tr data-slot=\"table-empty\">"
+          }
         },
         {
           "name": "TableFooter",
           "kind": "component",
           "source": "src/components/table/table.tsx",
-          "props": []
+          "props": [],
+          "forwards": {
+            "element": "<tfoot data-slot=\"table-footer\">"
+          }
         },
         {
           "name": "TableHead",
@@ -5658,17 +5960,28 @@
             },
             {
               "name": "sort",
-              "type": "SortDirection",
+              "type": "TableSortDirection",
               "required": false,
-              "description": "Makes the header a sort control. `none` renders the control in its idle state; `aria-sort` is only set on the column actually sorted, because announcing \"not sorted\" on every column is noise."
+              "description": "Makes the header a sort control. `none` renders the control in its idle state; `aria-sort` is only set on the column actually sorted, because announcing \"not sorted\" on every column is noise.",
+              "values": [
+                "none",
+                "ascending",
+                "descending"
+              ]
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<th data-slot=\"table-head\">"
+          }
         },
         {
           "name": "TableHeader",
           "kind": "component",
           "source": "src/components/table/table.tsx",
-          "props": []
+          "props": [],
+          "forwards": {
+            "element": "<thead data-slot=\"table-header\">"
+          }
         },
         {
           "name": "TableRow",
@@ -5682,14 +5995,33 @@
               "default": "false",
               "description": "The row is part of the current selection. Gold, because gold is the layer this system marks a choice with — it is also the text-selection colour — while añil stays free to mean \"information\". The fill is a wash, not the layer, so every ink in the row still clears AA; and an ink bar on the leading edge carries the state for anyone who cannot see the hue."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<tr data-slot=\"table-row\">"
+          }
         },
         {
           "name": "TableSkeletonRows",
           "kind": "component",
           "source": "src/components/table/table.tsx",
           "description": "Loading rows: real rows at the real height, so the table does not jump when the data lands. Bar widths vary by a fixed pattern rather than at random, so a re-render does not make the skeleton twitch.",
-          "props": []
+          "props": [
+            {
+              "name": "columns",
+              "type": "number",
+              "required": true
+            },
+            {
+              "name": "rows",
+              "type": "number",
+              "required": false,
+              "default": "5",
+              "description": "How many rows to draw."
+            }
+          ],
+          "forwards": {
+            "element": null
+          }
         },
         {
           "name": "DataTable",
@@ -5720,11 +6052,6 @@
             {
               "name": "caption",
               "type": "ReactNode",
-              "required": false
-            },
-            {
-              "name": "className",
-              "type": "string",
               "required": false
             },
             {
@@ -5763,7 +6090,8 @@
             {
               "name": "frameClassName",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "Classes for the scrolling frame around the table."
             },
             {
               "name": "framed",
@@ -5876,14 +6204,23 @@
               "type": "boolean",
               "required": false,
               "default": "false"
+            },
+            {
+              "name": "wrapperClassName",
+              "type": "string",
+              "required": false,
+              "description": "Classes for the outer element that holds the bar, the table and the pagination."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<table data-slot=\"table\">"
+          }
         },
         {
           "name": "DataTableColumnMenu",
           "kind": "component",
           "source": "src/components/table/data-table.tsx",
-          "description": "Which columns show. Toggling does not close the menu, because columns are chosen several at a time. The last visible column cannot be hidden — a table with no columns is not a state worth being able to reach — and a column marked `hideable: false` is shown checked and disabled, so the menu still says it exists.",
+          "description": "`className`, `ref` and the rest of the DOM props go to the \"Columns\" button.",
           "props": [
             {
               "name": "columns",
@@ -5899,13 +6236,11 @@
               "name": "onToggle",
               "type": "(key: string, visible: boolean) => void",
               "required": true
-            },
-            {
-              "name": "className",
-              "type": "string",
-              "required": false
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<button data-slot=\"button\">"
+          }
         },
         {
           "name": "TableCellProps",
@@ -5916,6 +6251,12 @@
           "name": "TableCheckboxProps",
           "kind": "type",
           "source": "src/components/table/table.tsx"
+        },
+        {
+          "name": "TableEmptyProps",
+          "kind": "type",
+          "source": "src/components/table/table.tsx",
+          "description": "The empty state, as a row. It spans the table rather than replacing it, so the headers stay and the reader still knows what would have been here."
         },
         {
           "name": "TableHeadProps",
@@ -5929,6 +6270,16 @@
         },
         {
           "name": "TableRowProps",
+          "kind": "type",
+          "source": "src/components/table/table.tsx"
+        },
+        {
+          "name": "TableSkeletonRowsProps",
+          "kind": "type",
+          "source": "src/components/table/table.tsx"
+        },
+        {
+          "name": "TableSortDirection",
           "kind": "type",
           "source": "src/components/table/table.tsx"
         },
@@ -6142,27 +6493,47 @@
           "source": "src/components/timeline/timeline.tsx",
           "description": "Ruled, ordered steps — a runbook, an onboarding checklist, the stages of a rollout. Where `Timeline` is a spine with a node per event, this is a stack of ruled bands with a label column, and merging the two would mean a component whose every rule is conditional.",
           "variants": {
-            "tone": {
+            "inverse": {
               "values": [
-                "default",
-                "inverse"
+                "false",
+                "true"
               ]
             }
           },
           "props": [
             {
+              "name": "items",
+              "type": "StepListItem[]",
+              "required": true
+            },
+            {
+              "name": "inverse",
+              "type": "false | true",
+              "required": false,
+              "description": "Set the list on an ink panel."
+            },
+            {
+              "name": "titleAs",
+              "type": "\"h3\" | \"h4\" | \"p\"",
+              "required": false,
+              "default": "h3"
+            },
+            {
               "name": "tone",
               "type": "\"default\" | \"inverse\"",
               "required": false,
-              "default": "default",
-              "description": "`inverse` sets the list on an ink panel."
+              "deprecated": "Since 0.7.0; removed in 1.0.0. Use `inverse`: `tone` is a status everywhere else, and this was a ground."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<ol data-slot=\"step-list\">"
+          }
         },
         {
           "name": "Timeline",
           "kind": "component",
           "source": "src/components/timeline/timeline.tsx",
+          "description": "`className`, `ref` and the rest of the DOM props go to the `<ol>`.",
           "props": [
             {
               "name": "items",
@@ -6176,11 +6547,6 @@
               "description": "Names the list, since the spine carries no heading of its own."
             },
             {
-              "name": "className",
-              "type": "string",
-              "required": false
-            },
-            {
               "name": "gap",
               "type": "\"spaced\" | \"flush\"",
               "required": false,
@@ -6189,10 +6555,13 @@
             },
             {
               "name": "size",
-              "type": "\"default\" | \"editorial\"",
+              "type": "TimelineVariant",
               "required": false,
-              "default": "default",
-              "description": "`default`   product scale: semibold titles at body size. `editorial` the travel-guide scale it was born at, for a narrative."
+              "values": [
+                "default",
+                "editorial"
+              ],
+              "deprecated": "Since 0.7.0; removed in 1.0.0. Use `variant`, which takes the same values: a type scale is a presentation, and `size` is the t-shirt scale everywhere else."
             },
             {
               "name": "titleAs",
@@ -6200,11 +6569,29 @@
               "required": false,
               "default": "p",
               "description": "The element each title renders as. Defaults to a non-heading, since most logs are not outlines."
+            },
+            {
+              "name": "variant",
+              "type": "TimelineVariant",
+              "required": false,
+              "description": "`default`   product scale: semibold titles at body size. `editorial` the travel-guide scale it was born at, for a narrative.",
+              "values": [
+                "default",
+                "editorial"
+              ]
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<ol data-slot=\"timeline\">"
+          }
         },
         {
           "name": "StepListItem",
+          "kind": "type",
+          "source": "src/components/timeline/timeline.tsx"
+        },
+        {
+          "name": "StepListProps",
           "kind": "type",
           "source": "src/components/timeline/timeline.tsx"
         },
@@ -6223,6 +6610,11 @@
           "kind": "type",
           "source": "src/components/timeline/timeline.tsx",
           "description": "A vertical sequence drawn as a spine beside the events it connects: an audit log, a deploy history, the stages of a rollout."
+        },
+        {
+          "name": "TimelineVariant",
+          "kind": "type",
+          "source": "src/components/timeline/timeline.tsx"
         }
       ],
       "stories": [
@@ -6367,7 +6759,10 @@
               "type": "\"solid\" | \"soft\" | \"outline\"",
               "required": false
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<span data-slot=\"badge\">"
+          }
         },
         {
           "name": "RecommendationBadge",
@@ -6390,7 +6785,10 @@
               "type": "\"essential\" | \"highly\" | \"detour\" | \"time\"",
               "required": false
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<span data-slot=\"recommendation-badge\">"
+          }
         },
         {
           "name": "StatusDot",
@@ -6415,9 +6813,20 @@
               "name": "tone",
               "type": "BadgeTone",
               "required": false,
-              "default": "neutral"
+              "default": "neutral",
+              "values": [
+                "neutral",
+                "danger",
+                "success",
+                "info",
+                "warn",
+                "accent"
+              ]
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<span data-slot=\"status-dot\">"
+          }
         },
         {
           "name": "RECOMMENDATION_LABELS",
@@ -6688,7 +7097,10 @@
               "type": "\"seam\" | \"flat\"",
               "required": false
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"callout\">"
+          }
         },
         {
           "name": "calloutVariants",
@@ -6890,7 +7302,7 @@
           "kind": "component",
           "source": "src/components/empty-state/empty-state.tsx",
           "variants": {
-            "variant": {
+            "kind": {
               "values": [
                 "empty",
                 "no-results",
@@ -6935,7 +7347,12 @@
               "name": "icon",
               "type": "ReactNode",
               "required": false,
-              "description": "Replace the variant's icon, or `false` for none."
+              "description": "Replace the kind's icon, or `false` for none."
+            },
+            {
+              "name": "kind",
+              "type": "\"empty\" | \"no-results\" | \"error\" | \"no-permission\"",
+              "required": false
             },
             {
               "name": "size",
@@ -6944,16 +7361,31 @@
             },
             {
               "name": "variant",
-              "type": "\"empty\" | \"no-results\" | \"error\" | \"no-permission\"",
-              "required": false
+              "type": "EmptyStateKind",
+              "required": false,
+              "values": [
+                "empty",
+                "no-results",
+                "error",
+                "no-permission"
+              ],
+              "deprecated": "Since 0.7.0; removed in 1.0.0. Use `kind`, which takes the same values. `codemods/prop-vocabulary.ts` rewrites call sites."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"empty-state\">"
+          }
         },
         {
           "name": "emptyStateVariants",
           "kind": "function",
           "source": "src/components/empty-state/empty-state.tsx",
           "description": "The state a panel is in when it has nothing to show — designed as a condition rather than as an apology."
+        },
+        {
+          "name": "EmptyStateKind",
+          "kind": "type",
+          "source": "src/components/empty-state/empty-state.tsx"
         },
         {
           "name": "EmptyStateProps",
@@ -7064,12 +7496,21 @@
               "description": "The kind of thing that goes here — \"Image\", \"Chart\", \"Preview\"."
             },
             {
+              "name": "layer",
+              "type": "\"shade\" | \"deep\"",
+              "required": false,
+              "description": "The cloth it is cut from: `shade` by default, `deep` on a shaded panel, where `shade` would vanish."
+            },
+            {
               "name": "tone",
               "type": "\"default\" | \"deep\"",
               "required": false,
-              "default": "default"
+              "deprecated": "Since 0.7.0; removed in 1.0.0. Use `layer`: `default` is `shade`, `deep` is `deep`. A ground is a layer, as on `Panel`; `tone` is a status."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"placeholder\">"
+          }
         },
         {
           "name": "PlaceholderProps",
@@ -7169,9 +7610,14 @@
             },
             {
               "name": "size",
-              "type": "\"sm\" | \"lg\" | \"md\"",
+              "type": "ProgressSize",
               "required": false,
-              "default": "md"
+              "default": "md",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
             },
             {
               "name": "thresholds",
@@ -7188,7 +7634,10 @@
           ],
           "inherits": [
             "MeterRootProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"meter\">"
+          }
         },
         {
           "name": "Progress",
@@ -7215,16 +7664,21 @@
             },
             {
               "name": "size",
-              "type": "\"sm\" | \"lg\" | \"md\"",
+              "type": "ProgressSize",
               "required": false,
-              "default": "md"
+              "default": "md",
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ]
             },
             {
               "name": "tone",
-              "type": "\"danger\" | \"success\" | \"ink\"",
+              "type": "\"neutral\" | \"danger\" | \"success\" | \"ink\"",
               "required": false,
-              "default": "ink",
-              "description": "Fill colour. Ink is in-flight; verde/rojo for a finished state that stays on screen."
+              "default": "neutral",
+              "description": "Fill colour. `neutral` (ink) is in-flight; `success` and `danger` (verde, rojo) for a finished state that stays on screen. `ink` is deprecated since 0.7.0 and removed in 1.0.0: use `neutral`, the same fill under the status word every other `tone` uses."
             },
             {
               "name": "valueText",
@@ -7235,7 +7689,10 @@
           ],
           "inherits": [
             "ProgressRootProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"progress\">"
+          }
         },
         {
           "name": "meterLevel",
@@ -7250,6 +7707,11 @@
         },
         {
           "name": "ProgressProps",
+          "kind": "type",
+          "source": "src/components/progress/progress.tsx"
+        },
+        {
+          "name": "ProgressSize",
           "kind": "type",
           "source": "src/components/progress/progress.tsx"
         }
@@ -7377,34 +7839,16 @@
               "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
               "required": false
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"skeleton\">"
+          }
         },
         {
           "name": "SkeletonGroup",
           "kind": "component",
           "source": "src/components/skeleton/skeleton.tsx",
           "description": "The region that is loading, and the one place that says so.",
-          "variants": {
-            "shape": {
-              "values": [
-                "block",
-                "text",
-                "line",
-                "avatar"
-              ],
-              "default": "block"
-            },
-            "size": {
-              "values": [
-                "xs",
-                "sm",
-                "md",
-                "lg",
-                "xl"
-              ],
-              "default": "md"
-            }
-          },
           "props": [
             {
               "name": "fallback",
@@ -7430,34 +7874,16 @@
               "required": false,
               "description": "The real content, shown once loaded."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"skeleton-group\">"
+          }
         },
         {
           "name": "SkeletonText",
           "kind": "component",
           "source": "src/components/skeleton/skeleton.tsx",
           "description": "Lines of text that have not arrived. The last line is short, because a paragraph ends ragged; a block of equal bars reads as a table.",
-          "variants": {
-            "shape": {
-              "values": [
-                "block",
-                "text",
-                "line",
-                "avatar"
-              ],
-              "default": "block"
-            },
-            "size": {
-              "values": [
-                "xs",
-                "sm",
-                "md",
-                "lg",
-                "xl"
-              ],
-              "default": "md"
-            }
-          },
           "props": [
             {
               "name": "lines",
@@ -7465,7 +7891,15 @@
               "required": false,
               "default": "3"
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"skeleton-text\">"
+          }
+        },
+        {
+          "name": "skeletonVariants",
+          "kind": "function",
+          "source": "src/components/skeleton/skeleton.tsx"
         },
         {
           "name": "SkeletonGroupProps",
@@ -7638,7 +8072,10 @@
               "default": "5000",
               "description": "Default auto-dismiss, ms. Also the timeout a running toast starts when `update()` turns it into a result."
             }
-          ]
+          ],
+          "forwards": {
+            "element": null
+          }
         },
         {
           "name": "useToast",
@@ -7660,7 +8097,7 @@
           "name": "ToastTone",
           "kind": "type",
           "source": "src/components/toast/toast.tsx",
-          "description": "Something happened somewhere other than where the operator is looking."
+          "description": "The status tones every `tone` prop uses, minus `accent` (a toast is never an emphasis, only a report), plus `running`: the one toast that is work still happening, which `update()` turns into a result."
         }
       ],
       "stories": [
@@ -7761,6 +8198,7 @@
           "name": "Checkbox",
           "kind": "component",
           "source": "src/components/checkbox/checkbox.tsx",
+          "description": "`className`, `ref` and the DOM props go to the control, with or without a `label`; the row a `label` adds takes `wrapperClassName`. `className` used to move to that row when a label was set.",
           "props": [
             {
               "name": "className",
@@ -7778,12 +8216,21 @@
               "type": "ReactNode",
               "required": false,
               "description": "Visible label. The whole label is the press target."
+            },
+            {
+              "name": "wrapperClassName",
+              "type": "string",
+              "required": false,
+              "description": "Classes for the label row a `label` adds around the control. `className` always styles the control itself."
             }
           ],
           "inherits": [
             "CheckboxRootProps",
             "NativeButtonProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<span data-slot=\"checkbox\">"
+          }
         },
         {
           "name": "CheckboxGroup",
@@ -7818,7 +8265,11 @@
           ],
           "inherits": [
             "CheckboxGroupProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div>",
+            "className": "<fieldset data-slot=\"checkbox-group\">"
+          }
         },
         {
           "name": "checkboxBoxClasses",
@@ -7952,13 +8403,16 @@
           "name": "Chip",
           "kind": "component",
           "source": "src/components/chip/chip.tsx",
+          "description": "`className` and `style` go to the `<label>`, which is the chip you see; `ref` and every other prop go to the `<input>`, which is the control a form, a test or a screen reader talks to. `style` used to go to the visually hidden input with the rest, where it did nothing.",
           "variants": {
             "size": {
               "values": [
+                "sm",
+                "md",
                 "default",
                 "comfortable"
               ],
-              "default": "default"
+              "default": "sm"
             }
           },
           "props": [
@@ -7976,7 +8430,7 @@
             },
             {
               "name": "size",
-              "type": "\"default\" | \"comfortable\"",
+              "type": "\"sm\" | \"md\" | \"default\" | \"comfortable\"",
               "required": false
             },
             {
@@ -7986,22 +8440,17 @@
               "default": "checkbox",
               "description": "`radio` for one-of-N within a `name` group, `checkbox` for multi-select."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<input>",
+            "className": "<label data-slot=\"chip\">"
+          }
         },
         {
           "name": "ChipGroup",
           "kind": "component",
           "source": "src/components/chip/chip.tsx",
           "description": "A row of chips inside a real fieldset. The legend is what a screen reader says before the first chip — \"Status, group\" — so \"Failed\" is heard as a status filter rather than as an alarming word on its own.",
-          "variants": {
-            "size": {
-              "values": [
-                "default",
-                "comfortable"
-              ],
-              "default": "default"
-            }
-          },
           "props": [
             {
               "name": "legend",
@@ -8016,7 +8465,10 @@
               "default": "false",
               "description": "Hide the legend visually while keeping it for assistive technology — for a toolbar row whose meaning is obvious from position."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<fieldset data-slot=\"chip-group\">"
+          }
         },
         {
           "name": "chipVariants",
@@ -8173,32 +8625,6 @@
               "description": "Suggestions. Plain strings, or options with a description line."
             },
             {
-              "name": "aria-describedby",
-              "type": "string",
-              "required": false
-            },
-            {
-              "name": "aria-invalid",
-              "type": "boolean | \"true\" | \"false\"",
-              "required": false
-            },
-            {
-              "name": "aria-label",
-              "type": "string",
-              "required": false
-            },
-            {
-              "name": "autoComplete",
-              "type": "string",
-              "required": false,
-              "default": "off"
-            },
-            {
-              "name": "className",
-              "type": "string",
-              "required": false
-            },
-            {
               "name": "defaultValue",
               "type": "string",
               "required": false
@@ -8213,11 +8639,6 @@
               "type": "ReactNode",
               "required": false,
               "description": "What the popup says when nothing matches. Omit to close the popup instead."
-            },
-            {
-              "name": "id",
-              "type": "string",
-              "required": false
             },
             {
               "name": "label",
@@ -8264,7 +8685,7 @@
             },
             {
               "name": "size",
-              "type": "\"sm\" | \"lg\" | \"md\"",
+              "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false,
               "default": "md"
             },
@@ -8277,39 +8698,29 @@
               "name": "value",
               "type": "string",
               "required": false
+            },
+            {
+              "name": "wrapperClassName",
+              "type": "string",
+              "required": false,
+              "description": "Classes for the wrapper that holds `label` and the input. Only rendered with a `label`."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<input data-slot=\"autocomplete\">"
+          }
         },
         {
           "name": "Combobox",
           "kind": "component",
           "source": "src/components/combobox/combobox.tsx",
+          "description": "`className` goes to the box around the input (the element with the cut), `ref`, `id` and the other DOM props to the `<input>`, with or without a `label`; the wrapper a `label` adds takes `wrapperClassName`.",
           "props": [
             {
               "name": "items",
-              "type": "Items",
+              "type": "ComboboxItems",
               "required": true,
               "description": "Flat options, or labelled groups. With `filter={null}`, the options to show right now."
-            },
-            {
-              "name": "aria-describedby",
-              "type": "string",
-              "required": false
-            },
-            {
-              "name": "aria-invalid",
-              "type": "boolean | \"true\" | \"false\"",
-              "required": false
-            },
-            {
-              "name": "aria-label",
-              "type": "string",
-              "required": false
-            },
-            {
-              "name": "className",
-              "type": "string",
-              "required": false
             },
             {
               "name": "clearLabel",
@@ -8338,11 +8749,6 @@
               "type": "((option: ComboboxOption, query: string) => boolean) | null",
               "required": false,
               "description": "How typed text matches an option. Pass `null` when the caller filters — a server search — and hand the results in through `items`."
-            },
-            {
-              "name": "id",
-              "type": "string",
-              "required": false
             },
             {
               "name": "label",
@@ -8397,7 +8803,7 @@
               "name": "removeLabel",
               "type": "((label: string) => string)",
               "required": false,
-              "description": "Accessible name of each chip's remove button."
+              "description": "Only with `multiple`: a single value has no chips to remove. Typed `never` so passing it here is an error rather than a silent no-op — an optional discriminant does not narrow the union by itself. Accessible name of each chip's remove button."
             },
             {
               "name": "required",
@@ -8406,7 +8812,7 @@
             },
             {
               "name": "size",
-              "type": "\"sm\" | \"lg\" | \"md\"",
+              "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false
             },
             {
@@ -8425,13 +8831,35 @@
               "name": "value",
               "type": "string | string[] | null",
               "required": false
+            },
+            {
+              "name": "wrapperClassName",
+              "type": "string",
+              "required": false,
+              "description": "Classes for the wrapper that holds `label` and the field. Only rendered with a `label`."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<input>",
+            "className": "<div data-slot=\"combobox\">"
+          }
         },
         {
           "name": "AutocompleteProps",
           "kind": "type",
           "source": "src/components/combobox/combobox.tsx"
+        },
+        {
+          "name": "ComboboxCommonProps",
+          "kind": "type",
+          "source": "src/components/combobox/combobox.tsx",
+          "description": "What both forms share. Every DOM prop of the `<input>` is accepted too, and goes to it with `ref`; `className` goes to the box around it."
+        },
+        {
+          "name": "ComboboxItems",
+          "kind": "type",
+          "source": "src/components/combobox/combobox.tsx",
+          "description": "Flat options, or labelled groups."
         },
         {
           "name": "ComboboxMultipleProps",
@@ -8657,11 +9085,6 @@
               "description": "Move focus to the active day when the calendar mounts — for a popup that has just opened."
             },
             {
-              "name": "className",
-              "type": "string",
-              "required": false
-            },
-            {
               "name": "defaultFocusedDate",
               "type": "Date | null",
               "required": false,
@@ -8731,33 +9154,16 @@
               "required": false,
               "description": "0 = Sunday … 6 = Saturday. Overrides the locale's first day of the week."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"calendar\">"
+          }
         },
         {
           "name": "DatePicker",
           "kind": "component",
           "source": "src/components/date-picker/date-picker.tsx",
           "props": [
-            {
-              "name": "aria-describedby",
-              "type": "string",
-              "required": false
-            },
-            {
-              "name": "aria-invalid",
-              "type": "boolean | \"true\" | \"false\"",
-              "required": false
-            },
-            {
-              "name": "aria-label",
-              "type": "string",
-              "required": false
-            },
-            {
-              "name": "className",
-              "type": "string",
-              "required": false
-            },
             {
               "name": "defaultOpen",
               "type": "boolean",
@@ -8774,11 +9180,6 @@
             {
               "name": "disabled",
               "type": "boolean",
-              "required": false
-            },
-            {
-              "name": "id",
-              "type": "string",
               "required": false
             },
             {
@@ -8809,9 +9210,20 @@
               "description": "Submitted as `yyyy-mm-dd`, whatever the display locale."
             },
             {
+              "name": "onOpenChange",
+              "type": "((open: boolean) => void)",
+              "required": false
+            },
+            {
               "name": "onValueChange",
               "type": "((value: Date | null) => void)",
               "required": false
+            },
+            {
+              "name": "open",
+              "type": "boolean",
+              "required": false,
+              "description": "Whether the calendar is open, when the page owns that."
             },
             {
               "name": "placeholder",
@@ -8826,7 +9238,7 @@
             },
             {
               "name": "size",
-              "type": "\"sm\" | \"lg\" | \"md\"",
+              "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false,
               "default": "md"
             },
@@ -8846,34 +9258,24 @@
               "type": "number",
               "required": false,
               "description": "0 = Sunday … 6 = Saturday. Overrides the locale's first day of the week."
+            },
+            {
+              "name": "wrapperClassName",
+              "type": "string",
+              "required": false,
+              "description": "Classes for the outer element that holds the field and its error."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<input data-slot=\"input\">",
+            "className": "<div data-slot=\"input-group\">"
+          }
         },
         {
           "name": "DateRangePicker",
           "kind": "component",
           "source": "src/components/date-picker/date-range-picker.tsx",
           "props": [
-            {
-              "name": "aria-describedby",
-              "type": "string",
-              "required": false
-            },
-            {
-              "name": "aria-invalid",
-              "type": "boolean | \"true\" | \"false\"",
-              "required": false
-            },
-            {
-              "name": "aria-label",
-              "type": "string",
-              "required": false
-            },
-            {
-              "name": "className",
-              "type": "string",
-              "required": false
-            },
             {
               "name": "defaultOpen",
               "type": "boolean",
@@ -8890,11 +9292,6 @@
             {
               "name": "disabled",
               "type": "boolean",
-              "required": false
-            },
-            {
-              "name": "id",
-              "type": "string",
               "required": false
             },
             {
@@ -8924,9 +9321,20 @@
               "description": "Submitted as `<name>-start` and `<name>-end`, `yyyy-mm-dd`."
             },
             {
+              "name": "onOpenChange",
+              "type": "((open: boolean) => void)",
+              "required": false
+            },
+            {
               "name": "onValueChange",
               "type": "((value: DateRange) => void)",
               "required": false
+            },
+            {
+              "name": "open",
+              "type": "boolean",
+              "required": false,
+              "description": "Whether the calendar is open, when the page owns that."
             },
             {
               "name": "placeholder",
@@ -8948,7 +9356,7 @@
             },
             {
               "name": "size",
-              "type": "\"sm\" | \"lg\" | \"md\"",
+              "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false,
               "default": "md"
             },
@@ -8974,8 +9382,17 @@
               "name": "weekStartsOn",
               "type": "number",
               "required": false
+            },
+            {
+              "name": "wrapperClassName",
+              "type": "string",
+              "required": false,
+              "description": "Classes for the outer element that holds the trigger. `className` styles the trigger itself."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<button data-slot=\"date-range-picker-trigger\">"
+          }
         },
         {
           "name": "CalendarProps",
@@ -9018,6 +9435,11 @@
           "kind": "type",
           "source": "src/components/date-picker/date-utils.ts",
           "description": "The date arithmetic the pickers need, and nothing more."
+        },
+        {
+          "name": "DatePart",
+          "kind": "type",
+          "source": "src/components/date-picker/date-utils.ts"
         },
         {
           "name": "DatePattern",
@@ -9234,7 +9656,10 @@
               "default": "false",
               "description": "Renders the required asterisk. Does NOT set `required` on any control."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<label data-slot=\"label\">"
+          }
         },
         {
           "name": "Field",
@@ -9283,13 +9708,16 @@
               "required": false,
               "default": "false"
             }
-          ]
+          ],
+          "forwards": {
+            "element": null
+          }
         },
         {
           "name": "Input",
           "kind": "component",
           "source": "src/components/field/input.tsx",
-          "description": "A text control. Without adornments it is the bare `<input>` wearing the shared control classes; with them, the CUT moves to a wrapper and the input inside goes transparent, so the icon or unit sits inside the same keyline as the text rather than beside it — a unit outside the box reads as a second field.",
+          "description": "A text control: an `<input>` inside a box that wears the shared control classes. The box is always there, so the icon or unit of an adorned input sits inside the same keyline as the text rather than beside it — a unit outside the box reads as a second field.",
           "props": [
             {
               "name": "leading",
@@ -9299,7 +9727,7 @@
             },
             {
               "name": "size",
-              "type": "\"sm\" | \"lg\" | \"md\"",
+              "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false,
               "default": "md",
               "description": "Height and type from the density tokens."
@@ -9310,7 +9738,11 @@
               "required": false,
               "description": "Inside the cut, after the text: a unit (\"ms\", \"tokens\"), a button."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<input data-slot=\"input\">",
+            "className": "<div data-slot=\"input-group\">"
+          }
         },
         {
           "name": "Textarea",
@@ -9325,7 +9757,10 @@
               "default": "false",
               "description": "Grow with the content instead of scrolling inside a fixed box, using `field-sizing: content` — no script, no resize observer, and it still respects `rows` as the minimum and `max-h-*` as the ceiling. Browsers without it fall back to the normal resizable textarea, which is the correct degradation rather than a broken one."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<textarea data-slot=\"textarea\">"
+          }
         },
         {
           "name": "SearchInput",
@@ -9354,11 +9789,15 @@
             },
             {
               "name": "size",
-              "type": "\"sm\" | \"lg\" | \"md\"",
+              "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false,
               "description": "Height and type from the density tokens."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<input data-slot=\"input\">",
+            "className": "<div data-slot=\"input-group\">"
+          }
         },
         {
           "name": "LabelProps",
@@ -9529,6 +9968,7 @@
           "name": "FileUpload",
           "kind": "component",
           "source": "src/components/file-upload/file-upload.tsx",
+          "description": "`className`, `ref` and the DOM props go to the root, the region that holds the dropzone and the list; the Field wiring (`id`, `aria-*`) goes to the browse button, the control a label names.",
           "props": [
             {
               "name": "accept",
@@ -9548,11 +9988,6 @@
             },
             {
               "name": "aria-label",
-              "type": "string",
-              "required": false
-            },
-            {
-              "name": "className",
               "type": "string",
               "required": false
             },
@@ -9639,7 +10074,10 @@
               "type": "boolean",
               "required": false
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"file-upload\">"
+          }
         },
         {
           "name": "defaultFileUploadMessages",
@@ -9703,6 +10141,11 @@
         },
         {
           "name": "FileRejectionReason",
+          "kind": "type",
+          "source": "src/components/file-upload/file-upload-utils.ts"
+        },
+        {
+          "name": "FileValidationOptions",
           "kind": "type",
           "source": "src/components/file-upload/file-upload-utils.ts"
         }
@@ -9856,33 +10299,32 @@
           "source": "src/components/number-input/number-input.tsx",
           "props": [
             {
-              "name": "aria-describedby",
-              "type": "string",
-              "required": false,
-              "description": "Identifies the element (or elements) that describes the object."
-            },
-            {
-              "name": "aria-invalid",
-              "type": "boolean | \"true\" | \"false\"",
-              "required": false,
-              "description": "Indicates the entered value does not conform to the format expected by the application."
-            },
-            {
-              "name": "aria-label",
-              "type": "string",
-              "required": false,
-              "description": "Defines a string value that labels the current element."
-            },
-            {
-              "name": "className",
-              "type": "string",
+              "name": "allowOutOfRange",
+              "type": "boolean",
               "required": false
+            },
+            {
+              "name": "allowWheelScrub",
+              "type": "boolean",
+              "required": false,
+              "description": "Let the wheel change a focused, hovered field. Off by default; see above."
             },
             {
               "name": "decrementLabel",
               "type": "string",
               "required": false,
               "default": "Decrease"
+            },
+            {
+              "name": "defaultValue",
+              "type": "number",
+              "required": false
+            },
+            {
+              "name": "format",
+              "type": "NumberFormatOptions",
+              "required": false,
+              "description": "`Intl.NumberFormat` options: grouping, decimals, a unit or a currency."
             },
             {
               "name": "incrementLabel",
@@ -9898,37 +10340,84 @@
               "description": "Visible label above the field. Omit inside `Field`, which renders its own."
             },
             {
+              "name": "largeStep",
+              "type": "number",
+              "required": false,
+              "default": "10",
+              "description": "Shift+Arrow and PageUp/PageDown step."
+            },
+            {
+              "name": "locale",
+              "type": "LocalesArgument",
+              "required": false,
+              "description": "BCP 47 tag for parsing and formatting. `undefined` uses the runtime's locale."
+            },
+            {
+              "name": "max",
+              "type": "number",
+              "required": false
+            },
+            {
+              "name": "min",
+              "type": "number",
+              "required": false
+            },
+            {
               "name": "onValueChange",
               "type": "((value: number | null) => void)",
               "required": false
             },
             {
-              "name": "placeholder",
-              "type": "string",
-              "required": false
-            },
-            {
-              "name": "ref",
-              "type": "Ref<HTMLInputElement>",
+              "name": "onValueCommitted",
+              "type": "((value: number | null, eventDetails: NumberFieldRootCommitEventDetails) => void)",
               "required": false,
-              "description": "The text input, not the wrapper: the element that takes focus and the value."
+              "description": "Called when the value is committed: on blur, Enter or a stepper press, not per keystroke."
             },
             {
               "name": "size",
-              "type": "\"sm\" | \"lg\" | \"md\"",
+              "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false,
               "default": "md"
+            },
+            {
+              "name": "smallStep",
+              "type": "number",
+              "required": false,
+              "description": "Alt+Arrow step."
+            },
+            {
+              "name": "snapOnStep",
+              "type": "boolean",
+              "required": false
+            },
+            {
+              "name": "step",
+              "type": "number | \"any\"",
+              "required": false,
+              "description": "ArrowUp/Down step."
             },
             {
               "name": "unit",
               "type": "string",
               "required": false,
               "description": "Short unit suffix inside the cut: \"tokens\", \"ms\", \"%\". Also added to the accessible description."
+            },
+            {
+              "name": "value",
+              "type": "number | null",
+              "required": false
+            },
+            {
+              "name": "wrapperClassName",
+              "type": "string",
+              "required": false,
+              "description": "Classes for the wrapper that holds `label` and the field. Only rendered with a `label`."
             }
           ],
-          "inherits": [
-            "NumberFieldRootProps"
-          ]
+          "forwards": {
+            "element": "<input>",
+            "className": "<div data-slot=\"number-input\">"
+          }
         },
         {
           "name": "NumberInputProps",
@@ -10081,6 +10570,7 @@
           "name": "Radio",
           "kind": "component",
           "source": "src/components/radio/radio.tsx",
+          "description": "`className`, `ref` and the DOM props go to the control, with or without a `label`; the row a `label` adds takes `wrapperClassName`. `className` used to move to that row when a label was set.",
           "props": [
             {
               "name": "className",
@@ -10096,12 +10586,21 @@
               "name": "label",
               "type": "ReactNode",
               "required": false
+            },
+            {
+              "name": "wrapperClassName",
+              "type": "string",
+              "required": false,
+              "description": "Classes for the label row a `label` adds around the control. `className` always styles the control itself."
             }
           ],
           "inherits": [
             "NativeButtonProps",
             "RadioRootProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<span data-slot=\"radio\">"
+          }
         },
         {
           "name": "RadioGroup",
@@ -10134,7 +10633,11 @@
           ],
           "inherits": [
             "RadioGroupProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div>",
+            "className": "<div data-slot=\"radio-group-field\">"
+          }
         },
         {
           "name": "RadioGroupProps",
@@ -10258,22 +10761,12 @@
           "name": "SegmentedControl",
           "kind": "component",
           "source": "src/components/segmented/segmented-control.tsx",
+          "description": "`className`, `ref` and the rest of the DOM props go to the group.",
           "props": [
-            {
-              "name": "aria-label",
-              "type": "string",
-              "required": true,
-              "description": "Names the group. Required: three buttons reading \"Table\", \"Board\", \"List\" mean nothing until a screen reader hears \"View\"."
-            },
             {
               "name": "options",
               "type": "SegmentedOption<V>[]",
               "required": true
-            },
-            {
-              "name": "className",
-              "type": "string",
-              "required": false
             },
             {
               "name": "defaultValue",
@@ -10315,12 +10808,21 @@
               "type": "string",
               "required": false
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"segmented-control\">"
+          }
+        },
+        {
+          "name": "SegmentedControlBaseProps",
+          "kind": "type",
+          "source": "src/components/segmented/segmented-control.tsx"
         },
         {
           "name": "SegmentedControlProps",
           "kind": "type",
-          "source": "src/components/segmented/segmented-control.tsx"
+          "source": "src/components/segmented/segmented-control.tsx",
+          "description": "A name is required: three buttons reading \"Table\", \"Board\", \"List\" mean nothing until a screen reader hears \"View\". It can be an `aria-label`, or an `aria-labelledby` pointing at a visible heading; the second used to be refused, which forced a duplicate, invisible name next to a visible one."
         },
         {
           "name": "SegmentedOption",
@@ -10471,24 +10973,10 @@
               "description": "Flat options, or labelled groups."
             },
             {
-              "name": "aria-describedby",
-              "type": "string",
-              "required": false
-            },
-            {
-              "name": "aria-invalid",
-              "type": "boolean | \"true\" | \"false\"",
-              "required": false
-            },
-            {
-              "name": "aria-label",
-              "type": "string",
-              "required": false
-            },
-            {
               "name": "className",
               "type": "string",
-              "required": false
+              "required": false,
+              "description": "CSS class applied to the element, or a function that returns a class based on the component's state."
             },
             {
               "name": "defaultValue",
@@ -10498,11 +10986,6 @@
             {
               "name": "disabled",
               "type": "boolean",
-              "required": false
-            },
-            {
-              "name": "id",
-              "type": "string",
               "required": false
             },
             {
@@ -10533,8 +11016,14 @@
               "required": false
             },
             {
+              "name": "rootProps",
+              "type": "Omit<Props<V, false>, \"defaultValue\" | \"children\" | \"value\" | \"items\" | \"onValueChange\">",
+              "required": false,
+              "description": "Props for Base UI's `Select.Root`, for what the one-line form does not name: `open`, `onOpenChange`, `modal`, `readOnly`."
+            },
+            {
               "name": "size",
-              "type": "\"sm\" | \"lg\" | \"md\"",
+              "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false,
               "default": "md"
             },
@@ -10542,8 +11031,20 @@
               "name": "value",
               "type": "string | null",
               "required": false
+            },
+            {
+              "name": "wrapperClassName",
+              "type": "string",
+              "required": false,
+              "description": "Classes for the wrapper that holds `label` and the trigger. Only rendered with a `label`."
             }
-          ]
+          ],
+          "inherits": [
+            "NativeButtonProps"
+          ],
+          "forwards": {
+            "element": "<button data-slot=\"select-trigger\">"
+          }
         },
         {
           "name": "SelectContent",
@@ -10566,19 +11067,28 @@
           ],
           "inherits": [
             "SelectPopupProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"select-content\">"
+          }
         },
         {
           "name": "SelectGroup",
           "kind": "component",
           "source": "src/components/select/select.tsx",
-          "props": []
+          "props": [],
+          "forwards": {
+            "element": "<div data-slot=\"select-group\">"
+          }
         },
         {
           "name": "SelectGroupLabel",
           "kind": "component",
           "source": "src/components/select/select.tsx",
-          "props": []
+          "props": [],
+          "forwards": {
+            "element": "<div data-slot=\"select-group-label\">"
+          }
         },
         {
           "name": "SelectItem",
@@ -10601,7 +11111,10 @@
           "inherits": [
             "NativeButtonProps",
             "SelectItemProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"select-item\">"
+          }
         },
         {
           "name": "SelectRoot",
@@ -10611,7 +11124,10 @@
           "props": [],
           "inherits": [
             "SelectRootProps"
-          ]
+          ],
+          "forwards": {
+            "element": null
+          }
         },
         {
           "name": "SelectSeparator",
@@ -10620,7 +11136,10 @@
           "props": [],
           "inherits": [
             "SelectSeparatorProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"select-separator\">"
+          }
         },
         {
           "name": "SelectTrigger",
@@ -10641,7 +11160,7 @@
             },
             {
               "name": "size",
-              "type": "\"sm\" | \"lg\" | \"md\"",
+              "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false,
               "default": "md"
             }
@@ -10649,7 +11168,10 @@
           "inherits": [
             "NativeButtonProps",
             "SelectTriggerProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<button data-slot=\"select-trigger\">"
+          }
         },
         {
           "name": "SelectValue",
@@ -10658,7 +11180,10 @@
           "props": [],
           "inherits": [
             "SelectValueProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<span data-slot=\"select-value\">"
+          }
         },
         {
           "name": "SelectContentProps",
@@ -10854,7 +11379,10 @@
           ],
           "inherits": [
             "SliderRootProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"slider\">"
+          }
         },
         {
           "name": "SliderProps",
@@ -10959,6 +11487,7 @@
           "name": "Switch",
           "kind": "component",
           "source": "src/components/switch/switch.tsx",
+          "description": "`className`, `ref` and the DOM props go to the switch, with or without a `label`; see `Checkbox`.",
           "props": [
             {
               "name": "className",
@@ -10981,12 +11510,21 @@
               "required": false,
               "default": "end",
               "description": "Put the label before the switch — for settings lists, where labels align left and switches right."
+            },
+            {
+              "name": "wrapperClassName",
+              "type": "string",
+              "required": false,
+              "description": "Classes for the label row a `label` adds around the control. `className` always styles the switch itself."
             }
           ],
           "inherits": [
             "NativeButtonProps",
             "SwitchRootProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<span data-slot=\"switch\">"
+          }
         },
         {
           "name": "SwitchProps",
@@ -11048,7 +11586,7 @@
         ],
         "practices": [
           {
-            "do": "Mark the current destination with active, and set countTone to attention only for things that need a person.",
+            "do": "Mark the current destination with active, and set countTone to danger only for things that need a person.",
             "dont": "Fill every count in rojo; totals are not alarms."
           },
           {
@@ -11134,14 +11672,20 @@
               "required": false,
               "description": "Controlled collapse of the desktop sidebar."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"app-shell\">"
+          }
         },
         {
           "name": "SidebarToggle",
           "kind": "component",
           "source": "src/components/app-shell/app-shell.tsx",
           "description": "The control that collapses the sidebar on desktop and opens the sheet on mobile. Two buttons, one shown per breakpoint, rather than one button that asks `matchMedia` what it is: CSS decides which exists, so the server render is already right and nothing flickers on hydration.",
-          "props": []
+          "props": [],
+          "forwards": {
+            "element": "<span data-slot=\"sidebar-toggle\">"
+          }
         },
         {
           "name": "Topbar",
@@ -11167,7 +11711,10 @@
               "required": false,
               "description": "The product mark or switcher."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<header data-slot=\"topbar\">"
+          }
         },
         {
           "name": "NavItem",
@@ -11202,24 +11749,36 @@
             },
             {
               "name": "countTone",
-              "type": "\"neutral\" | \"attention\"",
+              "type": "\"neutral\" | \"danger\" | \"attention\"",
               "required": false,
               "default": "neutral",
-              "description": "`attention` fills the count in the danger colour — for failures that need a person, not for totals."
+              "description": "`danger` fills the count in the danger colour — for failures that need a person, not for totals. `attention` is deprecated since 0.7.0 and removed in 1.0.0: use `danger`, the same fill under the status word every `tone` uses."
             },
             {
               "name": "icon",
               "type": "ReactNode",
               "required": false
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<a data-slot=\"nav-item\">"
+          }
         },
         {
           "name": "NavSection",
           "kind": "component",
           "source": "src/components/app-shell/sidebar.tsx",
-          "description": "A titled group of items. The title is in the rótulo register; collapsed to a rail it becomes a short keyline, and the words stay for screen readers so the groups are still announced.",
-          "props": []
+          "props": [
+            {
+              "name": "title",
+              "type": "string",
+              "required": false,
+              "description": "The group's title, in the rótulo register. Names the list."
+            }
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"nav-section\">"
+          }
         },
         {
           "name": "Sidebar",
@@ -11242,7 +11801,10 @@
               "type": "ReactNode",
               "required": false
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<nav data-slot=\"sidebar-nav\">"
+          }
         },
         {
           "name": "SidebarContext",
@@ -11261,6 +11823,11 @@
           "description": "What a nav item needs to know about where it is drawn."
         },
         {
+          "name": "SidebarToggleProps",
+          "kind": "type",
+          "source": "src/components/app-shell/app-shell.tsx"
+        },
+        {
           "name": "TopbarProps",
           "kind": "type",
           "source": "src/components/app-shell/app-shell.tsx"
@@ -11269,6 +11836,12 @@
           "name": "NavItemProps",
           "kind": "type",
           "source": "src/components/app-shell/sidebar.tsx"
+        },
+        {
+          "name": "NavSectionProps",
+          "kind": "type",
+          "source": "src/components/app-shell/sidebar.tsx",
+          "description": "A titled group of items. The title is in the rótulo register; collapsed to a rail it becomes a short keyline, and the words stay for screen readers so the groups are still announced."
         },
         {
           "name": "SidebarProps",
@@ -11347,7 +11920,7 @@
           "kind": "component",
           "source": "src/components/layout/container.tsx",
           "variants": {
-            "size": {
+            "width": {
               "values": [
                 "page",
                 "wide",
@@ -11360,10 +11933,25 @@
           "props": [
             {
               "name": "size",
+              "type": "ContainerWidth",
+              "required": false,
+              "values": [
+                "page",
+                "wide",
+                "prose",
+                "full"
+              ],
+              "deprecated": "Since 0.7.0; removed in 1.0.0. Use `width`, which takes the same values. `codemods/prop-vocabulary.ts` rewrites call sites."
+            },
+            {
+              "name": "width",
               "type": "\"page\" | \"wide\" | \"prose\" | \"full\"",
               "required": false
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"container\">"
+          }
         },
         {
           "name": "Section",
@@ -11384,12 +11972,16 @@
               "default": "panel",
               "description": "`page` is the editorial 56/80/112px rhythm; `panel` is the tool rhythm."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<section data-slot=\"section\">"
+          }
         },
         {
           "name": "SectionHeader",
           "kind": "component",
           "source": "src/components/layout/section.tsx",
+          "description": "`className`, `ref` and the rest of the DOM props go to the outer `<div>`.",
           "props": [
             {
               "name": "title",
@@ -11401,11 +11993,6 @@
               "type": "ReactNode",
               "required": false,
               "description": "Actions, aligned to the heading's baseline on the right."
-            },
-            {
-              "name": "className",
-              "type": "string",
-              "required": false
             },
             {
               "name": "label",
@@ -11424,7 +12011,10 @@
               "required": false,
               "default": "2"
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"section-header\">"
+          }
         },
         {
           "name": "containerVariants",
@@ -11434,6 +12024,11 @@
         },
         {
           "name": "ContainerProps",
+          "kind": "type",
+          "source": "src/components/layout/container.tsx"
+        },
+        {
+          "name": "ContainerWidth",
           "kind": "type",
           "source": "src/components/layout/container.tsx"
         },
@@ -11517,7 +12112,14 @@
               "name": "band",
               "type": "DividerBand",
               "required": false,
-              "default": "oro"
+              "default": "oro",
+              "values": [
+                "cloth",
+                "rojo",
+                "anil",
+                "verde",
+                "oro"
+              ]
             },
             {
               "name": "orientation",
@@ -11539,7 +12141,10 @@
               "default": "keyline",
               "description": "`keyline` — the decorative 1px rule. Between rows, between fields. `relleno` — the filler slit: a band of colour cut by fine ink lines. For the seam between two parts of a page, not between list items. `diente`  — the sawtooth left where one ground is cut away from another. For the major seam only, where the page gives way to a filled panel. Set `color` on the element to choose the ground."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"divider\">"
+          }
         },
         {
           "name": "DividerBand",
@@ -11661,7 +12266,10 @@
               "required": false,
               "description": "For `cols=\"auto\"`: the narrowest a cell may get, as a CSS length."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"grid\">"
+          }
         },
         {
           "name": "gridVariants",
@@ -11808,7 +12416,10 @@
               "required": false,
               "description": "A Tabs list. Sits on the header's bottom edge so the active tab cuts into it."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<header data-slot=\"page-header\">"
+          }
         },
         {
           "name": "PageHeaderProps",
@@ -11897,7 +12508,7 @@
           "kind": "component",
           "source": "src/components/layout/panel.tsx",
           "variants": {
-            "tone": {
+            "layer": {
               "values": [
                 "pale",
                 "cloth",
@@ -11941,7 +12552,7 @@
           "props": [
             {
               "name": "as",
-              "type": "\"div\" | \"article\" | \"aside\" | \"section\"",
+              "type": "\"article\" | \"aside\" | \"div\" | \"section\"",
               "required": false,
               "default": "div",
               "description": "Render as a landmark-free `section` (named by its heading) instead of a `div`."
@@ -11957,22 +12568,46 @@
               "required": false
             },
             {
+              "name": "layer",
+              "type": "\"pale\" | \"cloth\" | \"shade\" | \"ink\" | \"rojo\" | \"anil\" | \"verde\" | \"oro\"",
+              "required": false
+            },
+            {
               "name": "padding",
               "type": "\"none\" | \"sm\" | \"md\" | \"lg\"",
               "required": false
             },
             {
               "name": "tone",
-              "type": "\"pale\" | \"cloth\" | \"shade\" | \"ink\" | \"rojo\" | \"anil\" | \"verde\" | \"oro\"",
-              "required": false
+              "type": "PanelLayer",
+              "required": false,
+              "values": [
+                "pale",
+                "cloth",
+                "shade",
+                "ink",
+                "rojo",
+                "anil",
+                "verde",
+                "oro"
+              ],
+              "deprecated": "Since 0.7.0; removed in 1.0.0. Use `layer`, which takes the same values. `codemods/prop-vocabulary.ts` rewrites call sites."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"panel\">"
+          }
         },
         {
           "name": "panelVariants",
           "kind": "function",
           "source": "src/components/layout/panel.tsx",
           "description": "The cut surface: a region of one ground, bounded by a hard edge."
+        },
+        {
+          "name": "PanelLayer",
+          "kind": "type",
+          "source": "src/components/layout/panel.tsx"
         },
         {
           "name": "PanelProps",
@@ -12103,8 +12738,17 @@
             },
             {
               "name": "gap",
-              "type": "\"xs\" | \"sm\" | \"lg\" | \"md\" | \"none\" | \"2xs\" | \"xl\"",
-              "required": false
+              "type": "Gap",
+              "required": false,
+              "values": [
+                "xs",
+                "sm",
+                "md",
+                "lg",
+                "none",
+                "2xs",
+                "xl"
+              ]
             },
             {
               "name": "justify",
@@ -12116,7 +12760,10 @@
               "type": "true | false",
               "required": false
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"stack\">"
+          }
         },
         {
           "name": "Inline",
@@ -12132,9 +12779,18 @@
             },
             {
               "name": "gap",
-              "type": "\"xs\" | \"sm\" | \"lg\" | \"md\" | \"none\" | \"2xs\" | \"xl\"",
+              "type": "Gap",
               "required": false,
-              "default": "sm"
+              "default": "sm",
+              "values": [
+                "xs",
+                "sm",
+                "md",
+                "lg",
+                "none",
+                "2xs",
+                "xl"
+              ]
             },
             {
               "name": "justify",
@@ -12147,14 +12803,20 @@
               "required": false,
               "default": "true"
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"inline\">"
+          }
         },
         {
           "name": "RowBetween",
           "kind": "component",
           "source": "src/components/layout/stack.tsx",
           "description": "One thing on the left, one on the right: a panel header, a table toolbar.",
-          "props": []
+          "props": [],
+          "forwards": {
+            "element": "<div data-slot=\"row-between\">"
+          }
         },
         {
           "name": "stackVariants",
@@ -12164,7 +12826,8 @@
         {
           "name": "Gap",
           "kind": "type",
-          "source": "src/components/layout/stack.tsx"
+          "source": "src/components/layout/stack.tsx",
+          "description": "The gap scale, named by role rather than by pixel. Every value is a spacing multiple, so it scales with density: `md` is 16px comfortable, 14px compact. Seven steps and no more — a layout that needs an eighth is a layout that needs a divider, not another number."
         },
         {
           "name": "InlineProps",
@@ -12315,22 +12978,16 @@
           ],
           "inherits": [
             "ToolbarRootProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"toolbar\">"
+          }
         },
         {
           "name": "ToolbarButton",
           "kind": "component",
           "source": "src/components/toolbar/toolbar.tsx",
           "description": "A Button that takes part in the toolbar's arrow-key focus. Ghost and small by default.",
-          "variants": {
-            "variant": {
-              "values": [
-                "panel",
-                "bare"
-              ],
-              "default": "bare"
-            }
-          },
           "props": [
             {
               "name": "className",
@@ -12344,13 +13001,13 @@
             },
             {
               "name": "size",
-              "type": "\"sm\" | \"lg\" | \"md\"",
+              "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false,
               "default": "sm"
             },
             {
               "name": "variant",
-              "type": "\"panel\" | \"bare\"",
+              "type": "\"secondary\" | \"danger\" | \"primary\" | \"ghost\"",
               "required": false,
               "default": "ghost"
             }
@@ -12358,41 +13015,29 @@
           "inherits": [
             "NativeButtonProps",
             "ToolbarButtonProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<button data-slot=\"toolbar-button\">"
+          }
         },
         {
           "name": "ToolbarGroup",
           "kind": "component",
           "source": "src/components/toolbar/toolbar.tsx",
           "description": "Wraps, like `ToolbarToggleGroup` and for the same reason: the toolbar wraps its children, and a group is one child. Unwrapped, the app shell's three filter buttons ran 86px past a 320px phone.",
-          "variants": {
-            "variant": {
-              "values": [
-                "panel",
-                "bare"
-              ],
-              "default": "bare"
-            }
-          },
           "props": [],
           "inherits": [
             "ToolbarGroupProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"toolbar-group\">"
+          }
         },
         {
           "name": "ToolbarInput",
           "kind": "component",
           "source": "src/components/toolbar/toolbar.tsx",
           "description": "A text field that is one of the toolbar's stops. The arrow keys move the caret while there is text to move through and only leave the field at its edges — Base UI's rule, and the one that lets a person edit a filter without being thrown onto the next button.",
-          "variants": {
-            "variant": {
-              "values": [
-                "panel",
-                "bare"
-              ],
-              "default": "bare"
-            }
-          },
           "props": [
             {
               "name": "className",
@@ -12414,22 +13059,16 @@
           ],
           "inherits": [
             "ToolbarInputProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<input data-slot=\"toolbar-input\">"
+          }
         },
         {
           "name": "ToolbarOverflow",
           "kind": "component",
           "source": "src/components/toolbar/toolbar.tsx",
           "description": "Actions that fold into a \"More\" menu when the row runs out of room.",
-          "variants": {
-            "variant": {
-              "values": [
-                "panel",
-                "bare"
-              ],
-              "default": "bare"
-            }
-          },
           "props": [
             {
               "name": "items",
@@ -12445,48 +13084,40 @@
               "description": "Which end of the free space the buttons hug."
             },
             {
-              "name": "className",
-              "type": "string",
-              "required": false
-            },
-            {
               "name": "moreLabel",
               "type": "string",
               "required": false,
               "default": "More actions",
               "description": "The name of the menu button that collects what does not fit."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"toolbar-overflow\">"
+          }
         },
         {
           "name": "ToolbarSeparator",
           "kind": "component",
           "source": "src/components/toolbar/toolbar.tsx",
-          "variants": {
-            "variant": {
-              "values": [
-                "panel",
-                "bare"
-              ],
-              "default": "bare"
+          "props": [
+            {
+              "name": "className",
+              "type": "string",
+              "required": false
             }
-          },
-          "props": []
+          ],
+          "inherits": [
+            "ToolbarSeparatorProps"
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"toolbar-separator\">"
+          }
         },
         {
           "name": "ToolbarToggle",
           "kind": "component",
           "source": "src/components/toolbar/toolbar.tsx",
           "description": "A two-state button: \"Show archived\", \"Wrap lines\". Inside a `ToolbarToggleGroup` it is one of a set.",
-          "variants": {
-            "variant": {
-              "values": [
-                "panel",
-                "bare"
-              ],
-              "default": "bare"
-            }
-          },
           "props": [
             {
               "name": "className",
@@ -12515,7 +13146,7 @@
             },
             {
               "name": "size",
-              "type": "\"sm\" | \"lg\" | \"md\"",
+              "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false,
               "default": "sm"
             },
@@ -12529,22 +13160,16 @@
           "inherits": [
             "NativeButtonProps",
             "ToolbarButtonProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<button data-slot=\"toolbar-toggle\">"
+          }
         },
         {
           "name": "ToolbarToggleGroup",
           "kind": "component",
           "source": "src/components/toolbar/toolbar.tsx",
           "description": "A set of toggles: one-of (the default) or `multiple`. It sits inside the toolbar's roving focus rather than adding a second arrow-key scope, so the arrows walk straight through it and out the other side.",
-          "variants": {
-            "variant": {
-              "values": [
-                "panel",
-                "bare"
-              ],
-              "default": "bare"
-            }
-          },
           "props": [
             {
               "name": "aria-label",
@@ -12560,7 +13185,16 @@
           ],
           "inherits": [
             "ToggleGroupProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"toolbar-toggle-group\">"
+          }
+        },
+        {
+          "name": "toolbarVariants",
+          "kind": "function",
+          "source": "src/components/toolbar/toolbar.tsx",
+          "description": "A row of related controls with `role=\"toolbar\"` and one tab stop: Tab enters the toolbar, the arrow keys move inside it, Tab leaves. In a dense tool a table header can carry ten controls, and ten tab stops between the page title and the first row is a keyboard user's afternoon."
         },
         {
           "name": "ToolbarButtonProps",
@@ -12584,6 +13218,11 @@
         },
         {
           "name": "ToolbarProps",
+          "kind": "type",
+          "source": "src/components/toolbar/toolbar.tsx"
+        },
+        {
+          "name": "ToolbarSeparatorProps",
           "kind": "type",
           "source": "src/components/toolbar/toolbar.tsx"
         },
@@ -12735,7 +13374,10 @@
           ],
           "inherits": [
             "AccordionRootProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"accordion\">"
+          }
         },
         {
           "name": "AccordionItem",
@@ -12751,12 +13393,16 @@
           "inherits": [
             "AccordionItemProps",
             "UseCollapsibleRootParameters"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"accordion-item\">"
+          }
         },
         {
           "name": "AccordionPanel",
           "kind": "component",
           "source": "src/components/accordion/accordion.tsx",
+          "description": "`ref` and the DOM props go to the panel; `className` goes to the content inside it. The panel animates its own height, and padding on it would be clipped while it does, so the padding a consumer adds belongs to the content.",
           "props": [
             {
               "name": "className",
@@ -12766,7 +13412,11 @@
           ],
           "inherits": [
             "AccordionRootProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"accordion-panel\">",
+            "className": "<div>"
+          }
         },
         {
           "name": "AccordionTrigger",
@@ -12787,7 +13437,10 @@
           ],
           "inherits": [
             "NativeButtonProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<button data-slot=\"accordion-trigger\">"
+          }
         },
         {
           "name": "Collapsible",
@@ -12797,12 +13450,16 @@
           "props": [],
           "inherits": [
             "CollapsibleRootProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"collapsible\">"
+          }
         },
         {
           "name": "CollapsiblePanel",
           "kind": "component",
           "source": "src/components/accordion/accordion.tsx",
+          "description": "`className` goes to the content inside the panel, for the reason given on `AccordionPanel`.",
           "props": [
             {
               "name": "className",
@@ -12812,7 +13469,11 @@
           ],
           "inherits": [
             "CollapsiblePanelProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"collapsible-panel\">",
+            "className": "<div>"
+          }
         },
         {
           "name": "CollapsibleTrigger",
@@ -12827,7 +13488,10 @@
           ],
           "inherits": [
             "NativeButtonProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<button data-slot=\"collapsible-trigger\">"
+          }
         },
         {
           "name": "AccordionItemProps",
@@ -12956,10 +13620,14 @@
             },
             {
               "name": "renderLink",
-              "type": "((props: { href: string; className: string; children: ReactNode; }) => ReactNode)",
-              "required": false
+              "type": "BreadcrumbLinkRender",
+              "required": false,
+              "description": "The element each link crumb renders as: your router's `<Link />`, or a function returning one."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<nav data-slot=\"breadcrumb\">"
+          }
         },
         {
           "name": "middleTruncate",
@@ -12972,6 +13640,12 @@
           "kind": "type",
           "source": "src/components/breadcrumb/breadcrumb.tsx",
           "description": "Where this page sits — Workspace / Agents / knowledge-agent / Run #4182."
+        },
+        {
+          "name": "BreadcrumbLinkRender",
+          "kind": "type",
+          "source": "src/components/breadcrumb/breadcrumb.tsx",
+          "description": "Base UI's render prop, with the anchor props a crumb link receives."
         },
         {
           "name": "BreadcrumbProps",
@@ -13109,7 +13783,10 @@
               "required": false,
               "default": "pages"
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<nav data-slot=\"pagination\">"
+          }
         },
         {
           "name": "getPageRange",
@@ -13275,14 +13952,21 @@
             },
             {
               "name": "variant",
-              "type": "Variant",
+              "type": "TabsVariant",
               "required": false,
-              "default": "underline"
+              "default": "underline",
+              "values": [
+                "panel",
+                "underline"
+              ]
             }
           ],
           "inherits": [
             "TabsRootProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"tabs\">"
+          }
         },
         {
           "name": "TabsList",
@@ -13303,7 +13987,10 @@
           ],
           "inherits": [
             "TabsListProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"tabs-list\">"
+          }
         },
         {
           "name": "TabsPanel",
@@ -13318,7 +14005,10 @@
           ],
           "inherits": [
             "TabsPanelProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"tabs-panel\">"
+          }
         },
         {
           "name": "TabsTab",
@@ -13345,7 +14035,10 @@
           "inherits": [
             "NativeButtonProps",
             "TabsTabProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<button data-slot=\"tabs-tab\">"
+          }
         },
         {
           "name": "TabsListProps",
@@ -13366,6 +14059,12 @@
           "name": "TabsTabProps",
           "kind": "type",
           "source": "src/components/tabs/tabs.tsx"
+        },
+        {
+          "name": "TabsVariant",
+          "kind": "type",
+          "source": "src/components/tabs/tabs.tsx",
+          "description": "Two variants, for two jobs."
         }
       ],
       "stories": [
@@ -13477,6 +14176,7 @@
           "name": "CommandPalette",
           "kind": "component",
           "source": "src/components/command/command.tsx",
+          "description": "`className`, `ref` and the rest of the DOM props go to the dialog popup, the element that is the palette. Controlled or not: every other overlay offered `defaultOpen`, and a palette that was controlled-only made the simplest case — a button that opens it — need a state hook in the page.",
           "props": [
             {
               "name": "groups",
@@ -13484,14 +14184,11 @@
               "required": true
             },
             {
-              "name": "onOpenChange",
-              "type": "(open: boolean) => void",
-              "required": true
-            },
-            {
-              "name": "open",
+              "name": "defaultOpen",
               "type": "boolean",
-              "required": true
+              "required": false,
+              "default": "false",
+              "description": "Open on first render, for a palette that owns its own state."
             },
             {
               "name": "label",
@@ -13499,6 +14196,17 @@
               "required": false,
               "default": "Command palette",
               "description": "Accessible name of the dialog."
+            },
+            {
+              "name": "onOpenChange",
+              "type": "((open: boolean) => void)",
+              "required": false
+            },
+            {
+              "name": "open",
+              "type": "boolean",
+              "required": false,
+              "description": "Whether the palette is open, when the page owns that (it usually does, to bind ⌘K)."
             },
             {
               "name": "placeholder",
@@ -13511,8 +14219,17 @@
               "type": "((query: string) => ReactNode)",
               "required": false,
               "description": "Shown when nothing matches. Receives the query."
+            },
+            {
+              "name": "trigger",
+              "type": "ReactElement<unknown, string | JSXElementConstructor<any>>",
+              "required": false,
+              "description": "Rendered as the button that opens the palette, e.g. a `SearchInput`-shaped `Button`."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"command-palette\">"
+          }
         },
         {
           "name": "filterCommands",
@@ -13734,7 +14451,7 @@
             },
             {
               "name": "tone",
-              "type": "\"danger\" | \"neutral\"",
+              "type": "\"neutral\" | \"danger\"",
               "required": false,
               "default": "danger",
               "description": "`danger` cuts the seam in rojo and arms the confirm button in red."
@@ -13745,7 +14462,10 @@
               "required": false,
               "description": "Rendered as the trigger, e.g. a danger `Button`."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"alert-dialog\">"
+          }
         },
         {
           "name": "Dialog",
@@ -13754,7 +14474,10 @@
           "props": [],
           "inherits": [
             "DialogRootProps"
-          ]
+          ],
+          "forwards": {
+            "element": null
+          }
         },
         {
           "name": "DialogClose",
@@ -13763,12 +14486,25 @@
           "props": [],
           "inherits": [
             "NativeButtonProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<button data-slot=\"dialog-close\">"
+          }
         },
         {
           "name": "DialogContent",
           "kind": "component",
           "source": "src/components/dialog/dialog.tsx",
+          "variants": {
+            "size": {
+              "values": [
+                "sm",
+                "md",
+                "lg"
+              ],
+              "default": "md"
+            }
+          },
           "props": [
             {
               "name": "title",
@@ -13778,10 +14514,16 @@
             },
             {
               "name": "band",
-              "type": "\"rojo\" | \"anil\" | \"verde\" | \"oro\"",
+              "type": "DialogBand",
               "required": false,
               "default": "oro",
-              "description": "The layer revealed in the top seam."
+              "description": "The layer revealed in the top seam.",
+              "values": [
+                "rojo",
+                "anil",
+                "verde",
+                "oro"
+              ]
             },
             {
               "name": "className",
@@ -13808,13 +14550,16 @@
             },
             {
               "name": "size",
-              "type": "\"sm\" | \"lg\" | \"md\"",
+              "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false
             }
           ],
           "inherits": [
             "DialogPopupProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"dialog\">"
+          }
         },
         {
           "name": "DialogTrigger",
@@ -13824,10 +14569,24 @@
           "inherits": [
             "DialogTriggerProps",
             "NativeButtonProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<button data-slot=\"dialog-trigger\">"
+          }
+        },
+        {
+          "name": "dialogContentVariants",
+          "kind": "function",
+          "source": "src/components/dialog/dialog.tsx",
+          "description": "A modal is a panel cut out of the page and laid on top of it, so it is the one place a seam earns the full relleno: an 11px strip of the layer colour slit with ink along its top edge. In the source mola that strip is how a panel announces where one layer ends and the next begins; here it is how a dialog says \"you are now inside something\" without a title bar or a tint. Gold by default, rojo on a destructive confirm — the band is the only place the dialog's intent shows before a word is read."
         },
         {
           "name": "AlertDialogProps",
+          "kind": "type",
+          "source": "src/components/dialog/dialog.tsx"
+        },
+        {
+          "name": "DialogBand",
           "kind": "type",
           "source": "src/components/dialog/dialog.tsx"
         },
@@ -13979,12 +14738,20 @@
               "type": "DrawerSide",
               "required": false,
               "default": "end",
-              "description": "The edge the drawer slides in from. `start` and `end` are logical and swap in right-to-left; the swipe that dismisses it follows. Defaults to `end`, where a details panel beside a list belongs."
+              "description": "The edge the drawer slides in from. `start` and `end` are logical and swap in right-to-left; the swipe that dismisses it follows. Defaults to `end`, where a details panel beside a list belongs.",
+              "values": [
+                "start",
+                "end",
+                "bottom"
+              ]
             }
           ],
           "inherits": [
             "DrawerRootProps"
-          ]
+          ],
+          "forwards": {
+            "element": null
+          }
         },
         {
           "name": "DrawerClose",
@@ -13993,7 +14760,10 @@
           "props": [],
           "inherits": [
             "NativeButtonProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<button data-slot=\"drawer-close\">"
+          }
         },
         {
           "name": "DrawerContent",
@@ -14008,10 +14778,16 @@
             },
             {
               "name": "band",
-              "type": "\"rojo\" | \"anil\" | \"verde\" | \"oro\"",
+              "type": "DrawerBand",
               "required": false,
               "default": "oro",
-              "description": "The layer revealed in the top seam."
+              "description": "The layer revealed in the top seam.",
+              "values": [
+                "rojo",
+                "anil",
+                "verde",
+                "oro"
+              ]
             },
             {
               "name": "className",
@@ -14038,7 +14814,7 @@
             },
             {
               "name": "size",
-              "type": "\"sm\" | \"lg\" | \"md\"",
+              "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false,
               "default": "md",
               "description": "Width of a side drawer, or height of a bottom sheet. Always capped by the viewport."
@@ -14046,7 +14822,10 @@
           ],
           "inherits": [
             "DrawerPopupProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"drawer\">"
+          }
         },
         {
           "name": "DrawerTrigger",
@@ -14056,7 +14835,15 @@
           "inherits": [
             "DrawerTriggerProps",
             "NativeButtonProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<button data-slot=\"drawer-trigger\">"
+          }
+        },
+        {
+          "name": "DrawerBand",
+          "kind": "type",
+          "source": "src/components/drawer/drawer.tsx"
         },
         {
           "name": "DrawerContentProps",
@@ -14231,7 +15018,10 @@
           "props": [],
           "inherits": [
             "MenuRootProps"
-          ]
+          ],
+          "forwards": {
+            "element": null
+          }
         },
         {
           "name": "MenuCheckboxItem",
@@ -14253,7 +15043,10 @@
           "inherits": [
             "MenuCheckboxItemProps",
             "NativeButtonProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"menu-checkbox-item\">"
+          }
         },
         {
           "name": "MenuContent",
@@ -14264,7 +15057,12 @@
               "name": "align",
               "type": "Align",
               "required": false,
-              "default": "start"
+              "default": "start",
+              "values": [
+                "start",
+                "center",
+                "end"
+              ]
             },
             {
               "name": "alignOffset",
@@ -14281,7 +15079,15 @@
               "name": "side",
               "type": "Side",
               "required": false,
-              "default": "bottom"
+              "default": "bottom",
+              "values": [
+                "bottom",
+                "top",
+                "left",
+                "right",
+                "inline-end",
+                "inline-start"
+              ]
             },
             {
               "name": "sideOffset",
@@ -14292,7 +15098,10 @@
           ],
           "inherits": [
             "MenuPopupProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"menu\">"
+          }
         },
         {
           "name": "MenuGroup",
@@ -14301,13 +15110,19 @@
           "props": [],
           "inherits": [
             "MenuGroupProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"menu-group\">"
+          }
         },
         {
           "name": "MenuGroupLabel",
           "kind": "component",
           "source": "src/components/menu/menu.tsx",
-          "props": []
+          "props": [],
+          "forwards": {
+            "element": "<div data-slot=\"menu-group-label\">"
+          }
         },
         {
           "name": "MenuItem",
@@ -14332,16 +15147,19 @@
             },
             {
               "name": "tone",
-              "type": "\"default\" | \"danger\"",
+              "type": "\"default\" | \"neutral\" | \"danger\"",
               "required": false,
-              "default": "default",
-              "description": "Destroys something: highlights in rojo instead of ink."
+              "default": "neutral",
+              "description": "`danger` destroys something: it highlights in rojo instead of ink. `default` is deprecated since 0.7.0 and removed in 1.0.0: use `neutral`, the status word every other `tone` uses."
             }
           ],
           "inherits": [
             "MenuItemProps",
             "NativeButtonProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"menu-item\">"
+          }
         },
         {
           "name": "MenuRadioGroup",
@@ -14350,7 +15168,10 @@
           "props": [],
           "inherits": [
             "MenuRadioGroupProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"menu-radio-group\">"
+          }
         },
         {
           "name": "MenuRadioItem",
@@ -14367,7 +15188,10 @@
           "inherits": [
             "MenuRadioItemProps",
             "NativeButtonProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"menu-radio-item\">"
+          }
         },
         {
           "name": "MenuSeparator",
@@ -14376,14 +15200,20 @@
           "props": [],
           "inherits": [
             "SeparatorProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"menu-separator\">"
+          }
         },
         {
           "name": "MenuShortcut",
           "kind": "component",
           "source": "src/components/menu/menu.tsx",
           "description": "Right-aligned key hint.",
-          "props": []
+          "props": [],
+          "forwards": {
+            "element": "<span data-slot=\"menu-shortcut\">"
+          }
         },
         {
           "name": "MenuSubmenu",
@@ -14393,7 +15223,10 @@
           "inherits": [
             "MenuRootProps",
             "MenuSubmenuRootProps"
-          ]
+          ],
+          "forwards": {
+            "element": null
+          }
         },
         {
           "name": "MenuSubmenuTrigger",
@@ -14414,7 +15247,10 @@
           "inherits": [
             "MenuSubmenuTriggerProps",
             "NativeButtonProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"menu-submenu-trigger\">"
+          }
         },
         {
           "name": "MenuTrigger",
@@ -14424,7 +15260,10 @@
           "inherits": [
             "MenuTriggerProps",
             "NativeButtonProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<button data-slot=\"menu-trigger\">"
+          }
         },
         {
           "name": "MenuCheckboxItemProps",
@@ -14551,7 +15390,10 @@
           "props": [],
           "inherits": [
             "PopoverRootProps"
-          ]
+          ],
+          "forwards": {
+            "element": null
+          }
         },
         {
           "name": "PopoverClose",
@@ -14560,7 +15402,10 @@
           "props": [],
           "inherits": [
             "NativeButtonProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<button data-slot=\"popover-close\">"
+          }
         },
         {
           "name": "PopoverContent",
@@ -14571,7 +15416,12 @@
               "name": "align",
               "type": "Align",
               "required": false,
-              "default": "start"
+              "default": "start",
+              "values": [
+                "start",
+                "center",
+                "end"
+              ]
             },
             {
               "name": "className",
@@ -14587,7 +15437,15 @@
               "name": "side",
               "type": "Side",
               "required": false,
-              "default": "bottom"
+              "default": "bottom",
+              "values": [
+                "bottom",
+                "top",
+                "left",
+                "right",
+                "inline-end",
+                "inline-start"
+              ]
             },
             {
               "name": "sideOffset",
@@ -14604,7 +15462,10 @@
           ],
           "inherits": [
             "PopoverPopupProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"popover\">"
+          }
         },
         {
           "name": "PopoverTrigger",
@@ -14613,7 +15474,10 @@
           "props": [],
           "inherits": [
             "NativeButtonProps"
-          ]
+          ],
+          "forwards": {
+            "element": "<button data-slot=\"popover-trigger\">"
+          }
         },
         {
           "name": "PopoverContentProps",
@@ -14710,6 +15574,7 @@
           "name": "Tooltip",
           "kind": "component",
           "source": "src/components/tooltip/tooltip.tsx",
+          "description": "`className`, `ref` and the rest of the DOM props go to the tooltip popup; the trigger is `children`, which keeps its own.",
           "props": [
             {
               "name": "children",
@@ -14726,12 +15591,12 @@
               "name": "align",
               "type": "Align",
               "required": false,
-              "default": "center"
-            },
-            {
-              "name": "className",
-              "type": "string",
-              "required": false
+              "default": "center",
+              "values": [
+                "start",
+                "center",
+                "end"
+              ]
             },
             {
               "name": "defaultOpen",
@@ -14743,6 +15608,12 @@
               "type": "number",
               "required": false,
               "description": "Overrides the provider's delay for this tooltip."
+            },
+            {
+              "name": "disabled",
+              "type": "boolean",
+              "required": false,
+              "description": "Never open: for a trigger whose label is already visible in this state."
             },
             {
               "name": "onOpenChange",
@@ -14764,9 +15635,20 @@
               "name": "side",
               "type": "Side",
               "required": false,
-              "default": "top"
+              "default": "top",
+              "values": [
+                "bottom",
+                "top",
+                "left",
+                "right",
+                "inline-end",
+                "inline-start"
+              ]
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"tooltip\">"
+          }
         },
         {
           "name": "TooltipProvider",
@@ -14776,7 +15658,10 @@
           "props": [],
           "inherits": [
             "TooltipProviderProps"
-          ]
+          ],
+          "forwards": {
+            "element": null
+          }
         },
         {
           "name": "TooltipProps",
@@ -14857,7 +15742,10 @@
               "default": "h1",
               "description": "The heading element. Defaults to h1; the visual register does not change."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<h1 data-slot=\"display\">"
+          }
         },
         {
           "name": "DisplayProps",
@@ -14933,7 +15821,7 @@
           "kind": "component",
           "source": "src/components/typography/heading.tsx",
           "variants": {
-            "size": {
+            "visualLevel": {
               "values": [
                 "1",
                 "2",
@@ -14946,15 +15834,42 @@
             {
               "name": "level",
               "type": "HeadingLevel",
-              "required": true
+              "required": true,
+              "values": [
+                "1",
+                "2",
+                "3",
+                "4"
+              ]
             },
             {
               "name": "size",
+              "type": "HeadingLevel",
+              "required": false,
+              "values": [
+                "1",
+                "2",
+                "3",
+                "4"
+              ],
+              "deprecated": "Since 0.7.0; removed in 1.0.0. Use `visualLevel`, which takes the same values. `codemods/prop-vocabulary.ts` rewrites call sites."
+            },
+            {
+              "name": "visualLevel",
               "type": "1 | 2 | 3 | 4",
               "required": false,
-              "description": "Visual size, when it must differ from the outline level."
+              "description": "The level it should look like, when that must differ from the outline level.",
+              "values": [
+                "1",
+                "2",
+                "3",
+                "4"
+              ]
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<h2 data-slot=\"heading\">"
+          }
         },
         {
           "name": "headingVariants",
@@ -15033,7 +15948,10 @@
           "kind": "component",
           "source": "src/components/typography/kbd.tsx",
           "description": "A key, as a cut shape: raised cloth, ink keyline, and a heavier foot where the keycap sits on the board — the one place a solid offset is honest, because a key really is a block that moves down when pressed.",
-          "props": []
+          "props": [],
+          "forwards": {
+            "element": "<kbd data-slot=\"kbd\">"
+          }
         },
         {
           "name": "KbdChord",
@@ -15046,7 +15964,10 @@
               "required": true,
               "description": "The keys, in order: `['⌘', 'K']`."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<kbd data-slot=\"kbd-chord\">"
+          }
         },
         {
           "name": "KbdChordProps",
@@ -15109,7 +16030,10 @@
           "kind": "component",
           "source": "src/components/typography/lead.tsx",
           "description": "The first thing someone says, so it is set in the reading voice rather than the system one. Alegreya from here down; Archivo above and around.",
-          "props": []
+          "props": [],
+          "forwards": {
+            "element": "<p data-slot=\"lead\">"
+          }
         }
       ],
       "stories": [
@@ -15167,7 +16091,10 @@
           "kind": "component",
           "source": "src/components/typography/meta.tsx",
           "description": "Duration, cost, count, timestamp — facts that are compared down a column, so they carry tabular figures. This is the role a monospace usually plays in tool UIs, minus the costume: Archivo's tabular figures line up exactly as well and keep the row in one voice.",
-          "props": []
+          "props": [],
+          "forwards": {
+            "element": "<p data-slot=\"meta\">"
+          }
         }
       ],
       "stories": [
@@ -15242,12 +16169,15 @@
             },
             {
               "name": "size",
-              "type": "\"sm\" | \"base\"",
+              "type": "\"sm\" | \"md\" | \"base\"",
               "required": false,
-              "default": "base",
-              "description": "`sm` for a chat column or a side panel; `base` for a document."
+              "default": "md",
+              "description": "`sm` for a chat column or a side panel; `md` for a document. `base` is deprecated since 0.7.0 and removed in 1.0.0: use `md`, the same size."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"prose\">"
+          }
         },
         {
           "name": "ProseProps",
@@ -15318,13 +16248,11 @@
               "type": "string",
               "required": false,
               "description": "Who said it. Rendered in the label register, under the quote."
-            },
-            {
-              "name": "className",
-              "type": "string",
-              "required": false
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<figure data-slot=\"pullquote\">"
+          }
         },
         {
           "name": "PullquoteProps",
@@ -15403,7 +16331,15 @@
               "type": "RotuloBand",
               "required": false,
               "default": "ink",
-              "description": "The revealed band before the label. Defaults to ink: on light cloth gold measures 1.66:1 and the mark disappears, and rojo, the default until 2026-10, is the danger colour on a product screen (docs/adr/0008-the-rojo-register.md). Rojo stays available for editorial pages; gold is for ink grounds."
+              "description": "The revealed band before the label. Defaults to ink: on light cloth gold measures 1.66:1 and the mark disappears, and rojo, the default until 2026-10, is the danger colour on a product screen (docs/adr/0008-the-rojo-register.md). Rojo stays available for editorial pages; gold is for ink grounds.",
+              "values": [
+                "cloth",
+                "ink",
+                "rojo",
+                "anil",
+                "verde",
+                "oro"
+              ]
             },
             {
               "name": "plain",
@@ -15412,7 +16348,10 @@
               "default": "false",
               "description": "Drop the band and keep only the lettering — for a label inside a dense header."
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<p data-slot=\"rotulo\">"
+          }
         },
         {
           "name": "RotuloBand",
@@ -15502,20 +16441,30 @@
               "values": [
                 "xs",
                 "sm",
-                "base",
-                "lg"
+                "md",
+                "lg",
+                "base"
               ],
-              "default": "base"
+              "default": "md"
+            },
+            "variant": {
+              "values": [
+                "default",
+                "secondary",
+                "muted"
+              ],
+              "default": "default"
             },
             "tone": {
               "values": [
+                "neutral",
+                "danger",
+                "success",
                 "default",
                 "2",
-                "muted",
-                "danger",
-                "success"
+                "muted"
               ],
-              "default": "default"
+              "default": "neutral"
             },
             "weight": {
               "values": [
@@ -15548,8 +16497,13 @@
               "default": "p"
             },
             {
+              "name": "ref",
+              "type": "Ref<HTMLElement>",
+              "required": false
+            },
+            {
               "name": "size",
-              "type": "\"xs\" | \"sm\" | \"base\" | \"lg\"",
+              "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"base\"",
               "required": false
             },
             {
@@ -15559,7 +16513,7 @@
             },
             {
               "name": "tone",
-              "type": "\"default\" | 2 | \"muted\" | \"danger\" | \"success\"",
+              "type": "\"neutral\" | \"danger\" | \"success\" | \"default\" | 2 | \"muted\"",
               "required": false
             },
             {
@@ -15568,11 +16522,19 @@
               "required": false
             },
             {
+              "name": "variant",
+              "type": "\"default\" | \"secondary\" | \"muted\"",
+              "required": false
+            },
+            {
               "name": "weight",
               "type": "\"regular\" | \"medium\" | \"semibold\"",
               "required": false
             }
-          ]
+          ],
+          "forwards": {
+            "element": "<p data-slot=\"text\">"
+          }
         },
         {
           "name": "textVariants",
@@ -16453,6 +17415,12 @@
       "name": "toHex",
       "kind": "function",
       "source": "src/tokens/color.ts"
+    },
+    {
+      "name": "RGB",
+      "kind": "type",
+      "source": "src/tokens/color.ts",
+      "description": "The colour arithmetic the contrast contract is checked with."
     },
     {
       "name": "DirectionProvider",

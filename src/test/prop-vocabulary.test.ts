@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest'
 
 /**
  * One meaning each for `tone`, `variant`, `kind` and `size`
- * (docs/adr/0009-prop-vocabulary.md), read from the agent manifest
+ * (docs/adr/0010-prop-vocabulary.md), read from the agent manifest
  * (docs/ai/components.json), which is what people and agents see.
  *
  * Each name had drifted to four or five meanings: `tone` was a status on

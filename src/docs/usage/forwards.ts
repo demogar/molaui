@@ -1,6 +1,6 @@
 /**
  * Where each exported component sends `className`, and where `ref` and the
- * other DOM props go (docs/adr/0009-prop-vocabulary.md). `element` takes
+ * other DOM props go (docs/adr/0010-prop-vocabulary.md). `element` takes
  * `ref`, `id`, `data-*` and the rest; `className` is named only when it goes
  * somewhere else (the box around a control, or the content inside a panel).
  * `null` is a component that renders no element of its own.

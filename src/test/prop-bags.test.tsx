@@ -9,7 +9,7 @@ import { FORWARDS, type Forward } from '@/docs/usage/forwards'
 import * as mola from '@/index'
 
 /**
- * Every exported component is an open prop bag (docs/adr/0009-prop-vocabulary.md):
+ * Every exported component is an open prop bag (docs/adr/0010-prop-vocabulary.md):
  *
  * - it accepts `ref`, and the ref reaches a DOM element;
  * - it forwards `data-*` (and with it `id`, `aria-*`, handlers) to the DOM,
@@ -697,7 +697,7 @@ afterAll(() => {
   const sorted = Object.fromEntries(Object.entries(observed).sort(([a], [b]) => a.localeCompare(b)))
   const body = `/**
  * Where each exported component sends \`className\`, and where \`ref\` and the
- * other DOM props go (docs/adr/0009-prop-vocabulary.md). \`element\` takes
+ * other DOM props go (docs/adr/0010-prop-vocabulary.md). \`element\` takes
  * \`ref\`, \`id\`, \`data-*\` and the rest; \`className\` is named only when it goes
  * somewhere else (the box around a control, or the content inside a panel).
  * \`null\` is a component that renders no element of its own.

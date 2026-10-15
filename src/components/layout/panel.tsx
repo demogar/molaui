@@ -27,7 +27,7 @@ import { type Variants } from '../../lib/variants'
  * The prop was `tone` until 0.7.0. Everywhere else `tone` is a status
  * (neutral, info, success, warn, danger, accent), and a Panel's value is a
  * layer of cloth, so the same word meant two unrelated things; see
- * docs/adr/0009-prop-vocabulary.md.
+ * docs/adr/0010-prop-vocabulary.md.
  */
 export const panelVariants = cva('relative min-w-0 rounded-none', {
   variants: {

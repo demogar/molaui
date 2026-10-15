@@ -63,32 +63,32 @@ Each story is a live example in Storybook.
 
 Also accepts the props of `ToolbarRootProps`.
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="toolbar">`.
+
 ### `ToolbarButton` (component)
 
 A Button that takes part in the toolbar's arrow-key focus. Ghost and small by default.
-
-- `variant`: `panel`, `bare` (default `bare`)
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `className` | `string` |  |  |
 | `icon` | `ReactNode` |  |  |
-| `size` | `"sm" \| "lg" \| "md"` | `sm` |  |
-| `variant` | `"panel" \| "bare"` | `ghost` |  |
+| `size` | `"sm" \| "md" \| "lg"` | `sm` |  |
+| `variant` | `"secondary" \| "danger" \| "primary" \| "ghost"` | `ghost` |  |
 
 Also accepts the props of `NativeButtonProps`, `ToolbarButtonProps`.
+
+`className`, `ref`, `id` and the other DOM props go to `<button data-slot="toolbar-button">`.
 
 ### `ToolbarGroup` (component)
 
 Wraps, like `ToolbarToggleGroup` and for the same reason: the toolbar wraps its children, and a group is one child. Unwrapped, the app shell's three filter buttons ran 86px past a 320px phone.
 
-- `variant`: `panel`, `bare` (default `bare`)
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="toolbar-group">`.
 
 ### `ToolbarInput` (component)
 
 A text field that is one of the toolbar's stops. The arrow keys move the caret while there is text to move through and only leave the field at its edges — Base UI's rule, and the one that lets a person edit a filter without being thrown onto the next button.
-
-- `variant`: `panel`, `bare` (default `bare`)
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -98,28 +98,33 @@ A text field that is one of the toolbar's stops. The arrow keys move the caret w
 
 Also accepts the props of `ToolbarInputProps`.
 
+`className`, `ref`, `id` and the other DOM props go to `<input data-slot="toolbar-input">`.
+
 ### `ToolbarOverflow` (component)
 
 Actions that fold into a "More" menu when the row runs out of room.
-
-- `variant`: `panel`, `bare` (default `bare`)
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `items` (required) | `ToolbarOverflowItem[]` |  | In priority order: the first items stay visible longest. |
 | `align` | `"start" \| "end"` | `end` | Which end of the free space the buttons hug. |
-| `className` | `string` |  |  |
 | `moreLabel` | `string` | `More actions` | The name of the menu button that collects what does not fit. |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="toolbar-overflow">`.
 
 ### `ToolbarSeparator` (component)
 
-- `variant`: `panel`, `bare` (default `bare`)
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` |  |  |
+
+Also accepts the props of `ToolbarSeparatorProps`.
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="toolbar-separator">`.
 
 ### `ToolbarToggle` (component)
 
 A two-state button: "Show archived", "Wrap lines". Inside a `ToolbarToggleGroup` it is one of a set.
-
-- `variant`: `panel`, `bare` (default `bare`)
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -128,16 +133,16 @@ A two-state button: "Show archived", "Wrap lines". Inside a `ToolbarToggleGroup`
 | `icon` | `ReactNode` |  |  |
 | `onPressedChange` | `((pressed: boolean) => void)` |  |  |
 | `pressed` | `boolean` |  |  |
-| `size` | `"sm" \| "lg" \| "md"` | `sm` |  |
+| `size` | `"sm" \| "md" \| "lg"` | `sm` |  |
 | `value` | `string` |  | Identifies the toggle inside a `ToolbarToggleGroup`. |
 
 Also accepts the props of `NativeButtonProps`, `ToolbarButtonProps`.
 
+`className`, `ref`, `id` and the other DOM props go to `<button data-slot="toolbar-toggle">`.
+
 ### `ToolbarToggleGroup` (component)
 
 A set of toggles: one-of (the default) or `multiple`. It sits inside the toolbar's roving focus rather than adding a second arrow-key scope, so the arrows walk straight through it and out the other side.
-
-- `variant`: `panel`, `bare` (default `bare`)
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -146,7 +151,13 @@ A set of toggles: one-of (the default) or `multiple`. It sits inside the toolbar
 
 Also accepts the props of `ToggleGroupProps`.
 
-Types: `ToolbarButtonProps`, `ToolbarInputProps`, `ToolbarOverflowItem`, `ToolbarOverflowProps`, `ToolbarProps`, `ToolbarToggleGroupProps`, `ToolbarToggleProps`
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="toolbar-toggle-group">`.
+
+### `toolbarVariants` (function)
+
+A row of related controls with `role="toolbar"` and one tab stop: Tab enters the toolbar, the arrow keys move inside it, Tab leaves. In a dense tool a table header can carry ten controls, and ten tab stops between the page title and the first row is a keyboard user's afternoon.
+
+Types: `ToolbarButtonProps`, `ToolbarInputProps`, `ToolbarOverflowItem`, `ToolbarOverflowProps`, `ToolbarProps`, `ToolbarSeparatorProps`, `ToolbarToggleGroupProps`, `ToolbarToggleProps`
 
 ## Accessibility
 

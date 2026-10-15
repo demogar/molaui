@@ -1,4 +1,4 @@
-# 0009 — One meaning each for tone, variant, kind and size, and one place for className
+# 0010 — One meaning each for tone, variant, kind and size, and one place for className
 
 **Date:** 2026-10-14 · **Status:** accepted
 

@@ -1,7 +1,7 @@
 /**
  * Codemod: one meaning each for `tone`, `variant`, `kind` and `size`.
  *
- * 0.7.0 gave each of those prop names one meaning (docs/adr/0009-prop-vocabulary.md):
+ * 0.7.0 gave each of those prop names one meaning (docs/adr/0010-prop-vocabulary.md):
  * `tone` is a status, `variant` a presentation, `kind` a category and `size`
  * the t-shirt scale. The props and values that meant something else were
  * renamed, and the old spellings are removed in 1.0.0. This rewrites them:

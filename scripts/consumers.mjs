@@ -272,7 +272,7 @@ async function check(browser, url, name) {
           transparentBackground: transparent(style(dialog).backgroundColor),
         },
         // The cut is on the Input's box, the element around the <input> that
-        // takes `className` (docs/adr/0009-prop-vocabulary.md), not on the
+        // takes `className` (docs/adr/0010-prop-vocabulary.md), not on the
         // <input> inside it.
         input: input && {
           label: input.labels?.[0]?.textContent ?? '',
