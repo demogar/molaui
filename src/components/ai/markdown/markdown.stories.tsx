@@ -122,7 +122,7 @@ export const UntrustedInput: Story = {
       '',
       '- <img src=x onerror="alert(1)"> stays as text.',
       '- [A javascript: link](javascript:alert(1)) keeps its words and loses its href.',
-      '- [A relative link](#sources) and [an external one](https://example.com/rollouts) stay links.',
+      '- [A relative link](#sources) and [an external one](https://rollouts.cayuco.internal) stay links.',
       '',
       'Without `renderCitation`, a marker stays as text: [1].',
     ].join('\n'),

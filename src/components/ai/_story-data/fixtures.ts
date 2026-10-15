@@ -43,7 +43,7 @@ from ro_0412_assignments
 group by plan;
 \`\`\`
 
-Full numbers are on the [results page](https://example.com/rollouts/ro-0412/results).`
+Full numbers are on the [results page](https://rollouts.cayuco.internal/ro-0412/results).`
 
 export const REASONING = `The question has two parts: did tickets drop, and is it safe to roll out. For the first I need the rollout's primary metric with its interval, not just the point estimate. For the second I need the guardrails from the brief, because "fewer tickets" is not the same as "safe to roll out" if a guardrail moved. I'll query the results table, then read the brief.`
 
@@ -51,7 +51,7 @@ export const SOURCES = [
   {
     id: 1,
     title: 'ro-0412 results — in-app help panel',
-    href: 'https://example.com/rollouts/ro-0412/results',
+    href: 'https://rollouts.cayuco.internal/ro-0412/results',
     domain: 'rollouts.cayuco.internal',
     snippet: 'Primary metric tickets_per_1k. Control 31.2, help panel 27.0. n = 48,210. Sequential test, alpha 0.05.',
     retrievedAt: '2026-10-05T14:02:00Z',
@@ -59,7 +59,7 @@ export const SOURCES = [
   {
     id: 2,
     title: 'Segment breakdown: Starter vs Enterprise plan',
-    href: 'https://example.com/rollouts/ro-0412/segments',
+    href: 'https://rollouts.cayuco.internal/ro-0412/segments',
     domain: 'rollouts.cayuco.internal',
     snippet: 'Enterprise cohort: −0.4 per 1,000 (CI −1.9 to +1.1). Starter cohort: −6.1 per 1,000 (CI −7.4 to −4.8).',
     retrievedAt: '2026-10-05T14:02:03Z',
@@ -67,7 +67,7 @@ export const SOURCES = [
   {
     id: 3,
     title: 'Rollout brief: help panel v2',
-    href: 'https://example.com/docs/briefs/help-panel-v2',
+    href: 'https://docs.cayuco.internal/briefs/help-panel-v2',
     domain: 'docs.cayuco.internal',
     snippet: 'Guardrails: time_to_first_reply_s must not regress more than 10%. Escalation rate ≤ 4%.',
     retrievedAt: '2026-10-05T14:02:05Z',
