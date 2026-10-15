@@ -9,7 +9,7 @@ import type { Decorator, Preview } from '@storybook/react-vite'
 import { type ReactNode, useEffect } from 'react'
 
 import { DocsPage } from './docs-page'
-import { molaTheme } from './mola-theme'
+import { docsFrameTheme, ThemedDocsContainer } from './docs-theme'
 
 type Theme = 'light' | 'dark'
 type Density = 'compact' | 'comfortable' | 'spacious'
@@ -20,8 +20,11 @@ type Direction = 'ltr' | 'rtl'
  * system is: a dialog portals to <body>, and a context provider would leave it
  * in the light theme while the page behind it went dark.
  *
- * On a docs page the attributes go on each story's own frame instead, so the
- * documentation chrome stays readable while the examples inside it switch.
+ * On a docs page the theme goes on <html> too, so the page around the
+ * examples follows the toolbar (docs-theme.tsx does the same for MDX pages,
+ * which run no decorators). Density and direction go only on each story's
+ * own frame: the documentation's prose keeps its reading size and direction
+ * while the examples inside it switch.
  *
  * Direction is both. `dir` is a document attribute for the same reason as
  * theme — a portaled menu has to lay out right-to-left too — but Base UI
@@ -46,9 +49,7 @@ function MolaContext({
   useEffect(() => {
     const root = document.documentElement
     if (inDocs) {
-      // The documentation chrome is always the light theme; only the
-      // examples inside it follow the toolbar.
-      root.dataset.theme = 'light'
+      root.dataset.theme = theme
       root.dataset.density = 'comfortable'
       root.dir = 'ltr'
       return
@@ -72,7 +73,9 @@ function MolaContext({
 
 const withMolaContext: Decorator = (Story, context) => (
   <MolaContext
-    theme={context.globals.theme as Theme}
+    // An example rendered in its own iframe on a docs page (a pattern's)
+    // gets no globals from Storybook; it takes the page's theme.
+    theme={docsFrameTheme() ?? (context.globals.theme as Theme)}
     density={context.globals.density as Density}
     direction={(context.globals.direction as Direction | undefined) ?? 'ltr'}
     inDocs={context.viewMode === 'docs'}
@@ -130,7 +133,19 @@ const preview: Preview = {
     layout: 'padded',
     backgrounds: { disable: true },
     controls: { expanded: true, sort: 'requiredFirst' },
-    docs: { theme: molaTheme, page: DocsPage, toc: { headingSelector: 'h2, h3', ignoreSelector: '[data-usage] h3, [data-a11y] h3, [data-related] h3' } },
+    docs: {
+      container: ThemedDocsContainer,
+      page: DocsPage,
+      // The table of contents lists the page's own sections. Headings inside
+      // a rendered example (`.sb-story`, in an example's frame or the
+      // anatomy diagram: an empty state's title, a settings section) belong
+      // to the example, and listed beside the page's they read as sections
+      // of the documentation.
+      toc: {
+        headingSelector: 'h2, h3',
+        ignoreSelector: '[data-usage] h3, [data-a11y] h3, [data-related] h3, .sb-story h2, .sb-story h3',
+      },
+    },
     a11y: { test: 'error' },
     options: {
       storySort: {
