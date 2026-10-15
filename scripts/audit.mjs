@@ -132,9 +132,31 @@ async function clipped(story) {
   // A sticky header or a sticky save bar sits over the content scrolling
   // beneath it by design, and scrolling uncovers that content; only things in
   // the same pinned (or unpinned) layer are compared for overlap.
+  // A control floated over a scrolling region ("Jump to latest" over a
+  // thread) is the same kind of layer: absolutely placed in a box that also
+  // holds a scroller it is not part of. A composer that is merely laid out
+  // on top of a panel is not, and is still a finding.
+  const floats = new Map()
+  const floatsOverScroller = (a) => {
+    if (!floats.has(a)) {
+      const box = a.offsetParent
+      const scrolls = (n) => {
+        const s = getComputedStyle(n)
+        return (
+          (/auto|scroll/.test(s.overflowY) && n.scrollHeight > n.clientHeight + 1) ||
+          (/auto|scroll/.test(s.overflowX) && n.scrollWidth > n.clientWidth + 1)
+        )
+      }
+      floats.set(a, !!box && [...box.querySelectorAll('*')].some((n) => !a.contains(n) && !n.contains(a) && scrolls(n)))
+    }
+    return floats.get(a)
+  }
   const pinned = (el) => {
-    for (let a = el; a && a !== document.body; a = a.parentElement)
-      if (/sticky|fixed/.test(getComputedStyle(a).position)) return a
+    for (let a = el; a && a !== document.body; a = a.parentElement) {
+      const position = getComputedStyle(a).position
+      if (/sticky|fixed/.test(position)) return a
+      if (position === 'absolute' && floatsOverScroller(a)) return a
+    }
     return null
   }
 
