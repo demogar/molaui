@@ -96,7 +96,7 @@ export default defineConfig({
     // building jsdom 87 times was 40% of the run (vitest's own report).
     pool: 'vmThreads',
     setupFiles: ['./src/test/setup.ts'],
-    include: ['src/**/*.test.{ts,tsx}', 'codemods/**/*.test.ts', 'scripts/**/*.test.ts', 'mcp/**/*.test.ts', 'eslint/**/*.test.ts'],
+    include: ['src/**/*.test.{ts,tsx}', 'figma/**/*.test.ts', 'codemods/**/*.test.ts', 'scripts/**/*.test.ts', 'mcp/**/*.test.ts', 'eslint/**/*.test.ts'],
     css: false,
   },
 })

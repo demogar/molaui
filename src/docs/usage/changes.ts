@@ -306,6 +306,7 @@ export const NON_COMPONENT_SCOPES: Record<string, string> = {
   audit: 'the browser audit script',
   package: 'the package boundary: package.json, exports, peers and engines',
   styles: 'the shipped stylesheets as a whole, such as components.css',
+  figma: 'the Figma kit plugin in figma/, generated from the tokens and the manifest rather than shipped in the package',
 }
 
 /**

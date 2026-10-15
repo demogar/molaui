@@ -494,12 +494,21 @@ builtins, so it adds no dependency.
 
 ## Figma
 
-`tokens/mola.tokens.json` is the same token set in the [W3C Design Tokens](https://www.designtokens.org/tr/2025.10/format/)
-format (2025.10), both themes fully resolved — including every OKLab `color-mix()` and the
-translucent colours, with their alpha. Load it with Tokens
-Studio to get Figma variables that match the browser to the hex. It is generated from
-`tokens.css` (`npm run tokens`) and CI fails if it is stale, so the design file cannot drift from
-the code.
+Two things reach Figma, both generated from the code, and CI fails if either is stale.
+
+**The tokens.** `tokens/mola.tokens.json` is the same token set in the [W3C Design Tokens](https://www.designtokens.org/tr/2025.10/format/)
+format (2025.10). Both themes are fully resolved, including every OKLab `color-mix()` and the
+translucent colours, with their alpha. Load it with Tokens Studio, Style Dictionary or another
+DTCG tool. It is generated from `tokens.css` (`npm run tokens`).
+
+**The kit.** `figma/plugin/` is a Figma plugin that draws the kit into your file. Import
+`figma/plugin/manifest.json` in the Figma desktop app (**Plugins → Development → Import plugin
+from manifest…**) and run it. It writes the variables, with `light` and `dark` modes and the
+three densities, scopes, and `var(--token)` code syntax for Dev Mode. It also writes the shadow
+effect styles and the core components. Each component is named after its export, with the prop
+names as variant axes and padding, gap and colour bound to variables. Run it again after an
+upgrade and it updates the kit in place. `figma/README.md` covers the fonts it needs, what it
+creates, and the components still pending in `figma/component-map.json`.
 
 ## Read next
 

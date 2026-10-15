@@ -21,6 +21,8 @@ npm run tokens           # regenerate tokens/mola.tokens.json from tokens.css
 npm run tokens:check     # fail if tokens/mola.tokens.json is stale
 npm run manifest         # regenerate docs/ai/components.json, llms*.txt, the Markdown twins in docs/ai/md and snippets/mola-ui.code-snippets
 npm run manifest:check   # fail if those are stale, the README/introduction counts are wrong, or a public prop has no doc comment
+npm run figma            # regenerate figma/plugin/code.js and figma/component-map.json (the Figma kit plugin) from the tokens and the manifest
+npm run figma:check      # fail if they are stale
 npm run evidence         # regenerate docs/accessibility/evidence.json (testing status on each component page)
 npm run evidence:check   # fail if it is stale
 npm run build            # library build to dist/, then dist/mola-ui-components.css (vite.css.config.ts), then the mola-ui-mcp bin to dist/mcp/ and the ESLint plugin to dist/eslint/
@@ -76,6 +78,9 @@ Theme and density are document/element **attributes, not React context** (portal
 - `src/tokens/contract.test.ts` — the contrast contract: every promised fg/bg pairing with its minimum ratio, in both themes. A new color token needs a measured pairing here.
 - `scripts/export-tokens.ts` — emits DTCG JSON to `tokens/mola.tokens.json` (derived artefact; never edit by hand, rerun `npm run tokens`).
 
+### The Figma kit
+`figma/` is a Figma plugin the owner runs in their own file (the REST API cannot create components; its Variables endpoints need Enterprise). `scripts/export-figma.ts` builds it from `tokens/mola.tokens.json` and `docs/ai/components.json`: `figma/src/tokens.ts` makes the variable collections (`_Primitives` hidden, `Color` with `light`/`dark`, `Density` with the three densities plus `space/*` steps, `Scale`) and the shadow effect styles; `figma/src/components.ts` draws the core components with the export's name, prop-named axes and the manifest's exact values, Figma-only states as `nonApi`, and every colour and length bound to a variable; `figma/src/plugin.ts` is the runtime, transpiled alone (types-only imports) into `figma/plugin/code.js` with the data inlined. `figma/component-map.json` lists every component export as `built` or `pending`. `figma/src/build.test.ts` is the drift gate (stale files, every token carried, every export mapped, name identity); `figma/src/plugin.test.ts` runs the plugin and the committed code.js against a fake `figma` (`fake-figma.ts`), including a second run that must update in place. `figma/src/api.ts` types the API narrowly instead of using `@figma/plugin-typings`, whose lockfile licence ("MIT License") is not an SPDX id the licence gate accepts.
+
 ### Stories are tests
 `src/test/stories.test.tsx` globs every `*.stories.tsx`, composes them through the real `.storybook/preview.tsx` (theme/density decorator included), renders in jsdom and runs axe (contrast disabled there — owned by the contract test and `audit.mjs`). Any new story is automatically a test and must be axe-clean. The Storybook a11y addon is set to `error`. `src/test/ssr-stories.test.tsx` renders every story again with `renderToString` in the node environment, so a component that reads `window` or `document` while rendering fails there; it composes them through `.storybook/mola-context.tsx` (the decorator and initial globals that `preview.tsx` uses), because `preview.tsx` loads Storybook's doc blocks, which need a `document` to import.
 
@@ -118,6 +123,7 @@ Storybook docs pages (introduction, principles, foundations, migration, changelo
 - The README and introduction counts (components = non-AI docs pages, parts = exported React components, stories) are checked by `npm run manifest:check`; update the wording it names when it fails. Other prose claims are not checked.
 - A breaking release needs its section on the Migration page (`src/docs/migration.mdx`) on `main` before the release PR merges; `src/docs/usage/migration.test.ts` reads `CHANGELOG.md` and fails the release PR otherwise. Write it with the breaking change.
 - The agent docs (`docs/ai/components.json`, the Markdown twins, the llms files) embed each component's `changes`, parsed from CHANGELOG.md, which only release-please writes. So the release PR regenerates them itself: the `agent-docs` job in `release-please.yml` runs `npm run manifest` on the release branch and pushes the result, and main's `manifest:check` still holds after a release. If that job fails, run `npm run manifest` on the release branch and push before merging it.
+- The Figma kit plugin (`figma/plugin/code.js`, `figma/component-map.json`) embeds token values, props, cva values and each component's summary and do/don't from the manifest. A change to any of them makes `npm run figma:check` fail; rerun `npm run figma` (after `npm run manifest`) and commit. The manifest's `changes` are not embedded, so a release does not make it stale.
 - Composed demos live under AI/Agent console, Components/Layout/App shell, Components/Forms/Form example and Patterns/*.
 
 ## Design rules (enforced in review)
