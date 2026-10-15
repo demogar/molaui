@@ -3,6 +3,7 @@ import { resolve } from 'node:path'
 
 import { expect, type Page, test } from '@playwright/test'
 
+import { DOCS_SHOTS } from './docs-pages'
 import { NOW, settle } from './helpers'
 import { mine } from './shard'
 
@@ -160,7 +161,7 @@ for (const mode of [...everyStory, ...representative]) {
  */
 if (mine(0)) {
   test('every committed baseline belongs to a screenshot', () => {
-    const expected = new Set(shots.map(file))
+    const expected = new Set([...shots.map(file), ...DOCS_SHOTS.map((shot) => shot.file)])
     const committed = readdirSync(resolve(import.meta.dirname, '__screenshots__/linux')).filter((f) => f.endsWith('.png'))
     expect(committed.filter((f) => !expected.has(f))).toEqual([])
   })

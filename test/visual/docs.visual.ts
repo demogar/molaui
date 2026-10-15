@@ -1,34 +1,11 @@
 import { expect, type Page, test } from '@playwright/test'
 
+import { DOCS_SHOTS } from './docs-pages'
 import { NOW, settle } from './helpers'
 import { mine } from './shard'
 
-/**
- * Docs pages in both themes, because the toolbar's theme reaches them too
- * (.storybook/docs-theme.tsx): with Dark selected, the prose, the args table
- * and the system's doc blocks go dark with the examples. They once stayed
- * light while only the examples switched, and a text-only page did not
- * switch at all; nothing caught it because every visual test opened a story,
- * never a page.
- *
- * Not every page: one of each kind that renders in the page itself. An MDX
- * page with no stories runs no decorator (Introduction); an MDX page whose
- * doc blocks resolve tokens (Color); an autodocs component page with its args
- * table (Button). All 107 in two themes would be the slowest tests in the
- * suite for regressions these three already show. A pattern page is left
- * out: its examples are lazily loaded iframes, each with its own clock, and
- * their screenshots differed between two runs of the same build; the
- * behaviour test checks those frames follow the theme instead. The browser
- * audit still checks every docs page in both themes for contrast.
- */
-const PAGES = [
-  'mola-ui-introduction--overview',
-  'foundations-color--overview',
-  'components-actions-button--overview',
-]
-const THEMES = ['light', 'dark'] as const
-
-async function open(page: Page, id: string, theme: (typeof THEMES)[number]) {
+// Which docs pages, and why only these: docs-pages.ts.
+async function open(page: Page, id: string, theme: 'light' | 'dark') {
   await page.clock.install({ time: NOW.getTime() - 60_000 })
   await page.clock.pauseAt(NOW)
   await page.goto(`/iframe.html?id=${id}&viewMode=docs&globals=theme:${theme}`)
@@ -53,16 +30,10 @@ async function open(page: Page, id: string, theme: (typeof THEMES)[number]) {
 test.use({ viewport: { width: 1280, height: 900 } })
 
 // Dealt across the CI shards like the story screenshots (shard.ts).
-const shots = THEMES.flatMap((theme) => PAGES.map((id) => ({ theme, id })))
-
-for (const theme of THEMES) {
-  test.describe(`docs ${theme}`, () => {
-    for (const id of PAGES) {
-      if (!mine(shots.findIndex((s) => s.theme === theme && s.id === id))) continue
-      test(id, async ({ page }) => {
-        await open(page, id, theme)
-        await expect(page).toHaveScreenshot(`docs--${id}--${theme}.png`, { fullPage: true })
-      })
-    }
+DOCS_SHOTS.forEach(({ theme, id, file }, i) => {
+  if (!mine(i)) return
+  test(`docs ${theme} › ${id}`, async ({ page }) => {
+    await open(page, id, theme)
+    await expect(page).toHaveScreenshot(file, { fullPage: true })
   })
-}
+})
