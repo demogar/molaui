@@ -327,10 +327,11 @@ Releases are automated with [release-please](https://github.com/googleapis/relea
    `main`) and re-run the `Publish package` job. It then tests and builds the tagged commit and publishes
    [`@demogar/mola-ui`](https://www.npmjs.com/package/@demogar/mola-ui) to npm, with provenance,
    and to GitHub Packages.
-4. The What's new page for the minor that was just released (`src/docs/whats-new/<minor>.mdx`,
-   listed in `WHATS_NEW`) lands in the next pull request to `main`, not in the release PR. The
-   release PR passes without it. `changes.test.ts` requires a page for every released minor
-   except the newest, so a missing page turns the *next* release PR red.
+4. A release that starts a new minor needs its What's new page (`src/docs/whats-new/<minor>.mdx`,
+   listed in `WHATS_NEW`) on `main` **before** the release PR is merged, so the version that goes
+   out has its page. The page can be written any time before: it reads "Unreleased" until
+   `package.json` reaches its version. `changes.test.ts` reads `CHANGELOG.md`, so the release PR is
+   red until the page exists. A patch release folds into its minor's page and is never held.
 5. A release with breaking changes is different: its section on the Migration page
    (`src/docs/migration.mdx`, opened by `<ReleaseStatus version="x.y.z" />` and linking every
    breaking pull request) must land on `main` **before** the release PR is merged.

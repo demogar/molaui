@@ -250,27 +250,33 @@ describe("What's new", () => {
 
   /**
    * The readable layer once fell a release behind (it stopped at 0.4 while
-   * 0.5 shipped), so every released minor needs a page, except the newest.
-   * release-please writes the new minor into CHANGELOG.md on the release
-   * branch itself, and the owner merges that pull request: requiring its page
-   * there would turn our own release tooling's PR red until someone wrote it
-   * by hand. So the newest minor may lack a page, and every older one must
-   * have one. Write the page in the pull request right after the release
-   * (CONTRIBUTING.md, "Releases"). The test cannot tell that PR from the
-   * release itself (both carry the new version), so what it enforces is the
-   * deadline: a minor without a page fails the NEXT release's PR, the moment
-   * it stops being the newest.
+   * 0.5 shipped), so every released minor needs a page — including the one
+   * being released. This test used to exempt the newest minor, so release
+   * PRs stayed green and the page landed in the pull request after. The
+   * result was that the version just published never had its page when it
+   * went out: 0.7.0 shipped without one. A page can be written before its
+   * release (it reads "Unreleased" until package.json reaches its version),
+   * so the rule is now the Migration page's: release-please writes the new
+   * minor into CHANGELOG.md on the release branch, and that pull request is
+   * red until the page is on main. A patch release folds into its minor's
+   * page and is never held.
    *
    * 0.1.0 is exempt: it is the first release, with nothing before it to be
    * new against.
    */
-  it('has a page for every minor release in CHANGELOG.md except the newest', () => {
-    const order = (m: string) => m.split('.').map(Number) as [number, number]
-    const minors = [...new Set(releases.map((r) => minorOf(r.version)))]
+  const missingPages = (rs: { version: string }[]) =>
+    [...new Set(rs.map((r) => minorOf(r.version)))]
       .filter((m) => m !== '0.1')
-      .sort((a, b) => order(b)[0] - order(a)[0] || order(b)[1] - order(a)[1])
-    const missing = minors.slice(1).filter((m) => !WHATS_NEW.some((v) => minorOf(v) === m))
-    expect(missing, 'Write src/docs/whats-new/<minor>.mdx and list it in WHATS_NEW').toEqual([])
+      .filter((m) => !WHATS_NEW.some((v) => minorOf(v) === m))
+
+  it('has a page for every minor release in CHANGELOG.md, the newest included', () => {
+    expect(missingPages(releases), 'Write src/docs/whats-new/<minor>.mdx and list it in WHATS_NEW').toEqual([])
+  })
+
+  it('holds a release PR whose new minor has no page', () => {
+    // As release-please would write it for a minor nobody has written up yet.
+    const next = `## [99.0.0](https://github.com/demogar/molaui/compare/v0.7.0...v99.0.0) (2099-01-01)\n\n### Features\n\n* something new\n\n`
+    expect(missingPages(parseChangelog(next + raw))).toEqual(['99.0'])
   })
 
   it('reads released from the version, so a draft flips when the release lands', () => {
