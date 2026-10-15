@@ -806,6 +806,52 @@ export interface DateRangePreset {
 }
 
 // @public (undocumented)
+export function DateTimePicker(input: DateTimePickerProps): React_2.JSX.Element;
+
+// @public
+export interface DateTimePickerMessages extends TimePickerMessages {
+    // (undocumented)
+    date: string;
+    // (undocumented)
+    time: string;
+}
+
+// @public (undocumented)
+export interface DateTimePickerProps extends Omit<React_2.ComponentProps<'div'>, 'defaultValue' | 'onChange' | 'children' | 'role'> {
+    // (undocumented)
+    defaultOpen?: boolean;
+    // (undocumented)
+    defaultValue?: Date | null;
+    // (undocumented)
+    disabled?: boolean;
+    hourCycle?: 12 | 24;
+    id?: string;
+    // (undocumented)
+    isDateDisabled?: (date: Date) => boolean;
+    locale?: DateLocale;
+    // (undocumented)
+    max?: Date | null;
+    // (undocumented)
+    messages?: Partial<DateTimePickerMessages>;
+    // (undocumented)
+    min?: Date | null;
+    minuteStep?: number;
+    name?: string;
+    // (undocumented)
+    onOpenChange?: (open: boolean) => void;
+    onValueChange?: (value: Date | null) => void;
+    open?: boolean;
+    // (undocumented)
+    required?: boolean;
+    // (undocumented)
+    size?: FieldControlSize;
+    today?: Date;
+    // (undocumented)
+    value?: Date | null;
+    weekStartsOn?: number;
+}
+
+// @public (undocumented)
 export const defaultFileUploadMessages: FileUploadMessages;
 
 // @public
@@ -1175,6 +1221,9 @@ export function formatDuration(ms: number): string;
 export function formatFileSize(bytes: number, locale?: Intl.LocalesArgument): string;
 
 // @public
+export function formatRelativeTime(date: Date | number | string, now: Date | number, input?: Pick<RelativeTimeProps, 'locale' | 'format' | 'numeric'>): string;
+
+// @public
 export function formatRunErrorDetails(input: Pick<RunErrorProps, 'kind' | 'step' | 'stepNumber' | 'stepCount' | 'tool' | 'error' | 'runId' | 'at'>): string;
 
 // @public
@@ -1185,6 +1234,9 @@ export function getDatePattern(locale: DateLocale): DatePattern;
 
 // @public
 export function getPageRange(page: number, pageCount: number, siblings?: number): PageRangeItem[];
+
+// @public
+export function getTimeLayout(locale: DateLocale, hourCycle?: 12 | 24): TimeLayout;
 
 // @public (undocumented)
 export function Grid(input: GridProps): React_2.JSX.Element;
@@ -1755,6 +1807,20 @@ export type RecommendationLevel = NonNullable<Variants<typeof recommendationVari
 export const recommendationVariants: (props?: ({
     level?: "time" | "essential" | "highly" | "detour" | null | undefined;
 } & ClassProp) | undefined) => string;
+
+// @public (undocumented)
+export function RelativeTime(input: RelativeTimeProps): React_2.JSX.Element;
+
+// @public
+export interface RelativeTimeProps extends Omit<React_2.ComponentProps<'time'>, 'children' | 'dateTime'> {
+    date: Date | number | string;
+    format?: 'long' | 'short' | 'narrow';
+    live?: boolean;
+    locale?: DateLocale;
+    now?: Date | number;
+    numeric?: 'auto' | 'always';
+    timeZone?: string;
+}
 
 // @public
 export type RGB = readonly [number, number, number];
@@ -2406,6 +2472,15 @@ export interface ThreadProps extends React_2.ComponentProps<'section'> {
     stickThreshold?: number;
 }
 
+// @public (undocumented)
+export interface TimeLayout {
+    dayPeriods: [string, string];
+    hourCycle: 'h11' | 'h12' | 'h23';
+    literals: string[];
+    order: TimeSegment[];
+    padHour: boolean;
+}
+
 // @public
 export function Timeline(input: TimelineProps): React_2.JSX.Element;
 
@@ -2438,6 +2513,53 @@ export type TimelineTone = 'neutral' | 'success' | 'danger' | 'warn' | 'info' | 
 
 // @public (undocumented)
 export type TimelineVariant = 'default' | 'editorial';
+
+// @public (undocumented)
+export function TimePicker(input: TimePickerProps): React_2.JSX.Element;
+
+// @public
+export interface TimePickerMessages {
+    // (undocumented)
+    dayPeriod: string;
+    empty: string;
+    // (undocumented)
+    hour: string;
+    // (undocumented)
+    incomplete: string;
+    // (undocumented)
+    minute: string;
+    tooEarly: (formatted: string) => string;
+    tooLate: (formatted: string) => string;
+}
+
+// @public (undocumented)
+export interface TimePickerProps extends Omit<React_2.ComponentProps<'div'>, 'defaultValue' | 'onChange' | 'children' | 'role'> {
+    // (undocumented)
+    defaultValue?: TimeString | null;
+    // (undocumented)
+    disabled?: boolean;
+    hourCycle?: 12 | 24;
+    id?: string;
+    locale?: DateLocale;
+    max?: TimeString | null;
+    messages?: Partial<TimePickerMessages>;
+    min?: TimeString | null;
+    minuteStep?: number;
+    name?: string;
+    onValueChange?: (value: TimeString | null) => void;
+    // (undocumented)
+    required?: boolean;
+    // (undocumented)
+    size?: FieldControlSize;
+    value?: TimeString | null;
+    wrapperClassName?: string;
+}
+
+// @public (undocumented)
+export type TimeSegment = 'hour' | 'minute' | 'dayPeriod';
+
+// @public
+export type TimeString = string;
 
 // @public (undocumented)
 export interface ToastOptions {
