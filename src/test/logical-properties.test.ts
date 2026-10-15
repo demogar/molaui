@@ -20,8 +20,8 @@ const root = resolve(import.meta.dirname, '..')
 const ALLOWED: Record<string, { token: string; why: string }[]> = {
   'components/tabs/tabs.tsx': [
     {
-      token: 'left-(--active-tab-left)',
-      why: "Base UI measures --active-tab-left as a physical offset from the list's left edge, in either direction.",
+      token: 'left-0',
+      why: "The indicator is translated by Base UI's measured offset, which is physical: from the list's left edge, in either direction.",
     },
   ],
   'components/dialog/dialog.tsx': [

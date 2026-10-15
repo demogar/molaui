@@ -4047,7 +4047,7 @@ One file's change, as a reviewer reads it.
 | `headingLevel` | `3 \| 4 \| 5` | `4` | Heading level for the path. Defaults to 4, under a `ChangeReview` heading. |
 | `hunks` | `readonly (DiffHunk \| DiffHunkInput)[]` |  | Or the hunks, structured. Wins over `diff`. |
 | `kind` | `FileChangeKind` | `modified` |  |
-| `layout` | `"split" \| "unified"` | `unified` | `unified` is one column of lines. `split` sets old against new side by side once the diff's container is 48rem wide, and stays unified below that — a phone has no room for two columns of code. |
+| `layout` | `"unified" \| "split"` | `unified` | `unified` is one column of lines. `split` sets old against new side by side once the diff's container is 48rem wide, and stays unified below that — a phone has no room for two columns of code. |
 | `previousPath` | `string` |  | The path before a rename. |
 
 #### `countChanges` (function)

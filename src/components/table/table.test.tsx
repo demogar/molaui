@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
 import { DataTable, type DataTableColumn } from './data-table'
-import { Table, TableBody, TableCell, TableCheckbox, TableEmpty, TableHead, TableHeader, TableRow } from './table'
+import { Table, TableBody, TableCell, TableCheckbox, TableEmpty, TableHead, TableHeader, TableRow, TableSkeletonRows } from './table'
 
 interface Row {
   id: string
@@ -129,6 +129,46 @@ describe('Table primitives', () => {
       client.mockRestore()
       vi.unstubAllGlobals()
     }
+  })
+
+  it('writes the frame width only while the table is empty, so a resize does not restyle every cell', () => {
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        observe() {}
+        disconnect() {}
+      },
+    )
+    const client = vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockReturnValue(390)
+    try {
+      render(
+        <Table aria-label="Runs">
+          <TableBody>
+            <TableRow>
+              <TableCell>run_1</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>,
+      )
+      const frame = screen.getByRole('table', { name: 'Runs' }).parentElement!
+      expect(frame.style.getPropertyValue('--table-viewport')).toBe('')
+    } finally {
+      client.mockRestore()
+      vi.unstubAllGlobals()
+    }
+  })
+
+  it('sweeps each loading row once, not each bar', () => {
+    const { container } = render(
+      <Table aria-label="Loading runs">
+        <TableBody>
+          <TableSkeletonRows rows={3} columns={4} />
+        </TableBody>
+      </Table>,
+    )
+    const rows = container.querySelectorAll('[data-slot="table-skeleton-row"]')
+    expect(rows).toHaveLength(3)
+    for (const row of rows) expect(row.querySelectorAll('[class*="after:animate-mola-shimmer"]')).toHaveLength(1)
   })
 
   it('renders header cells as column headers and numeric cells right-aligned', () => {

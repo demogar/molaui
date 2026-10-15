@@ -10,8 +10,9 @@ import { cn } from '../../lib/cn'
  * different colour underneath.
  *
  * ── the leading cannot be lost ──
- * `tailwind-merge` treats any arbitrary `text-[…]` as possibly carrying a
- * line-height, so a caller who overrides the size with a bare `text-[40px]`
+ * `cn()`, following tailwind-merge, treats any arbitrary `text-[…]` as
+ * possibly carrying a line-height, so a caller who overrides the size with a
+ * bare `text-[40px]`
  * silently discards the heading's leading — the page then inherits the body
  * leading and a three-line heading opens up by half its own height, with
  * nothing failing. In the product this was extracted from, the fix was a

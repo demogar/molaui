@@ -67,8 +67,8 @@ Clocks and reader-local times render after hydration (`useHydrated` in `src/lib/
 
 Theme and density are document/element **attributes, not React context** (portaled dialogs must inherit them). Components take no density props.
 
-### `cn()` and tailwind-merge
-`src/lib/cn.ts` extends tailwind-merge with the system's color tokens, text sizes and shadows; without it, unknown `text-*` colors get merged as font sizes and silently dropped. Adding a `--color-*` token to `theme.css` requires adding it to `COLORS` in `cn.ts` — `cn.test.ts` parses `theme.css` and fails otherwise.
+### `cn()` and the class merger
+`src/lib/cn.ts` is `clsx` plus `src/lib/merge.ts`, Mola's own merger: tailwind-merge's rules restated as a table for the families the components write (plus Mola's names: `shadow-cut`, `leading-body`, `max-w-page`, `literal`…), so the library does not ship tailwind-merge (it was 63% of `{ Button, Field }`). Families no component writes (masks, snap, backdrop filters…) are left alone: kept, never merged. `merge.test.ts` keeps tailwind-merge as a devDependency configured as `cn()` used to, and fails if the two disagree on any pair of utilities the source writes or Tailwind compiles under Mola's theme, or if a utility the source writes is left alone; when it fails after you write a new kind of utility, add its family to the table. `cn.test.ts` parses `theme.css` and fails if a colour token would be read as something other than a colour. `.size-limit.js` budgets `cn` on its own.
 
 ### Tokens pipeline
 `src/tokens/resolve.ts` parses `tokens.css` and resolves `light-dark()`, `var()` and OKLab `color-mix()` per theme; `src/tokens/color.ts` has the color math. Both are used by:

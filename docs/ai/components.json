@@ -1802,7 +1802,7 @@
             },
             {
               "name": "layout",
-              "type": "\"split\" | \"unified\"",
+              "type": "\"unified\" | \"split\"",
               "required": false,
               "default": "unified",
               "description": "`unified` is one column of lines. `split` sets old against new side by side once the diff's container is 48rem wide, and stays unified below that — a phone has no room for two columns of code."

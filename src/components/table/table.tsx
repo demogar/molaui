@@ -86,6 +86,14 @@ export function Table({
  * collapses a frame whose parent sizes to its content. The property is
  * written straight onto the element rather than through state, so a resize
  * restyles one cell instead of re-rendering every row.
+ *
+ * It is written only while the table is empty, which is the only time
+ * anything reads it. A custom property on the frame is inherited by every
+ * cell, so writing it restyles the whole table, and the observer fires on
+ * every frame of a resize: collapsing the app shell's sidebar beside a
+ * populated table cost 57 ms of style recalculation over the 200 ms ease,
+ * all of it for a value no cell used. Emptying or filling the table changes
+ * its height, so the observer runs again and the property follows.
  */
 function useOverflows(ref: React.RefObject<HTMLElement | null>) {
   const [overflows, setOverflows] = React.useState(false)
@@ -93,7 +101,8 @@ function useOverflows(ref: React.RefObject<HTMLElement | null>) {
     const el = ref.current
     if (!el || typeof ResizeObserver === 'undefined') return
     const measure = () => {
-      el.style.setProperty('--table-viewport', `${el.clientWidth}px`)
+      if (el.querySelector('[data-slot="table-empty"]')) el.style.setProperty('--table-viewport', `${el.clientWidth}px`)
+      else el.style.removeProperty('--table-viewport')
       setOverflows(el.scrollWidth > el.clientWidth || el.scrollHeight > el.clientHeight)
     }
     const observer = new ResizeObserver(measure)
@@ -332,22 +341,24 @@ export function TableEmpty({
  * Loading rows: real rows at the real height, so the table does not jump when
  * the data lands. Bar widths vary by a fixed pattern rather than at random, so
  * a re-render does not make the skeleton twitch.
+ *
+ * One sweep per row, not one per bar. Each bar carried Skeleton's own sweep,
+ * so a ten-row, five-column loading table ran fifty infinite animations, each
+ * its own compositor layer, and a dashboard with two tables twice that. The
+ * band now crosses the whole row (the row is its containing block), over bars
+ * that stay put; in a framed table the band is the frame's own cloth, so
+ * between the bars it does not show, and the look is what it was.
  */
 export function TableSkeletonRows({ rows = 5, columns }: { rows?: number; columns: number }) {
   const widths = ['w-3/4', 'w-1/2', 'w-2/3', 'w-5/12', 'w-7/12']
   return (
     <>
       {Array.from({ length: rows }, (_, r) => (
-        <tr key={r} data-slot="table-skeleton-row" aria-hidden>
+        <tr key={r} data-slot="table-skeleton-row" aria-hidden className="relative">
           {Array.from({ length: columns }, (_, c) => (
             <td key={c} className="h-(--row-h) px-3 align-middle shadow-[inset_0_-1px_0_var(--keyline-soft)]">
-              <span
-                className={cn(
-                  'block h-2.5 bg-cloth-deep relleno-field',
-                  skeletonShimmer,
-                  widths[(r + c * 2) % widths.length],
-                )}
-              />
+              <span className={cn('block h-2.5 bg-cloth-deep relleno-field', widths[(r + c * 2) % widths.length])} />
+              {c === 0 ? <span className={cn(skeletonShimmer, 'absolute inset-x-0 top-0 bottom-px')} /> : null}
             </td>
           ))}
         </tr>

@@ -52,7 +52,7 @@ const ALLOWED: Record<string, Allowed[]> = {
     },
   ],
   'src/components/tabs/tabs.tsx': [
-    { rule: 7, match: /left-\(--active-tab-left\)/, why: "Base UI measures --active-tab-left as a physical offset from the list's left edge, in either direction." },
+    { rule: 7, match: /`left-0` is a physical/, why: "The indicator is translated by Base UI's measured offset, which is physical: from the list's left edge, in either direction." },
   ],
 
   /* Patterns: the hand-styled-button suggestion is a warning because sometimes the native element is right. */

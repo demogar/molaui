@@ -1,6 +1,8 @@
 // Browser audit over every story and every docs page: axe (with real colour
 // contrast) in both themes, that every `data-theme` subtree paints its own
-// ground, a visible focus indicator on every tab stop, horizontal overflow at phone width, and console errors. Exits non-zero on any finding, so CI can gate on it.
+// ground, a visible focus indicator on every tab stop, horizontal overflow at phone width, console errors,
+// and runtime cost (layout transitions, infinite animations, budgets; scripts/runtime-scan.mjs). Exits
+// non-zero on any finding, so CI can gate on it.
 //   node scripts/audit.mjs <base> [--out <dir>] [--only <id substring>] [--workers <n>] [--shard <i>/<n>]
 //   node scripts/audit.mjs --serve storybook-static [--out <dir>]   (npm run audit)
 //
@@ -18,6 +20,7 @@ import { join } from 'node:path'
 import { chromium } from 'playwright'
 
 import { focusScan } from './focus-scan.mjs'
+import { BUDGETS, longTaskScan, runtimeScan } from './runtime-scan.mjs'
 import { serve } from './serve-static.mjs'
 
 const args = process.argv.slice(2)
@@ -230,6 +233,9 @@ async function audit(page, job, errors) {
   found.push(...theming)
   // Every tab stop must look different focused (scripts/focus-scan.mjs). On
   // story pages only: a docs page repeats its stories' examples.
+  // Runtime cost does not depend on the theme, so it is measured once. Before
+  // the focus scan, which switches transitions off to read settled paint.
+  if (job.viewMode === 'story' && job.theme === 'light') found.push(...(await runtimeScan(page, job.id)))
   if (job.viewMode === 'story') found.push(...(await focusScan(page)))
   if (job.overflow) {
     // Last, because it changes the page. The args table is a fixed-width grid
@@ -310,6 +316,14 @@ async function worker(queue) {
 
 const queue = [...mine]
 await Promise.all(Array.from({ length: workers }, () => worker(queue)))
+// Timed budgets last, one page at a time, once nothing else is running.
+for (const job of mine.filter((j) => j.viewMode === 'story' && j.theme === 'light' && BUDGETS[j.id])) {
+  try {
+    for (const f of await longTaskScan(browser, base, job.id)) failures.push({ ...job, finding: f })
+  } catch (e) {
+    failures.push({ ...job, finding: `long-task budget: ${String(e.message ?? e).split('\n')[0]}` })
+  }
+}
 await browser.close()
 server?.close()
 
