@@ -53,7 +53,10 @@ export function PageHeader({
           <Heading data-part="title" level={1}>{title}</Heading>
           {description ? <p data-part="description" className="mt-1.5 mb-0 text-sm text-ink-2">{description}</p> : null}
         </div>
-        {actions ? <div data-part="actions" className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div> : null}
+        {/* `max-w-full`: the actions keep their width beside the title but
+            wrap to a second row of buttons when they alone outgrow the page,
+            as Export and New run did by 5px at spacious on a 320px phone. */}
+        {actions ? <div data-part="actions" className="flex max-w-full shrink-0 flex-wrap items-center gap-2">{actions}</div> : null}
       </div>
       {meta && meta.length > 0 ? (
         <ul data-part="meta" className="m-0 flex list-none flex-wrap items-center gap-y-1 p-0 text-xs text-ink-muted">

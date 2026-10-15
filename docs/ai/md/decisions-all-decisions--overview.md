@@ -20,6 +20,7 @@ each rest on one, and a change that ignores it reopens an argument that was sett
 - [0006 — One disclosure marker: a plus that turns into a cross](https://demogar.github.io/molaui/md/decisions-0006-one-disclosure-marker--overview.md)
 - [0007 — The Tailwind bridge is closed](https://demogar.github.io/molaui/md/decisions-0007-a-closed-bridge--overview.md)
 - [0008 — Rojo means danger on a product screen](https://demogar.github.io/molaui/md/decisions-0008-the-rojo-register--overview.md)
+- [0009 — A stitched edge marks a region that scrolls sideways](https://demogar.github.io/molaui/md/decisions-0009-scroll-edge-cue--overview.md)
 
 ## How a decision changes
 

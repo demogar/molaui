@@ -52,6 +52,7 @@ describe('Mola’s own utilities', () => {
     'display-cut': 'a text-shadow; nothing else in the system sets one',
     'forced-focus': 'an outline under forced colours only',
     'scroll-cloth': 'the scrollbar colours; nothing else sets them',
+    'scroll-edge': 'the trailing scroll cue, drawn only under data-overflow-end',
     'flip-rtl': 'a scale under :dir(rtl) only',
   }
 
