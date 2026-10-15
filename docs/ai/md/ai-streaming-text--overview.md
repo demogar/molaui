@@ -56,7 +56,7 @@ Each story is a live example in Storybook.
 
 ### `Caret` (component)
 
-The block caret: ink, half an em wide, the height of the x-height plus ascenders. A thin bar caret reads as a text field waiting for input; a block reads as output being written, which is the opposite thing.
+`className`, `ref`, `id` and the other DOM props go to `<span data-slot="caret">`.
 
 ### `StreamingText` (component)
 
@@ -69,13 +69,16 @@ Text that arrives a token at a time.
 | `errorAnnouncement` | `string` | `Response stopped with an error.` | Spoken once when a stream that was running fails. |
 | `renderCitation` | `((n: number) => ReactNode)` |  | How an inline `[n]` marker renders. Without it the marker stays as text. Pass a stable function (module scope or `useCallback`): finished blocks skip re-rendering only while it stays the same. |
 | `status` | `StreamStatus` | `done` |  |
-| `tone` | `"default" \| "muted"` | `default` | `muted` for text the reader may skim — reasoning, not the answer. |
+| `tone` (deprecated) | `"default" \| "muted"` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `variant`, which takes the same values: a muted ink is a presentation, and `tone` is a status. |
+| `variant` | `"default" \| "muted"` |  | `muted` for text the reader may skim — reasoning, not the answer. |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="streaming-text">`.
 
 ### `parseBlocks` (function)
 
 ### `parseInline` (function)
 
-Types: `StreamStatus`, `StreamingTextProps`, `Block`, `InlineRun`
+Types: `CaretProps`, `StreamStatus`, `StreamingTextProps`, `Block`, `InlineRun`
 
 ## Accessibility
 

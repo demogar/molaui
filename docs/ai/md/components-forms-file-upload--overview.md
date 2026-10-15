@@ -48,13 +48,14 @@ Each story is a live example in Storybook.
 
 ### `FileUpload` (component)
 
+`className`, `ref` and the DOM props go to the root, the region that holds the dropzone and the list; the Field wiring (`id`, `aria-*`) goes to the browse button, the control a label names.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `accept` | `string` |  | Native `accept`: `.jsonl,.csv`, `application/pdf`, `image/*`. Enforced on drop as well as in the picker. |
 | `aria-describedby` | `string` |  |  |
 | `aria-invalid` | `boolean \| "true" \| "false"` |  |  |
 | `aria-label` | `string` |  |  |
-| `className` | `string` |  |  |
 | `defaultFiles` | `FileUploadItem[]` |  | Rows to start with: files already on the server, or a fixed state for a demo. |
 | `disabled` | `boolean` | `false` |  |
 | `id` | `string` |  |  |
@@ -69,6 +70,8 @@ Each story is a live example in Storybook.
 | `onReject` | `((rejections: FileRejection[]) => void)` |  | Files turned away, with the rule each broke. |
 | `onUpload` | `((file: File, context: UploadContext) => Promise<void>)` |  | Upload one file. Resolve when done; reject with an Error whose message says why. |
 | `required` | `boolean` |  |  |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="file-upload">`.
 
 ### `defaultFileUploadMessages` (constant)
 
@@ -88,7 +91,7 @@ Whether a file matches an `accept` string, using the rules the native picker use
 
 Splits a batch into the files that pass and the ones that do not, each with the one rule it broke. Type is checked before size, because "wrong kind of file" is the more useful thing to hear about a 2 GB video dropped on a CSV field. Count is checked last and in order, so the first files chosen are the ones kept.
 
-Types: `FileUploadItem`, `FileUploadMessages`, `FileUploadProps`, `FileUploadStatus`, `UploadContext`, `FileRejection`, `FileRejectionReason`
+Types: `FileUploadItem`, `FileUploadMessages`, `FileUploadProps`, `FileUploadStatus`, `UploadContext`, `FileRejection`, `FileRejectionReason`, `FileValidationOptions`
 
 ## Accessibility
 

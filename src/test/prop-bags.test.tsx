@@ -1,7 +1,11 @@
+import { writeFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+
 import { act, render } from '@/test/render'
 import * as React from 'react'
-import { describe, expect, it } from 'vitest'
+import { afterAll, describe, expect, it } from 'vitest'
 
+import { FORWARDS, type Forward } from '@/docs/usage/forwards'
 import * as mola from '@/index'
 
 /**
@@ -23,6 +27,12 @@ import * as mola from '@/index'
  * (and the parent it needs), spreading the probe onto it; a new export with
  * no fixture fails here. EXEMPT is for components that render no element of
  * their own, with the reason.
+ *
+ * Where each component put the probe is also checked against
+ * src/docs/usage/forwards.ts, which the agent manifest publishes, so the
+ * docs say which element takes `className` and which takes `ref` because
+ * this test saw it there. Rerun with `WRITE_FORWARDS=1` to rewrite that file
+ * after a deliberate change, and review the diff.
  */
 
 type Probe = { ref: React.RefCallback<Element>; className: string; 'data-probe': string }
@@ -626,6 +636,14 @@ interface Seen {
   probe: Element | null
   ref: Element | null
   classed: Element | null
+  forward: Forward
+}
+
+/** `<input data-slot="input">`, the way the docs name an element. */
+function descriptor(el: Element | null): string | null {
+  if (!el) return null
+  const slot = el.getAttribute('data-slot')
+  return `<${el.tagName.toLowerCase()}${slot ? ` data-slot="${slot}"` : ''}>`
 }
 
 async function mount(fixture: Fixture, name: string): Promise<Seen> {
@@ -641,10 +659,15 @@ async function mount(fixture: Fixture, name: string): Promise<Seen> {
   await act(async () => {
     await new Promise((r) => setTimeout(r, 0))
   })
-  const seen = {
-    probe: document.querySelector(`[data-probe="${name}"]`),
+  const probeEl = document.querySelector(`[data-probe="${name}"]`)
+  const classed = document.querySelector('.prop-bag-probe')
+  const element = descriptor(probeEl)
+  const classTarget = descriptor(classed)
+  const seen: Seen = {
+    probe: probeEl,
     ref: refNode,
-    classed: document.querySelector('.prop-bag-probe'),
+    classed,
+    forward: { element, ...(classed !== probeEl && classTarget ? { className: classTarget } : {}) },
   }
   view.unmount()
   return seen
@@ -667,7 +690,46 @@ function problems({ probe, ref, classed }: Seen, onContent = false): string[] {
   return found
 }
 
+const observed: Record<string, Forward> = Object.fromEntries(Object.keys(EXEMPT).map((name) => [name, { element: null }]))
+
+afterAll(() => {
+  if (!process.env.WRITE_FORWARDS) return
+  const sorted = Object.fromEntries(Object.entries(observed).sort(([a], [b]) => a.localeCompare(b)))
+  const body = `/**
+ * Where each exported component sends \`className\`, and where \`ref\` and the
+ * other DOM props go (docs/adr/0008-prop-vocabulary.md). \`element\` takes
+ * \`ref\`, \`id\`, \`data-*\` and the rest; \`className\` is named only when it goes
+ * somewhere else (the box around a control, or the content inside a panel).
+ * \`null\` is a component that renders no element of its own.
+ *
+ * Observed, not written: src/test/prop-bags.test.tsx renders every component
+ * and fails when this file disagrees with what it saw. \`WRITE_FORWARDS=1 npx
+ * vitest run src/test/prop-bags.test.tsx\` rewrites it. The agent manifest
+ * publishes it with each component's props.
+ */
+export interface Forward {
+  element: string | null
+  className?: string
+}
+
+export const FORWARDS: Record<string, Forward> = {
+${Object.entries(sorted)
+  .map(([name, f]) => {
+    const quote = (v: string | null) => (v === null ? 'null' : `'${v}'`)
+    return `  ${name}: { element: ${quote(f.element)}${f.className ? `, className: ${quote(f.className)}` : ''} },`
+  })
+  .join('\n')}
+}
+`
+  writeFileSync(resolve(import.meta.dirname, '../docs/usage/forwards.ts'), body)
+})
+
 describe('every exported component accepts ref, data-* and className', () => {
+  it('forwards.ts names every component, exempt ones as rendering no element', () => {
+    expect(Object.keys(FORWARDS).sort()).toEqual(components)
+    for (const name of Object.keys(EXEMPT)) expect(FORWARDS[name], name).toEqual({ element: null })
+  })
+
   it('has a fixture or an exemption for every export, and no stale ones', () => {
     const missing = components.filter((name) => !(name in FIXTURES) && !(name in EXEMPT))
     const stale = [...Object.keys(FIXTURES), ...Object.keys(EXEMPT)].filter((name) => !components.includes(name))
@@ -678,12 +740,17 @@ describe('every exported component accepts ref, data-* and className', () => {
     const fixture = FIXTURES[name]!
     it(name, async () => {
       if (typeof fixture === 'function') {
-        expect(problems(await mount(fixture, name), name in CLASS_ON_CONTENT)).toEqual([])
+        const seen = await mount(fixture, name)
+        observed[name] = seen.forward
+        expect(problems(seen, name in CLASS_ON_CONTENT)).toEqual([])
+        expect(seen.forward).toEqual(FORWARDS[name])
         return
       }
       const plain = await mount(fixture.plain, name)
       const labelled = await mount(fixture.labelled, name)
+      observed[name] = plain.forward
       expect([...problems(plain), ...problems(labelled).map((p) => `with a label: ${p}`)]).toEqual([])
+      expect(plain.forward).toEqual(FORWARDS[name])
       // The same element, by its slot, takes className with or without a label.
       expect(labelled.classed?.getAttribute('data-slot')).toBe(plain.classed?.getAttribute('data-slot'))
     })

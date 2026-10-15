@@ -47,13 +47,15 @@ Each story is a live example in Storybook.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `items` (required) | `BreadcrumbItem[]` |  |  |
-| `renderLink` | `((props: { href: string; className: string; children: ReactNode; }) => ReactNode)` |  |  |
+| `renderLink` | `BreadcrumbLinkRender` |  | The element each link crumb renders as: your router's `<Link />`, or a function returning one. |
+
+`className`, `ref`, `id` and the other DOM props go to `<nav data-slot="breadcrumb">`.
 
 ### `middleTruncate` (function)
 
 `run_8f3a2b91c21e` → `run_8f3a…c21e`. Both ends survive; the middle is what nobody reads.
 
-Types: `BreadcrumbItem`, `BreadcrumbProps`
+Types: `BreadcrumbItem`, `BreadcrumbLinkRender`, `BreadcrumbProps`
 
 ## Accessibility
 

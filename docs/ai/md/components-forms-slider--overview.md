@@ -57,6 +57,8 @@ Each story is a live example in Storybook.
 
 Also accepts the props of `SliderRootProps`.
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="slider">`.
+
 Types: `SliderProps`
 
 ## Accessibility

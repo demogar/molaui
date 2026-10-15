@@ -53,6 +53,8 @@ Each story is a live example in Storybook.
 
 Also accepts the props of `AccordionRootProps`.
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="accordion">`.
+
 ### `AccordionItem` (component)
 
 | Prop | Type | Default | Description |
@@ -61,13 +63,19 @@ Also accepts the props of `AccordionRootProps`.
 
 Also accepts the props of `AccordionItemProps`, `UseCollapsibleRootParameters`.
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="accordion-item">`.
+
 ### `AccordionPanel` (component)
+
+`ref` and the DOM props go to the panel; `className` goes to the content inside it. The panel animates its own height, and padding on it would be clipped while it does, so the padding a consumer adds belongs to the content.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `className` | `string` |  |  |
 
 Also accepts the props of `AccordionRootProps`.
+
+`className` goes to `<div>`; `ref`, `id` and the other DOM props go to `<div data-slot="accordion-panel">`.
 
 ### `AccordionTrigger` (component)
 
@@ -78,17 +86,25 @@ Also accepts the props of `AccordionRootProps`.
 
 Also accepts the props of `NativeButtonProps`.
 
+`className`, `ref`, `id` and the other DOM props go to `<button data-slot="accordion-trigger">`.
+
 ### `Collapsible` (component)
 
 One disclosure on its own — "Show 12 more fields", "Raw response". No rules, no heading semantics: it is a control inside something else, not a section.
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="collapsible">`.
+
 ### `CollapsiblePanel` (component)
+
+`className` goes to the content inside the panel, for the reason given on `AccordionPanel`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `className` | `string` |  |  |
 
 Also accepts the props of `CollapsiblePanelProps`.
+
+`className` goes to `<div>`; `ref`, `id` and the other DOM props go to `<div data-slot="collapsible-panel">`.
 
 ### `CollapsibleTrigger` (component)
 
@@ -97,6 +113,8 @@ Also accepts the props of `CollapsiblePanelProps`.
 | `className` | `string` |  |  |
 
 Also accepts the props of `NativeButtonProps`.
+
+`className`, `ref`, `id` and the other DOM props go to `<button data-slot="collapsible-trigger">`.
 
 Types: `AccordionItemProps`, `AccordionPanelProps`, `AccordionProps`, `AccordionTriggerProps`, `CollapsiblePanelProps`, `CollapsibleTriggerProps`
 

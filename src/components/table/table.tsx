@@ -171,7 +171,7 @@ export function TableRow({ selected = false, className, ...props }: TableRowProp
   )
 }
 
-type SortDirection = 'ascending' | 'descending' | 'none'
+export type TableSortDirection = 'ascending' | 'descending' | 'none'
 
 export interface TableHeadProps extends React.ComponentProps<'th'> {
   /** Right-align, for a column of figures. Header and cells must agree or the label floats off its numbers. */
@@ -181,7 +181,7 @@ export interface TableHeadProps extends React.ComponentProps<'th'> {
    * state; `aria-sort` is only set on the column actually sorted, because
    * announcing "not sorted" on every column is noise.
    */
-  sort?: SortDirection
+  sort?: TableSortDirection
   onSort?: () => void
 }
 

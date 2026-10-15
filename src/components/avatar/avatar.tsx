@@ -26,12 +26,15 @@ import { type Variants } from '../../lib/variants'
  * place rather than a broken-image glyph inside a keyline.
  */
 
-const LAYERS = [
+/** The classes for the layer an avatar is cut from, chosen from the name. */
+export type AvatarLayer = 'bg-anil text-on-layer' | 'bg-verde text-on-layer' | 'bg-oro text-on-oro' | 'bg-ink text-on-ink'
+
+const LAYERS: readonly AvatarLayer[] = [
   'bg-anil text-on-layer',
   'bg-verde text-on-layer',
   'bg-oro text-on-oro',
   'bg-ink text-on-ink',
-] as const
+]
 
 /** FNV-1a: tiny, stable across engines, and good enough to spread names over four colours. */
 function hash(value: string): number {
@@ -43,7 +46,7 @@ function hash(value: string): number {
   return h >>> 0
 }
 
-export function avatarLayer(name: string): (typeof LAYERS)[number] {
+export function avatarLayer(name: string): AvatarLayer {
   return LAYERS[hash(name.trim().toLowerCase()) % LAYERS.length]!
 }
 

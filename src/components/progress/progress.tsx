@@ -44,8 +44,8 @@ function fillStyle(value: number, min = 0, max = 100): React.CSSProperties {
   const fraction = max > min ? Math.min(1, Math.max(0, (value - min) / (max - min))) : 0
   return { width: '100%', scale: `${fraction} 1` }
 }
-const sizeClasses = { sm: 'h-1.5', md: 'h-2.5', lg: 'h-4' } as const
-type Size = keyof typeof sizeClasses
+export type ProgressSize = 'sm' | 'md' | 'lg'
+const sizeClasses: Record<ProgressSize, string> = { sm: 'h-1.5', md: 'h-2.5', lg: 'h-4' }
 
 export interface ProgressProps extends Omit<ProgressPrimitive.Root.Props, 'className' | 'children'> {
   className?: string
@@ -55,7 +55,7 @@ export interface ProgressProps extends Omit<ProgressPrimitive.Root.Props, 'class
   showValue?: boolean
   /** Replaces the value text, e.g. "212 / 300 prompts". */
   valueText?: (formatted: string | null, value: number | null) => React.ReactNode
-  size?: Size
+  size?: ProgressSize
   /**
    * Fill colour. `neutral` (ink) is in-flight; `success` and `danger` (verde,
    * rojo) for a finished state that stays on screen. `ink` is deprecated
@@ -116,7 +116,7 @@ export interface MeterProps extends Omit<MeterPrimitive.Root.Props, 'className' 
    */
   thresholds?: { warn?: number; danger?: number }
   valueText?: (formatted: string, value: number) => React.ReactNode
-  size?: Size
+  size?: ProgressSize
 }
 
 /** Which band a reading is in — exported for the stat tiles and tables that colour a number to match. */

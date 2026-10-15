@@ -45,14 +45,19 @@ Each story is a live example in Storybook.
 
 ### `Switch` (component)
 
+`className`, `ref` and the DOM props go to the switch, with or without a `label`; see `Checkbox`.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `className` | `string` |  |  |
 | `description` | `ReactNode` |  |  |
 | `label` | `ReactNode` |  |  |
 | `labelPosition` | `"start" \| "end"` | `end` | Put the label before the switch — for settings lists, where labels align left and switches right. |
+| `wrapperClassName` | `string` |  | Classes for the label row a `label` adds around the control. `className` always styles the switch itself. |
 
 Also accepts the props of `NativeButtonProps`, `SwitchRootProps`.
+
+`className`, `ref`, `id` and the other DOM props go to `<span data-slot="switch">`.
 
 Types: `SwitchProps`
 

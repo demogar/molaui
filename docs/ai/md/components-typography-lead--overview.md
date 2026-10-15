@@ -38,6 +38,8 @@ Each story is a live example in Storybook.
 
 The first thing someone says, so it is set in the reading voice rather than the system one. Alegreya from here down; Archivo above and around.
 
+`className`, `ref`, `id` and the other DOM props go to `<p data-slot="lead">`.
+
 ## Accessibility
 
 Nothing in it takes focus, so there is no keyboard table.

@@ -61,15 +61,9 @@ Free text with suggestions: a run label, a tag, a search. The typed text is the 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `items` (required) | `(string \| ComboboxOption)[]` |  | Suggestions. Plain strings, or options with a description line. |
-| `aria-describedby` | `string` |  |  |
-| `aria-invalid` | `boolean \| "true" \| "false"` |  |  |
-| `aria-label` | `string` |  |  |
-| `autoComplete` | `string` | `off` |  |
-| `className` | `string` |  |  |
 | `defaultValue` | `string` |  |  |
 | `disabled` | `boolean` |  |  |
 | `emptyMessage` | `ReactNode` |  | What the popup says when nothing matches. Omit to close the popup instead. |
-| `id` | `string` |  |  |
 | `label` | `ReactNode` |  |  |
 | `loading` | `boolean` | `false` |  |
 | `locale` | `LocalesArgument` |  | Locale for the built-in matching. Omitted, the runtime's locale is used. |
@@ -78,25 +72,25 @@ Free text with suggestions: a run label, a tag, a search. The typed text is the 
 | `placeholder` | `string` |  |  |
 | `readOnly` | `boolean` |  |  |
 | `required` | `boolean` |  |  |
-| `size` | `"sm" \| "lg" \| "md"` | `md` |  |
+| `size` | `"sm" \| "md" \| "lg"` | `md` |  |
 | `status` | `ReactNode` |  |  |
 | `value` | `string` |  |  |
+| `wrapperClassName` | `string` |  | Classes for the wrapper that holds `label` and the input. Only rendered with a `label`. |
+
+`className`, `ref`, `id` and the other DOM props go to `<input data-slot="autocomplete">`.
 
 ### `Combobox` (component)
 
+`className` goes to the box around the input (the element with the cut), `ref`, `id` and the other DOM props to the `<input>`, with or without a `label`; the wrapper a `label` adds takes `wrapperClassName`.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `items` (required) | `Items` |  | Flat options, or labelled groups. With `filter={null}`, the options to show right now. |
-| `aria-describedby` | `string` |  |  |
-| `aria-invalid` | `boolean \| "true" \| "false"` |  |  |
-| `aria-label` | `string` |  |  |
-| `className` | `string` |  |  |
+| `items` (required) | `ComboboxItems` |  | Flat options, or labelled groups. With `filter={null}`, the options to show right now. |
 | `clearLabel` | `string` |  | Accessible name of the clear button. |
 | `defaultValue` | `string \| string[] \| null` |  |  |
 | `disabled` | `boolean` |  |  |
 | `emptyMessage` | `ReactNode` |  | What the popup says when nothing matches. |
 | `filter` | `((option: ComboboxOption, query: string) => boolean) \| null` |  | How typed text matches an option. Pass `null` when the caller filters — a server search — and hand the results in through `items`. |
-| `id` | `string` |  |  |
 | `label` | `ReactNode` |  | A visible label above the field. Omit it inside `Field`, which renders its own, and spread Field's control props onto this component instead. |
 | `loading` | `boolean` |  | Results are on their way: the popup shows the working texture and "Searching…". |
 | `locale` | `LocalesArgument` |  | Locale for the built-in matching. Omitted, the runtime's locale is used. |
@@ -106,14 +100,17 @@ Free text with suggestions: a run label, a tag, a search. The typed text is the 
 | `onValueChange` | `((value: string \| null) => void) \| ((value: string[]) => void)` |  |  |
 | `placeholder` | `string` |  |  |
 | `readOnly` | `boolean` |  |  |
-| `removeLabel` | `((label: string) => string)` |  | Accessible name of each chip's remove button. |
+| `removeLabel` | `((label: string) => string)` |  | Only with `multiple`: a single value has no chips to remove. Typed `never` so passing it here is an error rather than a silent no-op — an optional discriminant does not narrow the union by itself. Accessible name of each chip's remove button. |
 | `required` | `boolean` |  |  |
-| `size` | `"sm" \| "lg" \| "md"` |  |  |
+| `size` | `"sm" \| "md" \| "lg"` |  |  |
 | `status` | `ReactNode` |  | A line above the results — "Showing 20 of 312", or an error from the search. |
 | `triggerLabel` | `string` |  | Accessible name of the button that opens the list. |
 | `value` | `string \| string[] \| null` |  |  |
+| `wrapperClassName` | `string` |  | Classes for the wrapper that holds `label` and the field. Only rendered with a `label`. |
 
-Types: `AutocompleteProps`, `ComboboxMultipleProps`, `ComboboxOption`, `ComboboxOptionGroup`, `ComboboxProps`, `ComboboxSingleProps`
+`className` goes to `<div data-slot="combobox">`; `ref`, `id` and the other DOM props go to `<input>`.
+
+Types: `AutocompleteProps`, `ComboboxCommonProps`, `ComboboxItems`, `ComboboxMultipleProps`, `ComboboxOption`, `ComboboxOptionGroup`, `ComboboxProps`, `ComboboxSingleProps`
 
 ## Accessibility
 

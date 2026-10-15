@@ -66,6 +66,8 @@ Output that stopped arriving before it was finished — kept, and marked.
 | --- | --- | --- | --- |
 | `note` | `ReactNode` |  | What cut it short, in words. Defaults to a plain statement. |
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="partial-output">`.
+
 ### `RunError` (component)
 
 What stopped a run, said plainly, with the way back next to it.
@@ -86,6 +88,8 @@ What stopped a run, said plainly, with the way back next to it.
 | `stepCount` | `number` |  |  |
 | `stepNumber` | `number` |  | The step's position, counted from 1. Shown as "step 4 of 5" and used to name *Retry from step 4*. |
 | `tool` | `string` |  | The tool that failed, exactly as the model called it. |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="run-error">`.
 
 ### `formatRunErrorDetails` (function)
 

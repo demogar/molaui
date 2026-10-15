@@ -39,7 +39,7 @@ import { fieldControlClasses, fieldControlSizes } from '../field/field-control'
  * itself, so it forwards `finalFocus` by name, with the same type.
  */
 
-const dialogPopupVariants = cva(
+export const dialogContentVariants = cva(
   [
     'fixed top-1/2 left-1/2 z-(--z-overlay) flex max-h-[calc(100dvh-2rem)] w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col',
     'bg-cloth-pale text-ink rounded-none outline-none',
@@ -66,8 +66,8 @@ const backdropClasses = [
   'data-starting-style:opacity-0 data-ending-style:opacity-0',
 ]
 
-const bandClass = { oro: 'band-oro', rojo: 'band-rojo', anil: 'band-anil', verde: 'band-verde' } as const
-type Band = keyof typeof bandClass
+export type DialogBand = 'oro' | 'rojo' | 'anil' | 'verde'
+const bandClass: Record<DialogBand, string> = { oro: 'band-oro', rojo: 'band-rojo', anil: 'band-anil', verde: 'band-verde' }
 
 export const Dialog = DialogPrimitive.Root
 export function DialogTrigger(props: DialogPrimitive.Trigger.Props) {
@@ -80,7 +80,7 @@ export function DialogClose(props: DialogPrimitive.Close.Props) {
 
 export interface DialogContentProps
   extends Omit<DialogPrimitive.Popup.Props, 'className' | 'title'>,
-    Variants<typeof dialogPopupVariants> {
+    Variants<typeof dialogContentVariants> {
   className?: string
   /** The dialog's accessible name. Required: an unnamed modal is announced as "dialog" and nothing else. */
   title: React.ReactNode
@@ -88,7 +88,7 @@ export interface DialogContentProps
   /** Action row under the body: right-aligned, or stacked full width with the last action on top when the row is under 24rem. Usually a `ghost` cancel and one primary. */
   footer?: React.ReactNode
   /** The layer revealed in the top seam. */
-  band?: Band
+  band?: DialogBand
   /** Hide the corner close button. Only when the footer carries an explicit way out. */
   hideClose?: boolean
 }
@@ -107,7 +107,7 @@ export function DialogContent({
   return (
     <DialogPrimitive.Portal>
       <DialogPrimitive.Backdrop className={cn(backdropClasses)} />
-      <DialogPrimitive.Popup data-slot="dialog" className={cn(dialogPopupVariants({ size }), className)} {...props}>
+      <DialogPrimitive.Popup data-slot="dialog" className={cn(dialogContentVariants({ size }), className)} {...props}>
         <DialogFrame
           band={band}
           title={<DialogPrimitive.Title className={titleClasses}>{title}</DialogPrimitive.Title>}
@@ -161,7 +161,7 @@ function DialogFrame({
   error,
   children,
 }: {
-  band: Band
+  band: DialogBand
   title: React.ReactNode
   description: React.ReactNode
   close: React.ReactNode
@@ -320,7 +320,7 @@ export function AlertDialog({
           data-slot="alert-dialog"
           initialFocus={cancelRef}
           finalFocus={finalFocus}
-          className={cn(dialogPopupVariants({ size: 'sm' }), className)}
+          className={cn(dialogContentVariants({ size: 'sm' }), className)}
         >
           <DialogFrame
             band={tone === 'danger' ? 'rojo' : 'oro'}

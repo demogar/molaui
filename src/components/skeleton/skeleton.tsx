@@ -27,7 +27,7 @@ export const skeletonShimmer = [
   'motion-reduce:after:hidden forced-colors:after:hidden',
 ]
 
-const skeletonVariants = cva(['rounded-none bg-cloth-shade', skeletonShimmer], {
+export const skeletonVariants = cva(['rounded-none bg-cloth-shade', skeletonShimmer], {
   variants: {
     shape: {
       /** A card, a chart, an image: keeps the keyline every other shape has. */

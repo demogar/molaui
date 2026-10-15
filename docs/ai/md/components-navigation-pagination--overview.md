@@ -54,6 +54,8 @@ Each story is a live example in Storybook.
 | `total` | `number` |  |  |
 | `variant` | `"pages" \| "compact"` | `pages` |  |
 
+`className`, `ref`, `id` and the other DOM props go to `<nav data-slot="pagination">`.
+
 ### `getPageRange` (function)
 
 The visible slots for `page` of `pageCount` (both 1-based). Always `5 + 2 × siblings` long once it needs ellipses.

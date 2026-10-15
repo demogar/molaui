@@ -49,6 +49,8 @@ Each story is a live example in Storybook.
 
 Actions on a thing — a run, a row, a document — that do not each deserve a button.
 
+Renders no element of its own, so it takes no `className` or `ref`.
+
 ### `MenuCheckboxItem` (component)
 
 The check sits in a fixed leading column, so checked and unchecked labels stay aligned down the menu. Toggling does not close the menu: a set of column toggles is chosen several at a time.
@@ -59,6 +61,8 @@ The check sits in a fixed leading column, so checked and unchecked labels stay a
 | `shortcut` | `string` |  |  |
 
 Also accepts the props of `MenuCheckboxItemProps`, `NativeButtonProps`.
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="menu-checkbox-item">`.
 
 ### `MenuContent` (component)
 
@@ -72,9 +76,15 @@ Also accepts the props of `MenuCheckboxItemProps`, `NativeButtonProps`.
 
 Also accepts the props of `MenuPopupProps`.
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="menu">`.
+
 ### `MenuGroup` (component)
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="menu-group">`.
+
 ### `MenuGroupLabel` (component)
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="menu-group-label">`.
 
 ### `MenuItem` (component)
 
@@ -83,11 +93,15 @@ Also accepts the props of `MenuPopupProps`.
 | `className` | `string` |  |  |
 | `icon` | `ReactNode` |  | Leading icon; decorative. |
 | `shortcut` | `string` |  |  |
-| `tone` | `"default" \| "danger"` | `default` | Destroys something: highlights in rojo instead of ink. |
+| `tone` | `"default" \| "neutral" \| "danger"` | `neutral` | `danger` destroys something: it highlights in rojo instead of ink. `default` is deprecated since 0.7.0 and removed in 1.0.0: use `neutral`, the status word every other `tone` uses. |
 
 Also accepts the props of `MenuItemProps`, `NativeButtonProps`.
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="menu-item">`.
+
 ### `MenuRadioGroup` (component)
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="menu-radio-group">`.
 
 ### `MenuRadioItem` (component)
 
@@ -99,13 +113,21 @@ One-of-N. The mark is a filled square — a radio dot would be the only round th
 
 Also accepts the props of `MenuRadioItemProps`, `NativeButtonProps`.
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="menu-radio-item">`.
+
 ### `MenuSeparator` (component)
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="menu-separator">`.
 
 ### `MenuShortcut` (component)
 
 Right-aligned key hint.
 
+`className`, `ref`, `id` and the other DOM props go to `<span data-slot="menu-shortcut">`.
+
 ### `MenuSubmenu` (component)
+
+Renders no element of its own, so it takes no `className` or `ref`.
 
 ### `MenuSubmenuTrigger` (component)
 
@@ -116,7 +138,11 @@ Right-aligned key hint.
 
 Also accepts the props of `MenuSubmenuTriggerProps`, `NativeButtonProps`.
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="menu-submenu-trigger">`.
+
 ### `MenuTrigger` (component)
+
+`className`, `ref`, `id` and the other DOM props go to `<button data-slot="menu-trigger">`.
 
 Types: `MenuCheckboxItemProps`, `MenuContentProps`, `MenuItemProps`, `MenuRadioItemProps`, `MenuSubmenuTriggerProps`
 

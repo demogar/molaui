@@ -77,7 +77,7 @@ export interface FileRejection {
   reason: FileRejectionReason
 }
 
-export interface ValidateOptions {
+export interface FileValidationOptions {
   accept?: string
   maxSize?: number
   maxFiles?: number
@@ -92,7 +92,7 @@ export interface ValidateOptions {
  * field. Count is checked last and in order, so the first files chosen are the
  * ones kept.
  */
-export function validateFiles(files: readonly File[], options: ValidateOptions) {
+export function validateFiles(files: readonly File[], options: FileValidationOptions) {
   const { accept, maxSize, maxFiles, existing = 0 } = options
   const accepted: File[] = []
   const rejected: FileRejection[] = []

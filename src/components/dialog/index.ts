@@ -1,2 +1,2 @@
-export { AlertDialog, Dialog, DialogClose, DialogContent, DialogTrigger } from './dialog'
-export type { AlertDialogProps, DialogContentProps } from './dialog'
+export { AlertDialog, Dialog, DialogClose, DialogContent, DialogTrigger, dialogContentVariants } from './dialog'
+export type { AlertDialogProps, DialogBand, DialogContentProps } from './dialog'

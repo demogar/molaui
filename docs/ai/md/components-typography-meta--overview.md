@@ -40,6 +40,8 @@ Each story is a live example in Storybook.
 
 Duration, cost, count, timestamp — facts that are compared down a column, so they carry tabular figures. This is the role a monospace usually plays in tool UIs, minus the costume: Archivo's tabular figures line up exactly as well and keep the row in one voice.
 
+`className`, `ref`, `id` and the other DOM props go to `<p data-slot="meta">`.
+
 ## Accessibility
 
 Nothing in it takes focus, so there is no keyboard table.

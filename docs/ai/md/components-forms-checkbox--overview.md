@@ -49,13 +49,18 @@ Each story is a live example in Storybook.
 
 ### `Checkbox` (component)
 
+`className`, `ref` and the DOM props go to the control, with or without a `label`; the row a `label` adds takes `wrapperClassName`. `className` used to move to that row when a label was set.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `className` | `string` |  |  |
 | `description` | `ReactNode` |  | Second line under the label. Linked as the control's description. |
 | `label` | `ReactNode` |  | Visible label. The whole label is the press target. |
+| `wrapperClassName` | `string` |  | Classes for the label row a `label` adds around the control. `className` always styles the control itself. |
 
 Also accepts the props of `CheckboxRootProps`, `NativeButtonProps`.
+
+`className`, `ref`, `id` and the other DOM props go to `<span data-slot="checkbox">`.
 
 ### `CheckboxGroup` (component)
 
@@ -69,6 +74,8 @@ A set of checkboxes that share one value array, inside a real fieldset and legen
 | `orientation` | `"horizontal" \| "vertical"` | `vertical` | Lay options out in a row rather than a column. |
 
 Also accepts the props of `CheckboxGroupProps`.
+
+`className` goes to `<fieldset data-slot="checkbox-group">`; `ref`, `id` and the other DOM props go to `<div>`.
 
 ### `checkboxBoxClasses` (constant)
 

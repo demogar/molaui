@@ -72,13 +72,14 @@ export interface ComboboxOptionGroup {
   items: ComboboxOption[]
 }
 
-type Items = ComboboxOption[] | ComboboxOptionGroup[]
+/** Flat options, or labelled groups. */
+export type ComboboxItems = ComboboxOption[] | ComboboxOptionGroup[]
 
-function isGrouped(items: Items): items is ComboboxOptionGroup[] {
+function isGrouped(items: ComboboxItems): items is ComboboxOptionGroup[] {
   return items.length > 0 && 'items' in items[0]!
 }
 
-function flatten(items: Items): ComboboxOption[] {
+function flatten(items: ComboboxItems): ComboboxOption[] {
   return isGrouped(items) ? items.flatMap((group) => group.items) : items
 }
 
@@ -177,7 +178,7 @@ function OptionList({ grouped }: { grouped: boolean }) {
 export interface ComboboxCommonProps
   extends Omit<React.ComponentProps<'input'>, 'value' | 'defaultValue' | 'onChange' | 'size' | 'children' | 'multiple' | 'type'> {
   /** Flat options, or labelled groups. With `filter={null}`, the options to show right now. */
-  items: Items
+  items: ComboboxItems
   placeholder?: string
   /**
    * A visible label above the field. Omit it inside `Field`, which renders
@@ -241,7 +242,7 @@ export type ComboboxProps = ComboboxSingleProps | ComboboxMultipleProps
  * UI in option objects; with a server search the selected option may have
  * scrolled out of `items`, and its label still has to be shown in the field.
  */
-function useOptionCache(items: Items) {
+function useOptionCache(items: ComboboxItems) {
   // One Map for the component's life, filled as items arrive. It only ever
   // gains entries, so writing to it during render is idempotent.
   const [cache] = React.useState(() => new Map<string, ComboboxOption>())

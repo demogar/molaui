@@ -4,6 +4,8 @@ Markdown version of https://demogar.github.io/molaui/?path=/docs/mola-ui-version
 
 # Versioning and deprecation
 
+The decisions behind this page are architecture decision records: see [Decisions](https://demogar.github.io/molaui/md/decisions-all-decisions--overview.md).
+
 Mola UI is installed, not copied, so every product that uses it depends on its version number
 meaning something. This page says what the number promises, what counts as a breaking change,
 and how something is retired without breaking the products that use it.

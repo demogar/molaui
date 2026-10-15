@@ -54,6 +54,8 @@ Each story is a live example in Storybook.
 
 An inline machine literal: an id, a field name, a flag.
 
+`className`, `ref`, `id` and the other DOM props go to `<code data-slot="code">`.
+
 ### `CodeBlock` (component)
 
 A block of machine text — a tool call's arguments, a query, a log tail.
@@ -67,6 +69,8 @@ A block of machine text — a tool call's arguments, a query, a log tail.
 | `lineNumbers` | `boolean` | `false` |  |
 | `maxHeight` | `string` |  | Scroll inside after this height (any CSS length). |
 | `wrap` | `boolean` | `false` | Start with long lines wrapped. The reader can toggle it. |
+
+`className`, `ref`, `id` and the other DOM props go to `<figure data-slot="code-block">`.
 
 ### `tokenizeJson` (function)
 

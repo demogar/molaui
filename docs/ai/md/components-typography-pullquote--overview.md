@@ -41,7 +41,8 @@ A voice interrupting the prose, so it keeps the reading face and takes a relleno
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `cite` | `string` |  | Who said it. Rendered in the label register, under the quote. |
-| `className` | `string` |  |  |
+
+`className`, `ref`, `id` and the other DOM props go to `<figure data-slot="pullquote">`.
 
 Types: `PullquoteProps`
 

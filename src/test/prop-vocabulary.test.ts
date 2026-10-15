@@ -59,6 +59,7 @@ const VARIANT_TONE_WORDS: Record<string, string[]> = {
   // that says "this destroys" — and a button has no `tone` to carry it.
   'Button.variant': ['danger'],
   'IconButton.variant': ['danger'],
+  'ToolbarButton.variant': ['danger'],
 }
 
 /** `Component.prop` → deprecated value → its replacement, which must also be accepted. */

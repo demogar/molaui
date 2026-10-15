@@ -11,7 +11,16 @@ export {
   TableRow,
   TableSkeletonRows,
 } from './table'
-export type { TableCellProps, TableCheckboxProps, TableHeadProps, TableProps, TableRowProps } from './table'
+export type {
+  TableCellProps,
+  TableCheckboxProps,
+  TableEmptyProps,
+  TableHeadProps,
+  TableProps,
+  TableRowProps,
+  TableSkeletonRowsProps,
+  TableSortDirection,
+} from './table'
 export { DataTable, DataTableColumnMenu } from './data-table'
 export type {
   DataTableBulkContext,

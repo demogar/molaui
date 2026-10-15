@@ -63,6 +63,8 @@ Each story is a live example in Storybook.
 | `tone` | `"neutral" \| "info" \| "success" \| "warn" \| "danger" \| "accent"` |  |  |
 | `variant` | `"solid" \| "soft" \| "outline"` |  |  |
 
+`className`, `ref`, `id` and the other DOM props go to `<span data-slot="badge">`.
+
 ### `RecommendationBadge` (component)
 
 - `level`: `essential`, `highly`, `detour`, `time` (default `essential`)
@@ -70,6 +72,8 @@ Each story is a live example in Storybook.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `level` | `"essential" \| "highly" \| "detour" \| "time"` |  |  |
+
+`className`, `ref`, `id` and the other DOM props go to `<span data-slot="recommendation-badge">`.
 
 ### `StatusDot` (component)
 
@@ -80,6 +84,8 @@ A square, not a circle. It is a scrap of cut cloth, and a round dot is the one s
 | `label` | `string` |  | Announced text for a dot used on its own. Omit when the dot sits beside a label that already says the state — then it is decorative and hidden. |
 | `pulse` | `boolean` | `false` | The state is live. Respects reduced motion: the pulse stills, the dot stays. |
 | `tone` | `BadgeTone` | `neutral` |  |
+
+`className`, `ref`, `id` and the other DOM props go to `<span data-slot="status-dot">`.
 
 ### `RECOMMENDATION_LABELS` (constant)
 

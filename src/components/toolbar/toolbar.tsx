@@ -29,7 +29,7 @@ import { Menu, MenuContent, MenuItem, MenuTrigger } from '../menu'
  * right-to-left all come from Base UI's Toolbar; nothing here listens for a
  * key.
  */
-const toolbarVariants = cva('flex flex-wrap items-center gap-1', {
+export const toolbarVariants = cva('flex flex-wrap items-center gap-1', {
   variants: {
     variant: {
       /** Its own cut panel, for a toolbar that stands alone over a canvas. */

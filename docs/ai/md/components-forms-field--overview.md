@@ -70,6 +70,8 @@ Each story is a live example in Storybook.
 | `optional` | `boolean` | `false` | Renders the "Optional" tag. |
 | `required` | `boolean` | `false` | Renders the required asterisk. Does NOT set `required` on any control. |
 
+`className`, `ref`, `id` and the other DOM props go to `<label data-slot="label">`.
+
 ### `Field` (component)
 
 | Prop | Type | Default | Description |
@@ -82,15 +84,19 @@ Each story is a live example in Storybook.
 | `optional` | `boolean` | `false` | Renders the "Optional" tag. Ignored when `required`. |
 | `required` | `boolean` | `false` |  |
 
+Renders no element of its own, so it takes no `className` or `ref`.
+
 ### `Input` (component)
 
-A text control. Without adornments it is the bare `<input>` wearing the shared control classes; with them, the CUT moves to a wrapper and the input inside goes transparent, so the icon or unit sits inside the same keyline as the text rather than beside it — a unit outside the box reads as a second field.
+A text control: an `<input>` inside a box that wears the shared control classes. The box is always there, so the icon or unit of an adorned input sits inside the same keyline as the text rather than beside it — a unit outside the box reads as a second field.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `leading` | `ReactNode` |  | Inside the cut, before the text: an icon, a currency sign, a protocol. |
-| `size` | `"sm" \| "lg" \| "md"` | `md` | Height and type from the density tokens. |
+| `size` | `"sm" \| "md" \| "lg"` | `md` | Height and type from the density tokens. |
 | `trailing` | `ReactNode` |  | Inside the cut, after the text: a unit ("ms", "tokens"), a button. |
+
+`className` goes to `<div data-slot="input-group">`; `ref`, `id` and the other DOM props go to `<input data-slot="input">`.
 
 ### `Textarea` (component)
 
@@ -99,6 +105,8 @@ Multi-line text: a system prompt, a note on a run, a JSON override. Same cut and
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `autosize` | `boolean` | `false` | Grow with the content instead of scrolling inside a fixed box, using `field-sizing: content` — no script, no resize observer, and it still respects `rows` as the minimum and `max-h-*` as the ceiling. Browsers without it fall back to the normal resizable textarea, which is the correct degradation rather than a broken one. |
+
+`className`, `ref`, `id` and the other DOM props go to `<textarea data-slot="textarea">`.
 
 ### `SearchInput` (component)
 
@@ -109,7 +117,9 @@ The filter box that heads every list in an internal tool.
 | `clearLabel` | `string` | `Clear search` | Accessible name for the clear button. |
 | `onClear` | `(() => void)` |  | Called after the clear button empties the field. |
 | `shortcut` | `string` |  | The keyboard shortcut that focuses this field, shown as a key cap while the field is empty — e.g. `⌘K` or `/`. Display only: binding the key is the page's job, because only the page knows what else is listening. |
-| `size` | `"sm" \| "lg" \| "md"` |  | Height and type from the density tokens. |
+| `size` | `"sm" \| "md" \| "lg"` |  | Height and type from the density tokens. |
+
+`className` goes to `<div data-slot="input-group">`; `ref`, `id` and the other DOM props go to `<input data-slot="input">`.
 
 ### `fieldControlClasses` (constant)
 

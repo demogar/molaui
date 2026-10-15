@@ -45,22 +45,28 @@ Each story is a live example in Storybook.
 
 ### `Tooltip` (component)
 
+`className`, `ref` and the rest of the DOM props go to the tooltip popup; the trigger is `children`, which keeps its own.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `children` (required) | `ReactElement<unknown, string \| JSXElementConstructor<any>>` |  | The element that triggers it. Must be focusable — usually a Button or IconButton. |
 | `content` (required) | `ReactNode` |  |  |
 | `align` | `Align` | `center` |  |
-| `className` | `string` |  |  |
 | `defaultOpen` | `boolean` |  |  |
 | `delay` | `number` |  | Overrides the provider's delay for this tooltip. |
+| `disabled` | `boolean` |  | Never open: for a trigger whose label is already visible in this state. |
 | `onOpenChange` | `((open: boolean, eventDetails: TooltipRootChangeEventDetails) => void)` |  |  |
 | `open` | `boolean` |  |  |
 | `shortcut` | `string[]` |  | Keys, in order: `['⌘', 'K']`. |
 | `side` | `Side` | `top` |  |
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="tooltip">`.
+
 ### `TooltipProvider` (component)
 
 A tooltip is the inverse panel at its smallest: ink ground, cloth type. It is the one floating surface that is NOT raised cloth, on purpose — a tooltip is a label, not a place, and it should never be mistaken for something you can move the pointer into and click. The ink ground also makes it the only thing on screen at that value, so a 12px label is found at a glance against a dense table.
+
+Renders no element of its own, so it takes no `className` or `ref`.
 
 Types: `TooltipProps`
 

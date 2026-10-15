@@ -53,25 +53,33 @@ Each story is a live example in Storybook.
 
 Also accepts the props of `DrawerRootProps`.
 
+Renders no element of its own, so it takes no `className` or `ref`.
+
 ### `DrawerClose` (component)
+
+`className`, `ref`, `id` and the other DOM props go to `<button data-slot="drawer-close">`.
 
 ### `DrawerContent` (component)
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `title` (required) | `ReactNode` |  | The drawer's accessible name. Required: an unnamed modal is announced as "dialog" and nothing else. |
-| `band` | `"rojo" \| "anil" \| "verde" \| "oro"` | `oro` | The layer revealed in the top seam. |
+| `band` | `DrawerBand` | `oro` | The layer revealed in the top seam. |
 | `className` | `string` |  |  |
 | `description` | `ReactNode` |  |  |
 | `footer` | `ReactNode` |  | Action row pinned under the scrolling body, behind a keyline. Usually a `ghost` cancel and one primary. |
 | `hideClose` | `boolean` | `false` | Hide the close button. Only when the footer carries an explicit way out. |
-| `size` | `"sm" \| "lg" \| "md"` | `md` | Width of a side drawer, or height of a bottom sheet. Always capped by the viewport. |
+| `size` | `"sm" \| "md" \| "lg"` | `md` | Width of a side drawer, or height of a bottom sheet. Always capped by the viewport. |
 
 Also accepts the props of `DrawerPopupProps`.
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="drawer">`.
+
 ### `DrawerTrigger` (component)
 
-Types: `DrawerContentProps`, `DrawerProps`, `DrawerSide`
+`className`, `ref`, `id` and the other DOM props go to `<button data-slot="drawer-trigger">`.
+
+Types: `DrawerBand`, `DrawerContentProps`, `DrawerProps`, `DrawerSide`
 
 ## Accessibility
 

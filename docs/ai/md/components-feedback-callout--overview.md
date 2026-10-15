@@ -80,6 +80,8 @@ Each story is a live example in Storybook.
 | `tone` | `"neutral" \| "info" \| "success" \| "warn" \| "danger"` |  |  |
 | `variant` | `"seam" \| "flat"` |  |  |
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="callout">`.
+
 ### `calloutVariants` (function)
 
 A message that belongs to a region of the page — "this agent is using a deprecated model", "billing is in read-only mode" — rather than to a moment, which is a toast's job.

@@ -66,8 +66,11 @@ An inline citation marker: a small cut chip with the source's number.
 | --- | --- | --- | --- |
 | `n` (required) | `number` |  |  |
 | `cardSide` | `"bottom" \| "top"` | `top` | Which side of the marker the card opens on. |
+| `render` | `ReactElement<unknown, string \| JSXElementConstructor<any>> \| ((props: DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>) => ReactElement<...>)` |  | The element the marker renders as: your router's `<Link />` when `href` points inside the app, or a function returning one. Base UI's render prop, so the marker's classes, name and handlers are merged onto it. |
 | `source` | `Source` |  | The source this marker points at. With it, hovering or focusing the marker opens a preview card — title, domain, the passage used — so the claim can be checked without leaving the sentence. |
 | `title` | `string` |  | The source's title, for the accessible name. "[2]" alone tells a screen reader nothing. Defaults to `source.title`. |
+
+`className`, `ref`, `id` and the other DOM props go to `<a data-slot="citation">`.
 
 ### `SourceList` (component)
 
@@ -77,6 +80,8 @@ The sources an answer drew on, as an ordered list whose numbers match the inline
 | --- | --- | --- | --- |
 | `sources` (required) | `readonly Source[]` |  |  |
 | `timeZone` | `string` |  | IANA zone the read times are shown in, such as `"UTC"`. Without it they are the reader's own and appear only after hydration, because the server cannot know the reader's zone. |
+
+`className`, `ref`, `id` and the other DOM props go to `<ol data-slot="source-list">`.
 
 ### `citationRenderer` (function)
 

@@ -10,7 +10,9 @@ import { type Variants } from '../../lib/variants'
  * compact. Seven steps and no more — a layout that needs an eighth is a layout
  * that needs a divider, not another number.
  */
-const GAP = {
+export type Gap = 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+
+const GAP: Record<Gap, string> = {
   none: 'gap-0',
   '2xs': 'gap-1',
   xs: 'gap-2',
@@ -18,9 +20,7 @@ const GAP = {
   md: 'gap-4',
   lg: 'gap-6',
   xl: 'gap-10',
-} as const
-
-export type Gap = keyof typeof GAP
+}
 
 export const stackVariants = cva('flex', {
   variants: {

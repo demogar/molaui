@@ -40,11 +40,15 @@ Each story is a live example in Storybook.
 
 A key, as a cut shape: raised cloth, ink keyline, and a heavier foot where the keycap sits on the board — the one place a solid offset is honest, because a key really is a block that moves down when pressed.
 
+`className`, `ref`, `id` and the other DOM props go to `<kbd data-slot="kbd">`.
+
 ### `KbdChord` (component)
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `keys` (required) | `string[]` |  | The keys, in order: `['⌘', 'K']`. |
+
+`className`, `ref`, `id` and the other DOM props go to `<kbd data-slot="kbd-chord">`.
 
 Types: `KbdChordProps`
 

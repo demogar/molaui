@@ -57,11 +57,11 @@ Each story is a live example in Storybook.
 | `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` |  |  |
 | `src` | `string` |  |  |
 
+`className`, `ref`, `id` and the other DOM props go to `<span data-slot="avatar">`.
+
 ### `AvatarGroup` (component)
 
 Overlapping tiles, each separated from the next by a ring of the page ground inside its keyline — the gap a blade leaves between two shapes cut from the same layer. Without it, overlapping squares merge into one shape and the count is unreadable.
-
-- `size`: `xs`, `sm`, `md`, `lg`, `xl` (default `md`)
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -69,13 +69,15 @@ Overlapping tiles, each separated from the next by a ring of the page ground ins
 | `max` | `number` | `4` | Show at most this many; the rest collapse into a "+n" tile. |
 | `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` | `md` |  |
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="avatar-group">`.
+
 ### `avatarLayer` (function)
 
 ### `avatarVariants` (function)
 
 ### `initials` (function)
 
-Types: `AvatarGroupProps`, `AvatarProps`
+Types: `AvatarGroupProps`, `AvatarLayer`, `AvatarProps`
 
 ## Accessibility
 

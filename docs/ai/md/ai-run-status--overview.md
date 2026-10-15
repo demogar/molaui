@@ -66,12 +66,20 @@ Glyph + word + colour, always all three. State is never carried by colour alone:
 | `durationMs` | `number` |  | A known duration, for a finished step that has no timestamps. |
 | `endedAt` | `number \| Date` |  | When it ended. Freezes the clock; omit while the work is open. |
 | `label` | `string` |  | Override the word — e.g. "Thinking" for a running reasoning step. The glyph stays. |
-| `register` | `"label" \| "inline"` | `label` | `label`: the rótulo register, for headers. `inline`: sentence case, for rows and running text. |
+| `register` | `"inline" \| "label"` | `label` | `label`: the rótulo register, for headers. `inline`: sentence case, for rows and running text. |
 | `startedAt` | `number \| Date` |  | When the work started. With it, an elapsed clock follows the label. |
+
+`className`, `ref`, `id` and the other DOM props go to `<span data-slot="run-status">`.
 
 ### `RunStatusGlyph` (component)
 
-The glyph. Square, because nothing in this system is round except a dot that has to be a dot; keylined, because every mark is a cut shape.
+`className`, `ref` and the rest of the DOM props go to the glyph's `<span>`.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `status` (required) | `RunStatusValue` |  |  |
+
+`className`, `ref`, `id` and the other DOM props go to `<span data-slot="run-status-glyph">`.
 
 ### `RUN_STATUS_LABEL` (constant)
 
@@ -95,7 +103,7 @@ Work is over and will not change again without a retry.
 
 Milliseconds since `startedAt`, ticking while the work is still open.
 
-Types: `RunStatusProps`, `RunStatusValue`
+Types: `RunStatusGlyphProps`, `RunStatusProps`, `RunStatusValue`
 
 ## Accessibility
 

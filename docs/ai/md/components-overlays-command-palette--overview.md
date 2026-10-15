@@ -48,14 +48,20 @@ Each story is a live example in Storybook.
 
 ### `CommandPalette` (component)
 
+`className`, `ref` and the rest of the DOM props go to the dialog popup, the element that is the palette. Controlled or not: every other overlay offered `defaultOpen`, and a palette that was controlled-only made the simplest case — a button that opens it — need a state hook in the page.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `groups` (required) | `CommandGroup[]` |  |  |
-| `onOpenChange` (required) | `(open: boolean) => void` |  |  |
-| `open` (required) | `boolean` |  |  |
+| `defaultOpen` | `boolean` | `false` | Open on first render, for a palette that owns its own state. |
 | `label` | `string` | `Command palette` | Accessible name of the dialog. |
+| `onOpenChange` | `((open: boolean) => void)` |  |  |
+| `open` | `boolean` |  | Whether the palette is open, when the page owns that (it usually does, to bind ⌘K). |
 | `placeholder` | `string` | `Type a command or search…` |  |
 | `renderEmpty` | `((query: string) => ReactNode)` |  | Shown when nothing matches. Receives the query. |
+| `trigger` | `ReactElement<unknown, string \| JSXElementConstructor<any>>` |  | Rendered as the button that opens the palette, e.g. a `SearchInput`-shaped `Button`. |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="command-palette">`.
 
 ### `filterCommands` (function)
 

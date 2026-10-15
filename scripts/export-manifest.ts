@@ -39,12 +39,13 @@ import ts from 'typescript'
 
 import evidenceFile from '../docs/accessibility/evidence.json' with { type: 'json' }
 import pkg from '../package.json' with { type: 'json' }
-import { changeLine, colorInfo, componentTwin, mdxPages, mdxTwin, screenTwin, SERVED_AS_IS, TOKEN_ROWS, tokensJson, tokensText, twinPath, twinUrl } from './agent-docs'
+import { changeLine, colorInfo, componentTwin, forwardsLine, mdxPages, mdxTwin, screenTwin, SERVED_AS_IS, TOKEN_ROWS, tokensJson, tokensText, twinPath, twinUrl } from './agent-docs'
 import { ACCESSIBILITY } from '../src/docs/usage/accessibility'
 import { ANATOMY, ROOT_PART } from '../src/docs/usage/anatomy'
 import type { Accessibility } from '../src/docs/usage/accessibility-types'
 import { type ChangeEntry, changesFor, parseChangelog } from '../src/docs/usage/changes'
 import { builtFrom, type Composition, compositionFiles } from '../src/docs/usage/composition'
+import { FORWARDS } from '../src/docs/usage/forwards'
 import { USAGE, type Usage } from '../src/docs/usage/guidance'
 import { type Phase, phaseOf, PHASES } from '../src/docs/usage/lifecycle'
 import { docsId, storyId } from '../src/docs/usage/links'
@@ -274,6 +275,8 @@ interface ExportEntry extends ExportInfo {
   props?: Prop[]
   inherits?: string[]
   variants?: Variants
+  /** Where `className`, `ref` and the other DOM props land, as prop-bags.test.tsx observed. */
+  forwards?: { element: string | null; className?: string }
 }
 
 interface Entry {
@@ -303,6 +306,7 @@ interface Entry {
 
 const entries = new Map<string, Entry>()
 const utilities: ExportInfo[] = []
+const componentNames = new Set(exportsInfo.filter((e) => e.kind === 'component').map((e) => e.name.toLowerCase()))
 const variantCache = new Map<string, Record<string, Variants>>()
 
 for (const info of exportsInfo) {
@@ -355,9 +359,15 @@ for (const info of exportsInfo) {
     // Callout, or by prefix, `recommendationVariants` -> RecommendationBadge.
     const cvas = Object.entries(variantCache.get(file)!)
     const lower = info.name.toLowerCase()
+    // The prefix match skips a cva that belongs exactly to another component:
+    // `toolbarVariants` is Toolbar's, and ToolbarButton, whose variants are
+    // the Button's, was being told it took `panel | bare`.
     const own =
       cvas.find(([name]) => name.toLowerCase() === `${lower}variants`) ??
-      cvas.find(([name]) => lower.startsWith(name.toLowerCase().replace(/variants$/, '')))
+      cvas.find(([name]) => {
+        const base = name.toLowerCase().replace(/variants$/, '')
+        return lower.startsWith(base) && !componentNames.has(base)
+      })
     if (own && Object.keys(own[1]).length) item.variants = own[1]
     const doc = docs.get(`${info.source}#${info.name}`)
     if (doc) {
@@ -377,6 +387,8 @@ for (const info of exportsInfo) {
       const from = inherits(doc)
       if (from.length) item.inherits = from
     }
+    const forwards = FORWARDS[info.name]
+    if (forwards) item.forwards = forwards
   }
   entry.exports.push(item)
 }
@@ -623,11 +635,15 @@ ${showcases.map((s) => `- [${s.title.split('/').at(-1)}](${s.docs}) ([Markdown](
 `
 
 function propsTable(item: ExportEntry) {
-  if (!item.props?.length) return ''
+  const where = forwardsLine(item.forwards)
+  if (!item.props?.length) return where ? `\n${where}\n` : ''
   const cell = (s: string) => s.replace(/\|/g, '\\|').replace(/\n/g, ' ')
-  const rows = item.props.map((p) => `| \`${p.name}\`${p.required ? ' (required)' : ''} | \`${cell(p.type)}\` | ${p.default ? `\`${cell(p.default)}\`` : ''} | ${cell(p.description ?? '')} |`)
+  const rows = item.props.map(
+    (p) =>
+      `| \`${p.name}\`${p.required ? ' (required)' : ''}${p.deprecated ? ' (deprecated)' : ''} | \`${cell(p.type)}\` | ${p.default ? `\`${cell(p.default)}\`` : ''} | ${cell(p.deprecated ? `Deprecated: ${p.deprecated}` : (p.description ?? ''))} |`,
+  )
   const extra = item.inherits?.length ? `\nAlso accepts the props of ${item.inherits.map((n) => `\`${n}\``).join(', ')}.\n` : ''
-  return `\n| Prop | Type | Default | Description |\n| --- | --- | --- | --- |\n${rows.join('\n')}\n${extra}`
+  return `\n| Prop | Type | Default | Description |\n| --- | --- | --- | --- |\n${rows.join('\n')}\n${extra}${where ? `\n${where}\n` : ''}`
 }
 
 function fullEntry(e: Entry) {
