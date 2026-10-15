@@ -3,6 +3,7 @@ import { join, relative, resolve } from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
+import { found } from '../../test/found'
 import { ADR_FILES, DECISIONS, DECISIONS_INDEX, parseRecord } from './decisions'
 
 /**
@@ -23,16 +24,18 @@ function walk(dir: string): string[] {
 
 /** MDX title → its source, for every docs page in src/. */
 const pages = new Map(
-  walk(join(root, 'src')).flatMap((path) => {
+  found(walk(join(root, 'src')), 15, 'MDX pages under src/').flatMap((path) => {
     const text = readFileSync(path, 'utf8')
     const title = text.match(/<Meta\s+title="([^"]+)"/)?.[1]
     return title ? [[title, { file: relative(root, path), text }] as const] : []
   }),
 )
 
-const onDisk = readdirSync(join(root, 'docs/adr'))
-  .filter((name) => name.endsWith('.md'))
-  .map((name) => `docs/adr/${name}`)
+const onDisk = found(
+  readdirSync(join(root, 'docs/adr')).filter((name) => name.endsWith('.md')),
+  4,
+  'records in docs/adr/',
+).map((name) => `docs/adr/${name}`)
 
 describe('decision records', () => {
   it('the docs see every file in docs/adr/', () => {

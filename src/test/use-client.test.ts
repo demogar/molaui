@@ -3,6 +3,8 @@ import { join, relative, resolve } from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
+import { found } from './found'
+
 /**
  * A module that calls a React hook or creates a context starts with
  * `'use client'`, so the package works from a React Server Component.
@@ -45,8 +47,7 @@ function stripComments(source: string) {
 
 describe("'use client'", () => {
   it('every library module that calls a hook or creates a context declares it', () => {
-    const missing = [join(root, 'components'), join(root, 'lib')]
-      .flatMap(walk)
+    const missing = found([join(root, 'components'), join(root, 'lib')].flatMap(walk), 100, 'library modules')
       .filter((file) => {
         const code = stripComments(readFileSync(file, 'utf8')).trimStart()
         return HOOK_CALL.test(code) && !/^['"]use client['"]/.test(code)

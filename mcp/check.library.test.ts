@@ -4,6 +4,7 @@ import { join, relative, resolve } from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
+import { found } from '../src/test/found'
 import { checkCode, contextFrom, type Finding } from './check'
 import { loadData } from './data'
 
@@ -107,7 +108,7 @@ function walk(dir: string): string[] {
   })
 }
 
-const files = walk(join(root, 'src'))
+const files = found(walk(join(root, 'src')), 200, 'sources under src/')
   .map((path) => relative(root, path))
   .filter((rel) => /^src\/(?:components|patterns)\//.test(rel) || /\.stories\.tsx$/.test(rel) || /^src\/docs\/.*\.(?:tsx|mdx)$/.test(rel))
 

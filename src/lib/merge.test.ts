@@ -6,6 +6,7 @@ import { extendTailwindMerge } from 'tailwind-merge'
 import { __unstable__loadDesignSystem } from 'tailwindcss'
 import { beforeAll, describe, expect, it } from 'vitest'
 
+import { found } from '../test/found'
 import { merge } from './merge'
 
 /**
@@ -134,7 +135,7 @@ function walk(dir: string): string[] {
 /** Every utility the source writes, variants included. */
 function sourceUtilities() {
   const words = new Set<string>()
-  for (const file of [...walk(join(root, 'src')), ...walk(join(root, '.storybook'))]) {
+  for (const file of found([...walk(join(root, 'src')), ...walk(join(root, '.storybook'))], 200, 'sources under src/ and .storybook/')) {
     for (const word of readFileSync(file, 'utf8').match(/[\w\-:/[\]!.&()=,@>*~+%#'"]+/g) ?? []) {
       const trimmed = word.replace(/^['"`]+|['",`]+$/g, '')
       if (trimmed) words.add(trimmed)

@@ -5,6 +5,8 @@ import { dirname, join, relative, resolve } from 'node:path'
 import { __unstable__loadDesignSystem, compile } from 'tailwindcss'
 import { beforeAll, describe, expect, it } from 'vitest'
 
+import { found } from '../test/found'
+
 /**
  * The Tailwind bridge (theme.css), held to what it compiles to rather than to
  * what it says. Two of the bugs this file exists for read correctly in the
@@ -126,12 +128,16 @@ describe('every utility the code writes has a Mola token behind it', () => {
       return /\.(tsx?|mdx)$/.test(name) && !/\.test\.tsx?$/.test(name) ? [path] : []
     })
   }
-  const files = [
-    ...walk(join(root, 'src/components')),
-    ...walk(join(root, 'src/patterns')),
-    ...walk(join(root, 'src/docs')),
-    ...walk(join(root, '.storybook')),
-  ]
+  const files = found(
+    [
+      ...walk(join(root, 'src/components')),
+      ...walk(join(root, 'src/patterns')),
+      ...walk(join(root, 'src/docs')),
+      ...walk(join(root, '.storybook')),
+    ],
+    150,
+    'component, pattern, docs and Storybook sources',
+  )
   const text = (file: string) => {
     const raw = readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\s)\/\/.*$/gm, '$1')
     return file.endsWith('.mdx') ? raw.replace(/```[\s\S]*?```/g, '').replace(/`[^`\n]*`/g, '') : raw

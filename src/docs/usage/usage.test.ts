@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
+import { foundModules } from '../../test/found'
 import { storyTitles } from '../../test/story-index'
 import { ACCESSIBILITY, NON_INTERACTIVE } from './accessibility'
 import { pageData, SECTIONS } from './contract'
@@ -9,7 +10,7 @@ import { PATTERNS } from './patterns'
 import { isPattern, isShowcase } from './showcases'
 
 type StoryModule = { default: { title: string; tags?: string[] } } & Record<string, unknown>
-const modules = import.meta.glob<StoryModule>('../../**/*.stories.tsx', { eager: true })
+const modules = foundModules(import.meta.glob<StoryModule>('../../**/*.stories.tsx', { eager: true }), 40, 'stories files')
 const metas = Object.values(modules).map((mod) => mod.default)
 const components = metas.filter((meta) => !isShowcase(meta.title))
 

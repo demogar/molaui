@@ -40,7 +40,7 @@ A change is ready when `npm run check:all` passes. It runs every job the ruleset
 order, and `scripts/check-all.test.ts` fails if a required job ever runs a script it does not:
 
 ```bash
-npm run check           # lint · typecheck · test · tokens:check · manifest:check · evidence:check · build · api:check · size · build-storybook  (the Gates job)
+npm run check           # lint · typecheck · test · deps:audit · tokens:check · manifest:check · evidence:check · build · api:check · size · build-storybook  (the Gates job)
 npm run check:browser   # build-storybook · audit · visual  (Browser audit, Visual regression)
 npm run check:all       # check · check:browser · consumers  (every required job)
 ```
@@ -61,6 +61,23 @@ CI runs the three browser jobs side by side with `Gates`. Each can also be run o
 
 For a quick look while Storybook's dev server is running, `node scripts/audit.mjs
 http://localhost:6006` still works; add `--only <story id fragment>` to audit a few pages.
+
+### Dependencies: licences and npm audit
+
+What the package ships is its runtime dependencies, its peer dependencies and the MCP SDK and zod
+bundled into the `mola-ui-mcp` bin, each with everything it depends on. `scripts/deps.mjs` reads
+that set from `package-lock.json`.
+
+- **Licences** are checked by `scripts/deps.test.ts`, offline, from the `license` field npm
+  records in the lockfile. Shipped packages must be permissive (`SHIPPED_LICENSES`); the rest of
+  the tree may also be MPL-2.0, OFL-1.1, CC-BY-4.0 or Python-2.0 (`TREE_LICENSES`), because the
+  Storybook site bundles some of it. GPL, LGPL, AGPL and SSPL fail everywhere. Add a licence only
+  after reading it.
+- **`npm run deps:audit`** runs `npm audit` and fails on a high or critical advisory in a shipped
+  package; lower severities are warnings, and findings in dev tooling are counted, not failed.
+  If an advisory cannot reach a user, add its GHSA id to `ACCEPTED` with the reason. When the
+  registry cannot be reached it retries twice, then warns and passes, so an npm outage does not
+  block merges; any other failure to produce a report fails.
 
 ### The public API report
 

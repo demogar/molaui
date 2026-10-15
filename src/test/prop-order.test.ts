@@ -4,6 +4,8 @@ import { join, relative, resolve } from 'node:path'
 import ts from 'typescript'
 import { describe, expect, it } from 'vitest'
 
+import { found } from './found'
+
 /**
  * An internal `ref`, event handler or `aria-describedby` is never written
  * before a spread of the consumer's props.
@@ -79,9 +81,9 @@ describe('consumer props never silently replace internal ones', () => {
   })
 
   it('no ref, handler or aria-describedby in src/components is written before a spread', () => {
-    const found = walk(join(root, 'components')).flatMap((file) =>
+    const shadowed = found(walk(join(root, 'components')), 40, 'component sources').flatMap((file) =>
       findShadowedAttributes(relative(root, file), readFileSync(file, 'utf8')),
     )
-    expect(found).toEqual([])
+    expect(shadowed).toEqual([])
   })
 })

@@ -28,6 +28,7 @@ npm run build-storybook  # static Storybook to storybook-static/
 npm run api              # regenerate etc/mola-ui.api.md from dist/ (API Extractor; needs build)
 npm run api:check        # fail if the public API changed without the report
 npm run size             # size-limit budgets in .size-limit.js (needs build)
+npm run deps:audit       # npm audit of what ships (deps, peers, the bundled MCP SDK); warns, not fails, if the registry is down
 npm run check            # all gates, same list CI's Gates job runs
 npm run check:browser    # build-storybook, then audit and visual (the two browser jobs)
 npm run check:all        # check + check:browser + consumers: every job the ruleset requires
@@ -77,6 +78,8 @@ Theme and density are document/element **attributes, not React context** (portal
 
 ### Stories are tests
 `src/test/stories.test.tsx` globs every `*.stories.tsx`, composes them through the real `.storybook/preview.tsx` (theme/density decorator included), renders in jsdom and runs axe (contrast disabled there — owned by the contract test and `audit.mjs`). Any new story is automatically a test and must be axe-clean. The Storybook a11y addon is set to `error`. `src/test/ssr-stories.test.tsx` renders every story again with `renderToString` in the node environment, so a component that reads `window` or `document` while rendering fails there; it composes them through `.storybook/mola-context.tsx` (the decorator and initial globals that `preview.tsx` uses), because `preview.tsx` loads Storybook's doc blocks, which need a `document` to import.
+
+Every test that globs or walks the filesystem passes the result through `found(list, min, what)` (`src/test/found.ts`), which throws at collection when the glob matches too little, so a moved folder cannot turn a gate into a loop over nothing; `src/test/sentinels.test.ts` fails a test file that enumerates files without it. Licences are checked offline from `package-lock.json` by `scripts/deps.test.ts` (a permissive allow-list for what ships, a looser one for dev tooling, both in `scripts/deps.mjs`).
 
 ### Components
 One folder per component in `src/components/<name>/`: `<name>.tsx` (cva variants + `cn()`), `<name>.stories.tsx`, `<name>.test.tsx` (query by role/accessible name, keyboard included), `index.ts` barrel. New components must also be exported from `src/index.ts`. AI-layer stories share fixtures and a simulated agent in `src/components/ai/_story-data/`.

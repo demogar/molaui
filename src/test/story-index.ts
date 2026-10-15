@@ -4,6 +4,7 @@ import { join, resolve } from 'node:path'
 import { isExportStory } from 'storybook/internal/csf'
 
 import { docsId, storyId } from '../docs/usage/links'
+import { found, foundModules } from './found'
 
 /**
  * The ids Storybook will assign, computed from the sources rather than from a
@@ -11,7 +12,7 @@ import { docsId, storyId } from '../docs/usage/links'
  * per stories title (autodocs) and per MDX page, and one id per story.
  */
 type StoryModule = { default: { title: string } } & Record<string, unknown>
-const modules = import.meta.glob<StoryModule>('../**/*.stories.tsx', { eager: true })
+const modules = foundModules(import.meta.glob<StoryModule>('../**/*.stories.tsx', { eager: true }), 40, 'stories files')
 
 export const repoRoot = resolve(import.meta.dirname, '../..')
 
@@ -26,7 +27,7 @@ export function walk(dir: string, test: (name: string) => boolean): string[] {
 
 export const storyTitles = Object.values(modules).map((mod) => mod.default.title)
 
-export const mdxTitles = walk(join(repoRoot, 'src'), (name) => name.endsWith('.mdx')).flatMap((path) => {
+export const mdxTitles = found(walk(join(repoRoot, 'src'), (name) => name.endsWith('.mdx')), 15, 'MDX pages under src/').flatMap((path) => {
   const title = readFileSync(path, 'utf8').match(/<Meta\s+title="([^"]+)"/)?.[1]
   return title ? [title] : []
 })

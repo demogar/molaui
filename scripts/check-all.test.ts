@@ -2,6 +2,8 @@ import { readdirSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 
+import { found } from '../src/test/found'
+
 /**
  * `npm run check:all` is the local readiness bar, so it must run everything a
  * pull request needs to merge. `npm run check` alone matched only the `Gates`
@@ -115,8 +117,11 @@ describe('check:all covers every required CI job', () => {
   // locally, but it must exist somewhere, or the ruleset waits on a check
   // that never reports.
   it('finds every other required check in some workflow', () => {
-    const others = readdirSync(resolve(root, '.github/workflows'))
-      .filter((file) => file !== 'ci.yml' && /\.ya?ml$/.test(file))
+    const others = found(
+      readdirSync(resolve(root, '.github/workflows')).filter((file) => file !== 'ci.yml' && /\.ya?ml$/.test(file)),
+      1,
+      'workflows besides ci.yml',
+    )
       .flatMap((file) => [...readJobs(read(`.github/workflows/${file}`)).values()].map((job) => job.name))
     for (const context of required.filter((context) => !inCi.includes(context))) {
       expect(others, `no workflow defines the required check "${context}"`).toContain(context)

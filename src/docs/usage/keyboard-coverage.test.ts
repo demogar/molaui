@@ -3,12 +3,13 @@ import { dirname, resolve } from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
+import { foundModules } from '../../test/found'
 import { ACCESSIBILITY } from './accessibility'
 import { chordsInKeyboardText, pressedKeys, untestedKeys } from './keyboard-coverage'
 import { isShowcase } from './showcases'
 
 type StoryModule = { default: { title: string } }
-const modules = import.meta.glob<StoryModule>('../../**/*.stories.tsx', { eager: true })
+const modules = foundModules(import.meta.glob<StoryModule>('../../**/*.stories.tsx', { eager: true }), 40, 'stories files')
 
 /**
  * The gate for #82: every key a component page's keyboard table names is

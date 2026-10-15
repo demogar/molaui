@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest'
 
 import { type IconButtonProps } from '../components/button'
 import { type ToolbarButtonProps, type ToolbarProps } from '../components/toolbar'
+import { found } from '../test/found'
 
 /**
  * cva's `VariantProps` puts `null` into every variant's type; spread into a
@@ -23,7 +24,7 @@ describe('variant props', () => {
     })
 
   it('takes variants through Variants<>, never the raw cva VariantProps', () => {
-    const offenders = [...files(join(root, 'components')), ...files(join(root, 'patterns'))]
+    const offenders = found([...files(join(root, 'components')), ...files(join(root, 'patterns'))], 100, 'component and pattern sources')
       .filter((path) => /\bVariantProps\b/.test(readFileSync(path, 'utf8')))
       .map((path) => relative(root, path))
     expect(offenders).toEqual([])

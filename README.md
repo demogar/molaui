@@ -235,7 +235,7 @@ no longer compiles.
 ## How quality is held
 
 ```bash
-npm run check   # lint · typecheck · test · tokens:check · manifest:check · evidence:check · build · api:check · size · build-storybook
+npm run check   # lint · typecheck · test · deps:audit · tokens:check · manifest:check · evidence:check · build · api:check · size · build-storybook
 ```
 
 CI runs that list, plus three browser jobs in parallel: the audit, visual regression and consumer

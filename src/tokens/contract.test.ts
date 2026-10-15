@@ -3,6 +3,7 @@ import { join, relative, resolve } from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
+import { found } from '../test/found'
 import { contrast, over, type RGB } from './color'
 import { OVERLAID, PAIRS } from './pairings'
 import { parseRootDeclarations, resolveLayer, token, type ThemeName } from './resolve'
@@ -76,7 +77,7 @@ describe('hex literals', () => {
   }
 
   it('appear nowhere in src except tokens.css', () => {
-    const offenders = walk(root)
+    const offenders = found(walk(root), 200, 'sources under src/')
       .map((path) => relative(root, path))
       .filter((rel) => !allowed.has(rel))
       .filter((rel) => /(?<![&\w])#[0-9a-f]{6}\b|(?<![&\w])#[0-9a-f]{3}\b(?![0-9a-f-])/i.test(
