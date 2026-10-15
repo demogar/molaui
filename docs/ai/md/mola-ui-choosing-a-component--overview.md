@@ -19,7 +19,9 @@ or in the way of the next step.
 | --- | --- | --- |
 | The state of a row or an object, in a word | [Badge](https://demogar.github.io/molaui/?path=/docs/components-feedback-badge--overview) | Callout: a status is a mark, not a message |
 | A condition of a page or region that stays true until something changes | [Callout](https://demogar.github.io/molaui/?path=/docs/components-feedback-callout--overview) | Toast: it disappears while the condition still holds |
+| A condition of the whole application, such as maintenance tonight or a dropped connection | [Banner](https://demogar.github.io/molaui/?path=/docs/components-feedback-banner--overview), in the AppShell `banner` slot | Callout: it belongs to one region, not to the app |
 | To report something that just happened, possibly elsewhere | [Toast](https://demogar.github.io/molaui/?path=/docs/components-feedback-toast--overview) | Callout: it is static, and nobody hears it appear |
+| To find an event again after its toast has gone | [Notification centre](https://demogar.github.io/molaui/?path=/docs/components-feedback-notification-centre--overview), fed the same event as the toast | a longer toast timeout: it is still gone by the time someone looks |
 | Progress on long work the operator may leave | [Toast](https://demogar.github.io/molaui/?path=/docs/components-feedback-toast--overview), with `toast.running()` | a second toast for the result: update the same one |
 | A decision before the person can go on | [Dialog](https://demogar.github.io/molaui/?path=/docs/components-overlays-dialog--overview) | Toast: a toast cannot hold a decision |
 | Confirmation of an action that destroys something | [AlertDialog](https://demogar.github.io/molaui/?path=/docs/components-overlays-dialog--overview) | a Dialog with “OK”: name the object and the consequence |

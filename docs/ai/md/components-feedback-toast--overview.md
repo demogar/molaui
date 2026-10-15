@@ -21,6 +21,8 @@ Something happened somewhere other than where the operator is looking. Tone is a
 ### When not to
 
 - A condition of the page that stays true, such as read-only mode. Use [Callout](https://demogar.github.io/molaui/md/components-feedback-callout--overview.md).
+- A condition of the whole application, such as a dropped connection. Use [Banner](https://demogar.github.io/molaui/md/components-feedback-banner--overview.md).
+- Keeping the event to find later; send it to the notification centre as well. Use [Notification centre](https://demogar.github.io/molaui/md/components-feedback-notification-centre--overview.md).
 - Anything that needs a decision, or more than one action. Use [Dialog](https://demogar.github.io/molaui/md/components-overlays-dialog--overview.md).
 - A validation error on a field. Use [Field](https://demogar.github.io/molaui/md/components-forms-field--overview.md).
 - Confirming a copy to the clipboard. Confirm it in place, as CodeBlock and Message do.
@@ -100,6 +102,8 @@ Types: `ToastOptions`, `ToastProviderProps`, `ToastTone`
 ### Use instead, when it fits better
 
 - [Callout](https://demogar.github.io/molaui/md/components-feedback-callout--overview.md)
+- [Banner](https://demogar.github.io/molaui/md/components-feedback-banner--overview.md)
+- [Notification centre](https://demogar.github.io/molaui/md/components-feedback-notification-centre--overview.md)
 - [Dialog](https://demogar.github.io/molaui/md/components-overlays-dialog--overview.md)
 - [Field](https://demogar.github.io/molaui/md/components-forms-field--overview.md)
 

@@ -137,7 +137,8 @@ because keyboard direction is read from context.
 | --- | --- | --- |
 | State of a row, in a word | `Badge` (`tone`, `dot`) | `Callout` |
 | A condition of a region that stays true | `Callout` | `Toast` |
-| Something that just happened | `useToast()` | `Callout` |
+| A condition of the whole app that stays true | `Banner` in `AppShell`'s `banner` slot | `Callout`, `Toast` |
+| Something that just happened | `useToast()`, and the same event to `NotificationCentre` if it matters later | `Callout` |
 | A decision before going on | `Dialog`; destructive: `AlertDialog` naming the object | `Toast` |
 | A panel with nothing in it | `EmptyState` | grey text in a blank panel |
 | On/off applied on Save, or on/off applied at once | `Checkbox`, or `Switch` | the other one |
@@ -154,6 +155,7 @@ because keyboard direction is read from context.
 | Actions on an object | `Menu` | `Select` |
 | Details beside a list | `Drawer` | `Dialog` |
 | Jump anywhere by name | `CommandPalette` | `Menu` |
+| A keyboard shortcut | `useHotkeys` with a `label` (`mod` for ⌘/Ctrl), listed by `ShortcutsDialog` | a `keydown` listener of your own |
 | Content loading in a known layout | `SkeletonGroup` + `Skeleton` | a spinner |
 | Work toward a known total, or a reading in a range | `Progress`, or `Meter` | each other |
 | Records compared row by row | `Table`; with sort, selection, bulk actions or pages: `DataTable` | `DescriptionList` |

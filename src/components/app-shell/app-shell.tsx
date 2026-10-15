@@ -64,6 +64,12 @@ export interface AppShellProps extends Omit<React.ComponentProps<'div'>, 'childr
    * drift.
    */
   sidebar: React.ReactNode
+  /**
+   * A condition of the whole application, usually a `Banner`: drawn full width
+   * above the top bar, so it pushes the frame down rather than covering it.
+   * After the skip link in reading order, so the way to the content stays first.
+   */
+  banner?: React.ReactNode
   children: React.ReactNode
   /** Controlled collapse of the desktop sidebar. */
   sidebarCollapsed?: boolean
@@ -82,6 +88,7 @@ export interface AppShellProps extends Omit<React.ComponentProps<'div'>, 'childr
 export function AppShell({
   topbar,
   sidebar,
+  banner,
   children,
   sidebarCollapsed,
   defaultSidebarCollapsed = false,
@@ -126,6 +133,7 @@ export function AppShell({
             Skip to content
           </a>
         </nav>
+        {banner}
         {topbar}
         <div className="flex min-h-0 flex-1">
           <aside

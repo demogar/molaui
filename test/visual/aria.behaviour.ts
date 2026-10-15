@@ -87,6 +87,11 @@ const CASES: Case[] = [
   // from the label ("Deploy the new model at Hour") are what this pins.
   { name: 'date-time-picker', story: 'components-forms-time-picker--date-and-time' },
   { name: 'toolbar', story: 'components-layout-toolbar--run-actions' },
+  // Open by default: the bell's name with its count, the named popover, and a
+  // list whose unread items say so in words.
+  { name: 'notification-centre', story: 'components-feedback-notification-centre--default' },
+  // Open by default: the registry, grouped, each key spelled out in words.
+  { name: 'shortcuts-dialog', story: 'components-overlays-shortcuts-dialog--default' },
   { name: 'segmented-control', story: 'components-forms-segmented-control--default' },
   // The composites Mola writes out itself (ADR 0012): nothing but this and
   // the keyboard tests holds their roles, levels and states in place.

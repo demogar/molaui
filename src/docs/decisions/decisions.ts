@@ -145,6 +145,16 @@ const NOTES: Record<string, Notes> = {
         'Where Base UI has no primitive (Listbox, Tag group, Tree), the APG pattern is written out, every key in its table is pressed by a test, and its accessibility tree is pinned from Chromium.',
     },
   },
+  '0013': {
+    name: 'Notices and shortcuts',
+    decided:
+      'A banner is for the whole app, a callout for a region, a toast for a moment and the notification centre for the record; only the toast speaks. Every shortcut is a `useHotkeys` binding with a label, listed from one registry, with `mod` as ⌘ on a Mac and Ctrl elsewhere.',
+    governs: {
+      'Foundations/Accessibility':
+        'One notice speaks: the toast. The notification centre is silent, and a banner is announced only when it appears mid-session, once and politely.',
+      'Foundations/Content and voice': 'Notification is an event and Announcement a standing condition; the words table holds both.',
+    },
+  },
 }
 
 export interface Decision extends Notes {

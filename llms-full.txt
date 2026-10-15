@@ -2,7 +2,7 @@
 
 > A design system cut like a mola: flat layers, hard keylines, revealed bands. React components for dense internal tools and AI-native interfaces. Published as `@demogar/mola-ui`: React 19, Base UI for behaviour, Tailwind v4 for styling, design tokens as CSS custom properties.
 
-61 components and 14 AI components (75 documented pages).
+64 components and 14 AI components (78 documented pages).
 
 Install and set up:
 
@@ -908,6 +908,82 @@ Types: `BadgeProps`, `BadgeTone`, `RecommendationBadgeProps`, `RecommendationLev
 
 Used in: Agent hand-off, Confirmation, Empty states, Filtered table, List and detail
 
+### Banner
+
+https://demogar.github.io/molaui/?path=/docs/components-feedback-banner--overview
+
+A strip across the top of the application for a condition of the whole app, for as long as it holds.
+
+Phase: Experimental. Its API may change in a minor release, without a deprecation first.
+
+When to use:
+- Maintenance, an outage or a degraded service that affects every page.
+- A state of the whole workspace or account: read-only, a failed payment, a trial that ends soon.
+- A dropped connection, with announce, because it appeared during the session.
+
+When not to:
+- A condition of one page or panel. Use Callout.
+- Something that has just happened, such as a finished deploy. Use Toast.
+- An event the operator may want to find later. Use Notification centre.
+- A decision the person must make before going on. Use AlertDialog.
+
+- Do: Show one banner at a time, the most severe, in the AppShell banner slot.
+- Don’t: Stack banners until the top bar sits halfway down the screen.
+- Do: Pass announce only for a banner that appears during the session.
+- Don’t: Announce a banner that is there when the page loads; it talks over the page’s own title.
+
+Content:
+- The title names the condition: “Scheduled maintenance”, “Read-only workspace”.
+- The message says when, and what it means for the work: “Runs started then wait in the queue.”
+- The action is a verb on the object: “Update card”, “View status”.
+
+Keyboard:
+- Tab: Moves to the action and the Dismiss button, after the skip link and before the top bar.
+- Enter or Space: Runs the action, or dismisses the banner.
+
+Mola handles:
+- Is a landmark named Announcement, or your `label`, so it can be found in a landmark list.
+- Says its tone in hidden words before the message, Warning, Error or Success, and hides the icon.
+- Says nothing on its own. With `announce`, says the message once, politely, from a status region that mounts empty and is filled a moment later.
+- Names the dismiss button “Dismiss”.
+
+You handle:
+- Give each banner a `label` that names its kind when a page could show more than one.
+- Pass `announce` only for a banner that appears during the session.
+- Decide whether a dismissed banner comes back, and when.
+
+Anatomy:
+- Strip (`[data-slot="banner"]`): Full bleed, the tone’s wash, with a heavy foot edge in the status colour: the region a status owns.
+- Icon (`[data-part="icon"]`): The tone’s glyph, so the tone is never colour alone. Hidden; the tone is also said in words.
+- Message (`[data-part="message"]`): The condition and what it means for the work, in ink, never in the tone’s colour.
+- Title (`[data-part="title"]`): A few words in bold that name the condition.
+- Action (`[data-part="action"]`): One follow-up, a verb on the object.
+- Dismiss (`[data-part="dismiss"]`): Present only with onDismiss; the caller decides whether the banner comes back.
+
+#### `Banner` (component)
+
+`className`, `ref` and the rest of the DOM props go to the `<section>`, the strip itself.
+
+- `tone`: `neutral`, `info`, `success`, `warn`, `danger` (default `info`)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `action` | `ReactNode` |  | One follow-up, usually a `Button` at `size="sm"` or a link: “View status”. |
+| `announce` | `boolean` | `false` | Say the message once, politely, when the banner appears. Only for a banner that appears during the session because something changed; one that is there when the page loads is read in order, and announcing it talks over the page's own title. |
+| `icon` | `ReactNode` |  | Replace the tone's icon, or `false` for none. |
+| `label` | `string` | `Announcement` | The landmark's name, “Announcement” by default. Name it for what it is when there is more than one kind: “Maintenance”. |
+| `onDismiss` | `(() => void)` |  | Renders a Dismiss button. The caller owns whether the banner comes back, and when. |
+| `title` | `ReactNode` |  | A few words in bold before the message: “Scheduled maintenance”. |
+| `tone` | `"neutral" \| "info" \| "success" \| "warn" \| "danger"` |  | The status of the condition, carried by the wash, the foot edge and the icon; `info` by default. The message still says it in words. |
+
+`className`, `ref`, `id` and the other DOM props go to `<section data-slot="banner">`.
+
+#### `bannerVariants` (function)
+
+A condition of the whole application, said once across the top of it: maintenance tonight, the workspace is read-only, the connection dropped.
+
+Types: `BannerProps`, `BannerTone`
+
 ### Callout
 
 https://demogar.github.io/molaui/?path=/docs/components-feedback-callout--overview
@@ -924,6 +1000,7 @@ When to use:
 
 When not to:
 - Something that has just happened, possibly elsewhere, such as a finished re-index. Use Toast.
+- A condition of the whole application, such as maintenance tonight. Use Banner.
 - A decision the person must make before going on. Use AlertDialog.
 - A panel with nothing to show. Use Empty state.
 - A short status on a row. Use Badge.
@@ -1064,6 +1141,92 @@ The state a panel is in when it has nothing to show — designed as a condition 
 Types: `EmptyStateKind`, `EmptyStateProps`
 
 Used in: Agent hand-off, Confirmation, Empty states, List and detail
+
+### Notification centre
+
+https://demogar.github.io/molaui/?path=/docs/components-feedback-notification-centre--overview
+
+The record of what happened: a bell with an unread count, and the notifications under it, kept after their toasts have gone.
+
+Phase: Experimental. Its API may change in a minor release, without a deprecation first.
+
+When to use:
+- Events the operator may have missed: a failed run, an approval waiting, a view shared with them.
+- The other half of a toast: send the same event to both, the toast to say it now and the centre to find it later.
+- A full notifications page, with NotificationList on its own.
+
+When not to:
+- Saying an event now, where the operator is looking. Use Toast.
+- A condition of the whole application that is still true. Use Banner.
+- The history of one object, such as a run’s steps or a deploy log. Use Timeline.
+
+- Do: Add the event to the centre when you raise its toast.
+- Don’t: Raise a toast for an event that matters later and keep no record of it.
+- Do: Let the unread count change silently; the bell’s name carries it.
+- Don’t: Announce each new notification from the centre as well; the toast already said it.
+
+Content:
+- The title says what happened, in the past tense, standing on its own: “Re-index failed for Billing FAQ”.
+- Times are relative while recent, “4 min ago”, and absolute after a day, “Yesterday 16:20”.
+- The action is one verb: “View run”, “Review”.
+
+Keyboard:
+- Enter or Space: On the bell, opens the list and moves focus into it.
+- Tab or Shift+Tab: Moves through Mark all as read and each notification’s action.
+- Escape: Closes the list and returns focus to the bell.
+
+Mola handles:
+- Names the bell “Notifications”, with the unread count when there is one: “Notifications, 2 unread”.
+- Changes the count silently, with no live region: the toast that raised the event already announced it.
+- Renders a named list; each unread item starts with a hidden “Unread.” and its tone in words.
+- Shows unread as an ink edge, a semibold title and the word New, never colour alone.
+- Keeps focus in the popover when Mark all as read, its own button, goes away.
+
+You handle:
+- Raise a toast for an event that needs saying now; the centre will not say it.
+- Write titles that stand on their own, away from the page they came from.
+- Save the read state if it should survive a reload.
+
+Anatomy:
+- Notification (`[data-part="item"]`): One event. Unread, it carries a heavy ink edge at its start.
+- Tone mark (`[data-part="tone"]`): The toast’s own cut square, so the record is recognisably the toast it came from.
+- Title (`[data-part="title"]`): What happened, in the past tense; semibold while unread.
+- New (`[data-part="unread"]`): The word that says unread, beside the edge and the weight, so unread is never colour alone.
+- Time (`[data-part="time"]`): When, as a person reads it, in a time element with the machine date.
+- Action (`[data-part="action"]`): One follow-up; running it marks the notification read.
+
+#### `NotificationCentre` (component)
+
+The bell for the top bar's `end`, and the list in a popover under it. `className`, `ref` and the rest go to the popover popup.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `notifications` (required) | `NotificationItem[]` |  | Newest first. |
+| `defaultOpen` | `boolean` | `false` | Open on first render. |
+| `empty` | `ReactNode` |  | Shown when there is nothing. Defaults to “No notifications yet.” |
+| `footer` | `ReactNode` |  | Under the list: usually a link to a full notifications page, “View all”. |
+| `label` | `string` | `Notifications` | The popover's title and the bell's name, “Notifications” by default. |
+| `onMarkAllRead` | `(() => void)` |  | Called when the operator presses Mark all as read. The button shows only while something is unread. |
+| `onMarkRead` | `((id: string) => void)` |  | Called with an item's id when its action runs. |
+| `onOpenChange` | `((open: boolean) => void)` |  | Called when the popover opens or closes. |
+| `open` | `boolean` |  | Whether the popover is open, when the page owns that. |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="notification-centre">`.
+
+#### `NotificationList` (component)
+
+The list on its own, for a full notifications page or a panel the page places itself. `NotificationCentre` puts it in a popover under a bell. `className`, `ref` and the rest go to the wrapping `<div>`.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `notifications` (required) | `NotificationItem[]` |  | Newest first. |
+| `empty` | `ReactNode` | `No notifications yet.` | Shown when there is nothing. Defaults to “No notifications yet.” |
+| `label` | `string` | `Notifications` | The list's accessible name, “Notifications” by default. |
+| `onMarkRead` | `((id: string) => void)` |  | Called with an item's id when its action runs. |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="notification-list">`.
+
+Types: `NotificationCentreProps`, `NotificationItem`, `NotificationListProps`, `NotificationTone`
 
 ### Placeholder
 
@@ -1277,6 +1440,8 @@ When to use:
 
 When not to:
 - A condition of the page that stays true, such as read-only mode. Use Callout.
+- A condition of the whole application, such as a dropped connection. Use Banner.
+- Keeping the event to find later; send it to the notification centre as well. Use Notification centre.
 - Anything that needs a decision, or more than one action. Use Dialog.
 - A validation error on a field. Use Field.
 - Confirming a copy to the clipboard. Confirm it in place, as CodeBlock and Message do.
@@ -2763,6 +2928,7 @@ When to use:
 - The outer frame of an application with navigation, search and a work area.
 - Navigation with sections, a current page and counts, through Sidebar, NavSection and NavItem.
 - The product mark, search and account controls, through Topbar.
+- A condition of the whole application above the top bar, through the banner slot and a Banner.
 
 When not to:
 - The title, description and actions at the top of one page inside the shell. Use Page header.
@@ -2794,6 +2960,7 @@ Mola handles:
 You handle:
 - Give the sidebar a `label` that names the navigation.
 - Give each page one `h1`, usually through `PageHeader`.
+- Put a condition of the whole application in the `banner` slot, as a `Banner`, rather than above the shell.
 
 #### `AppShell` (component)
 
@@ -2801,6 +2968,7 @@ You handle:
 | --- | --- | --- | --- |
 | `sidebar` (required) | `ReactNode` |  | The navigation, usually a `Sidebar`. The same tree is drawn in the layout from 920px and in a modal sheet below it, so desktop and mobile navigation cannot drift. |
 | `topbar` (required) | `ReactNode` |  | The bar across the top, usually a `Topbar`. It stays put while `<main>` scrolls, so the switcher and search are never lost. |
+| `banner` | `ReactNode` |  | A condition of the whole application, usually a `Banner`: drawn full width above the top bar, so it pushes the frame down rather than covering it. After the skip link in reading order, so the way to the content stays first. |
 | `defaultSidebarCollapsed` | `boolean` | `false` | Start with the desktop sidebar collapsed to its icon rail. Defaults to `false`; ignored below 920px, where the sidebar is a sheet. |
 | `onSidebarCollapsedChange` | `((collapsed: boolean) => void)` |  | Called when the desktop sidebar collapses or expands — to remember the choice between visits. |
 | `sidebarCollapsed` | `boolean` |  | Controlled collapse of the desktop sidebar. |
@@ -3861,6 +4029,7 @@ When not to:
 - Choosing a value for a form field from a long list. Use Combobox.
 - Actions on one object, opened from that object. Use Menu.
 - Filtering the list on the current page. Use SearchInput.
+- Listing every shortcut the page binds. Use Shortcuts dialog.
 
 - Do: Group results under headings, such as Actions, Agents and Go to.
 - Don’t: Expect fuzzy matches; every typed word must appear in the label, description or keywords.
@@ -3872,7 +4041,7 @@ Content:
 - Descriptions add the reason or the context: “Owners only”, “Answers from the help centre”.
 
 Keyboard:
-- Control+K or Meta+K: Opens the palette, when the page calls `useCommandShortcut`.
+- Control+K or Meta+K: Opens the palette when the page calls `useCommandShortcut`: ⌘K on a Mac, Ctrl-K elsewhere.
 - ArrowDown or ArrowUp: Moves the highlight, skipping disabled commands and wrapping at the ends.
 - Enter: Runs the highlighted command and closes the palette.
 - Escape: Closes the palette.
@@ -3885,7 +4054,7 @@ Mola handles:
 - Icons and the key hints in the footer are hidden from assistive technology; the status region speaks the count instead.
 
 You handle:
-- Call `useCommandShortcut` to bind ⌘K and Ctrl-K; the shortcuts shown on items are display only.
+- Call `useCommandShortcut` to bind ⌘K or Ctrl-K. Give a command a `hotkey` to bind it, print it and list it in the shortcuts dialog; `shortcut` is display only.
 - Write command labels as actions, “Start a new run”, and add `keywords` for the other words people use.
 
 #### `CommandPalette` (component)
@@ -3911,7 +4080,7 @@ The groups and items that match `query`, empty groups dropped, label-prefix matc
 
 #### `useCommandShortcut` (hook)
 
-Opens the palette on ⌘K / Ctrl-K, anywhere on the page. Ctrl as well as ⌘, because half of every internal team is on Windows or Linux and a shortcut that silently does nothing there is worse than none.
+Opens the palette on ⌘K on a Mac and Ctrl-K everywhere else, from anywhere on the page, a search field included. Ctrl as well as ⌘, because half of every internal team is on Windows or Linux and a shortcut that silently does nothing there is worse than none.
 
 Types: `CommandGroup`, `CommandItem`, `CommandPaletteProps`
 
@@ -4334,6 +4503,108 @@ Also accepts the props of `PopoverPopupProps`.
 The one class list every floating surface in the system shares: popovers, menus, tooltips' larger cousins, the command palette, toasts.
 
 Types: `PopoverContentProps`
+
+### Shortcuts dialog
+
+https://demogar.github.io/molaui/?path=/docs/components-overlays-shortcuts-dialog--overview
+
+Every keyboard shortcut the page binds, listed from one registry and opened with ?; useHotkeys binds and registers each one.
+
+Phase: Experimental. Its API may change in a minor release, without a deprecation first.
+
+When to use:
+- Listing the shortcuts of a tool people use all day, from a help button and the ? key.
+- Binding a page-wide shortcut with useHotkeys, so it is listed in its own words and printed for the platform.
+- Giving a command palette entry a hotkey, so it runs without opening the palette.
+
+When not to:
+- Finding and running a command by name. Use Command palette.
+- Showing one key beside the control it triggers. Use Tooltip.
+- Writing a key in running text. Use Kbd.
+
+- Do: Use mod for a cross-platform chord: ⌘ on a Mac, Ctrl elsewhere.
+- Don’t: Bind Ctrl-K on a Mac, where it deletes to the end of the line in every text field.
+- Do: Use a sequence such as g r for navigation, and leave useHotkeys to keep plain keys out of text fields.
+- Don’t: Pass inFields to a plain-key shortcut; it will eat the letter someone was typing.
+
+Content:
+- Labels start with a verb and name the object: “Open the command palette”, “Go to runs”.
+- Groups are short nouns: General, Navigation, Runs.
+
+Keyboard:
+- ?: Opens the dialog, or closes it, from anywhere but a text field.
+- Tab or Shift+Tab: Moves between the dialog’s controls; focus stays inside.
+- Escape: Closes the dialog and returns focus to where it was.
+
+Mola handles:
+- Lists only the shortcuts bound under the `HotkeysProvider`, so the list cannot drift from the keys.
+- Prints each key for the platform, ⌘ on a Mac and Ctrl elsewhere, and hides the keycaps behind the same keys in words: “Control K”, “G, then E”.
+- `useHotkeys` ignores plain keys typed in a text field, every key during IME composition, key repeat and keys a component has already handled.
+- It is a modal Base UI Dialog, titled “Keyboard shortcuts”, with a Close button.
+
+You handle:
+- Mount `HotkeysProvider` once near the root, around `ToastProvider`.
+- Give every `useHotkeys` call a `label` that starts with a verb.
+- Use `mod` for cross-platform chords, and sequences rather than single letters for navigation.
+
+#### `ShortcutsDialog` (component)
+
+`className`, `ref` and the rest go to the dialog popup, as on `DialogContent`.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `band` | `DialogBand` |  | The layer revealed in the top seam. |
+| `className` | `string` |  | Classes for the popup, merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute. |
+| `defaultOpen` | `boolean` | `false` | Open on first render. |
+| `description` | `ReactNode` |  | A line under the title, read as the dialog's accessible description when it opens. Say what the dialog is for; leave instructions to the body. |
+| `footer` | `ReactNode` |  | Action row under the body: right-aligned, or stacked full width with the last action on top when the row is under 24rem. Usually a `ghost` cancel and one primary. |
+| `hideClose` | `boolean` |  | Hide the corner close button. Only when the footer carries an explicit way out. |
+| `hotkey` | `string \| false` | `?` | The key that opens it, listed with the rest; `?` by default. `false` binds none. |
+| `onOpenChange` | `((open: boolean) => void)` |  | Called when the dialog opens or closes: the hotkey, the trigger, Escape, Close. |
+| `open` | `boolean` |  | Whether the dialog is open, when the page owns that. |
+| `size` | `"sm" \| "md" \| "lg"` | `sm` | The popup's maximum width: `sm` for a short question, `md` (default) for a form, `lg` for a table or a long review. |
+| `title` | `ReactNode` | `Keyboard shortcuts` | The dialog's title and accessible name. Defaults to “Keyboard shortcuts”. |
+| `trigger` | `ReactElement<unknown, string \| JSXElementConstructor<any>>` |  | Rendered as the button that opens the dialog, e.g. a help `IconButton` in the top bar. |
+
+Also accepts the props of `DialogPopupProps`.
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="shortcuts-dialog">`.
+
+#### `HotkeysProvider` (component)
+
+Mount once near the root, around `ToastProvider`, so the toast region's F6 is listed too. Renders no element.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `platform` | `HotkeyPlatform` |  | Which modifier `mod` means: `apple` for ⌘, `other` for Ctrl. Detected from the browser by default; set it to pin a story, a test, or a server render. |
+
+Renders no element of its own, so it takes no `className` or `ref`.
+
+#### `describeHotkey` (function)
+
+The same keys in words, for a screen reader: "Command K", "G, then D". A glyph like ⌘ is read as "place of interest sign", or not at all.
+
+#### `formatHotkey` (function)
+
+The keys as a keyboard prints them, one array per step: `mod+k` is `[['⌘', 'K']]` on a Mac and `[['Ctrl', 'K']]` elsewhere. Modifiers in each platform's own order (⌃⌥⇧⌘ on a Mac, Ctrl+Alt+Shift elsewhere). Shift is left off a symbol that already needs it: `?` is printed `?`, not `⇧ ?`.
+
+#### `useHotkeyKeys` (hook)
+
+The keys of a binding as this platform prints them, flattened: `['⌘', 'K']` on a Mac, `['Ctrl', 'K']` elsewhere. For the display-only `shortcut` props on `Tooltip`, `MenuItem` and `SearchInput`, so the hint and the binding are one string.
+
+#### `useHotkeyPlatform` (hook)
+
+The platform the nearest provider pins, or the browser's. Until hydration it is `other`, the answer a server can give, so the first client render matches the server's HTML and a Mac swaps Ctrl for ⌘ a frame later rather than failing hydration.
+
+#### `useHotkeys` (hook)
+
+Bind `keys` (see hotkeys.ts for the grammar) to `handler` on the window, and list it under the nearest `HotkeysProvider`. Pass `null` to list a key something else already binds.
+
+#### `useRegisteredHotkeys` (hook)
+
+Every shortcut bound under the nearest provider, in the order they were bound. Empty without one.
+
+Types: `HotkeyPlatform`, `ShortcutsDialogProps`, `HotkeysProviderProps`, `RegisteredHotkey`, `UseHotkeysOptions`
 
 ### Tooltip
 

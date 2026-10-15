@@ -673,6 +673,35 @@ export const USAGE: Record<string, Usage> = {
       'Use the same status words as the filters and headers around it.',
     ],
   },
+  'Components/Feedback/Banner': {
+    summary: 'A strip across the top of the application for a condition of the whole app, for as long as it holds.',
+    use: [
+      'Maintenance, an outage or a degraded service that affects every page.',
+      'A state of the whole workspace or account: read-only, a failed payment, a trial that ends soon.',
+      'A dropped connection, with announce, because it appeared during the session.',
+    ],
+    avoid: [
+      { when: 'A condition of one page or panel.', use: 'Components/Feedback/Callout' },
+      { when: 'Something that has just happened, such as a finished deploy.', use: 'Components/Feedback/Toast' },
+      { when: 'An event the operator may want to find later.', use: 'Components/Feedback/Notification centre' },
+      { when: 'A decision the person must make before going on.', use: 'Components/Overlays/Dialog', label: 'AlertDialog' },
+    ],
+    practices: [
+      {
+        do: 'Show one banner at a time, the most severe, in the AppShell banner slot.',
+        dont: 'Stack banners until the top bar sits halfway down the screen.',
+      },
+      {
+        do: 'Pass announce only for a banner that appears during the session.',
+        dont: 'Announce a banner that is there when the page loads; it talks over the page’s own title.',
+      },
+    ],
+    content: [
+      'The title names the condition: “Scheduled maintenance”, “Read-only workspace”.',
+      'The message says when, and what it means for the work: “Runs started then wait in the queue.”',
+      'The action is a verb on the object: “Update card”, “View status”.',
+    ],
+  },
   'Components/Feedback/Callout': {
     summary: 'A message that belongs to a region of the page, with a tone, an optional title and actions.',
     use: [
@@ -683,6 +712,7 @@ export const USAGE: Record<string, Usage> = {
     ],
     avoid: [
       { when: 'Something that has just happened, possibly elsewhere, such as a finished re-index.', use: 'Components/Feedback/Toast' },
+      { when: 'A condition of the whole application, such as maintenance tonight.', use: 'Components/Feedback/Banner' },
       { when: 'A decision the person must make before going on.', use: 'Components/Overlays/Dialog', label: 'AlertDialog' },
       { when: 'A panel with nothing to show.', use: 'Components/Feedback/Empty state' },
       { when: 'A short status on a row.', use: 'Components/Feedback/Badge' },
@@ -731,6 +761,34 @@ export const USAGE: Record<string, Usage> = {
       'The title states the condition: “No runs match these filters”, “Traces did not load”.',
       'The description gives the cause or the count: “3 filters are hiding 1,284 runs.”',
       'An error says what happened and what happens next: “The trace store returned 503. This panel will try again in 30s.”',
+    ],
+  },
+  'Components/Feedback/Notification centre': {
+    summary: 'The record of what happened: a bell with an unread count, and the notifications under it, kept after their toasts have gone.',
+    use: [
+      'Events the operator may have missed: a failed run, an approval waiting, a view shared with them.',
+      'The other half of a toast: send the same event to both, the toast to say it now and the centre to find it later.',
+      'A full notifications page, with NotificationList on its own.',
+    ],
+    avoid: [
+      { when: 'Saying an event now, where the operator is looking.', use: 'Components/Feedback/Toast' },
+      { when: 'A condition of the whole application that is still true.', use: 'Components/Feedback/Banner' },
+      { when: 'The history of one object, such as a run’s steps or a deploy log.', use: 'Components/Data display/Timeline' },
+    ],
+    practices: [
+      {
+        do: 'Add the event to the centre when you raise its toast.',
+        dont: 'Raise a toast for an event that matters later and keep no record of it.',
+      },
+      {
+        do: 'Let the unread count change silently; the bell’s name carries it.',
+        dont: 'Announce each new notification from the centre as well; the toast already said it.',
+      },
+    ],
+    content: [
+      'The title says what happened, in the past tense, standing on its own: “Re-index failed for Billing FAQ”.',
+      'Times are relative while recent, “4 min ago”, and absolute after a day, “Yesterday 16:20”.',
+      'The action is one verb: “View run”, “Review”.',
     ],
   },
   'Components/Feedback/Placeholder': {
@@ -812,6 +870,8 @@ export const USAGE: Record<string, Usage> = {
     ],
     avoid: [
       { when: 'A condition of the page that stays true, such as read-only mode.', use: 'Components/Feedback/Callout' },
+      { when: 'A condition of the whole application, such as a dropped connection.', use: 'Components/Feedback/Banner' },
+      { when: 'Keeping the event to find later; send it to the notification centre as well.', use: 'Components/Feedback/Notification centre' },
       { when: 'Anything that needs a decision, or more than one action.', use: 'Components/Overlays/Dialog' },
       { when: 'A validation error on a field.', use: 'Components/Forms/Field' },
       { when: 'Confirming a copy to the clipboard. Confirm it in place, as CodeBlock and Message do.', use: null },
@@ -1251,6 +1311,7 @@ export const USAGE: Record<string, Usage> = {
       'The outer frame of an application with navigation, search and a work area.',
       'Navigation with sections, a current page and counts, through Sidebar, NavSection and NavItem.',
       'The product mark, search and account controls, through Topbar.',
+      'A condition of the whole application above the top bar, through the banner slot and a Banner.',
     ],
     avoid: [
       { when: 'The title, description and actions at the top of one page inside the shell.', use: 'Components/Layout/Page header' },
@@ -1565,6 +1626,33 @@ export const USAGE: Record<string, Usage> = {
       'Name the tree for what it holds: “Files changed”, “Knowledge base”.',
     ],
   },
+  'Components/Overlays/Shortcuts dialog': {
+    summary: 'Every keyboard shortcut the page binds, listed from one registry and opened with ?; useHotkeys binds and registers each one.',
+    use: [
+      'Listing the shortcuts of a tool people use all day, from a help button and the ? key.',
+      'Binding a page-wide shortcut with useHotkeys, so it is listed in its own words and printed for the platform.',
+      'Giving a command palette entry a hotkey, so it runs without opening the palette.',
+    ],
+    avoid: [
+      { when: 'Finding and running a command by name.', use: 'Components/Overlays/Command palette' },
+      { when: 'Showing one key beside the control it triggers.', use: 'Components/Overlays/Tooltip' },
+      { when: 'Writing a key in running text.', use: 'Components/Typography/Kbd' },
+    ],
+    practices: [
+      {
+        do: 'Use mod for a cross-platform chord: ⌘ on a Mac, Ctrl elsewhere.',
+        dont: 'Bind Ctrl-K on a Mac, where it deletes to the end of the line in every text field.',
+      },
+      {
+        do: 'Use a sequence such as g r for navigation, and leave useHotkeys to keep plain keys out of text fields.',
+        dont: 'Pass inFields to a plain-key shortcut; it will eat the letter someone was typing.',
+      },
+    ],
+    content: [
+      'Labels start with a verb and name the object: “Open the command palette”, “Go to runs”.',
+      'Groups are short nouns: General, Navigation, Runs.',
+    ],
+  },
   'Components/Overlays/Command palette': {
     summary: 'The keyboard’s front door: a searchable list of commands and destinations, opened with ⌘K or Ctrl+K.',
     use: [
@@ -1576,6 +1664,7 @@ export const USAGE: Record<string, Usage> = {
       { when: 'Choosing a value for a form field from a long list.', use: 'Components/Forms/Combobox' },
       { when: 'Actions on one object, opened from that object.', use: 'Components/Overlays/Menu' },
       { when: 'Filtering the list on the current page.', use: 'Components/Forms/Field', label: 'SearchInput' },
+      { when: 'Listing every shortcut the page binds.', use: 'Components/Overlays/Shortcuts dialog' },
     ],
     practices: [
       {

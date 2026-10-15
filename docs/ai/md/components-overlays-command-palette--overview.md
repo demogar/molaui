@@ -23,6 +23,7 @@ The keyboard’s front door. The input is a `combobox` that never loses focus; r
 - Choosing a value for a form field from a long list. Use [Combobox](https://demogar.github.io/molaui/md/components-forms-combobox--overview.md).
 - Actions on one object, opened from that object. Use [Menu](https://demogar.github.io/molaui/md/components-overlays-menu--overview.md).
 - Filtering the list on the current page. Use [SearchInput](https://demogar.github.io/molaui/md/components-forms-field--overview.md).
+- Listing every shortcut the page binds. Use [Shortcuts dialog](https://demogar.github.io/molaui/md/components-overlays-shortcuts-dialog--overview.md).
 
 ### Do and don’t
 
@@ -69,7 +70,7 @@ The groups and items that match `query`, empty groups dropped, label-prefix matc
 
 ### `useCommandShortcut` (hook)
 
-Opens the palette on ⌘K / Ctrl-K, anywhere on the page. Ctrl as well as ⌘, because half of every internal team is on Windows or Linux and a shortcut that silently does nothing there is worse than none.
+Opens the palette on ⌘K on a Mac and Ctrl-K everywhere else, from anywhere on the page, a search field included. Ctrl as well as ⌘, because half of every internal team is on Windows or Linux and a shortcut that silently does nothing there is worse than none.
 
 Types: `CommandGroup`, `CommandItem`, `CommandPaletteProps`
 
@@ -79,7 +80,7 @@ Types: `CommandGroup`, `CommandItem`, `CommandPaletteProps`
 
 | Key | What happens |
 | --- | --- |
-| Control+K or Meta+K | Opens the palette, when the page calls `useCommandShortcut`. |
+| Control+K or Meta+K | Opens the palette when the page calls `useCommandShortcut`: ⌘K on a Mac, Ctrl-K elsewhere. |
 | ArrowDown or ArrowUp | Moves the highlight, skipping disabled commands and wrapping at the ends. |
 | Enter | Runs the highlighted command and closes the palette. |
 | Escape | Closes the palette. |
@@ -94,7 +95,7 @@ Types: `CommandGroup`, `CommandItem`, `CommandPaletteProps`
 
 ### You handle
 
-- Call `useCommandShortcut` to bind ⌘K and Ctrl-K; the shortcuts shown on items are display only.
+- Call `useCommandShortcut` to bind ⌘K or Ctrl-K. Give a command a `hotkey` to bind it, print it and list it in the shortcuts dialog; `shortcut` is display only.
 - Write command labels as actions, “Start a new run”, and add `keywords` for the other words people use.
 
 ### Testing status
@@ -111,6 +112,7 @@ Types: `CommandGroup`, `CommandItem`, `CommandPaletteProps`
 - [Combobox](https://demogar.github.io/molaui/md/components-forms-combobox--overview.md)
 - [Menu](https://demogar.github.io/molaui/md/components-overlays-menu--overview.md)
 - [Field](https://demogar.github.io/molaui/md/components-forms-field--overview.md)
+- [Shortcuts dialog](https://demogar.github.io/molaui/md/components-overlays-shortcuts-dialog--overview.md)
 
 ### Pages that send readers here
 

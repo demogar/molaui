@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { useState } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 
+import { HotkeysProvider, useRegisteredHotkeys } from '../shortcuts'
 import { type CommandGroup, CommandPalette, filterCommands, useCommandShortcut } from './command'
 
 const make = (onSelect: () => void = vi.fn()): CommandGroup[] => [
@@ -131,12 +132,49 @@ describe('useCommandShortcut', () => {
     useCommandShortcut(onTrigger)
     return null
   }
-  it('fires on Ctrl-K and ⌘K', async () => {
-    const onTrigger = vi.fn()
-    render(<Probe onTrigger={onTrigger} />)
+  it('fires on ⌘K on a Mac and Ctrl-K elsewhere, each platform only its own', async () => {
+    const onMac = vi.fn()
+    const { unmount } = render(
+      <HotkeysProvider platform="apple">
+        <Probe onTrigger={onMac} />
+      </HotkeysProvider>,
+    )
+    await userEvent.keyboard('{Meta>}k{/Meta}')
+    // Ctrl-K deletes to the end of the line in a Mac text field: not ours to take.
+    await userEvent.keyboard('{Control>}k{/Control}')
+    expect(onMac).toHaveBeenCalledTimes(1)
+    unmount()
+
+    const elsewhere = vi.fn()
+    render(
+      <HotkeysProvider platform="other">
+        <Probe onTrigger={elsewhere} />
+      </HotkeysProvider>,
+    )
     await userEvent.keyboard('{Control>}k{/Control}')
     await userEvent.keyboard('{Meta>}k{/Meta}')
-    expect(onTrigger).toHaveBeenCalledTimes(2)
+    expect(elsewhere).toHaveBeenCalledTimes(1)
+  })
+
+  it('binds a command’s hotkey while the palette is closed, prints it for the platform and lists it', async () => {
+    const onSelect = vi.fn()
+    function Listed() {
+      return <output data-testid="listed">{useRegisteredHotkeys().map((e) => `${e.group}/${e.keys}/${e.label}`).join('|')}</output>
+    }
+    render(
+      <HotkeysProvider platform="apple">
+        <Probe onTrigger={() => {}} />
+        <CommandPalette
+          defaultOpen={false}
+          groups={[{ heading: 'Go to', items: [{ id: 'runs', label: 'Runs', hotkey: 'g r', onSelect }] }]}
+        />
+        <Listed />
+      </HotkeysProvider>,
+    )
+    await userEvent.keyboard('gr')
+    expect(onSelect).toHaveBeenCalledOnce()
+    expect(screen.getByTestId('listed')).toHaveTextContent('General/mod+k/Open the command palette|Go to/g r/Runs')
+    await userEvent.keyboard('{Meta>}k{/Meta}')
   })
 
   it('renders a repeated shortcut key twice without a duplicate React key', async () => {

@@ -74,6 +74,7 @@ export const WORDS: { group: string; words: Word[] }[] = [
         where: [
           { label: 'Toast close button', title: 'Components/Feedback/Toast' },
           { label: 'Callout with onDismiss', title: 'Components/Feedback/Callout' },
+          { label: 'Banner with onDismiss', title: 'Components/Feedback/Banner' },
         ],
         not: 'Not for a dialog the person opened themselves (Close).',
       },
@@ -88,6 +89,32 @@ export const WORDS: { group: string; words: Word[] }[] = [
         when: 'Abandons what the person started in this panel, changing nothing. Always beside a named action, never alone.',
         where: [{ label: 'Dialog footer, the default cancelLabel', title: 'Components/Overlays/Dialog' }],
         not: 'Not as the confirm of a destructive question; the confirm repeats the verb, “Delete run”.',
+      },
+    ],
+  },
+  {
+    group: 'Telling people something',
+    words: [
+      {
+        say: 'Notification',
+        when: 'An event the system reports. It is said once in a toast and kept in the notification centre, so both use the word.',
+        where: [
+          { label: '“Notifications, 2 unread” on the bell', title: 'Components/Feedback/Notification centre' },
+          { label: 'The toast region, and its F6 shortcut', title: 'Components/Feedback/Toast' },
+        ],
+        not: 'Not for a condition that is still true (Announcement).',
+      },
+      {
+        say: 'Announcement',
+        when: 'A condition of the whole application, for as long as it holds: maintenance, a read-only workspace, a dropped connection. The banner’s landmark name.',
+        where: [{ label: 'The Banner landmark, unless a label names its kind', title: 'Components/Feedback/Banner' }],
+        not: 'Not for something that has just happened (Notification). A condition of one region is a callout, named by its title.',
+      },
+      {
+        say: 'Mark all as read',
+        when: 'Clears the unread state of every notification. Nothing leaves the list.',
+        where: [{ label: 'Notification centre header', title: 'Components/Feedback/Notification centre' }],
+        not: 'Not Clear or Dismiss: the notifications stay where they were.',
       },
     ],
   },

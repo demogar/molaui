@@ -93,13 +93,13 @@
     }
   },
   "counts": {
-    "components": 61,
-    "parts": 155,
+    "components": 64,
+    "parts": 160,
     "aiComponents": 14,
     "aiParts": 25,
-    "pages": 75,
-    "stories": 345,
-    "summary": "61 components and 14 AI components (75 documented pages)"
+    "pages": 78,
+    "stories": 359,
+    "summary": "64 components and 14 AI components (78 documented pages)"
   },
   "tokens": {
     "source": "src/styles/tokens.css",
@@ -7576,6 +7576,233 @@
       ]
     },
     {
+      "title": "Components/Feedback/Banner",
+      "name": "Banner",
+      "layer": "components",
+      "category": "Feedback",
+      "docs": "https://demogar.github.io/molaui/?path=/docs/components-feedback-banner--overview",
+      "phase": "experimental",
+      "summary": "A strip across the top of the application for a condition of the whole app, for as long as it holds.",
+      "description": "A condition of the **whole application**, said once across the top of it, for as long as it holds: maintenance tonight, a read-only workspace, a dropped connection. Full bleed in the AppShell’s `banner` slot, above the top bar, so it pushes the frame down instead of covering the search. The tone is the wash and a `--bar-w` foot in the status colour, the edge whose one job is “the region a status owns”. It is a landmark named Announcement, read in order after the skip link; only a banner that appears mid-session asks to be announced, once and politely, with `announce`.",
+      "usage": {
+        "use": [
+          "Maintenance, an outage or a degraded service that affects every page.",
+          "A state of the whole workspace or account: read-only, a failed payment, a trial that ends soon.",
+          "A dropped connection, with announce, because it appeared during the session."
+        ],
+        "avoid": [
+          {
+            "when": "A condition of one page or panel.",
+            "use": "Components/Feedback/Callout"
+          },
+          {
+            "when": "Something that has just happened, such as a finished deploy.",
+            "use": "Components/Feedback/Toast"
+          },
+          {
+            "when": "An event the operator may want to find later.",
+            "use": "Components/Feedback/Notification centre"
+          },
+          {
+            "when": "A decision the person must make before going on.",
+            "use": "Components/Overlays/Dialog",
+            "label": "AlertDialog"
+          }
+        ],
+        "practices": [
+          {
+            "do": "Show one banner at a time, the most severe, in the AppShell banner slot.",
+            "dont": "Stack banners until the top bar sits halfway down the screen."
+          },
+          {
+            "do": "Pass announce only for a banner that appears during the session.",
+            "dont": "Announce a banner that is there when the page loads; it talks over the page’s own title."
+          }
+        ],
+        "content": [
+          "The title names the condition: “Scheduled maintenance”, “Read-only workspace”.",
+          "The message says when, and what it means for the work: “Runs started then wait in the queue.”",
+          "The action is a verb on the object: “Update card”, “View status”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves to the action and the Dismiss button, after the skip link and before the top bar."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Runs the action, or dismisses the banner."
+          }
+        ],
+        "handles": [
+          "Is a landmark named Announcement, or your `label`, so it can be found in a landmark list.",
+          "Says its tone in hidden words before the message, Warning, Error or Success, and hides the icon.",
+          "Says nothing on its own. With `announce`, says the message once, politely, from a status region that mounts empty and is filled a moment later.",
+          "Names the dismiss button “Dismiss”."
+        ],
+        "you": [
+          "Give each banner a `label` that names its kind when a page could show more than one.",
+          "Pass `announce` only for a banner that appears during the session.",
+          "Decide whether a dismissed banner comes back, and when."
+        ]
+      },
+      "anatomy": {
+        "slot": "banner",
+        "parts": [
+          {
+            "part": "root",
+            "name": "Strip",
+            "does": "Full bleed, the tone’s wash, with a heavy foot edge in the status colour: the region a status owns.",
+            "selector": "[data-slot=\"banner\"]"
+          },
+          {
+            "part": "icon",
+            "name": "Icon",
+            "does": "The tone’s glyph, so the tone is never colour alone. Hidden; the tone is also said in words.",
+            "selector": "[data-part=\"icon\"]"
+          },
+          {
+            "part": "message",
+            "name": "Message",
+            "does": "The condition and what it means for the work, in ink, never in the tone’s colour.",
+            "selector": "[data-part=\"message\"]"
+          },
+          {
+            "part": "title",
+            "name": "Title",
+            "does": "A few words in bold that name the condition.",
+            "selector": "[data-part=\"title\"]"
+          },
+          {
+            "part": "action",
+            "name": "Action",
+            "does": "One follow-up, a verb on the object.",
+            "selector": "[data-part=\"action\"]"
+          },
+          {
+            "part": "dismiss",
+            "name": "Dismiss",
+            "does": "Present only with onDismiss; the caller decides whether the banner comes back.",
+            "selector": "[data-part=\"dismiss\"]"
+          }
+        ]
+      },
+      "exports": [
+        {
+          "name": "Banner",
+          "kind": "component",
+          "source": "src/components/banner/banner.tsx",
+          "description": "`className`, `ref` and the rest of the DOM props go to the `<section>`, the strip itself.",
+          "variants": {
+            "tone": {
+              "values": [
+                "neutral",
+                "info",
+                "success",
+                "warn",
+                "danger"
+              ],
+              "default": "info"
+            }
+          },
+          "props": [
+            {
+              "name": "action",
+              "type": "ReactNode",
+              "required": false,
+              "description": "One follow-up, usually a `Button` at `size=\"sm\"` or a link: “View status”."
+            },
+            {
+              "name": "announce",
+              "type": "boolean",
+              "required": false,
+              "default": "false",
+              "description": "Say the message once, politely, when the banner appears. Only for a banner that appears during the session because something changed; one that is there when the page loads is read in order, and announcing it talks over the page's own title."
+            },
+            {
+              "name": "icon",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Replace the tone's icon, or `false` for none."
+            },
+            {
+              "name": "label",
+              "type": "string",
+              "required": false,
+              "default": "Announcement",
+              "description": "The landmark's name, “Announcement” by default. Name it for what it is when there is more than one kind: “Maintenance”."
+            },
+            {
+              "name": "onDismiss",
+              "type": "(() => void)",
+              "required": false,
+              "description": "Renders a Dismiss button. The caller owns whether the banner comes back, and when."
+            },
+            {
+              "name": "title",
+              "type": "ReactNode",
+              "required": false,
+              "description": "A few words in bold before the message: “Scheduled maintenance”."
+            },
+            {
+              "name": "tone",
+              "type": "\"neutral\" | \"info\" | \"success\" | \"warn\" | \"danger\"",
+              "required": false,
+              "description": "The status of the condition, carried by the wash, the foot edge and the icon; `info` by default. The message still says it in words."
+            }
+          ],
+          "forwards": {
+            "element": "<section data-slot=\"banner\">"
+          }
+        },
+        {
+          "name": "bannerVariants",
+          "kind": "function",
+          "source": "src/components/banner/banner.tsx",
+          "description": "A condition of the whole application, said once across the top of it: maintenance tonight, the workspace is read-only, the connection dropped."
+        },
+        {
+          "name": "BannerProps",
+          "kind": "type",
+          "source": "src/components/banner/banner.tsx"
+        },
+        {
+          "name": "BannerTone",
+          "kind": "type",
+          "source": "src/components/banner/banner.tsx"
+        }
+      ],
+      "stories": [
+        {
+          "name": "Announced",
+          "id": "components-feedback-banner--announced",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-banner--announced"
+        },
+        {
+          "name": "Default",
+          "id": "components-feedback-banner--default",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-banner--default"
+        },
+        {
+          "name": "Tones",
+          "id": "components-feedback-banner--tones",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-banner--tones"
+        },
+        {
+          "name": "WithAction",
+          "id": "components-feedback-banner--with-action",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-banner--with-action"
+        }
+      ]
+    },
+    {
       "title": "Components/Feedback/Callout",
       "name": "Callout",
       "layer": "components",
@@ -7595,6 +7822,10 @@
           {
             "when": "Something that has just happened, possibly elsewhere, such as a finished re-index.",
             "use": "Components/Feedback/Toast"
+          },
+          {
+            "when": "A condition of the whole application, such as maintenance tonight.",
+            "use": "Components/Feedback/Banner"
           },
           {
             "when": "A decision the person must make before going on.",
@@ -8102,6 +8333,283 @@
         "Patterns/Confirmation",
         "Patterns/Empty states",
         "Patterns/List and detail"
+      ]
+    },
+    {
+      "title": "Components/Feedback/Notification centre",
+      "name": "Notification centre",
+      "layer": "components",
+      "category": "Feedback",
+      "docs": "https://demogar.github.io/molaui/?path=/docs/components-feedback-notification-centre--overview",
+      "phase": "experimental",
+      "summary": "The record of what happened: a bell with an unread count, and the notifications under it, kept after their toasts have gone.",
+      "description": "Where a notification goes after its toast has gone. **The toast is the moment, the centre is the record**: the same event usually goes to both, the toast to say it now and the centre to find it later. The centre never says it now: no live region, and the unread count changes silently, because the toast already announced the event. The count is in the bell’s name, “Notifications, 2 unread”, heard when someone goes to the bell. Unread is an ink edge, a semibold title and the word New, never a tint alone. The list is a prop: the page owns where notifications come from and whether “read” is saved.",
+      "usage": {
+        "use": [
+          "Events the operator may have missed: a failed run, an approval waiting, a view shared with them.",
+          "The other half of a toast: send the same event to both, the toast to say it now and the centre to find it later.",
+          "A full notifications page, with NotificationList on its own."
+        ],
+        "avoid": [
+          {
+            "when": "Saying an event now, where the operator is looking.",
+            "use": "Components/Feedback/Toast"
+          },
+          {
+            "when": "A condition of the whole application that is still true.",
+            "use": "Components/Feedback/Banner"
+          },
+          {
+            "when": "The history of one object, such as a run’s steps or a deploy log.",
+            "use": "Components/Data display/Timeline"
+          }
+        ],
+        "practices": [
+          {
+            "do": "Add the event to the centre when you raise its toast.",
+            "dont": "Raise a toast for an event that matters later and keep no record of it."
+          },
+          {
+            "do": "Let the unread count change silently; the bell’s name carries it.",
+            "dont": "Announce each new notification from the centre as well; the toast already said it."
+          }
+        ],
+        "content": [
+          "The title says what happened, in the past tense, standing on its own: “Re-index failed for Billing FAQ”.",
+          "Times are relative while recent, “4 min ago”, and absolute after a day, “Yesterday 16:20”.",
+          "The action is one verb: “View run”, “Review”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "On the bell, opens the list and moves focus into it."
+          },
+          {
+            "keys": [
+              "Tab",
+              "Shift+Tab"
+            ],
+            "action": "Moves through Mark all as read and each notification’s action."
+          },
+          {
+            "keys": [
+              "Escape"
+            ],
+            "action": "Closes the list and returns focus to the bell."
+          }
+        ],
+        "handles": [
+          "Names the bell “Notifications”, with the unread count when there is one: “Notifications, 2 unread”.",
+          "Changes the count silently, with no live region: the toast that raised the event already announced it.",
+          "Renders a named list; each unread item starts with a hidden “Unread.” and its tone in words.",
+          "Shows unread as an ink edge, a semibold title and the word New, never colour alone.",
+          "Keeps focus in the popover when Mark all as read, its own button, goes away."
+        ],
+        "you": [
+          "Raise a toast for an event that needs saying now; the centre will not say it.",
+          "Write titles that stand on their own, away from the page they came from.",
+          "Save the read state if it should survive a reload."
+        ]
+      },
+      "anatomy": {
+        "slot": "notification-list",
+        "parts": [
+          {
+            "part": "item",
+            "name": "Notification",
+            "does": "One event. Unread, it carries a heavy ink edge at its start.",
+            "selector": "[data-part=\"item\"]"
+          },
+          {
+            "part": "tone",
+            "name": "Tone mark",
+            "does": "The toast’s own cut square, so the record is recognisably the toast it came from.",
+            "selector": "[data-part=\"tone\"]"
+          },
+          {
+            "part": "title",
+            "name": "Title",
+            "does": "What happened, in the past tense; semibold while unread.",
+            "selector": "[data-part=\"title\"]"
+          },
+          {
+            "part": "unread",
+            "name": "New",
+            "does": "The word that says unread, beside the edge and the weight, so unread is never colour alone.",
+            "selector": "[data-part=\"unread\"]"
+          },
+          {
+            "part": "time",
+            "name": "Time",
+            "does": "When, as a person reads it, in a time element with the machine date.",
+            "selector": "[data-part=\"time\"]"
+          },
+          {
+            "part": "action",
+            "name": "Action",
+            "does": "One follow-up; running it marks the notification read.",
+            "selector": "[data-part=\"action\"]"
+          }
+        ]
+      },
+      "exports": [
+        {
+          "name": "NotificationCentre",
+          "kind": "component",
+          "source": "src/components/notification-centre/notification-centre.tsx",
+          "description": "The bell for the top bar's `end`, and the list in a popover under it. `className`, `ref` and the rest go to the popover popup.",
+          "props": [
+            {
+              "name": "notifications",
+              "type": "NotificationItem[]",
+              "required": true,
+              "description": "Newest first."
+            },
+            {
+              "name": "defaultOpen",
+              "type": "boolean",
+              "required": false,
+              "default": "false",
+              "description": "Open on first render."
+            },
+            {
+              "name": "empty",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Shown when there is nothing. Defaults to “No notifications yet.”"
+            },
+            {
+              "name": "footer",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Under the list: usually a link to a full notifications page, “View all”."
+            },
+            {
+              "name": "label",
+              "type": "string",
+              "required": false,
+              "default": "Notifications",
+              "description": "The popover's title and the bell's name, “Notifications” by default."
+            },
+            {
+              "name": "onMarkAllRead",
+              "type": "(() => void)",
+              "required": false,
+              "description": "Called when the operator presses Mark all as read. The button shows only while something is unread."
+            },
+            {
+              "name": "onMarkRead",
+              "type": "((id: string) => void)",
+              "required": false,
+              "description": "Called with an item's id when its action runs."
+            },
+            {
+              "name": "onOpenChange",
+              "type": "((open: boolean) => void)",
+              "required": false,
+              "description": "Called when the popover opens or closes."
+            },
+            {
+              "name": "open",
+              "type": "boolean",
+              "required": false,
+              "description": "Whether the popover is open, when the page owns that."
+            }
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"notification-centre\">"
+          }
+        },
+        {
+          "name": "NotificationList",
+          "kind": "component",
+          "source": "src/components/notification-centre/notification-centre.tsx",
+          "description": "The list on its own, for a full notifications page or a panel the page places itself. `NotificationCentre` puts it in a popover under a bell. `className`, `ref` and the rest go to the wrapping `<div>`.",
+          "props": [
+            {
+              "name": "notifications",
+              "type": "NotificationItem[]",
+              "required": true,
+              "description": "Newest first."
+            },
+            {
+              "name": "empty",
+              "type": "ReactNode",
+              "required": false,
+              "default": "No notifications yet.",
+              "description": "Shown when there is nothing. Defaults to “No notifications yet.”"
+            },
+            {
+              "name": "label",
+              "type": "string",
+              "required": false,
+              "default": "Notifications",
+              "description": "The list's accessible name, “Notifications” by default."
+            },
+            {
+              "name": "onMarkRead",
+              "type": "((id: string) => void)",
+              "required": false,
+              "description": "Called with an item's id when its action runs."
+            }
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"notification-list\">"
+          }
+        },
+        {
+          "name": "NotificationCentreProps",
+          "kind": "type",
+          "source": "src/components/notification-centre/notification-centre.tsx"
+        },
+        {
+          "name": "NotificationItem",
+          "kind": "type",
+          "source": "src/components/notification-centre/notification-centre.tsx"
+        },
+        {
+          "name": "NotificationListProps",
+          "kind": "type",
+          "source": "src/components/notification-centre/notification-centre.tsx"
+        },
+        {
+          "name": "NotificationTone",
+          "kind": "type",
+          "source": "src/components/notification-centre/notification-centre.tsx",
+          "description": "The status of a notification: the toast tones, without `running` (a record is of something that has happened)."
+        }
+      ],
+      "stories": [
+        {
+          "name": "AllRead",
+          "id": "components-feedback-notification-centre--all-read",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-notification-centre--all-read"
+        },
+        {
+          "name": "Default",
+          "id": "components-feedback-notification-centre--default",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-notification-centre--default"
+        },
+        {
+          "name": "Empty",
+          "id": "components-feedback-notification-centre--empty",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-notification-centre--empty"
+        },
+        {
+          "name": "List",
+          "id": "components-feedback-notification-centre--list",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-notification-centre--list"
+        },
+        {
+          "name": "WithToasts",
+          "id": "components-feedback-notification-centre--with-toasts",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-notification-centre--with-toasts"
+        }
       ]
     },
     {
@@ -8665,6 +9173,14 @@
           {
             "when": "A condition of the page that stays true, such as read-only mode.",
             "use": "Components/Feedback/Callout"
+          },
+          {
+            "when": "A condition of the whole application, such as a dropped connection.",
+            "use": "Components/Feedback/Banner"
+          },
+          {
+            "when": "Keeping the event to find later; send it to the notification centre as well.",
+            "use": "Components/Feedback/Notification centre"
           },
           {
             "when": "Anything that needs a decision, or more than one action.",
@@ -13585,7 +14101,8 @@
         "use": [
           "The outer frame of an application with navigation, search and a work area.",
           "Navigation with sections, a current page and counts, through Sidebar, NavSection and NavItem.",
-          "The product mark, search and account controls, through Topbar."
+          "The product mark, search and account controls, through Topbar.",
+          "A condition of the whole application above the top bar, through the banner slot and a Banner."
         ],
         "avoid": [
           {
@@ -13653,7 +14170,8 @@
         ],
         "you": [
           "Give the sidebar a `label` that names the navigation.",
-          "Give each page one `h1`, usually through `PageHeader`."
+          "Give each page one `h1`, usually through `PageHeader`.",
+          "Put a condition of the whole application in the `banner` slot, as a `Banner`, rather than above the shell."
         ]
       },
       "exports": [
@@ -13673,6 +14191,12 @@
               "type": "ReactNode",
               "required": true,
               "description": "The bar across the top, usually a `Topbar`. It stays put while `<main>` scrolls, so the switcher and search are never lost."
+            },
+            {
+              "name": "banner",
+              "type": "ReactNode",
+              "required": false,
+              "description": "A condition of the whole application, usually a `Banner`: drawn full width above the top bar, so it pushes the frame down rather than covering it. After the skip link in reading order, so the way to the content stays first."
             },
             {
               "name": "defaultSidebarCollapsed",
@@ -13889,6 +14413,11 @@
           "name": "Mobile",
           "id": "components-layout-app-shell--mobile",
           "url": "https://demogar.github.io/molaui/?path=/story/components-layout-app-shell--mobile"
+        },
+        {
+          "name": "WithNotices",
+          "id": "components-layout-app-shell--with-notices",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-layout-app-shell--with-notices"
         }
       ],
       "usedIn": [
@@ -16682,6 +17211,10 @@
             "when": "Filtering the list on the current page.",
             "use": "Components/Forms/Field",
             "label": "SearchInput"
+          },
+          {
+            "when": "Listing every shortcut the page binds.",
+            "use": "Components/Overlays/Shortcuts dialog"
           }
         ],
         "practices": [
@@ -16706,7 +17239,7 @@
               "Control+K",
               "Meta+K"
             ],
-            "action": "Opens the palette, when the page calls `useCommandShortcut`."
+            "action": "Opens the palette when the page calls `useCommandShortcut`: ⌘K on a Mac, Ctrl-K elsewhere."
           },
           {
             "keys": [
@@ -16736,7 +17269,7 @@
           "Icons and the key hints in the footer are hidden from assistive technology; the status region speaks the count instead."
         ],
         "you": [
-          "Call `useCommandShortcut` to bind ⌘K and Ctrl-K; the shortcuts shown on items are display only.",
+          "Call `useCommandShortcut` to bind ⌘K or Ctrl-K. Give a command a `hotkey` to bind it, print it and list it in the shortcuts dialog; `shortcut` is display only.",
           "Write command labels as actions, “Start a new run”, and add `keywords` for the other words people use."
         ]
       },
@@ -16813,7 +17346,7 @@
           "name": "useCommandShortcut",
           "kind": "hook",
           "source": "src/components/command/command.tsx",
-          "description": "Opens the palette on ⌘K / Ctrl-K, anywhere on the page. Ctrl as well as ⌘, because half of every internal team is on Windows or Linux and a shortcut that silently does nothing there is worse than none."
+          "description": "Opens the palette on ⌘K on a Mac and Ctrl-K everywhere else, from anywhere on the page, a search field included. Ctrl as well as ⌘, because half of every internal team is on Windows or Linux and a shortcut that silently does nothing there is worse than none."
         },
         {
           "name": "CommandGroup",
@@ -18101,6 +18634,290 @@
           "name": "Plain",
           "id": "components-overlays-popover--plain",
           "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-popover--plain"
+        }
+      ]
+    },
+    {
+      "title": "Components/Overlays/Shortcuts dialog",
+      "name": "Shortcuts dialog",
+      "layer": "components",
+      "category": "Overlays",
+      "docs": "https://demogar.github.io/molaui/?path=/docs/components-overlays-shortcuts-dialog--overview",
+      "phase": "experimental",
+      "summary": "Every keyboard shortcut the page binds, listed from one registry and opened with ?; useHotkeys binds and registers each one.",
+      "description": "Every keyboard shortcut the page binds, opened with `?`. It lists the `HotkeysProvider` registry and nothing else: each row is a live `useHotkeys` binding, printed from the same string the listener matches, so the list cannot drift from the keys. `mod` is ⌘ on a Mac and Ctrl elsewhere, each platform’s own convention. The palette’s ⌘K, its commands’ `hotkey`s and the toast region’s F6 register themselves. Keys are keycaps for the eye and words for a screen reader: “Control K”, “G, then E”. A plain-key shortcut never fires while someone is typing, or mid-composition in an input method.",
+      "usage": {
+        "use": [
+          "Listing the shortcuts of a tool people use all day, from a help button and the ? key.",
+          "Binding a page-wide shortcut with useHotkeys, so it is listed in its own words and printed for the platform.",
+          "Giving a command palette entry a hotkey, so it runs without opening the palette."
+        ],
+        "avoid": [
+          {
+            "when": "Finding and running a command by name.",
+            "use": "Components/Overlays/Command palette"
+          },
+          {
+            "when": "Showing one key beside the control it triggers.",
+            "use": "Components/Overlays/Tooltip"
+          },
+          {
+            "when": "Writing a key in running text.",
+            "use": "Components/Typography/Kbd"
+          }
+        ],
+        "practices": [
+          {
+            "do": "Use mod for a cross-platform chord: ⌘ on a Mac, Ctrl elsewhere.",
+            "dont": "Bind Ctrl-K on a Mac, where it deletes to the end of the line in every text field."
+          },
+          {
+            "do": "Use a sequence such as g r for navigation, and leave useHotkeys to keep plain keys out of text fields.",
+            "dont": "Pass inFields to a plain-key shortcut; it will eat the letter someone was typing."
+          }
+        ],
+        "content": [
+          "Labels start with a verb and name the object: “Open the command palette”, “Go to runs”.",
+          "Groups are short nouns: General, Navigation, Runs."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "?"
+            ],
+            "action": "Opens the dialog, or closes it, from anywhere but a text field."
+          },
+          {
+            "keys": [
+              "Tab",
+              "Shift+Tab"
+            ],
+            "action": "Moves between the dialog’s controls; focus stays inside."
+          },
+          {
+            "keys": [
+              "Escape"
+            ],
+            "action": "Closes the dialog and returns focus to where it was."
+          }
+        ],
+        "handles": [
+          "Lists only the shortcuts bound under the `HotkeysProvider`, so the list cannot drift from the keys.",
+          "Prints each key for the platform, ⌘ on a Mac and Ctrl elsewhere, and hides the keycaps behind the same keys in words: “Control K”, “G, then E”.",
+          "`useHotkeys` ignores plain keys typed in a text field, every key during IME composition, key repeat and keys a component has already handled.",
+          "It is a modal Base UI Dialog, titled “Keyboard shortcuts”, with a Close button."
+        ],
+        "you": [
+          "Mount `HotkeysProvider` once near the root, around `ToastProvider`.",
+          "Give every `useHotkeys` call a `label` that starts with a verb.",
+          "Use `mod` for cross-platform chords, and sequences rather than single letters for navigation."
+        ]
+      },
+      "exports": [
+        {
+          "name": "ShortcutsDialog",
+          "kind": "component",
+          "source": "src/components/shortcuts/shortcuts-dialog.tsx",
+          "description": "`className`, `ref` and the rest go to the dialog popup, as on `DialogContent`.",
+          "props": [
+            {
+              "name": "band",
+              "type": "DialogBand",
+              "required": false,
+              "description": "The layer revealed in the top seam.",
+              "values": [
+                "rojo",
+                "anil",
+                "verde",
+                "oro"
+              ]
+            },
+            {
+              "name": "className",
+              "type": "string",
+              "required": false,
+              "description": "Classes for the popup, merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute."
+            },
+            {
+              "name": "defaultOpen",
+              "type": "boolean",
+              "required": false,
+              "default": "false",
+              "description": "Open on first render."
+            },
+            {
+              "name": "description",
+              "type": "ReactNode",
+              "required": false,
+              "description": "A line under the title, read as the dialog's accessible description when it opens. Say what the dialog is for; leave instructions to the body."
+            },
+            {
+              "name": "footer",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Action row under the body: right-aligned, or stacked full width with the last action on top when the row is under 24rem. Usually a `ghost` cancel and one primary."
+            },
+            {
+              "name": "hideClose",
+              "type": "boolean",
+              "required": false,
+              "description": "Hide the corner close button. Only when the footer carries an explicit way out."
+            },
+            {
+              "name": "hotkey",
+              "type": "string | false",
+              "required": false,
+              "default": "?",
+              "description": "The key that opens it, listed with the rest; `?` by default. `false` binds none."
+            },
+            {
+              "name": "onOpenChange",
+              "type": "((open: boolean) => void)",
+              "required": false,
+              "description": "Called when the dialog opens or closes: the hotkey, the trigger, Escape, Close."
+            },
+            {
+              "name": "open",
+              "type": "boolean",
+              "required": false,
+              "description": "Whether the dialog is open, when the page owns that."
+            },
+            {
+              "name": "size",
+              "type": "\"sm\" | \"md\" | \"lg\"",
+              "required": false,
+              "default": "sm",
+              "description": "The popup's maximum width: `sm` for a short question, `md` (default) for a form, `lg` for a table or a long review."
+            },
+            {
+              "name": "title",
+              "type": "ReactNode",
+              "required": false,
+              "default": "Keyboard shortcuts",
+              "description": "The dialog's title and accessible name. Defaults to “Keyboard shortcuts”."
+            },
+            {
+              "name": "trigger",
+              "type": "ReactElement<unknown, string | JSXElementConstructor<any>>",
+              "required": false,
+              "description": "Rendered as the button that opens the dialog, e.g. a help `IconButton` in the top bar."
+            }
+          ],
+          "inherits": [
+            "DialogPopupProps"
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"shortcuts-dialog\">"
+          }
+        },
+        {
+          "name": "HotkeysProvider",
+          "kind": "component",
+          "source": "src/components/shortcuts/use-hotkeys.tsx",
+          "description": "Mount once near the root, around `ToastProvider`, so the toast region's F6 is listed too. Renders no element.",
+          "props": [
+            {
+              "name": "platform",
+              "type": "HotkeyPlatform",
+              "required": false,
+              "description": "Which modifier `mod` means: `apple` for ⌘, `other` for Ctrl. Detected from the browser by default; set it to pin a story, a test, or a server render.",
+              "values": [
+                "other",
+                "apple"
+              ]
+            }
+          ],
+          "forwards": {
+            "element": null
+          }
+        },
+        {
+          "name": "describeHotkey",
+          "kind": "function",
+          "source": "src/components/shortcuts/hotkeys.ts",
+          "description": "The same keys in words, for a screen reader: \"Command K\", \"G, then D\". A glyph like ⌘ is read as \"place of interest sign\", or not at all."
+        },
+        {
+          "name": "formatHotkey",
+          "kind": "function",
+          "source": "src/components/shortcuts/hotkeys.ts",
+          "description": "The keys as a keyboard prints them, one array per step: `mod+k` is `[['⌘', 'K']]` on a Mac and `[['Ctrl', 'K']]` elsewhere. Modifiers in each platform's own order (⌃⌥⇧⌘ on a Mac, Ctrl+Alt+Shift elsewhere). Shift is left off a symbol that already needs it: `?` is printed `?`, not `⇧ ?`."
+        },
+        {
+          "name": "HotkeyPlatform",
+          "kind": "type",
+          "source": "src/components/shortcuts/hotkeys.ts",
+          "description": "The grammar of a hotkey, and the three questions every keydown has to answer before it runs one: does it match, is the person typing, and how is it written on this platform."
+        },
+        {
+          "name": "ShortcutsDialogProps",
+          "kind": "type",
+          "source": "src/components/shortcuts/shortcuts-dialog.tsx",
+          "description": "Every keyboard shortcut the page binds, in one modal list, opened with `?`."
+        },
+        {
+          "name": "useHotkeyKeys",
+          "kind": "hook",
+          "source": "src/components/shortcuts/use-hotkeys.tsx",
+          "description": "The keys of a binding as this platform prints them, flattened: `['⌘', 'K']` on a Mac, `['Ctrl', 'K']` elsewhere. For the display-only `shortcut` props on `Tooltip`, `MenuItem` and `SearchInput`, so the hint and the binding are one string."
+        },
+        {
+          "name": "useHotkeyPlatform",
+          "kind": "hook",
+          "source": "src/components/shortcuts/use-hotkeys.tsx",
+          "description": "The platform the nearest provider pins, or the browser's. Until hydration it is `other`, the answer a server can give, so the first client render matches the server's HTML and a Mac swaps Ctrl for ⌘ a frame later rather than failing hydration."
+        },
+        {
+          "name": "useHotkeys",
+          "kind": "hook",
+          "source": "src/components/shortcuts/use-hotkeys.tsx",
+          "description": "Bind `keys` (see hotkeys.ts for the grammar) to `handler` on the window, and list it under the nearest `HotkeysProvider`. Pass `null` to list a key something else already binds."
+        },
+        {
+          "name": "useRegisteredHotkeys",
+          "kind": "hook",
+          "source": "src/components/shortcuts/use-hotkeys.tsx",
+          "description": "Every shortcut bound under the nearest provider, in the order they were bound. Empty without one."
+        },
+        {
+          "name": "HotkeysProviderProps",
+          "kind": "type",
+          "source": "src/components/shortcuts/use-hotkeys.tsx"
+        },
+        {
+          "name": "RegisteredHotkey",
+          "kind": "type",
+          "source": "src/components/shortcuts/use-hotkeys.tsx",
+          "description": "One registry of the page's keyboard shortcuts, and the hook that binds them."
+        },
+        {
+          "name": "UseHotkeysOptions",
+          "kind": "type",
+          "source": "src/components/shortcuts/use-hotkeys.tsx"
+        }
+      ],
+      "stories": [
+        {
+          "name": "Default",
+          "id": "components-overlays-shortcuts-dialog--default",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-shortcuts-dialog--default"
+        },
+        {
+          "name": "NothingBound",
+          "id": "components-overlays-shortcuts-dialog--nothing-bound",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-shortcuts-dialog--nothing-bound"
+        },
+        {
+          "name": "OnAMac",
+          "id": "components-overlays-shortcuts-dialog--on-a-mac",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-shortcuts-dialog--on-a-mac"
+        },
+        {
+          "name": "TypingIsSafe",
+          "id": "components-overlays-shortcuts-dialog--typing-is-safe",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-shortcuts-dialog--typing-is-safe"
         }
       ]
     },

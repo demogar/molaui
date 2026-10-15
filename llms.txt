@@ -2,7 +2,7 @@
 
 > A design system cut like a mola: flat layers, hard keylines, revealed bands. React components for dense internal tools and AI-native interfaces. Published as `@demogar/mola-ui`: React 19, Base UI for behaviour, Tailwind v4 for styling, design tokens as CSS custom properties.
 
-61 components and 14 AI components (75 documented pages).
+64 components and 14 AI components (78 documented pages).
 
 Install and set up:
 
@@ -108,8 +108,10 @@ An MCP server with the same data ships in the package: `npx -y --package @demoga
 ## Feedback
 
 - [Badge](https://demogar.github.io/molaui/?path=/docs/components-feedback-badge--overview) ([Markdown](https://demogar.github.io/molaui/md/components-feedback-badge--overview.md)): A small status mark in one of the system’s tones; StatusDot for a square dot beside a label; RecommendationBadge for an editorial scale.
+- [Banner](https://demogar.github.io/molaui/?path=/docs/components-feedback-banner--overview) ([Markdown](https://demogar.github.io/molaui/md/components-feedback-banner--overview.md)) (Experimental): A strip across the top of the application for a condition of the whole app, for as long as it holds.
 - [Callout](https://demogar.github.io/molaui/?path=/docs/components-feedback-callout--overview) ([Markdown](https://demogar.github.io/molaui/md/components-feedback-callout--overview.md)): A message that belongs to a region of the page, with a tone, an optional title and actions.
 - [Empty state](https://demogar.github.io/molaui/?path=/docs/components-feedback-empty-state--overview) ([Markdown](https://demogar.github.io/molaui/md/components-feedback-empty-state--overview.md)): What a panel shows when it has nothing to show, in four variants: empty, no results, error and no permission.
+- [Notification centre](https://demogar.github.io/molaui/?path=/docs/components-feedback-notification-centre--overview) ([Markdown](https://demogar.github.io/molaui/md/components-feedback-notification-centre--overview.md)) (Experimental): The record of what happened: a bell with an unread count, and the notifications under it, kept after their toasts have gone.
 - [Placeholder](https://demogar.github.io/molaui/?path=/docs/components-feedback-placeholder--overview) ([Markdown](https://demogar.github.io/molaui/md/components-feedback-placeholder--overview.md)): A slot for something that does not exist yet, such as a chart with no data, announced as one image.
 - [Progress](https://demogar.github.io/molaui/?path=/docs/components-feedback-progress--overview) ([Markdown](https://demogar.github.io/molaui/md/components-feedback-progress--overview.md)): Progress for work moving toward done, which may be indeterminate; Meter for a reading inside a known range, with thresholds.
 - [Skeleton](https://demogar.github.io/molaui/?path=/docs/components-feedback-skeleton--overview) ([Markdown](https://demogar.github.io/molaui/md/components-feedback-skeleton--overview.md)): Bones in the shape of content that has not arrived, with SkeletonGroup to mark the region busy and say once what is loading.
@@ -161,6 +163,7 @@ An MCP server with the same data ships in the package: `npx -y --package @demoga
 - [Drawer](https://demogar.github.io/molaui/?path=/docs/components-overlays-drawer--overview) ([Markdown](https://demogar.github.io/molaui/md/components-overlays-drawer--overview.md)): A panel that slides in from an edge: details beside a list, filters, or quick actions in a bottom sheet.
 - [Menu](https://demogar.github.io/molaui/?path=/docs/components-overlays-menu--overview) ([Markdown](https://demogar.github.io/molaui/md/components-overlays-menu--overview.md)): Actions on a thing that do not each deserve a button, with checkbox and radio items, submenus and shortcuts.
 - [Popover](https://demogar.github.io/molaui/?path=/docs/components-overlays-popover--overview) ([Markdown](https://demogar.github.io/molaui/md/components-overlays-popover--overview.md)): A non-modal panel anchored to the control that opened it.
+- [Shortcuts dialog](https://demogar.github.io/molaui/?path=/docs/components-overlays-shortcuts-dialog--overview) ([Markdown](https://demogar.github.io/molaui/md/components-overlays-shortcuts-dialog--overview.md)) (Experimental): Every keyboard shortcut the page binds, listed from one registry and opened with ?; useHotkeys binds and registers each one.
 - [Tooltip](https://demogar.github.io/molaui/?path=/docs/components-overlays-tooltip--overview) ([Markdown](https://demogar.github.io/molaui/md/components-overlays-tooltip--overview.md)): A short label on hover or focus, with an optional keyboard shortcut.
 
 ## Typography

@@ -22,6 +22,7 @@ A message that belongs to a region of the page rather than to a moment. Tone is 
 ### When not to
 
 - Something that has just happened, possibly elsewhere, such as a finished re-index. Use [Toast](https://demogar.github.io/molaui/md/components-feedback-toast--overview.md).
+- A condition of the whole application, such as maintenance tonight. Use [Banner](https://demogar.github.io/molaui/md/components-feedback-banner--overview.md).
 - A decision the person must make before going on. Use [AlertDialog](https://demogar.github.io/molaui/md/components-overlays-dialog--overview.md).
 - A panel with nothing to show. Use [Empty state](https://demogar.github.io/molaui/md/components-feedback-empty-state--overview.md).
 - A short status on a row. Use [Badge](https://demogar.github.io/molaui/md/components-feedback-badge--overview.md).
@@ -122,6 +123,7 @@ Types: `CalloutProps`, `CalloutTone`, `CalloutVariant`
 ### Use instead, when it fits better
 
 - [Toast](https://demogar.github.io/molaui/md/components-feedback-toast--overview.md)
+- [Banner](https://demogar.github.io/molaui/md/components-feedback-banner--overview.md)
 - [Dialog](https://demogar.github.io/molaui/md/components-overlays-dialog--overview.md)
 - [Empty state](https://demogar.github.io/molaui/md/components-feedback-empty-state--overview.md)
 - [Badge](https://demogar.github.io/molaui/md/components-feedback-badge--overview.md)

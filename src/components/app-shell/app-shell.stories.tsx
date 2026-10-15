@@ -1,8 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { Download, Play, RefreshCw, SlidersHorizontal } from 'lucide-react'
+import { CircleHelp, Download, LifeBuoy, ListTree, Play, RefreshCw, SlidersHorizontal } from 'lucide-react'
+import * as React from 'react'
 
+import { Avatar } from '../avatar'
 import { Badge } from '../badge'
-import { Button } from '../button'
+import { Banner } from '../banner'
+import { Button, IconButton } from '../button'
+import { type CommandGroup, CommandPalette, useCommandShortcut } from '../command'
+import { NotificationCentre } from '../notification-centre'
+import { cayucoNotifications } from '../notification-centre/_story-data/notifications'
+import { HotkeysProvider, ShortcutsDialog, useHotkeyKeys, useHotkeyPlatform, useHotkeys } from '../shortcuts'
+import { ToastProvider, useToast } from '../toast'
 import { Stat, StatGroup } from '../stat'
 import { DataTable, type DataTableColumn } from '../table'
 import { type AgentRun, formatDuration, formatRelative, makeAgentRuns } from '../table/agent-runs.fixture'
@@ -192,6 +200,92 @@ export const Mobile: Story = {
     docs: {
       description: {
         story: 'Under 920px the rail is gone and the menu button opens the same sidebar as a sheet. Choosing a destination closes it.',
+      },
+    },
+  },
+}
+
+const paletteGroups: CommandGroup[] = [
+  {
+    heading: 'Go to',
+    items: [
+      { id: 'runs', label: 'Runs', icon: <ListTree />, hotkey: 'g r', onSelect: () => {} },
+      { id: 'escalations', label: 'Escalations', icon: <LifeBuoy />, hotkey: 'g e', onSelect: () => {} },
+    ],
+  },
+]
+
+function NoticesShell() {
+  const toast = useToast()
+  const [palette, setPalette] = React.useState(false)
+  const [items, setItems] = React.useState(() => cayucoNotifications())
+  const [maintenance, setMaintenance] = React.useState(true)
+  useCommandShortcut(() => setPalette((o) => !o))
+  const keys = useHotkeyKeys('mod+k')
+  // ⌘K reads as one glyph pair; Ctrl+K needs the plus to be read as a chord.
+  const shortcut = keys.join(useHotkeyPlatform() === 'apple' ? '' : '+')
+  useHotkeys(
+    'shift+f',
+    () => {
+      const title = 'Re-index failed for Refund policy'
+      toast.danger({ title, description: 'Source returned 503 · retrying in 30s' })
+      setItems((all) => [{ id: `n${all.length + 1}`, tone: 'danger', title, time: 'Just now' }, ...all])
+    },
+    { label: 'Simulate a failed re-index', group: 'Demo' },
+  )
+  return (
+    <AppShell
+      banner={
+        maintenance ? (
+          <Banner tone="warn" title="Scheduled maintenance" onDismiss={() => setMaintenance(false)}>
+            Saturday 18 October, 02:00–03:00 UTC. Runs started then wait in the queue.
+          </Banner>
+        ) : null
+      }
+      topbar={
+        <CayucoTopbar
+          search={{ shortcut, onClick: () => setPalette(true) }}
+          end={
+            <>
+              <ShortcutsDialog
+                trigger={
+                  <IconButton label="Keyboard shortcuts" variant="ghost" size="sm" className="max-sm:hidden">
+                    <CircleHelp />
+                  </IconButton>
+                }
+              />
+              <NotificationCentre
+                notifications={items}
+                onMarkRead={(id) => setItems((all) => all.map((n) => (n.id === id ? { ...n, read: true } : n)))}
+                onMarkAllRead={() => setItems((all) => all.map((n) => ({ ...n, read: true })))}
+              />
+              <Avatar name="Ana Pérez" size="sm" className="ms-1" />
+            </>
+          }
+        />
+      }
+      sidebar={<CayucoSidebar />}
+    >
+      <CommandPalette open={palette} onOpenChange={setPalette} groups={paletteGroups} />
+      <RunsPage />
+    </AppShell>
+  )
+}
+
+export const WithNotices: Story = {
+  args: { topbar: null, sidebar: null, children: null },
+  render: () => (
+    <HotkeysProvider>
+      <ToastProvider>
+        <NoticesShell />
+      </ToastProvider>
+    </HotkeysProvider>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The shell’s three kinds of notice, each in its place. The **banner** is a condition of the whole app, above the top bar. A **toast** is an event, said once (press ⇧F to fail a re-index). The **notification centre** under the bell keeps that event after the toast has gone, and its count changes without a word. The `?` key, or the help button, lists every shortcut bound on the page from one registry: the palette’s ⌘K or Ctrl-K, its commands’ G sequences, the toast region’s F6, and the page’s own.',
       },
     },
   },

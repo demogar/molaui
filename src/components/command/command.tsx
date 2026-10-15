@@ -6,6 +6,8 @@ import * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { useControllable } from '../../lib/use-controllable'
+import { formatHotkey } from '../shortcuts/hotkeys'
+import { useHotkeyPlatform, useHotkeys } from '../shortcuts/use-hotkeys'
 import { Kbd } from '../typography'
 
 /**
@@ -44,7 +46,14 @@ export interface CommandItem {
   label: string
   description?: string
   icon?: React.ReactNode
-  /** Keys shown at the end of the row: `['⌘', 'R']`. Display only — bind them yourself. */
+  /**
+   * A shortcut that runs this command without opening the palette, in
+   * `useHotkeys` grammar: `g r`, `mod+shift+p`. Bound while the palette is
+   * mounted, printed at the end of the row for this platform, and listed in
+   * the shortcuts dialog under the item's group.
+   */
+  hotkey?: string
+  /** Keys shown at the end of the row: `['⌘', 'R']`. Display only, for a key bound elsewhere; prefer `hotkey`, which binds and prints the same string. */
   shortcut?: string[]
   /** Extra words this item answers to: synonyms, ids. Not displayed. */
   keywords?: string[]
@@ -76,25 +85,31 @@ export function filterCommands(groups: CommandGroup[], query: string): CommandGr
 }
 
 /**
- * Opens the palette on ⌘K / Ctrl-K, anywhere on the page. Ctrl as well as ⌘,
- * because half of every internal team is on Windows or Linux and a shortcut
- * that silently does nothing there is worse than none.
+ * Opens the palette on ⌘K on a Mac and Ctrl-K everywhere else, from anywhere
+ * on the page, a search field included. Ctrl as well as ⌘, because half of
+ * every internal team is on Windows or Linux and a shortcut that silently
+ * does nothing there is worse than none.
+ *
+ * It is `useHotkeys('mod+k')`, so it is listed in the shortcuts dialog under
+ * a `HotkeysProvider`. It used to answer both ⌘K and Ctrl-K on every
+ * platform; on a Mac, Ctrl-K deletes to the end of the line in every native
+ * text field, so it now follows each platform's convention (see hotkeys.ts).
  */
-export function useCommandShortcut(onTrigger: () => void, { key = 'k' }: { key?: string } = {}) {
-  const callback = React.useRef(onTrigger)
-  React.useEffect(() => {
-    callback.current = onTrigger
-  })
-  React.useEffect(() => {
-    function onKeyDown(event: KeyboardEvent) {
-      if ((event.metaKey || event.ctrlKey) && !event.altKey && event.key.toLowerCase() === key) {
-        event.preventDefault()
-        callback.current()
-      }
-    }
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [key])
+export function useCommandShortcut(
+  onTrigger: () => void,
+  { key = 'k', label = 'Open the command palette' }: { key?: string; label?: string } = {},
+) {
+  useHotkeys(`mod+${key}`, () => onTrigger(), { label })
+}
+
+/**
+ * Binds one command's `hotkey` while the palette is mounted, open or not:
+ * the point of a command's shortcut is not having to open the palette.
+ * A component per item because a hook cannot be called in a loop.
+ */
+function CommandHotkey({ item, group }: { item: CommandItem & { hotkey: string }; group: string }) {
+  useHotkeys(item.hotkey, () => item.onSelect(), { label: item.label, group, enabled: !item.disabled })
+  return null
 }
 
 /**
@@ -148,6 +163,7 @@ export function CommandPalette({
 }: CommandPaletteProps) {
   const [open, setOpen] = useControllable({ value: openProp, defaultValue: defaultOpen, onChange: onOpenChange })
   const [query, setQuery] = React.useState('')
+  const platform = useHotkeyPlatform()
   // The highlight is held by id, not position, so it survives the list
   // re-sorting under it; `null` means "the first enabled match".
   const [activeId, setActiveId] = React.useState<string | null>(null)
@@ -224,6 +240,11 @@ export function CommandPalette({
       }}
     >
       {trigger ? <DialogPrimitive.Trigger render={trigger} /> : null}
+      {groups.flatMap((group) =>
+        group.items.map((item) =>
+          item.hotkey ? <CommandHotkey key={item.id} item={item as CommandItem & { hotkey: string }} group={group.heading} /> : null,
+        ),
+      )}
       <DialogPrimitive.Portal>
         <DialogPrimitive.Backdrop className="fixed inset-0 z-(--z-overlay) bg-backdrop transition-opacity duration-(--motion-base) data-starting-style:opacity-0 data-ending-style:opacity-0" />
         <DialogPrimitive.Popup
@@ -329,10 +350,10 @@ export function CommandPalette({
                               </span>
                             ) : null}
                           </span>
-                          {item.shortcut ? (
+                          {item.hotkey || item.shortcut ? (
                             <span className="flex shrink-0 gap-1 text-xs tabular-nums text-ink-muted group-aria-selected/option:text-on-ink-muted">
                               {/* By position, not glyph: G G repeats a key. */}
-                              {item.shortcut.map((key, i) => (
+                              {(item.hotkey ? formatHotkey(item.hotkey, platform).flat() : item.shortcut!).map((key, i) => (
                                 <span key={i} className="min-w-4 text-center">
                                   {key}
                                 </span>

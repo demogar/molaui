@@ -1,0 +1,24 @@
+- button "Notifications, 2 unread" [expanded]
+- dialog "Notifications":
+  - heading "Notifications" [level=2]
+  - button "Mark all as read"
+  - list "Notifications":
+    - listitem:
+      - paragraph: "Unread. Error: Re-index failed for Billing FAQ"
+      - text: /\d+ of \d+,\d+ documents · embedding quota reached/
+      - time: 4 min ago
+      - button "View run"
+    - listitem:
+      - paragraph: "Unread. Warning: Refund agent is waiting for approval"
+      - text: /Order CY-\d+ · \$\d+\.\d+ over the auto-approve limit/
+      - time: /\d+ min ago/
+      - button "Review"
+    - listitem:
+      - paragraph: "Success: Evaluation passed for Returns triage v4"
+      - text: /\d+ of \d+ prompts matched the reference answer/
+      - time: 1 h ago
+    - listitem:
+      - paragraph: Ana Pérez shared the Escalations view with you
+      - time: /Yesterday \d+:\d+/
+  - link "View all notifications":
+    - /url: "#notifications"

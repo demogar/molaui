@@ -257,6 +257,14 @@
       "<Badge tone=\"success\" variant=\"soft\" dot>${1:Succeeded}</Badge>$0"
     ]
   },
+  "Banner": {
+    "scope": "typescriptreact,javascriptreact",
+    "prefix": "mola-banner",
+    "description": "A strip across the top of the application for a condition of the whole app, for as long as it holds. import { Banner } from '@demogar/mola-ui'",
+    "body": [
+      "<Banner tone=\"warn\" title=\"${1:Scheduled maintenance}\">${2:Saturday 18 October, 02:00–03:00 UTC. Runs started in that window wait in the queue and start when it ends.}</Banner>$0"
+    ]
+  },
   "Callout": {
     "scope": "typescriptreact,javascriptreact",
     "prefix": "mola-callout",
@@ -271,6 +279,14 @@
     "description": "What a panel shows when it has nothing to show, in four variants: empty, no results, error and no permission. import { Button, EmptyState } from '@demogar/mola-ui'; import { Plus } from 'lucide-react'",
     "body": [
       "<EmptyState title=\"${1:No saved replies yet}\" description=\"${2:A saved reply answers a common question in one click, in the same words every time.}\" actions={<Button icon={<Plus />}>${3:New saved reply}</Button>} />$0"
+    ]
+  },
+  "Notification centre": {
+    "scope": "typescriptreact,javascriptreact",
+    "prefix": "mola-notification-centre",
+    "description": "The record of what happened: a bell with an unread count, and the notifications under it, kept after their toasts have gone. import { NotificationCentre } from '@demogar/mola-ui'",
+    "body": [
+      "<NotificationCentre notifications={[]} defaultOpen />$0"
     ]
   },
   "Placeholder": {
@@ -778,6 +794,16 @@
       "    </div>",
       "  </PopoverContent>",
       "</Popover>$0"
+    ]
+  },
+  "Shortcuts dialog": {
+    "scope": "typescriptreact,javascriptreact",
+    "prefix": "mola-shortcuts-dialog",
+    "description": "Every keyboard shortcut the page binds, listed from one registry and opened with ?; useHotkeys binds and registers each one. import { IconButton, ShortcutsDialog } from '@demogar/mola-ui'; import { CircleHelp } from 'lucide-react'",
+    "body": [
+      "<ShortcutsDialog defaultOpen trigger={<IconButton label=\"${1:Keyboard shortcuts}\" variant=\"secondary\">",
+      "        <CircleHelp />",
+      "      </IconButton>} />$0"
     ]
   },
   "Tooltip": {

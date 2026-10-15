@@ -77,3 +77,7 @@ Nothing in it takes focus, so there is no keyboard table.
 
 - [Code](https://demogar.github.io/molaui/md/components-data-display-code--overview.md)
 - [Tooltip](https://demogar.github.io/molaui/md/components-overlays-tooltip--overview.md)
+
+### Pages that send readers here
+
+- [Shortcuts dialog](https://demogar.github.io/molaui/md/components-overlays-shortcuts-dialog--overview.md)

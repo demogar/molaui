@@ -18,6 +18,7 @@ export const BREAKPOINT_USES: Record<string, string[]> = {
     'ai/token-usage/token-usage.tsx',
     'app-shell/app-shell.tsx',
     'app-shell/page-header.tsx',
+    'banner/banner.tsx',
     'date-picker/calendar.tsx',
     'date-picker/date-range-picker.tsx',
     'description-list/description-list.tsx',

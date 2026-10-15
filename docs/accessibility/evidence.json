@@ -241,6 +241,16 @@
       "pressesKeys": false,
       "screenReadersByHand": false
     },
+    "Components/Feedback/Banner": {
+      "stories": 4,
+      "unitTests": [
+        "src/components/banner/banner.test.tsx"
+      ],
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
+      "screenReadersByHand": false
+    },
     "Components/Feedback/Callout": {
       "stories": 7,
       "unitTests": [
@@ -259,6 +269,16 @@
       "keyboardInUnitTests": false,
       "keysUntested": [],
       "pressesKeys": false,
+      "screenReadersByHand": false
+    },
+    "Components/Feedback/Notification centre": {
+      "stories": 5,
+      "unitTests": [
+        "src/components/notification-centre/notification-centre.test.tsx"
+      ],
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Feedback/Placeholder": {
@@ -462,7 +482,7 @@
       "screenReadersByHand": false
     },
     "Components/Layout/App shell": {
-      "stories": 3,
+      "stories": 4,
       "unitTests": [
         "src/components/app-shell/app-shell.test.tsx"
       ],
@@ -645,6 +665,16 @@
       "stories": 2,
       "unitTests": [
         "src/components/popover/popover.test.tsx"
+      ],
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
+      "screenReadersByHand": false
+    },
+    "Components/Overlays/Shortcuts dialog": {
+      "stories": 4,
+      "unitTests": [
+        "src/components/shortcuts/shortcuts-dialog.test.tsx"
       ],
       "keyboardInUnitTests": true,
       "keysUntested": [],

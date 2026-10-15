@@ -13,8 +13,8 @@ admin consoles, knowledge bases, agent run monitors — documented in a standalo
 - **Tokens.** One CSS file. Two themes declared once with `light-dark()`, three densities on one
   attribute, zero radius. Every contrast pairing, 100+ of them across both themes, is computed
   from the CSS and enforced by a test. The tokens are exported to W3C design-token JSON for Figma.
-- **61 components.** Actions, forms, overlays, feedback, navigation, data display and an
-  application shell: 155 exported parts, built on [Base UI](https://base-ui.com) for behaviour and
+- **64 components.** Actions, forms, overlays, feedback, navigation, data display and an
+  application shell: 160 exported parts, built on [Base UI](https://base-ui.com) for behaviour and
   accessibility (the WAI-ARIA patterns it has no primitive for are written out and tested key by
   key), and styled with Tailwind v4. Every one has a docs page in the same order: what it
   is for and its lifecycle phase, when to use it and what to use instead, examples, the keys it
@@ -154,7 +154,8 @@ Mola share one copy (Mola re-exports Base UI's `DirectionProvider`, which only w
 The package is ESM only; `require()` works too, on Node 22.12 or later.
 
 Mount the providers once, at the root: `DirectionProvider` (keyboard direction for right-to-left),
-`ToastProvider` (`useToast()` throws without it) and, optionally, `TooltipProvider`. Getting
+`ToastProvider` (`useToast()` throws without it) and, optionally, `TooltipProvider` and
+`HotkeysProvider` (the shortcut registry the shortcuts dialog lists). Getting
 started has the app root, a theme switcher with no flash on load, and the Next.js layout; each of
 those code blocks is compiled against the packed package in CI.
 
@@ -275,7 +276,7 @@ run takes about three minutes.
   `light-dark()`, `var()`, OKLab `color-mix()` — and asserts each promised pairing. It caught a real
   dark-theme failure during the build (muted ink on the gold wash, 4.00:1) before any screen did.
 - **No hex outside `tokens.css`**, enforced by a test.
-- **Every story is a test**: all 345 stories render through the real Storybook config and pass axe
+- **Every story is a test**: all 359 stories render through the real Storybook config and pass axe
   in the unit suite; `scripts/audit.mjs` re-runs axe *with colour contrast* in a real browser in both
   themes, checks every story for horizontal overflow at 390px and reflow at 320px (no text clipped
   or painted over, nothing scrolling sideways without the scroll-edge cue, every story again at

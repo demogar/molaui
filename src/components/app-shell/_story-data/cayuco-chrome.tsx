@@ -25,20 +25,27 @@ export function CayucoMark() {
   )
 }
 
-function SearchTrigger() {
+function SearchTrigger({ shortcut = '⌘K', onClick }: { shortcut?: string; onClick?: () => void }) {
   return (
     <button
       type="button"
+      onClick={onClick}
       className="flex h-(--control-h-sm) w-full max-w-md items-center gap-2 bg-cloth px-2.5 text-sm text-ink-muted shadow-cut transition-shadow hover:cut-band band-oro [--cut-reveal:3px]"
     >
       <Search aria-hidden className="size-4 shrink-0" />
       <span className="flex-1 truncate text-start">Search runs, agents, documents…</span>
-      <Kbd className="max-sm:hidden">⌘K</Kbd>
+      <Kbd className="max-sm:hidden">{shortcut}</Kbd>
     </button>
   )
 }
 
-export function CayucoTopbar() {
+/**
+ * `end` and `search` replace the bell, help and avatar, and the search
+ * trigger's key hint and press, for the story that wires them to the real
+ * notification centre, shortcuts dialog and palette. Every other story keeps
+ * the static drawing.
+ */
+export function CayucoTopbar({ end, search }: { end?: React.ReactNode; search?: { shortcut: string; onClick: () => void } } = {}) {
   return (
     <Topbar
       start={
@@ -53,9 +60,9 @@ export function CayucoTopbar() {
           </Button>
         </>
       }
-      center={<SearchTrigger />}
+      center={<SearchTrigger {...search} />}
       end={
-        <>
+        end ?? <>
           <IconButton label="Help" variant="ghost" size="sm" className="max-sm:hidden">
             <CircleHelp />
           </IconButton>

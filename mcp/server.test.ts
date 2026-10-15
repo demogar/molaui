@@ -179,7 +179,10 @@ describe('mola-ui MCP server', () => {
   })
 
   it('search finds a token by its scope', async () => {
-    expect((await call('search', { query: 'overlay' })).text).toContain('token **--scrim**')
+    // With a limit wide enough for every page under Components/Overlays: they
+    // match "overlay" by title and outrank a token matched by scope alone, so
+    // the default ten held --scrim only while there were seven overlays.
+    expect((await call('search', { query: 'overlay', limit: 20 })).text).toContain('token **--scrim**')
   })
 
   it('get_rules returns every design rule with its reason', async () => {
