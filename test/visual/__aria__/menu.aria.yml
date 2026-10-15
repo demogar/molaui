@@ -1,0 +1,9 @@
+- button "Run actions" [expanded]
+- menu "Run actions":
+  - menuitem "Rename E"
+  - menuitem "Duplicate ⌘D"
+  - menuitem "Fork from last step"
+  - menuitem "Export"
+  - separator
+  - menuitem "Archive"
+  - menuitem "Delete run ⌫"

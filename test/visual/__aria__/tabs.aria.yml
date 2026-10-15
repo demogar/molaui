@@ -1,0 +1,8 @@
+- tablist:
+  - tab /Trace \d+/ [selected]
+  - tab "Output"
+  - tab "Cost"
+  - tab /Logs \d+,\d+/
+  - tab "Replay" [disabled]
+- tabpanel /Trace \d+/:
+  - paragraph: /\d+ steps, 6 tool calls, 2 retries\./

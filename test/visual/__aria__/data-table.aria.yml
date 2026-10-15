@@ -1,0 +1,124 @@
+- paragraph: /\d+ runs/
+- button "Columns"
+- table "Agent runs":
+  - rowgroup:
+    - row "Run Agent Status Tokens Cost Duration Started":
+      - columnheader "Run"
+      - columnheader "Agent":
+        - button "Agent"
+      - columnheader "Status":
+        - button "Status"
+      - columnheader "Tokens":
+        - button "Tokens"
+      - columnheader "Cost":
+        - button "Cost"
+      - columnheader "Duration":
+        - button "Duration"
+      - columnheader "Started":
+        - button "Started"
+  - rowgroup:
+    - row /run_5a4ea1 Release-notes drafter queued — — — [\d,.]+[bkmBKM]+ ago/:
+      - cell "run_5a4ea1"
+      - cell "Release-notes drafter"
+      - cell "queued"
+      - cell "—"
+      - cell "—"
+      - cell "—"
+      - cell /[\d,.]+[bkmBKM]+ ago/:
+        - time: /[\d,.]+[bkmBKM]+ ago/
+    - row /run_5a61c5 Abuse-report reviewer running \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ [\d,.]+[bkmBKM]+ ago/:
+      - cell "run_5a61c5"
+      - cell "Abuse-report reviewer"
+      - cell "running"
+      - cell /\d+,\d+/
+      - cell /\$\d+\.\d+/
+      - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
+      - cell /[\d,.]+[bkmBKM]+ ago/:
+        - time: /[\d,.]+[bkmBKM]+ ago/
+    - row /run_5a8529 Invoice checker running \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ [\d,.]+[bkmBKM]+ ago/:
+      - cell "run_5a8529"
+      - cell "Invoice checker"
+      - cell "running"
+      - cell /\d+,\d+/
+      - cell /\$\d+\.\d+/
+      - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
+      - cell /[\d,.]+[bkmBKM]+ ago/:
+        - time: /[\d,.]+[bkmBKM]+ ago/
+    - row /run_5aab72 Invoice checker running \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+      - cell "run_5aab72"
+      - cell "Invoice checker"
+      - cell "running"
+      - cell /\d+,\d+/
+      - cell /\$\d+\.\d+/
+      - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
+      - cell /\d+[hmsp]+ ago/:
+        - time: /\d+[hmsp]+ ago/
+    - row /run_5ac380 Refund reviewer succeeded \d+,\d+ \$\d+\.\d+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+      - cell "run_5ac380"
+      - cell "Refund reviewer"
+      - cell "succeeded"
+      - cell /\d+,\d+/
+      - cell /\$\d+\.\d+/
+      - cell /\d+[hmsp]+/
+      - cell /\d+[hmsp]+ ago/:
+        - time: /\d+[hmsp]+ ago/
+    - row /run_5ae91f Abuse-report reviewer cancelled \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+      - cell "run_5ae91f"
+      - cell "Abuse-report reviewer"
+      - cell "cancelled"
+      - cell /\d+,\d+/
+      - cell /\$\d+\.\d+/
+      - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
+      - cell /\d+[hmsp]+ ago/:
+        - time: /\d+[hmsp]+ ago/
+    - row /run_5aff68 Docs answerer failed \d+,\d+ \$\d+\.\d+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+      - cell "run_5aff68"
+      - cell "Docs answerer"
+      - cell "failed"
+      - cell /\d+,\d+/
+      - cell /\$\d+\.\d+/
+      - cell /\d+[hmsp]+/
+      - cell /\d+[hmsp]+ ago/:
+        - time: /\d+[hmsp]+ ago/
+    - row /run_5b26ac Release-notes drafter failed \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+      - cell "run_5b26ac"
+      - cell "Release-notes drafter"
+      - cell "failed"
+      - cell /\d+,\d+/
+      - cell /\$\d+\.\d+/
+      - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
+      - cell /\d+[hmsp]+ ago/:
+        - time: /\d+[hmsp]+ ago/
+    - row /run_5b4513 Support triage succeeded \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+      - cell "run_5b4513"
+      - cell "Support triage"
+      - cell "succeeded"
+      - cell /\d+,\d+/
+      - cell /\$\d+\.\d+/
+      - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
+      - cell /\d+[hmsp]+ ago/:
+        - time: /\d+[hmsp]+ ago/
+    - row /run_5b6424 Abuse-report reviewer succeeded \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+      - cell "run_5b6424"
+      - cell "Abuse-report reviewer"
+      - cell "succeeded"
+      - cell /\d+,\d+/
+      - cell /\$\d+\.\d+/
+      - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
+      - cell /\d+[hmsp]+ ago/:
+        - time: /\d+[hmsp]+ ago/
+- paragraph: /1–\d+ of \d+ runs/
+- navigation "Agent runs pages":
+  - list:
+    - listitem:
+      - button "Previous page" [disabled]
+    - listitem:
+      - button "Page 1"
+    - listitem:
+      - button "Page 2"
+    - listitem:
+      - button "Page 3"
+    - listitem:
+      - button "Page 4"
+    - listitem:
+      - button "Next page"

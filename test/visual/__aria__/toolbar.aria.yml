@@ -1,0 +1,10 @@
+- toolbar "Run actions":
+  - group:
+    - button "Re-run"
+    - button "Stop"
+  - separator
+  - group:
+    - button "Copy id"
+    - button "Share trace"
+  - separator
+  - button "Delete"

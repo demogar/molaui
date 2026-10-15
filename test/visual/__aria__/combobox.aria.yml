@@ -1,0 +1,13 @@
+- group:
+  - button "Dismiss"
+  - combobox "Reviewer*" [expanded]
+- listbox:
+  - option "Ana Ríos Evaluation · Panamá"
+  - option "Bruno Vega Platform · Lisboa"
+  - option "Carla Pinzón Evaluation · Bogotá"
+  - option "Dalia Osei Safety · Accra"
+  - option "Emil Strand Platform · Oslo"
+  - option "Farah Haddad Safety · Amman"
+  - option "Gael Moreno On leave" [disabled]
+  - option "Hana Sato Retrieval · Osaka"
+- button "Dismiss"

@@ -1,0 +1,68 @@
+- region "Conversation with Cayuco":
+  - article /M\. Herrera, \d+:\d+ AM/:
+    - text: ""
+    - time: /\d+:\d+ AM/
+    - text: Which guardrails did help panel v2 define, and did any of them regress?
+  - article /Cayuco, \d+:\d+ AM/:
+    - text: ""
+    - time: /\d+:\d+ AM/
+    - text: cayuco-deep-3
+    - button /Thought for [\d,.]+[hmsp]+/
+    - button /query_rollout Rollout results Succeeded [\d,.]+[hmsp]+/
+    - button /search_docs Rollout brief Succeeded [\d,.]+[hmsp]+/
+    - paragraph:
+      - text: /Yes — with one caveat worth checking before you roll out\. The help panel cut support tickets from new workspaces from \d+\.\d+ to \d+\.\d+ per \d+,\d+ across \d+,\d+ new workspaces, and the interval excludes zero/
+      - 'link /Source 1: ro-\d+ results — in-app help panel/':
+        - /url: "#source-1"
+        - text: ""
+      - text: .
+    - paragraph:
+      - text: The drop is concentrated in workspaces on the Starter plan. For Enterprise workspaces, the difference is inside the noise
+      - 'link "Source 2: Segment breakdown: Starter vs Enterprise plan"':
+        - /url: "#source-2"
+        - text: ""
+      - text: .
+    - list:
+      - listitem: "/Tickets per \\d+,\\d+ new workspaces: −4\\.2 \\(\\d+% CI −5\\.3 to −3\\.1\\)/"
+      - listitem: "/Help articles read in the first week: \\d+\\.\\d+ vs 6\\.1/"
+      - listitem:
+        - text: "Time to first reply:"
+        - strong: slower
+        - text: /by about \d+ seconds with the panel/
+    - paragraph:
+      - text: The slower first reply is the caveat. The rollout brief lists
+      - code: time_to_first_reply_s
+      - text: as a guardrail metric
+      - 'link "Source 3: Rollout brief: help panel v2"':
+        - /url: "#source-3"
+        - text: ""
+      - text: ", and the panel moves it in the wrong direction. I would roll the panel out to Starter workspaces only and keep the guardrail on the dashboard for two weeks."
+    - status: Response complete.
+    - complementary "Unverified figure":
+      - paragraph: Unverified figure
+      - text: /The \d+-second slowdown comes from one summary row; the per-day data was not available\. Check it before you ship\./
+    - list:
+      - listitem:
+        - link /1 ro-\d+ results — in-app help panel rollouts\.cayuco\.internal read Oct 5, \d+:\d+ PM “Primary metric tickets_per_1k\. Control \d+\.\d+, help panel \d+\.\d+\. n = \d+,\d+\. Sequential test, alpha \d+\.\d+\.”/:
+          - /url: https://example.com/rollouts/ro-0412/results
+          - text: ""
+          - time: /read Oct 5, \d+:\d+ PM/
+          - text: ""
+      - listitem:
+        - 'link /2 Segment breakdown: Starter vs Enterprise plan rollouts\.cayuco\.internal read Oct 5, \d+:\d+ PM “Enterprise cohort: −0\.4 per \d+,\d+ \(CI −1\.9 to \+1\.1\)\. Starter cohort: −6\.1 per \d+,\d+ \(CI −7\.4 to −4\.8\)\.”/':
+          - /url: https://example.com/rollouts/ro-0412/segments
+          - text: ""
+          - time: /read Oct 5, \d+:\d+ PM/
+          - text: ""
+      - listitem:
+        - 'link /3 Rollout brief: help panel v2 docs\.cayuco\.internal read Oct 5, \d+:\d+ PM “Guardrails: time_to_first_reply_s must not regress more than \d+%\. Escalation rate ≤ 4%\.”/':
+          - /url: https://example.com/docs/briefs/help-panel-v2
+          - text: ""
+          - time: /read Oct 5, \d+:\d+ PM/
+          - text: ""
+    - text: Medium confidence · the guardrail and the headline disagree
+    - button "Copy response"
+    - button "Regenerate"
+    - button "Good response"
+    - button "Bad response"
+    - status

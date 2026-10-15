@@ -1,0 +1,4 @@
+- group "View":
+  - button "Table" [pressed]
+  - button "Board"
+  - button "Timeline"
