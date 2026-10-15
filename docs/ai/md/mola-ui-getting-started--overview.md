@@ -465,6 +465,33 @@ Code) take the same command in their JSON config:
 `npx` runs the copy in your project's `node_modules` when there is one. The MCP SDK is bundled
 into the bin, so it is not a dependency of the library and your app's bundle does not change.
 
+## Lint with the design rules (ESLint)
+
+The decisions behind this page are architecture decision records: see [Decisions](https://demogar.github.io/molaui/md/decisions-all-decisions--overview.md).
+
+The same `check_code` rules run in your editor and CI through the ESLint plugin the package
+ships, `@demogar/mola-ui/eslint` (ESLint 9 or later, flat config). It calls the checker the MCP
+tool calls, with the manifest of the version you have installed:
+
+```js
+// eslint.config.js
+import mola from '@demogar/mola-ui/eslint'
+
+export default [
+  // …your other configs, with a parser for JSX or TSX (espree, typescript-eslint)
+  mola.configs.recommended,
+]
+```
+
+- `mola-ui/design-rules` (an error in `recommended`): breaks a rule in every context.
+- `mola-ui/design-advice` (a warning): very probably wrong, but the code alone cannot prove it.
+
+Each message starts with the rule's number, as `get_rules` numbers them, and ends with the fix.
+The rules read the source text rather than the syntax tree, so they work under any parser,
+eslint-mdx included. Excuse a finding with `// check_code: allow rule N — the reason`, as for
+the MCP tool, or with an `eslint-disable` comment. The plugin imports nothing but Node's
+builtins, so it adds no dependency.
+
 ## Figma
 
 `tokens/mola.tokens.json` is the same token set in the [W3C Design Tokens](https://www.designtokens.org/tr/2025.10/format/)

@@ -22,6 +22,9 @@
 //                  its own page styles: the host page must keep them
 //   node-require   no bundler: `require()` from plain Node, and one Base UI
 //                  copy shared by the app and the package
+//   eslint         the `@demogar/mola-ui/eslint` plugin loaded by the app's
+//                  own ESLint 9: a file that breaks the rules gets exactly
+//                  the expected errors and warning, and a clean one none
 //
 // A fixture with a `check` script and no entry in SERVE is not built or
 // opened in a browser: its check script is the whole test.
@@ -29,7 +32,10 @@
 // Then the `mola-ui-mcp` bin: the tarball is unpacked with no node_modules
 // beside it and the bin is started over stdio with the MCP SDK's client, so
 // a bundle that still needs a package at run time, or a docs/ai file missing
-// from `files`, fails here rather than in a user's `npx`.
+// from `files`, fails here rather than in a user's `npx`. The ESLint plugin
+// is imported from the same kind of bare unpack, which proves it needs no
+// package at run time (the eslint fixture has the library's dependencies
+// installed, so it could not show that).
 //
 // Fixtures are copied to a temp dir before installing, so the repo tree is
 // never touched, and the library goes in as `file:<tarball>` from `npm pack`
@@ -76,7 +82,7 @@ for (const name of fixtures) {
   if (!SERVE[name] && !scriptOnly(name)) fail(`fixture "${name}" has neither a serve command in scripts/consumers.mjs nor a check script`)
 }
 
-if (!['dist/index.js', 'dist/mola-ui.css', 'dist/mola-ui-components.css', 'dist/mcp/mola-ui-mcp.js'].every((file) => existsSync(join(root, file)))) {
+if (!['dist/index.js', 'dist/mola-ui.css', 'dist/mola-ui-components.css', 'dist/mcp/mola-ui-mcp.js', 'dist/eslint/index.js'].every((file) => existsSync(join(root, file)))) {
   fail('dist/ is missing or incomplete. Run `npm run build` first.')
 }
 
@@ -98,6 +104,7 @@ try {
     await browser.close()
   }
   results.push(await checkMcp(tarball))
+  results.push(checkEslintBare(tarball))
 } finally {
   if (process.env.MOLA_CONSUMERS_KEEP) log(`kept ${tmp}`)
   else rmSync(tmp, { recursive: true, force: true })
@@ -226,6 +233,47 @@ async function checkMcp(tarball) {
     result.errors.push(`${error.message}\n    server stderr:\n${indent(stderr)}`)
   } finally {
     await client.close()
+    result.check = Math.round(performance.now() - started)
+  }
+  log(`  checked (${result.check} ms)${result.errors.length ? '' : ': ok'}`)
+  return result
+}
+
+/**
+ * The plugin from a bare unpack of the tarball, nothing installed: an import
+ * it left external would fail here. Its rule then runs on one bad line,
+ * through the plugin's own rule object rather than ESLint, which is not
+ * installed here either.
+ */
+function checkEslintBare(tarball) {
+  const result = { name: 'eslint bare', errors: [] }
+  log('\neslint bare')
+  const dir = join(tmp, 'eslint-bare')
+  mkdirSync(dir)
+  const started = performance.now()
+  try {
+    run('tar', ['-xzf', tarball, '-C', dir], dir)
+    const pkg = JSON.parse(readFileSync(join(dir, 'package/package.json'), 'utf8'))
+    const entry = pkg.exports?.['./eslint']?.default
+    if (!entry || !existsSync(join(dir, 'package', entry))) {
+      result.errors.push(`package.json exports "./eslint" (${entry}) is missing from the tarball`)
+      return result
+    }
+    const line = '<button className="border">Save</button>'
+    const probe = [
+      `const { default: plugin } = await import(${JSON.stringify(join(dir, 'package', entry))})`,
+      'const reports = []',
+      `const sourceCode = { text: ${JSON.stringify(line)}, lines: [${JSON.stringify(line)}] }`,
+      "const listener = plugin.rules['design-rules'].create({ sourceCode, filename: 'save.jsx', report: (r) => reports.push(r) })",
+      'listener.Program()',
+      'console.log(JSON.stringify({ version: plugin.meta.version, reports: reports.map((r) => r.data.text) }))',
+    ].join('\n')
+    const out = JSON.parse(execFileSync(process.execPath, ['--input-type=module', '-e', probe], { cwd: dir, encoding: 'utf8' }))
+    if (out.version !== pkg.version) result.errors.push(`plugin says version ${out.version}, the package is ${pkg.version}`)
+    if (!out.reports.some((text) => text.startsWith('Rule 1:'))) result.errors.push(`design-rules did not report the border: ${JSON.stringify(out.reports)}`)
+  } catch (error) {
+    result.errors.push(error.message)
+  } finally {
     result.check = Math.round(performance.now() - started)
   }
   log(`  checked (${result.check} ms)${result.errors.length ? '' : ': ok'}`)

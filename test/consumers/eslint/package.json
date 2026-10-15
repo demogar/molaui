@@ -1,0 +1,11 @@
+{
+  "name": "mola-consumer-eslint",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node check.mjs"
+  },
+  "devDependencies": {
+    "eslint": "9.39.5"
+  }
+}

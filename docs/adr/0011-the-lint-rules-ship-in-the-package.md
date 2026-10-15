@@ -1,0 +1,63 @@
+# 0011 — The lint rules ship in the package
+
+**Date:** 2026-10-14 · **Status:** accepted
+
+## Context
+
+`check_code` (`mcp/check.ts`) reviews code against the design rules, deterministically, and CI runs
+it over this repository. But it only ran when an agent called the MCP tool. A person in an editor,
+or an app's CI, never saw it. Issue #101 asked for the same rules as an ESLint plugin, without a
+second copy of them, and for a choice of how to ship it:
+
+- a subpath export of the library, `@demogar/mola-ui/eslint`, built like the `mola-ui-mcp` bin; or
+- a separate package, such as `@demogar/eslint-plugin-mola-ui`.
+
+## Decision
+
+**A subpath export, `@demogar/mola-ui/eslint`.** `eslint/plugin.ts` imports `checkCode` from
+`mcp/check.ts` and reports its findings. `vite.eslint.config.ts` bundles the plugin into
+`dist/eslint/index.js`, as `vite.mcp.config.ts` bundles the bin.
+
+Why not a separate package:
+
+- **The rules read the manifest.** Token names, scopes and exports come from
+  `docs/ai/components.json`, which ships in the library. A plugin in its own package would need
+  the library installed beside it and would have to match versions with it. A plugin one minor
+  version behind would flag a new export as a guessed name. Inside the package, the plugin and the
+  manifest are always the same version.
+- **One release.** release-please, the publish job, provenance and the changelog are set up for
+  one package. A second package needs a monorepo manifest, a second publish job and a second
+  version to bump with every rule change. None of that adds anything a user needs.
+- **The cost is nothing.** The plugin imports only Node's builtins and its own files
+  (`scripts/deps.test.ts` follows its imports to hold it to that). ESLint is only a type import.
+  So the library gains no dependency, and the deps gates (licences, `npm audit` of what ships) are
+  unchanged: the plugin ships no third-party code. An app that never imports
+  `@demogar/mola-ui/eslint` loads none of it, since it is a separate entry outside `dist/index.js`.
+
+Why not declare `eslint` as a peer dependency: the plugin never imports it at run time. A required
+peer would make npm install ESLint into every app that installs the React library. An optional
+peer would only show up in `deps.mjs`'s shipped set as code we do not ship.
+
+**Two ESLint rules, not fourteen.** `check_code` already grades each finding: `error` breaks a rule
+in every context, and `warn` is very probably wrong but cannot be proved. ESLint gives a severity
+to a rule, not to a single report. `mola-ui/design-rules` carries the errors and
+`mola-ui/design-advice` the warnings, and `recommended` sets them to `error` and `warn`. Each
+message starts with the rule's number, as `get_rules` numbers them.
+
+**The rules read the text, not the tree.** `check_code` is a scanner. Rebuilding each rule as an
+AST visitor would make a second implementation to keep in step. The plugin reads
+`sourceCode.text`, so it works under espree, typescript-eslint or eslint-mdx, and gives a file
+exactly the findings the MCP tool would.
+
+## Consequences
+
+- One allowlist for this repo, `mcp/check.allowed.ts`, used by both `mcp/check.library.test.ts`
+  (checkCode directly) and `eslint/plugin.test.ts` (through ESLint). The plugin test also requires
+  the two runs to agree, finding for finding, on line, column and grade.
+- The `eslint` consumer fixture installs the packed tarball with ESLint 9, lints a file that
+  breaks the rules and expects the exact errors and warning. A second check imports the plugin
+  from a bare unpack with nothing installed.
+- The plugin works with flat config only (ESLint 9 and later). Legacy `.eslintrc` is not
+  supported.
+- Exceptions use the same `// check_code: allow rule N — reason` directive as the MCP tool, so a
+  file excused for one is excused for the other. `eslint-disable` also works.

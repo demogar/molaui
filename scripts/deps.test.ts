@@ -92,6 +92,35 @@ describe('BUNDLED matches what the MCP server imports', () => {
   })
 })
 
+describe('the ESLint plugin ships no package', () => {
+  /**
+   * vite.eslint.config.ts bundles eslint/plugin.ts with everything it imports
+   * into dist/eslint/index.js. A package it imported would ship inside that
+   * file, outside `shipped()` and so outside the licence and audit gates. So
+   * it may import nothing but Node's builtins and its own files (mcp/check.ts,
+   * mcp/data.ts); a type-only import (`eslint`'s types) is erased. To bundle
+   * a package, add it to the audit first, as BUNDLED does for the MCP bin.
+   */
+  it('imports only Node builtins and its own files, followed through every relative import', () => {
+    const seen = new Set<string>()
+    const packages = new Set<string>()
+    const visit = (file: string) => {
+      if (seen.has(file)) return
+      seen.add(file)
+      const text = readFileSync(file, 'utf8')
+      for (const m of text.matchAll(/^import\s+(type\s+)?[^'\n]*?from\s+'([^']+)'/gm)) {
+        const spec = m[2] as string
+        if (m[1]) continue
+        if (spec.startsWith('.')) visit(resolve(file, '..', `${spec}.ts`))
+        else if (!spec.startsWith('node:') && !builtinModules.includes(spec)) packages.add(spec)
+      }
+    }
+    visit(resolve(root, 'eslint/plugin.ts'))
+    expect([...seen].map((file) => file.slice(root.length + 1)).sort()).toEqual(['eslint/plugin.ts', 'mcp/check.ts', 'mcp/data.ts'])
+    expect([...packages]).toEqual([])
+  })
+})
+
 describe('closure', () => {
   it('resolves a nested copy before the top-level one', () => {
     const fake = {

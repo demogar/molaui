@@ -60,7 +60,7 @@ CI runs the three browser jobs side by side with `Gates`. Each can also be run o
 |---|---|---|
 | Browser audit | `npm run build-storybook && npm run audit` | axe with colour contrast in both themes, every `data-theme` subtree painting its own ground, no horizontal overflow at 390px, and reflow at 320px: no text clipped by a container that cannot scroll or painted over other text or a control, no number cut in its field, and nothing scrolling sideways without the `scroll-edge` cue; the composed screens are measured again at spacious density at 1024, 768 and 320. Over every story and every docs page, plus console errors. The report lands in `reports/audit/`. |
 | Visual regression | `npm run build-storybook && npm run visual` | every story in both themes, and each component's first story in compact density, RTL and forced colours, against the Linux baselines. |
-| Consumer smoke tests | `npm run build && npm run consumers` | the packed tarball installed, built and checked in a browser in three apps: Vite on `styles.css`, Vite with its own Tailwind v4 on `tailwind.css`, and the Next.js App Router. |
+| Consumer smoke tests | `npm run build && npm run consumers` | the packed tarball installed, built and checked in a browser in three apps: Vite on `styles.css`, Vite with its own Tailwind v4 on `tailwind.css`, and the Next.js App Router; plus script-only fixtures (`require()` from Node, and the ESLint plugin linting a bad file), the MCP bin and the ESLint plugin from a bare unpack. |
 
 For a quick look while Storybook's dev server is running, `node scripts/audit.mjs
 http://localhost:6006` still works; add `--only <story id fragment>` to audit a few pages.
@@ -69,7 +69,8 @@ http://localhost:6006` still works; add `--only <story id fragment>` to audit a 
 
 What the package ships is its runtime dependencies, its peer dependencies and the MCP SDK and zod
 bundled into the `mola-ui-mcp` bin, each with everything it depends on. `scripts/deps.mjs` reads
-that set from `package-lock.json`.
+that set from `package-lock.json`. The ESLint plugin (`dist/eslint/`) ships too, and bundles no
+package: `scripts/deps.test.ts` holds its imports to Node's builtins and its own files.
 
 - **Licences** are checked by `scripts/deps.test.ts`, offline, from the `license` field npm
   records in the lockfile. Shipped packages must be permissive (`SHIPPED_LICENSES`); the rest of
