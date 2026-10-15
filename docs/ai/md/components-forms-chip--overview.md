@@ -56,7 +56,7 @@ Each story is a live example in Storybook.
 | --- | --- | --- | --- |
 | `children` (required) | `ReactNode` |  | The visible label. Also the control's accessible name, via the wrapping `<label>`. |
 | `count` | `number` |  | A count after the label: how many rows this filter would leave. Tabular, so a row of chips does not jitter as counts change. |
-| `size` | `"sm" \| "md" \| "default" \| "comfortable"` |  |  |
+| `size` | `"sm" \| "md" \| "default" \| "comfortable"` |  | `sm` (default) is a one-line filter chip that never wraps; `md` is a control height tall and lets a longer label wrap. |
 | `type` | `"checkbox" \| "radio"` | `checkbox` | `radio` for one-of-N within a `name` group, `checkbox` for multi-select. |
 
 `className` goes to `<label data-slot="chip">`; `ref`, `id` and the other DOM props go to `<input>`.

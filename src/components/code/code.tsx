@@ -29,11 +29,17 @@ export function Code({ className, ...props }: React.ComponentProps<'code'>) {
 export type CodeLanguage = 'json' | 'text' | 'shell' | 'sql' | 'ts' | 'python' | 'markdown'
 
 export interface CodeBlockProps extends Omit<React.ComponentProps<'figure'>, 'children'> {
+  /** The text, exactly as it should be copied. Rendered verbatim; format JSON before passing it. */
   code: string
   /** Shown as a tag in the header. Only `json` is tokenized; everything else is plain. */
   language?: CodeLanguage
   /** A filename or a role — "arguments", "result", "query.sql". */
   label?: string
+  /**
+   * A gutter of line numbers that stays put as the code scrolls sideways.
+   * Hidden from assistive tech and never copied. Off by default; turn it on
+   * when someone will cite a line.
+   */
   lineNumbers?: boolean
   /** Scroll inside after this height (any CSS length). */
   maxHeight?: string

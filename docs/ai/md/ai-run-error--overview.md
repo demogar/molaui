@@ -78,14 +78,14 @@ What stopped a run, said plainly, with the way back next to it.
 | `autoRetry` | `boolean` | `false` | At `retryAt`, retry by itself instead of re-enabling the buttons. |
 | `copyable` | `boolean` | `kind !== 'cancelled'` | Offer *Copy error details*. On by default except for a cancellation, which is not an error. |
 | `error` | `string` |  | The error, verbatim. |
-| `kind` | `RunErrorKind` | `failed` |  |
+| `kind` | `RunErrorKind` | `failed` | Why the run stopped, which sets the headline, the plain sentence and the glyph. Defaults to `failed`; `cancelled` is not an error, so it offers no copy action. |
 | `message` | `ReactNode` |  | Replaces the plain sentence under the headline. |
-| `onRetry` | `(() => void)` |  |  |
-| `onRetryFromStep` | `(() => void)` |  |  |
+| `onRetry` | `(() => void)` |  | Runs the whole run again from the start. Shows *Retry run*, disabled until `retryAt` passes. |
+| `onRetryFromStep` | `(() => void)` |  | Re-runs from the step that stopped, keeping the work before it, so it takes the stronger button when both retries are offered. Disabled until `retryAt` passes. |
 | `retryAt` | `number \| Date` |  | When a retry is allowed (or will happen). Shows a countdown. |
 | `runId` | `string` |  | The run id, for the copied details. |
 | `step` | `string` |  | The step that stopped, in words — "Break the result down by plan". |
-| `stepCount` | `number` |  |  |
+| `stepCount` | `number` |  | How many steps the run has, so the position reads "step 4 of 5". Only used with `stepNumber`. |
 | `stepNumber` | `number` |  | The step's position, counted from 1. Shown as "step 4 of 5" and used to name *Retry from step 4*. |
 | `tool` | `string` |  | The tool that failed, exactly as the model called it. |
 

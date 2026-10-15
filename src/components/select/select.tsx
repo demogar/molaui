@@ -44,6 +44,10 @@ export function SelectGroup(props: SelectPrimitive.Group.Props) {
 }
 
 export interface SelectTriggerProps extends SelectPrimitive.Trigger.Props {
+  /**
+   * Trigger height, shared with Input so a select lines up in a form row. Defaults
+   * to `md`; density rescales every size.
+   */
   size?: FieldControlSize
   className?: string
   /** Shown when there is no value. */
@@ -200,9 +204,16 @@ export interface SelectProps<V extends string = string>
   extends Omit<SelectTriggerProps, 'value' | 'defaultValue' | 'children' | 'placeholder' | 'size' | 'disabled'> {
   /** Flat options, or labelled groups. */
   items: SelectOption<V>[] | SelectOptionGroup<V>[]
+  /**
+   * The selected option's `value`, controlled. `null` is no selection, which shows
+   * the `placeholder`; leave it `undefined` to let the select hold its own state.
+   */
   value?: V | null
+  /** The option `value` selected on first render, uncontrolled. `null` or omitted shows the `placeholder`. */
   defaultValue?: V | null
+  /** Called with the chosen option's `value` when the selection changes. */
   onValueChange?: (value: V | null) => void
+  /** Shown in the trigger while nothing is selected: "Choose a model". Not a label; the field still needs one. */
   placeholder?: React.ReactNode
   /**
    * A visible label rendered above the trigger. Omit it when the select sits
@@ -210,9 +221,16 @@ export interface SelectProps<V extends string = string>
    * onto this component instead.
    */
   label?: React.ReactNode
+  /**
+   * Trigger height, shared with Input so a select lines up in a form row. Defaults
+   * to `md`; density rescales every size.
+   */
   size?: FieldControlSize
+  /** Stated, not faded: the trigger goes to the shaded cloth and the list cannot open. */
   disabled?: boolean
+  /** Marks the select required for form validation, and the `label`, when there is one, with the required mark. */
   required?: boolean
+  /** Form field name. The selected option's `value` is submitted under it through a hidden input. */
   name?: string
   /** Classes for the wrapper that holds `label` and the trigger. Only rendered with a `label`. */
   wrapperClassName?: string

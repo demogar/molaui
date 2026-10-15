@@ -55,9 +55,9 @@ Ruled, ordered steps — a runbook, an onboarding checklist, the stages of a rol
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `items` (required) | `StepListItem[]` |  |  |
+| `items` (required) | `StepListItem[]` |  | The steps, in order. An item without a `label` is numbered by position; one authored label widens the column for every row. |
 | `inverse` | `false \| true` |  | Set the list on an ink panel. |
-| `titleAs` | `"h3" \| "h4" \| "p"` | `h3` |  |
+| `titleAs` | `"h3" \| "h4" \| "p"` | `h3` | The element each step title renders as, `h3` by default: a runbook's steps are its outline. Use `p` when they are not. |
 | `tone` (deprecated) | `"default" \| "inverse"` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `inverse`: `tone` is a status everywhere else, and this was a ground. |
 
 `className`, `ref`, `id` and the other DOM props go to `<ol data-slot="step-list">`.
@@ -68,7 +68,7 @@ Ruled, ordered steps — a runbook, an onboarding checklist, the stages of a rol
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `items` (required) | `TimelineItem[]` |  |  |
+| `items` (required) | `TimelineItem[]` |  | The events, in the order they happened, one node on the spine each. A `tone` on an item states its outcome. |
 | `label` (required) | `string` |  | Names the list, since the spine carries no heading of its own. |
 | `gap` | `"spaced" \| "flush"` | `spaced` | `spaced`   separate events, a gap between rows. `flush`    one continuous journey, carried by the connector alone. |
 | `size` (deprecated) | `TimelineVariant` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `variant`, which takes the same values: a type scale is a presentation, and `size` is the t-shirt scale everywhere else. |

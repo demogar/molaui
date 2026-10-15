@@ -54,11 +54,11 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
-| `label` | `ReactNode` |  |  |
-| `size` | `ProgressSize` | `md` |  |
+| `className` | `string` |  | Classes for the root, which holds the label row and the track. |
+| `label` | `ReactNode` |  | Visible label; also the accessible name. Use `aria-label` when there is no room for one. |
+| `size` | `ProgressSize` | `md` | Track thickness: `sm` inside a row or a card, `md` (the default) on its own, `lg` when the reading is the point of the screen. |
 | `thresholds` | `{ warn?: number; danger?: number; } \| undefined` | `{ warn: 0.75, danger: 0.9 }` | Fractions of the range at which the fill changes: gold past `warn`, rojo past `danger`. Drawn on the track as ticks. Pass `{}` for none. |
-| `valueText` | `((formatted: string, value: number) => ReactNode)` |  |  |
+| `valueText` | `((formatted: string, value: number) => ReactNode)` |  | Replaces the value text at the end of the label row, e.g. "212 / 300 MB". Receives the formatted value and the raw number. |
 
 Also accepts the props of `MeterRootProps`.
 
@@ -68,10 +68,10 @@ Also accepts the props of `MeterRootProps`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the root, which holds the label row and the track. |
 | `label` | `ReactNode` |  | Visible label; also the accessible name. Use `aria-label` when there is no room for one. |
 | `showValue` | `boolean` | `true` | Show the formatted value at the end of the label row. Ignored while indeterminate. |
-| `size` | `ProgressSize` | `md` |  |
+| `size` | `ProgressSize` | `md` | Track thickness: `sm` inside a row or a card, `md` (the default) on its own, `lg` for the one task a screen is waiting on. |
 | `tone` | `"neutral" \| "danger" \| "success" \| "ink"` | `neutral` | Fill colour. `neutral` (ink) is in-flight; `success` and `danger` (verde, rojo) for a finished state that stays on screen. `ink` is deprecated since 0.7.0 and removed in 1.0.0: use `neutral`, the same fill under the status word every other `tone` uses. |
 | `valueText` | `((formatted: string \| null, value: number \| null) => ReactNode)` |  | Replaces the value text, e.g. "212 / 300 prompts". |
 

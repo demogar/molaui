@@ -49,7 +49,7 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the root, merged with `cn()` so yours win a conflict. A string, not Base UI's function of state: style a state with its `data-*` attribute instead (`data-open:`). |
 
 Also accepts the props of `AccordionRootProps`.
 
@@ -59,7 +59,7 @@ Also accepts the props of `AccordionRootProps`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the item, merged with `cn()`. A string, for the reason given on `Accordion`. |
 
 Also accepts the props of `AccordionItemProps`, `UseCollapsibleRootParameters`.
 
@@ -71,7 +71,7 @@ Also accepts the props of `AccordionItemProps`, `UseCollapsibleRootParameters`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the content inside the panel, not the panel itself: the panel animates its height, and padding on it would be clipped while it does. |
 
 Also accepts the props of `AccordionRootProps`.
 
@@ -81,7 +81,7 @@ Also accepts the props of `AccordionRootProps`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the trigger button (not the heading around it), merged with `cn()`. A string, for the reason given on `Accordion`. |
 | `meta` | `ReactNode` |  | Secondary text on the same line, right of the title — a count, a status. |
 
 Also accepts the props of `NativeButtonProps`.
@@ -100,7 +100,7 @@ One disclosure on its own — "Show 12 more fields", "Raw response". No rules, n
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the content inside the panel, for the reason given on `AccordionPanel`. |
 
 Also accepts the props of `CollapsiblePanelProps`.
 
@@ -110,7 +110,7 @@ Also accepts the props of `CollapsiblePanelProps`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the trigger button, merged with `cn()`. A string, for the reason given on `Accordion`. |
 
 Also accepts the props of `NativeButtonProps`.
 

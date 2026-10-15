@@ -49,10 +49,10 @@ The model's thinking, behind a disclosure.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `text` (required) | `string` |  | The reasoning text so far. |
-| `defaultOpen` | `boolean` | `false` |  |
+| `defaultOpen` | `boolean` | `false` | Start with the reasoning shown. Closed by default, because reasoning is evidence for when the answer looks wrong, not the answer. |
 | `durationMs` | `number` |  | A known duration, when there are no timestamps. |
-| `endedAt` | `number \| Date` |  |  |
-| `startedAt` | `number \| Date` |  |  |
+| `endedAt` | `number \| Date` |  | When the thinking ended. Freezes the clock; omit while the model is still thinking. |
+| `startedAt` | `number \| Date` |  | When the thinking started. Gives the summary line its clock: live while streaming, "Thought for 12.4s" once done. |
 | `status` | `"streaming" \| "done"` | `done` | `streaming` while the model is still thinking. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="reasoning">`.

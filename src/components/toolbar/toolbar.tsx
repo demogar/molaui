@@ -31,6 +31,7 @@ import { Menu, MenuContent, MenuItem, MenuTrigger } from '../menu'
  */
 export const toolbarVariants = cva('flex flex-wrap items-center gap-1', {
   variants: {
+    /** `bare` (default) inside a header or a table frame; `panel` gives the toolbar its own cut ground over a canvas. */
     variant: {
       /** Its own cut panel, for a toolbar that stands alone over a canvas. */
       panel: 'bg-cloth-pale p-1 shadow-cut',
@@ -44,6 +45,10 @@ export const toolbarVariants = cva('flex flex-wrap items-center gap-1', {
 export interface ToolbarProps
   extends Omit<ToolbarPrimitive.Root.Props, 'className'>,
     Variants<typeof toolbarVariants> {
+  /**
+   * Classes for the toolbar, merged with `cn()`. A string, not Base UI's
+   * function of state: style a state with its `data-*` attribute.
+   */
   className?: string
   /** Names the toolbar: "Run actions", "Text formatting". */
   'aria-label': string
@@ -63,6 +68,7 @@ export function ToolbarGroup({ className, ...props }: Omit<ToolbarPrimitive.Grou
 }
 
 export interface ToolbarSeparatorProps extends Omit<ToolbarPrimitive.Separator.Props, 'className'> {
+  /** Classes for the keyline between groups. A string, for the reason given on `Toolbar`. */
   className?: string
 }
 
@@ -79,7 +85,9 @@ export function ToolbarSeparator({ className, ...props }: ToolbarSeparatorProps)
 export interface ToolbarButtonProps
   extends Omit<ToolbarPrimitive.Button.Props, 'className'>,
     Variants<typeof buttonVariants> {
+  /** Classes for the button, merged with `cn()`. A string, for the reason given on `Toolbar`. */
   className?: string
+  /** Leading icon; decorative. An icon-only button still needs an `aria-label`. */
   icon?: React.ReactNode
 }
 
@@ -118,12 +126,17 @@ const toggleClasses = [
 export interface ToolbarToggleProps
   extends Omit<ToolbarPrimitive.Button.Props, 'className' | 'value'>,
     Pick<Variants<typeof buttonVariants>, 'size'> {
+  /** Classes for the toggle, merged with `cn()`. A string, for the reason given on `Toolbar`. */
   className?: string
+  /** Leading icon; decorative. An icon-only toggle still needs an `aria-label`. */
   icon?: React.ReactNode
   /** Identifies the toggle inside a `ToolbarToggleGroup`. */
   value?: string
+  /** Whether the toggle is on, when you control it. Inside a `ToolbarToggleGroup`, control the group's value instead. */
   pressed?: boolean
+  /** Whether it starts on, without controlling it afterwards. */
   defaultPressed?: boolean
+  /** Called with the new state each time the toggle is pressed. */
   onPressedChange?: (pressed: boolean) => void
 }
 
@@ -160,6 +173,7 @@ export function ToolbarToggle({
 }
 
 export interface ToolbarToggleGroupProps extends Omit<ToggleGroup.Props, 'className'> {
+  /** Classes for the group, which wraps like the toolbar. A string, for the reason given on `Toolbar`. */
   className?: string
   /** Names the set: "Density", "Status". */
   'aria-label': string
@@ -181,6 +195,7 @@ export function ToolbarToggleGroup({ className, ...props }: ToolbarToggleGroupPr
 }
 
 export interface ToolbarInputProps extends Omit<ToolbarPrimitive.Input.Props, 'className' | 'size'> {
+  /** Classes for the `<input>` itself. Set a width with `wrapperClassName`. */
   className?: string
   /** Classes for the wrapper, e.g. a width. */
   wrapperClassName?: string

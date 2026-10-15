@@ -43,6 +43,11 @@ export interface BreadcrumbItem {
 }
 
 export interface BreadcrumbProps extends Omit<React.ComponentProps<'nav'>, 'children'> {
+  /**
+   * The trail, root first. The last item is the current page and renders as
+   * text whether or not it has an `href`; pass a long id through
+   * `middleTruncate` so both ends survive.
+   */
   items: BreadcrumbItem[]
   /** The element each link crumb renders as: your router's `<Link />`, or a function returning one. */
   renderLink?: BreadcrumbLinkRender

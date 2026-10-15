@@ -57,11 +57,11 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `title` (required) | `ReactNode` |  |  |
-| `actions` | `ReactNode` |  |  |
-| `breadcrumb` | `ReactNode` |  |  |
-| `description` | `ReactNode` |  |  |
-| `meta` | `ReactNode[]` |  |  |
+| `title` (required) | `ReactNode` |  | The page's name, rendered as its one `h1`. |
+| `actions` | `ReactNode` |  | The page's buttons, right of the title. They wrap below it on a narrow screen rather than hiding in an overflow menu, because the primary action should never cost an extra click. |
+| `breadcrumb` | `ReactNode` |  | A `Breadcrumb`, above the title: it is navigation back up the trail, not a label for the heading. |
+| `description` | `ReactNode` |  | A sentence under the title saying what the page is for. |
+| `meta` | `ReactNode[]` |  | Short facts — owner, last updated, version — in a row divided by keylines. Rendered as a list, so a screen reader hears how many there are. |
 | `tabs` | `ReactNode` |  | A Tabs list. Sits on the header's bottom edge so the active tab cuts into it. |
 
 `className`, `ref`, `id` and the other DOM props go to `<header data-slot="page-header">`.

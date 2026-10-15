@@ -76,9 +76,9 @@ Each story is a live example in Storybook.
 | `headingLevel` | `2 \| 3 \| 4 \| 5` | `3` | The heading element for `title`. |
 | `icon` | `ReactNode` |  | Replace the tone's default mark — the icon, or in `flat` the square swatch — or `false` for none. |
 | `onDismiss` | `(() => void)` |  | Renders a dismiss button. The caller owns whether it comes back. |
-| `title` | `ReactNode` |  |  |
-| `tone` | `"neutral" \| "info" \| "success" \| "warn" \| "danger"` |  |  |
-| `variant` | `"seam" \| "flat"` |  |  |
+| `title` | `ReactNode` |  | A short heading that states the message. With it the callout becomes a region named by the title; without it, it is plain content and the body has to stand alone. |
+| `tone` | `"neutral" \| "info" \| "success" \| "warn" \| "danger"` |  | The status of the message, carried by the seam (or the swatch), the wash and the tone's icon; `info` by default. The title still has to say it in words. |
+| `variant` | `"seam" \| "flat"` |  | `seam` (default) is the full message: top seam, keyline, icon. `flat` keeps only the wash and a square swatch, for a one-line aside beside a hero or at the head of a list, where a seam reads as a stripe. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="callout">`.
 

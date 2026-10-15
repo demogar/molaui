@@ -61,9 +61,9 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `values` (required) | `number[]` |  |  |
-| `height` | `number` | `24` |  |
-| `width` | `number` | `72` |  |
+| `values` (required) | `number[]` |  | The series, oldest first, scaled to its own minimum and maximum. The latest point is cut out in the accent. Empty draws nothing. Decorative: say the figure in text beside it. |
+| `height` | `number` | `24` | Drawn height in pixels, 24 by default. |
+| `width` | `number` | `72` | Drawn width in pixels, 72 by default. |
 
 `className`, `ref`, `id` and the other DOM props go to `<svg data-slot="sparkline">`.
 
@@ -71,9 +71,9 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `label` (required) | `ReactNode` |  |  |
-| `value` (required) | `ReactNode` |  |  |
-| `delta` | `StatDelta` |  |  |
+| `label` (required) | `ReactNode` |  | What the figure measures, set in the label register: "p95 latency", "Runs today". It is the tile's term. |
+| `value` (required) | `ReactNode` |  | The figure itself, already formatted: "1,284", "97.8". Put the unit in `unit` rather than in the string. |
+| `delta` | `StatDelta` |  | The change since a reference period. State both which way it moved (`direction`, the glyph) and whether that is good (`sentiment`, the colour): up is not always good news. |
 | `hint` | `ReactNode` |  | A line of context under the figure. |
 | `trend` | `number[]` |  | The recent series, oldest first. Drawn in ink with the latest point cut out in the accent. |
 | `unit` | `ReactNode` |  | Set smaller beside the figure: "ms", "runs", "%". |

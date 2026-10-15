@@ -77,11 +77,27 @@ export interface DataTableBulkContext {
 }
 
 export interface DataTableProps<Row> extends Omit<React.ComponentProps<'table'>, 'children' | 'aria-label'> {
+  /**
+   * What each column shows, how it sorts and aligns, and whether it can be hidden.
+   * Order is display order.
+   */
   columns: DataTableColumn<Row>[]
+  /**
+   * The data. Every row when the table sorts and pages itself; one page, already
+   * sorted, when `manual`. Never mutated.
+   */
   rows: Row[]
+  /**
+   * A stable id per row. Selection is kept by id, so it survives sorting, paging
+   * and a refetch that returns new objects.
+   */
   getRowId: (row: Row) => string
   /** Names the table for assistive tech when there is no visible caption. */
   label?: string
+  /**
+   * A visible caption naming the table. Prefer it to `label` when the page has
+   * room: a visible name helps every reader, not only assistive tech.
+   */
   caption?: React.ReactNode
   /** What a row is, for counts: `{ one: 'run', other: 'runs' }`. */
   noun?: { one: string; other: string }
@@ -91,23 +107,43 @@ export interface DataTableProps<Row> extends Omit<React.ComponentProps<'table'>,
 
   /** Controlled sort. `null` is "no sort"; leave undefined to let the table own it. */
   sort?: DataTableSort | null
+  /**
+   * The sort the table starts with when it owns sorting. Clicking a sorted header
+   * cycles ascending → descending → off.
+   */
   defaultSort?: DataTableSort
+  /**
+   * Called with the new sort, or `null` when it is turned off. With `manual`,
+   * fetch the re-sorted page here; the table also resets to page 1.
+   */
   onSortChange?: (sort: DataTableSort | null) => void
 
   /** Rows per page. Setting it turns pagination on. */
   pageSize?: number
   /** Controlled page, 1-based. */
   page?: number
+  /** The page the table starts on when it owns paging, 1-based. Defaults to 1. */
   defaultPage?: number
+  /** Called with the new page, 1-based. With `manual`, fetch that page here. */
   onPageChange?: (page: number) => void
   /** The total across every page, when `manual`. */
   rowCount?: number
+  /**
+   * `compact` (the default) is previous/next with the range; `pages` numbers the
+   * pages, for a table where jumping matters more than stepping.
+   */
   paginationVariant?: 'compact' | 'pages'
 
+  /**
+   * Adds a checkbox column and a select-all in the header. Select-all covers the
+   * current page only, so paging never selects rows nobody has seen.
+   */
   selectable?: boolean
   /** Controlled selection. Pair with `onSelectionChange`. */
   selection?: ReadonlySet<string>
+  /** Row ids selected at the start when the table owns selection. */
   defaultSelection?: Iterable<string>
+  /** Called with the new set of selected ids, across every page. */
   onSelectionChange?: (selection: Set<string>) => void
   /** How a row checkbox is named, e.g. `(run) => \`Select ${run.id}\``. */
   rowLabel?: (row: Row) => string
@@ -118,12 +154,37 @@ export interface DataTableProps<Row> extends Omit<React.ComponentProps<'table'>,
   columnMenu?: boolean
   /** Controlled hidden columns, by key. */
   hiddenColumns?: ReadonlySet<string>
+  /**
+   * Column keys hidden at the start when the table owns visibility. The reader can
+   * bring them back from the column menu.
+   */
   defaultHiddenColumns?: Iterable<string>
+  /**
+   * Called with the new set of hidden column keys — to remember the choice between
+   * visits.
+   */
   onHiddenColumnsChange?: (hidden: Set<string>) => void
 
+  /**
+   * Shows skeleton rows at the real row height in place of the body and says
+   * "Loading…" in the bar, so the table does not jump when the data lands.
+   */
   loading?: boolean
+  /**
+   * What shows when there are no rows: an empty state as data (title, description,
+   * kind, actions), or a node that becomes its description. Use `kind: "no-
+   * results"` when filters emptied it.
+   */
   empty?: React.ReactNode | DataTableEmpty
+  /**
+   * Keeps the header row visible while the body scrolls. Give the frame a height
+   * with `frameClassName`.
+   */
   stickyHeader?: boolean
+  /**
+   * Bounds the table with a keyline on a raised ground, for a table that is the
+   * panel rather than sitting in one.
+   */
   framed?: boolean
   /** Classes for the scrolling frame around the table. */
   frameClassName?: string
@@ -480,8 +541,20 @@ export function DataTable<Row>({
 }
 
 export interface DataTableColumnMenuProps<Row> extends Omit<React.ComponentProps<'button'>, 'children' | 'onToggle' | 'hidden'> {
+  /**
+   * Every column, hidden or not, so the menu can list them all. A column with
+   * `hideable: false` shows checked and disabled.
+   */
   columns: DataTableColumn<Row>[]
+  /**
+   * The keys of the columns currently hidden. The last visible column cannot be
+   * hidden.
+   */
   hidden: ReadonlySet<string>
+  /**
+   * Called with a column's key and whether it should now be visible. The menu
+   * stays open, because columns are chosen several at a time.
+   */
   onToggle: (key: string, visible: boolean) => void
 }
 

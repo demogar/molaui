@@ -54,8 +54,8 @@ Each story is a live example in Storybook.
 | --- | --- | --- | --- |
 | `name` (required) | `string` |  | The person's or agent's name. Becomes the accessible name and seeds the colour. |
 | `icon` | `ReactNode` |  | Shown instead of initials when there is no image — e.g. a bot glyph for an agent. |
-| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` |  |  |
-| `src` | `string` |  |  |
+| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` |  | The square's side, on the spacing scale so density re-scales it: `md` for a table row or a message, `xs`/`sm` inline with text, `lg`/`xl` for a profile header. |
+| `src` | `string` |  | An image URL. The initials stay until it has loaded, and stay for good if it fails, so a broken URL never shows a broken-image glyph. |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="avatar">`.
 
@@ -67,7 +67,7 @@ Overlapping tiles, each separated from the next by a ring of the page ground ins
 | --- | --- | --- | --- |
 | `label` (required) | `string` |  | Names the group: "Reviewers", "On call". |
 | `max` | `number` | `4` | Show at most this many; the rest collapse into a "+n" tile. |
-| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` | `md` |  |
+| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` | `md` | Every tile's size, the "+n" tile's included; it overrides the size set on each child, so the row stays even. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="avatar-group">`.
 

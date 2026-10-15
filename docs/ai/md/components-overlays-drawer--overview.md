@@ -65,8 +65,8 @@ Renders no element of its own, so it takes no `className` or `ref`.
 | --- | --- | --- | --- |
 | `title` (required) | `ReactNode` |  | The drawer's accessible name. Required: an unnamed modal is announced as "dialog" and nothing else. |
 | `band` | `DrawerBand` | `oro` | The layer revealed in the top seam. |
-| `className` | `string` |  |  |
-| `description` | `ReactNode` |  |  |
+| `className` | `string` |  | Classes for the popup, merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute. |
+| `description` | `ReactNode` |  | A line under the title, read as the drawer's accessible description when it opens. |
 | `footer` | `ReactNode` |  | Action row pinned under the scrolling body, behind a keyline. Usually a `ghost` cancel and one primary. |
 | `hideClose` | `boolean` | `false` | Hide the close button. Only when the footer carries an explicit way out. |
 | `size` | `"sm" \| "md" \| "lg"` | `md` | Width of a side drawer, or height of a bottom sheet. Always capped by the viewport. |

@@ -64,16 +64,16 @@ The confirmation for an action that destroys something. Built on Base UI's Alert
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `confirmLabel` (required) | `string` |  | The verb on the confirm button: "Delete run", never "OK". |
-| `description` (required) | `ReactNode` |  |  |
+| `description` (required) | `ReactNode` |  | What happens if the operator confirms, and whether it can be undone. Required: a destructive confirm with no consequence stated is a guess. |
 | `onConfirm` (required) | `() => void \| Promise<void>` |  | May return a promise. While it is pending the confirm button shows its working strip, both buttons stop accepting presses, and the dialog stays open; it closes when the promise resolves and stays open if it rejects, so the operator can see the failure where they caused it. |
-| `title` (required) | `ReactNode` |  |  |
-| `cancelLabel` | `string` | `Cancel` |  |
+| `title` (required) | `ReactNode` |  | The question, naming the thing: "Delete run #4182?". It is the dialog's accessible name. |
+| `cancelLabel` | `string` | `Cancel` | The safe answer's label, "Cancel" by default. It takes focus when the dialog opens, so a reflexive Enter cancels. |
 | `confirmationText` | `string` |  | When set, the confirm button stays disabled until this exact string is typed — the run id, the project slug. For actions that cannot be undone and that a muscle-memory Enter could otherwise fire. |
-| `defaultOpen` | `boolean` |  |  |
+| `defaultOpen` | `boolean` |  | Opens the dialog on first render without controlling it afterwards. |
 | `error` | `ReactNode` |  | Why the last confirm failed, starting with what did not happen: "Not revoked. The server didn't answer." Shown between the body and the buttons, announced once when it appears, and linked to the confirm button so it is read again when focus is there. Hidden while a retry is pending. Clear it when the dialog opens for something else. |
 | `finalFocus` | `boolean \| RefObject<HTMLElement \| null> \| ((closeType: InteractionType) => boolean \| void \| HTMLElement \| null)` |  | Where focus goes when the dialog closes: Base UI's `finalFocus`. By default it returns to the trigger, which is right after Cancel. After a confirm that removed the trigger (a deleted row's button), return the element a reader would carry on from: the next row's action, or the list's heading. A function receives how the dialog was closed. |
-| `onOpenChange` | `((open: boolean) => void)` |  |  |
-| `open` | `boolean` |  |  |
+| `onOpenChange` | `((open: boolean) => void)` |  | Called with the next open state on every open and close, Cancel and Escape included. |
+| `open` | `boolean` |  | Whether the dialog is open, when you control it: to open it from somewhere other than `trigger`, or to close it after an async confirm of your own. |
 | `tone` | `"neutral" \| "danger"` | `danger` | `danger` cuts the seam in rojo and arms the confirm button in red. |
 | `trigger` | `ReactElement<unknown, string \| JSXElementConstructor<any>>` |  | Rendered as the trigger, e.g. a danger `Button`. |
 
@@ -95,11 +95,11 @@ Renders no element of its own, so it takes no `className` or `ref`.
 | --- | --- | --- | --- |
 | `title` (required) | `ReactNode` |  | The dialog's accessible name. Required: an unnamed modal is announced as "dialog" and nothing else. |
 | `band` | `DialogBand` | `oro` | The layer revealed in the top seam. |
-| `className` | `string` |  |  |
-| `description` | `ReactNode` |  |  |
+| `className` | `string` |  | Classes for the popup, merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute. |
+| `description` | `ReactNode` |  | A line under the title, read as the dialog's accessible description when it opens. Say what the dialog is for; leave instructions to the body. |
 | `footer` | `ReactNode` |  | Action row under the body: right-aligned, or stacked full width with the last action on top when the row is under 24rem. Usually a `ghost` cancel and one primary. |
 | `hideClose` | `boolean` | `false` | Hide the corner close button. Only when the footer carries an explicit way out. |
-| `size` | `"sm" \| "md" \| "lg"` |  |  |
+| `size` | `"sm" \| "md" \| "lg"` |  | The popup's maximum width: `sm` for a short question, `md` (default) for a form, `lg` for a table or a long review. |
 
 Also accepts the props of `DialogPopupProps`.
 

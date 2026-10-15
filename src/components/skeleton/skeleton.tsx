@@ -29,6 +29,7 @@ export const skeletonShimmer = [
 
 export const skeletonVariants = cva(['rounded-none bg-cloth-shade', skeletonShimmer], {
   variants: {
+    /** What the bone stands in for: a `block` (default) for a card or chart, `text` for a line, `avatar` for a person's mark. Size a block with classes. */
     shape: {
       /** A card, a chart, an image: keeps the keyline every other shape has. */
       block: 'relleno-field shadow-cut',
@@ -47,6 +48,7 @@ export const skeletonVariants = cva(['rounded-none bg-cloth-shade', skeletonShim
       /** A person or agent mark, square-cut like `Avatar`. */
       avatar: 'shrink-0 shadow-cut',
     },
+    /** For `shape="avatar"` only: the Avatar size it stands in for, so the bone is exactly the mark that replaces it. */
     size: {
       xs: '',
       sm: '',
@@ -102,6 +104,7 @@ export function Skeleton({ shape, size, className, ...props }: SkeletonProps) {
 }
 
 export interface SkeletonTextProps extends React.ComponentProps<'div'> {
+  /** How many lines, 3 by default. Match the text that will arrive; the last line is drawn short. */
   lines?: number
 }
 

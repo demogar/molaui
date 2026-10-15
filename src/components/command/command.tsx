@@ -108,10 +108,19 @@ export interface CommandPaletteProps extends Omit<React.ComponentProps<'div'>, '
   open?: boolean
   /** Open on first render, for a palette that owns its own state. */
   defaultOpen?: boolean
+  /**
+   * Called when the palette opens or closes: the trigger, Escape, a press outside,
+   * or choosing an item, which closes it before the item runs.
+   */
   onOpenChange?: (open: boolean) => void
   /** Rendered as the button that opens the palette, e.g. a `SearchInput`-shaped `Button`. */
   trigger?: React.ReactElement
+  /**
+   * The commands, in headed groups. Filtered as the person types; label-prefix
+   * matches come first within a group, and empty groups are dropped.
+   */
   groups: CommandGroup[]
+  /** Shown in the empty search input. Defaults to "Type a command or search…". */
   placeholder?: string
   /** Shown when nothing matches. Receives the query. */
   renderEmpty?: (query: string) => React.ReactNode

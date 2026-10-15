@@ -48,7 +48,7 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `level` (required) | `HeadingLevel` |  |  |
+| `level` (required) | `HeadingLevel` |  | The outline level, `h1` to `h4`. Required, and set from the document outline: never skip one to get a smaller look; use `visualLevel`. |
 | `size` (deprecated) | `HeadingLevel` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `visualLevel`, which takes the same values. `codemods/prop-vocabulary.ts` rewrites call sites. |
 | `visualLevel` | `1 \| 2 \| 3 \| 4` |  | The level it should look like, when that must differ from the outline level. |
 

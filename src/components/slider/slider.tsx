@@ -33,7 +33,9 @@ export interface SliderProps
   formatValue?: (formatted: string, value: number) => React.ReactNode
   /** Labels under the two ends of the track: "Precise" / "Creative". */
   minLabel?: React.ReactNode
+  /** Label under the high end of the track. Decorative: the value text, not this, is what a screen reader hears. */
   maxLabel?: React.ReactNode
+  /** Classes for the root, which holds the label row, the track and the end labels. */
   className?: string
 }
 

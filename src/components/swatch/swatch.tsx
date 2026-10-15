@@ -37,6 +37,7 @@ import { type Variants } from '../../lib/variants'
  */
 export const swatchVariants = cva('inline-block shrink-0 forced-ink', {
   variants: {
+    /** The colour keyed, in the badge tones so a key and a status for the same thing agree; `neutral` by default. */
     tone: {
       neutral: 'bg-ink-muted',
       info: 'bg-anil',
@@ -45,10 +46,12 @@ export const swatchVariants = cva('inline-block shrink-0 forced-ink', {
       danger: 'bg-danger',
       accent: 'bg-accent cut-thin',
     },
+    /** `md` (default) beside body text, `sm` beside a label or a small figure. */
     size: {
       sm: 'size-2',
       md: 'size-2.5',
     },
+    /** `square` (default), or `round` only when the thing keyed is itself a dot, such as a map pin. */
     shape: {
       square: 'rounded-none',
       round: 'rounded-full',

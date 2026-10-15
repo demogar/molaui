@@ -31,6 +31,11 @@ import { type Variants } from '../../lib/variants'
  */
 export const panelVariants = cva('relative min-w-0 rounded-none', {
   variants: {
+    /**
+     * The ground the panel is cut from, `pale` by default. A filled layer
+     * (`rojo`, `anil`, `verde`, `ink`) re-inks everything inside it, so pick
+     * it here rather than with a background class.
+     */
     layer: {
       pale: 'bg-cloth-pale text-ink',
       cloth: 'bg-cloth text-ink',
@@ -41,17 +46,24 @@ export const panelVariants = cva('relative min-w-0 rounded-none', {
       verde: 'bg-verde on-layer',
       oro: 'bg-oro text-on-oro [--ink-2:var(--on-oro)] [--ink-muted:var(--on-oro)]',
     },
+    /**
+     * `cut` (default) is the ink keyline; `band` reveals a band of `band`'s
+     * colour between two keylines, for the one panel that is the point of the
+     * screen; `none` for a ground inside another.
+     */
     edge: {
       cut: 'shadow-cut',
       band: 'cut-band',
       none: '',
     },
+    /** Inner padding on the spacing scale, so it moves with density; `md` by default, `none` for a table or a list that runs edge to edge. */
     padding: {
       none: 'p-0',
       sm: 'p-3',
       md: 'p-5',
       lg: 'p-8',
     },
+    /** The colour revealed by `edge="band"`, gold by default. Has no effect on the other edges. */
     band: {
       oro: 'band-oro',
       rojo: 'band-rojo',

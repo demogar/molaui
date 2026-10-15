@@ -68,7 +68,7 @@ Text that arrives a token at a time.
 | `doneAnnouncement` | `string` | `Response complete.` | Spoken once when a stream that was running completes. |
 | `errorAnnouncement` | `string` | `Response stopped with an error.` | Spoken once when a stream that was running fails. |
 | `renderCitation` | `((n: number) => ReactNode)` |  | How an inline `[n]` marker renders. Without it the marker stays as text. Pass a stable function (module scope or `useCallback`): finished blocks skip re-rendering only while it stays the same. |
-| `status` | `StreamStatus` | `done` |  |
+| `status` | `StreamStatus` | `done` | Where the stream is. `streaming` shows the caret and sets `aria-busy`; the move from `streaming` to `done` or `error` is announced once. Defaults to `done`. |
 | `tone` (deprecated) | `"default" \| "muted"` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `variant`, which takes the same values: a muted ink is a presentation, and `tone` is a status. |
 | `variant` | `"default" \| "muted"` |  | `muted` for text the reader may skim — reasoning, not the answer. |
 

@@ -61,20 +61,20 @@ Free text with suggestions: a run label, a tag, a search. The typed text is the 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `items` (required) | `(string \| ComboboxOption)[]` |  | Suggestions. Plain strings, or options with a description line. |
-| `defaultValue` | `string` |  |  |
-| `disabled` | `boolean` |  |  |
+| `defaultValue` | `string` |  | The text in the input on first render, uncontrolled. |
+| `disabled` | `boolean` |  | Stated, not faded: the input goes to the shaded cloth and no suggestions open. |
 | `emptyMessage` | `ReactNode` |  | What the popup says when nothing matches. Omit to close the popup instead. |
-| `label` | `ReactNode` |  |  |
-| `loading` | `boolean` | `false` |  |
+| `label` | `ReactNode` |  | A visible label above the input. Omit it inside `Field`, which renders its own, and spread Field's control props onto this component instead. |
+| `loading` | `boolean` | `false` | Suggestions are on their way: the popup shows the working texture and "Searching…" and the list is marked busy. Set it while a server search is in flight. |
 | `locale` | `LocalesArgument` |  | Locale for the built-in matching. Omitted, the runtime's locale is used. |
-| `name` | `string` |  |  |
+| `name` | `string` |  | Form field name. The typed text is what submits, not a suggestion's value. |
 | `onValueChange` | `((value: string) => void)` |  | Every change to the text, typed or chosen. |
-| `placeholder` | `string` |  |  |
-| `readOnly` | `boolean` |  |  |
-| `required` | `boolean` |  |  |
-| `size` | `"sm" \| "md" \| "lg"` | `md` |  |
-| `status` | `ReactNode` |  |  |
-| `value` | `string` |  |  |
+| `placeholder` | `string` |  | Shown in the empty input. A hint at what to type, never the label: it disappears on the first keystroke. |
+| `readOnly` | `boolean` |  | Shows the text without letting it change; it still submits and can be focused and read. |
+| `required` | `boolean` |  | Marks the field required for form validation, and the `label`, when there is one, with the required mark. |
+| `size` | `"sm" \| "md" \| "lg"` | `md` | Control height, shared with Input and Select so the field lines up in a form row. Defaults to `md`; density rescales every size. |
+| `status` | `ReactNode` |  | A line above the suggestions: "Showing 20 of 312", or an error from the search. |
+| `value` | `string` |  | The text in the input, controlled. Typing and picking a suggestion both change it, so pair it with `onValueChange`. |
 | `wrapperClassName` | `string` |  | Classes for the wrapper that holds `label` and the input. Only rendered with a `label`. |
 
 `className`, `ref`, `id` and the other DOM props go to `<input data-slot="autocomplete">`.
@@ -87,25 +87,25 @@ Free text with suggestions: a run label, a tag, a search. The typed text is the 
 | --- | --- | --- | --- |
 | `items` (required) | `ComboboxItems` |  | Flat options, or labelled groups. With `filter={null}`, the options to show right now. |
 | `clearLabel` | `string` |  | Accessible name of the clear button. |
-| `defaultValue` | `string \| string[] \| null` |  |  |
-| `disabled` | `boolean` |  |  |
+| `defaultValue` | `string \| string[] \| null` |  | The option `value` selected on first render, uncontrolled. `null` or omitted starts empty. The option values selected on first render, uncontrolled. |
+| `disabled` | `boolean` |  | Stated, not faded: the field and any chips go to the shaded cloth and the clear, open and remove buttons are taken away. |
 | `emptyMessage` | `ReactNode` |  | What the popup says when nothing matches. |
 | `filter` | `((option: ComboboxOption, query: string) => boolean) \| null` |  | How typed text matches an option. Pass `null` when the caller filters — a server search — and hand the results in through `items`. |
 | `label` | `ReactNode` |  | A visible label above the field. Omit it inside `Field`, which renders its own, and spread Field's control props onto this component instead. |
 | `loading` | `boolean` |  | Results are on their way: the popup shows the working texture and "Searching…". |
 | `locale` | `LocalesArgument` |  | Locale for the built-in matching. Omitted, the runtime's locale is used. |
-| `multiple` | `boolean` |  |  |
-| `name` | `string` |  |  |
+| `multiple` | `boolean` |  | Omit, or `false`, for a single choice. Set `true` to pick several, shown as removable chips in the field. Pick several options, shown as removable chips in the field. Values become `string[]`. |
+| `name` | `string` |  | Form field name. The selected option's `value` is submitted under it (one entry per value with `multiple`). |
 | `onInputValueChange` | `((query: string) => void)` |  | What is typed, as it is typed: the hook for a server search. |
-| `onValueChange` | `((value: string \| null) => void) \| ((value: string[]) => void)` |  |  |
-| `placeholder` | `string` |  |  |
-| `readOnly` | `boolean` |  |  |
+| `onValueChange` | `((value: string \| null) => void) \| ((value: string[]) => void)` |  | Called with the chosen option's `value`, or `null` when the field is cleared. Called with every selected value after a pick, a chip removal or a clear. |
+| `placeholder` | `string` |  | Shown in the empty input. A hint at what can be searched, never the label: it disappears on the first keystroke. |
+| `readOnly` | `boolean` |  | Shows the selection without letting it change. The clear, open and remove buttons are taken away, but the value still submits and can be focused and read. |
 | `removeLabel` | `((label: string) => string)` |  | Only with `multiple`: a single value has no chips to remove. Typed `never` so passing it here is an error rather than a silent no-op — an optional discriminant does not narrow the union by itself. Accessible name of each chip's remove button. |
-| `required` | `boolean` |  |  |
-| `size` | `"sm" \| "md" \| "lg"` |  |  |
+| `required` | `boolean` |  | Marks the field required for form validation, and the `label`, when there is one, with the required mark. |
+| `size` | `"sm" \| "md" \| "lg"` |  | Control height, shared with Input and Select so a combobox lines up in a form row. Defaults to `md`; density rescales every size. |
 | `status` | `ReactNode` |  | A line above the results — "Showing 20 of 312", or an error from the search. |
 | `triggerLabel` | `string` |  | Accessible name of the button that opens the list. |
-| `value` | `string \| string[] \| null` |  |  |
+| `value` | `string \| string[] \| null` |  | The selected option's `value`, controlled. `null` is no selection; leave it `undefined` to let the combobox hold its own state. The selected option values, controlled, in the order they were picked. |
 | `wrapperClassName` | `string` |  | Classes for the wrapper that holds `label` and the field. Only rendered with a `label`. |
 
 `className` goes to `<div data-slot="combobox">`; `ref`, `id` and the other DOM props go to `<input>`.

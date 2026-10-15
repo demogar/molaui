@@ -36,15 +36,27 @@ export interface SegmentedOption<V extends string = string> {
 
 export interface SegmentedControlBaseProps<V extends string = string>
   extends Omit<React.ComponentProps<'div'>, 'defaultValue' | 'onChange' | 'children' | 'aria-label' | 'aria-labelledby'> {
+  /**
+   * The segments, in order: a `value`, a `label` and optionally an icon or
+   * `disabled`. Two to five short ones; past that, use a Select.
+   */
   options: SegmentedOption<V>[]
+  /** The pressed segment's `value`, controlled. Give one: a segmented control always has a choice made. */
   value?: V
+  /** The segment pressed on first render, uncontrolled. */
   defaultValue?: V
+  /**
+   * Called with the newly pressed segment's `value`. Pressing the segment that is
+   * already pressed does not call it, so the group never empties.
+   */
   onValueChange?: (value: V) => void
+  /** Height: `md` (the default) matches the other controls in a row; `sm` for a toolbar or a dense table header. */
   size?: 'sm' | 'md'
   /** Render icons only; labels become the accessible names. */
   iconOnly?: boolean
   /** Segments share the full width equally. */
   fill?: boolean
+  /** Disables every segment. To disable one, set `disabled` on its option instead. */
   disabled?: boolean
 }
 

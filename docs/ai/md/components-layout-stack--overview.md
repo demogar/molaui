@@ -54,11 +54,11 @@ Vertical rhythm: children down a column, one gap between them.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `align` | `"start" \| "center" \| "end" \| "stretch" \| "baseline"` |  |  |
-| `direction` | `"column" \| "row"` |  |  |
-| `gap` | `Gap` |  |  |
-| `justify` | `"start" \| "center" \| "end" \| "between"` |  |  |
-| `wrap` | `true \| false` |  |  |
+| `align` | `"start" \| "center" \| "end" \| "stretch" \| "baseline"` |  | Cross-axis alignment. Inline defaults to `center`, so an icon and a label line up; use `baseline` for mixed type sizes. |
+| `direction` | `"column" \| "row"` |  | `column` (default) stacks children down; `row` lays them across without wrapping, unless `wrap` is set. |
+| `gap` | `Gap` |  | The space between children, on the role-named scale that moves with density. Stack defaults to `md`, Inline to `sm`. |
+| `justify` | `"start" \| "center" \| "end" \| "between"` |  | Main-axis distribution. `between` pushes the first and last child to the ends. |
+| `wrap` | `true \| false` |  | Let children wrap onto a new line. On by default for Inline, off for Stack; turn it off on a row only when its children can shrink, or it overflows a phone. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="stack">`.
 
@@ -68,10 +68,10 @@ A row that wraps — toolbars, badge rows, button groups. Wraps by default, beca
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `align` | `"start" \| "center" \| "end" \| "stretch" \| "baseline"` | `center` |  |
-| `gap` | `Gap` | `sm` |  |
-| `justify` | `"start" \| "center" \| "end" \| "between"` |  |  |
-| `wrap` | `boolean` | `true` |  |
+| `align` | `"start" \| "center" \| "end" \| "stretch" \| "baseline"` | `center` | Cross-axis alignment. Inline defaults to `center`, so an icon and a label line up; use `baseline` for mixed type sizes. |
+| `gap` | `Gap` | `sm` | The space between children, on the role-named scale that moves with density. Stack defaults to `md`, Inline to `sm`. |
+| `justify` | `"start" \| "center" \| "end" \| "between"` |  | Main-axis distribution. `between` pushes the first and last child to the ends. |
+| `wrap` | `boolean` | `true` | Let children wrap onto a new line. On by default for Inline, off for Stack; turn it off on a row only when its children can shrink, or it overflows a phone. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="inline">`.
 

@@ -34,7 +34,17 @@ export type TabsVariant = 'underline' | 'panel'
 const VariantContext = React.createContext<TabsVariant>('underline')
 
 export interface TabsProps extends Omit<TabsPrimitive.Root.Props, 'className'> {
+  /**
+   * Classes for the root, merged with `cn()`. A string, not Base UI's
+   * function of state: style a state with its `data-*` attribute.
+   */
   className?: string
+  /**
+   * `underline` (default) switches views of one thing, a run's Trace / Output
+   * / Logs. `panel` is for tabs that are containers, a settings sheet or a
+   * code sample in three languages: the active tab joins the panel below.
+   * Every part inside reads it, so set it here only.
+   */
   variant?: TabsVariant
 }
 
@@ -47,6 +57,7 @@ export function Tabs({ className, variant = 'underline', ...props }: TabsProps) 
 }
 
 export interface TabsListProps extends Omit<TabsPrimitive.List.Props, 'className'> {
+  /** Classes for the row of tabs, which scrolls sideways when the tabs outgrow it. A string, for the reason given on `Tabs`. */
   className?: string
   ref?: React.Ref<HTMLDivElement>
 }
@@ -97,9 +108,11 @@ export function TabsList({ className, children, ref, ...props }: TabsListProps) 
 }
 
 export interface TabsTabProps extends Omit<TabsPrimitive.Tab.Props, 'className'> {
+  /** Classes for the tab, merged with `cn()`. A string, for the reason given on `Tabs`. */
   className?: string
   /** Trailing count, e.g. the number of tool calls. Tabular. */
   count?: number
+  /** Leading icon; decorative, so the label still has to name the tab. */
   icon?: React.ReactNode
 }
 
@@ -157,6 +170,7 @@ export function TabsTab({ className, count, icon, children, ...props }: TabsTabP
 }
 
 export interface TabsPanelProps extends Omit<TabsPrimitive.Panel.Props, 'className'> {
+  /** Classes for the panel, merged with `cn()`. A string, for the reason given on `Tabs`. */
   className?: string
 }
 

@@ -60,10 +60,15 @@ const itemClasses = [
 ]
 
 export interface MenuContentProps extends Omit<MenuPrimitive.Popup.Props, 'className'> {
+  /** Classes for the popup, merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute. */
   className?: string
+  /** Which side of the trigger the menu opens on, `bottom` by default. Base UI flips it when there is no room. */
   side?: MenuPrimitive.Positioner.Props['side']
+  /** How the menu lines up along that side, `start` by default, so it hangs from the trigger's leading edge. */
   align?: MenuPrimitive.Positioner.Props['align']
+  /** The gap between trigger and menu in pixels, 6 by default: enough that the menu's keyline does not merge with the trigger's. */
   sideOffset?: number
+  /** A shift along the aligned edge in pixels, 0 by default. */
   alignOffset?: number
 }
 
@@ -109,9 +114,14 @@ export function MenuShortcut({ className, ...props }: React.ComponentProps<'span
 }
 
 export interface MenuItemProps extends Omit<MenuPrimitive.Item.Props, 'className'> {
+  /** Classes for the item, merged with `cn()`. A string, for the reason given on `MenuContent`. */
   className?: string
   /** Leading icon; decorative. */
   icon?: React.ReactNode
+  /**
+   * A key hint, right-aligned in muted figures: "⌘D". It only shows the key;
+   * binding it is yours, and it is read as part of the item's name.
+   */
   shortcut?: string
   /**
    * `danger` destroys something: it highlights in rojo instead of ink.
@@ -147,7 +157,9 @@ export function MenuItem({ className, icon, shortcut, tone = 'neutral', children
 }
 
 export interface MenuCheckboxItemProps extends Omit<MenuPrimitive.CheckboxItem.Props, 'className'> {
+  /** Classes for the item, merged with `cn()`. A string, for the reason given on `MenuContent`. */
   className?: string
+  /** A key hint, as on `MenuItem`: shown, not bound. */
   shortcut?: string
 }
 
@@ -176,6 +188,7 @@ export function MenuCheckboxItem({ className, shortcut, children, closeOnClick =
 }
 
 export interface MenuRadioItemProps extends Omit<MenuPrimitive.RadioItem.Props, 'className'> {
+  /** Classes for the item, merged with `cn()`. A string, for the reason given on `MenuContent`. */
   className?: string
 }
 
@@ -213,7 +226,9 @@ export function MenuSeparator({ className, ...props }: Omit<MenuPrimitive.Separa
 }
 
 export interface MenuSubmenuTriggerProps extends Omit<MenuPrimitive.SubmenuTrigger.Props, 'className'> {
+  /** Classes for the item, merged with `cn()`. A string, for the reason given on `MenuContent`. */
   className?: string
+  /** Leading icon; decorative. The trailing chevron is always drawn. */
   icon?: React.ReactNode
 }
 

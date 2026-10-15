@@ -61,11 +61,11 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the button, merged with `cn()` so yours win a conflict. A string, not Base UI's function of state: style a state with its `data-*` attribute (`data-disabled:`). |
 | `icon` | `ReactNode` |  | Leading icon. Decorative: the label is the accessible name. |
 | `loading` | `boolean` | `false` | Work is in flight. The label stays (so the button never changes width mid-click), a strip of working relleno runs along its foot, and the button stops accepting presses while staying focusable and announced as busy. |
-| `size` | `"sm" \| "md" \| "lg"` |  |  |
-| `variant` | `"primary" \| "secondary" \| "danger" \| "ghost"` |  |  |
+| `size` | `"sm" \| "md" \| "lg"` |  | The control height. Density already re-scales every size, so reach for a different one only to set a button apart from its neighbours, not to make a whole screen compact. |
+| `variant` | `"primary" \| "secondary" \| "danger" \| "ghost"` |  | The weight of the action: `primary` (ink) for the panel's main action, `secondary` beside it, `danger` only for what destroys something, `ghost` for low-stakes actions in dense rows. |
 | `withArrow` | `boolean` | `false` | Trailing arrow that slides 3px on hover — for actions that move you somewhere. |
 
 Also accepts the props of `ButtonProps`, `NativeButtonProps`.
@@ -83,10 +83,10 @@ A square button that carries only an icon. `label` is required and becomes the a
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `label` (required) | `string` |  | The accessible name. Required: an icon is not a label. |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the button, merged with `cn()` so yours win a conflict. A string, not Base UI's function of state: style a state with its `data-*` attribute (`data-disabled:`). |
 | `loading` | `boolean` |  | Work is in flight. The label stays (so the button never changes width mid-click), a strip of working relleno runs along its foot, and the button stops accepting presses while staying focusable and announced as busy. |
-| `size` | `"sm" \| "md" \| "lg"` |  |  |
-| `variant` | `"secondary" \| "danger" \| "primary" \| "ghost"` |  |  |
+| `size` | `"sm" \| "md" \| "lg"` |  | The control height. Density already re-scales every size, so reach for a different one only to set a button apart from its neighbours, not to make a whole screen compact. |
+| `variant` | `"secondary" \| "danger" \| "primary" \| "ghost"` |  | The weight of the action: `primary` (ink) for the panel's main action, `secondary` beside it, `danger` only for what destroys something, `ghost` for low-stakes actions in dense rows. |
 
 Also accepts the props of `ButtonProps`, `NativeButtonProps`.
 

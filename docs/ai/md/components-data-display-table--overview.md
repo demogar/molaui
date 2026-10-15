@@ -110,10 +110,10 @@ A native checkbox, drawn as a cut square. Native, so space toggles it, forms sub
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `colSpan` (required) | `number` |  |  |
+| `colSpan` (required) | `number` |  | How many columns the row spans: all of them, including a checkbox column, or the empty state sits in the first cell. |
 | `actions` | `ReactNode` |  | One or two buttons; for a filtered table, the one that clears the filters. |
-| `kind` | `"empty" \| "no-results" \| "error" \| "no-permission"` |  |  |
-| `title` | `ReactNode` | `Nothing here yet` |  |
+| `kind` | `"empty" \| "no-results" \| "error" \| "no-permission"` |  | Why it is empty, as on `EmptyState`: `empty` (the default), `no-results` when filters emptied it, `error`, or `no-permission`. |
+| `title` | `ReactNode` | `Nothing here yet` | The empty state's heading. Defaults to "Nothing here yet"; the children become its description. |
 | `variant` (deprecated) | `"empty" \| "no-results" \| "error" \| "no-permission"` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `kind`, as on `EmptyState`. |
 
 `className`, `ref`, `id` and the other DOM props go to `<tr data-slot="table-empty">`.
@@ -127,7 +127,7 @@ A native checkbox, drawn as a cut square. Native, so space toggles it, forms sub
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `numeric` | `boolean` | `false` | Right-align, for a column of figures. Header and cells must agree or the label floats off its numbers. |
-| `onSort` | `(() => void)` |  |  |
+| `onSort` | `(() => void)` |  | Called when the header's sort control is pressed. The page decides the next direction; only used with `sort`. |
 | `sort` | `TableSortDirection` |  | Makes the header a sort control. `none` renders the control in its idle state; `aria-sort` is only set on the column actually sorted, because announcing "not sorted" on every column is noise. |
 
 `className`, `ref`, `id` and the other DOM props go to `<th data-slot="table-head">`.
@@ -150,7 +150,7 @@ Loading rows: real rows at the real height, so the table does not jump when the 
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `columns` (required) | `number` |  |  |
+| `columns` (required) | `number` |  | How many cells each row draws: the table's column count, including a checkbox column. |
 | `rows` | `number` | `5` | How many rows to draw. |
 
 Renders no element of its own, so it takes no `className` or `ref`.
@@ -159,37 +159,37 @@ Renders no element of its own, so it takes no `className` or `ref`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `columns` (required) | `DataTableColumn<Row>[]` |  |  |
-| `getRowId` (required) | `(row: Row) => string` |  |  |
-| `rows` (required) | `Row[]` |  |  |
+| `columns` (required) | `DataTableColumn<Row>[]` |  | What each column shows, how it sorts and aligns, and whether it can be hidden. Order is display order. |
+| `getRowId` (required) | `(row: Row) => string` |  | A stable id per row. Selection is kept by id, so it survives sorting, paging and a refetch that returns new objects. |
+| `rows` (required) | `Row[]` |  | The data. Every row when the table sorts and pages itself; one page, already sorted, when `manual`. Never mutated. |
 | `bulkActions` | `((context: DataTableBulkContext) => ReactNode)` |  | Actions for the selected rows, shown in the bar above the table while any are selected. |
-| `caption` | `ReactNode` |  |  |
+| `caption` | `ReactNode` |  | A visible caption naming the table. Prefer it to `label` when the page has room: a visible name helps every reader, not only assistive tech. |
 | `columnMenu` | `boolean` | `false` | Adds a "Columns" menu to the bar above the table. |
-| `defaultHiddenColumns` | `Iterable<string>` |  |  |
-| `defaultPage` | `number` | `1` |  |
-| `defaultSelection` | `Iterable<string>` |  |  |
-| `defaultSort` | `DataTableSort` |  |  |
-| `empty` | `ReactNode \| DataTableEmpty` |  |  |
+| `defaultHiddenColumns` | `Iterable<string>` |  | Column keys hidden at the start when the table owns visibility. The reader can bring them back from the column menu. |
+| `defaultPage` | `number` | `1` | The page the table starts on when it owns paging, 1-based. Defaults to 1. |
+| `defaultSelection` | `Iterable<string>` |  | Row ids selected at the start when the table owns selection. |
+| `defaultSort` | `DataTableSort` |  | The sort the table starts with when it owns sorting. Clicking a sorted header cycles ascending → descending → off. |
+| `empty` | `ReactNode \| DataTableEmpty` |  | What shows when there are no rows: an empty state as data (title, description, kind, actions), or a node that becomes its description. Use `kind: "no- results"` when filters emptied it. |
 | `frameClassName` | `string` |  | Classes for the scrolling frame around the table. |
-| `framed` | `boolean` | `false` |  |
+| `framed` | `boolean` | `false` | Bounds the table with a keyline on a raised ground, for a table that is the panel rather than sitting in one. |
 | `hiddenColumns` | `ReadonlySet<string>` |  | Controlled hidden columns, by key. |
 | `label` | `string` |  | Names the table for assistive tech when there is no visible caption. |
-| `loading` | `boolean` | `false` |  |
+| `loading` | `boolean` | `false` | Shows skeleton rows at the real row height in place of the body and says "Loading…" in the bar, so the table does not jump when the data lands. |
 | `manual` | `boolean` | `false` | Sorting and paging are done by the server: rows are one page, already sorted. |
 | `noun` | `{ one: string; other: string; }` | `{ one: 'row', other: 'rows' }` | What a row is, for counts: `{ one: 'run', other: 'runs' }`. |
-| `onHiddenColumnsChange` | `((hidden: Set<string>) => void)` |  |  |
-| `onPageChange` | `((page: number) => void)` |  |  |
-| `onSelectionChange` | `((selection: Set<string>) => void)` |  |  |
-| `onSortChange` | `((sort: DataTableSort \| null) => void)` |  |  |
+| `onHiddenColumnsChange` | `((hidden: Set<string>) => void)` |  | Called with the new set of hidden column keys — to remember the choice between visits. |
+| `onPageChange` | `((page: number) => void)` |  | Called with the new page, 1-based. With `manual`, fetch that page here. |
+| `onSelectionChange` | `((selection: Set<string>) => void)` |  | Called with the new set of selected ids, across every page. |
+| `onSortChange` | `((sort: DataTableSort \| null) => void)` |  | Called with the new sort, or `null` when it is turned off. With `manual`, fetch the re-sorted page here; the table also resets to page 1. |
 | `page` | `number` |  | Controlled page, 1-based. |
 | `pageSize` | `number` |  | Rows per page. Setting it turns pagination on. |
-| `paginationVariant` | `"pages" \| "compact"` | `compact` |  |
+| `paginationVariant` | `"pages" \| "compact"` | `compact` | `compact` (the default) is previous/next with the range; `pages` numbers the pages, for a table where jumping matters more than stepping. |
 | `rowCount` | `number` |  | The total across every page, when `manual`. |
 | `rowLabel` | `((row: Row) => string)` |  | How a row checkbox is named, e.g. `(run) => \`Select ${run.id}\``. |
-| `selectable` | `boolean` | `false` |  |
+| `selectable` | `boolean` | `false` | Adds a checkbox column and a select-all in the header. Select-all covers the current page only, so paging never selects rows nobody has seen. |
 | `selection` | `ReadonlySet<string>` |  | Controlled selection. Pair with `onSelectionChange`. |
 | `sort` | `DataTableSort \| null` |  | Controlled sort. `null` is "no sort"; leave undefined to let the table own it. |
-| `stickyHeader` | `boolean` | `false` |  |
+| `stickyHeader` | `boolean` | `false` | Keeps the header row visible while the body scrolls. Give the frame a height with `frameClassName`. |
 | `wrapperClassName` | `string` |  | Classes for the outer element that holds the bar, the table and the pagination. |
 
 `className`, `ref`, `id` and the other DOM props go to `<table data-slot="table">`.
@@ -200,9 +200,9 @@ Renders no element of its own, so it takes no `className` or `ref`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `columns` (required) | `DataTableColumn<Row>[]` |  |  |
-| `hidden` (required) | `ReadonlySet<string>` |  |  |
-| `onToggle` (required) | `(key: string, visible: boolean) => void` |  |  |
+| `columns` (required) | `DataTableColumn<Row>[]` |  | Every column, hidden or not, so the menu can list them all. A column with `hideable: false` shows checked and disabled. |
+| `hidden` (required) | `ReadonlySet<string>` |  | The keys of the columns currently hidden. The last visible column cannot be hidden. |
+| `onToggle` (required) | `(key: string, visible: boolean) => void` |  | Called with a column's key and whether it should now be visible. The menu stays open, because columns are chosen several at a time. |
 
 `className`, `ref`, `id` and the other DOM props go to `<button data-slot="button">`.
 

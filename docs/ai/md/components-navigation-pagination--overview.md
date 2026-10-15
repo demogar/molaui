@@ -46,13 +46,13 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `onPageChange` (required) | `(page: number) => void` |  |  |
+| `onPageChange` (required) | `(page: number) => void` |  | Called with the 1-based page a person asked for. The page is controlled: set `page` from it, or from the router if pages are addressable. |
 | `page` (required) | `number` |  | 1-based. |
-| `pageCount` (required) | `number` |  |  |
+| `pageCount` (required) | `number` |  | How many pages there are. The next button is disabled on the last. |
 | `pageSize` | `number` |  | For the compact range text: rows per page and the total row count. |
 | `siblings` | `number` | `1` | Pages either side of the current one in the `pages` variant. |
-| `total` | `number` |  |  |
-| `variant` | `"pages" \| "compact"` | `pages` |  |
+| `total` | `number` |  | Total row count for the `compact` range text. Without it, or without `pageSize`, the text falls back to "Page 3 of 26". |
+| `variant` | `"pages" \| "compact"` | `pages` | `pages` (the default) for results where a page is a place people return to; `compact` ("51–100 of 1,284" and two arrows) for dense tables where how much is left matters more. |
 
 `className`, `ref`, `id` and the other DOM props go to `<nav data-slot="pagination">`.
 

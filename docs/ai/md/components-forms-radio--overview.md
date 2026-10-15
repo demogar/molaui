@@ -50,9 +50,9 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
-| `description` | `ReactNode` |  |  |
-| `label` | `ReactNode` |  |  |
+| `className` | `string` |  | Classes for the circle itself, with or without a `label`. A string, not Base UI's state function: use the `data-checked` and `data-disabled` variants for state. |
+| `description` | `ReactNode` |  | Second line under the label. Linked as the radio's description, before any hint or error `Field` adds. |
+| `label` | `ReactNode` |  | Visible label. The whole label is the press target and names the radio. |
 | `wrapperClassName` | `string` |  | Classes for the label row a `label` adds around the control. `className` always styles the control itself. |
 
 Also accepts the props of `NativeButtonProps`, `RadioRootProps`.
@@ -66,9 +66,9 @@ The group, named by a visible label in the rótulo register via `aria-labelledby
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `label` (required) | `ReactNode` |  | The question the options answer. Names the radiogroup. |
-| `className` | `string` |  |  |
-| `description` | `ReactNode` |  |  |
-| `orientation` | `"horizontal" \| "vertical"` | `vertical` |  |
+| `className` | `string` |  | Classes for the wrapper that holds the label, the description and the group. |
+| `description` | `ReactNode` |  | Copy under the label, linked as the group's description so it is heard on entering the group. |
+| `orientation` | `"horizontal" \| "vertical"` | `vertical` | Lay the options out in a column (the default) or a wrapping row. |
 
 Also accepts the props of `RadioGroupProps`.
 

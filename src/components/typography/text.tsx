@@ -22,6 +22,7 @@ import { type Variants } from '../../lib/variants'
  */
 export const textVariants = cva('m-0 font-ui', {
   variants: {
+    /** A step on the type scale, which density re-scales; `md` (body) by default. */
     size: {
       xs: 'text-xs leading-snug',
       sm: 'text-sm leading-body',
@@ -30,12 +31,14 @@ export const textVariants = cva('m-0 font-ui', {
       /** @deprecated Since 0.7.0; removed in 1.0.0. Use `md`, the same size. */
       base: 'text-base leading-body',
     },
+    /** Which of the three inks: `default` for what the reader came for, `secondary` for what explains it, `muted` for what they can skip. */
     variant: {
       /** Inherits the ground's ink, so the same Text reads on cloth and on a panel. */
       default: '',
       secondary: 'text-ink-2',
       muted: 'text-ink-muted',
     },
+    /** A status ink, over the variant's: `danger` or `success` for a line that reports an outcome. Pair it with words or a glyph that say the state. */
     tone: {
       /** No status: the variant's ink. */
       neutral: '',
@@ -48,12 +51,15 @@ export const textVariants = cva('m-0 font-ui', {
       /** @deprecated Since 0.7.0; removed in 1.0.0. Use `variant="muted"`. */
       muted: 'text-ink-muted',
     },
+    /** `regular` by default; `medium` or `semibold` to lift a name or a figure out of a line without changing its size. */
     weight: {
       regular: 'font-normal',
       medium: 'font-medium',
       semibold: 'font-semibold',
     },
+    /** Tabular figures, so numbers in a column or a ticking counter keep their width. */
     tabular: { true: 'tabular', false: '' },
+    /** Cut to one line with an ellipsis. Only for text whose full value is available elsewhere, such as a tooltip or a detail view. */
     truncate: { true: 'truncate', false: '' },
   },
   defaultVariants: { size: 'md', variant: 'default', tone: 'neutral', weight: 'regular', tabular: false, truncate: false },
@@ -62,7 +68,9 @@ export const textVariants = cva('m-0 font-ui', {
 export interface TextProps
   extends Omit<React.HTMLAttributes<HTMLElement>, 'color'>,
     Variants<typeof textVariants> {
+  /** The element, `p` by default: `span` inside a line, `div` around block content. Headings are `Heading`, so the outline never lies. */
   as?: 'p' | 'span' | 'div'
+  /** Forwarded to the rendered element, whichever `as` picks. */
   ref?: React.Ref<HTMLElement>
 }
 

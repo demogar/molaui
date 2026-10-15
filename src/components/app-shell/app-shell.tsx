@@ -53,12 +53,29 @@ export const SidebarContext = React.createContext<SidebarContextValue>({
 })
 
 export interface AppShellProps extends Omit<React.ComponentProps<'div'>, 'children'> {
+  /**
+   * The bar across the top, usually a `Topbar`. It stays put while `<main>`
+   * scrolls, so the switcher and search are never lost.
+   */
   topbar: React.ReactNode
+  /**
+   * The navigation, usually a `Sidebar`. The same tree is drawn in the layout from
+   * 920px and in a modal sheet below it, so desktop and mobile navigation cannot
+   * drift.
+   */
   sidebar: React.ReactNode
   children: React.ReactNode
   /** Controlled collapse of the desktop sidebar. */
   sidebarCollapsed?: boolean
+  /**
+   * Start with the desktop sidebar collapsed to its icon rail. Defaults to
+   * `false`; ignored below 920px, where the sidebar is a sheet.
+   */
   defaultSidebarCollapsed?: boolean
+  /**
+   * Called when the desktop sidebar collapses or expands — to remember the choice
+   * between visits.
+   */
   onSidebarCollapsedChange?: (collapsed: boolean) => void
 }
 

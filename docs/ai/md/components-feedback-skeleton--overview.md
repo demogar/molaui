@@ -60,8 +60,8 @@ Loading is a cut shape whose content has not arrived, so a block keeps the keyli
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `shape` | `"block" \| "text" \| "line" \| "avatar"` |  |  |
-| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` |  |  |
+| `shape` | `"block" \| "text" \| "line" \| "avatar"` |  | What the bone stands in for: a `block` (default) for a card or chart, `text` for a line, `avatar` for a person's mark. Size a block with classes. |
+| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` |  | For `shape="avatar"` only: the Avatar size it stands in for, so the bone is exactly the mark that replaces it. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="skeleton">`.
 
@@ -84,7 +84,7 @@ Lines of text that have not arrived. The last line is short, because a paragraph
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `lines` | `number` | `3` |  |
+| `lines` | `number` | `3` | How many lines, 3 by default. Match the text that will arrive; the last line is drawn short. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="skeleton-text">`.
 

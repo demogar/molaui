@@ -57,8 +57,8 @@ The check sits in a fixed leading column, so checked and unchecked labels stay a
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
-| `shortcut` | `string` |  |  |
+| `className` | `string` |  | Classes for the item, merged with `cn()`. A string, for the reason given on `MenuContent`. |
+| `shortcut` | `string` |  | A key hint, as on `MenuItem`: shown, not bound. |
 
 Also accepts the props of `MenuCheckboxItemProps`, `NativeButtonProps`.
 
@@ -68,11 +68,11 @@ Also accepts the props of `MenuCheckboxItemProps`, `NativeButtonProps`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `align` | `Align` | `start` |  |
-| `alignOffset` | `number` | `0` |  |
-| `className` | `string` |  |  |
-| `side` | `Side` | `bottom` |  |
-| `sideOffset` | `number` | `6` |  |
+| `align` | `Align` | `start` | How the menu lines up along that side, `start` by default, so it hangs from the trigger's leading edge. |
+| `alignOffset` | `number` | `0` | A shift along the aligned edge in pixels, 0 by default. |
+| `className` | `string` |  | Classes for the popup, merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute. |
+| `side` | `Side` | `bottom` | Which side of the trigger the menu opens on, `bottom` by default. Base UI flips it when there is no room. |
+| `sideOffset` | `number` | `6` | The gap between trigger and menu in pixels, 6 by default: enough that the menu's keyline does not merge with the trigger's. |
 
 Also accepts the props of `MenuPopupProps`.
 
@@ -90,9 +90,9 @@ Also accepts the props of `MenuPopupProps`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the item, merged with `cn()`. A string, for the reason given on `MenuContent`. |
 | `icon` | `ReactNode` |  | Leading icon; decorative. |
-| `shortcut` | `string` |  |  |
+| `shortcut` | `string` |  | A key hint, right-aligned in muted figures: "⌘D". It only shows the key; binding it is yours, and it is read as part of the item's name. |
 | `tone` | `"default" \| "neutral" \| "danger"` | `neutral` | `danger` destroys something: it highlights in rojo instead of ink. `default` is deprecated since 0.7.0 and removed in 1.0.0: use `neutral`, the status word every other `tone` uses. |
 
 Also accepts the props of `MenuItemProps`, `NativeButtonProps`.
@@ -109,7 +109,7 @@ One-of-N. The mark is a filled square — a radio dot would be the only round th
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the item, merged with `cn()`. A string, for the reason given on `MenuContent`. |
 
 Also accepts the props of `MenuRadioItemProps`, `NativeButtonProps`.
 
@@ -133,8 +133,8 @@ Renders no element of its own, so it takes no `className` or `ref`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
-| `icon` | `ReactNode` |  |  |
+| `className` | `string` |  | Classes for the item, merged with `cn()`. A string, for the reason given on `MenuContent`. |
+| `icon` | `ReactNode` |  | Leading icon; decorative. The trailing chevron is always drawn. |
 
 Also accepts the props of `MenuSubmenuTriggerProps`, `NativeButtonProps`.
 

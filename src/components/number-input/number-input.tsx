@@ -64,17 +64,36 @@ export interface NumberInputProps
   > {
   /** Visible label above the field. Omit inside `Field`, which renders its own. */
   label?: React.ReactNode
+  /**
+   * Control height, shared with Input and Select so the field lines up in a form
+   * row. Defaults to `md`; density rescales every size.
+   */
   size?: FieldControlSize
   /** Classes for the wrapper that holds `label` and the field. Only rendered with a `label`. */
   wrapperClassName?: string
   /** Short unit suffix inside the cut: "tokens", "ms", "%". Also added to the accessible description. */
   unit?: string
+  /** The number, controlled. `null` is an empty field; leave it `undefined` to let the field hold its own state. */
   value?: number | null
+  /** The number on first render, uncontrolled. Omitted, the field starts empty. */
   defaultValue?: number
+  /**
+   * Called as the number changes, typed or stepped, with `null` when the field is
+   * emptied. For a save or a request, use `onValueCommitted`, which does not fire
+   * per keystroke.
+   */
   onValueChange?: (value: number | null) => void
   /** Called when the value is committed: on blur, Enter or a stepper press, not per keystroke. */
   onValueCommitted?: NumberFieldPrimitive.Root.Props['onValueCommitted']
+  /**
+   * The lowest value. Stepping and committed values clamp to it, and the decrease
+   * stepper is disabled there; Home jumps to it.
+   */
   min?: number
+  /**
+   * The highest value. Stepping and committed values clamp to it, and the increase
+   * stepper is disabled there; End jumps to it.
+   */
   max?: number
   /** ArrowUp/Down step. */
   step?: number | 'any'
@@ -82,9 +101,18 @@ export interface NumberInputProps
   largeStep?: number
   /** Alt+Arrow step. */
   smallStep?: number
+  /**
+   * Keep a typed value outside `min`/`max` instead of clamping it on commit, so form
+   * validation can say why it is wrong. Off by default; the steppers still stop at
+   * the bounds.
+   */
   allowOutOfRange?: boolean
   /** Let the wheel change a focused, hovered field. Off by default; see above. */
   allowWheelScrub?: boolean
+  /**
+   * Round to the nearest multiple of the step when stepping, so 13 stepped by 5 goes
+   * to 15 rather than 18. Off by default.
+   */
   snapOnStep?: boolean
   /** `Intl.NumberFormat` options: grouping, decimals, a unit or a currency. */
   format?: Intl.NumberFormatOptions
@@ -92,6 +120,7 @@ export interface NumberInputProps
   locale?: Intl.LocalesArgument
   /** Accessible names of the steppers. */
   incrementLabel?: string
+  /** Accessible name of the − stepper. Defaults to "Decrease"; translate it with the page. */
   decrementLabel?: string
 }
 

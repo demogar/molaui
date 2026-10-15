@@ -44,6 +44,11 @@ export const buttonVariants = cva(
   ],
   {
     variants: {
+      /**
+       * The weight of the action: `primary` (ink) for the panel's
+       * main action, `secondary` beside it, `danger` only for what destroys
+       * something, `ghost` for low-stakes actions in dense rows.
+       */
       variant: {
         primary: [
           'bg-ink text-on-ink band-accent shadow-cut',
@@ -70,6 +75,11 @@ export const buttonVariants = cva(
       },
       // `--button-h` names the height so a slot that lets a long label wrap
       // (wrapping-slot.ts) can keep it as a minimum.
+      /**
+       * The control height. Density already re-scales every size, so reach
+       * for a different one only to set a button apart from its neighbours,
+       * not to make a whole screen compact.
+       */
       size: {
         sm: 'h-(--control-h-sm) [--button-h:var(--control-h-sm)] px-[calc(var(--control-px)*0.75)] text-2xs [&_svg]:size-(--icon-sm)',
         md: 'h-(--control-h) [--button-h:var(--control-h)] px-(--control-px) text-xs [&_svg]:size-(--icon)',
@@ -83,6 +93,11 @@ export const buttonVariants = cva(
 export interface ButtonProps
   extends Omit<ButtonPrimitive.Props, 'className'>,
     Variants<typeof buttonVariants> {
+  /**
+   * Classes for the button, merged with `cn()` so yours win a conflict. A
+   * string, not Base UI's function of state: style a state with its `data-*`
+   * attribute (`data-disabled:`).
+   */
   className?: string
   /** Trailing arrow that slides 3px on hover — for actions that move you somewhere. */
   withArrow?: boolean

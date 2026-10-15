@@ -16,7 +16,15 @@ import { SidebarContext } from './app-shell'
 export interface SidebarProps extends Omit<React.ComponentProps<'nav'>, 'aria-label'> {
   /** Names the navigation landmark: "Main", "Settings". */
   label: string
+  /**
+   * Pinned above the navigation and outside its scroll — a workspace switcher or
+   * the product's name.
+   */
   header?: React.ReactNode
+  /**
+   * Pinned below the navigation behind a keyline — the signed-in account, help,
+   * settings.
+   */
   footer?: React.ReactNode
 }
 
@@ -79,6 +87,10 @@ export function NavSection({ title, className, children, ...props }: NavSectionP
 export interface NavItemProps extends Omit<useRender.ComponentProps<'a'>, 'children'> {
   /** The visible label. A string, so it can also be the rail's tooltip. */
   children: string
+  /**
+   * A leading icon. Needed for the collapsed rail, where the icon is all that
+   * shows and the label becomes its tooltip.
+   */
   icon?: React.ReactNode
   /** The current page. Sets `aria-current="page"`. */
   active?: boolean

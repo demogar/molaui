@@ -211,6 +211,9 @@ not in the legend.
   company's name, branding or product names.
 - **Doc comments explain the decision**, including what was tried first and why it failed. The
   code says what; the comment says why.
+- **Every public prop has a doc comment**: what it does, its default when that is not obvious,
+  and when to use it. `npm run manifest:check` fails on one without. A cva variant is
+  documented by a comment on its key in the `cva` call; DOM and Base UI props are exempt.
 
 ## Branches, pull requests and commits
 

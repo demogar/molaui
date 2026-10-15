@@ -25,9 +25,19 @@ export interface ToolCallProps extends Omit<React.ComponentProps<'div'>, 'childr
   name: string
   /** What the call is for, in words — "Query rollout results". Optional; the name is always shown. */
   title?: string
+  /**
+   * The call's state. `waiting` and `failed` keep the details open, because the
+   * decision or the error is the content.
+   */
   status: RunStatusValue
+  /**
+   * When the call started. With it, the header shows a clock that counts while the
+   * call is active.
+   */
   startedAt?: number | Date
+  /** When the call ended. Freezes the clock; omit while the call is open. */
   endedAt?: number | Date
+  /** A known duration, for a finished call that has no timestamps. */
   durationMs?: number
   /** The arguments the model sent. Objects are shown as formatted JSON. */
   args?: unknown
@@ -35,6 +45,10 @@ export interface ToolCallProps extends Omit<React.ComponentProps<'div'>, 'childr
   result?: unknown
   /** The error, verbatim. */
   error?: string
+  /**
+   * Calls the tool again. Shows Retry beside the error once the call has failed;
+   * omit when the run, not the call, owns retrying.
+   */
   onRetry?: () => void
   /** Present when `status` is `waiting`: the call is held for a person. */
   approval?: ToolCallApproval
@@ -42,6 +56,7 @@ export interface ToolCallProps extends Omit<React.ComponentProps<'div'>, 'childr
   open?: boolean
   /** Start expanded. Waiting and failed calls are always expanded. */
   defaultOpen?: boolean
+  /** Called when the reader opens or closes the details. */
   onOpenChange?: (open: boolean) => void
 }
 
@@ -236,6 +251,10 @@ function ApprovalBlock({ approval }: { approval: ToolCallApproval }) {
 export interface ToolCallGroupProps extends React.ComponentProps<'div'> {
   /** Defaults to "N tools in parallel". */
   label?: string
+  /**
+   * How many calls ran together. Used for the default label, "N tools in
+   * parallel".
+   */
   count: number
 }
 

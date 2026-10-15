@@ -44,6 +44,10 @@ export const checkboxBoxClasses = [
 ] as const
 
 export interface CheckboxProps extends Omit<CheckboxPrimitive.Root.Props, 'className'> {
+  /**
+   * Classes for the box itself, with or without a `label`. A string, not Base UI's
+   * state function: use the `data-checked` and `data-disabled` variants for state.
+   */
   className?: string
   /** Classes for the label row a `label` adds around the control. `className` always styles the control itself. */
   wrapperClassName?: string
@@ -107,6 +111,7 @@ export interface CheckboxGroupProps extends Omit<CheckboxGroupPrimitive.Props, '
   description?: React.ReactNode
   /** Lay options out in a row rather than a column. */
   orientation?: 'vertical' | 'horizontal'
+  /** Classes for the `<fieldset>` that holds the legend, the description and the options. */
   className?: string
 }
 

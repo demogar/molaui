@@ -39,13 +39,23 @@ export function TooltipProvider({ delay = 500, closeDelay = 0, ...props }: Toolt
 export interface TooltipProps extends Omit<React.ComponentProps<'div'>, 'children' | 'content' | 'role'> {
   /** The element that triggers it. Must be focusable — usually a Button or IconButton. */
   children: React.ReactElement
+  /**
+   * The label: a few words, no interactive content. It reaches a screen reader
+   * only as the trigger's description, and not at all on touch, so it must
+   * repeat something said elsewhere rather than be the only place it lives.
+   */
   content: React.ReactNode
   /** Keys, in order: `['⌘', 'K']`. */
   shortcut?: string[]
+  /** Which side of the trigger it appears on, `top` by default. Base UI flips it when there is no room. */
   side?: TooltipPrimitive.Positioner.Props['side']
+  /** How it lines up along that side, `center` by default. */
   align?: TooltipPrimitive.Positioner.Props['align']
+  /** Whether it is showing, when you control it. Rarely needed: hover and focus open it already. */
   open?: boolean
+  /** Shows it on first render without controlling it afterwards. */
   defaultOpen?: boolean
+  /** Called when hover, focus or Escape would open or close it, with the next state. */
   onOpenChange?: TooltipPrimitive.Root.Props['onOpenChange']
   /** Overrides the provider's delay for this tooltip. */
   delay?: number

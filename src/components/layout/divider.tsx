@@ -22,7 +22,13 @@ export interface DividerProps extends React.ComponentProps<'div'> {
    *             panel. Set `color` on the element to choose the ground.
    */
   variant?: 'keyline' | 'relleno' | 'diente'
+  /** The colour of a `relleno` divider's band, gold by default. Ignored by the other variants. */
   band?: DividerBand
+  /**
+   * `vertical` stretches to the height of a flex row, for a seam between
+   * columns or toolbar groups. `diente` is horizontal only. Announced only
+   * when you also pass `role="separator"`.
+   */
   orientation?: 'horizontal' | 'vertical'
   /** Teeth pointing up — for the top edge of a filled panel. */
   up?: boolean

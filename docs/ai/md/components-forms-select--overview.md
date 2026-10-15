@@ -55,16 +55,16 @@ The one-line form, for the nine selects in ten that are a label and a list. The 
 | --- | --- | --- | --- |
 | `items` (required) | `SelectOption<V>[] \| SelectOptionGroup<V>[]` |  | Flat options, or labelled groups. |
 | `className` | `string` |  | CSS class applied to the element, or a function that returns a class based on the component's state. |
-| `defaultValue` | `string \| null` |  |  |
-| `disabled` | `boolean` |  |  |
+| `defaultValue` | `string \| null` |  | The option `value` selected on first render, uncontrolled. `null` or omitted shows the `placeholder`. |
+| `disabled` | `boolean` |  | Stated, not faded: the trigger goes to the shaded cloth and the list cannot open. |
 | `label` | `ReactNode` |  | A visible label rendered above the trigger. Omit it when the select sits inside `Field`, which renders its own — and spread Field's control props onto this component instead. |
-| `name` | `string` |  |  |
-| `onValueChange` | `((value: V \| null) => void)` |  |  |
-| `placeholder` | `ReactNode` | `Select…` |  |
-| `required` | `boolean` |  |  |
+| `name` | `string` |  | Form field name. The selected option's `value` is submitted under it through a hidden input. |
+| `onValueChange` | `((value: V \| null) => void)` |  | Called with the chosen option's `value` when the selection changes. |
+| `placeholder` | `ReactNode` | `Select…` | Shown in the trigger while nothing is selected: "Choose a model". Not a label; the field still needs one. |
+| `required` | `boolean` |  | Marks the select required for form validation, and the `label`, when there is one, with the required mark. |
 | `rootProps` | `Omit<Props<V, false>, "defaultValue" \| "children" \| "value" \| "items" \| "onValueChange">` |  | Props for Base UI's `Select.Root`, for what the one-line form does not name: `open`, `onOpenChange`, `modal`, `readOnly`. |
-| `size` | `"sm" \| "md" \| "lg"` | `md` |  |
-| `value` | `string \| null` |  |  |
+| `size` | `"sm" \| "md" \| "lg"` | `md` | Trigger height, shared with Input so a select lines up in a form row. Defaults to `md`; density rescales every size. |
+| `value` | `string \| null` |  | The selected option's `value`, controlled. `null` is no selection, which shows the `placeholder`; leave it `undefined` to let the select hold its own state. |
 | `wrapperClassName` | `string` |  | Classes for the wrapper that holds `label` and the trigger. Only rendered with a `label`. |
 
 Also accepts the props of `NativeButtonProps`.
@@ -117,7 +117,7 @@ Renders no element of its own, so it takes no `className` or `ref`.
 | --- | --- | --- | --- |
 | `className` | `string` |  | CSS class applied to the element, or a function that returns a class based on the component's state. |
 | `placeholder` | `ReactNode` |  | Shown when there is no value. |
-| `size` | `"sm" \| "md" \| "lg"` | `md` |  |
+| `size` | `"sm" \| "md" \| "lg"` | `md` | Trigger height, shared with Input so a select lines up in a form row. Defaults to `md`; density rescales every size. |
 
 Also accepts the props of `NativeButtonProps`, `SelectTriggerProps`.
 

@@ -53,23 +53,23 @@ Each story is a live example in Storybook.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `accept` | `string` |  | Native `accept`: `.jsonl,.csv`, `application/pdf`, `image/*`. Enforced on drop as well as in the picker. |
-| `aria-describedby` | `string` |  |  |
-| `aria-invalid` | `boolean \| "true" \| "false"` |  |  |
-| `aria-label` | `string` |  |  |
+| `aria-describedby` | `string` |  | Ids of the hint and error, from `Field`. Joined with the drop zone's own constraints text on the browse button. |
+| `aria-invalid` | `boolean \| "true" \| "false"` |  | Marks the browse button invalid and draws the drop zone in the danger band. `Field` sets it while it shows an error. |
+| `aria-label` | `string` |  | Accessible name of the browse button when there is no `Field` label to name it. |
 | `defaultFiles` | `FileUploadItem[]` |  | Rows to start with: files already on the server, or a fixed state for a demo. |
-| `disabled` | `boolean` | `false` |  |
-| `id` | `string` |  |  |
+| `disabled` | `boolean` | `false` | Stated, not faded: the drop zone goes to the shaded cloth, drops are refused, and the browse, retry and remove buttons are disabled. |
+| `id` | `string` |  | Id of the browse button, so `Field`'s label points at the control a person presses. |
 | `locale` | `LocalesArgument` |  | Locale for sizes and lists. Omit to use the runtime's locale. |
 | `maxConcurrent` | `number` | `2` | How many `onUpload` calls run at once. |
 | `maxFiles` | `number` |  | Total files in the list, including ones already there. |
 | `maxSize` | `number` |  | Bytes, per file. |
 | `messages` | `Partial<FileUploadMessages>` |  | Copy, for another language. Merged over the English defaults. |
-| `multiple` | `boolean` | `false` |  |
+| `multiple` | `boolean` | `false` | Accept several files, added to the list. Off by default: a new file replaces the one there and cancels its upload. |
 | `name` | `string` |  | Submitted with a form when there is no `onUpload`. |
 | `onFilesChange` | `((files: FileUploadItem[]) => void)` |  | Every change to the list: added, progressed, finished, failed, removed. |
 | `onReject` | `((rejections: FileRejection[]) => void)` |  | Files turned away, with the rule each broke. |
 | `onUpload` | `((file: File, context: UploadContext) => Promise<void>)` |  | Upload one file. Resolve when done; reject with an Error whose message says why. |
-| `required` | `boolean` |  |  |
+| `required` | `boolean` |  | Makes the form refuse to submit while the list is empty, through the hidden file input. `Field` passes it with its label's mark. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="file-upload">`.
 

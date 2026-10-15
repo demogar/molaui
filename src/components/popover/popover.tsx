@@ -32,12 +32,17 @@ export function PopoverClose(props: PopoverPrimitive.Close.Props) {
 }
 
 export interface PopoverContentProps extends Omit<PopoverPrimitive.Popup.Props, 'className' | 'title'> {
+  /** Classes for the popup (`w-72` and `p-4` by default), merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute. */
   className?: string
+  /** Which side of the trigger the popover opens on, `bottom` by default. Base UI flips it when there is no room. */
   side?: PopoverPrimitive.Positioner.Props['side']
+  /** How the popover lines up along that side, `start` by default. */
   align?: PopoverPrimitive.Positioner.Props['align']
+  /** The gap between trigger and popover in pixels, 8 by default. */
   sideOffset?: number
   /** Heading, wired as the popover's accessible name. */
   title?: React.ReactNode
+  /** A line under the title, wired as the popover's accessible description. */
   description?: React.ReactNode
 }
 

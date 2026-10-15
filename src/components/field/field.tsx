@@ -52,6 +52,10 @@ export interface FieldControlProps {
 }
 
 export interface FieldProps extends Omit<React.ComponentProps<'div'>, 'children'> {
+  /**
+   * The visible label, wired to the control by `id`. Required: a placeholder is not
+   * a label, and a field with none is a question nobody hears.
+   */
   label: React.ReactNode
   /** Supporting copy under the control. */
   hint?: React.ReactNode
@@ -59,6 +63,10 @@ export interface FieldProps extends Omit<React.ComponentProps<'div'>, 'children'
   description?: React.ReactNode
   /** Validation message under the control. Its presence is what marks the field invalid. */
   error?: React.ReactNode
+  /**
+   * Shows the required mark on the label and passes `required` to the control
+   * through the render prop, so the browser validates it too. Overrides `optional`.
+   */
   required?: boolean
   /** Renders the "Optional" tag. Ignored when `required`. */
   optional?: boolean

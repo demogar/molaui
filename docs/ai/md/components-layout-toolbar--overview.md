@@ -58,8 +58,8 @@ Each story is a live example in Storybook.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `aria-label` (required) | `string` |  | Names the toolbar: "Run actions", "Text formatting". |
-| `className` | `string` |  |  |
-| `variant` | `"panel" \| "bare"` |  |  |
+| `className` | `string` |  | Classes for the toolbar, merged with `cn()`. A string, not Base UI's function of state: style a state with its `data-*` attribute. |
+| `variant` | `"panel" \| "bare"` |  | `bare` (default) inside a header or a table frame; `panel` gives the toolbar its own cut ground over a canvas. |
 
 Also accepts the props of `ToolbarRootProps`.
 
@@ -71,10 +71,10 @@ A Button that takes part in the toolbar's arrow-key focus. Ghost and small by de
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
-| `icon` | `ReactNode` |  |  |
-| `size` | `"sm" \| "md" \| "lg"` | `sm` |  |
-| `variant` | `"secondary" \| "danger" \| "primary" \| "ghost"` | `ghost` |  |
+| `className` | `string` |  | Classes for the button, merged with `cn()`. A string, for the reason given on `Toolbar`. |
+| `icon` | `ReactNode` |  | Leading icon; decorative. An icon-only button still needs an `aria-label`. |
+| `size` | `"sm" \| "md" \| "lg"` | `sm` | The control height. Density already re-scales every size, so reach for a different one only to set a button apart from its neighbours, not to make a whole screen compact. |
+| `variant` | `"secondary" \| "danger" \| "primary" \| "ghost"` | `ghost` | The weight of the action: `primary` (ink) for the panel's main action, `secondary` beside it, `danger` only for what destroys something, `ghost` for low-stakes actions in dense rows. |
 
 Also accepts the props of `NativeButtonProps`, `ToolbarButtonProps`.
 
@@ -92,7 +92,7 @@ A text field that is one of the toolbar's stops. The arrow keys move the caret w
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the `<input>` itself. Set a width with `wrapperClassName`. |
 | `icon` | `ReactNode` |  | A leading glyph. Defaults to the search glyph; `false` for none. |
 | `wrapperClassName` | `string` |  | Classes for the wrapper, e.g. a width. |
 
@@ -116,7 +116,7 @@ Actions that fold into a "More" menu when the row runs out of room.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the keyline between groups. A string, for the reason given on `Toolbar`. |
 
 Also accepts the props of `ToolbarSeparatorProps`.
 
@@ -128,12 +128,12 @@ A two-state button: "Show archived", "Wrap lines". Inside a `ToolbarToggleGroup`
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
-| `defaultPressed` | `boolean` |  |  |
-| `icon` | `ReactNode` |  |  |
-| `onPressedChange` | `((pressed: boolean) => void)` |  |  |
-| `pressed` | `boolean` |  |  |
-| `size` | `"sm" \| "md" \| "lg"` | `sm` |  |
+| `className` | `string` |  | Classes for the toggle, merged with `cn()`. A string, for the reason given on `Toolbar`. |
+| `defaultPressed` | `boolean` |  | Whether it starts on, without controlling it afterwards. |
+| `icon` | `ReactNode` |  | Leading icon; decorative. An icon-only toggle still needs an `aria-label`. |
+| `onPressedChange` | `((pressed: boolean) => void)` |  | Called with the new state each time the toggle is pressed. |
+| `pressed` | `boolean` |  | Whether the toggle is on, when you control it. Inside a `ToolbarToggleGroup`, control the group's value instead. |
+| `size` | `"sm" \| "md" \| "lg"` | `sm` | The control height. Density already re-scales every size, so reach for a different one only to set a button apart from its neighbours, not to make a whole screen compact. |
 | `value` | `string` |  | Identifies the toggle inside a `ToolbarToggleGroup`. |
 
 Also accepts the props of `NativeButtonProps`, `ToolbarButtonProps`.
@@ -147,7 +147,7 @@ A set of toggles: one-of (the default) or `multiple`. It sits inside the toolbar
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `aria-label` (required) | `string` |  | Names the set: "Density", "Status". |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the group, which wraps like the toolbar. A string, for the reason given on `Toolbar`. |
 
 Also accepts the props of `ToggleGroupProps`.
 

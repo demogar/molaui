@@ -55,25 +55,25 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `allowOutOfRange` | `boolean` |  |  |
+| `allowOutOfRange` | `boolean` |  | Keep a typed value outside `min`/`max` instead of clamping it on commit, so form validation can say why it is wrong. Off by default; the steppers still stop at the bounds. |
 | `allowWheelScrub` | `boolean` |  | Let the wheel change a focused, hovered field. Off by default; see above. |
-| `decrementLabel` | `string` | `Decrease` |  |
-| `defaultValue` | `number` |  |  |
+| `decrementLabel` | `string` | `Decrease` | Accessible name of the − stepper. Defaults to "Decrease"; translate it with the page. |
+| `defaultValue` | `number` |  | The number on first render, uncontrolled. Omitted, the field starts empty. |
 | `format` | `NumberFormatOptions` |  | `Intl.NumberFormat` options: grouping, decimals, a unit or a currency. |
 | `incrementLabel` | `string` | `Increase` | Accessible names of the steppers. |
 | `label` | `ReactNode` |  | Visible label above the field. Omit inside `Field`, which renders its own. |
 | `largeStep` | `number` | `10` | Shift+Arrow and PageUp/PageDown step. |
 | `locale` | `LocalesArgument` |  | BCP 47 tag for parsing and formatting. `undefined` uses the runtime's locale. |
-| `max` | `number` |  |  |
-| `min` | `number` |  |  |
-| `onValueChange` | `((value: number \| null) => void)` |  |  |
+| `max` | `number` |  | The highest value. Stepping and committed values clamp to it, and the increase stepper is disabled there; End jumps to it. |
+| `min` | `number` |  | The lowest value. Stepping and committed values clamp to it, and the decrease stepper is disabled there; Home jumps to it. |
+| `onValueChange` | `((value: number \| null) => void)` |  | Called as the number changes, typed or stepped, with `null` when the field is emptied. For a save or a request, use `onValueCommitted`, which does not fire per keystroke. |
 | `onValueCommitted` | `((value: number \| null, eventDetails: NumberFieldRootCommitEventDetails) => void)` |  | Called when the value is committed: on blur, Enter or a stepper press, not per keystroke. |
-| `size` | `"sm" \| "md" \| "lg"` | `md` |  |
+| `size` | `"sm" \| "md" \| "lg"` | `md` | Control height, shared with Input and Select so the field lines up in a form row. Defaults to `md`; density rescales every size. |
 | `smallStep` | `number` |  | Alt+Arrow step. |
-| `snapOnStep` | `boolean` |  |  |
+| `snapOnStep` | `boolean` |  | Round to the nearest multiple of the step when stepping, so 13 stepped by 5 goes to 15 rather than 18. Off by default. |
 | `step` | `number \| "any"` |  | ArrowUp/Down step. |
 | `unit` | `string` |  | Short unit suffix inside the cut: "tokens", "ms", "%". Also added to the accessible description. |
-| `value` | `number \| null` |  |  |
+| `value` | `number \| null` |  | The number, controlled. `null` is an empty field; leave it `undefined` to let the field hold its own state. |
 | `wrapperClassName` | `string` |  | Classes for the wrapper that holds `label` and the field. Only rendered with a `label`. |
 
 `className` goes to `<div data-slot="number-input">`; `ref`, `id` and the other DOM props go to `<input>`.

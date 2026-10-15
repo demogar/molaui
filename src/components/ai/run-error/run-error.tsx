@@ -38,11 +38,20 @@ const LABEL: Record<RunErrorKind, string> = {
 }
 
 export interface RunErrorProps extends Omit<React.ComponentProps<'div'>, 'children' | 'title'> {
+  /**
+   * Why the run stopped, which sets the headline, the plain sentence and the
+   * glyph. Defaults to `failed`; `cancelled` is not an error, so it offers no copy
+   * action.
+   */
   kind?: RunErrorKind
   /** The step that stopped, in words — "Break the result down by plan". */
   step?: string
   /** The step's position, counted from 1. Shown as "step 4 of 5" and used to name *Retry from step 4*. */
   stepNumber?: number
+  /**
+   * How many steps the run has, so the position reads "step 4 of 5". Only used
+   * with `stepNumber`.
+   */
   stepCount?: number
   /** The tool that failed, exactly as the model called it. */
   tool?: string
@@ -58,7 +67,16 @@ export interface RunErrorProps extends Omit<React.ComponentProps<'div'>, 'childr
   retryAt?: number | Date
   /** At `retryAt`, retry by itself instead of re-enabling the buttons. */
   autoRetry?: boolean
+  /**
+   * Runs the whole run again from the start. Shows *Retry run*, disabled until
+   * `retryAt` passes.
+   */
   onRetry?: () => void
+  /**
+   * Re-runs from the step that stopped, keeping the work before it, so it takes
+   * the stronger button when both retries are offered. Disabled until `retryAt`
+   * passes.
+   */
   onRetryFromStep?: () => void
   /** Offer *Copy error details*. On by default except for a cancellation, which is not an error. */
   copyable?: boolean

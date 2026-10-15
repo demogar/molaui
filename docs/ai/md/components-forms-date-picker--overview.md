@@ -66,8 +66,8 @@ Each story is a live example in Storybook.
 | `headingId` | `string` |  | Id for the month heading, so a dialog can be named by it. |
 | `isDateDisabled` | `((date: Date) => boolean)` |  | Days that exist but cannot be chosen: weekends in a freeze, public holidays. |
 | `locale` | `LocalesArgument` |  | BCP 47 tag. `undefined` uses the runtime's locale, as Intl does. |
-| `max` | `Date \| null` |  |  |
-| `min` | `Date \| null` |  |  |
+| `max` | `Date \| null` |  | The latest day that can be chosen, inclusive. Later days are disabled, and focus never moves past it. |
+| `min` | `Date \| null` |  | The earliest day that can be chosen, inclusive. Earlier days are disabled, and focus never moves before it. |
 | `onSelect` | `((date: Date) => void)` |  | Called with the day a person chose. Range logic belongs to the caller. |
 | `renderHeading` | `((props: { id: string; className: string; children: ReactNode; }) => ReactNode)` |  | Render the heading as the popup's title instead of a plain element. |
 | `selected` | `DateRange` |  | The selected day, or the range. A single date is a range whose ends match. |
@@ -82,21 +82,21 @@ Each story is a live example in Storybook.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `defaultOpen` | `boolean` | `false` | Open the calendar on first render — for a step that exists only to pick a date. |
-| `defaultValue` | `Date \| null` | `null` |  |
-| `disabled` | `boolean` |  |  |
-| `isDateDisabled` | `((date: Date) => boolean)` |  |  |
+| `defaultValue` | `Date \| null` | `null` | The day chosen on first render, uncontrolled. `null` or omitted starts empty. |
+| `disabled` | `boolean` |  | Stated, not faded: the input goes to the shaded cloth and the calendar button is disabled. |
+| `isDateDisabled` | `((date: Date) => boolean)` |  | Days inside `min`–`max` that still cannot be chosen: weekends in a freeze, public holidays. Disabled in the grid, and refused when typed with a sentence naming the day. |
 | `locale` | `LocalesArgument` |  | BCP 47 tag for names, digits, typed order and week start. `undefined` uses the runtime's locale. |
-| `max` | `Date \| null` |  |  |
-| `min` | `Date \| null` |  |  |
+| `max` | `Date \| null` |  | The latest day that can be chosen, inclusive; only the day counts, not the time. Later days are disabled in the grid and refused when typed, with a sentence naming the limit. |
+| `min` | `Date \| null` |  | The earliest day that can be chosen, inclusive; only the day counts, not the time. Earlier days are disabled in the grid and refused when typed, with a sentence naming the limit. |
 | `name` | `string` |  | Submitted as `yyyy-mm-dd`, whatever the display locale. |
-| `onOpenChange` | `((open: boolean) => void)` |  |  |
-| `onValueChange` | `((value: Date \| null) => void)` |  |  |
+| `onOpenChange` | `((open: boolean) => void)` |  | Called when the calendar opens or closes, by the button, Escape, a pick or a press outside. |
+| `onValueChange` | `((value: Date \| null) => void)` |  | Called with the day at local midnight when one is picked or a typed date commits (on Enter or blur, never per keystroke), and with `null` when the text is cleared. A typed date that cannot be read is shown as an error and does not call it. |
 | `open` | `boolean` |  | Whether the calendar is open, when the page owns that. |
 | `placeholder` | `string` |  | Defaults to the locale's format, e.g. `DD/MM/YYYY`. |
-| `required` | `boolean` |  |  |
-| `size` | `"sm" \| "md" \| "lg"` | `md` |  |
+| `required` | `boolean` |  | Marks the input required for form validation. Inside `Field`, the label carries the required mark. |
+| `size` | `"sm" \| "md" \| "lg"` | `md` | Control height, shared with Input and Select so the picker lines up in a form row. Defaults to `md`; density rescales every size. |
 | `today` | `Date` |  | Inject "now" for stable stories and tests. Pass it when server rendering too: today's date, and with it the starting month, depends on the zone it is computed in, and the grid cannot wait for hydration without arriving blank. The server's date, passed down, keeps both renders on one day. |
-| `value` | `Date \| null` |  |  |
+| `value` | `Date \| null` |  | The chosen day, controlled, at local midnight. `null` is no date; leave it `undefined` to let the picker hold its own state. |
 | `weekStartsOn` | `number` |  | 0 = Sunday … 6 = Saturday. Overrides the locale's first day of the week. |
 | `wrapperClassName` | `string` |  | Classes for the outer element that holds the field and its error. |
 
@@ -107,24 +107,24 @@ Each story is a live example in Storybook.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `defaultOpen` | `boolean` | `false` | Open the calendar on first render. |
-| `defaultValue` | `DateRange` | `{ start: null, end: null }` |  |
-| `disabled` | `boolean` |  |  |
-| `isDateDisabled` | `((date: Date) => boolean)` |  |  |
-| `locale` | `LocalesArgument` |  |  |
-| `max` | `Date \| null` |  |  |
-| `min` | `Date \| null` |  |  |
+| `defaultValue` | `DateRange` | `{ start: null, end: null }` | The range on first render, uncontrolled. Omitted, both ends start `null`. |
+| `disabled` | `boolean` |  | Stated, not faded: the trigger goes to the shaded cloth and the popup cannot open. |
+| `isDateDisabled` | `((date: Date) => boolean)` |  | Days inside `min`–`max` that cannot be an end of the range: public holidays, a freeze. Disabled in the grid and refused when typed. |
+| `locale` | `LocalesArgument` |  | BCP 47 tag for names, digits, typed order, week start and how the period is written on the trigger. `undefined` uses the runtime's locale. |
+| `max` | `Date \| null` |  | The latest day either end can be, inclusive. Later days are disabled in the grid and refused when typed. |
+| `min` | `Date \| null` |  | The earliest day either end can be, inclusive. Earlier days are disabled in the grid and refused when typed. |
 | `name` | `string` |  | Submitted as `<name>-start` and `<name>-end`, `yyyy-mm-dd`. |
-| `onOpenChange` | `((open: boolean) => void)` |  |  |
-| `onValueChange` | `((value: DateRange) => void)` |  |  |
+| `onOpenChange` | `((open: boolean) => void)` |  | Called when the popup opens or closes. A range pressed on the grid or a preset closes it; a range completed by typing leaves it open, so the person sees it drawn. |
+| `onValueChange` | `((value: DateRange) => void)` |  | Called with the whole range once both ends are chosen, pressed or typed, when a preset is picked, and with both ends `null` when both typed dates are cleared. |
 | `open` | `boolean` |  | Whether the calendar is open, when the page owns that. |
-| `placeholder` | `string` | `Choose a period` |  |
+| `placeholder` | `string` | `Choose a period` | The trigger's text while no range is chosen. Defaults to "Choose a period". |
 | `presets` | `DateRangePreset[]` | `[   { label: 'Last 7 days', range: (t) => ({ start: addDays(t, -6), end: t }) },   { label: 'Last 30 days', range: (t) => ({ start: addDays(t, -29), end: t }) },   { label: 'Last 90 days', range: (t) => ({ start: addDays(t, -89), end: t }) },   { label: 'This month', range: (t) => ({ start: startOfMonth(t), end: t }) },   {     label: 'Last month',     range: (t) => {       const previous = addMonths(startOfMonth(t), -1)       return { start: previous, end: endOfMonth(previous) }     },   }, ]` | Pass `[]` for none. |
-| `required` | `boolean` |  |  |
-| `size` | `"sm" \| "md" \| "lg"` | `md` |  |
+| `required` | `boolean` |  | Marks the trigger `aria-required`. Inside `Field`, the label carries the required mark. |
+| `size` | `"sm" \| "md" \| "lg"` | `md` | Trigger height, shared with Input and Select so the picker lines up in a form row. Defaults to `md`; density rescales every size. |
 | `today` | `Date` |  | Inject "now" for stable stories and tests. Pass it when server rendering too: today's date, and with it the starting month, depends on the zone it is computed in, and the grid cannot wait for hydration without arriving blank. The server's date, passed down, keeps both renders on one day. |
 | `typedEntry` | `boolean` | `true` | Start and end inputs above the calendar. On by default: typing is the accessible path into a date, not an extra, and the single picker always has it. Turn it off only where presets and the grid cover every case. |
-| `value` | `DateRange` |  |  |
-| `weekStartsOn` | `number` |  |  |
+| `value` | `DateRange` |  | The chosen range, controlled: `{ start, end }`, each a day at local midnight or `null`. The half-chosen range between two presses lives only in the popup and is never the value. |
+| `weekStartsOn` | `number` |  | 0 = Sunday … 6 = Saturday. Overrides the locale's first day of the week. |
 | `wrapperClassName` | `string` |  | Classes for the outer element that holds the trigger. `className` styles the trigger itself. |
 
 `className`, `ref`, `id` and the other DOM props go to `<button data-slot="date-range-picker-trigger">`.

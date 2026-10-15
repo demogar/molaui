@@ -38,10 +38,17 @@ export interface StatDelta {
 }
 
 export interface StatProps extends Omit<React.ComponentProps<'div'>, 'children'> {
+  /** What the figure measures, set in the label register: "p95 latency", "Runs today". It is the tile's term. */
   label: React.ReactNode
+  /** The figure itself, already formatted: "1,284", "97.8". Put the unit in `unit` rather than in the string. */
   value: React.ReactNode
   /** Set smaller beside the figure: "ms", "runs", "%". */
   unit?: React.ReactNode
+  /**
+   * The change since a reference period. State both which way it moved
+   * (`direction`, the glyph) and whether that is good (`sentiment`, the
+   * colour): up is not always good news.
+   */
   delta?: StatDelta
   /** The recent series, oldest first. Drawn in ink with the latest point cut out in the accent. */
   trend?: number[]
@@ -134,8 +141,15 @@ function StatDeltaLine({ delta }: { delta: StatDelta }) {
  * Decorative: the figure and the delta already say what it shows.
  */
 export interface SparklineProps extends Omit<React.ComponentProps<'svg'>, 'values' | 'children'> {
+  /**
+   * The series, oldest first, scaled to its own minimum and maximum. The
+   * latest point is cut out in the accent. Empty draws nothing. Decorative:
+   * say the figure in text beside it.
+   */
   values: number[]
+  /** Drawn width in pixels, 72 by default. */
   width?: number
+  /** Drawn height in pixels, 24 by default. */
   height?: number
 }
 

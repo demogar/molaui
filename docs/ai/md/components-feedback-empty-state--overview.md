@@ -70,13 +70,13 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `title` (required) | `ReactNode` |  |  |
+| `title` (required) | `ReactNode` |  | What the state is, in a few words: "No saved replies yet", "Nothing matches 'refund'". |
 | `actions` | `ReactNode` |  | One or two buttons. The first is the way forward. |
-| `description` | `ReactNode` |  |  |
-| `headingLevel` | `2 \| 3 \| 4` | `3` |  |
+| `description` | `ReactNode` |  | One sentence on why, or on what the action will do. |
+| `headingLevel` | `2 \| 3 \| 4` | `3` | The element for `title`, `h3` by default. Set it from the page outline; the size stays the same. |
 | `icon` | `ReactNode` |  | Replace the kind's icon, or `false` for none. |
-| `kind` | `"empty" \| "no-results" \| "error" \| "no-permission"` |  |  |
-| `size` | `"sm" \| "md" \| "lg"` |  |  |
+| `kind` | `"empty" \| "no-results" \| "error" \| "no-permission"` |  | Which of the four conversations this is: `empty` (default, nothing yet), `no-results` (a filter hides everything), `error` (could not load; announced as an alert) or `no-permission`. Each brings its icon and seam; the copy and the action must match it. |
+| `size` | `"sm" \| "md" \| "lg"` |  | How much of the slot the state fills vertically: `sm` inside a card or a table, `md` (default) for a panel, `lg` for a whole page. |
 | `variant` (deprecated) | `EmptyStateKind` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `kind`, which takes the same values. `codemods/prop-vocabulary.ts` rewrites call sites. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="empty-state">`.

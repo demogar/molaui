@@ -62,7 +62,7 @@ Glyph + word + colour, always all three. State is never carried by colour alone:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `status` (required) | `RunStatusValue` |  |  |
+| `status` (required) | `RunStatusValue` |  | The state shown: it picks the glyph, the word (unless `label` overrides it) and its colour, and whether the clock keeps running. |
 | `durationMs` | `number` |  | A known duration, for a finished step that has no timestamps. |
 | `endedAt` | `number \| Date` |  | When it ended. Freezes the clock; omit while the work is open. |
 | `label` | `string` |  | Override the word — e.g. "Thinking" for a running reasoning step. The glyph stays. |
@@ -77,7 +77,7 @@ Glyph + word + colour, always all three. State is never carried by colour alone:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `status` (required) | `RunStatusValue` |  |  |
+| `status` (required) | `RunStatusValue` |  | Which mark to draw. Each status has its own shape, not only its own hue, so the glyph survives greyscale. Decorative: pair it with the word, as `RunStatus` does. |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="run-status-glyph">`.
 

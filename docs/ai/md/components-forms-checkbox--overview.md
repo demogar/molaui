@@ -53,7 +53,7 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the box itself, with or without a `label`. A string, not Base UI's state function: use the `data-checked` and `data-disabled` variants for state. |
 | `description` | `ReactNode` |  | Second line under the label. Linked as the control's description. |
 | `label` | `ReactNode` |  | Visible label. The whole label is the press target. |
 | `wrapperClassName` | `string` |  | Classes for the label row a `label` adds around the control. `className` always styles the control itself. |
@@ -69,7 +69,7 @@ A set of checkboxes that share one value array, inside a real fieldset and legen
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `legend` (required) | `ReactNode` |  | The group's name, rendered as the fieldset legend in the label register. |
-| `className` | `string` |  |  |
+| `className` | `string` |  | Classes for the `<fieldset>` that holds the legend, the description and the options. |
 | `description` | `ReactNode` |  | Copy under the legend. |
 | `orientation` | `"horizontal" \| "vertical"` | `vertical` | Lay options out in a row rather than a column. |
 

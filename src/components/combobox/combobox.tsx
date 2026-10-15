@@ -179,16 +179,34 @@ export interface ComboboxCommonProps
   extends Omit<React.ComponentProps<'input'>, 'value' | 'defaultValue' | 'onChange' | 'size' | 'children' | 'multiple' | 'type'> {
   /** Flat options, or labelled groups. With `filter={null}`, the options to show right now. */
   items: ComboboxItems
+  /**
+   * Shown in the empty input. A hint at what can be searched, never the label: it
+   * disappears on the first keystroke.
+   */
   placeholder?: string
   /**
    * A visible label above the field. Omit it inside `Field`, which renders
    * its own, and spread Field's control props onto this component instead.
    */
   label?: React.ReactNode
+  /**
+   * Control height, shared with Input and Select so a combobox lines up in a form
+   * row. Defaults to `md`; density rescales every size.
+   */
   size?: FieldControlSize
+  /**
+   * Stated, not faded: the field and any chips go to the shaded cloth and the clear,
+   * open and remove buttons are taken away.
+   */
   disabled?: boolean
+  /**
+   * Shows the selection without letting it change. The clear, open and remove
+   * buttons are taken away, but the value still submits and can be focused and read.
+   */
   readOnly?: boolean
+  /** Marks the field required for form validation, and the `label`, when there is one, with the required mark. */
   required?: boolean
+  /** Form field name. The selected option's `value` is submitted under it (one entry per value with `multiple`). */
   name?: string
   /** Classes for the wrapper that holds `label` and the field. Only rendered with a `label`. */
   wrapperClassName?: string
@@ -214,9 +232,16 @@ export interface ComboboxCommonProps
 }
 
 export interface ComboboxSingleProps extends ComboboxCommonProps {
+  /** Omit, or `false`, for a single choice. Set `true` to pick several, shown as removable chips in the field. */
   multiple?: false
+  /**
+   * The selected option's `value`, controlled. `null` is no selection; leave it
+   * `undefined` to let the combobox hold its own state.
+   */
   value?: string | null
+  /** The option `value` selected on first render, uncontrolled. `null` or omitted starts empty. */
   defaultValue?: string | null
+  /** Called with the chosen option's `value`, or `null` when the field is cleared. */
   onValueChange?: (value: string | null) => void
   /**
    * Only with `multiple`: a single value has no chips to remove. Typed
@@ -227,9 +252,13 @@ export interface ComboboxSingleProps extends ComboboxCommonProps {
 }
 
 export interface ComboboxMultipleProps extends ComboboxCommonProps {
+  /** Pick several options, shown as removable chips in the field. Values become `string[]`. */
   multiple: true
+  /** The selected option values, controlled, in the order they were picked. */
   value?: string[]
+  /** The option values selected on first render, uncontrolled. */
   defaultValue?: string[]
+  /** Called with every selected value after a pick, a chip removal or a clear. */
   onValueChange?: (value: string[]) => void
   /** Accessible name of each chip's remove button. */
   removeLabel?: (label: string) => string
@@ -470,22 +499,46 @@ export interface AutocompleteProps
   extends Omit<React.ComponentProps<'input'>, 'value' | 'defaultValue' | 'onChange' | 'size' | 'children' | 'type'> {
   /** Suggestions. Plain strings, or options with a description line. */
   items: (string | ComboboxOption)[]
+  /**
+   * The text in the input, controlled. Typing and picking a suggestion both change
+   * it, so pair it with `onValueChange`.
+   */
   value?: string
+  /** The text in the input on first render, uncontrolled. */
   defaultValue?: string
   /** Every change to the text, typed or chosen. */
   onValueChange?: (value: string) => void
+  /** Shown in the empty input. A hint at what to type, never the label: it disappears on the first keystroke. */
   placeholder?: string
+  /**
+   * A visible label above the input. Omit it inside `Field`, which renders its own,
+   * and spread Field's control props onto this component instead.
+   */
   label?: React.ReactNode
+  /**
+   * Control height, shared with Input and Select so the field lines up in a form
+   * row. Defaults to `md`; density rescales every size.
+   */
   size?: FieldControlSize
+  /** Stated, not faded: the input goes to the shaded cloth and no suggestions open. */
   disabled?: boolean
+  /** Shows the text without letting it change; it still submits and can be focused and read. */
   readOnly?: boolean
+  /** Marks the field required for form validation, and the `label`, when there is one, with the required mark. */
   required?: boolean
+  /** Form field name. The typed text is what submits, not a suggestion's value. */
   name?: string
   /** Classes for the wrapper that holds `label` and the input. Only rendered with a `label`. */
   wrapperClassName?: string
   /** What the popup says when nothing matches. Omit to close the popup instead. */
   emptyMessage?: React.ReactNode
+  /**
+   * Suggestions are on their way: the popup shows the working texture and
+   * "Searching…" and the list is marked busy. Set it while a server search is in
+   * flight.
+   */
   loading?: boolean
+  /** A line above the suggestions: "Showing 20 of 312", or an error from the search. */
   status?: React.ReactNode
   /** Locale for the built-in matching. Omitted, the runtime's locale is used. */
   locale?: Intl.LocalesArgument

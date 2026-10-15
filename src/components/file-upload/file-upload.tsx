@@ -155,7 +155,15 @@ export interface FileUploadProps
   maxSize?: number
   /** Total files in the list, including ones already there. */
   maxFiles?: number
+  /**
+   * Accept several files, added to the list. Off by default: a new file replaces the
+   * one there and cancels its upload.
+   */
   multiple?: boolean
+  /**
+   * Stated, not faded: the drop zone goes to the shaded cloth, drops are refused,
+   * and the browse, retry and remove buttons are disabled.
+   */
   disabled?: boolean
   /** Submitted with a form when there is no `onUpload`. */
   name?: string
@@ -174,10 +182,15 @@ export interface FileUploadProps
   /** Copy, for another language. Merged over the English defaults. */
   messages?: Partial<FileUploadMessages>
   /* Field wiring, spread from `{...control}`: these go to the browse button, the control. */
+  /** Id of the browse button, so `Field`'s label points at the control a person presses. */
   id?: string
+  /** Makes the form refuse to submit while the list is empty, through the hidden file input. `Field` passes it with its label's mark. */
   required?: boolean
+  /** Ids of the hint and error, from `Field`. Joined with the drop zone's own constraints text on the browse button. */
   'aria-describedby'?: string
+  /** Marks the browse button invalid and draws the drop zone in the danger band. `Field` sets it while it shows an error. */
   'aria-invalid'?: boolean | 'true' | 'false'
+  /** Accessible name of the browse button when there is no `Field` label to name it. */
   'aria-label'?: string
 }
 

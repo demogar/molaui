@@ -42,6 +42,11 @@ export interface FileDiffProps extends Omit<React.ComponentProps<'section'>, 'ch
   path: string
   /** The path before a rename. */
   previousPath?: string
+  /**
+   * What happened to the file, shown as a mark and a word in the header. Defaults
+   * to `modified`; a `renamed` file with no hunks says so instead of showing an
+   * empty diff.
+   */
   kind?: FileChangeKind
   /** One file's unified diff, as `git diff` prints it. */
   diff?: string

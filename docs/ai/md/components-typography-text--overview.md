@@ -54,14 +54,14 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `as` | `"div" \| "p" \| "span"` | `p` |  |
-| `ref` | `Ref<HTMLElement>` |  |  |
-| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "base"` |  |  |
-| `tabular` | `true \| false` |  |  |
-| `tone` | `"neutral" \| "danger" \| "success" \| "default" \| 2 \| "muted"` |  |  |
-| `truncate` | `true \| false` |  |  |
-| `variant` | `"default" \| "secondary" \| "muted"` |  |  |
-| `weight` | `"regular" \| "medium" \| "semibold"` |  |  |
+| `as` | `"div" \| "p" \| "span"` | `p` | The element, `p` by default: `span` inside a line, `div` around block content. Headings are `Heading`, so the outline never lies. |
+| `ref` | `Ref<HTMLElement>` |  | Forwarded to the rendered element, whichever `as` picks. |
+| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "base"` |  | A step on the type scale, which density re-scales; `md` (body) by default. |
+| `tabular` | `true \| false` |  | Tabular figures, so numbers in a column or a ticking counter keep their width. |
+| `tone` | `"neutral" \| "danger" \| "success" \| "default" \| 2 \| "muted"` |  | A status ink, over the variant's: `danger` or `success` for a line that reports an outcome. Pair it with words or a glyph that say the state. |
+| `truncate` | `true \| false` |  | Cut to one line with an ellipsis. Only for text whose full value is available elsewhere, such as a tooltip or a detail view. |
+| `variant` | `"default" \| "secondary" \| "muted"` |  | Which of the three inks: `default` for what the reader came for, `secondary` for what explains it, `muted` for what they can skip. |
+| `weight` | `"regular" \| "medium" \| "semibold"` |  | `regular` by default; `medium` or `semibold` to lift a name or a figure out of a line without changing its size. |
 
 `className`, `ref`, `id` and the other DOM props go to `<p data-slot="text">`.
 

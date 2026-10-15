@@ -22,6 +22,10 @@ export interface Source {
 }
 
 export interface CitationProps extends Omit<React.ComponentProps<'a'>, 'children'> {
+  /**
+   * The source's number, matching its place in the `SourceList`. Shown as "[n]";
+   * the link defaults to `#source-n`.
+   */
   n: number
   /**
    * The element the marker renders as: your router's `<Link />` when `href`
@@ -247,6 +251,10 @@ export function citationRenderer(sources: readonly Source[]): (n: number) => Rea
 }
 
 export interface SourceListProps extends Omit<React.ComponentProps<'ol'>, 'children'> {
+  /**
+   * The sources the answer drew on, in citation order, so each card's number
+   * matches its inline marker.
+   */
   sources: readonly Source[]
   /**
    * IANA zone the read times are shown in, such as `"UTC"`. Without it they
