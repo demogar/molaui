@@ -244,6 +244,8 @@ export const SCOPE_PAGES: Record<string, string[]> = {
   'agent-run': ['AI/Agent run'],
   'change-review': ['AI/Change review'],
   confidence: ['AI/Confidence'],
+  markdown: ['AI/Markdown'],
+  'side-by-side-diff': ['AI/Side-by-side diff'],
   message: ['AI/Message'],
   thread: ['AI/Message'],
   'prompt-input': ['AI/Prompt input'],

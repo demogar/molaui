@@ -118,6 +118,8 @@ Types: `CodeBlockProps`, `CodeLanguage`, `JsonToken`, `JsonTokenKind`
 
 ### Pages that send readers here
 
+- [Markdown](https://demogar.github.io/molaui/md/ai-markdown--overview.md)
+- [Side-by-side diff](https://demogar.github.io/molaui/md/ai-side-by-side-diff--overview.md)
 - [Tool call](https://demogar.github.io/molaui/md/ai-tool-call--overview.md)
 
 ### Used in

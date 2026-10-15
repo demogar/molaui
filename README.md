@@ -19,8 +19,8 @@ admin consoles, knowledge bases, agent run monitors — documented in a standalo
   key), and styled with Tailwind v4. Every one has a docs page in the same order: what it
   is for and its lifecycle phase, when to use it and what to use instead, examples, the keys it
   answers to and how it is tested, and related components.
-- **An AI interface layer: 12 more components.** Streaming text, message threads, a composer whose send button becomes
-  stop, tool-call cards with human approval, change review with diffs and a decision that needs a
+- **An AI interface layer: 14 more components.** Streaming text, a Markdown renderer that keeps citations, message threads, a composer whose send button becomes
+  stop, tool-call cards with human approval, change review with diffs (side by side too) and a decision that needs a
   reason to say no, long-running agent run timelines with live elapsed time, run failure and
   recovery that keeps partial output, reasoning disclosure, citations that preview their source on
   hover, focus or tap, token budgets, and confidence stated in words rather than decimals.
@@ -275,7 +275,7 @@ run takes about three minutes.
   `light-dark()`, `var()`, OKLab `color-mix()` — and asserts each promised pairing. It caught a real
   dark-theme failure during the build (muted ink on the gold wash, 4.00:1) before any screen did.
 - **No hex outside `tokens.css`**, enforced by a test.
-- **Every story is a test**: all 334 stories render through the real Storybook config and pass axe
+- **Every story is a test**: all 345 stories render through the real Storybook config and pass axe
   in the unit suite; `scripts/audit.mjs` re-runs axe *with colour contrast* in a real browser in both
   themes, checks every story for horizontal overflow at 390px and reflow at 320px (no text clipped
   or painted over, nothing scrolling sideways without the scroll-edge cue, every story again at

@@ -942,6 +942,11 @@ export interface DiffLine {
 // @public
 export type DiffLineKind = 'add' | 'remove' | 'context';
 
+// @public
+export function diffLines(before: string, after: string, input?: {
+    context?: number;
+}): DiffHunk[];
+
 export { DirectionProvider }
 
 // @public (undocumented)
@@ -1423,6 +1428,20 @@ export interface ListboxSingleProps<V extends string = string> extends ListboxCo
     multiple?: false;
     onValueChange?: (value: V | null) => void;
     value?: V | null;
+}
+
+// @public
+export function Markdown(input: MarkdownProps): React_2.JSX.Element;
+
+// @public (undocumented)
+export interface MarkdownProps extends Omit<React_2.ComponentProps<'div'>, 'children'> {
+    doneAnnouncement?: string;
+    errorAnnouncement?: string;
+    headingLevel?: 2 | 3 | 4;
+    renderCitation?: (n: number) => React_2.ReactNode;
+    status?: StreamStatus;
+    text: string;
+    variant?: 'default' | 'muted';
 }
 
 // @public
@@ -2092,6 +2111,22 @@ export function SidebarToggle(input: SidebarToggleProps): React_2.JSX.Element | 
 
 // @public (undocumented)
 export type SidebarToggleProps = Omit<React_2.ComponentProps<'span'>, 'children'>;
+
+// @public
+export function SideBySideDiff(input: SideBySideDiffProps): React_2.JSX.Element;
+
+// @public (undocumented)
+export interface SideBySideDiffProps extends Omit<React_2.ComponentProps<'section'>, 'children' | 'title'> {
+    after?: string;
+    afterLabel?: string;
+    before?: string;
+    beforeLabel?: string;
+    context?: number;
+    diff?: string;
+    headingLevel?: 3 | 4 | 5;
+    hunks?: readonly (DiffHunk | DiffHunkInput)[];
+    title: React_2.ReactNode;
+}
 
 // @public
 export function Skeleton(input: SkeletonProps): React_2.JSX.Element;

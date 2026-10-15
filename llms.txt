@@ -2,7 +2,7 @@
 
 > A design system cut like a mola: flat layers, hard keylines, revealed bands. React components for dense internal tools and AI-native interfaces. Published as `@demogar/mola-ui`: React 19, Base UI for behaviour, Tailwind v4 for styling, design tokens as CSS custom properties.
 
-61 components and 12 AI components (73 documented pages).
+61 components and 14 AI components (75 documented pages).
 
 Install and set up:
 
@@ -180,11 +180,13 @@ An MCP server with the same data ships in the package: `npx -y --package @demoga
 - [Agent run](https://demogar.github.io/molaui/?path=/docs/ai-agent-run--overview) ([Markdown](https://demogar.github.io/molaui/md/ai-agent-run--overview.md)): A long-running agent run as a timeline: its status and live clock, each step on one spine, and the reason it stopped.
 - [Change review](https://demogar.github.io/molaui/?path=/docs/ai-change-review--overview) ([Markdown](https://demogar.github.io/molaui/md/ai-change-review--overview.md)): A change an agent proposes, shown as the reviewer reads it, with Approve, Request changes and Reject under it.
 - [Confidence](https://demogar.github.io/molaui/?path=/docs/ai-confidence--overview) ([Markdown](https://demogar.github.io/molaui/md/ai-confidence--overview.md)): How sure the system is, in three levels and in words, with UncertaintyNote for a specific claim to check.
+- [Markdown](https://demogar.github.io/molaui/?path=/docs/ai-markdown--overview) ([Markdown](https://demogar.github.io/molaui/md/ai-markdown--overview.md)) (Experimental): A model’s Markdown answer, streamed and rendered in Mola’s typography, with its citation markers kept and no HTML ever injected.
 - [Message](https://demogar.github.io/molaui/?path=/docs/ai-message--overview) ([Markdown](https://demogar.github.io/molaui/md/ai-message--overview.md)): One turn of a conversation, laid out as a ledger: who spoke, when, with which model, and what they said or did.
 - [Prompt input](https://demogar.github.io/molaui/?path=/docs/ai-prompt-input--overview) ([Markdown](https://demogar.github.io/molaui/md/ai-prompt-input--overview.md)): The composer: a field that grows, attachments, a toolbar, and a send button that becomes Stop while a response generates.
 - [Reasoning](https://demogar.github.io/molaui/?path=/docs/ai-reasoning--overview) ([Markdown](https://demogar.github.io/molaui/md/ai-reasoning--overview.md)): The model’s thinking behind a disclosure, summarised as “Thought for 12.4s” and set a step quieter than the answer.
 - [Run error](https://demogar.github.io/molaui/?path=/docs/ai-run-error--overview) ([Markdown](https://demogar.github.io/molaui/md/ai-run-error--overview.md)): Why a run stopped: the step, a plain sentence, the error verbatim, and the ways back in order of cost.
 - [Run status](https://demogar.github.io/molaui/?path=/docs/ai-run-status--overview) ([Markdown](https://demogar.github.io/molaui/md/ai-run-status--overview.md)): The one status vocabulary for a run, a step and a tool call: a glyph, a word and a colour, with an elapsed clock.
+- [Side-by-side diff](https://demogar.github.io/molaui/?path=/docs/ai-side-by-side-diff--overview) ([Markdown](https://demogar.github.io/molaui/md/ai-side-by-side-diff--overview.md)) (Experimental): Two versions of one text in two panes, each change opposite its replacement, falling back to one column when narrow.
 - [Sources](https://demogar.github.io/molaui/?path=/docs/ai-sources--overview) ([Markdown](https://demogar.github.io/molaui/md/ai-sources--overview.md)): Inline citation markers and the numbered list of sources they point to, with a preview card on hover, focus or first tap.
 - [Streaming text](https://demogar.github.io/molaui/?path=/docs/ai-streaming-text--overview) ([Markdown](https://demogar.github.io/molaui/md/ai-streaming-text--overview.md)): A model’s answer arriving a token at a time, in the reading voice, without layout shift, and announced once when it ends.
 - [Token usage](https://demogar.github.io/molaui/?path=/docs/ai-token-usage--overview) ([Markdown](https://demogar.github.io/molaui/md/ai-token-usage--overview.md)): What a run consumed: input, cached and output tokens, cost, and how full the context window is.

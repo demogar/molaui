@@ -123,6 +123,10 @@ One file's change, as a reviewer reads it.
 
 Lines added and removed across hunks — the figures `ChangeCount` shows.
 
+### `diffLines` (function)
+
+Two versions of a text → the hunks between them, numbered, with `context` unchanged lines around each change (3 by default, as `git diff`).
+
 ### `parseUnifiedDiff` (function)
 
 Parse the hunks of one file's unified diff. File headers (`diff --git`, `index`, `---`, `+++`) are skipped — the path is `FileDiff`'s own prop — and so is `\ No newline at end of file`, which is a fact about bytes, not a line anyone reviews.
@@ -168,6 +172,7 @@ Types: `ChangeCountProps`, `ChangeDecision`, `ChangeDecisionStatus`, `ChangeRevi
 
 ### Pages that send readers here
 
+- [Side-by-side diff](https://demogar.github.io/molaui/md/ai-side-by-side-diff--overview.md)
 - [Description list](https://demogar.github.io/molaui/md/components-data-display-description-list--overview.md)
 
 ## Changes

@@ -22,7 +22,7 @@ export type Block =
 // with no newline after it is just characters. Without that, "```" alone was
 // a code block and "a\n\n```" was not, so the answer depended on where the
 // text happened to be cut.
-const FENCE_SPLIT = /(```[^\n]*(?:\n[\s\S]*?(?:```|$)|$))/g
+export const FENCE_SPLIT = /(```[^\n]*(?:\n[\s\S]*?(?:```|$)|$))/g
 
 const INLINE = /(`[^`\n]+`|\*\*[^*\n]+\*\*|\[\d{1,2}\])/g
 
@@ -102,12 +102,19 @@ export function settledLength(text: string): number {
  *
  * If the text is ever rewritten rather than appended to, the cache no longer
  * matches and the parser starts again from the top, so it is never wrong,
- * only slower. `parse` is injectable for the test that guards the cost.
+ * only slower. `parse` is injectable for the test that guards the cost, and
+ * for `Markdown`, which keeps the same boundaries with a larger grammar.
+ *
+ * `open` says the text is still arriving. It reaches only the tail's parse:
+ * a settled block is finished by definition, while the tail may end inside
+ * a marker that has not closed yet.
  */
-export function createBlockParser(parse: (text: string) => Block[] = parseBlocks) {
+export function createBlockParser<B = Block>(
+  parse: (text: string, open: boolean) => B[] = parseBlocks as unknown as (text: string, open: boolean) => B[],
+) {
   let settledText = ''
-  let settled: Block[] = []
-  return (text: string): Block[] => {
+  let settled: B[] = []
+  return (text: string, open = false): B[] => {
     if (!text.startsWith(settledText)) {
       settledText = ''
       settled = []
@@ -115,10 +122,10 @@ export function createBlockParser(parse: (text: string) => Block[] = parseBlocks
     const from = settledText.length
     const end = from + settledLength(text.slice(from))
     if (end > from) {
-      settled = settled.concat(parse(text.slice(from, end)))
+      settled = settled.concat(parse(text.slice(from, end), false))
       settledText = text.slice(0, end)
     }
-    const tail = end < text.length ? parse(text.slice(end)) : []
+    const tail = end < text.length ? parse(text.slice(end), open) : []
     return tail.length > 0 ? settled.concat(tail) : settled
   }
 }

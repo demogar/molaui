@@ -124,3 +124,105 @@ export function pairLines(lines: readonly DiffLine[]): { old?: DiffLine; new?: D
   }
   return rows
 }
+
+const splitLines = (text: string) => (text === '' ? [] : text.replace(/\r\n/g, '\n').replace(/\n$/, '').split('\n'))
+
+// Above this many cells the table that finds the longest common run of lines
+// would take more memory than a diff on a page is worth (2,000,000 cells is
+// 8 MB). Past it the changed middle is shown as removed, then added: still a
+// true diff, only not the smallest one.
+const MAX_CELLS = 2_000_000
+
+/**
+ * Two versions of a text → the hunks between them, numbered, with `context`
+ * unchanged lines around each change (3 by default, as `git diff`).
+ *
+ * For when the caller holds both versions rather than a patch: a prompt and
+ * the model's rewrite of it, a config before and after an agent edited it.
+ * The result feeds `SideBySideDiff` or `FileDiff` alike.
+ *
+ * The lines common to both ends are trimmed first, so the usual case, one
+ * edit in a long file, costs the edit and not the file. The middle is matched
+ * by longest common subsequence, with removals placed before the additions
+ * that replace them, as `git diff` prints them.
+ */
+export function diffLines(before: string, after: string, { context = 3 }: { context?: number } = {}): DiffHunk[] {
+  const a = splitLines(before)
+  const b = splitLines(after)
+  let head = 0
+  while (head < a.length && head < b.length && a[head] === b[head]) head++
+  let tail = 0
+  while (tail < a.length - head && tail < b.length - head && a[a.length - 1 - tail] === b[b.length - 1 - tail]) tail++
+
+  const ops: { kind: DiffLineKind; text: string }[] = a.slice(0, head).map((text) => ({ kind: 'context', text }))
+  const am = a.slice(head, a.length - tail)
+  const bm = b.slice(head, b.length - tail)
+  const n = am.length
+  const m = bm.length
+  if (n * m > MAX_CELLS) {
+    for (const text of am) ops.push({ kind: 'remove', text })
+    for (const text of bm) ops.push({ kind: 'add', text })
+  } else {
+    // lcs[i * (m + 1) + j]: the longest common run of am[i..] and bm[j..].
+    const width = m + 1
+    const lcs = new Uint32Array((n + 1) * width)
+    for (let i = n - 1; i >= 0; i--) {
+      for (let j = m - 1; j >= 0; j--) {
+        lcs[i * width + j] =
+          am[i] === bm[j] ? lcs[(i + 1) * width + j + 1]! + 1 : Math.max(lcs[(i + 1) * width + j]!, lcs[i * width + j + 1]!)
+      }
+    }
+    let i = 0
+    let j = 0
+    while (i < n || j < m) {
+      if (i < n && j < m && am[i] === bm[j]) {
+        ops.push({ kind: 'context', text: am[i]! })
+        i++
+        j++
+      } else if (j >= m || (i < n && lcs[(i + 1) * width + j]! >= lcs[i * width + j + 1]!)) {
+        ops.push({ kind: 'remove', text: am[i++]! })
+      } else {
+        ops.push({ kind: 'add', text: bm[j++]! })
+      }
+    }
+  }
+  for (const text of a.slice(a.length - tail)) ops.push({ kind: 'context', text })
+
+  // Where each op sits in the old and the new file.
+  let oldLine = 1
+  let newLine = 1
+  const at = ops.map((op) => {
+    const here = { old: oldLine, new: newLine }
+    if (op.kind !== 'add') oldLine++
+    if (op.kind !== 'remove') newLine++
+    return here
+  })
+
+  // Each change with `context` lines either side; two changes whose context
+  // would touch or overlap share one hunk.
+  const hunks: DiffHunk[] = []
+  let k = 0
+  while (k < ops.length) {
+    if (ops[k]!.kind === 'context') {
+      k++
+      continue
+    }
+    const from = Math.max(0, k - context)
+    let end = k
+    for (;;) {
+      while (end + 1 < ops.length && ops[end + 1]!.kind !== 'context') end++
+      let next = end + 1
+      while (next < ops.length && ops[next]!.kind === 'context') next++
+      if (next < ops.length && next - end - 1 <= context * 2) end = next
+      else break
+    }
+    const to = Math.min(ops.length, end + 1 + context)
+    const lines = ops.slice(from, to)
+    const hasOld = lines.some((l) => l.kind !== 'add')
+    const hasNew = lines.some((l) => l.kind !== 'remove')
+    // An empty side starts at line 0, as `@@ -0,0 +1,3 @@` says of a new file.
+    hunks.push(numberHunk({ oldStart: at[from]!.old - (hasOld ? 0 : 1), newStart: at[from]!.new - (hasNew ? 0 : 1), lines }))
+    k = to
+  }
+  return hunks
+}

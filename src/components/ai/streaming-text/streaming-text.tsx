@@ -7,6 +7,7 @@ import { deprecate } from '../../../lib/deprecate'
 import { useScrollEdge } from '../../../lib/scroll-edge'
 
 import { createBlockParser, type Block, type InlineRun } from './parse'
+import { useCompletionAnnouncement } from './use-completion-announcement'
 
 export type StreamStatus = 'idle' | 'streaming' | 'done' | 'error'
 
@@ -89,21 +90,11 @@ export function StreamingText({
   }
   const variant = variantProp ?? tone ?? 'default'
   // One parser per mounted stream: it holds the settled blocks between chunks.
-  const [parse] = React.useState(createBlockParser)
+  const [parse] = React.useState(() => createBlockParser())
   const blocks = React.useMemo(() => parse(text), [parse, text])
   const streaming = status === 'streaming'
 
-  // "Adjust state when a prop changes", done during render rather than in an
-  // effect: the announcement is derived from the transition, not the value,
-  // and a static `done` on first mount must not announce anything.
-  const [prevStatus, setPrevStatus] = React.useState(status)
-  const [announcement, setAnnouncement] = React.useState('')
-  if (status !== prevStatus) {
-    setPrevStatus(status)
-    if (status === 'streaming') setAnnouncement('')
-    else if (prevStatus === 'streaming' && status === 'done') setAnnouncement(doneAnnouncement)
-    else if (prevStatus === 'streaming' && status === 'error') setAnnouncement(errorAnnouncement)
-  }
+  const announcement = useCompletionAnnouncement(status, doneAnnouncement, errorAnnouncement)
 
   return (
     <div

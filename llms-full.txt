@@ -2,7 +2,7 @@
 
 > A design system cut like a mola: flat layers, hard keylines, revealed bands. React components for dense internal tools and AI-native interfaces. Published as `@demogar/mola-ui`: React 19, Base UI for behaviour, Tailwind v4 for styling, design tokens as CSS custom properties.
 
-61 components and 12 AI components (73 documented pages).
+61 components and 14 AI components (75 documented pages).
 
 Install and set up:
 
@@ -4965,6 +4965,10 @@ One file's change, as a reviewer reads it.
 
 Lines added and removed across hunks — the figures `ChangeCount` shows.
 
+#### `diffLines` (function)
+
+Two versions of a text → the hunks between them, numbered, with `context` unchanged lines around each change (3 by default, as `git diff`).
+
 #### `parseUnifiedDiff` (function)
 
 Parse the hunks of one file's unified diff. File headers (`diff --git`, `index`, `---`, `+++`) are skipped — the path is `FileDiff`'s own prop — and so is `\ No newline at end of file`, which is a fact about bytes, not a line anyone reviews.
@@ -5035,6 +5039,65 @@ Where the model flags its own doubt, in the answer, next to the claim.
 Types: `ConfidenceLevel`, `ConfidenceProps`, `UncertaintyNoteProps`
 
 Used in: Agent console, Agent hand-off
+
+### Markdown
+
+https://demogar.github.io/molaui/?path=/docs/ai-markdown--overview
+
+A model’s Markdown answer, streamed and rendered in Mola’s typography, with its citation markers kept and no HTML ever injected.
+
+Phase: Experimental. Its API may change in a minor release, without a deprecation first.
+
+When to use:
+- The model answers in Markdown: headings, tables, numbered and nested lists, quotes, links and fenced code.
+- The answer cites sources with [n] markers that must stay Citations, with their preview cards.
+- Rendering untrusted model output, which must never reach the page as markup.
+
+When not to:
+- Plain paragraphs, bullets and code with no headings, tables or links; the smaller grammar is enough. Use Streaming text.
+- Long-form content you write and trust, such as documentation, rendered by your own pipeline. Use Prose.
+- A tool’s raw result or a payload, which is machine text, not an answer. Use CodeBlock.
+
+- Do: Pass renderCitation built once with citationRenderer(sources), and render the SourceList on the same page.
+- Don’t: Put a general Markdown library in front of the text; it drops the [n] markers or reads them as links.
+- Do: Append to text as tokens arrive and pass status, so open markers close and the end is announced once.
+- Don’t: Strip or buffer the Markdown yourself until a block is complete; the component already holds back what cannot be read yet.
+
+Content:
+- Set headingLevel so the answer’s # sits one level under the heading above it.
+- Ask the model for the subset it renders: no raw HTML, footnotes or reference-style links.
+
+Keyboard:
+- Tab: Moves through the answer’s links and citation markers in reading order, then a code block’s wrap and copy buttons and a table that scrolls.
+
+Mola handles:
+- Headings are real headings, from `headingLevel` down, so the answer joins the page outline; lists, quotes and tables are their own elements.
+- The text is `aria-busy` while it streams, and a polite status says “Response complete.” once, when a running stream ends.
+- Nothing from the model is rendered as HTML, and a link keeps its href only for http(s), mailto and relative paths.
+- An absolute link opens in a new tab and says “(opens in a new tab)” to screen readers.
+- Citation markers go through `renderCitation`, so with `citationRenderer` each is a link named “Source 2:” and the source’s title.
+
+You handle:
+- Set `headingLevel` so the answer’s headings sit under the heading above it.
+- Render the `SourceList` on the same page, so each marker’s `#source-n` link has somewhere to land.
+
+#### `Markdown` (component)
+
+A model's answer written in Markdown, streamed and rendered in Mola's typography, with its citation markers kept.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `text` (required) | `string` |  | The Markdown received so far. Grows; never rewritten from the top. |
+| `doneAnnouncement` | `string` | `Response complete.` | Spoken once when a stream that was running completes. |
+| `errorAnnouncement` | `string` | `Response stopped with an error.` | Spoken once when a stream that was running fails. |
+| `headingLevel` | `2 \| 3 \| 4` | `3` | The heading level a `#` becomes; `##` is one deeper, and so on, never past 6. Defaults to 3, for an answer under a page and a section heading. The look follows the depth in the Markdown, not the level, so the same answer looks the same wherever it is placed. |
+| `renderCitation` | `((n: number) => ReactNode)` |  | How an inline `[n]` marker renders, usually `citationRenderer(sources)`. Without it the marker stays as text. Pass a stable function (module scope or `useMemo`): finished blocks skip re-rendering only while it stays the same. |
+| `status` | `StreamStatus` | `done` | Where the stream is. `streaming` shows the caret, sets `aria-busy` and closes markers still open at the end; the move from `streaming` to `done` or `error` is announced once. Defaults to `done`. |
+| `variant` | `"default" \| "muted"` | `default` | `muted` for text the reader may skim — reasoning, not the answer. |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="markdown">`.
+
+Types: `MarkdownProps`
 
 ### Message
 
@@ -5453,6 +5516,78 @@ Types: `RunStatusGlyphProps`, `RunStatusProps`, `RunStatusValue`
 
 Used in: Agent hand-off
 
+### Side-by-side diff
+
+https://demogar.github.io/molaui/?path=/docs/ai-side-by-side-diff--overview
+
+Two versions of one text in two panes, each change opposite its replacement, falling back to one column when narrow.
+
+Phase: Experimental. Its API may change in a minor release, without a deprecation first.
+
+When to use:
+- Comparing a prompt, a policy or a config with an agent’s revision of it, line against line.
+- You hold both versions rather than a patch: pass before and after and the diff is worked out.
+- A reviewer has to read across, comparing a changed line with the one it replaces.
+
+When not to:
+- One file among several in a proposed change, with hunks to fold. Use FileDiff.
+- A change to a record’s fields rather than to lines of text. Use FieldChanges.
+- A single version of code or a payload, with nothing to compare it to. Use CodeBlock.
+
+- Do: Name the panes for what the versions are, such as Live and Proposed.
+- Don’t: Leave both panes as Before and After when the reader needs to know which one is running.
+- Do: Put it inside a ChangeReview when an agent proposes the change, so the comparison and the decision sit together.
+- Don’t: Show a proposed change in a diff with no way to approve or reject it.
+
+Content:
+- Title it by what is compared, “System prompt, support triage agent”, not by the action.
+- Keep pane labels to one or two words; they name the scroll regions.
+
+Keyboard:
+- Tab: Moves focus to the old pane, then the new one; a focused pane scrolls sideways with the arrow keys.
+
+Mola handles:
+- The diff is a section named by its title, and each pane a focusable region named by its label and the title, so a keyboard can scroll it and a screen reader can jump to it.
+- Changed lines say “Removed:” or “Added:”, and carry a +/− glyph as well as the wash; line numbers and glyphs are hidden from screen readers and from a copy.
+- The blank rows that keep the panes aligned are hidden from screen readers, so each pane reads as its version, in order.
+- The panes scroll together and carry the scroll-edge cue while there is more to the side; below 48rem they become one column of wrapped lines.
+- Code is pinned left to right, so a right-to-left page does not reorder a line of source.
+
+You handle:
+- Give it a `title` that says what is compared, and pane labels that say which version is which.
+- Set `headingLevel` so the title fits the page outline.
+
+Anatomy:
+- Container (`[data-slot="side-by-side-diff"]`): A keylined section named by its title, and the container the two-pane query measures.
+- Title (`[data-part="title"]`): What is being compared, as a heading.
+- Count (`[data-part="count"]`): Lines added and removed: “+2 −1” to the eye, a sentence to a screen reader.
+- Pane (`[data-part="pane"]`): One version. Its code scrolls sideways under the scroll-edge cue, in step with the other pane.
+- Pane label (`[data-part="pane-label"]`): Which version this is; it names the pane’s scroll region.
+- Hunk header (`[data-part="hunk-header"]`): The range and section, held at the start while the pane scrolls.
+- Line (`[data-part="line"]`): One line of the version. A change is a wash, a glyph and a hidden word.
+- Gutter (`[data-part="gutter"]`): Line number and +/− glyph, held in place while the code scrolls, never copied.
+- Blank row (`[data-part="filler"]`): Keeps the panes aligned where one side has no line, in the empty texture, hidden from screen readers.
+
+#### `SideBySideDiff` (component)
+
+Two versions of one text, side by side: the old in one pane, the new in the other, each change opposite its replacement.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `title` (required) | `ReactNode` |  | What is being compared, as a heading: “System prompt, triage agent”. |
+| `after` | `string` |  | The text after the change. |
+| `afterLabel` | `string` | `After` | The new pane's name. Defaults to “After”. |
+| `before` | `string` |  | The text before the change. With `after`, the diff is worked out for you. |
+| `beforeLabel` | `string` | `Before` | The old pane's name, shown above it and naming its scroll region. Defaults to “Before”. |
+| `context` | `number` | `3` | Unchanged lines kept around each change when the diff is worked out from `before` and `after`. Defaults to 3. |
+| `diff` | `string` |  | Or one unified diff, as `git diff` prints it. Wins over `before` and `after`. |
+| `headingLevel` | `3 \| 4 \| 5` | `4` | Heading level for the title. Defaults to 4, under a `ChangeReview` heading. |
+| `hunks` | `readonly (DiffHunk \| DiffHunkInput)[]` |  | Or the hunks, structured. Wins over `diff`. |
+
+`className`, `ref`, `id` and the other DOM props go to `<section data-slot="side-by-side-diff">`.
+
+Types: `SideBySideDiffProps`
+
 ### Sources
 
 https://demogar.github.io/molaui/?path=/docs/ai-sources--overview
@@ -5545,6 +5680,7 @@ When to use:
 - Text the reader may skim, such as reasoning, with tone set to muted.
 
 When not to:
+- An answer in Markdown with headings, tables, numbered lists or links. Use Markdown.
 - Long-form markup that does not stream, such as rendered documentation. Use Prose.
 - Text the system says in its own voice, such as labels and hints. Use Text.
 - Saying that work is under way before any text exists, outside a message. Use Run status.

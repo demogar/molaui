@@ -17,6 +17,34 @@ The drop is concentrated in workspaces on the Starter plan. For Enterprise works
 
 The slower first reply is the caveat. The rollout brief lists \`time_to_first_reply_s\` as a guardrail metric [3], and the panel moves it in the wrong direction. I would roll the panel out to Starter workspaces only and keep the guardrail on the dashboard for two weeks.`
 
+/** The same answer as a model writes it in Markdown: headings, a table, a list, code. */
+export const MARKDOWN_ANSWER = `## Short answer
+
+Yes, for **Starter** workspaces. The help panel cut support tickets from new workspaces from 31.2 to 27.0 per 1,000, and the interval excludes zero [1]. For Enterprise workspaces the difference is *inside the noise* [2].
+
+## What moved
+
+| Metric | Control | Help panel |
+| :-- | --: | --: |
+| Tickets per 1,000 | 31.2 | 27.0 |
+| Help articles read, first week | 6.1 | 11.4 |
+| Time to first reply | 212 s | 251 s |
+
+1. Tickets fell on Starter: −6.1 per 1,000 (95% CI −7.4 to −4.8) [2].
+2. First replies got **slower** by about 40 seconds, against a guardrail of 10% [3].
+   - The brief lists \`time_to_first_reply_s\` as a guardrail metric.
+   - The panel moves it the wrong way.
+
+> Roll the panel out to Starter only, and keep the guardrail on the dashboard for two weeks.
+
+\`\`\`sql
+select plan, avg(tickets_7d)
+from ro_0412_assignments
+group by plan;
+\`\`\`
+
+Full numbers are on the [results page](https://example.com/rollouts/ro-0412/results).`
+
 export const REASONING = `The question has two parts: did tickets drop, and is it safe to roll out. For the first I need the rollout's primary metric with its interval, not just the point estimate. For the second I need the guardrails from the brief, because "fewer tickets" is not the same as "safe to roll out" if a guardrail moved. I'll query the results table, then read the brief.`
 
 export const SOURCES = [
