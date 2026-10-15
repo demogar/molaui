@@ -93,13 +93,13 @@
     }
   },
   "counts": {
-    "components": 59,
-    "parts": 151,
+    "components": 61,
+    "parts": 155,
     "aiComponents": 12,
     "aiParts": 23,
-    "pages": 71,
-    "stories": 327,
-    "summary": "59 components and 12 AI components (71 documented pages)"
+    "pages": 73,
+    "stories": 334,
+    "summary": "61 components and 12 AI components (73 documented pages)"
   },
   "tokens": {
     "source": "src/styles/tokens.css",
@@ -6707,6 +6707,10 @@
           {
             "when": "Sections of one document that open and close.",
             "use": "Components/Navigation/Accordion"
+          },
+          {
+            "when": "A task people do in the product, step by step, with checks between steps.",
+            "use": "Components/Navigation/Stepper"
           }
         ],
         "practices": [
@@ -8529,6 +8533,12 @@
               "description": "Copy under the legend."
             },
             {
+              "name": "error",
+              "type": "ReactNode",
+              "required": false,
+              "description": "A rule the group breaks as a whole, such as “choose at least one”. Shown under the legend, joined to the group's description, and listed by a `FormErrorSummary` in the same `Form`."
+            },
+            {
               "name": "orientation",
               "type": "\"horizontal\" | \"vertical\"",
               "required": false,
@@ -9885,6 +9895,10 @@
           {
             "when": "A prompt to a model, with attachments and a send button.",
             "use": "AI/Prompt input"
+          },
+          {
+            "when": "Several controls answering one question, or a form that can fail in several places at once.",
+            "use": "Components/Forms/Form"
           }
         ],
         "practices": [
@@ -9921,13 +9935,13 @@
         ],
         "handles": [
           "`Field` links the label to the control and joins the hint and error into `aria-describedby`, in the order they are shown.",
-          "An error sets `aria-invalid`, is announced with `role=\"alert\"`, and carries a cut square so it is not colour alone.",
+          "An error sets `aria-invalid` and carries a cut square so it is not colour alone. It is announced with `role=\"alert\"`, except inside a `Form` with a `FormErrorSummary`, which announces every error once.",
           "The required asterisk is hidden from assistive technology while `required` reaches the control; “Optional” is kept as a separate word.",
           "`SearchInput` is a `searchbox`, and its clear button is named “Clear search”."
         ],
         "you": [
           "Spread the `control` props onto the control; without them it has no name and no description.",
-          "When several fields fail at once, add an error summary at the top of the form and move focus to it.",
+          "When several fields can fail at once, put the fields in a `Form` with a `FormErrorSummary`; their errors then stop being alerts and the summary takes focus.",
           "Bind the key shown by `shortcut` yourself; the key cap is display only."
         ]
       },
@@ -10537,6 +10551,249 @@
             "url": "https://github.com/demogar/molaui/commit/aeacb52f1b4212e472d3f4cc9aa984bfd760528a"
           }
         }
+      ]
+    },
+    {
+      "title": "Components/Forms/Form",
+      "name": "Form",
+      "layer": "components",
+      "category": "Forms",
+      "docs": "https://demogar.github.io/molaui/?path=/docs/components-forms-form--overview",
+      "phase": "experimental",
+      "summary": "A form that knows which fields are failing: FormErrorSummary lists them as links and takes focus on submit; Fieldset groups controls under one legend.",
+      "description": "A `<form>` that knows which of its fields are failing. Each `Field`, `Fieldset` and `CheckboxGroup` inside registers its error, so a **`FormErrorSummary`** can list every one as a link to its control. On the submit that finds problems, focus moves to the summary, and that focus move is the **one** announcement; while a summary is mounted, each field’s error drops `role=\"alert\"` and stays in the control’s description. Without a summary, focus goes to the first invalid control. Built on Base UI’s `Form` and `Fieldset`.",
+      "usage": {
+        "use": [
+          "Any form saved as a whole, where Save can find more than one problem at once: put a FormErrorSummary at the top.",
+          "Moving focus after a failed submit without writing it by hand: to the summary, or to the first invalid field when there is none.",
+          "Several controls that answer one question, such as a pair of limits or a time window, with Fieldset and its legend.",
+          "A rule a group breaks as a whole, such as “the last retry must wait longer than the first”, with the Fieldset’s error."
+        ],
+        "avoid": [
+          {
+            "when": "One control with its label, hint and error.",
+            "use": "Components/Forms/Field"
+          },
+          {
+            "when": "A set of checkboxes; CheckboxGroup is already a fieldset, and takes an error too.",
+            "use": "Components/Forms/Checkbox",
+            "label": "CheckboxGroup"
+          },
+          {
+            "when": "A long task split into steps done in order.",
+            "use": "Components/Navigation/Stepper"
+          },
+          {
+            "when": "A message about the page rather than about the fields in it.",
+            "use": "Components/Feedback/Callout"
+          }
+        ],
+        "practices": [
+          {
+            "do": "Validate on submit, then re-check only the fields already showing an error as they change.",
+            "dont": "Show errors on every keystroke; an error about a value nobody has finished typing is noise."
+          },
+          {
+            "do": "Write each error so it makes sense in the summary, away from its field: “Enter an https:// address”.",
+            "dont": "Rely on the field around it: “Invalid” in a list of links says nothing."
+          }
+        ],
+        "content": [
+          "The summary title counts what to fix: “3 fields need fixing”. Pass title to word it otherwise or translate it.",
+          "Use description for what happens next: “Nothing has been saved yet.”",
+          "Legends are short nouns, like labels: “Retry delays”, “Run window”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Enter"
+            ],
+            "action": "In a text field, submits the form; if it finds errors, moves focus to the error summary."
+          },
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "From the summary, moves through its links, one per error."
+          },
+          {
+            "keys": [
+              "Enter"
+            ],
+            "action": "On a summary link, moves focus to that field’s control, or the first control of a group, and scrolls its label into view."
+          }
+        ],
+        "handles": [
+          "On the submit that finds errors, focus moves to the `FormErrorSummary`, a region named by its heading (“3 fields need fixing”). The focus move is the one announcement; the summary is not also a live region.",
+          "While a summary is mounted, each field’s error drops `role=\"alert\"` and stays in its control’s `aria-describedby`, so three errors are not three alerts.",
+          "Without a summary, focus moves to the first invalid control in document order, and field errors keep `role=\"alert\"`.",
+          "Each summary entry is a real link to the control’s id, reading “Label: message”, listed in document order.",
+          "`Fieldset` is a real `<fieldset>` named by its legend; its description and error are its `aria-describedby`, and `disabled` disables every Base UI control inside."
+        ],
+        "you": [
+          "Validate in `onSubmit` and set each field’s `error`; the form does not decide what is wrong.",
+          "Write errors that make sense away from their field, since the summary lists them on their own.",
+          "For errors that arrive later, such as from a server, call `focus()` on the summary’s ref: only a submit moves focus by itself.",
+          "Give the form a name with `aria-label` or `aria-labelledby` when the page has more than one."
+        ]
+      },
+      "anatomy": {
+        "slot": "form-error-summary",
+        "parts": [
+          {
+            "part": "seam",
+            "name": "Seam",
+            "does": "The rojo relleno a danger callout opens with: this block is about something that went wrong.",
+            "selector": "[data-part=\"seam\"]"
+          },
+          {
+            "part": "title",
+            "name": "Title",
+            "does": "Counts what to fix. It names the summary, so it is what a screen reader says when focus lands here.",
+            "selector": "[data-part=\"title\"]"
+          },
+          {
+            "part": "description",
+            "name": "Description",
+            "does": "What happens next, or what was kept: “Nothing has been saved yet.”",
+            "selector": "[data-part=\"description\"]"
+          },
+          {
+            "part": "list",
+            "name": "Error links",
+            "does": "One link per error, “Label: message”, in the order of the form; each moves focus to its field.",
+            "selector": "[data-part=\"list\"]"
+          }
+        ]
+      },
+      "exports": [
+        {
+          "name": "Form",
+          "kind": "component",
+          "source": "src/components/form/form.tsx",
+          "props": [
+            {
+              "name": "onSubmit",
+              "type": "FormEventHandler<HTMLFormElement>",
+              "required": false,
+              "description": "Runs on submit, before focus is moved. Validate here and set your fields' errors; call `event.preventDefault()` unless you want the browser to post the form."
+            }
+          ],
+          "forwards": {
+            "element": "<form data-slot=\"form\">"
+          }
+        },
+        {
+          "name": "FormErrorSummary",
+          "kind": "component",
+          "source": "src/components/form/form-error-summary.tsx",
+          "props": [
+            {
+              "name": "description",
+              "type": "ReactNode",
+              "required": false,
+              "description": "A sentence under the heading: what happens next, or what is kept."
+            },
+            {
+              "name": "headingLevel",
+              "type": "2 | 3 | 4",
+              "required": false,
+              "default": "2",
+              "description": "The heading element. Match the form's outline; `h2` by default."
+            },
+            {
+              "name": "title",
+              "type": "ReactNode | ((count: number) => ReactNode)",
+              "required": false,
+              "default": "(count: number) => (count === 1 ? '1 field needs fixing' : `${count} fields need fixing`)",
+              "description": "The heading, which is also the summary's accessible name and what a screen reader says when it takes focus. Pass a function to word it for the count, or to translate it. Defaults to “1 field needs fixing” / “3 fields need fixing”."
+            }
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"form-error-summary\">"
+          }
+        },
+        {
+          "name": "Fieldset",
+          "kind": "component",
+          "source": "src/components/form/fieldset.tsx",
+          "props": [
+            {
+              "name": "legend",
+              "type": "ReactNode",
+              "required": true,
+              "description": "The question the controls answer, in the label register. It names the group."
+            },
+            {
+              "name": "description",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Copy under the legend, read when focus enters the group."
+            },
+            {
+              "name": "disabled",
+              "type": "boolean",
+              "required": false,
+              "default": "false",
+              "description": "Disables every control in the group."
+            },
+            {
+              "name": "error",
+              "type": "ReactNode",
+              "required": false,
+              "description": "A rule the group breaks as a whole. Marks the group invalid and is listed by `FormErrorSummary`."
+            }
+          ],
+          "forwards": {
+            "element": "<fieldset data-slot=\"fieldset\">"
+          }
+        },
+        {
+          "name": "FormProps",
+          "kind": "type",
+          "source": "src/components/form/form.tsx",
+          "description": "A `<form>` that knows which of its fields are failing, so it can do the one thing a field cannot: decide where focus goes when Save finds problems."
+        },
+        {
+          "name": "FormErrorSummaryProps",
+          "kind": "type",
+          "source": "src/components/form/form-error-summary.tsx",
+          "description": "Every error in the form, at the top of it, each one a link to its field."
+        },
+        {
+          "name": "FieldsetProps",
+          "kind": "type",
+          "source": "src/components/form/fieldset.tsx",
+          "description": "Several controls that answer one question, under one legend: an address, a pair of limits, a schedule. A screen reader announces the legend on the way into the group, so “Minimum” and “Maximum” are heard as the minimum and maximum of something."
+        }
+      ],
+      "stories": [
+        {
+          "name": "Default",
+          "id": "components-forms-form--default",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-form--default"
+        },
+        {
+          "name": "FieldsetGroup",
+          "id": "components-forms-form--fieldset-group",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-form--fieldset-group"
+        },
+        {
+          "name": "WithErrors",
+          "id": "components-forms-form--with-errors",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-form--with-errors"
+        },
+        {
+          "name": "WithoutSummary",
+          "id": "components-forms-form--without-summary",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-form--without-summary"
+        }
+      ],
+      "usedIn": [
+        "Components/Forms/Form example",
+        "Patterns/Settings page"
       ]
     },
     {
@@ -15105,8 +15362,7 @@
           },
           {
             "when": "Steps of a flow that must be done in order.",
-            "use": "Components/Data display/Timeline",
-            "label": "StepList"
+            "use": "Components/Navigation/Stepper"
           }
         ],
         "practices": [
@@ -15237,6 +15493,257 @@
       ]
     },
     {
+      "title": "Components/Navigation/Stepper",
+      "name": "Stepper",
+      "layer": "components",
+      "category": "Navigation",
+      "docs": "https://demogar.github.io/molaui/?path=/docs/components-navigation-stepper--overview",
+      "phase": "experimental",
+      "summary": "A task done in order, one step at a time: the steps with their state, and the current step as a form that validates before it moves on.",
+      "description": "A task done in order, one step at a time. The list says where you are, in a **glyph, a word and a colour** for each step (a numbered hollow square “To do”, an accent square “Current”, a verde check “Done”, a rojo “!” “Needs fixing”). The panel is a `Form`: **Continue** submits it, `onStepSubmit` validates, and a step with errors stays put while focus goes to its `FormErrorSummary`. When the step changes, focus moves to the new step’s heading. Steps already reached are buttons; later steps are not, because skipping ahead would skip the checks.",
+      "usage": {
+        "use": [
+          "Creating something that needs several decisions in a set order, such as an agent, a data source or an evaluation.",
+          "A flow where each step depends on the one before, so later steps cannot be judged until earlier ones are done.",
+          "Letting people go back to a step they finished and change an answer without losing the rest."
+        ],
+        "avoid": [
+          {
+            "when": "Settings that can be changed in any order and saved together.",
+            "use": "Components/Forms/Form"
+          },
+          {
+            "when": "Views of one thing people switch between freely.",
+            "use": "Components/Navigation/Tabs"
+          },
+          {
+            "when": "Instructions a person reads and follows outside the product, such as a runbook.",
+            "use": "Components/Data display/Timeline",
+            "label": "StepList"
+          },
+          {
+            "when": "The progress of work the system is doing, such as an agent run.",
+            "use": "AI/Agent run"
+          }
+        ],
+        "practices": [
+          {
+            "do": "Keep to three to six steps, each a decision with a short noun for a title: “Model”, “Tools”.",
+            "dont": "Split a short form into steps to make it look smaller; every Continue is a page someone has to wait for."
+          },
+          {
+            "do": "End on a Review step that shows every answer before Finish.",
+            "dont": "Let Finish be the first time someone sees what they chose across steps."
+          }
+        ],
+        "content": [
+          "Name Finish for what it does: “Create agent”, “Connect source”.",
+          "Step descriptions say what the step decides, in one sentence.",
+          "Translate the buttons, the “Step 2 of 4” line and the state words with messages."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves through the steps that can be returned to, then into the current step’s fields, Back and Continue."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "On a step in the list, opens that step and moves focus to its heading."
+          },
+          {
+            "keys": [
+              "Enter"
+            ],
+            "action": "In a text field, or on Continue, submits the step; a step that passes moves on and focuses the next heading."
+          }
+        ],
+        "handles": [
+          "The steps are an ordered list in a `nav` named by `label`; the current one has `aria-current=\"step\"`.",
+          "Each step states its state in words (“Done”, “Current”, “To do”, “Needs fixing”) as well as by its marker’s shape and colour, and a step button is named by those words, “Basics Done”.",
+          "When the step changes, focus moves to the new step’s heading, which follows a “Step 2 of 4” line; on first render focus is left where it is.",
+          "The panel is a `Form`, so a step with errors keeps focus in the step and sends it to the `FormErrorSummary` there.",
+          "Steps beyond the furthest one reached are plain text, not disabled buttons, so they are not tab stops."
+        ],
+        "you": [
+          "Name the list with `label`, such as “Steps to create an agent”.",
+          "Validate in `onStepSubmit` and return `false` to keep a step; put a `FormErrorSummary` in any step with more than one field.",
+          "Translate every word it writes with `messages`.",
+          "Keep it out of another `<form>`: the panel is already one."
+        ]
+      },
+      "anatomy": {
+        "slot": "stepper",
+        "parts": [
+          {
+            "part": "steps",
+            "name": "Steps",
+            "does": "The ordered list of steps, in a nav named by label; reached steps are buttons.",
+            "selector": "[data-part=\"steps\"]"
+          },
+          {
+            "part": "bar",
+            "name": "Bar",
+            "does": "A band along the top of each step that carries its state’s colour.",
+            "selector": "[data-part=\"bar\"]"
+          },
+          {
+            "part": "marker",
+            "name": "Marker",
+            "does": "The square: a number to do, a check when done, a “!” when it needs fixing. Its shape states the state without colour.",
+            "selector": "[data-part=\"marker\"]"
+          },
+          {
+            "part": "title",
+            "name": "Step title",
+            "does": "The step’s short name; the same words head its panel.",
+            "selector": "[data-part=\"title\"]"
+          },
+          {
+            "part": "state",
+            "name": "State",
+            "does": "The state in a word: To do, Current, Done or Needs fixing.",
+            "selector": "[data-part=\"state\"]"
+          },
+          {
+            "part": "panel",
+            "name": "Panel",
+            "does": "The current step, a Form: Continue submits it, and it only moves on when the step passes.",
+            "selector": "[data-part=\"panel\"]"
+          },
+          {
+            "part": "position",
+            "name": "Position",
+            "does": "“Step 3 of 4”, above the heading that takes focus when the step changes.",
+            "selector": "[data-part=\"position\"]"
+          },
+          {
+            "part": "actions",
+            "name": "Actions",
+            "does": "Back, and Continue or Finish, which is the form’s submit button.",
+            "selector": "[data-part=\"actions\"]"
+          }
+        ]
+      },
+      "exports": [
+        {
+          "name": "Stepper",
+          "kind": "component",
+          "source": "src/components/stepper/stepper.tsx",
+          "props": [
+            {
+              "name": "children",
+              "type": "(step: StepperStep, index: number) => ReactNode",
+              "required": true,
+              "description": "Renders the current step's content: its fields, and a `FormErrorSummary` if it has more than one."
+            },
+            {
+              "name": "label",
+              "type": "string",
+              "required": true,
+              "description": "Names the list of steps, which is a `nav`: “Steps to create an agent”."
+            },
+            {
+              "name": "steps",
+              "type": "StepperStep[]",
+              "required": true,
+              "description": "The steps, in the order they are done."
+            },
+            {
+              "name": "defaultStep",
+              "type": "string",
+              "required": false,
+              "description": "The step to open on, uncontrolled. The first step by default."
+            },
+            {
+              "name": "headingLevel",
+              "type": "2 | 3",
+              "required": false,
+              "default": "2",
+              "description": "The level of the panel heading; match the page outline. `h2` by default."
+            },
+            {
+              "name": "messages",
+              "type": "(Partial<Omit<StepperMessages, \"states\">> & { states?: Partial<Record<StepperStepState, string>>; })",
+              "required": false,
+              "description": "Words, for translation. Any key not given keeps its English default."
+            },
+            {
+              "name": "onComplete",
+              "type": "(() => void)",
+              "required": false,
+              "description": "Called after the last step's `onStepSubmit` passes."
+            },
+            {
+              "name": "onStepChange",
+              "type": "((step: string) => void)",
+              "required": false,
+              "description": "Called with the new step's id when Continue, Back or a step in the list changes it."
+            },
+            {
+              "name": "onStepSubmit",
+              "type": "((step: string, event: FormEvent<HTMLFormElement>) => boolean | void | Promise<boolean | void>)",
+              "required": false,
+              "description": "Runs when Continue or Finish is pressed, with the step's id and the submit event. Validate here; return `false` (or a promise of `false`) to stay on the step. While a promise is pending, Continue shows it is working."
+            },
+            {
+              "name": "step",
+              "type": "string",
+              "required": false,
+              "description": "The current step's id, controlled. Pair with `onStepChange`."
+            }
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"stepper\">"
+          }
+        },
+        {
+          "name": "StepperMessages",
+          "kind": "type",
+          "source": "src/components/stepper/stepper.tsx"
+        },
+        {
+          "name": "StepperProps",
+          "kind": "type",
+          "source": "src/components/stepper/stepper.tsx"
+        },
+        {
+          "name": "StepperStep",
+          "kind": "type",
+          "source": "src/components/stepper/stepper.tsx"
+        },
+        {
+          "name": "StepperStepState",
+          "kind": "type",
+          "source": "src/components/stepper/stepper.tsx",
+          "description": "A task split into steps that are done in order: create an agent, connect a data source, invite a team. The step list says where you are and how far there is to go; the panel under it is the current step, and it is a `Form`."
+        }
+      ],
+      "stories": [
+        {
+          "name": "Default",
+          "id": "components-navigation-stepper--default",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-stepper--default"
+        },
+        {
+          "name": "States",
+          "id": "components-navigation-stepper--states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-stepper--states"
+        },
+        {
+          "name": "Translated",
+          "id": "components-navigation-stepper--translated",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-stepper--translated"
+        }
+      ]
+    },
+    {
       "title": "Components/Navigation/Tabs",
       "name": "Tabs",
       "layer": "components",
@@ -15263,6 +15770,10 @@
           {
             "when": "Moving between parts of the product.",
             "use": "Components/Layout/App shell"
+          },
+          {
+            "when": "Steps that must be done in order, each checked before the next.",
+            "use": "Components/Navigation/Stepper"
           }
         ],
         "practices": [
@@ -18290,7 +18801,7 @@
       "title": "Components/Forms/Form example",
       "kind": "showcase",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-forms-form-example--overview",
-      "description": "Every form component, composed into the kind of form an AI platform team edits daily. Submit it empty to see validation: errors appear under each invalid control, announced on insertion, and **focus moves to the first invalid field** — the behaviour `Field`’s `role=\"alert\"` decision was made for.",
+      "description": "Every form component, composed into the kind of form an AI platform team edits daily. Submit it empty to see validation: a **`FormErrorSummary`** appears at the top, lists the seven problems as links to their fields, and **takes focus**. That focus move is the one announcement; inside a `Form` with a summary, each field’s error is part of its control’s description rather than its own alert, so seven problems are not seven alerts fired in one tick.",
       "builtFrom": [
         "Components/Actions/Button",
         "Components/Forms/Checkbox",
@@ -18298,6 +18809,7 @@
         "Components/Forms/Date picker",
         "Components/Forms/Field",
         "Components/Forms/File upload",
+        "Components/Forms/Form",
         "Components/Forms/Number input",
         "Components/Forms/Radio",
         "Components/Forms/Select",
@@ -18972,6 +19484,7 @@
         "Components/Actions/Button",
         "Components/Feedback/Toast",
         "Components/Forms/Field",
+        "Components/Forms/Form",
         "Components/Forms/Number input",
         "Components/Forms/Radio",
         "Components/Forms/Select",
@@ -19016,6 +19529,10 @@
             "role": "Every label, hint and error, around Input and Textarea."
           },
           {
+            "title": "Components/Forms/Form",
+            "role": "Form around the settings, and FormErrorSummary at its top: on a failed Save it lists every error as a link and takes focus."
+          },
+          {
             "title": "Components/Forms/Number input",
             "role": "Tokens per run and the monthly limit."
           },
@@ -19057,7 +19574,7 @@
           },
           "error": {
             "story": "https://demogar.github.io/molaui/?path=/story/patterns-settings-page--with-validation-errors",
-            "note": "Save pressed with three problems: each says what is wrong and what to do, focus is on the first, and the bar counts what needs fixing."
+            "note": "Save pressed with three problems: the summary at the top lists them as links and has focus, each field says what is wrong and what to do, and the bar counts what needs fixing."
           },
           "noPermission": {
             "note": "Not shown. Someone who may not change settings should see the values as read-only text with who can change them, not a form that refuses on Save."
@@ -19065,7 +19582,7 @@
         },
         "accessibility": [
           "The bar at the foot is always mounted, and Save stays focusable while disabled, so saving never drops focus to the top of the page.",
-          "Errors appear on Save, not while typing; focus goes to the first, and each clears as soon as its field is fixed.",
+          "Errors appear on Save, not while typing. The error summary takes focus and is the one announcement: the fields’ errors are not alerts while it is there. Each error clears from its field and from the summary as soon as it is fixed.",
           "The unsaved count is a number in words, “3 unsaved changes”, not a dot, so it reads the same to a screen reader and in forced colours.",
           "Leaving with unsaved changes asks first, with Keep editing focused."
         ]

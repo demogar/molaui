@@ -7,6 +7,8 @@ import * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { joinIds } from '../../lib/merge-props'
+import { ErrorMessage } from '../field/error-message'
+import { useFormErrorEntry } from '../form/form-context'
 import { ChoiceField } from './choice-field'
 
 /**
@@ -109,6 +111,12 @@ export interface CheckboxGroupProps extends Omit<CheckboxGroupPrimitive.Props, '
   legend: React.ReactNode
   /** Copy under the legend. */
   description?: React.ReactNode
+  /**
+   * A rule the group breaks as a whole, such as “choose at least one”. Shown
+   * under the legend, joined to the group's description, and listed by a
+   * `FormErrorSummary` in the same `Form`.
+   */
+  error?: React.ReactNode
   /** Lay options out in a row rather than a column. */
   orientation?: 'vertical' | 'horizontal'
   /** Classes for the `<fieldset>` that holds the legend, the description and the options. */
@@ -120,19 +128,40 @@ export interface CheckboxGroupProps extends Omit<CheckboxGroupPrimitive.Props, '
  * legend — so a screen reader announces "Tools, group" before the first
  * option and every option is heard in that context, which no `aria-label` on
  * a div reproduces across readers.
+ *
+ * An `error` is drawn and registered exactly as `Fieldset`'s is (one
+ * ErrorMessage, one register), so a group of checkboxes fails the way any
+ * other group does.
  */
 export function CheckboxGroup({
   legend,
   description,
+  error,
   orientation = 'vertical',
   className,
   children,
   ...props
 }: CheckboxGroupProps) {
+  const uid = React.useId()
+  const id = `${uid}-group`
+  const descriptionId = `${uid}-description`
+  const errorId = `${uid}-error`
+  const { announce } = useFormErrorEntry(id, legend, error)
   return (
-    <fieldset data-slot="checkbox-group" className={cn('m-0 min-w-0 border-0 p-0', className)}>
+    <fieldset
+      id={id}
+      data-slot="checkbox-group"
+      data-invalid={error ? '' : undefined}
+      aria-describedby={joinIds(description ? descriptionId : undefined, error ? errorId : undefined)}
+      className={cn('m-0 min-w-0 border-0 p-0', className)}
+    >
       <legend className="mb-3 p-0 rotulo text-ink-2">{legend}</legend>
-      {description ? <p className="-mt-1.5 mb-3 text-xs text-ink-muted">{description}</p> : null}
+      {description ? <p id={descriptionId} className="-mt-1.5 mb-3 text-xs text-ink-muted">{description}</p> : null}
+      {error ? (
+        <ErrorMessage id={errorId} announce={announce} className="mb-3">
+          {error}
+        </ErrorMessage>
+      ) : null}
       <CheckboxGroupPrimitive
         className={cn(
           'flex',

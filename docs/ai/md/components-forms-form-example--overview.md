@@ -4,7 +4,7 @@ Markdown version of https://demogar.github.io/molaui/?path=/docs/components-form
 
 # Form example
 
-Every form component, composed into the kind of form an AI platform team edits daily. Submit it empty to see validation: errors appear under each invalid control, announced on insertion, and **focus moves to the first invalid field** — the behaviour `Field`’s `role="alert"` decision was made for.
+Every form component, composed into the kind of form an AI platform team edits daily. Submit it empty to see validation: a **`FormErrorSummary`** appears at the top, lists the seven problems as links to their fields, and **takes focus**. That focus move is the one announcement; inside a `Form` with a summary, each field’s error is part of its control’s description rather than its own alert, so seven problems are not seven alerts fired in one tick.
 
 ## Built from
 
@@ -14,6 +14,7 @@ Every form component, composed into the kind of form an AI platform team edits d
 - [Date picker](https://demogar.github.io/molaui/md/components-forms-date-picker--overview.md)
 - [Field](https://demogar.github.io/molaui/md/components-forms-field--overview.md)
 - [File upload](https://demogar.github.io/molaui/md/components-forms-file-upload--overview.md)
+- [Form](https://demogar.github.io/molaui/md/components-forms-form--overview.md)
 - [Number input](https://demogar.github.io/molaui/md/components-forms-number-input--overview.md)
 - [Radio](https://demogar.github.io/molaui/md/components-forms-radio--overview.md)
 - [Select](https://demogar.github.io/molaui/md/components-forms-select--overview.md)

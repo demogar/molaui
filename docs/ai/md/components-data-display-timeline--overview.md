@@ -23,6 +23,7 @@ A spine beside the events it connects. Always an `<ol>` — the order is the con
 - A live agent run whose steps change as it works. Use [Agent run](https://demogar.github.io/molaui/md/ai-agent-run--overview.md).
 - Records compared by their fields rather than read in order. Use [Table](https://demogar.github.io/molaui/md/components-data-display-table--overview.md).
 - Sections of one document that open and close. Use [Accordion](https://demogar.github.io/molaui/md/components-navigation-accordion--overview.md).
+- A task people do in the product, step by step, with checks between steps. Use [Stepper](https://demogar.github.io/molaui/md/components-navigation-stepper--overview.md).
 
 ### Do and don’t
 
@@ -109,8 +110,8 @@ Nothing in it takes focus, so there is no keyboard table.
 - [Agent run](https://demogar.github.io/molaui/md/ai-agent-run--overview.md)
 - [Table](https://demogar.github.io/molaui/md/components-data-display-table--overview.md)
 - [Accordion](https://demogar.github.io/molaui/md/components-navigation-accordion--overview.md)
+- [Stepper](https://demogar.github.io/molaui/md/components-navigation-stepper--overview.md)
 
 ### Pages that send readers here
 
 - [Relative time](https://demogar.github.io/molaui/md/components-data-display-relative-time--overview.md)
-- [Pagination](https://demogar.github.io/molaui/md/components-navigation-pagination--overview.md)

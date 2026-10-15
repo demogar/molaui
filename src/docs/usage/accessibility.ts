@@ -553,13 +553,13 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
     ],
     handles: [
       '`Field` links the label to the control and joins the hint and error into `aria-describedby`, in the order they are shown.',
-      'An error sets `aria-invalid`, is announced with `role="alert"`, and carries a cut square so it is not colour alone.',
+      'An error sets `aria-invalid` and carries a cut square so it is not colour alone. It is announced with `role="alert"`, except inside a `Form` with a `FormErrorSummary`, which announces every error once.',
       'The required asterisk is hidden from assistive technology while `required` reaches the control; “Optional” is kept as a separate word.',
       '`SearchInput` is a `searchbox`, and its clear button is named “Clear search”.',
     ],
     you: [
       'Spread the `control` props onto the control; without them it has no name and no description.',
-      'When several fields fail at once, add an error summary at the top of the form and move focus to it.',
+      'When several fields can fail at once, put the fields in a `Form` with a `FormErrorSummary`; their errors then stop being alerts and the summary takes focus.',
       'Bind the key shown by `shortcut` yourself; the key cap is display only.',
     ],
   },
@@ -605,6 +605,26 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
       'Name it: pass `aria-labelledby` pointing at a visible label, or `aria-label`.',
       'Say why an option is disabled, in its description or next to the list.',
       'Announce the consequence of a choice yourself if it changes the page, such as a count in a live region.',
+    ],
+  },
+  'Components/Forms/Form': {
+    keyboard: [
+      { keys: ['Enter'], action: 'In a text field, submits the form; if it finds errors, moves focus to the error summary.' },
+      { keys: ['Tab'], action: 'From the summary, moves through its links, one per error.' },
+      { keys: ['Enter'], action: 'On a summary link, moves focus to that field’s control, or the first control of a group, and scrolls its label into view.' },
+    ],
+    handles: [
+      'On the submit that finds errors, focus moves to the `FormErrorSummary`, a region named by its heading (“3 fields need fixing”). The focus move is the one announcement; the summary is not also a live region.',
+      'While a summary is mounted, each field’s error drops `role="alert"` and stays in its control’s `aria-describedby`, so three errors are not three alerts.',
+      'Without a summary, focus moves to the first invalid control in document order, and field errors keep `role="alert"`.',
+      'Each summary entry is a real link to the control’s id, reading “Label: message”, listed in document order.',
+      '`Fieldset` is a real `<fieldset>` named by its legend; its description and error are its `aria-describedby`, and `disabled` disables every Base UI control inside.',
+    ],
+    you: [
+      'Validate in `onSubmit` and set each field’s `error`; the form does not decide what is wrong.',
+      'Write errors that make sense away from their field, since the summary lists them on their own.',
+      'For errors that arrive later, such as from a server, call `focus()` on the summary’s ref: only a submit moves focus by itself.',
+      'Give the form a name with `aria-label` or `aria-labelledby` when the page has more than one.',
     ],
   },
   'Components/Forms/Number input': {
@@ -872,6 +892,26 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
     you: [
       'Pass a distinct `aria-label` when a page has more than one pagination.',
       'After a page change, move focus to the results or say what loaded; the page buttons do not announce it.',
+    ],
+  },
+  'Components/Navigation/Stepper': {
+    keyboard: [
+      { keys: ['Tab'], action: 'Moves through the steps that can be returned to, then into the current step’s fields, Back and Continue.' },
+      { keys: ['Enter', 'Space'], action: 'On a step in the list, opens that step and moves focus to its heading.' },
+      { keys: ['Enter'], action: 'In a text field, or on Continue, submits the step; a step that passes moves on and focuses the next heading.' },
+    ],
+    handles: [
+      'The steps are an ordered list in a `nav` named by `label`; the current one has `aria-current="step"`.',
+      'Each step states its state in words (“Done”, “Current”, “To do”, “Needs fixing”) as well as by its marker’s shape and colour, and a step button is named by those words, “Basics Done”.',
+      'When the step changes, focus moves to the new step’s heading, which follows a “Step 2 of 4” line; on first render focus is left where it is.',
+      'The panel is a `Form`, so a step with errors keeps focus in the step and sends it to the `FormErrorSummary` there.',
+      'Steps beyond the furthest one reached are plain text, not disabled buttons, so they are not tab stops.',
+    ],
+    you: [
+      'Name the list with `label`, such as “Steps to create an agent”.',
+      'Validate in `onStepSubmit` and return `false` to keep a step; put a `FormErrorSummary` in any step with more than one field.',
+      'Translate every word it writes with `messages`.',
+      'Keep it out of another `<form>`: the panel is already one.',
     ],
   },
   'Components/Navigation/Tabs': {

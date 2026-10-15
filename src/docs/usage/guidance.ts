@@ -572,6 +572,7 @@ export const USAGE: Record<string, Usage> = {
       { when: 'A live agent run whose steps change as it works.', use: 'AI/Agent run' },
       { when: 'Records compared by their fields rather than read in order.', use: 'Components/Data display/Table' },
       { when: 'Sections of one document that open and close.', use: 'Components/Navigation/Accordion' },
+      { when: 'A task people do in the product, step by step, with checks between steps.', use: 'Components/Navigation/Stepper' },
     ],
     practices: [
       {
@@ -920,6 +921,7 @@ export const USAGE: Record<string, Usage> = {
       { when: 'A choice from a known list.', use: 'Components/Forms/Select' },
       { when: 'A date or a period.', use: 'Components/Forms/Date picker' },
       { when: 'A prompt to a model, with attachments and a send button.', use: 'AI/Prompt input' },
+      { when: 'Several controls answering one question, or a form that can fail in several places at once.', use: 'Components/Forms/Form' },
     ],
     practices: [
       {
@@ -986,6 +988,36 @@ export const USAGE: Record<string, Usage> = {
     content: [
       'Options are names, in sentence case: “Panama City”, not “PANAMA CITY” or “Region: Panama City”.',
       'Put codes and figures in the description, not the label, so type-ahead matches what people read first.',
+    ],
+  },
+  'Components/Forms/Form': {
+    summary: 'A form that knows which fields are failing: FormErrorSummary lists them as links and takes focus on submit; Fieldset groups controls under one legend.',
+    use: [
+      'Any form saved as a whole, where Save can find more than one problem at once: put a FormErrorSummary at the top.',
+      'Moving focus after a failed submit without writing it by hand: to the summary, or to the first invalid field when there is none.',
+      'Several controls that answer one question, such as a pair of limits or a time window, with Fieldset and its legend.',
+      'A rule a group breaks as a whole, such as “the last retry must wait longer than the first”, with the Fieldset’s error.',
+    ],
+    avoid: [
+      { when: 'One control with its label, hint and error.', use: 'Components/Forms/Field' },
+      { when: 'A set of checkboxes; CheckboxGroup is already a fieldset, and takes an error too.', use: 'Components/Forms/Checkbox', label: 'CheckboxGroup' },
+      { when: 'A long task split into steps done in order.', use: 'Components/Navigation/Stepper' },
+      { when: 'A message about the page rather than about the fields in it.', use: 'Components/Feedback/Callout' },
+    ],
+    practices: [
+      {
+        do: 'Validate on submit, then re-check only the fields already showing an error as they change.',
+        dont: 'Show errors on every keystroke; an error about a value nobody has finished typing is noise.',
+      },
+      {
+        do: 'Write each error so it makes sense in the summary, away from its field: “Enter an https:// address”.',
+        dont: 'Rely on the field around it: “Invalid” in a list of links says nothing.',
+      },
+    ],
+    content: [
+      'The summary title counts what to fix: “3 fields need fixing”. Pass title to word it otherwise or translate it.',
+      'Use description for what happens next: “Nothing has been saved yet.”',
+      'Legends are short nouns, like labels: “Retry delays”, “Run window”.',
     ],
   },
   'Components/Forms/Number input': {
@@ -1387,7 +1419,7 @@ export const USAGE: Record<string, Usage> = {
     avoid: [
       { when: 'A table that also sorts and selects; DataTable includes its pagination.', use: 'Components/Data display/Table', label: 'DataTable' },
       { when: 'Showing where a page sits in the hierarchy.', use: 'Components/Navigation/Breadcrumb' },
-      { when: 'Steps of a flow that must be done in order.', use: 'Components/Data display/Timeline', label: 'StepList' },
+      { when: 'Steps of a flow that must be done in order.', use: 'Components/Navigation/Stepper' },
     ],
     practices: [
       {
@@ -1396,6 +1428,35 @@ export const USAGE: Record<string, Usage> = {
       },
     ],
     content: ['Give the compact variant pageSize and total, so it states the range rather than “Page 2 of 26”.'],
+  },
+  'Components/Navigation/Stepper': {
+    summary: 'A task done in order, one step at a time: the steps with their state, and the current step as a form that validates before it moves on.',
+    use: [
+      'Creating something that needs several decisions in a set order, such as an agent, a data source or an evaluation.',
+      'A flow where each step depends on the one before, so later steps cannot be judged until earlier ones are done.',
+      'Letting people go back to a step they finished and change an answer without losing the rest.',
+    ],
+    avoid: [
+      { when: 'Settings that can be changed in any order and saved together.', use: 'Components/Forms/Form' },
+      { when: 'Views of one thing people switch between freely.', use: 'Components/Navigation/Tabs' },
+      { when: 'Instructions a person reads and follows outside the product, such as a runbook.', use: 'Components/Data display/Timeline', label: 'StepList' },
+      { when: 'The progress of work the system is doing, such as an agent run.', use: 'AI/Agent run' },
+    ],
+    practices: [
+      {
+        do: 'Keep to three to six steps, each a decision with a short noun for a title: “Model”, “Tools”.',
+        dont: 'Split a short form into steps to make it look smaller; every Continue is a page someone has to wait for.',
+      },
+      {
+        do: 'End on a Review step that shows every answer before Finish.',
+        dont: 'Let Finish be the first time someone sees what they chose across steps.',
+      },
+    ],
+    content: [
+      'Name Finish for what it does: “Create agent”, “Connect source”.',
+      'Step descriptions say what the step decides, in one sentence.',
+      'Translate the buttons, the “Step 2 of 4” line and the state words with messages.',
+    ],
   },
   'Components/Navigation/Tabs': {
     summary: 'Switching between views of one thing: underline for views, panel for tabs that are containers.',
@@ -1408,6 +1469,7 @@ export const USAGE: Record<string, Usage> = {
       { when: 'Changing how the same data is displayed, such as Table or Board.', use: 'Components/Forms/Segmented control' },
       { when: 'Sections someone may want open together.', use: 'Components/Navigation/Accordion' },
       { when: 'Moving between parts of the product.', use: 'Components/Layout/App shell' },
+      { when: 'Steps that must be done in order, each checked before the next.', use: 'Components/Navigation/Stepper' },
     ],
     practices: [
       {

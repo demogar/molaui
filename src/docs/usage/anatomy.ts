@@ -78,6 +78,30 @@ export const ANATOMY: Record<string, Anatomy> = {
       { part: 'icon', name: 'Icon', does: 'A clock, hidden from assistive technology; the label says what the field is.' },
     ],
   },
+  'Components/Forms/Form': {
+    story: 'WithErrors',
+    slot: 'form-error-summary',
+    parts: [
+      { part: 'seam', name: 'Seam', does: 'The rojo relleno a danger callout opens with: this block is about something that went wrong.' },
+      { part: 'title', name: 'Title', does: 'Counts what to fix. It names the summary, so it is what a screen reader says when focus lands here.' },
+      { part: 'description', name: 'Description', does: 'What happens next, or what was kept: “Nothing has been saved yet.”' },
+      { part: 'list', name: 'Error links', does: 'One link per error, “Label: message”, in the order of the form; each moves focus to its field.' },
+    ],
+  },
+  'Components/Navigation/Stepper': {
+    story: 'States',
+    slot: 'stepper',
+    parts: [
+      { part: 'steps', name: 'Steps', does: 'The ordered list of steps, in a nav named by label; reached steps are buttons.' },
+      { part: 'bar', name: 'Bar', does: 'A band along the top of each step that carries its state’s colour.' },
+      { part: 'marker', name: 'Marker', does: 'The square: a number to do, a check when done, a “!” when it needs fixing. Its shape states the state without colour.' },
+      { part: 'title', name: 'Step title', does: 'The step’s short name; the same words head its panel.' },
+      { part: 'state', name: 'State', does: 'The state in a word: To do, Current, Done or Needs fixing.' },
+      { part: 'panel', name: 'Panel', does: 'The current step, a Form: Continue submits it, and it only moves on when the step passes.' },
+      { part: 'position', name: 'Position', does: '“Step 3 of 4”, above the heading that takes focus when the step changes.' },
+      { part: 'actions', name: 'Actions', does: 'Back, and Continue or Finish, which is the form’s submit button.' },
+    ],
+  },
   'Components/Feedback/Callout': {
     story: 'WithActions',
     slot: 'callout',

@@ -222,6 +222,17 @@ const FIXTURES: Record<string, Fixture | LabelFixture> = {
   Textarea: (p) => <mola.Textarea {...p} aria-label="Notes" />,
   SearchInput: (p) => <mola.SearchInput {...p} aria-label="Search" />,
   FileUpload: (p) => <mola.FileUpload {...p} />,
+  Form: (p) => <mola.Form {...p} aria-label="Webhook" />,
+  // The summary renders only while a field in its form has an error.
+  FormErrorSummary: (p) => (
+    <mola.Form aria-label="Webhook">
+      <mola.FormErrorSummary {...p} />
+      <mola.Field label="Name" error="Required.">
+        {(control) => <mola.Input {...control} />}
+      </mola.Field>
+    </mola.Form>
+  ),
+  Fieldset: (p) => <mola.Fieldset {...p} legend="Retry delays" />,
   NumberInput: {
     plain: (p) => <mola.NumberInput {...p} aria-label="Count" />,
     labelled: (p) => <mola.NumberInput {...p} label="Count" />,
@@ -432,6 +443,11 @@ const FIXTURES: Record<string, Fixture | LabelFixture> = {
   ),
   Breadcrumb: (p) => <mola.Breadcrumb {...p} items={[{ label: 'Home', href: '/' }, { label: 'Here' }]} />,
   Pagination: (p) => <mola.Pagination {...p} page={1} pageCount={3} onPageChange={noop} />,
+  Stepper: (p) => (
+    <mola.Stepper {...p} label="Steps" steps={[{ id: 'a', title: 'Basics' }]}>
+      {() => null}
+    </mola.Stepper>
+  ),
   Tabs: (p) => <mola.Tabs {...p} />,
   Tree: (p) => <mola.Tree {...p} aria-label="Files" items={options} />,
   TabsList: (p) => (

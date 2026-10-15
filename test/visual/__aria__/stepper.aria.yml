@@ -1,0 +1,15 @@
+- navigation "Steps to create an agent":
+  - list:
+    - listitem:
+      - button "Basics Needs fixing"
+    - listitem:
+      - button "Model Done"
+    - listitem: Tools Current
+    - listitem: Review To do
+- form "Tools":
+  - text: Step 3 of 4
+  - heading "Tools" [level=2]
+  - paragraph: What the agent may call while it works.
+  - paragraph: The tools step’s fields go here.
+  - button "Back"
+  - button "Continue"

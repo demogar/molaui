@@ -304,6 +304,7 @@ export const PATTERNS: Record<string, PatternUsage> = {
       'Components/Actions/Button': 'Save changes and Discard in the sticky bar, and Delete workspace in the danger zone.',
       'Components/Feedback/Toast': 'Saved, and Discard with Undo, so neither needs a dialog.',
       'Components/Forms/Field': 'Every label, hint and error, around Input and Textarea.',
+      'Components/Forms/Form': 'Form around the settings, and FormErrorSummary at its top: on a failed Save it lists every error as a link and takes focus.',
       'Components/Forms/Number input': 'Tokens per run and the monthly limit.',
       'Components/Forms/Radio': 'What happens when the limit is reached.',
       'Components/Forms/Select': 'The default model.',
@@ -320,7 +321,7 @@ export const PATTERNS: Record<string, PatternUsage> = {
       },
       error: {
         story: 'WithValidationErrors',
-        note: 'Save pressed with three problems: each says what is wrong and what to do, focus is on the first, and the bar counts what needs fixing.',
+        note: 'Save pressed with three problems: the summary at the top lists them as links and has focus, each field says what is wrong and what to do, and the bar counts what needs fixing.',
       },
       noPermission: {
         note: 'Not shown. Someone who may not change settings should see the values as read-only text with who can change them, not a form that refuses on Save.',
@@ -328,7 +329,7 @@ export const PATTERNS: Record<string, PatternUsage> = {
     },
     accessibility: [
       'The bar at the foot is always mounted, and Save stays focusable while disabled, so saving never drops focus to the top of the page.',
-      'Errors appear on Save, not while typing; focus goes to the first, and each clears as soon as its field is fixed.',
+      'Errors appear on Save, not while typing. The error summary takes focus and is the one announcement: the fields’ errors are not alerts while it is there. Each error clears from its field and from the summary as soon as it is fixed.',
       'The unsaved count is a number in words, “3 unsaved changes”, not a dot, so it reads the same to a screen reader and in forced colours.',
       'Leaving with unsaved changes asks first, with Keep editing focused.',
     ],
