@@ -115,8 +115,8 @@ The mola's method is the system's grammar —
   scanned for *what it said* versus *what it did* from the type alone.
 - **State is never colour alone**: every status is a square mark, a word and a tone.
 
-It began as the design system of [mustdopanama.com](https://www.mustdopanama.com), an editorial
-travel guide, and was carried into product software — the same identity, re-argued for
+Demóstenes García started Mola UI as the design system of [mustdopanama.com](https://www.mustdopanama.com),
+an editorial travel guide, and carried it into product software — the same identity, re-argued for
 information density, all-day dark mode and the states AI work produces. The decisions are written
 down in [`docs/adr/`](docs/adr/). The whole method, layer by layer from the cloth to the interface,
 is told on the [Introduction](https://demogar.github.io/molaui/?path=/docs/mola-ui-introduction--overview).
@@ -357,7 +357,7 @@ something new with the [proposal template](https://github.com/demogar/molaui/iss
 
 ## Credits
 
-Designed, architected and directed by Demóstenes García. Built with
+Designed, architected and directed by [Demóstenes García](https://demogar.com). Built with
 [Claude Code](https://claude.com/claude-code).
 
 The mola is the textile art of the Guna people; this project borrows its method, not its motifs. Typefaces: Archivo (Omnibus-Type), Alegreya (Juan Pablo del Peral, Huerta

@@ -82,8 +82,8 @@ That method became the system's grammar:
 | *Diente* — the sawtooth seam | the edge where one ground is cut away from another |
 | No curve anywhere | zero radius, everywhere, no exceptions |
 
-It began as the design system for [Must Do Panama](https://www.mustdopanama.com), an editorial
-travel guide. Mola UI is that system **carried from an editorial site into product software**:
+Demóstenes García started Mola UI as the design system for [Must Do Panama](https://www.mustdopanama.com),
+an editorial travel guide. Mola UI is that system **carried from an editorial site into product software**:
 the same identity, re-argued for information density, a dark theme for all-day use, and the
 states AI work actually produces.
 
@@ -126,4 +126,4 @@ and fails a page that would leave a section empty. What the pages don't have yet
 
 ---
 
-*Designed, architected and directed by Demóstenes García. Built with Claude Code.*
+*Designed, architected and directed by [Demóstenes García](https://demogar.com). Built with Claude Code.*
