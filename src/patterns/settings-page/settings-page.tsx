@@ -6,6 +6,7 @@ import { NavItem } from '../../components/app-shell/sidebar'
 import { Button } from '../../components/button'
 import { AlertDialog } from '../../components/dialog'
 import { Field, Input, Textarea } from '../../components/field'
+import { Form, FormErrorSummary } from '../../components/form'
 import { NumberInput } from '../../components/number-input'
 import { Radio, RadioGroup } from '../../components/radio'
 import { Select } from '../../components/select'
@@ -46,9 +47,19 @@ import {
  * ── validation on save, cleared as you fix ──
  * Errors appear when Save is pressed, not on every keystroke — "use lowercase
  * letters" shouting while someone is half-way through typing a slug is an
- * error about a value nobody has finished. Focus goes to the first invalid
- * field, and the bar says how many need fixing. Once shown, an error is
- * re-checked as that field changes, so it disappears the moment it is fixed.
+ * error about a value nobody has finished. The form is a `Form` with a
+ * `FormErrorSummary` at its top: on a failed Save the summary lists every
+ * error as a link to its field and takes focus, which is the one
+ * announcement. The fields' own errors stop being alerts while it is there;
+ * this page used to fire one alert per field and then move focus to the
+ * first, three announcements racing each other. Once shown, an error is
+ * re-checked as that field changes, so it disappears from the field and from
+ * the summary the moment it is fixed.
+ *
+ * The bar at the foot still says how many fields need fixing, but not in its
+ * live region: the summary taking focus has just said it, and the same
+ * sentence from a status region would be said twice. The live region keeps
+ * the other states, "Saving…" and the unsaved count.
  *
  * ── leaving with unsaved changes ──
  * While the form is dirty, following any link that leaves the page — the
@@ -106,7 +117,7 @@ export function SettingsPage({
   const [saving, setSaving] = React.useState(false)
   const [leavingTo, setLeavingTo] = React.useState<string | null>(null)
   const [deleteOpen, setDeleteOpen] = React.useState(false)
-  const formRef = React.useRef<HTMLFormElement>(null)
+  const summaryRef = React.useRef<HTMLDivElement>(null)
   const uid = React.useId()
 
   const changes = countChanges(draft, saved)
@@ -126,9 +137,6 @@ export function SettingsPage({
       })
     }
   }
-
-  const focusFirstInvalid = () =>
-    requestAnimationFrame(() => formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus())
 
   const discard = () => {
     const before = draft
@@ -153,10 +161,8 @@ export function SettingsPage({
     if (!dirty || saving) return
     const next = validate(draft)
     setErrors(next)
-    if (Object.keys(next).length > 0) {
-      focusFirstInvalid()
-      return
-    }
+    // `Form` moves focus to the summary once these errors have rendered.
+    if (Object.keys(next).length > 0) return
     setSaving(true)
     window.setTimeout(() => {
       setSaving(false)
@@ -190,8 +196,11 @@ export function SettingsPage({
   }, [dirty])
 
   React.useEffect(() => {
-    if (defaultValidated) focusFirstInvalid()
-    // Once, on mount: the story opens as if Save had just been pressed.
+    // Once, on mount: the story opens as if Save had just been pressed, and
+    // a mount is not a submit, so `Form` would not move focus by itself. A
+    // frame later, because the summary renders only once the fields have
+    // registered their errors, which they do after this first render.
+    if (defaultValidated) requestAnimationFrame(() => summaryRef.current?.focus())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -236,7 +245,12 @@ export function SettingsPage({
         </nav>
 
         <div className="@container/form min-w-0 max-w-4xl">
-          <form ref={formRef} noValidate onSubmit={submit} aria-label="General settings">
+          <Form onSubmit={submit} aria-label="General settings">
+            <FormErrorSummary
+              ref={summaryRef}
+              description="Your changes are kept. Fix these, then save again."
+              className="mt-2"
+            />
             <SettingsSection
               id={`${uid}-general`}
               title="Workspace"
@@ -385,7 +399,7 @@ export function SettingsPage({
                 'forced-colors:border-t-2',
               )}
             >
-              <p role="status" className="m-0 flex min-w-0 flex-1 basis-full items-center gap-2 text-sm @md/form:basis-0">
+              <p className="m-0 flex min-w-0 flex-1 basis-full items-center gap-2 text-sm @md/form:basis-0">
                 <span
                   aria-hidden
                   className={cn(
@@ -393,11 +407,14 @@ export function SettingsPage({
                     errorCount > 0 ? 'bg-danger forced-ink' : dirty ? 'bg-oro forced-ink' : 'bg-transparent shadow-cut',
                   )}
                 />
-                <span
-                  dir="auto"
-                  className={cn(dirty ? 'font-semibold text-ink' : 'text-ink-muted', errorCount > 0 && 'text-ink-danger')}
-                >
-                  {status}
+                {/* The error count is drawn outside the live region; see the doc comment. */}
+                {errorCount > 0 ? (
+                  <span dir="auto" className="font-semibold text-ink-danger">
+                    {status}
+                  </span>
+                ) : null}
+                <span role="status" dir="auto" className={cn(dirty ? 'font-semibold text-ink' : 'text-ink-muted')}>
+                  {errorCount > 0 ? '' : status}
                 </span>
               </p>
               {/* Wraps, Save under Discard, when the two do not fit: at
@@ -411,7 +428,7 @@ export function SettingsPage({
                 </Button>
               </div>
             </div>
-          </form>
+          </Form>
 
           <SettingsSection
             id={`${uid}-danger`}

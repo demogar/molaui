@@ -50,7 +50,7 @@ describe('SettingsPage', () => {
     expect(status()).toHaveTextContent('3 unsaved changes')
   })
 
-  it('validates on save: says what is wrong, focuses the first invalid field, and clears each error once fixed', async () => {
+  it('validates on save: lists what is wrong in a summary that takes focus, and clears each error once fixed', async () => {
     const user = userEvent.setup()
     renderPage()
     const name = screen.getByRole('textbox', { name: /Workspace name/ })
@@ -62,25 +62,35 @@ describe('SettingsPage', () => {
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
 
     await user.click(save())
-    const alerts = screen.getAllByRole('alert')
-    expect(alerts.map((alert) => alert.textContent)).toEqual([
-      'Enter a workspace name. It is shown in the switcher and on every run.',
-      'Use lowercase letters, digits and single hyphens only, for example support-team.',
+    // One announcement: the summary takes focus. No per-field alerts, and the
+    // bar's live region stays quiet about the count the summary just said.
+    const summary = screen.getByRole('region', { name: '2 fields need fixing' })
+    expect(summary).toHaveFocus()
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+    expect(within(summary).getAllByRole('link').map((link) => link.textContent)).toEqual([
+      'Workspace name: Enter a workspace name. It is shown in the switcher and on every run.',
+      'Slug: Use lowercase letters, digits and single hyphens only, for example support-team.',
     ])
-    await waitFor(() => expect(name).toHaveFocus())
     expect(name).toHaveAttribute('aria-invalid', 'true')
-    expect(status()).toHaveTextContent('2 fields need fixing before you can save')
+    expect(name).toHaveAccessibleDescription(/Enter a workspace name/)
+    expect(screen.getByText('2 fields need fixing before you can save')).toBeInTheDocument()
+    expect(status()).toHaveTextContent('')
 
+    await user.click(within(summary).getByRole('link', { name: /^Workspace name/ }))
+    expect(name).toHaveFocus()
     await user.type(name, 'Support')
     expect(name).not.toHaveAttribute('aria-invalid')
-    expect(status()).toHaveTextContent('1 field needs fixing before you can save')
+    expect(screen.getByRole('region', { name: '1 field needs fixing' })).toBeInTheDocument()
+    expect(screen.getByText('1 field needs fixing before you can save')).toBeInTheDocument()
   })
 
   it('opens with errors shown when asked to, as the validation story does', async () => {
     renderPage({ defaultDraft: { name: '', slug: 'Support Team', tokensPerRun: 250000 }, defaultValidated: true })
-    expect(screen.getAllByRole('alert')).toHaveLength(3)
-    expect(screen.getByText(/A run can use at most 200,000 tokens/)).toBeInTheDocument()
-    await waitFor(() => expect(screen.getByRole('textbox', { name: /Workspace name/ })).toHaveFocus())
+    const summary = screen.getByRole('region', { name: '3 fields need fixing' })
+    expect(within(summary).getAllByRole('link')).toHaveLength(3)
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+    expect(within(summary).getByText(/A run can use at most 200,000 tokens/)).toBeInTheDocument()
+    await waitFor(() => expect(summary).toHaveFocus())
   })
 
   it('saves, confirms with a toast and keeps focus on Save', async () => {

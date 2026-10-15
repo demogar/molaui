@@ -71,6 +71,7 @@ A set of checkboxes that share one value array, inside a real fieldset and legen
 | `legend` (required) | `ReactNode` |  | The group's name, rendered as the fieldset legend in the label register. |
 | `className` | `string` |  | Classes for the `<fieldset>` that holds the legend, the description and the options. |
 | `description` | `ReactNode` |  | Copy under the legend. |
+| `error` | `ReactNode` |  | A rule the group breaks as a whole, such as “choose at least one”. Shown under the legend, joined to the group's description, and listed by a `FormErrorSummary` in the same `Form`. |
 | `orientation` | `"horizontal" \| "vertical"` | `vertical` | Lay options out in a row rather than a column. |
 
 Also accepts the props of `CheckboxGroupProps`.
@@ -119,6 +120,10 @@ Types: `CheckboxGroupProps`, `CheckboxProps`
 - [Radio](https://demogar.github.io/molaui/md/components-forms-radio--overview.md)
 - [Chip](https://demogar.github.io/molaui/md/components-forms-chip--overview.md)
 - [Combobox](https://demogar.github.io/molaui/md/components-forms-combobox--overview.md)
+
+### Pages that send readers here
+
+- [Form](https://demogar.github.io/molaui/md/components-forms-form--overview.md)
 
 ### Used in
 

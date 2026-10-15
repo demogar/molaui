@@ -128,6 +128,7 @@ Types: `AgentRunFailure`, `AgentRunProps`, `AgentStep`, `AgentStepKind`
 - [Reasoning](https://demogar.github.io/molaui/md/ai-reasoning--overview.md)
 - [Run error](https://demogar.github.io/molaui/md/ai-run-error--overview.md)
 - [Run status](https://demogar.github.io/molaui/md/ai-run-status--overview.md)
+- [Stepper](https://demogar.github.io/molaui/md/components-navigation-stepper--overview.md)
 
 ### Used in
 

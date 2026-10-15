@@ -25,6 +25,7 @@ Label, control and hint or error, wired so the caller cannot forget the half a s
 - A choice from a known list. Use [Select](https://demogar.github.io/molaui/md/components-forms-select--overview.md).
 - A date or a period. Use [Date picker](https://demogar.github.io/molaui/md/components-forms-date-picker--overview.md).
 - A prompt to a model, with attachments and a send button. Use [Prompt input](https://demogar.github.io/molaui/md/ai-prompt-input--overview.md).
+- Several controls answering one question, or a form that can fail in several places at once. Use [Form](https://demogar.github.io/molaui/md/components-forms-form--overview.md).
 
 ### Do and don’t
 
@@ -143,14 +144,14 @@ Types: `LabelProps`, `FieldControlProps`, `FieldProps`, `FieldControlSize`, `Inp
 ### Mola handles
 
 - `Field` links the label to the control and joins the hint and error into `aria-describedby`, in the order they are shown.
-- An error sets `aria-invalid`, is announced with `role="alert"`, and carries a cut square so it is not colour alone.
+- An error sets `aria-invalid` and carries a cut square so it is not colour alone. It is announced with `role="alert"`, except inside a `Form` with a `FormErrorSummary`, which announces every error once.
 - The required asterisk is hidden from assistive technology while `required` reaches the control; “Optional” is kept as a separate word.
 - `SearchInput` is a `searchbox`, and its clear button is named “Clear search”.
 
 ### You handle
 
 - Spread the `control` props onto the control; without them it has no name and no description.
-- When several fields fail at once, add an error summary at the top of the form and move focus to it.
+- When several fields can fail at once, put the fields in a `Form` with a `FormErrorSummary`; their errors then stop being alerts and the summary takes focus.
 - Bind the key shown by `shortcut` yourself; the key cap is display only.
 
 ### Testing status
@@ -168,6 +169,7 @@ Types: `LabelProps`, `FieldControlProps`, `FieldProps`, `FieldControlSize`, `Inp
 - [Select](https://demogar.github.io/molaui/md/components-forms-select--overview.md)
 - [Date picker](https://demogar.github.io/molaui/md/components-forms-date-picker--overview.md)
 - [Prompt input](https://demogar.github.io/molaui/md/ai-prompt-input--overview.md)
+- [Form](https://demogar.github.io/molaui/md/components-forms-form--overview.md)
 
 ### Pages that send readers here
 

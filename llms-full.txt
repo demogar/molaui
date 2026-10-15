@@ -2,7 +2,7 @@
 
 > A design system cut like a mola: flat layers, hard keylines, revealed bands. React components for dense internal tools and AI-native interfaces. Published as `@demogar/mola-ui`: React 19, Base UI for behaviour, Tailwind v4 for styling, design tokens as CSS custom properties.
 
-59 components and 12 AI components (71 documented pages).
+61 components and 12 AI components (73 documented pages).
 
 Install and set up:
 
@@ -765,6 +765,7 @@ When not to:
 - A live agent run whose steps change as it works. Use Agent run.
 - Records compared by their fields rather than read in order. Use Table.
 - Sections of one document that open and close. Use Accordion.
+- A task people do in the product, step by step, with checks between steps. Use Stepper.
 
 - Do: Put when or where in meta, and what happened in the title.
 - Don’t: Leave the node colour to say what happened; the words have to carry it.
@@ -1392,6 +1393,7 @@ A set of checkboxes that share one value array, inside a real fieldset and legen
 | `legend` (required) | `ReactNode` |  | The group's name, rendered as the fieldset legend in the label register. |
 | `className` | `string` |  | Classes for the `<fieldset>` that holds the legend, the description and the options. |
 | `description` | `ReactNode` |  | Copy under the legend. |
+| `error` | `ReactNode` |  | A rule the group breaks as a whole, such as “choose at least one”. Shown under the legend, joined to the group's description, and listed by a `FormErrorSummary` in the same `Form`. |
 | `orientation` | `"horizontal" \| "vertical"` | `vertical` | Lay options out in a row rather than a column. |
 
 Also accepts the props of `CheckboxGroupProps`.
@@ -1750,6 +1752,7 @@ When not to:
 - A choice from a known list. Use Select.
 - A date or a period. Use Date picker.
 - A prompt to a model, with attachments and a send button. Use Prompt input.
+- Several controls answering one question, or a form that can fail in several places at once. Use Form.
 
 - Do: Spread the control props onto the control, so its id, description and invalid state are wired.
 - Don’t: Use the placeholder as the label; it disappears as soon as someone types.
@@ -1767,13 +1770,13 @@ Keyboard:
 
 Mola handles:
 - `Field` links the label to the control and joins the hint and error into `aria-describedby`, in the order they are shown.
-- An error sets `aria-invalid`, is announced with `role="alert"`, and carries a cut square so it is not colour alone.
+- An error sets `aria-invalid` and carries a cut square so it is not colour alone. It is announced with `role="alert"`, except inside a `Form` with a `FormErrorSummary`, which announces every error once.
 - The required asterisk is hidden from assistive technology while `required` reaches the control; “Optional” is kept as a separate word.
 - `SearchInput` is a `searchbox`, and its clear button is named “Clear search”.
 
 You handle:
 - Spread the `control` props onto the control; without them it has no name and no description.
-- When several fields fail at once, add an error summary at the top of the form and move focus to it.
+- When several fields can fail at once, put the fields in a `Form` with a `FormErrorSummary`; their errors then stop being alerts and the summary takes focus.
 - Bind the key shown by `shortcut` yourself; the key cap is display only.
 
 Anatomy:
@@ -1941,6 +1944,93 @@ Used in: Form example
 
 Changes:
 - 0.2.0 (2026-10-06), feature: add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features [#11](https://github.com/demogar/molaui/issues/11)
+
+### Form
+
+https://demogar.github.io/molaui/?path=/docs/components-forms-form--overview
+
+A form that knows which fields are failing: FormErrorSummary lists them as links and takes focus on submit; Fieldset groups controls under one legend.
+
+Phase: Experimental. Its API may change in a minor release, without a deprecation first.
+
+When to use:
+- Any form saved as a whole, where Save can find more than one problem at once: put a FormErrorSummary at the top.
+- Moving focus after a failed submit without writing it by hand: to the summary, or to the first invalid field when there is none.
+- Several controls that answer one question, such as a pair of limits or a time window, with Fieldset and its legend.
+- A rule a group breaks as a whole, such as “the last retry must wait longer than the first”, with the Fieldset’s error.
+
+When not to:
+- One control with its label, hint and error. Use Field.
+- A set of checkboxes; CheckboxGroup is already a fieldset, and takes an error too. Use CheckboxGroup.
+- A long task split into steps done in order. Use Stepper.
+- A message about the page rather than about the fields in it. Use Callout.
+
+- Do: Validate on submit, then re-check only the fields already showing an error as they change.
+- Don’t: Show errors on every keystroke; an error about a value nobody has finished typing is noise.
+- Do: Write each error so it makes sense in the summary, away from its field: “Enter an https:// address”.
+- Don’t: Rely on the field around it: “Invalid” in a list of links says nothing.
+
+Content:
+- The summary title counts what to fix: “3 fields need fixing”. Pass title to word it otherwise or translate it.
+- Use description for what happens next: “Nothing has been saved yet.”
+- Legends are short nouns, like labels: “Retry delays”, “Run window”.
+
+Keyboard:
+- Enter: In a text field, submits the form; if it finds errors, moves focus to the error summary.
+- Tab: From the summary, moves through its links, one per error.
+- Enter: On a summary link, moves focus to that field’s control, or the first control of a group, and scrolls its label into view.
+
+Mola handles:
+- On the submit that finds errors, focus moves to the `FormErrorSummary`, a region named by its heading (“3 fields need fixing”). The focus move is the one announcement; the summary is not also a live region.
+- While a summary is mounted, each field’s error drops `role="alert"` and stays in its control’s `aria-describedby`, so three errors are not three alerts.
+- Without a summary, focus moves to the first invalid control in document order, and field errors keep `role="alert"`.
+- Each summary entry is a real link to the control’s id, reading “Label: message”, listed in document order.
+- `Fieldset` is a real `<fieldset>` named by its legend; its description and error are its `aria-describedby`, and `disabled` disables every Base UI control inside.
+
+You handle:
+- Validate in `onSubmit` and set each field’s `error`; the form does not decide what is wrong.
+- Write errors that make sense away from their field, since the summary lists them on their own.
+- For errors that arrive later, such as from a server, call `focus()` on the summary’s ref: only a submit moves focus by itself.
+- Give the form a name with `aria-label` or `aria-labelledby` when the page has more than one.
+
+Anatomy:
+- Seam (`[data-part="seam"]`): The rojo relleno a danger callout opens with: this block is about something that went wrong.
+- Title (`[data-part="title"]`): Counts what to fix. It names the summary, so it is what a screen reader says when focus lands here.
+- Description (`[data-part="description"]`): What happens next, or what was kept: “Nothing has been saved yet.”
+- Error links (`[data-part="list"]`): One link per error, “Label: message”, in the order of the form; each moves focus to its field.
+
+#### `Form` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `onSubmit` | `FormEventHandler<HTMLFormElement>` |  | Runs on submit, before focus is moved. Validate here and set your fields' errors; call `event.preventDefault()` unless you want the browser to post the form. |
+
+`className`, `ref`, `id` and the other DOM props go to `<form data-slot="form">`.
+
+#### `FormErrorSummary` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `description` | `ReactNode` |  | A sentence under the heading: what happens next, or what is kept. |
+| `headingLevel` | `2 \| 3 \| 4` | `2` | The heading element. Match the form's outline; `h2` by default. |
+| `title` | `ReactNode \| ((count: number) => ReactNode)` | `(count: number) => (count === 1 ? '1 field needs fixing' : `${count} fields need fixing`)` | The heading, which is also the summary's accessible name and what a screen reader says when it takes focus. Pass a function to word it for the count, or to translate it. Defaults to “1 field needs fixing” / “3 fields need fixing”. |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="form-error-summary">`.
+
+#### `Fieldset` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `legend` (required) | `ReactNode` |  | The question the controls answer, in the label register. It names the group. |
+| `description` | `ReactNode` |  | Copy under the legend, read when focus enters the group. |
+| `disabled` | `boolean` | `false` | Disables every control in the group. |
+| `error` | `ReactNode` |  | A rule the group breaks as a whole. Marks the group invalid and is listed by `FormErrorSummary`. |
+
+`className`, `ref`, `id` and the other DOM props go to `<fieldset data-slot="fieldset">`.
+
+Types: `FormProps`, `FormErrorSummaryProps`, `FieldsetProps`
+
+Used in: Form example, Settings page
 
 ### Listbox
 
@@ -3467,7 +3557,7 @@ When to use:
 When not to:
 - A table that also sorts and selects; DataTable includes its pagination. Use DataTable.
 - Showing where a page sits in the hierarchy. Use Breadcrumb.
-- Steps of a flow that must be done in order. Use StepList.
+- Steps of a flow that must be done in order. Use Stepper.
 
 - Do: Wire onPageChange to the router when a page should have its own URL.
 - Don’t: Expect the page numbers to be links; the component does not own your URLs.
@@ -3508,6 +3598,82 @@ The visible slots for `page` of `pageCount` (both 1-based). Always `5 + 2 × sib
 
 Types: `PageRangeItem`, `PaginationProps`
 
+### Stepper
+
+https://demogar.github.io/molaui/?path=/docs/components-navigation-stepper--overview
+
+A task done in order, one step at a time: the steps with their state, and the current step as a form that validates before it moves on.
+
+Phase: Experimental. Its API may change in a minor release, without a deprecation first.
+
+When to use:
+- Creating something that needs several decisions in a set order, such as an agent, a data source or an evaluation.
+- A flow where each step depends on the one before, so later steps cannot be judged until earlier ones are done.
+- Letting people go back to a step they finished and change an answer without losing the rest.
+
+When not to:
+- Settings that can be changed in any order and saved together. Use Form.
+- Views of one thing people switch between freely. Use Tabs.
+- Instructions a person reads and follows outside the product, such as a runbook. Use StepList.
+- The progress of work the system is doing, such as an agent run. Use Agent run.
+
+- Do: Keep to three to six steps, each a decision with a short noun for a title: “Model”, “Tools”.
+- Don’t: Split a short form into steps to make it look smaller; every Continue is a page someone has to wait for.
+- Do: End on a Review step that shows every answer before Finish.
+- Don’t: Let Finish be the first time someone sees what they chose across steps.
+
+Content:
+- Name Finish for what it does: “Create agent”, “Connect source”.
+- Step descriptions say what the step decides, in one sentence.
+- Translate the buttons, the “Step 2 of 4” line and the state words with messages.
+
+Keyboard:
+- Tab: Moves through the steps that can be returned to, then into the current step’s fields, Back and Continue.
+- Enter or Space: On a step in the list, opens that step and moves focus to its heading.
+- Enter: In a text field, or on Continue, submits the step; a step that passes moves on and focuses the next heading.
+
+Mola handles:
+- The steps are an ordered list in a `nav` named by `label`; the current one has `aria-current="step"`.
+- Each step states its state in words (“Done”, “Current”, “To do”, “Needs fixing”) as well as by its marker’s shape and colour, and a step button is named by those words, “Basics Done”.
+- When the step changes, focus moves to the new step’s heading, which follows a “Step 2 of 4” line; on first render focus is left where it is.
+- The panel is a `Form`, so a step with errors keeps focus in the step and sends it to the `FormErrorSummary` there.
+- Steps beyond the furthest one reached are plain text, not disabled buttons, so they are not tab stops.
+
+You handle:
+- Name the list with `label`, such as “Steps to create an agent”.
+- Validate in `onStepSubmit` and return `false` to keep a step; put a `FormErrorSummary` in any step with more than one field.
+- Translate every word it writes with `messages`.
+- Keep it out of another `<form>`: the panel is already one.
+
+Anatomy:
+- Steps (`[data-part="steps"]`): The ordered list of steps, in a nav named by label; reached steps are buttons.
+- Bar (`[data-part="bar"]`): A band along the top of each step that carries its state’s colour.
+- Marker (`[data-part="marker"]`): The square: a number to do, a check when done, a “!” when it needs fixing. Its shape states the state without colour.
+- Step title (`[data-part="title"]`): The step’s short name; the same words head its panel.
+- State (`[data-part="state"]`): The state in a word: To do, Current, Done or Needs fixing.
+- Panel (`[data-part="panel"]`): The current step, a Form: Continue submits it, and it only moves on when the step passes.
+- Position (`[data-part="position"]`): “Step 3 of 4”, above the heading that takes focus when the step changes.
+- Actions (`[data-part="actions"]`): Back, and Continue or Finish, which is the form’s submit button.
+
+#### `Stepper` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `children` (required) | `(step: StepperStep, index: number) => ReactNode` |  | Renders the current step's content: its fields, and a `FormErrorSummary` if it has more than one. |
+| `label` (required) | `string` |  | Names the list of steps, which is a `nav`: “Steps to create an agent”. |
+| `steps` (required) | `StepperStep[]` |  | The steps, in the order they are done. |
+| `defaultStep` | `string` |  | The step to open on, uncontrolled. The first step by default. |
+| `headingLevel` | `2 \| 3` | `2` | The level of the panel heading; match the page outline. `h2` by default. |
+| `messages` | `(Partial<Omit<StepperMessages, "states">> & { states?: Partial<Record<StepperStepState, string>>; })` |  | Words, for translation. Any key not given keeps its English default. |
+| `onComplete` | `(() => void)` |  | Called after the last step's `onStepSubmit` passes. |
+| `onStepChange` | `((step: string) => void)` |  | Called with the new step's id when Continue, Back or a step in the list changes it. |
+| `onStepSubmit` | `((step: string, event: FormEvent<HTMLFormElement>) => boolean \| void \| Promise<boolean \| void>)` |  | Runs when Continue or Finish is pressed, with the step's id and the submit event. Validate here; return `false` (or a promise of `false`) to stay on the step. While a promise is pending, Continue shows it is working. |
+| `step` | `string` |  | The current step's id, controlled. Pair with `onStepChange`. |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="stepper">`.
+
+Types: `StepperMessages`, `StepperProps`, `StepperStep`, `StepperStepState`
+
 ### Tabs
 
 https://demogar.github.io/molaui/?path=/docs/components-navigation-tabs--overview
@@ -3525,6 +3691,7 @@ When not to:
 - Changing how the same data is displayed, such as Table or Board. Use Segmented control.
 - Sections someone may want open together. Use Accordion.
 - Moving between parts of the product. Use App shell.
+- Steps that must be done in order, each checked before the next. Use Stepper.
 
 - Do: Keep labels short, in sentence case.
 - Don’t: Set tab labels in capitals; a row of capitalised labels reads as buttons.
@@ -5796,6 +5963,7 @@ Built from (read from its imports):
 - Button: Save changes and Discard in the sticky bar, and Delete workspace in the danger zone.
 - Toast: Saved, and Discard with Undo, so neither needs a dialog.
 - Field: Every label, hint and error, around Input and Textarea.
+- Form: Form around the settings, and FormErrorSummary at its top: on a failed Save it lists every error as a link and takes focus.
 - Number input: Tokens per run and the monthly limit.
 - Radio: What happens when the limit is reached.
 - Select: The default model.
@@ -5808,12 +5976,12 @@ Built from (read from its imports):
 States:
 - Empty: Not applicable: a settings form always has values. A section with nothing to set would say why in its description. (No story.)
 - Loading: Not shown. Saving is shown: Save changes carries its working strip and stays focusable. A first load would keep the form’s shape with Skeleton. (No story.)
-- Error: Save pressed with three problems: each says what is wrong and what to do, focus is on the first, and the bar counts what needs fixing. Story: https://demogar.github.io/molaui/?path=/story/patterns-settings-page--with-validation-errors
+- Error: Save pressed with three problems: the summary at the top lists them as links and has focus, each field says what is wrong and what to do, and the bar counts what needs fixing. Story: https://demogar.github.io/molaui/?path=/story/patterns-settings-page--with-validation-errors
 - No permission: Not shown. Someone who may not change settings should see the values as read-only text with who can change them, not a form that refuses on Save. (No story.)
 
 Accessibility:
 - The bar at the foot is always mounted, and Save stays focusable while disabled, so saving never drops focus to the top of the page.
-- Errors appear on Save, not while typing; focus goes to the first, and each clears as soon as its field is fixed.
+- Errors appear on Save, not while typing. The error summary takes focus and is the one announcement: the fields’ errors are not alerts while it is there. Each error clears from its field and from the summary as soon as it is fixed.
 - The unsaved count is a number in words, “3 unsaved changes”, not a dot, so it reads the same to a screen reader and in forced colours.
 - Leaving with unsaved changes asks first, with Keep editing focused.
 

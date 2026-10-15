@@ -93,6 +93,27 @@ const CASES: Case[] = [
   { name: 'listbox', story: 'components-forms-listbox--multiple' },
   { name: 'tag-group', story: 'components-forms-tag-group--select-and-remove' },
   { name: 'tree', story: 'components-navigation-tree--default' },
+  // Every state at once: a step to fix, one done, the current one, one to do.
+  {
+    name: 'stepper',
+    story: 'components-navigation-stepper--states',
+    also: async (page) => {
+      const steps = page.getByRole('navigation', { name: 'Steps to create an agent' })
+      await expect(steps.locator('[aria-current]')).toHaveCount(1)
+      await expect(steps.locator('[aria-current="step"]')).toContainText('Tools')
+    },
+  },
+  // The summary's region, its links and the fields they point at. Field
+  // errors are descriptions here, not alerts. A partial match would not
+  // notice an extra node, so the absence of alerts is asserted as well. The
+  // links' targets are generated ids, left out of the YAML on purpose.
+  {
+    name: 'form-error-summary',
+    story: 'components-forms-form--with-errors',
+    also: async (page) => {
+      await expect(page.getByRole('alert')).toHaveCount(0)
+    },
+  },
   // The agent console's transcript, once a suggested question has been asked
   // and the scripted run has finished.
   {

@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 
 import { Button } from '../button'
 import { Checkbox, CheckboxGroup } from '../checkbox'
 import { Combobox } from '../combobox'
 import { DatePicker } from '../date-picker'
 import { FileUpload } from '../file-upload'
+import { Form, FormErrorSummary } from '../form'
 import { NumberInput } from '../number-input'
 import { Radio, RadioGroup } from '../radio'
 import { Select } from '../select'
@@ -22,7 +23,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Every form component, composed into the kind of form an AI platform team edits daily. Submit it empty to see validation: errors appear under each invalid control, announced on insertion, and **focus moves to the first invalid field** — the behaviour `Field`’s `role="alert"` decision was made for.',
+          'Every form component, composed into the kind of form an AI platform team edits daily. Submit it empty to see validation: a **`FormErrorSummary`** appears at the top, lists the seven problems as links to their fields, and **takes focus**. That focus move is the one announcement; inside a `Form` with a summary, each field’s error is part of its control’s description rather than its own alert, so seven problems are not seven alerts fired in one tick.',
       },
     },
   },
@@ -65,7 +66,6 @@ function AgentConfigForm() {
   const [errors, setErrors] = useState<Errors>({})
   const [saved, setSaved] = useState(false)
   const [saving, setSaving] = useState(false)
-  const formRef = useRef<HTMLFormElement>(null)
 
   function validate(data: FormData): Errors {
     const next: Errors = {}
@@ -88,14 +88,8 @@ function AgentConfigForm() {
     setSaved(false)
     const next = validate(new FormData(event.currentTarget))
     setErrors(next)
-    if (Object.keys(next).length > 0) {
-      // After React has rendered the errors, move focus to the first invalid
-      // control in DOM order — not the first key in the object.
-      requestAnimationFrame(() => {
-        formRef.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus()
-      })
-      return
-    }
+    // `Form` moves focus to the summary once these errors have rendered.
+    if (Object.keys(next).length > 0) return
     setSaving(true)
     setTimeout(() => {
       setSaving(false)
@@ -104,9 +98,7 @@ function AgentConfigForm() {
   }
 
   return (
-    <form
-      ref={formRef}
-      noValidate
+    <Form
       onSubmit={onSubmit}
       className="grid max-w-2xl grid-cols-1 gap-0 bg-cloth-pale shadow-cut"
       aria-labelledby="agent-config-title"
@@ -121,6 +113,7 @@ function AgentConfigForm() {
       <div className="relleno band-oro" aria-hidden />
 
       <div className="grid grid-cols-1 gap-6 px-6 py-6 sm:grid-cols-2">
+        <FormErrorSummary className="sm:col-span-2" description="Nothing has been saved. Each link goes to its field." />
         <Field label="Name" required error={errors.name} hint="Used in run ids: refund-reviewer-…">
           {(control) => <Input {...control} name="name" placeholder="refund-reviewer" autoComplete="off" />}
         </Field>
@@ -226,7 +219,7 @@ function AgentConfigForm() {
 
       <div className="grid grid-cols-1 gap-8 px-6 py-6 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
-          <CheckboxGroup legend="Tools" value={tools} onValueChange={setTools}>
+          <CheckboxGroup legend="Tools" value={tools} onValueChange={setTools} error={errors.tools}>
             {TOOLS.map((tool) => (
               <Checkbox
                 key={tool.value}
@@ -237,12 +230,6 @@ function AgentConfigForm() {
               />
             ))}
           </CheckboxGroup>
-          {errors.tools ? (
-            <span role="alert" className="flex items-start gap-2 text-xs font-medium text-ink-danger">
-              <span aria-hidden className="mt-[0.3em] size-2 shrink-0 bg-danger shadow-cut" />
-              {errors.tools}
-            </span>
-          ) : null}
         </div>
         <div className="flex flex-col gap-6">
           <RadioGroup label="When a tool call fails" name="onFailure" defaultValue="retry">
@@ -274,7 +261,7 @@ function AgentConfigForm() {
           Save agent
         </Button>
       </footer>
-    </form>
+    </Form>
   )
 }
 

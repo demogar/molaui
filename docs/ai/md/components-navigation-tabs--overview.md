@@ -23,6 +23,7 @@ Status: Stable. Semantic versioning applies: nothing breaks without a deprecatio
 - Changing how the same data is displayed, such as Table or Board. Use [Segmented control](https://demogar.github.io/molaui/md/components-forms-segmented-control--overview.md).
 - Sections someone may want open together. Use [Accordion](https://demogar.github.io/molaui/md/components-navigation-accordion--overview.md).
 - Moving between parts of the product. Use [App shell](https://demogar.github.io/molaui/md/components-layout-app-shell--overview.md).
+- Steps that must be done in order, each checked before the next. Use [Stepper](https://demogar.github.io/molaui/md/components-navigation-stepper--overview.md).
 
 ### Do and don’t
 
@@ -136,6 +137,7 @@ Types: `TabsListProps`, `TabsPanelProps`, `TabsProps`, `TabsTabProps`, `TabsVari
 - [Segmented control](https://demogar.github.io/molaui/md/components-forms-segmented-control--overview.md)
 - [Accordion](https://demogar.github.io/molaui/md/components-navigation-accordion--overview.md)
 - [App shell](https://demogar.github.io/molaui/md/components-layout-app-shell--overview.md)
+- [Stepper](https://demogar.github.io/molaui/md/components-navigation-stepper--overview.md)
 
 ### Pages that send readers here
 

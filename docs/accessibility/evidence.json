@@ -341,6 +341,16 @@
       "pressesKeys": true,
       "screenReadersByHand": false
     },
+    "Components/Forms/Form": {
+      "stories": 4,
+      "unitTests": [
+        "src/components/form/form.test.tsx"
+      ],
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
+      "screenReadersByHand": false
+    },
     "Components/Forms/Listbox": {
       "stories": 6,
       "unitTests": [
@@ -535,6 +545,16 @@
       "stories": 3,
       "unitTests": [
         "src/components/pagination/pagination.test.tsx"
+      ],
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
+      "screenReadersByHand": false
+    },
+    "Components/Navigation/Stepper": {
+      "stories": 3,
+      "unitTests": [
+        "src/components/stepper/stepper.test.tsx"
       ],
       "keyboardInUnitTests": true,
       "keysUntested": [],

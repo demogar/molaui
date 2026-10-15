@@ -32,6 +32,7 @@ export * from './components/number-input'
 export * from './components/date-picker'
 export * from './components/time-picker'
 export * from './components/file-upload'
+export * from './components/form'
 
 // Feedback
 export * from './components/badge'
@@ -56,6 +57,7 @@ export * from './components/accordion'
 export * from './components/breadcrumb'
 export * from './components/pagination'
 export * from './components/tree'
+export * from './components/stepper'
 
 // Data display & application shell
 export * from './components/table'

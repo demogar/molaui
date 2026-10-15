@@ -3,6 +3,8 @@
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { useFormErrorEntry } from '../form/form-context'
+import { ErrorMessage } from './error-message'
 import { Label } from './label'
 
 /**
@@ -24,23 +26,21 @@ import { Label } from './label'
  * spreads onto any control — `Input`, `Textarea`, a `Select` trigger, a bare
  * `<select>` — without the caller re-mapping three names by hand.
  *
- * ── the error is announced with role="alert" ──
+ * ── the error is announced with role="alert", unless a summary is ──
  * The error element is mounted only when `error` is set, and `role="alert"`
- * announces on insertion. That matches how validation actually runs: on
+ * announces on insertion. On its own that matches how validation runs: on
  * submit, focus moves to the FIRST invalid control, and every other field's
  * error would otherwise appear in silence. A polite region would queue those
  * behind the announcement the focus move is already making.
  *
- * The known limit, stated rather than hidden: several fields failing at once
- * fires several alerts, and screen readers coalesce or clobber them. The fix
- * is an error summary at the top of the form that takes focus — a form-level
- * concern, deliberately not owned by `Field`.
+ * The limit of that: several fields failing at once fires several alerts,
+ * and screen readers coalesce or clobber them. The fix is form-level, so it
+ * is not owned here: inside a `Form` with a `FormErrorSummary`, the field
+ * registers its error with the form, the summary lists it as a link and is
+ * announced once by taking focus, and this message drops `role="alert"` and
+ * stays what it always also was, part of the control's description.
  *
- * ── the error is marked, not only coloured ──
- * A rojo message on cloth measures 5.04:1, so colour alone would pass contrast
- * — and still fail 1.4.1, which forbids colour being the only signal. The
- * message carries a small cut square, the same mark an invalid step uses in
- * an agent run, so the state survives greyscale and forced colours.
+ * The message's mark and ink are shared with `Fieldset` (error-message.tsx).
  */
 
 /** The wiring `Field` computes, ready to spread onto the control. */
@@ -92,6 +92,7 @@ export function Field({
   const hintId = `${uid}-hint`
   const errorId = `${uid}-error`
   const help = hint ?? description
+  const { announce } = useFormErrorEntry(id, label, error)
 
   // DOM order, so a screen reader reads the description in the order it is
   // rendered rather than in an order only this file knows about.
@@ -119,15 +120,9 @@ export function Field({
         </span>
       ) : null}
       {error ? (
-        <span
-          id={errorId}
-          data-part="error"
-          role="alert"
-          className="flex items-start gap-2 text-xs leading-snug font-medium text-ink-danger"
-        >
-          <span aria-hidden className="mt-[0.3em] size-2 shrink-0 bg-danger shadow-cut" />
-          <span>{error}</span>
-        </span>
+        <ErrorMessage id={errorId} data-part="error" announce={announce}>
+          {error}
+        </ErrorMessage>
       ) : null}
     </div>
   )

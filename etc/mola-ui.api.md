@@ -395,6 +395,7 @@ export function CheckboxGroup(input: CheckboxGroupProps): React_2.JSX.Element;
 export interface CheckboxGroupProps extends Omit<CheckboxGroup_2.Props, 'className'> {
     className?: string;
     description?: React_2.ReactNode;
+    error?: React_2.ReactNode;
     legend: React_2.ReactNode;
     orientation?: 'vertical' | 'horizontal';
 }
@@ -1081,6 +1082,19 @@ export interface FieldProps extends Omit<React_2.ComponentProps<'div'>, 'childre
 }
 
 // @public (undocumented)
+export function Fieldset(input: FieldsetProps): React_2.JSX.Element;
+
+// @public
+export interface FieldsetProps extends Omit<React_2.ComponentProps<'fieldset'>, 'children'> {
+    // (undocumented)
+    children?: React_2.ReactNode;
+    description?: React_2.ReactNode;
+    disabled?: boolean;
+    error?: React_2.ReactNode;
+    legend: React_2.ReactNode;
+}
+
+// @public (undocumented)
 export type FileChangeKind = 'added' | 'modified' | 'deleted' | 'renamed';
 
 // @public
@@ -1197,6 +1211,9 @@ export function filterCommands(groups: CommandGroup[], query: string): CommandGr
 // @public
 export const floatingSurface: readonly ["bg-cloth-pale text-ink rounded-none outline-none", "shadow-floating", "origin-(--transform-origin)", "transition-[opacity,transform] duration-(--motion-base)", "data-starting-style:opacity-0 data-starting-style:scale-[0.98]", "data-ending-style:opacity-0 data-ending-style:scale-[0.98] data-ending-style:duration-(--motion-cut)"];
 
+// @public (undocumented)
+export function Form(input: FormProps): React_2.JSX.Element;
+
 // @public
 export function formatCountdown(ms: number): string;
 
@@ -1214,6 +1231,21 @@ export function formatRelativeTime(date: Date | number | string, now: Date | num
 
 // @public
 export function formatRunErrorDetails(input: Pick<RunErrorProps, 'kind' | 'step' | 'stepNumber' | 'stepCount' | 'tool' | 'error' | 'runId' | 'at'>): string;
+
+// @public (undocumented)
+export function FormErrorSummary(input: FormErrorSummaryProps): React_2.JSX.Element | null;
+
+// @public
+export interface FormErrorSummaryProps extends Omit<React_2.ComponentProps<'div'>, 'title' | 'children'> {
+    description?: React_2.ReactNode;
+    headingLevel?: 2 | 3 | 4;
+    title?: React_2.ReactNode | ((count: number) => React_2.ReactNode);
+}
+
+// @public
+export interface FormProps extends React_2.ComponentProps<'form'> {
+    onSubmit?: React_2.FormEventHandler<HTMLFormElement>;
+}
 
 // @public
 export type Gap = 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -2219,6 +2251,49 @@ export interface StepListProps extends Omit<React_2.ComponentProps<'ol'>, 'child
     // @deprecated (undocumented)
     tone?: 'default' | 'inverse';
 }
+
+// @public (undocumented)
+export function Stepper(input: StepperProps): React_2.JSX.Element | null;
+
+// @public (undocumented)
+export interface StepperMessages {
+    // (undocumented)
+    back: string;
+    // (undocumented)
+    continue: string;
+    // (undocumented)
+    finish: string;
+    // (undocumented)
+    states: Record<StepperStepState, string>;
+    stepOf: (position: number, total: number) => string;
+}
+
+// @public (undocumented)
+export interface StepperProps extends Omit<React_2.ComponentProps<'div'>, 'children'> {
+    children: (step: StepperStep, index: number) => React_2.ReactNode;
+    defaultStep?: string;
+    headingLevel?: 2 | 3;
+    label: string;
+    messages?: Partial<Omit<StepperMessages, 'states'>> & {
+        states?: Partial<StepperMessages['states']>;
+    };
+    onComplete?: () => void;
+    onStepChange?: (step: string) => void;
+    onStepSubmit?: (step: string, event: React_2.FormEvent<HTMLFormElement>) => boolean | void | Promise<boolean | void>;
+    step?: string;
+    steps: StepperStep[];
+}
+
+// @public (undocumented)
+export interface StepperStep {
+    description?: React_2.ReactNode;
+    id: string;
+    invalid?: boolean;
+    title: React_2.ReactNode;
+}
+
+// @public
+export type StepperStepState = 'upcoming' | 'current' | 'complete' | 'invalid';
 
 // @public
 export function StreamingText(input: StreamingTextProps): React_2.JSX.Element;

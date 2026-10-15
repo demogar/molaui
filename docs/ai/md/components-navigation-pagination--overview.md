@@ -21,7 +21,7 @@ Status: Stable. Semantic versioning applies: nothing breaks without a deprecatio
 
 - A table that also sorts and selects; DataTable includes its pagination. Use [DataTable](https://demogar.github.io/molaui/md/components-data-display-table--overview.md).
 - Showing where a page sits in the hierarchy. Use [Breadcrumb](https://demogar.github.io/molaui/md/components-navigation-breadcrumb--overview.md).
-- Steps of a flow that must be done in order. Use [StepList](https://demogar.github.io/molaui/md/components-data-display-timeline--overview.md).
+- Steps of a flow that must be done in order. Use [Stepper](https://demogar.github.io/molaui/md/components-navigation-stepper--overview.md).
 
 ### Do and don’t
 
@@ -95,4 +95,4 @@ Types: `PageRangeItem`, `PaginationProps`
 
 - [Table](https://demogar.github.io/molaui/md/components-data-display-table--overview.md)
 - [Breadcrumb](https://demogar.github.io/molaui/md/components-navigation-breadcrumb--overview.md)
-- [Timeline](https://demogar.github.io/molaui/md/components-data-display-timeline--overview.md)
+- [Stepper](https://demogar.github.io/molaui/md/components-navigation-stepper--overview.md)

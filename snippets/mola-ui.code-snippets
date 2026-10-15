@@ -341,6 +341,14 @@
       "<FileUpload />$0"
     ]
   },
+  "Form": {
+    "scope": "typescriptreact,javascriptreact",
+    "prefix": "mola-form",
+    "description": "A form that knows which fields are failing: FormErrorSummary lists them as links and takes focus on submit; Fieldset groups controls under one legend. import { Form } from '@demogar/mola-ui'",
+    "body": [
+      "<Form>$0</Form>"
+    ]
+  },
   "Listbox": {
     "scope": "typescriptreact,javascriptreact",
     "prefix": "mola-listbox",
@@ -638,6 +646,24 @@
     "description": "Moving through a long ordered result, as numbered pages or as a compact range with two arrows. import { Pagination } from '@demogar/mola-ui'",
     "body": [
       "<Pagination onPageChange={${1:onPageChange}} page={${2:page}} pageCount={${3:pageCount}} />$0"
+    ]
+  },
+  "Stepper": {
+    "scope": "typescriptreact,javascriptreact",
+    "prefix": "mola-stepper",
+    "description": "A task done in order, one step at a time: the steps with their state, and the current step as a form that validates before it moves on. import { Stepper } from '@demogar/mola-ui'",
+    "body": [
+      "<Stepper label=\"${1:Pasos para crear un agente}\" steps={[",
+      "      { id: 'basics', title: 'Datos básicos' },",
+      "      { id: 'model', title: 'Modelo' },",
+      "      { id: 'tools', title: 'Herramientas' },",
+      "    ]} children={() => {}} lang=\"es\" defaultStep=\"model\" messages={{",
+      "      back: 'Atrás',",
+      "      continue: 'Continuar',",
+      "      finish: 'Crear agente',",
+      "      stepOf: (position: number, total: number) => `Paso \\${position} de \\${total}`,",
+      "      states: { upcoming: 'Pendiente', current: 'Actual', complete: 'Hecho', invalid: 'Por corregir' },",
+      "    }}>$0</Stepper>"
     ]
   },
   "Tabs": {

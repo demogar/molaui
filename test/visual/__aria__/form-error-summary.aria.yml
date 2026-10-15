@@ -1,0 +1,47 @@
+- form "New webhook":
+  - heading "New webhook" [level=2]
+  - region "4 fields need fixing":
+    - heading "4 fields need fixing" [level=2]
+    - paragraph: Nothing has been saved yet.
+    - list:
+      - listitem:
+        - 'link "Name: Name the webhook, so the delivery log can say which one fired."'
+      - listitem:
+        - 'link "Endpoint: Enter an https:// address; Cayuco does not deliver over plain http."'
+      - listitem:
+        - 'link "Events: Choose at least one event, or the webhook never fires."'
+      - listitem:
+        - 'link "Retry delays: The last retry must wait longer than the first."'
+  - text: Name
+  - textbox "Name" [invalid]
+  - text: Name the webhook, so the delivery log can say which one fired. Endpoint
+  - textbox "Endpoint" [invalid]:
+    - /placeholder: https://
+    - text: http://hooks.cayuco.example/runs
+  - text: Cayuco POSTs a JSON body to this address. Enter an https:// address; Cayuco does not deliver over plain http.
+  - group "Events":
+    - text: Events Choose at least one event, or the webhook never fires.
+    - group:
+      - checkbox "run.failed"
+      - text: run.failed A run ends in an error or times out.
+      - checkbox "run.succeeded"
+      - text: run.succeeded A run finishes and returns an answer.
+      - checkbox "approval.requested"
+      - text: approval.requested An agent waits for a person to approve a tool call.
+  - group "Retry delays":
+    - text: ""
+    - paragraph: Failed deliveries are retried five times, waiting longer each time.
+    - text: The last retry must wait longer than the first. First retry
+    - group:
+      - textbox "First retry": /\d+/
+      - text: seconds
+      - button "Decrease"
+      - button "Increase"
+    - text: Last retry
+    - group:
+      - textbox "Last retry": /\d+/
+      - text: seconds
+      - button "Decrease"
+      - button "Increase"
+  - status
+  - button "Save webhook"
