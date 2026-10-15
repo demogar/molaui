@@ -20,7 +20,7 @@ import { found, foundModules } from './found'
  */
 const root = resolve(import.meta.dirname, '../..')
 
-const ENUMERATES = /import\.meta\.glob\s*[<(]|\b(?:globSync|glob|readdirSync|readdir|opendirSync|opendir)\(/
+const ENUMERATES = /import\.meta\.glob\s*[<(]|\b(?:globSync|glob|readdirSync|readdir|opendirSync|opendir|walk)\(/
 const SENTINEL = /\bfound(?:Modules)?\s*\(/
 
 /** Files allowed to enumerate without a sentinel, each with why. Empty today. */
