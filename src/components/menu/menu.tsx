@@ -5,6 +5,7 @@ import { Check, ChevronRight } from 'lucide-react'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { deprecate } from '../../lib/deprecate'
 import { floatingSurface } from '../popover/surface'
 
 /**
@@ -102,11 +103,18 @@ export interface MenuItemProps extends Omit<MenuPrimitive.Item.Props, 'className
   /** Leading icon; decorative. */
   icon?: React.ReactNode
   shortcut?: string
-  /** Destroys something: highlights in rojo instead of ink. */
-  tone?: 'default' | 'danger'
+  /**
+   * `danger` destroys something: it highlights in rojo instead of ink.
+   * `default` is deprecated since 0.7.0 and removed in 1.0.0: use `neutral`,
+   * the status word every other `tone` uses.
+   */
+  tone?: 'neutral' | 'danger' | 'default'
 }
 
-export function MenuItem({ className, icon, shortcut, tone = 'default', children, ...props }: MenuItemProps) {
+export function MenuItem({ className, icon, shortcut, tone = 'neutral', children, ...props }: MenuItemProps) {
+  if (tone === 'default') {
+    deprecate('menu-item-tone-default', { what: '<MenuItem tone="default">', instead: '<MenuItem tone="neutral">', removal: '1.0.0' })
+  }
   return (
     <MenuPrimitive.Item
       data-slot="menu-item"

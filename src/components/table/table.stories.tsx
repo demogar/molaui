@@ -392,7 +392,7 @@ export const NoResults: Story = {
       getRowId={(run) => run.id}
       framed
       empty={{
-        variant: 'no-results',
+        kind: 'no-results',
         title: 'No runs match these filters',
         description: 'Nothing failed in the Support workspace in the last 24 hours.',
         actions: (
@@ -427,7 +427,7 @@ export const NoResultsOnAPhone: Story = {
         framed
         className="min-w-[52rem]"
         empty={{
-          variant: 'no-results',
+          kind: 'no-results',
           title: 'No runs match these filters',
           description: 'Try another agent, a wider date range, or clear the filters to see every run.',
           actions: (

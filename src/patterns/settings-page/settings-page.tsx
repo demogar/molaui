@@ -504,7 +504,7 @@ function SettingsSection({
       )}
     >
       <div className="min-w-0">
-        <Heading level={2} size={3} id={id}>
+        <Heading level={2} visualLevel={3} id={id}>
           {title}
         </Heading>
         <p className="mt-1.5 mb-0 text-sm text-ink-2">{description}</p>

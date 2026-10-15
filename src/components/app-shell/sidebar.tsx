@@ -5,6 +5,7 @@ import * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { mergeProps } from '../../lib/merge-props'
+import { deprecate } from '../../lib/deprecate'
 import { SidebarContext } from './app-shell'
 
 /**
@@ -78,8 +79,13 @@ export interface NavItemProps extends Omit<useRender.ComponentProps<'a'>, 'child
   count?: number
   /** Read with the count: "3 failed". Without it the number is read alone. */
   countLabel?: string
-  /** `attention` fills the count in the danger colour — for failures that need a person, not for totals. */
-  countTone?: 'neutral' | 'attention'
+  /**
+   * `danger` fills the count in the danger colour — for failures that need a
+   * person, not for totals. `attention` is deprecated since 0.7.0 and removed
+   * in 1.0.0: use `danger`, the same fill under the status word every `tone`
+   * uses.
+   */
+  countTone?: 'neutral' | 'danger' | 'attention'
 }
 
 /**
@@ -113,6 +119,14 @@ export function NavItem({
 }: NavItemProps) {
   const { collapsed, onNavigate } = React.useContext(SidebarContext)
   const hasCount = count !== undefined && count > 0
+  if (countTone === 'attention') {
+    deprecate('nav-item-count-tone-attention', {
+      what: '<NavItem countTone="attention">',
+      instead: '<NavItem countTone="danger">',
+      removal: '1.0.0',
+    })
+  }
+  const urgent = countTone === 'danger' || countTone === 'attention'
 
   const classes = cn(
     'relative flex h-(--control-h) items-center gap-2.5 px-3 text-sm text-ink-2 no-underline',
@@ -138,7 +152,7 @@ export function NavItem({
           <span
             className={cn(
               'absolute -top-1 -inset-e-1.5 size-1.5',
-              countTone === 'attention' ? 'bg-danger' : 'bg-ink-muted',
+              urgent ? 'bg-danger' : 'bg-ink-muted',
             )}
           />
         ) : null}
@@ -156,7 +170,7 @@ export function NavItem({
               'tabular-nums',
               collapsed
                 ? 'hidden'
-                : countTone === 'attention'
+                : urgent
                   ? 'bg-danger px-1.5 py-px text-2xs font-semibold text-on-layer'
                   : 'text-xs text-ink-muted',
             )}

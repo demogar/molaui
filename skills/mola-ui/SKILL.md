@@ -123,6 +123,13 @@ because keyboard direction is read from context.
 13. **Reflow at 320px.** Nothing scrolls sideways except a region meant to (a table, code, a tab
     or chip row), and that region carries `scroll-edge` with `ref={useScrollEdge()}`, so a
     stitched edge says there is more. `Table`, `Tabs` and `CodeBlock` already do.
+14. **Props share one vocabulary.** `tone` is a status (`neutral`, `info`, `success`, `warn`,
+    `danger`, `accent`), `variant` a presentation (`solid`, `outline`, `seam`), `kind` a
+    category (`<EmptyState kind="no-results">`), `size` the t-shirt scale (`xs` to `xl`). A
+    prop marked `deprecated` in the manifest still works, but write its replacement.
+15. **Every component takes `ref`, `id`, `data-*` and the DOM props of its element.**
+    `className` and `style` style the box you see (the element with the cut); `ref` and the
+    rest go to the control you focus. A wrapper around a `label` takes `wrapperClassName`.
 
 ## Picking a component
 

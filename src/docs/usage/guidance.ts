@@ -1058,7 +1058,7 @@ export const USAGE: Record<string, Usage> = {
     ],
     practices: [
       {
-        do: 'Mark the current destination with active, and set countTone to attention only for things that need a person.',
+        do: 'Mark the current destination with active, and set countTone to danger only for things that need a person.',
         dont: 'Fill every count in rojo; totals are not alarms.',
       },
     ],

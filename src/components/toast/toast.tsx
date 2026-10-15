@@ -31,7 +31,12 @@ import { Button, IconButton } from '../button'
  * region and focus handling (F6 jumps to the toast region) are Base UI's.
  */
 
-export type ToastTone = 'neutral' | 'success' | 'danger' | 'info' | 'running'
+/**
+ * The status tones every `tone` prop uses, minus `accent` (a toast is never
+ * an emphasis, only a report), plus `running`: the one toast that is work
+ * still happening, which `update()` turns into a result.
+ */
+export type ToastTone = 'neutral' | 'info' | 'success' | 'warn' | 'danger' | 'running'
 
 export interface ToastOptions {
   title: React.ReactNode
@@ -48,6 +53,7 @@ const MARK: Record<ToastTone, string> = {
   neutral: 'bg-ink',
   success: 'bg-verde',
   danger: 'bg-danger',
+  warn: 'bg-oro cut-thin',
   info: 'bg-anil',
   running: 'bg-oro animate-mola-pulse',
 }
@@ -56,6 +62,7 @@ const SR_TONE: Record<ToastTone, string | null> = {
   neutral: null,
   success: 'Success: ',
   danger: 'Error: ',
+  warn: 'Warning: ',
   info: null,
   running: 'In progress: ',
 }
@@ -88,7 +95,10 @@ export function useToast() {
     return {
       show,
       success: withTone('success'),
+      danger: withTone('danger'),
+      /** The same as `danger`, under the word people reach for first. */
       error: withTone('danger'),
+      warn: withTone('warn'),
       info: withTone('info'),
       running: withTone('running'),
       /**

@@ -8,8 +8,9 @@ const meta = {
   component: Text,
   args: { children: 'The agent retrieved 14 documents and cited 3 of them.' },
   argTypes: {
-    size: { control: 'inline-radio', options: ['xs', 'sm', 'base', 'lg'] },
-    tone: { control: 'inline-radio', options: ['default', 2, 'muted', 'danger', 'success'] },
+    size: { control: 'inline-radio', options: ['xs', 'sm', 'md', 'lg'] },
+    variant: { control: 'inline-radio', options: ['default', 'secondary', 'muted'] },
+    tone: { control: 'inline-radio', options: ['neutral', 'danger', 'success'] },
     weight: { control: 'inline-radio', options: ['regular', 'medium', 'semibold'] },
     as: { control: 'inline-radio', options: ['p', 'span', 'div'] },
   },
@@ -32,8 +33,8 @@ export const Inks: Story = {
   render: () => (
     <div className="flex max-w-xl flex-col gap-2">
       <Text>Ink — the thing the reader came for.</Text>
-      <Text tone={2}>Ink-2 — what explains it. 8.80:1 on cloth.</Text>
-      <Text tone="muted">Muted — what they can skip. 5.19:1, and the floor.</Text>
+      <Text variant="secondary">Ink-2 — what explains it. 8.80:1 on cloth.</Text>
+      <Text variant="muted">Muted — what they can skip. 5.19:1, and the floor.</Text>
       <Text tone="danger">Danger ink — a failure, said in words.</Text>
       <Text tone="success">Success ink — a pass, said in words.</Text>
     </div>

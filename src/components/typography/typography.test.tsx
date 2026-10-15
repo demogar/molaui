@@ -15,7 +15,7 @@ describe('Heading', () => {
 
   it('lets size differ from the outline level', () => {
     render(
-      <Heading level={2} size={4}>
+      <Heading level={2} visualLevel={4}>
         Dialog title
       </Heading>,
     )

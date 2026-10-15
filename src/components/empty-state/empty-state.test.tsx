@@ -10,7 +10,7 @@ describe('EmptyState', () => {
   })
 
   it('announces the error variant', () => {
-    render(<EmptyState variant="error" title="Did not load" />)
+    render(<EmptyState kind="error" title="Did not load" />)
     expect(screen.getByRole('alert')).toHaveTextContent('Did not load')
   })
 

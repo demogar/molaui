@@ -2,6 +2,7 @@ import { cva } from 'class-variance-authority'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { deprecate } from '../../lib/deprecate'
 
 /**
  * A vertical sequence drawn as a spine beside the events it connects: an
@@ -43,7 +44,7 @@ const NODE: Record<TimelineTone, string> = {
   active: 'band-accent relleno-working shadow-cut',
 }
 
-export interface TimelineProps {
+export interface TimelineProps extends Omit<React.ComponentProps<'ol'>, 'children'> {
   items: TimelineItem[]
   /** Names the list, since the spine carries no heading of its own. */
   label: string
@@ -56,22 +57,36 @@ export interface TimelineProps {
    * `default`   product scale: semibold titles at body size.
    * `editorial` the travel-guide scale it was born at, for a narrative.
    */
-  size?: 'default' | 'editorial'
+  variant?: TimelineVariant
+  /**
+   * @deprecated Since 0.7.0; removed in 1.0.0. Use `variant`, which takes the
+   * same values: a type scale is a presentation, and `size` is the t-shirt
+   * scale everywhere else.
+   */
+  size?: TimelineVariant
   /** The element each title renders as. Defaults to a non-heading, since most logs are not outlines. */
   titleAs?: 'h3' | 'h4' | 'p'
-  className?: string
 }
 
+export type TimelineVariant = 'default' | 'editorial'
+
+/** `className`, `ref` and the rest of the DOM props go to the `<ol>`. */
 export function Timeline({
   items,
   label,
   gap = 'spaced',
-  size = 'default',
+  variant: variantProp,
+  size: sizeProp,
   titleAs: TitleTag = 'p',
   className,
+  ...props
 }: TimelineProps) {
+  if (sizeProp !== undefined) {
+    deprecate('timeline-size', { what: '<Timeline size>', instead: '<Timeline variant>', removal: '1.0.0' })
+  }
+  const variant = variantProp ?? sizeProp ?? 'default'
   return (
-    <ol aria-label={label} className={cn('m-0 list-none p-0', className)}>
+    <ol aria-label={label} {...props} data-slot="timeline" className={cn('m-0 list-none p-0', className)}>
       {items.map((item, i) => {
         const last = i === items.length - 1
         return (
@@ -87,7 +102,7 @@ export function Timeline({
               <TitleTag
                 className={cn(
                   'm-0 font-display wdth-display text-ink',
-                  size === 'editorial'
+                  variant === 'editorial'
                     ? 'mt-1 text-xl leading-heading font-normal tracking-heading'
                     : 'text-sm leading-snug font-semibold',
                 )}
@@ -98,7 +113,7 @@ export function Timeline({
                 <div
                   className={cn(
                     'mt-1 text-ink-2',
-                    size === 'editorial' ? 'font-text text-base leading-body' : 'text-sm',
+                    variant === 'editorial' ? 'font-text text-base leading-body' : 'text-sm',
                   )}
                 >
                   {item.description}
@@ -122,12 +137,24 @@ export interface StepListItem {
 
 const stepListVariants = cva('m-0 list-none p-0', {
   variants: {
-    tone: {
-      default: 'cut-t',
-      inverse: 'on-ink rule-t px-5',
+    inverse: {
+      false: 'cut-t',
+      true: 'on-ink rule-t px-5',
     },
   },
 })
+
+export interface StepListProps extends Omit<React.ComponentProps<'ol'>, 'children'> {
+  items: StepListItem[]
+  /** Set the list on an ink panel. */
+  inverse?: boolean
+  /**
+   * @deprecated Since 0.7.0; removed in 1.0.0. Use `inverse`: `tone` is a
+   * status everywhere else, and this was a ground.
+   */
+  tone?: 'default' | 'inverse'
+  titleAs?: 'h3' | 'h4' | 'p'
+}
 
 /**
  * Ruled, ordered steps — a runbook, an onboarding checklist, the stages of a
@@ -139,29 +166,24 @@ const stepListVariants = cva('m-0 list-none p-0', {
  * positional numeral is decoration the `<ol>` already announces, so it is
  * hidden. One authored label widens the whole column: a ragged label column
  * down a single list reads as a mistake.
+ *
+ * `className`, `ref` and the rest of the DOM props go to the `<ol>`.
  */
-export function StepList({
-  items,
-  tone = 'default',
-  titleAs: TitleTag = 'h3',
-  className,
-}: {
-  items: StepListItem[]
-  /** `inverse` sets the list on an ink panel. */
-  tone?: 'default' | 'inverse'
-  titleAs?: 'h3' | 'h4' | 'p'
-  className?: string
-}) {
+export function StepList({ items, inverse: inverseProp, tone, titleAs: TitleTag = 'h3', className, ...props }: StepListProps) {
+  if (tone !== undefined) {
+    deprecate('step-list-tone', { what: '<StepList tone>', instead: '<StepList inverse>', removal: '1.0.0' })
+  }
+  const inverse = inverseProp ?? tone === 'inverse'
   const wideLabel = items.some((item) => item.label !== undefined)
   return (
-    <ol className={cn(stepListVariants({ tone }), className)}>
+    <ol {...props} data-slot="step-list" className={cn(stepListVariants({ inverse }), className)}>
       {items.map((item, i) => (
         <li
           key={item.id ?? i}
           className={cn(
             'grid grid-cols-1 gap-1 py-4 sm:gap-4',
             // On the inverse panel `on-ink` has already turned --keyline
-            // into --keyline-on-ink, so one rule serves both tones.
+            // into --keyline-on-ink, so one rule serves both.
             'rule-b',
             wideLabel ? 'sm:grid-cols-[7rem_1fr]' : 'sm:grid-cols-[2.5rem_1fr]',
           )}
@@ -173,7 +195,7 @@ export function StepList({
               // Not gold on the inverse panel: in the dark theme that panel is
               // bleached cotton, where gold measures 1.49:1. Full --on-ink is
               // the only ink measured on the inverse ground in both themes.
-              tone === 'inverse' ? 'text-on-ink' : 'text-ink',
+              inverse ? 'text-on-ink' : 'text-ink',
               item.label !== undefined && 'pt-1 text-xs uppercase tracking-label wdth-label',
             )}
           >

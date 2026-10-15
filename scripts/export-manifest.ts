@@ -113,6 +113,8 @@ const parser = withCompilerOptions(parsed.options, {
   savePropValueAsString: true,
   shouldExtractLiteralValuesFromEnum: true,
   shouldRemoveUndefinedFromOptional: true,
+  // For `@deprecated`, which the manifest carries so an agent stops using it.
+  shouldIncludePropTagMap: true,
   // Every DOM attribute React knows would bury the props that are ours.
   propFilter: (prop) => !(prop.declarations?.length && prop.declarations.every((d) => d.fileName.includes('@types/react'))),
 })
@@ -129,16 +131,32 @@ interface Prop {
   required: boolean
   default?: string
   description?: string
+  /**
+   * The literal values, when `type` names an alias (`BadgeTone`) rather than
+   * spelling them out, so an agent — and prop-vocabulary.test.ts — can read
+   * what the prop accepts without resolving the alias.
+   */
+  values?: string[]
+  /** The `@deprecated` note: since when, what to use, when it goes. */
+  deprecated?: string
 }
 
 function propOf(prop: PropItem): Prop {
   const type = prop.type.raw && prop.type.name === 'enum' ? prop.type.raw : prop.type.name
+  const literals =
+    prop.type.name === 'enum' && Array.isArray(prop.type.value)
+      ? (prop.type.value as { value: string }[]).map((v) => v.value.replace(/^"|"$/g, ''))
+      : []
+  const spelled = /^\s*("[^"]*"|\d+|true|false)(\s*\|\s*("[^"]*"|\d+|true|false))*\s*$/.test(type)
+  const deprecated = (prop as PropItem & { tags?: Record<string, string> }).tags?.deprecated
   return {
     name: prop.name,
     type: type.replace(/\s+/g, ' '),
     required: prop.required,
     ...(prop.defaultValue?.value !== undefined ? { default: String(prop.defaultValue.value) } : {}),
     ...(prop.description ? { description: firstParagraph(prop.description) } : {}),
+    ...(literals.length && !spelled ? { values: literals } : {}),
+    ...(deprecated !== undefined ? { deprecated: deprecated.replace(/\s+/g, ' ').trim() } : {}),
   }
 }
 

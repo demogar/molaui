@@ -3,6 +3,7 @@
 import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { deprecate } from '../../../lib/deprecate'
 import { useScrollEdge } from '../../../lib/scroll-edge'
 
 import { createBlockParser, type Block, type InlineRun } from './parse'
@@ -24,6 +25,11 @@ export interface StreamingTextProps extends Omit<React.ComponentProps<'div'>, 'c
    */
   renderCitation?: (n: number) => React.ReactNode
   /** `muted` for text the reader may skim — reasoning, not the answer. */
+  variant?: 'default' | 'muted'
+  /**
+   * @deprecated Since 0.7.0; removed in 1.0.0. Use `variant`, which takes the
+   * same values: a muted ink is a presentation, and `tone` is a status.
+   */
   tone?: 'default' | 'muted'
 }
 
@@ -68,10 +74,15 @@ export function StreamingText({
   doneAnnouncement = 'Response complete.',
   errorAnnouncement = 'Response stopped with an error.',
   renderCitation,
-  tone = 'default',
+  variant: variantProp,
+  tone,
   className,
   ...props
 }: StreamingTextProps) {
+  if (tone !== undefined) {
+    deprecate('streaming-text-tone', { what: '<StreamingText tone>', instead: '<StreamingText variant>', removal: '1.0.0' })
+  }
+  const variant = variantProp ?? tone ?? 'default'
   // One parser per mounted stream: it holds the settled blocks between chunks.
   const [parse] = React.useState(createBlockParser)
   const blocks = React.useMemo(() => parse(text), [parse, text])
@@ -96,7 +107,7 @@ export function StreamingText({
       aria-busy={streaming || undefined}
       className={cn(
         'font-text text-lg leading-body [overflow-wrap:anywhere]',
-        tone === 'muted' ? 'text-ink-muted' : 'text-ink',
+        variant === 'muted' ? 'text-ink-muted' : 'text-ink',
         '[&>*+*]:mt-[0.75em]',
         className,
       )}

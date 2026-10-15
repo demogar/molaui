@@ -87,7 +87,7 @@ export function CayucoSidebar({ active = 'Runs' }: { active?: string }) {
       <NavSection title="Platform">
         {item('Overview', <LayoutDashboard />)}
         {item('Agents', <Bot />, { count: 8 })}
-        {item('Runs', <ListTree />, { count: 3, countLabel: 'failed in the last hour', countTone: 'attention' })}
+        {item('Runs', <ListTree />, { count: 3, countLabel: 'failed in the last hour', countTone: 'danger' })}
         {item('Knowledge', <BookOpen />)}
       </NavSection>
       <NavSection title="Support">

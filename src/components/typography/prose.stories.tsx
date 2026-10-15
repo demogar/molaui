@@ -6,8 +6,8 @@ const meta = {
   title: 'Components/Typography/Prose',
   tags: ['stable'],
   component: Prose,
-  args: { size: 'base' },
-  argTypes: { size: { control: 'inline-radio', options: ['sm', 'base'] } },
+  args: { size: 'md' },
+  argTypes: { size: { control: 'inline-radio', options: ['sm', 'md'] } },
   parameters: {
     docs: {
       description: {

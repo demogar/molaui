@@ -7,7 +7,7 @@ const meta = {
   tags: ['stable'],
   component: Placeholder,
   args: { label: 'Chart', name: 'Tickets by plan', alt: 'No data yet: tickets by plan', className: 'h-56 w-full max-w-96' },
-  argTypes: { tone: { control: 'inline-radio', options: ['default', 'deep'] } },
+  argTypes: { layer: { control: 'inline-radio', options: ['shade', 'deep'] } },
   parameters: {
     docs: {
       description: {
@@ -23,4 +23,4 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {}
 
-export const Deep: Story = { args: { tone: 'deep', label: 'Image', name: 'Account logo', alt: 'No logo uploaded yet for this account' } }
+export const Deep: Story = { args: { layer: 'deep', label: 'Image', name: 'Account logo', alt: 'No logo uploaded yet for this account' } }

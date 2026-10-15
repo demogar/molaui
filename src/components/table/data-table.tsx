@@ -66,7 +66,7 @@ export interface DataTableSort {
 }
 
 /** The empty state, as data. A bare node is still accepted and becomes the description. */
-export type DataTableEmpty = Pick<EmptyStateProps, 'title' | 'description' | 'actions' | 'variant'>
+export type DataTableEmpty = Pick<EmptyStateProps, 'title' | 'description' | 'actions' | 'kind' | 'variant'>
 
 export interface DataTableBulkContext {
   /** The selected row ids, across every page. */
@@ -335,6 +335,7 @@ export function DataTable<Row>({
           <TableEmpty
             colSpan={columnCount}
             title={emptyProps.title}
+            kind={emptyProps.kind}
             variant={emptyProps.variant}
             actions={emptyProps.actions}
           >

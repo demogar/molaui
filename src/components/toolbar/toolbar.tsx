@@ -213,8 +213,12 @@ export interface ToolbarOverflowItem {
   icon?: React.ReactNode
   onSelect: () => void
   disabled?: boolean
-  /** Destroys something: highlights in rojo when it lands in the menu. */
-  tone?: 'default' | 'danger'
+  /**
+   * `danger` destroys something: it highlights in rojo when it lands in the
+   * menu. `default` is deprecated since 0.7.0 and removed in 1.0.0: use
+   * `neutral`.
+   */
+  tone?: 'neutral' | 'danger' | 'default'
 }
 
 export interface ToolbarOverflowProps {
@@ -328,7 +332,7 @@ export function ToolbarOverflow({ items, moreLabel = 'More actions', align = 'en
           </ToolbarButton>
           <MenuContent align="end">
             {folded.map((item) => (
-              <MenuItem key={item.key} icon={item.icon} disabled={item.disabled} tone={item.tone} onClick={item.onSelect}>
+              <MenuItem key={item.key} icon={item.icon} disabled={item.disabled} tone={item.tone === 'danger' ? 'danger' : 'neutral'} onClick={item.onSelect}>
                 {item.label}
               </MenuItem>
             ))}

@@ -8,12 +8,12 @@ import { SectionHeader } from './section'
 
 describe('Panel', () => {
   it('redefines the ink ramp on a filled layer, not just the colour', () => {
-    const { container } = render(<Panel tone="anil">x</Panel>)
+    const { container } = render(<Panel layer="anil">x</Panel>)
     expect(container.firstElementChild!.className).toContain('on-layer')
   })
 
   it('gives an ink panel a cloth keyline, since an ink edge would vanish into it', () => {
-    const { container } = render(<Panel tone="ink">x</Panel>)
+    const { container } = render(<Panel layer="ink">x</Panel>)
     const cls = container.firstElementChild!.className
     expect(cls).toContain('keyline-on-ink')
     expect(cls).not.toMatch(/\bshadow-cut\b/)

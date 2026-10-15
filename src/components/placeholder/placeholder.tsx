@@ -1,6 +1,7 @@
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { deprecate } from '../../lib/deprecate'
 
 export interface PlaceholderProps extends React.ComponentProps<'div'> {
   /** The kind of thing that goes here — "Image", "Chart", "Preview". */
@@ -9,6 +10,13 @@ export interface PlaceholderProps extends React.ComponentProps<'div'> {
   name: string
   /** Announced in place of the missing content. */
   alt: string
+  /** The cloth it is cut from: `shade` by default, `deep` on a shaded panel, where `shade` would vanish. */
+  layer?: 'shade' | 'deep'
+  /**
+   * @deprecated Since 0.7.0; removed in 1.0.0. Use `layer`: `default` is
+   * `shade`, `deep` is `deep`. A ground is a layer, as on `Panel`; `tone` is
+   * a status.
+   */
   tone?: 'default' | 'deep'
 }
 
@@ -29,10 +37,15 @@ export function Placeholder({
   label = 'Placeholder',
   name,
   alt,
-  tone = 'default',
+  layer: layerProp,
+  tone,
   className,
   ...props
 }: PlaceholderProps) {
+  if (tone !== undefined) {
+    deprecate('placeholder-tone', { what: '<Placeholder tone>', instead: '<Placeholder layer>', removal: '1.0.0' })
+  }
+  const layer = layerProp ?? (tone === 'deep' ? 'deep' : 'shade')
   return (
     <div
       role="img"
@@ -40,7 +53,7 @@ export function Placeholder({
       data-slot="placeholder"
       className={cn(
         'relative grid place-items-center overflow-hidden rounded-none relleno-field shadow-cut',
-        tone === 'deep' ? 'bg-cloth-deep' : 'bg-cloth-shade',
+        layer === 'deep' ? 'bg-cloth-deep' : 'bg-cloth-shade',
         className,
       )}
       {...props}

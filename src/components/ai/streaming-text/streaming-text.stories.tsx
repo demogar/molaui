@@ -82,7 +82,7 @@ export const WithCode: Story = {
 }
 
 export const Muted: Story = {
-  args: { tone: 'muted', text: 'The question has two parts: did tickets drop, and is it safe to roll out.' },
+  args: { variant: 'muted', text: 'The question has two parts: did tickets drop, and is it safe to roll out.' },
 }
 
 // Twelve tokens every 16 ms: 20,000 tokens in under half a minute, which is
