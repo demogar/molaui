@@ -129,4 +129,5 @@ Types: `SideBySideDiffMessages`, `SideBySideDiffProps`
 
 From CHANGELOG.md, newest first.
 
+- 0.7.1 (2026-10-15), fix: stop the panes' scroll sync undoing the reader's scrolling [#173](https://github.com/demogar/molaui/issues/173)
 - 0.7.0 (2026-10-15), feature: add a streaming markdown renderer that keeps citations, and a side-by-side diff [#158](https://github.com/demogar/molaui/issues/158)

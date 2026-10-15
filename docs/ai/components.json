@@ -4339,6 +4339,24 @@
       ],
       "changes": [
         {
+          "version": "0.7.1",
+          "date": "2026-10-15",
+          "type": "fix",
+          "breaking": false,
+          "scopes": [
+            "side-by-side-diff"
+          ],
+          "subject": "stop the panes' scroll sync undoing the reader's scrolling",
+          "pr": {
+            "number": 173,
+            "url": "https://github.com/demogar/molaui/issues/173"
+          },
+          "commit": {
+            "sha": "f350a81",
+            "url": "https://github.com/demogar/molaui/commit/f350a819eafa626ec11dfb2c70b0cf939d23f21c"
+          }
+        },
+        {
           "version": "0.7.0",
           "date": "2026-10-15",
           "type": "feature",

@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.7.1](https://github.com/demogar/molaui/compare/v0.7.0...v0.7.1) (2026-10-15)
+
+
+### Bug Fixes
+
+* **side-by-side-diff:** stop the panes' scroll sync undoing the reader's scrolling ([#173](https://github.com/demogar/molaui/issues/173)) ([f350a81](https://github.com/demogar/molaui/commit/f350a819eafa626ec11dfb2c70b0cf939d23f21c))
+* **stories:** point demo links at the cayuco host their cards show ([#172](https://github.com/demogar/molaui/issues/172)) ([e5f8eea](https://github.com/demogar/molaui/commit/e5f8eea4557709fcf4f873ed948731c71cbc74c0))
+* **storybook:** keep anatomy pins apart and off the component's text ([#174](https://github.com/demogar/molaui/issues/174)) ([2fc5018](https://github.com/demogar/molaui/commit/2fc5018e41659d2be99a422a3111537cef1d0230))
+
+
+### Documentation
+
+* link the credit to demogar.com and name who started the system ([#171](https://github.com/demogar/molaui/issues/171)) ([7d11973](https://github.com/demogar/molaui/commit/7d1197337a08c985b7f311a67962456a00e80736))
+* **whats-new:** add the 0.7 page ([#169](https://github.com/demogar/molaui/issues/169)) ([152c915](https://github.com/demogar/molaui/commit/152c9158066b4c874217ababa7a27380fb01952b))
+
 ## [0.7.0](https://github.com/demogar/molaui/compare/v0.6.0...v0.7.0) (2026-10-15)
 
 
