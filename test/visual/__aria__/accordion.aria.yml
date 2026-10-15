@@ -1,0 +1,13 @@
+- heading "What counts as a run?" [level=3]:
+  - button "What counts as a run?" [expanded]
+- region "What counts as a run?":
+  - paragraph: One invocation of an agent, from the first model call to its final answer, including every tool call in between.
+- heading /Why did my run stop at \d+ steps\?/ [level=3]:
+  - button /Why did my run stop at \d+ steps\?/
+- region /Why did my run stop at \d+ steps\?/
+- heading "Are tool arguments stored?" [level=3]:
+  - button "Are tool arguments stored?"
+- region "Are tool arguments stored?"
+- heading "Can I export a trace?" [level=3]:
+  - button "Can I export a trace?"
+- region "Can I export a trace?"

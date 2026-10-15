@@ -34,6 +34,8 @@ export default defineConfig({
     : [['list'], ['html', { outputFolder: '../../playwright-report', open: 'never' }]],
   timeout: 60_000,
   expect: {
+    // ARIA snapshots are text, the same on every platform (aria.behaviour.ts).
+    toMatchAriaSnapshot: { pathTemplate: '{testDir}/__aria__/{arg}{ext}' },
     toHaveScreenshot: {
       // Per-pixel colour tolerance stays at Playwright's default; the page as
       // a whole may differ by a tenth of a percent, which absorbs a stray

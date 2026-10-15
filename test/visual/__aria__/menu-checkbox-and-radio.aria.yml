@@ -1,0 +1,13 @@
+- button "View" [expanded]
+- menu "View":
+  - group "Columns":
+    - menuitemcheckbox "Status" [checked]
+    - menuitemcheckbox "Owner" [checked]
+    - menuitemcheckbox "Cost"
+    - menuitemcheckbox "Latency" [checked]
+  - separator
+  - group "Sort by":
+    - group:
+      - menuitemradio "Last updated" [checked]
+      - menuitemradio "Created"
+      - menuitemradio "Cost"

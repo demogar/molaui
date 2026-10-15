@@ -1,0 +1,62 @@
+- text: Run evaluation on
+- textbox "Run evaluation on":
+  - /placeholder: DD/MM/YYYY
+- button "Choose date" [expanded]
+- text: "Format: DD/MM/YYYY"
+- dialog /October \d+/:
+  - button /Previous month, September \d+/ [disabled]
+  - heading /October \d+/ [level=2]
+  - button /Next month, November \d+/
+  - grid /October \d+/:
+    - rowgroup:
+      - row "Mon Tue Wed Thu Fri Sat Sun":
+        - columnheader "Mon"
+        - columnheader "Tue"
+        - columnheader "Wed"
+        - columnheader "Thu"
+        - columnheader "Fri"
+        - columnheader "Sat"
+        - columnheader "Sun"
+    - rowgroup:
+      - row /Thursday, 1 October \d+, unavailable Friday, 2 October \d+, unavailable Saturday, 3 October \d+, unavailable Sunday, 4 October \d+, unavailable/:
+        - gridcell
+        - gridcell
+        - gridcell
+        - gridcell /Thursday, 1 October \d+, unavailable/ [disabled]
+        - gridcell /Friday, 2 October \d+, unavailable/ [disabled]
+        - gridcell /Saturday, 3 October \d+, unavailable/ [disabled]
+        - gridcell /Sunday, 4 October \d+, unavailable/ [disabled]
+      - row /Monday, 5 October \d+, unavailable Tuesday, 6 October \d+, today Wednesday, 7 October \d+ Thursday, 8 October \d+ Friday, 9 October \d+ Saturday, \d+ October \d+ Sunday, \d+ October \d+/:
+        - gridcell /Monday, 5 October \d+, unavailable/ [disabled]
+        - gridcell /Tuesday, 6 October \d+, today/
+        - gridcell /Wednesday, 7 October \d+/
+        - gridcell /Thursday, 8 October \d+/
+        - gridcell /Friday, 9 October \d+/
+        - gridcell /Saturday, \d+ October \d+/
+        - gridcell /Sunday, \d+ October \d+/
+      - row /Monday, \d+ October \d+ Tuesday, \d+ October \d+ Wednesday, \d+ October \d+ Thursday, \d+ October \d+ Friday, \d+ October \d+ Saturday, \d+ October \d+ Sunday, \d+ October \d+/:
+        - gridcell /Monday, \d+ October \d+/
+        - gridcell /Tuesday, \d+ October \d+/
+        - gridcell /Wednesday, \d+ October \d+/
+        - gridcell /Thursday, \d+ October \d+/
+        - gridcell /Friday, \d+ October \d+/
+        - gridcell /Saturday, \d+ October \d+/
+        - gridcell /Sunday, \d+ October \d+/
+      - row /Monday, \d+ October \d+ Tuesday, \d+ October \d+ Wednesday, \d+ October \d+ Thursday, \d+ October \d+ Friday, \d+ October \d+ Saturday, \d+ October \d+ Sunday, \d+ October \d+/:
+        - gridcell /Monday, \d+ October \d+/
+        - gridcell /Tuesday, \d+ October \d+/
+        - gridcell /Wednesday, \d+ October \d+/
+        - gridcell /Thursday, \d+ October \d+/
+        - gridcell /Friday, \d+ October \d+/
+        - gridcell /Saturday, \d+ October \d+/
+        - gridcell /Sunday, \d+ October \d+/
+      - row /Monday, \d+ October \d+ Tuesday, \d+ October \d+ Wednesday, \d+ October \d+ Thursday, \d+ October \d+ Friday, \d+ October \d+ Saturday, \d+ October \d+/:
+        - gridcell /Monday, \d+ October \d+/
+        - gridcell /Tuesday, \d+ October \d+/
+        - gridcell /Wednesday, \d+ October \d+/
+        - gridcell /Thursday, \d+ October \d+/
+        - gridcell /Friday, \d+ October \d+/
+        - gridcell /Saturday, \d+ October \d+/
+        - gridcell
+- text: /Evaluations start at \d+:\d+ UTC on the chosen day\./
+- paragraph: "Submits: —"

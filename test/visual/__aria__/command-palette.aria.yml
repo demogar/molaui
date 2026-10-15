@@ -1,0 +1,22 @@
+- dialog "Command palette":
+  - heading "Command palette" [level=2]
+  - combobox "Command palette" [expanded]
+  - text: esc
+  - listbox "Commands":
+    - group "Actions":
+      - text: ""
+      - option "Start a new run ⌘ R" [selected]
+      - option "New rollout ⌘ O"
+      - option "Toggle dark theme"
+      - option "Purge knowledge index Owners only" [disabled]
+    - group "Agents":
+      - text: ""
+      - option "knowledge-agent Answers from the help centre"
+      - option "refund-review-agent Reviews a refund request"
+      - option "abuse-triage Sorts abuse reports"
+    - group "Go to":
+      - text: ""
+      - option "Escalations G E"
+      - option "Documents G D"
+      - option "Settings G S"
+  - status
