@@ -88,7 +88,7 @@ export const Streamed: Story = {
 const LONG: Source = {
   id: 4,
   title: 'Ticket methodology: how tickets are counted across time zones, reopened threads and merged workspaces',
-  href: 'https://example.com/docs/metrics/tickets-per-1k',
+  href: 'https://docs.cayuco.internal/metrics/tickets-per-1k',
   domain: 'docs.cayuco.internal',
   snippet:
     'A ticket counts towards a workspace’s first week if it is opened between 0 and 168 hours after the workspace is created, measured in UTC. Reopened threads keep the original ticket timestamp. Workspaces merged within the window are counted once, under the older workspace, and the merged workspace’s tickets are attributed to it from the merge onwards.',
@@ -98,7 +98,7 @@ const LONG: Source = {
 const BARE: Source = {
   id: 5,
   title: 'Guardrail dashboard',
-  href: 'https://example.com/dash/help-panel-guardrails',
+  href: 'https://dash.cayuco.internal/help-panel-guardrails',
   domain: 'dash.cayuco.internal',
 }
 
@@ -137,7 +137,7 @@ export const WithoutSnippet: Story = {
 const ARABIC: Source = {
   id: 6,
   title: 'سياسة اللعب النظيف',
-  href: 'https://example.com/docs/policies/fair-play',
+  href: 'https://docs.cayuco.internal/policies/fair-play',
   domain: 'docs.cayuco.internal',
   snippet: 'تُراجع كل حالة يدويًا قبل إغلاق الحساب.',
   retrievedAt: '2026-10-05T14:02:08Z',

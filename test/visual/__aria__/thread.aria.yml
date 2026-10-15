@@ -44,19 +44,19 @@
     - list:
       - listitem:
         - link /1 ro-\d+ results — in-app help panel rollouts\.cayuco\.internal read Oct 5, \d+:\d+ PM “Primary metric tickets_per_1k\. Control \d+\.\d+, help panel \d+\.\d+\. n = \d+,\d+\. Sequential test, alpha \d+\.\d+\.”/:
-          - /url: https://example.com/rollouts/ro-0412/results
+          - /url: https://rollouts.cayuco.internal/ro-0412/results
           - text: ""
           - time: /read Oct 5, \d+:\d+ PM/
           - text: ""
       - listitem:
         - 'link /2 Segment breakdown: Starter vs Enterprise plan rollouts\.cayuco\.internal read Oct 5, \d+:\d+ PM “Enterprise cohort: −0\.4 per \d+,\d+ \(CI −1\.9 to \+1\.1\)\. Starter cohort: −6\.1 per \d+,\d+ \(CI −7\.4 to −4\.8\)\.”/':
-          - /url: https://example.com/rollouts/ro-0412/segments
+          - /url: https://rollouts.cayuco.internal/ro-0412/segments
           - text: ""
           - time: /read Oct 5, \d+:\d+ PM/
           - text: ""
       - listitem:
         - 'link /3 Rollout brief: help panel v2 docs\.cayuco\.internal read Oct 5, \d+:\d+ PM “Guardrails: time_to_first_reply_s must not regress more than \d+%\. Escalation rate ≤ 4%\.”/':
-          - /url: https://example.com/docs/briefs/help-panel-v2
+          - /url: https://docs.cayuco.internal/briefs/help-panel-v2
           - text: ""
           - time: /read Oct 5, \d+:\d+ PM/
           - text: ""
