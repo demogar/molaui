@@ -58,3 +58,38 @@ describe('CodeBlock', () => {
     expect(screen.getByRole('button', { name: 'Do not wrap lines' })).toHaveAttribute('aria-pressed', 'true')
   })
 })
+
+describe('CodeBlock keyboard', () => {
+  it('tabs to the wrap toggle, the copy button, then the code, and the buttons take Enter and Space', async () => {
+    const user = userEvent.setup()
+    const writeText = vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue()
+    render(<CodeBlock code="SELECT 1" language="sql" label="query.sql" />)
+    await user.tab()
+    expect(screen.getByRole('button', { name: 'Wrap lines' })).toHaveFocus()
+    await user.keyboard('{Enter}')
+    expect(screen.getByRole('button', { name: 'Do not wrap lines' })).toHaveAttribute('aria-pressed', 'true')
+    await user.keyboard(' ')
+    expect(screen.getByRole('button', { name: 'Wrap lines' })).toHaveAttribute('aria-pressed', 'false')
+    await user.tab()
+    expect(screen.getByRole('button', { name: 'Copy to clipboard' })).toHaveFocus()
+    await user.keyboard(' ')
+    expect(writeText).toHaveBeenCalledWith('SELECT 1')
+    await user.keyboard('{Enter}')
+    expect(writeText).toHaveBeenCalledTimes(2)
+    await user.tab()
+    expect(screen.getByLabelText('query.sql')).toHaveFocus()
+  })
+
+  it('keeps focus on the code while the arrow keys scroll it', async () => {
+    // jsdom does not lay out or scroll, so this checks the part it can see:
+    // the focusable <pre> holds focus through every arrow key (nothing traps or
+    // reroutes them), which is what lets the browser scroll it natively.
+    const user = userEvent.setup()
+    render(<CodeBlock code="SELECT 1" language="sql" label="query.sql" />)
+    const pre = screen.getByLabelText('query.sql')
+    pre.focus()
+    await user.keyboard('{ArrowDown}{ArrowUp}{ArrowRight}{ArrowLeft}')
+    expect(pre).toHaveFocus()
+    expect(pre).toHaveAttribute('tabindex', '0')
+  })
+})

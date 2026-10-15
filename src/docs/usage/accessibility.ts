@@ -7,8 +7,10 @@ import type { Accessibility } from './accessibility-types'
  * Every keyboard row was read from the component's source, its unit tests or
  * the Base UI primitive it wraps, not from what the WAI-ARIA pattern says a
  * component of that kind should do. Where the two differ, the page says what
- * the component does. Whether its unit tests press those keys is a separate,
- * generated claim (docs/accessibility/evidence.json).
+ * the component does. Every key a table names must also be pressed by the
+ * component's unit tests: keyboard-coverage.test.ts fails a page with a key
+ * nobody presses, and docs/accessibility/evidence.json is generated from the
+ * same reading.
  *
  * It is data beside guidance.ts, rather than inside it, because it answers a
  * different reader: guidance is "should I use this", this is "what do I owe
@@ -123,7 +125,7 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
   },
   'AI/Prompt input': {
     keyboard: [
-      { keys: ['Tab'], action: 'Moves to the field, then to the toolbar, Send or Stop, and each attachment’s remove button.' },
+      { keys: ['Tab'], action: 'Moves to each attachment’s remove button, then to the field, the toolbar, and Send or Stop.' },
       { keys: ['Enter'], action: 'Sends the prompt; with `submitOn="mod-enter"` it adds a new line instead.' },
       { keys: ['Shift+Enter'], action: 'Adds a new line when Enter sends.' },
       { keys: ['Control+Enter', 'Meta+Enter'], action: 'Sends the prompt when `submitOn` is `mod-enter`.' },
@@ -219,7 +221,7 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
   },
   'AI/Tool call': {
     keyboard: [
-      { keys: ['Tab'], action: 'Moves to the call’s header, then to Approve, Deny, Retry call and the payload’s buttons when open.' },
+      { keys: ['Tab'], action: 'Moves to the call’s header, then to Approve, Deny, Retry call and the payload’s buttons when open. A call that waits for approval or has failed is held open, so its header is not a stop.' },
       { keys: ['Enter', 'Space'], action: 'Opens or closes the call from its header, or activates the focused button.' },
       { keys: ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'], action: 'Scrolls a focused arguments or result block.' },
     ],

@@ -138,3 +138,23 @@ describe('SearchInput with a consumer ref', () => {
     expect(input).toHaveFocus()
   })
 })
+
+describe('Field keyboard', () => {
+  it('moves focus to the control with Tab', async () => {
+    const user = userEvent.setup()
+    render(<Field label="Run name">{(control) => <Input {...control} />}</Field>)
+    await user.tab()
+    expect(screen.getByRole('textbox', { name: 'Run name' })).toHaveFocus()
+  })
+
+  it.each(['Enter', 'Space'])('empties a search field from its clear button with %s and returns focus to it', async (key) => {
+    const user = userEvent.setup()
+    render(<SearchInput aria-label="Search runs" defaultValue="timeout" />)
+    const input = screen.getByRole('searchbox', { name: 'Search runs' })
+    screen.getByRole('button', { name: 'Clear search' }).focus()
+    if (key === 'Enter') await user.keyboard('{Enter}')
+    else await user.keyboard(' ')
+    expect(input).toHaveValue('')
+    expect(input).toHaveFocus()
+  })
+})

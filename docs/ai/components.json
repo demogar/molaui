@@ -2413,7 +2413,7 @@
             "keys": [
               "Tab"
             ],
-            "action": "Moves to the field, then to the toolbar, Send or Stop, and each attachment’s remove button."
+            "action": "Moves to each attachment’s remove button, then to the field, the toolbar, and Send or Stop."
           },
           {
             "keys": [
@@ -3815,7 +3815,7 @@
             "keys": [
               "Tab"
             ],
-            "action": "Moves to the call’s header, then to Approve, Deny, Retry call and the payload’s buttons when open."
+            "action": "Moves to the call’s header, then to Approve, Deny, Retry call and the payload’s buttons when open. A call that waits for approval or has failed is held open, so its header is not a stop."
           },
           {
             "keys": [

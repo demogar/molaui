@@ -99,7 +99,7 @@ Types: `DrawerContentProps`, `DrawerProps`, `DrawerSide`
 
 - Automated, jsdom: each of its 4 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
-- Keyboard in unit tests: yes.
+- Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.
 
 ## Related

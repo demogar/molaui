@@ -89,6 +89,16 @@ describe('FileDiff', () => {
     expect(screen.getAllByRole('list')).toHaveLength(1)
   })
 
+  it('unfolds a folded hunk with Space', async () => {
+    render(<FileDiff path="a.yaml" diff={DIFF} />)
+    const toggle = screen.getByRole('button', { name: /^@@ -3,3 \+3,4 @@\s*rollout:$/ })
+    toggle.focus()
+    await userEvent.keyboard(' ')
+    expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    await userEvent.keyboard(' ')
+    expect(toggle).toHaveAttribute('aria-expanded', 'true')
+  })
+
   it('names a rename by both paths', () => {
     render(<FileDiff path="b.yaml" previousPath="a.yaml" kind="renamed" hunks={[]} />)
     expect(screen.getByRole('heading', { name: /^a\.yaml\s*renamed to\s*b\.yaml$/ })).toBeInTheDocument()
@@ -157,6 +167,16 @@ describe('ChangeReview', () => {
     await userEvent.keyboard('{Enter}')
     expect(onDecide).toHaveBeenCalledWith('approved', undefined)
     expect(screen.getByText('Approved')).toBeInTheDocument()
+  })
+
+  it('decides with Space on the focused button, once a reason is given', async () => {
+    const onDecide = setup()
+    await userEvent.type(screen.getByRole('textbox', { name: 'Reason' }), 'Needs a canary first.')
+    await userEvent.tab()
+    await userEvent.tab()
+    expect(screen.getByRole('button', { name: 'Request changes' })).toHaveFocus()
+    await userEvent.keyboard(' ')
+    expect(onDecide).toHaveBeenCalledWith('changes_requested', 'Needs a canary first.')
   })
 
   it('when controlled, shows only the decision it is given', async () => {

@@ -1,5 +1,5 @@
 import { composeStories, setProjectAnnotations } from '@storybook/react-vite'
-import { render, screen } from '@/test/render'
+import { render, screen, waitFor } from '@/test/render'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
@@ -41,6 +41,20 @@ describe('Tooltip', () => {
     await userEvent.tab()
     expect(screen.getByRole('button', { name: 'Copy' })).toHaveFocus()
     expect(await screen.findByText('Copy run id')).toBeInTheDocument()
+  })
+
+  it('hides on Escape', async () => {
+    const user = userEvent.setup()
+    render(
+      <Tooltip content="Copy run id" delay={0}>
+        <Button>Copy</Button>
+      </Tooltip>,
+    )
+    await user.tab()
+    expect(await screen.findByText('Copy run id')).toBeInTheDocument()
+    await user.keyboard('{Escape}')
+    await waitFor(() => expect(screen.queryByText('Copy run id')).not.toBeInTheDocument())
+    expect(screen.getByRole('button', { name: 'Copy' })).toHaveFocus()
   })
 
   it('renders shortcut keys as <kbd>', async () => {

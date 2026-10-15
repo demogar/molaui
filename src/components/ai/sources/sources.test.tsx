@@ -63,6 +63,24 @@ describe('Citation', () => {
   })
 })
 
+describe('Citation keyboard', () => {
+  it('follows the focused marker to its source card with Enter', async () => {
+    const user = userEvent.setup()
+    render(
+      <>
+        <Citation n={2} source={SOURCES[1]} />
+        <SourceList sources={SOURCES} />
+      </>,
+    )
+    await user.tab()
+    const marker = screen.getByRole('link', { name: 'Source 2: Segment breakdown' })
+    expect(marker).toHaveFocus()
+    await user.keyboard('{Enter}')
+    // jsdom does not scroll, but following an in-page link updates the hash.
+    expect(window.location.hash).toBe('#source-2')
+  })
+})
+
 describe('citationRenderer', () => {
   it('gives marker n the card for source n, matching the list', async () => {
     const user = userEvent.setup()

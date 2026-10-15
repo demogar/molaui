@@ -151,3 +151,26 @@ describe('useCommandShortcut', () => {
     error.mockRestore()
   })
 })
+
+describe('CommandPalette keyboard', () => {
+  it('moves the highlight up with ArrowUp, wrapping from the first command to the last', async () => {
+    const user = userEvent.setup()
+    render(<Harness onSelect={() => {}} />)
+    const input = await screen.findByRole('combobox')
+    await waitFor(() => expect(input).toHaveFocus())
+    await user.keyboard('{ArrowUp}')
+    expect(input.getAttribute('aria-activedescendant')).toBe(screen.getByRole('option', { name: 'Settings' }).id)
+    await user.keyboard('{ArrowUp}')
+    // Purge index is disabled, so ArrowUp from Settings lands on Toggle theme.
+    expect(input.getAttribute('aria-activedescendant')).toBe(screen.getByRole('option', { name: 'Toggle theme' }).id)
+  })
+
+  it('closes with Escape', async () => {
+    const user = userEvent.setup()
+    render(<Harness onSelect={() => {}} />)
+    const input = await screen.findByRole('combobox')
+    await waitFor(() => expect(input).toHaveFocus())
+    await user.keyboard('{Escape}')
+    await waitFor(() => expect(screen.queryByRole('dialog', { name: 'Command palette' })).not.toBeInTheDocument())
+  })
+})

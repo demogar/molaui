@@ -41,6 +41,20 @@ describe('Tabs', () => {
     expect(screen.getByRole('tabpanel')).toHaveTextContent('Panel B')
   })
 
+  it('jumps to the first and last tab with Home and End, and selects with Space', async () => {
+    const user = userEvent.setup()
+    render(<Example />)
+    await user.tab()
+    await user.keyboard('{End}')
+    const cost = screen.getByRole('tab', { name: 'Cost' })
+    expect(cost).toHaveFocus()
+    await user.keyboard(' ')
+    expect(cost).toHaveAttribute('aria-selected', 'true')
+    expect(screen.getByRole('tabpanel')).toHaveTextContent('Panel C')
+    await user.keyboard('{Home}')
+    expect(screen.getByRole('tab', { name: 'Trace' })).toHaveFocus()
+  })
+
   it('moves toward the reading direction right-to-left', async () => {
     render(
       <DirectionProvider direction="rtl">

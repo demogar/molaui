@@ -4234,7 +4234,7 @@ Content:
 - Name attachments by file name, with type and size as the detail: “CSV · 4.1 MB”.
 
 Keyboard:
-- Tab: Moves to the field, then to the toolbar, Send or Stop, and each attachment’s remove button.
+- Tab: Moves to each attachment’s remove button, then to the field, the toolbar, and Send or Stop.
 - Enter: Sends the prompt; with `submitOn="mod-enter"` it adds a new line instead.
 - Shift+Enter: Adds a new line when Enter sends.
 - Control+Enter or Meta+Enter: Sends the prompt when `submitOn` is `mod-enter`.
@@ -4727,7 +4727,7 @@ Content:
 - Keep the approval reason to a sentence or two: what changes, for whom, and whether it can be undone.
 
 Keyboard:
-- Tab: Moves to the call’s header, then to Approve, Deny, Retry call and the payload’s buttons when open.
+- Tab: Moves to the call’s header, then to Approve, Deny, Retry call and the payload’s buttons when open. A call that waits for approval or has failed is held open, so its header is not a stop.
 - Enter or Space: Opens or closes the call from its header, or activates the focused button.
 - ArrowUp or ArrowDown or ArrowLeft or ArrowRight: Scrolls a focused arguments or result block.
 

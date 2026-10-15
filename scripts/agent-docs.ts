@@ -226,7 +226,7 @@ export function componentTwin(page: ComponentPage, site: string) {
         list([
           `Automated, jsdom: each of its ${evidence.stories} ${evidence.stories === 1 ? 'story is' : 'stories is'} rendered and checked with axe on every pull request.`,
           'Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.',
-          `Keyboard in unit tests: ${evidence.keyboardInUnitTests ? 'yes' : a.keyboard?.length ? 'not yet' : 'not applicable'}.`,
+          `Keyboard in unit tests: ${evidence.keyboardInUnitTests ? 'yes, every key in the table is pressed' : a.keyboard?.length ? 'not yet' : 'not applicable'}.`,
           'Screen readers: not yet tested by hand.',
         ]),
         '',

@@ -27,14 +27,14 @@ describe('Drawer', () => {
   // stories open their drawer by default, so a trigger focused behind the open
   // modal toggles it shut on either key. These keep both keys covered anyway,
   // and wait past the keystroke so an open-then-dismiss would show.
-  it.each([
-    ['Enter', '{Enter}'],
-    ['Space', ' '],
-  ])('opens from its trigger with %s and stays open', async (_name, key) => {
+  // The keys are written out, not passed in, so the keyboard-table gate
+  // (src/docs/usage/keyboard-coverage.ts) can see that both are pressed.
+  it.each(['Enter', 'Space'])('opens from its trigger with %s and stays open', async (key) => {
     render(<Example />)
     const trigger = screen.getByRole('button', { name: 'Open details' })
     trigger.focus()
-    await userEvent.keyboard(key)
+    if (key === 'Enter') await userEvent.keyboard('{Enter}')
+    else await userEvent.keyboard(' ')
     const drawer = await screen.findByRole('dialog', { name: 'Run details' })
     await new Promise((resolve) => setTimeout(resolve, 100))
     expect(drawer).toBeInTheDocument()

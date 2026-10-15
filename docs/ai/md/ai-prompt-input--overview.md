@@ -104,7 +104,7 @@ Types: `AttachmentChipProps`, `PromptInputProps`
 
 | Key | What happens |
 | --- | --- |
-| Tab | Moves to the field, then to the toolbar, Send or Stop, and each attachment’s remove button. |
+| Tab | Moves to each attachment’s remove button, then to the field, the toolbar, and Send or Stop. |
 | Enter | Sends the prompt; with `submitOn="mod-enter"` it adds a new line instead. |
 | Shift+Enter | Adds a new line when Enter sends. |
 | Control+Enter or Meta+Enter | Sends the prompt when `submitOn` is `mod-enter`. |
@@ -126,7 +126,7 @@ Types: `AttachmentChipProps`, `PromptInputProps`
 
 - Automated, jsdom: each of its 5 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
-- Keyboard in unit tests: yes.
+- Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.
 
 ## Related

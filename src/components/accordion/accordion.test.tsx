@@ -35,6 +35,30 @@ describe('Accordion', () => {
     await userEvent.keyboard('{Enter}')
     expect(screen.getByRole('button', { name: 'Limits' })).toHaveAttribute('aria-expanded', 'true')
   })
+
+  it('toggles the focused section with Space, and Tab moves to the next trigger', async () => {
+    render(
+      <Accordion>
+        <AccordionItem value="a">
+          <AccordionTrigger>Limits</AccordionTrigger>
+          <AccordionPanel>50 steps</AccordionPanel>
+        </AccordionItem>
+        <AccordionItem value="b">
+          <AccordionTrigger>Tools</AccordionTrigger>
+          <AccordionPanel>Search</AccordionPanel>
+        </AccordionItem>
+      </Accordion>,
+    )
+    const limits = screen.getByRole('button', { name: 'Limits' })
+    await userEvent.tab()
+    expect(limits).toHaveFocus()
+    await userEvent.keyboard(' ')
+    expect(limits).toHaveAttribute('aria-expanded', 'true')
+    await userEvent.keyboard(' ')
+    expect(limits).toHaveAttribute('aria-expanded', 'false')
+    await userEvent.tab()
+    expect(screen.getByRole('button', { name: 'Tools' })).toHaveFocus()
+  })
 })
 
 describe('Collapsible', () => {

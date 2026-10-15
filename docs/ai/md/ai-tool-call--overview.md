@@ -105,7 +105,7 @@ Types: `ToolCallApproval`, `ToolCallGroupProps`, `ToolCallProps`
 
 | Key | What happens |
 | --- | --- |
-| Tab | Moves to the call’s header, then to Approve, Deny, Retry call and the payload’s buttons when open. |
+| Tab | Moves to the call’s header, then to Approve, Deny, Retry call and the payload’s buttons when open. A call that waits for approval or has failed is held open, so its header is not a stop. |
 | Enter or Space | Opens or closes the call from its header, or activates the focused button. |
 | ArrowUp or ArrowDown or ArrowLeft or ArrowRight | Scrolls a focused arguments or result block. |
 
@@ -125,7 +125,7 @@ Types: `ToolCallApproval`, `ToolCallGroupProps`, `ToolCallProps`
 
 - Automated, jsdom: each of its 7 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
-- Keyboard in unit tests: not yet.
+- Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.
 
 ## Related

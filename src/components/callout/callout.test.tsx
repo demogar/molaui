@@ -60,3 +60,17 @@ describe('Callout flat', () => {
     expect(screen.getByRole('region')).toHaveAttribute('data-variant', 'seam')
   })
 })
+
+describe('Callout keyboard', () => {
+  it('reaches the dismiss button with Tab and dismisses with Enter or Space', async () => {
+    const user = userEvent.setup()
+    const onDismiss = vi.fn()
+    render(<Callout title="Budget at 86%" onDismiss={onDismiss} />)
+    await user.tab()
+    expect(screen.getByRole('button', { name: 'Dismiss' })).toHaveFocus()
+    await user.keyboard('{Enter}')
+    expect(onDismiss).toHaveBeenCalledTimes(1)
+    await user.keyboard(' ')
+    expect(onDismiss).toHaveBeenCalledTimes(2)
+  })
+})

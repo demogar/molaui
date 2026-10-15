@@ -756,7 +756,9 @@ const CLAIMS: [string, string[]][] = [
   [
     'src/docs/known-gaps.mdx',
     [
-      `**${testing.noKeyboardTest} of the ${testing.interactive} interactive component pages**`,
+      // Once every documented key is pressed (keyboard-coverage.test.ts holds
+      // it there), the gap is closed and its paragraph comes off the page.
+      ...(testing.noKeyboardTest ? [`**${testing.noKeyboardTest} of the ${testing.interactive} interactive component pages**`] : []),
       testing.screenReaders === 0 ? `None of the ${counts.pages} component pages` : `${testing.screenReaders} of the ${counts.pages} component pages`,
     ],
   ],

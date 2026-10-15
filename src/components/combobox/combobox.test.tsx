@@ -1,5 +1,5 @@
 import { DirectionProvider } from '@base-ui/react/direction-provider'
-import { render, screen, within } from '@/test/render'
+import { render, screen, waitFor, within } from '@/test/render'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
@@ -197,5 +197,27 @@ describe('Autocomplete', () => {
       </Field>,
     )
     expect(screen.getByRole('combobox', { name: 'Tag' })).toHaveAttribute('aria-invalid', 'true')
+  })
+})
+
+describe('Combobox keyboard', () => {
+  it('takes focus with Tab, moves the highlight with the arrows, and closes with Escape', async () => {
+    const user = userEvent.setup()
+    render(<Combobox label="Reviewer" items={reviewers} />)
+    await user.tab()
+    const input = screen.getByRole('combobox', { name: 'Reviewer' })
+    expect(input).toHaveFocus()
+    await user.keyboard('{ArrowDown}')
+    await screen.findByRole('listbox')
+    expect(input).toHaveAttribute('aria-expanded', 'true')
+    await user.keyboard('{ArrowDown}{ArrowDown}')
+    const highlighted = () => screen.getAllByRole('option').find((o) => o.hasAttribute('data-highlighted'))?.textContent
+    const down = highlighted()
+    await user.keyboard('{ArrowUp}')
+    expect(highlighted()).not.toBe(down)
+    expect(input).toHaveFocus()
+    await user.keyboard('{Escape}')
+    await waitFor(() => expect(input).toHaveAttribute('aria-expanded', 'false'))
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
   })
 })

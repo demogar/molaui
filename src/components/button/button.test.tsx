@@ -32,6 +32,34 @@ describe('Button', () => {
     expect(button).toHaveFocus()
   })
 
+  it('activates with Enter and Space, but not while disabled or loading', async () => {
+    const onClick = vi.fn()
+    const { rerender } = render(<Button onClick={onClick}>Save</Button>)
+    await userEvent.tab()
+    expect(screen.getByRole('button', { name: 'Save' })).toHaveFocus()
+    await userEvent.keyboard('{Enter}')
+    await userEvent.keyboard(' ')
+    expect(onClick).toHaveBeenCalledTimes(2)
+
+    rerender(
+      <Button loading onClick={onClick}>
+        Save
+      </Button>,
+    )
+    await userEvent.keyboard('{Enter}')
+    await userEvent.keyboard(' ')
+    expect(onClick).toHaveBeenCalledTimes(2)
+
+    rerender(
+      <Button disabled onClick={onClick}>
+        Save
+      </Button>,
+    )
+    await userEvent.keyboard('{Enter}')
+    await userEvent.keyboard(' ')
+    expect(onClick).toHaveBeenCalledTimes(2)
+  })
+
   it('keeps the label when loading, so the width does not jump', () => {
     render(<Button loading>Deploy</Button>)
     expect(screen.getByRole('button')).toHaveTextContent('Deploy')

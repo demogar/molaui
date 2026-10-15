@@ -61,3 +61,17 @@ describe('Checkbox inside Field', () => {
     expect(screen.getByRole('checkbox', { name: 'Policy' })).toHaveAccessibleDescription('Up to three times.')
   })
 })
+
+describe('Checkbox keyboard', () => {
+  it('takes focus with Tab, toggles with Space and not with Enter', async () => {
+    const user = userEvent.setup()
+    render(<Checkbox label="Stream" />)
+    await user.tab()
+    const box = screen.getByRole('checkbox', { name: 'Stream' })
+    expect(box).toHaveFocus()
+    await user.keyboard('{Enter}')
+    expect(box).not.toBeChecked()
+    await user.keyboard(' ')
+    expect(box).toBeChecked()
+  })
+})
