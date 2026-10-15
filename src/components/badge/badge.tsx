@@ -205,12 +205,11 @@ export const recommendationVariants = cva('inline-flex items-center rotulo px-2.
 
 export type RecommendationLevel = NonNullable<Variants<typeof recommendationVariants>['level']>
 
-/**
- * The English label of each level. Kept as an export for code that read it;
- * the badge itself reads `messages.recommendationBadge`, so a translation
- * reaches it.
- */
-export const RECOMMENDATION_LABELS: Record<RecommendationLevel, string> = recommendationBadgeMessages
+// The English label of each level, kept as an export for code that read it;
+// the badge itself reads `messages.recommendationBadge`, so a translation
+// reaches it. A line comment and a copy, for the reason RUN_STATUS_LABEL
+// gives: Storybook's docgen writes into a documented exported object.
+export const RECOMMENDATION_LABELS: Record<RecommendationLevel, string> = { ...recommendationBadgeMessages }
 
 export interface RecommendationBadgeProps
   extends React.ComponentProps<'span'>,

@@ -84,8 +84,6 @@ Glyph + word + colour, always all three. State is never carried by colour alone:
 
 ### `RUN_STATUS_LABEL` (constant)
 
-The English word for each status. Kept as an export for code that read it before the words became translatable; the components read `runStatus.statuses` through `MessagesProvider` instead.
-
 ### `isActiveStatus` (function)
 
 Work is still open: the clock is ticking and the operator can cancel.

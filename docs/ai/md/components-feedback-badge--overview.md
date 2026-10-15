@@ -90,8 +90,6 @@ A square, not a circle. It is a scrap of cut cloth, and a round dot is the one s
 
 ### `RECOMMENDATION_LABELS` (constant)
 
-The English label of each level. Kept as an export for code that read it; the badge itself reads `messages.recommendationBadge`, so a translation reaches it.
-
 ### `badgeVariants` (function)
 
 A status mark. Small, flat, cut — a scrap of the layer that says what state something is in.

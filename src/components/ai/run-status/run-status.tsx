@@ -24,12 +24,13 @@ export type RunStatusValue =
   | 'cancelled'
   | 'timed_out'
 
-/**
- * The English word for each status. Kept as an export for code that read it
- * before the words became translatable; the components read
- * `runStatus.statuses` through `MessagesProvider` instead.
- */
-export const RUN_STATUS_LABEL: Record<RunStatusValue, string> = runStatusMessages.statuses
+// The English word for each status, kept as an export for code that read it
+// before the words became translatable; the components read
+// `runStatus.statuses` through `MessagesProvider` instead. A line comment, not
+// JSDoc, and a copy: Storybook's docgen annotates a documented export as if it
+// were a component, and it wrote `displayName` and `__docgenInfo` into the
+// shared table, which the stories read as two more statuses.
+export const RUN_STATUS_LABEL: Record<RunStatusValue, string> = { ...runStatusMessages.statuses }
 
 /** Work is still open: the clock is ticking and the operator can cancel. */
 export function isActiveStatus(status: RunStatusValue): boolean {

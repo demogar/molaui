@@ -41,10 +41,14 @@ export const Standalone: Story = {
 /** A new tab is said, not only drawn: the arrow mirrors in a right-to-left page, and the hidden cue is read after the label. */
 export const External: Story = {
   render: () => (
-    <Text className="max-w-reading">
-      Cayuco follows the <Link href="https://www.w3.org/TR/WCAG22/" external>WCAG 2.2 guidelines</Link> for every
-      screen. <Link variant="standalone" href="https://www.w3.org/WAI/ARIA/apg/" external>Read the ARIA patterns</Link>
-    </Text>
+    <div className="flex flex-col items-start gap-3">
+      <Text className="max-w-reading">
+        Cayuco follows the <Link href="https://www.w3.org/TR/WCAG22/" external>WCAG 2.2 guidelines</Link> for every screen.
+      </Text>
+      <Link variant="standalone" href="https://www.w3.org/WAI/ARIA/apg/" external>
+        Read the ARIA patterns
+      </Link>
+    </div>
   ),
 }
 

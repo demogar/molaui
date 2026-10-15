@@ -22,7 +22,7 @@ and you can replace any of them without forking a component.
 
 ```tsx
 import { MessagesProvider, ToastProvider } from '@demogar/mola-ui'
-import es from './messages/es.json'
+import { es } from './messages/es'
 
 export function App({ children }) {
   return (
@@ -33,11 +33,14 @@ export function App({ children }) {
 }
 ```
 
-```json
-{
-  "dialog": { "close": "Cerrar" },
-  "pagination": { "previous": "Página anterior", "next": "Página siguiente", "page": "Página {page}" },
-  "dataTable": { "noun": { "one": "fila", "other": "filas" }, "selected": "{count} {noun} seleccionadas" }
+```ts
+// messages/es.ts. Plain data, so the same object can be a JSON file.
+import type { MessagesOverride, MolaMessages } from '@demogar/mola-ui'
+
+export const es: MessagesOverride<MolaMessages> = {
+  dialog: { close: 'Cerrar' },
+  pagination: { previous: 'Página anterior', next: 'Página siguiente', page: 'Página {page}' },
+  dataTable: { noun: { one: 'fila', other: 'filas' }, selected: '{count} {noun} seleccionadas' },
 }
 ```
 

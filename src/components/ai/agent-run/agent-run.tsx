@@ -9,7 +9,6 @@ import { type MessagesOverride, useMessages } from '../../../lib/messages'
 import { useControllable } from '../../../lib/use-controllable'
 import { Button, IconButton } from '../../button'
 import {
-  RUN_STATUS_LABEL,
   RunStatus,
   RunStatusGlyph,
   formatDuration,
@@ -21,6 +20,7 @@ import {
 import { RunError, type RunErrorProps } from '../run-error'
 import { FailureReportedContext } from '../run-error/failure-reported'
 import { TokenUsage, type TokenUsageProps } from '../token-usage'
+import { runStatusMessages } from '../run-status/messages'
 import { type AgentRunMessages, agentRunMessages } from './messages'
 
 export type AgentStepKind = 'reasoning' | 'tool' | 'message' | 'handoff' | 'approval'
@@ -266,6 +266,8 @@ export function AgentRun({
 }
 
 function StepRow({ step, kindLabel, last, nextStarted }: { step: AgentStep; kindLabel: string; last: boolean; nextStarted: boolean }) {
+  // The step's status word, from RunStatus's table: one vocabulary for runs and steps.
+  const [{ statuses }] = useMessages('runStatus', runStatusMessages)
   const active = isActiveStatus(step.status)
   const working = step.status === 'running' || step.status === 'streaming'
   const forcedOpen = step.status === 'waiting' || step.status === 'failed' || step.status === 'timed_out'
@@ -293,7 +295,7 @@ function StepRow({ step, kindLabel, last, nextStarted }: { step: AgentStep; kind
       </span>
       <span className="ms-auto flex shrink-0 flex-col items-end gap-0.5 pt-[1px]">
         <span className={cn('rotulo', active ? 'text-ink' : 'text-ink-muted')}>
-          {step.status === 'succeeded' ? <span className="sr-only">{RUN_STATUS_LABEL[step.status]}</span> : RUN_STATUS_LABEL[step.status]}
+          {step.status === 'succeeded' ? <span className="sr-only">{statuses[step.status]}</span> : statuses[step.status]}
         </span>
         {ms !== undefined ? <span className="font-ui text-xs tabular text-ink-2">{formatDuration(ms)}</span> : null}
       </span>
