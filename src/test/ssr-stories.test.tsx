@@ -5,6 +5,7 @@ import { renderToString } from 'react-dom/server'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { initialGlobals, withMolaContext } from '../../.storybook/mola-context'
+import { foundModules } from './found'
 
 /**
  * Every story, rendered on a server.
@@ -35,7 +36,7 @@ import { initialGlobals, withMolaContext } from '../../.storybook/mola-context'
 setProjectAnnotations({ decorators: [withMolaContext], initialGlobals })
 
 type StoryModule = Record<string, unknown>
-const modules = import.meta.glob<StoryModule>('../**/*.stories.tsx', { eager: true })
+const modules = foundModules(import.meta.glob<StoryModule>('../**/*.stories.tsx', { eager: true }), 40, 'stories files')
 
 let errors: string[] = []
 beforeEach(() => {
