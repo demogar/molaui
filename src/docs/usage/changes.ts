@@ -56,6 +56,11 @@ export const SECTION_TYPES: Record<string, ChangeType | 'breaking'> = {
   Features: 'feature',
   'Bug Fixes': 'fix',
   'Performance Improvements': 'performance',
+  // release-please-config.json renames these three sections; the default
+  // headings stay for entries written before the rename.
+  Performance: 'performance',
+  Refactoring: 'other',
+  CI: 'other',
   Documentation: 'docs',
   '⚠ BREAKING CHANGES': 'breaking',
   Reverts: 'other',
@@ -264,6 +269,8 @@ export const NON_COMPONENT_SCOPES: Record<string, string> = {
   'known-gaps': 'the Known gaps page',
   'whats-new': "the What's new pages",
   audit: 'the browser audit script',
+  package: 'the package boundary: package.json, exports, peers and engines',
+  styles: 'the shipped stylesheets as a whole, such as components.css',
 }
 
 /**
