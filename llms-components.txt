@@ -782,6 +782,8 @@ Types: `DataTableMessages`, `TableMessages`, `TableCellProps`, `TableCheckboxPro
 Used in: Confirmation, Empty states, Filtered table, List and detail
 
 Changes:
+- 0.7.0 (2026-10-15), feature: add virtual rows, column resize, row expansion, a frozen first column and rows on a phone [#161](https://github.com/demogar/molaui/issues/161)
+- 0.7.0 (2026-10-15), fix: stop the bulk bar clipping its actions' cut and focus ring [#131](https://github.com/demogar/molaui/issues/131)
 - 0.5.0 (2026-10-14), fix: centre the empty row on the visible frame, not the whole table [#39](https://github.com/demogar/molaui/issues/39)
 - 0.2.0 (2026-10-06), feature: add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features [#11](https://github.com/demogar/molaui/issues/11)
 
@@ -947,6 +949,9 @@ Types: `RecommendationBadgeMessages`, `BadgeProps`, `BadgeTone`, `Recommendation
 
 Used in: Agent hand-off, Confirmation, Empty states, Filtered table, List and detail
 
+Changes:
+- 0.7.0 (2026-10-15), fix: give every status tone its own shape and close the small accessibility defects [#133](https://github.com/demogar/molaui/issues/133)
+
 ### Banner
 
 https://demogar.github.io/molaui/?path=/docs/components-feedback-banner--overview
@@ -1023,6 +1028,9 @@ Anatomy:
 A condition of the whole application, said once across the top of it: maintenance tonight, the workspace is read-only, the connection dropped.
 
 Types: `BannerMessages`, `BannerProps`, `BannerTone`
+
+Changes:
+- 0.7.0 (2026-10-15), feature: add a banner, a notification centre, and a shortcuts dialog with usehotkeys [#156](https://github.com/demogar/molaui/issues/156)
 
 ### Callout
 
@@ -1270,6 +1278,9 @@ The list on its own, for a full notifications page or a panel the page places it
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="notification-list">`.
 
 Types: `NotificationsMessages`, `NotificationCentreProps`, `NotificationItem`, `NotificationListProps`, `NotificationTone`
+
+Changes:
+- 0.7.0 (2026-10-15), feature: add a banner, a notification centre, and a shortcuts dialog with usehotkeys [#156](https://github.com/demogar/molaui/issues/156)
 
 ### Placeholder
 
@@ -2071,6 +2082,9 @@ Height, padding and type per size. Every value is a density token, so the same `
 Types: `LabelMessages`, `SearchInputMessages`, `LabelProps`, `FieldControlProps`, `FieldProps`, `FieldControlSize`, `InputProps`, `TextareaProps`, `SearchInputProps`
 
 Used in: Agent hand-off, Empty states, Filtered table, Form validation, Settings page
+
+Changes:
+- 0.7.0 (2026-10-15), fix: keep keyboard shortcuts left to right in a right-to-left page [#166](https://github.com/demogar/molaui/issues/166)
 
 ### File upload
 
@@ -3091,6 +3105,9 @@ Types: `AppShellMessages`, `AppShellProps`, `SidebarContextValue`, `SidebarToggl
 
 Used in: Settings page
 
+Changes:
+- 0.7.0 (2026-10-15), feature: add a banner, a notification centre, and a shortcuts dialog with usehotkeys [#156](https://github.com/demogar/molaui/issues/156)
+
 ### Container
 
 https://demogar.github.io/molaui/?path=/docs/components-layout-container--overview
@@ -3160,6 +3177,9 @@ The page column. `page` is the editorial width the system was born at; `wide` is
 
 Types: `ContainerProps`, `ContainerWidth`, `SectionHeaderProps`, `SectionProps`
 
+Changes:
+- 0.7.0 (2026-10-15), fix: reflow at 320px and spacious density, with a scroll-edge cue and an audit gate [#129](https://github.com/demogar/molaui/issues/129)
+
 ### Divider
 
 https://demogar.github.io/molaui/?path=/docs/components-layout-divider--overview
@@ -3204,6 +3224,9 @@ The system's three dividers, in rising order of weight and rarity.
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="divider">`.
 
 Types: `DividerBand`, `DividerProps`
+
+Changes:
+- 0.7.0 (2026-10-15), fix: reflow at 320px and spacious density, with a scroll-edge cue and an audit gate [#129](https://github.com/demogar/molaui/issues/129)
 
 ### Grid
 
@@ -3252,6 +3275,9 @@ You handle:
 The responsive column patterns that recur. `auto` is the one a tool reaches for most: as many columns of at least `minItem` as fit, which is what a grid of stat tiles or agent cards actually wants — it never needs a breakpoint.
 
 Types: `GridProps`
+
+Changes:
+- 0.7.0 (2026-10-15), fix: reflow at 320px and spacious density, with a scroll-edge cue and an audit gate [#129](https://github.com/demogar/molaui/issues/129)
 
 ### Page header
 
@@ -3368,6 +3394,9 @@ The cut surface: a region of one ground, bounded by a hard edge.
 
 Types: `PanelLayer`, `PanelProps`, `PanelTone`
 
+Changes:
+- 0.7.0 (2026-10-15), fix: reflow at 320px and spacious density, with a scroll-edge cue and an audit gate [#129](https://github.com/demogar/molaui/issues/129)
+
 ### Stack
 
 https://demogar.github.io/molaui/?path=/docs/components-layout-stack--overview
@@ -3440,6 +3469,9 @@ One thing on the left, one on the right: a panel header, a table toolbar.
 #### `stackVariants` (function)
 
 Types: `Gap`, `InlineProps`, `StackProps`
+
+Changes:
+- 0.7.0 (2026-10-15), fix: reflow at 320px and spacious density, with a scroll-edge cue and an audit gate [#129](https://github.com/demogar/molaui/issues/129)
 
 ### Toolbar
 
@@ -4228,6 +4260,10 @@ Opens the palette on ⌘K on a Mac and Ctrl-K everywhere else, from anywhere on 
 
 Types: `CommandPaletteMessages`, `CommandGroup`, `CommandItem`, `CommandPaletteProps`
 
+Changes:
+- 0.7.0 (2026-10-15), fix: name groups by index-based ids and announce result counts [#120](https://github.com/demogar/molaui/issues/120)
+- 0.7.0 (2026-10-15), fix: keep keyboard shortcuts left to right in a right-to-left page [#166](https://github.com/demogar/molaui/issues/166)
+
 ### Dialog
 
 https://demogar.github.io/molaui/?path=/docs/components-overlays-dialog--overview
@@ -4577,6 +4613,9 @@ Also accepts the props of `MenuSubmenuTriggerProps`, `NativeButtonProps`.
 
 Types: `MenuCheckboxItemProps`, `MenuContentProps`, `MenuItemProps`, `MenuRadioItemProps`, `MenuSubmenuTriggerProps`
 
+Changes:
+- 0.7.0 (2026-10-15), fix: keep keyboard shortcuts left to right in a right-to-left page [#166](https://github.com/demogar/molaui/issues/166)
+
 ### Popover
 
 https://demogar.github.io/molaui/?path=/docs/components-overlays-popover--overview
@@ -4756,6 +4795,10 @@ Every shortcut bound under the nearest provider, in the order they were bound. E
 
 Types: `HotkeysMessages`, `ShortcutsDialogMessages`, `HotkeyPlatform`, `ShortcutsDialogProps`, `HotkeysProviderProps`, `RegisteredHotkey`, `UseHotkeysOptions`
 
+Changes:
+- 0.7.0 (2026-10-15), feature: add a banner, a notification centre, and a shortcuts dialog with usehotkeys [#156](https://github.com/demogar/molaui/issues/156)
+- 0.7.0 (2026-10-15), fix: keep keyboard shortcuts left to right in a right-to-left page [#166](https://github.com/demogar/molaui/issues/166)
+
 ### Tooltip
 
 https://demogar.github.io/molaui/?path=/docs/components-overlays-tooltip--overview
@@ -4822,6 +4865,9 @@ A tooltip is the inverse panel at its smallest: ink ground, cloth type. It is th
 Renders no element of its own, so it takes no `className` or `ref`.
 
 Types: `TooltipMessages`, `TooltipProps`
+
+Changes:
+- 0.7.0 (2026-10-15), fix: keep keyboard shortcuts left to right in a right-to-left page [#166](https://github.com/demogar/molaui/issues/166)
 
 ## Typography
 
@@ -4956,6 +5002,9 @@ A key, as a cut shape: raised cloth, ink keyline, and a heavier foot where the k
 `className`, `ref`, `id` and the other DOM props go to `<kbd data-slot="kbd-chord">`.
 
 Types: `KbdChordProps`
+
+Changes:
+- 0.7.0 (2026-10-15), fix: keep keyboard shortcuts left to right in a right-to-left page [#166](https://github.com/demogar/molaui/issues/166)
 
 ### Lead
 
@@ -5531,6 +5580,9 @@ A model's answer written in Markdown, streamed and rendered in Mola's typography
 
 Types: `MarkdownMessages`, `MarkdownProps`
 
+Changes:
+- 0.7.0 (2026-10-15), feature: add a streaming markdown renderer that keeps citations, and a side-by-side diff [#158](https://github.com/demogar/molaui/issues/158)
+
 ### Message
 
 https://demogar.github.io/molaui/?path=/docs/ai-message--overview
@@ -6028,6 +6080,9 @@ Two versions of one text, side by side: the old in one pane, the new in the othe
 `className`, `ref`, `id` and the other DOM props go to `<section data-slot="side-by-side-diff">`.
 
 Types: `SideBySideDiffMessages`, `SideBySideDiffProps`
+
+Changes:
+- 0.7.0 (2026-10-15), feature: add a streaming markdown renderer that keeps citations, and a side-by-side diff [#158](https://github.com/demogar/molaui/issues/158)
 
 ### Sources
 

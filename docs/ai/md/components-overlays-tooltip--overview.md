@@ -112,3 +112,9 @@ Types: `TooltipMessages`, `TooltipProps`
 
 - [Shortcuts dialog](https://demogar.github.io/molaui/md/components-overlays-shortcuts-dialog--overview.md)
 - [Kbd](https://demogar.github.io/molaui/md/components-typography-kbd--overview.md)
+
+## Changes
+
+From CHANGELOG.md, newest first.
+
+- 0.7.0 (2026-10-15), fix: keep keyboard shortcuts left to right in a right-to-left page [#166](https://github.com/demogar/molaui/issues/166)

@@ -119,3 +119,10 @@ Types: `CommandPaletteMessages`, `CommandGroup`, `CommandItem`, `CommandPaletteP
 ### Pages that send readers here
 
 - [Prompt input](https://demogar.github.io/molaui/md/ai-prompt-input--overview.md)
+
+## Changes
+
+From CHANGELOG.md, newest first.
+
+- 0.7.0 (2026-10-15), fix: name groups by index-based ids and announce result counts [#120](https://github.com/demogar/molaui/issues/120)
+- 0.7.0 (2026-10-15), fix: keep keyboard shortcuts left to right in a right-to-left page [#166](https://github.com/demogar/molaui/issues/166)

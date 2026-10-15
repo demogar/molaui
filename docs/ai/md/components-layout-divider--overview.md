@@ -88,3 +88,9 @@ Nothing in it takes focus, so there is no keyboard table.
 ### Pages that send readers here
 
 - [Stack](https://demogar.github.io/molaui/md/components-layout-stack--overview.md)
+
+## Changes
+
+From CHANGELOG.md, newest first.
+
+- 0.7.0 (2026-10-15), fix: reflow at 320px and spacious density, with a scroll-edge cue and an audit gate [#129](https://github.com/demogar/molaui/issues/129)

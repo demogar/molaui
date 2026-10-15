@@ -112,3 +112,9 @@ Nothing in it takes focus, so there is no keyboard table.
 - [Toolbar](https://demogar.github.io/molaui/md/components-layout-toolbar--overview.md)
 - [Grid](https://demogar.github.io/molaui/md/components-layout-grid--overview.md)
 - [Divider](https://demogar.github.io/molaui/md/components-layout-divider--overview.md)
+
+## Changes
+
+From CHANGELOG.md, newest first.
+
+- 0.7.0 (2026-10-15), fix: reflow at 320px and spacious density, with a scroll-edge cue and an audit gate [#129](https://github.com/demogar/molaui/issues/129)

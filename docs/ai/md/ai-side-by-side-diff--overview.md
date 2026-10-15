@@ -124,3 +124,9 @@ Types: `SideBySideDiffMessages`, `SideBySideDiffProps`
 
 - [Change review](https://demogar.github.io/molaui/md/ai-change-review--overview.md)
 - [Code](https://demogar.github.io/molaui/md/components-data-display-code--overview.md)
+
+## Changes
+
+From CHANGELOG.md, newest first.
+
+- 0.7.0 (2026-10-15), feature: add a streaming markdown renderer that keeps citations, and a side-by-side diff [#158](https://github.com/demogar/molaui/issues/158)

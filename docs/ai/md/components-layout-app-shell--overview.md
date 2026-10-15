@@ -168,3 +168,9 @@ Types: `AppShellMessages`, `AppShellProps`, `SidebarContextValue`, `SidebarToggl
 ### Used in
 
 - [Settings page](https://demogar.github.io/molaui/md/patterns-settings-page--overview.md) (pattern)
+
+## Changes
+
+From CHANGELOG.md, newest first.
+
+- 0.7.0 (2026-10-15), feature: add a banner, a notification centre, and a shortcuts dialog with usehotkeys [#156](https://github.com/demogar/molaui/issues/156)

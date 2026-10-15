@@ -123,3 +123,9 @@ Types: `BannerMessages`, `BannerProps`, `BannerTone`
 - [Toast](https://demogar.github.io/molaui/md/components-feedback-toast--overview.md)
 - [Notification centre](https://demogar.github.io/molaui/md/components-feedback-notification-centre--overview.md)
 - [Dialog](https://demogar.github.io/molaui/md/components-overlays-dialog--overview.md)
+
+## Changes
+
+From CHANGELOG.md, newest first.
+
+- 0.7.0 (2026-10-15), feature: add a banner, a notification centre, and a shortcuts dialog with usehotkeys [#156](https://github.com/demogar/molaui/issues/156)
