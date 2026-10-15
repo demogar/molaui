@@ -187,12 +187,20 @@ export interface TableHeadProps extends React.ComponentProps<'th'> {
    * direction; only used with `sort`.
    */
   onSort?: () => void
+  /**
+   * A column resize handle, drawn after the label and outside the sort
+   * control, so the two are separate tab stops. DataTable passes its own with
+   * `resizableColumns`; give the header `relative` (or keep it sticky) so the
+   * handle can sit on its trailing edge.
+   */
+  resizer?: React.ReactNode
 }
 
 export function TableHead({
   numeric = false,
   sort,
   onSort,
+  resizer,
   className,
   children,
   ...props
@@ -240,6 +248,7 @@ export function TableHead({
       ) : (
         children
       )}
+      {resizer}
     </th>
   )
 }

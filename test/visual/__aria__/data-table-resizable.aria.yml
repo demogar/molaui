@@ -1,0 +1,107 @@
+- table "Agent runs":
+  - rowgroup:
+    - row "Run Agent Status Model Tokens Cost Duration Started":
+      - columnheader "Run":
+        - text: ""
+        - separator "Resize Run"
+      - columnheader "Agent":
+        - button "Agent"
+        - separator "Resize Agent"
+      - columnheader "Status":
+        - button "Status"
+        - separator "Resize Status"
+      - columnheader "Model":
+        - text: ""
+        - separator "Resize Model"
+      - columnheader "Tokens":
+        - button "Tokens"
+        - separator "Resize Tokens"
+      - columnheader "Cost":
+        - button "Cost"
+        - separator "Resize Cost"
+      - columnheader "Duration":
+        - button "Duration"
+        - separator "Resize Duration"
+      - columnheader "Started":
+        - button "Started"
+  - rowgroup:
+    - row /run_5a4ea1 Release-notes drafter queued cayuco-deep-3 — — — [\d,.]+[bkmBKM]+ ago/:
+      - cell "run_5a4ea1"
+      - cell "Release-notes drafter"
+      - cell "queued"
+      - cell "cayuco-deep-3"
+      - cell "—"
+      - cell "—"
+      - cell "—"
+      - cell /[\d,.]+[bkmBKM]+ ago/:
+        - time: /[\d,.]+[bkmBKM]+ ago/
+    - row /run_5a61c5 Abuse-report reviewer running cayuco-steady-3 \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ [\d,.]+[bkmBKM]+ ago/:
+      - cell "run_5a61c5"
+      - cell "Abuse-report reviewer"
+      - cell "running"
+      - cell "cayuco-steady-3"
+      - cell /\d+,\d+/
+      - cell /\$\d+\.\d+/
+      - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
+      - cell /[\d,.]+[bkmBKM]+ ago/:
+        - time: /[\d,.]+[bkmBKM]+ ago/
+    - row /run_5a8529 Invoice checker running cayuco-deep-3 \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ [\d,.]+[bkmBKM]+ ago/:
+      - cell "run_5a8529"
+      - cell "Invoice checker"
+      - cell "running"
+      - cell "cayuco-deep-3"
+      - cell /\d+,\d+/
+      - cell /\$\d+\.\d+/
+      - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
+      - cell /[\d,.]+[bkmBKM]+ ago/:
+        - time: /[\d,.]+[bkmBKM]+ ago/
+    - row /run_5aab72 Invoice checker running cayuco-deep-3 \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+      - cell "run_5aab72"
+      - cell "Invoice checker"
+      - cell "running"
+      - cell "cayuco-deep-3"
+      - cell /\d+,\d+/
+      - cell /\$\d+\.\d+/
+      - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
+      - cell /\d+[hmsp]+ ago/:
+        - time: /\d+[hmsp]+ ago/
+    - row /run_5ac380 Refund reviewer succeeded cayuco-deep-3 \d+,\d+ \$\d+\.\d+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+      - cell "run_5ac380"
+      - cell "Refund reviewer"
+      - cell "succeeded"
+      - cell "cayuco-deep-3"
+      - cell /\d+,\d+/
+      - cell /\$\d+\.\d+/
+      - cell /\d+[hmsp]+/
+      - cell /\d+[hmsp]+ ago/:
+        - time: /\d+[hmsp]+ ago/
+    - row /run_5ae91f Abuse-report reviewer cancelled cayuco-steady-3 \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+      - cell "run_5ae91f"
+      - cell "Abuse-report reviewer"
+      - cell "cancelled"
+      - cell "cayuco-steady-3"
+      - cell /\d+,\d+/
+      - cell /\$\d+\.\d+/
+      - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
+      - cell /\d+[hmsp]+ ago/:
+        - time: /\d+[hmsp]+ ago/
+    - row /run_5aff68 Docs answerer failed cayuco-deep-3 \d+,\d+ \$\d+\.\d+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+      - cell "run_5aff68"
+      - cell "Docs answerer"
+      - cell "failed"
+      - cell "cayuco-deep-3"
+      - cell /\d+,\d+/
+      - cell /\$\d+\.\d+/
+      - cell /\d+[hmsp]+/
+      - cell /\d+[hmsp]+ ago/:
+        - time: /\d+[hmsp]+ ago/
+    - row /run_5b26ac Release-notes drafter failed cayuco-steady-3 \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+      - cell "run_5b26ac"
+      - cell "Release-notes drafter"
+      - cell "failed"
+      - cell "cayuco-steady-3"
+      - cell /\d+,\d+/
+      - cell /\$\d+\.\d+/
+      - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
+      - cell /\d+[hmsp]+ ago/:
+        - time: /\d+[hmsp]+ ago/

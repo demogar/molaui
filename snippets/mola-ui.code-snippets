@@ -192,7 +192,7 @@
   "Table": {
     "scope": "typescriptreact,javascriptreact",
     "prefix": "mola-table",
-    "description": "Table primitives for rows of records, and DataTable for columns as data with sorting, selection, column visibility and pages. import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@demogar/mola-ui'",
+    "description": "Table primitives for rows of records, and DataTable for columns as data with sorting, selection, column visibility, pages, virtual rows, resizing, expansion and a frozen first column. import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@demogar/mola-ui'",
     "body": [
       "<Table framed aria-label=\"${1:Spend by model}\">",
       "  <TableCaption>${2:Spend over the last 7 days. Figures are rounded to the cent.}</TableCaption>",

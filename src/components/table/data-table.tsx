@@ -1,12 +1,13 @@
 'use client'
 
-import { Columns3, X } from 'lucide-react'
+import { Columns3, Plus, X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { useMergedRefs } from '../../lib/merge-props'
 import { useScrollEdge } from '../../lib/scroll-edge'
 import { useControllable } from '../../lib/use-controllable'
-import { Button } from '../button'
+import { Button, IconButton } from '../button'
 import type { EmptyStateProps } from '../empty-state'
 import { Menu, MenuCheckboxItem, MenuContent, MenuGroup, MenuGroupLabel, MenuTrigger } from '../menu'
 import { Pagination } from '../pagination'
@@ -22,6 +23,7 @@ import {
   TableRow,
   TableSkeletonRows,
 } from './table'
+import { useVirtualRows } from './use-virtual-rows'
 
 /**
  * The convenience layer over the primitives: columns as data, sorting,
@@ -36,8 +38,21 @@ import {
  * Every piece of state — sort, page, selection, hidden columns — is either
  * controlled (`sort` + `onSortChange`) or left to the table (`defaultSort`),
  * the same contract as a React input. The primitives remain the escape hatch
- * for anything this does not cover, including virtualization (see the
- * "Virtualized" story).
+ * for anything this does not cover, such as virtual rows of varying height
+ * (see the "Virtualized" story).
+ *
+ * The features for long, dense tables are each one prop, off by default,
+ * because each changes something a reader relies on and should be a choice
+ * per screen:
+ *
+ *   virtualize         only the rows in view are in the DOM (use-virtual-rows.ts
+ *                      says what stays a real table, and what does not)
+ *   resizableColumns   a focusable separator on each header's trailing edge,
+ *                      dragged or moved with the arrow keys
+ *   renderExpanded     a disclosure button per row and a detail row under it
+ *   stickyFirstColumn  the identifying column stays put while the rest scrolls
+ *   stackWhenNarrow    each row becomes a block of label and value pairs when
+ *                      the table's container is narrower than 36rem
  */
 
 export type SortValue = string | number | Date | null | undefined
@@ -59,6 +74,12 @@ export interface DataTableColumn<Row> {
   truncate?: boolean
   /** `false` keeps the column out of the column menu's reach — the identifying column, usually. */
   hideable?: boolean
+  /** With `resizableColumns`, the narrowest the column can be made, in pixels. Defaults to 64. */
+  minWidth?: number
+  /** With `resizableColumns`, the widest the column can be made, in pixels. Defaults to 800. */
+  maxWidth?: number
+  /** `false` gives the column no resize handle when the table has `resizableColumns`. */
+  resizable?: boolean
 }
 
 export interface DataTableSort {
@@ -190,7 +211,71 @@ export interface DataTableProps<Row> extends Omit<React.ComponentProps<'table'>,
   frameClassName?: string
   /** Classes for the outer element that holds the bar, the table and the pagination. */
   wrapperClassName?: string
+
+  /**
+   * Renders only the rows in view, plus a margin, between two spacer rows, and
+   * sets `aria-rowcount` and `aria-rowindex` so assistive tech still hears the
+   * full count. Give the frame a height with `frameClassName`. The rows that are
+   * not rendered cannot be found with the browser's find-in-page, reached in a
+   * screen reader's browse mode or printed, so pair a long virtual table with a
+   * filter. Not combined with `stackWhenNarrow`, whose rows vary in height.
+   */
+  virtualize?: boolean
+
+  /**
+   * Puts a resize handle on the trailing edge of each column header but the
+   * last, which takes the room that is left. Drag it, or focus it and use the
+   * arrow keys; in right-to-left the keys follow the edge.
+   */
+  resizableColumns?: boolean
+  /** Controlled column widths in pixels, by column key. Pair with `onColumnWidthsChange`. */
+  columnWidths?: Readonly<Record<string, number>>
+  /** Column widths in pixels at the start, by key, when the table owns them. */
+  defaultColumnWidths?: Readonly<Record<string, number>>
+  /**
+   * Called with every column's width after a resize — to remember the layout
+   * between visits. The first resize fixes each column at its rendered width.
+   */
+  onColumnWidthsChange?: (widths: Record<string, number>) => void
+
+  /**
+   * What a row shows when it is expanded. Setting it adds a disclosure button at
+   * the start of each row, and a detail row under it while open.
+   */
+  renderExpanded?: (row: Row) => React.ReactNode
+  /** Whether a row has anything to expand. Rows that return `false` get no button. */
+  canExpand?: (row: Row) => boolean
+  /** Controlled expanded rows, by id. Pair with `onExpandedChange`. */
+  expanded?: ReadonlySet<string>
+  /** Row ids expanded at the start when the table owns expansion. */
+  defaultExpanded?: Iterable<string>
+  /** Called with the new set of expanded row ids. */
+  onExpandedChange?: (expanded: Set<string>) => void
+  /** How a row's disclosure button is named, e.g. `(run) => \`Details of ${run.id}\``. */
+  expandLabel?: (row: Row) => string
+
+  /**
+   * Keeps the first visible column, and the checkbox and disclosure columns
+   * before it, in place while the table scrolls sideways, with an ink edge where
+   * the frozen part ends.
+   */
+  stickyFirstColumn?: boolean
+
+  /**
+   * Below a 36rem container, draws each row as a block of label and value pairs
+   * instead of a row that scrolls sideways — for action tables used on a phone.
+   * The header stays as a bar of the sort and select-all controls. The table
+   * keeps its table semantics.
+   */
+  stackWhenNarrow?: boolean
 }
+
+/** A column's default limits when resizing, in pixels. */
+const MIN_WIDTH = 64
+const MAX_WIDTH = 800
+/** One arrow press, and one with Shift. */
+const STEP = 16
+const STEP_LARGE = 64
 
 function compare(a: SortValue, b: SortValue): number {
   // Missing values sort last in both directions; that is handled by the caller
@@ -206,6 +291,75 @@ function isEmptyData(empty: unknown): empty is DataTableEmpty {
 }
 
 const fmt = (n: number) => n.toLocaleString('en-US')
+
+const NO_ROWS: ReadonlySet<string> = new Set()
+
+function columnName<Row>(column: DataTableColumn<Row>): string {
+  return column.label ?? (typeof column.header === 'string' ? column.header : column.key)
+}
+
+/**
+ * Right-to-left, read from the element itself: a table can sit in a
+ * right-to-left region of a left-to-right page. The `dir` attribute is the
+ * fallback for environments that compute no direction.
+ */
+function isRtl(el: HTMLElement): boolean {
+  return getComputedStyle(el).direction === 'rtl' || el.closest('[dir]')?.getAttribute('dir') === 'rtl'
+}
+
+/**
+ * The stacked layout (`stackWhenNarrow`) as container-query classes on the
+ * wrapper's `@container/data-table`. `@max-xl` is below 36rem: a phone, or a
+ * table in a narrow side panel. A container query rather than a media query,
+ * because what decides is the room the table has, not the screen. Written out
+ * in full rather than built from a prefix, because Tailwind finds classes by
+ * reading the source.
+ *
+ * Each row becomes a two-column grid: the checkbox and disclosure cells in
+ * the first column, and every data cell a line of its own in the second, its
+ * column's name at the start and its value at the end. The header becomes a
+ * bar holding only what can be pressed, the select-all box and the sort
+ * buttons; a header with nothing to press is kept for screen readers only,
+ * since every cell now shows its own label.
+ *
+ * The explicit roles (`table`, `row`, `cell`…) are there because changing a
+ * table's `display` has made some browsers drop its table semantics; a role
+ * keeps them whatever the CSS does.
+ */
+const STACK = {
+  table: '@max-xl/data-table:block @max-xl/data-table:w-full @max-xl/data-table:min-w-0',
+  head: '@max-xl/data-table:block',
+  headRow: '@max-xl/data-table:flex @max-xl/data-table:flex-wrap @max-xl/data-table:items-center @max-xl/data-table:cut-b',
+  // The bar's rule is the row's; a header cell's own ground would cover it.
+  // 8px above and below, so a sort button's focus ring is not clipped by the
+  // frame the bar sits at the top of.
+  headCell: '@max-xl/data-table:h-auto @max-xl/data-table:bg-transparent @max-xl/data-table:py-2 @max-xl/data-table:[--edge-b:0_0_transparent]',
+  body: '@max-xl/data-table:block',
+  row: '@max-xl/data-table:grid @max-xl/data-table:grid-cols-[auto_minmax(0,1fr)] @max-xl/data-table:grid-flow-row-dense @max-xl/data-table:py-1.5 @max-xl/data-table:rule-b-soft @max-xl/data-table:[&>td]:[--edge-b:0_0_transparent] @max-xl/data-table:data-selected:bg-selected @max-xl/data-table:data-selected:bar-start-ink',
+  lead: '@max-xl/data-table:col-start-1 @max-xl/data-table:h-auto @max-xl/data-table:py-1',
+  cell: '@max-xl/data-table:col-start-2 @max-xl/data-table:flex @max-xl/data-table:h-auto @max-xl/data-table:max-w-none @max-xl/data-table:items-center @max-xl/data-table:justify-between @max-xl/data-table:gap-4 @max-xl/data-table:py-1',
+  label: 'hidden shrink-0 rotulo text-start text-ink-2 @max-xl/data-table:block',
+  detail: '@max-xl/data-table:block',
+  unfreeze: '@max-xl/data-table:static @max-xl/data-table:[--edge-e:0_0_transparent]',
+  hidden: '@max-xl/data-table:hidden',
+}
+
+/**
+ * Where each frozen column sticks (`stickyFirstColumn`). The checkbox and
+ * disclosure columns are each 2.75rem (`w-11`), so the first data column's
+ * inset is the sum of the ones before it: 0, 2.75rem or 5.5rem. Logical
+ * insets, so in right-to-left they stick to the right, where that scroll
+ * starts.
+ */
+const FROZEN_INSET = ['start-0', 'start-11', 'start-22'] as const
+
+/**
+ * A detail row's content starts where the row's first data cell does, past
+ * the checkbox and disclosure columns, so it reads as belonging to the row
+ * above and not to the controls: 0.75rem of cell padding, plus 2.75rem per
+ * column before it.
+ */
+const DETAIL_INSET = ['ps-3', 'ps-14', 'ps-25'] as const
 
 export function DataTable<Row>({
   columns,
@@ -240,10 +394,28 @@ export function DataTable<Row>({
   framed = false,
   frameClassName,
   wrapperClassName,
+  virtualize = false,
+  resizableColumns = false,
+  columnWidths: controlledWidths,
+  defaultColumnWidths,
+  onColumnWidthsChange,
+  renderExpanded,
+  canExpand,
+  expanded: controlledExpanded,
+  defaultExpanded,
+  onExpandedChange,
+  expandLabel,
+  stickyFirstColumn = false,
+  stackWhenNarrow = false,
   className,
+  style,
+  ref,
   ...props
 }: DataTableProps<Row>) {
   const bulkEdge = useScrollEdge<HTMLDivElement>()
+  const tableRef = React.useRef<HTMLTableElement>(null)
+  const setTable = useMergedRefs(tableRef, ref)
+  const baseId = React.useId()
   const [sort, setSortState] = useControllable<DataTableSort | null>({
     value: controlledSort,
     defaultValue: () => defaultSort ?? null,
@@ -260,8 +432,21 @@ export function DataTable<Row>({
     defaultValue: () => new Set(defaultHiddenColumns ?? []),
     onChange: onHiddenColumnsChange as ((next: ReadonlySet<string>) => void) | undefined,
   })
+  const [widths, setWidths] = useControllable<Readonly<Record<string, number>>>({
+    value: controlledWidths,
+    defaultValue: () => ({ ...defaultColumnWidths }),
+    onChange: onColumnWidthsChange as ((next: Readonly<Record<string, number>>) => void) | undefined,
+  })
+  const [expandedRows, setExpanded] = useControllable<ReadonlySet<string>>({
+    value: controlledExpanded,
+    defaultValue: () => new Set(defaultExpanded ?? []),
+    onChange: onExpandedChange as ((next: ReadonlySet<string>) => void) | undefined,
+  })
 
   const visibleColumns = columns.filter((c) => !hidden.has(c.key))
+  const expandable = renderExpanded !== undefined
+  // Stacked rows vary in height, and the window's arithmetic needs one height.
+  const stack = stackWhenNarrow && !virtualize
 
   const sorted = React.useMemo(() => {
     if (manual || !sort) return rows
@@ -287,7 +472,20 @@ export function DataTable<Row>({
   // A filter can shrink the data under the current page; show the last page
   // that exists rather than an empty table that says "page 9 of 3".
   const currentPage = Math.min(Math.max(page, 1), pageCount)
-  const pageRows = paginated && !manual ? sorted.slice((currentPage - 1) * pageSize, currentPage * pageSize) : sorted
+  // Memoised, with the ids, so a virtual table's scroll re-render does not
+  // slice and map ten thousand rows again.
+  const pageRows = React.useMemo(
+    () => (paginated && !manual ? sorted.slice((currentPage - 1) * pageSize, currentPage * pageSize) : sorted),
+    [sorted, paginated, manual, currentPage, pageSize],
+  )
+  const ids = React.useMemo(() => pageRows.map(getRowId), [pageRows, getRowId])
+
+  const virtual = useVirtualRows({
+    enabled: virtualize && !loading && pageRows.length > 0,
+    ids,
+    expanded: expandable ? expandedRows : NO_ROWS,
+    table: tableRef,
+  })
 
   const toggleSort = (key: string) => {
     // ascending → descending → off. A third state matters: it is the only way
@@ -304,7 +502,6 @@ export function DataTable<Row>({
     if (paginated && currentPage !== 1) setPage(1)
   }
 
-  const ids = pageRows.map(getRowId)
   const selectedOnPage = ids.filter((id) => selection.has(id)).length
   const allSelected = ids.length > 0 && selectedOnPage === ids.length
 
@@ -331,7 +528,163 @@ export function DataTable<Row>({
     setHidden(next)
   }
 
-  const columnCount = visibleColumns.length + (selectable ? 1 : 0)
+  const toggleExpanded = (id: string) => {
+    const next = new Set(expandedRows)
+    if (next.has(id)) next.delete(id)
+    else next.add(id)
+    setExpanded(next)
+  }
+
+  // ── column widths ──
+  // The header cells' rendered widths, kept for `aria-valuenow` before the
+  // first resize; the first resize itself measures again, in its handler.
+  const headRefs = React.useRef(new Map<string, HTMLTableCellElement>())
+  const [measured, setMeasured] = React.useState<Readonly<Record<string, number>>>({})
+  const visibleKeys = visibleColumns.map((c) => c.key).join('\u0000')
+  React.useLayoutEffect(() => {
+    if (!resizableColumns) return
+    const read = () => {
+      const next: Record<string, number> = {}
+      headRefs.current.forEach((th, key) => {
+        next[key] = Math.round(th.getBoundingClientRect().width)
+      })
+      setMeasured((prev) => {
+        const keys = Object.keys(next)
+        return keys.length === Object.keys(prev).length && keys.every((k) => prev[k] === next[k]) ? prev : next
+      })
+    }
+    read()
+    if (typeof ResizeObserver === 'undefined') return
+    const observer = new ResizeObserver(read)
+    headRefs.current.forEach((th) => observer.observe(th))
+    return () => observer.disconnect()
+  }, [resizableColumns, visibleKeys])
+
+  const lastColumn = visibleColumns.at(-1)
+  const limits = (column: DataTableColumn<Row>) => ({
+    min: column.minWidth ?? MIN_WIDTH,
+    max: column.maxWidth ?? MAX_WIDTH,
+  })
+  const shownWidth = (column: DataTableColumn<Row>) => {
+    const { min, max } = limits(column)
+    return Math.min(max, Math.max(min, widths[column.key] ?? measured[column.key] ?? 0))
+  }
+  // For handlers only: reads the header cell as it is drawn now.
+  const liveWidth = (key: string) =>
+    widths[key] ?? Math.round(headRefs.current.get(key)?.getBoundingClientRect().width ?? measured[key] ?? 0)
+
+  const resizeTo = (column: DataTableColumn<Row>, next: number) => {
+    const { min, max } = limits(column)
+    const width = Math.round(Math.min(max, Math.max(min, next)))
+    // The first resize fixes every column but the last at the width it is
+    // drawn at, and the table switches to a fixed layout. Without the
+    // snapshot, the switch let the browser share the width out again and
+    // every other column jumped the moment one was touched. The last column
+    // keeps no width: it takes what is left, so dragging one edge moves
+    // that edge and nothing else until the table runs out of room, and then
+    // the table grows and the frame scrolls.
+    const nextWidths: Record<string, number> = { ...widths }
+    for (const c of visibleColumns.slice(0, -1)) nextWidths[c.key] ??= liveWidth(c.key)
+    nextWidths[column.key] = width
+    const unchanged = Object.keys(nextWidths).every((k) => widths[k] === nextWidths[k])
+    if (!unchanged) setWidths(nextWidths)
+  }
+
+  const onResizeKey = (event: React.KeyboardEvent<HTMLElement>, column: DataTableColumn<Row>) => {
+    const step = event.shiftKey ? STEP_LARGE : STEP
+    // The handle sits on the column's trailing edge, so the arrow that
+    // points away from the column widens it: right in left-to-right, left in
+    // right-to-left. A table that kept "right is wider" in Arabic would move
+    // the edge against the arrow.
+    const outward = isRtl(event.currentTarget) ? -1 : 1
+    const now = liveWidth(column.key)
+    let next: number
+    if (event.key === 'ArrowRight') next = now + step * outward
+    else if (event.key === 'ArrowLeft') next = now - step * outward
+    else if (event.key === 'Home') next = limits(column).min
+    else if (event.key === 'End') next = limits(column).max
+    else return
+    // The focused frame would otherwise scroll on the same arrow.
+    event.preventDefault()
+    resizeTo(column, next)
+  }
+
+  const drag = React.useRef<{ key: string; x: number; width: number; mirrored: boolean } | null>(null)
+  const startDrag = (event: React.PointerEvent<HTMLElement>, column: DataTableColumn<Row>) => {
+    if (event.button !== 0) return
+    event.preventDefault()
+    // Captured, so the drag keeps going when the pointer outruns the handle.
+    event.currentTarget.setPointerCapture?.(event.pointerId)
+    drag.current = { key: column.key, x: event.clientX, width: liveWidth(column.key), mirrored: isRtl(event.currentTarget) }
+  }
+  const moveDrag = (event: React.PointerEvent<HTMLElement>, column: DataTableColumn<Row>) => {
+    const d = drag.current
+    if (!d || d.key !== column.key) return
+    resizeTo(column, d.width + (event.clientX - d.x) * (d.mirrored ? -1 : 1))
+  }
+  const endDrag = () => {
+    drag.current = null
+  }
+
+  const fixedLayout = resizableColumns && Object.keys(widths).length > 0
+  const leadCount = (selectable ? 1 : 0) + (expandable ? 1 : 0)
+  // At least the fixed columns plus the last one's minimum: wider than the
+  // frame, the table grows and the frame scrolls; narrower, the last
+  // column takes the rest.
+  const fixedSum = visibleColumns.slice(0, -1).reduce((sum, c) => sum + (widths[c.key] ?? 0), 0)
+  const tableStyle = fixedLayout
+    ? ({
+        ...style,
+        '--data-table-w': `max(100%, calc(${fixedSum + (lastColumn ? limits(lastColumn).min : 0)}px + ${leadCount * 2.75}rem))`,
+      } as React.CSSProperties)
+    : style
+
+  const colWidth = (column: DataTableColumn<Row>) => {
+    if (!fixedLayout) return column.width
+    if (column === lastColumn) return undefined
+    const px = widths[column.key]
+    return px !== undefined ? `${px}px` : column.width
+  }
+
+  const resizer = (column: DataTableColumn<Row>) => {
+    if (!resizableColumns || column === lastColumn || column.resizable === false) return undefined
+    const { min, max } = limits(column)
+    return (
+      <div
+        role="separator"
+        aria-orientation="vertical"
+        aria-label={`Resize ${columnName(column)}`}
+        aria-valuenow={shownWidth(column)}
+        aria-valuemin={min}
+        aria-valuemax={max}
+        tabIndex={0}
+        data-part="resizer"
+        onKeyDown={(event) => onResizeKey(event, column)}
+        onPointerDown={(event) => startDrag(event, column)}
+        onPointerMove={(event) => moveDrag(event, column)}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        className={cn(
+          'group/resize absolute inset-y-0 end-0 z-(--z-lift) w-3 cursor-col-resize touch-none select-none outline-none',
+          // Inset: the header row is the top of a scrolling frame, which
+          // clipped an outer ring to its lower half.
+          'focus-visible:focus-ring-inset',
+          stack && STACK.hidden,
+        )}
+      >
+        {/* The grip: ink-muted at rest, which clears 3:1 against the header
+            ground, so the handle can be found without hovering; ink while
+            pointed at or focused. A drag captures the pointer, so the
+            handle stays hovered for the length of it. */}
+        <span
+          aria-hidden
+          className="absolute inset-y-2 end-0 w-0.5 bg-ink-muted transition-colors group-hover/resize:bg-ink group-focus-visible/resize:bg-ink"
+        />
+      </div>
+    )
+  }
+
+  const columnCount = visibleColumns.length + leadCount
   const selectedCount = selection.size
   const nounFor = (n: number) => (n === 1 ? noun.one : noun.other)
 
@@ -339,27 +692,197 @@ export function DataTable<Row>({
     ? empty
     : { title: 'Nothing here yet', description: empty as React.ReactNode }
 
+  // ── frozen columns ──
+  const frozenGround = framed ? 'bg-cloth-pale' : 'bg-cloth'
+  // Three things overlap at the frozen corner of a sticky header: the frozen
+  // header cells, the header cells scrolling sideways under them, and the
+  // frozen body cells scrolling up under them. Same-level cells paint in DOM
+  // order, so the header cells that come later would cover the corner; the
+  // corner keeps `--z-sticky` and the rest of a sticky header drops to
+  // `--z-lift`, with the frozen body cells. Nothing else overlaps: the frozen
+  // body cells only ever pass under the corner. (One step above the scale,
+  // `calc(var(--z-sticky) + 1)`, did the same with a value off it.)
+  const frozenHead = cn('sticky', stickyHeader ? 'z-(--z-sticky)' : 'z-(--z-lift)', stack && STACK.unfreeze)
+  const frozenBody = cn('sticky z-(--z-lift)', frozenGround, stack && STACK.unfreeze)
+  // The insets assume the checkbox and disclosure columns are 2.75rem. A
+  // table squeezed to its content shrank them to the checkbox's own width,
+  // and the columns scrolling past showed through the gap before the frozen
+  // id, so they are held at that width, not only asked for it.
+  const frozenLead = 'min-w-11'
+  const selectInset = FROZEN_INSET[0]
+  const expandInset = FROZEN_INSET[selectable ? 1 : 0]
+  const firstInset = FROZEN_INSET[leadCount]
+  const firstKey = visibleColumns[0]?.key
+  const role = (r: string) => (stack ? r : undefined)
+
+  const renderRow = (row: Row, index: number) => {
+    const id = ids[index] as string
+    const isSelected = selection.has(id)
+    const canOpen = expandable && (canExpand ? canExpand(row) : true)
+    const isOpen = canOpen && expandedRows.has(id)
+    // An IDREF list is whitespace-separated, so an id with a space in it
+    // would point `aria-controls` at two elements that do not exist.
+    const detailId = `${baseId}-detail-${id.replace(/\s+/g, '_')}`
+    const rowIndex = virtual?.rowIndex(index)
+    const out = [
+      <TableRow
+        key={id}
+        role={role('row')}
+        aria-rowindex={rowIndex}
+        data-row-id={virtual ? id : undefined}
+        data-expanded={isOpen || undefined}
+        selected={selectable && isSelected}
+        className={cn(stack && STACK.row)}
+      >
+        {selectable ? (
+          <TableCell role={role('cell')} className={cn('w-11 pe-0', stickyFirstColumn && [frozenBody, frozenLead, selectInset], stack && STACK.lead)}>
+            <TableCheckbox
+              aria-label={rowLabel ? rowLabel(row) : `Select row ${id}`}
+              checked={isSelected}
+              onChange={() => toggleRow(id)}
+            />
+          </TableCell>
+        ) : null}
+        {expandable ? (
+          <TableCell role={role('cell')} className={cn('w-11 pe-0', stickyFirstColumn && [frozenBody, frozenLead, expandInset], stack && STACK.lead)}>
+            {canOpen ? (
+              // A native button with `aria-expanded` and `aria-controls` is
+              // the whole disclosure pattern. Base UI's Collapsible would need
+              // the panel inside its root, and the panel here is the next
+              // `<tr>`, which no wrapper element may sit around.
+              <IconButton
+                variant="ghost"
+                size="sm"
+                label={expandLabel ? expandLabel(row) : `Details of row ${id}`}
+                aria-expanded={isOpen}
+                aria-controls={isOpen ? detailId : undefined}
+                onClick={() => toggleExpanded(id)}
+                className="group/expand"
+              >
+                {/* The one disclosure marker (ADR 0006): a plus that turns
+                    into a cross. */}
+                <Plus className="transition-transform duration-(--motion-base) group-aria-expanded/expand:rotate-45" />
+              </IconButton>
+            ) : null}
+          </TableCell>
+        ) : null}
+        {visibleColumns.map((column) => {
+          const content = column.cell ? column.cell(row) : String((row as Record<string, unknown>)[column.key] ?? '')
+          const first = stickyFirstColumn && column.key === firstKey
+          return (
+            <TableCell
+              key={column.key}
+              role={role('cell')}
+              numeric={column.align === 'end'}
+              truncate={column.truncate}
+              title={column.truncate && typeof content === 'string' ? content : undefined}
+              className={cn(first && [frozenBody, firstInset, 'cut-e'], stack && STACK.cell)}
+            >
+              {stack ? (
+                <span aria-hidden className={STACK.label}>
+                  {columnName(column)}
+                </span>
+              ) : null}
+              {content}
+            </TableCell>
+          )
+        })}
+      </TableRow>,
+    ]
+    if (isOpen && renderExpanded) {
+      out.push(
+        <tr
+          key={`${id}\u0000detail`}
+          id={detailId}
+          role={role('row')}
+          aria-rowindex={rowIndex === undefined ? undefined : rowIndex + 1}
+          data-slot="data-table-detail"
+          data-part="detail"
+          data-detail-for={virtual ? id : undefined}
+          className={cn(stack && STACK.detail)}
+        >
+          <td colSpan={columnCount} role={role('cell')} className={cn('bg-cloth-shade py-3 pe-3 rule-b-soft', DETAIL_INSET[leadCount], stack && [STACK.detail, '@max-xl/data-table:ps-3'])}>
+            {renderExpanded(row)}
+          </td>
+        </tr>,
+      )
+    }
+    return out
+  }
+
+  const spacer = (key: string, height: number) =>
+    height > 0 ? (
+      <tr key={key} aria-hidden data-slot="data-table-spacer">
+        <td colSpan={columnCount} className="p-0" style={{ height }} />
+      </tr>
+    ) : null
+
+  let body: React.ReactNode
+  if (loading) {
+    body = <TableSkeletonRows columns={columnCount} rows={Math.min(pageSize ?? 6, 10)} />
+  } else if (pageRows.length === 0) {
+    body = (
+      <TableEmpty
+        colSpan={columnCount}
+        role={role('row')}
+        title={emptyProps.title}
+        kind={emptyProps.kind}
+        variant={emptyProps.variant}
+        actions={emptyProps.actions}
+      >
+        {emptyProps.description}
+      </TableEmpty>
+    )
+  } else if (virtual) {
+    const out: React.ReactNode[] = []
+    let next = 0
+    virtual.indexes.forEach((index, n) => {
+      if (index > next) out.push(spacer(`gap-${n}`, virtual.top(index) - virtual.top(next)))
+      out.push(...renderRow(pageRows[index] as Row, index))
+      next = index + 1
+    })
+    if (next < pageRows.length) out.push(spacer('gap-end', virtual.total - virtual.top(next)))
+    body = out
+  } else {
+    body = pageRows.flatMap((row, index) => renderRow(row, index))
+  }
+
   const table = (
     <Table
       {...props}
+      ref={setTable}
+      role={role('table')}
       aria-label={label}
       aria-busy={loading || undefined}
+      aria-rowcount={virtual?.rowCount}
       stickyHeader={stickyHeader}
       framed={framed}
-      frameClassName={frameClassName}
-      className={className}
+      // The sticky header would cover a row the browser scrolls to on focus;
+      // the padding keeps a focused row in sight below it.
+      frameClassName={cn(stickyHeader && 'scroll-pt-(--row-h)', frameClassName)}
+      style={tableStyle}
+      className={cn(fixedLayout && 'table-fixed w-(--data-table-w)', stack && STACK.table, className)}
     >
       {caption ? <TableCaption>{caption}</TableCaption> : null}
       <colgroup>
         {selectable ? <col style={{ width: '2.75rem' }} /> : null}
-        {visibleColumns.map((column) => (
-          <col key={column.key} style={column.width ? { width: column.width } : undefined} />
-        ))}
+        {expandable ? <col style={{ width: '2.75rem' }} /> : null}
+        {visibleColumns.map((column) => {
+          const width = colWidth(column)
+          return <col key={column.key} style={width ? { width } : undefined} />
+        })}
       </colgroup>
-      <TableHeader>
-        <TableRow className="hover:[&>td]:bg-transparent">
+      <TableHeader role={role('rowgroup')} className={cn(stack && STACK.head)}>
+        <TableRow
+          role={role('row')}
+          aria-rowindex={virtual ? 1 : undefined}
+          className={cn('hover:[&>td]:bg-transparent', stack && STACK.headRow)}
+        >
           {selectable ? (
-            <TableHead className="w-11 pe-0">
+            <TableHead
+              role={role('columnheader')}
+              className={cn('w-11 pe-0', stickyFirstColumn && [frozenHead, frozenLead, selectInset], stack && STACK.headCell)}
+            >
               <TableCheckbox
                 aria-label={
                   allSelected
@@ -377,63 +900,80 @@ export function DataTable<Row>({
               />
             </TableHead>
           ) : null}
-          {visibleColumns.map((column) => (
+          {expandable ? (
             <TableHead
-              key={column.key}
-              numeric={column.align === 'end'}
-              sort={
-                column.sortable
-                  ? sort?.key === column.key
-                    ? sort.direction
-                    : 'none'
-                  : undefined
-              }
-              onSort={column.sortable ? () => toggleSort(column.key) : undefined}
+              role={role('columnheader')}
+              className={cn('w-11 pe-0', stickyFirstColumn && [frozenHead, frozenLead, expandInset], stack && [STACK.headCell, '@max-xl/data-table:sr-only'])}
             >
-              {column.header}
+              <span className="sr-only">Details</span>
             </TableHead>
-          ))}
+          ) : null}
+          {visibleColumns.map((column) => {
+            const first = stickyFirstColumn && column.key === firstKey
+            const handle = resizer(column)
+            return (
+              <TableHead
+                key={column.key}
+                // A header's name is computed from its content, and the
+                // handle's own name is part of that content: every cell in
+                // the column was announced as "Agent Resize Agent". Named
+                // outright, the header is "Agent" again.
+                aria-label={handle ? columnName(column) : undefined}
+                ref={(el) => {
+                  if (el) headRefs.current.set(column.key, el)
+                  else headRefs.current.delete(column.key)
+                }}
+                role={role('columnheader')}
+                numeric={column.align === 'end'}
+                sort={
+                  column.sortable
+                    ? sort?.key === column.key
+                      ? sort.direction
+                      : 'none'
+                    : undefined
+                }
+                onSort={column.sortable ? () => toggleSort(column.key) : undefined}
+                resizer={handle}
+                className={cn(
+                  // The handle needs a positioned header; a sticky one already
+                  // is. Isolated, so a handle scrolled under the frozen
+                  // column stays under it rather than painting over it.
+                  resizableColumns && !stickyHeader && !first && 'relative isolate',
+                  stickyFirstColumn && stickyHeader && !first && 'z-(--z-lift)',
+                  first && [frozenHead, firstInset, 'cut-e'],
+                  stack && STACK.headCell,
+                  // In the stacked bar a label with nothing to press is read,
+                  // not shown: each cell now shows its own.
+                  stack && !column.sortable && '@max-xl/data-table:sr-only',
+                )}
+              >
+                {column.header}
+              </TableHead>
+            )
+          })}
         </TableRow>
       </TableHeader>
-      <TableBody>
-        {loading ? (
-          <TableSkeletonRows columns={columnCount} rows={Math.min(pageSize ?? 6, 10)} />
-        ) : pageRows.length === 0 ? (
-          <TableEmpty
-            colSpan={columnCount}
-            title={emptyProps.title}
-            kind={emptyProps.kind}
-            variant={emptyProps.variant}
-            actions={emptyProps.actions}
-          >
-            {emptyProps.description}
-          </TableEmpty>
-        ) : (
-          pageRows.map((row) => {
-            const id = getRowId(row)
-            const isSelected = selection.has(id)
-            return (
-              <TableRow key={id} selected={selectable && isSelected}>
-                {selectable ? (
-                  <TableCell className="w-11 pe-0">
-                    <TableCheckbox
-                      aria-label={rowLabel ? rowLabel(row) : `Select row ${id}`}
-                      checked={isSelected}
-                      onChange={() => toggleRow(id)}
-                    />
-                  </TableCell>
-                ) : null}
-                {visibleColumns.map((column) => (
-                  <TableCell key={column.key} numeric={column.align === 'end'} truncate={column.truncate}>
-                    {column.cell
-                      ? column.cell(row)
-                      : String((row as Record<string, unknown>)[column.key] ?? '')}
-                  </TableCell>
-                ))}
-              </TableRow>
-            )
-          })
-        )}
+      <TableBody
+        role={role('rowgroup')}
+        className={cn(stack && STACK.body)}
+        onFocus={
+          virtual
+            ? (event) => {
+                const tr = (event.target as HTMLElement).closest<HTMLElement>('tr[data-row-id], tr[data-detail-for]')
+                const id = tr?.dataset.rowId ?? tr?.dataset.detailFor
+                if (id !== undefined) virtual.pin(id)
+              }
+            : undefined
+        }
+        onBlur={
+          virtual
+            ? (event) => {
+                if (!event.currentTarget.contains(event.relatedTarget as Node | null)) virtual.pin(null)
+              }
+            : undefined
+        }
+      >
+        {body}
       </TableBody>
     </Table>
   )
@@ -451,7 +991,7 @@ export function DataTable<Row>({
   const hasBar = columnMenu || bulkActions !== undefined
   // Without a bar or pager the table renders exactly as it always has — no
   // wrapper — so existing layouts that size the table directly do not change.
-  if (!hasBar && !paginated) {
+  if (!hasBar && !paginated && !stack) {
     return (
       <>
         {table}
@@ -463,7 +1003,7 @@ export function DataTable<Row>({
   const showBulk = bulkActions !== undefined && selectedCount > 0
 
   return (
-    <div data-slot="data-table" className={cn('flex min-w-0 flex-col gap-2', wrapperClassName)}>
+    <div data-slot="data-table" className={cn('flex min-w-0 flex-col gap-2', stack && '@container/data-table', wrapperClassName)}>
       {hasBar ? (
         // A fixed height, so the bar trading its count for the bulk actions
         // never pushes the table down under the pointer.
@@ -578,7 +1118,7 @@ export function DataTableColumnMenu<Row>({ columns, hidden, onToggle, ...props }
           <MenuGroupLabel>Show columns</MenuGroupLabel>
           {columns.map((column) => {
             const visible = !hidden.has(column.key)
-            const name = column.label ?? (typeof column.header === 'string' ? column.header : column.key)
+            const name = columnName(column)
             return (
               <MenuCheckboxItem
                 key={column.key}

@@ -4,7 +4,7 @@ Markdown version of https://demogar.github.io/molaui/?path=/docs/components-data
 
 # Table
 
-Table primitives for rows of records, and DataTable for columns as data with sorting, selection, column visibility and pages.
+Table primitives for rows of records, and DataTable for columns as data with sorting, selection, column visibility, pages, virtual rows, resizing, expansion and a frozen first column.
 
 Status: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
 
@@ -16,7 +16,9 @@ Tables are read for hours, so every choice is about the eye travelling down a co
 
 - Comparing many records with the same fields, such as runs, documents or evaluations.
 - Sorting, selection, bulk actions and pages on client or server data, with DataTable.
-- A layout DataTable does not cover, such as virtualised rows, with the primitives.
+- Thousands of rows a reader scrolls through, with `virtualize`, and a filter beside it, because find-in-page reaches only the rows in view.
+- An action table used on a phone, with `stackWhenNarrow`, so each row is a block instead of a row that scrolls sideways.
+- A layout DataTable does not cover, such as virtual rows of varying height, with the primitives.
 
 ### When not to
 
@@ -30,6 +32,10 @@ Tables are read for hours, so every choice is about the eye travelling down a co
 - Don’t: Left-align costs and durations, or set them in the monospace.
 - Do: Show the no-results empty row with Clear filters when filters hide every row.
 - Don’t: Tell someone to create their first run when a filter is hiding the runs they have.
+- Do: Page a table by default, and virtualize only one the reader really scrolls through.
+- Don’t: Virtualize every table, so find-in-page and printing miss most of every one.
+- Do: Freeze a narrow identifying column, such as the run id.
+- Don’t: Freeze a wide name column, leaving a phone no room for the rest.
 
 ### Content
 
@@ -46,6 +52,8 @@ The root carries `data-slot="table-frame"`; each part carries its `data-part`.
 3. Row (`[data-part="row"]`): A row at the density’s row height, with a soft keyline under it.
 4. Footer (`[data-part="footer"]`): Totals, on a shaded ground under an ink rule.
 5. Caption (`[data-part="caption"]`): What the table shows, under it, read by screen readers as its name.
+6. Resize handle (`[data-part="resizer"]`): A focusable separator on a header’s trailing edge, dragged or moved with the arrow keys.
+7. Detail row (`[data-part="detail"]`): What an expanded row shows, on the shaded ground under it.
 
 ## Examples
 
@@ -54,15 +62,20 @@ Each story is a live example in Storybook.
 - [AgentRuns](https://demogar.github.io/molaui/?path=/story/components-data-display-table--agent-runs)
 - [Empty](https://demogar.github.io/molaui/?path=/story/components-data-display-table--empty)
 - [EmptyPrimitive](https://demogar.github.io/molaui/?path=/story/components-data-display-table--empty-primitive)
+- [ExpandableRows](https://demogar.github.io/molaui/?path=/story/components-data-display-table--expandable-rows)
+- [FrozenFirstColumn](https://demogar.github.io/molaui/?path=/story/components-data-display-table--frozen-first-column)
 - [Loading](https://demogar.github.io/molaui/?path=/story/components-data-display-table--loading)
 - [NoResults](https://demogar.github.io/molaui/?path=/story/components-data-display-table--no-results)
 - [NoResultsOnAPhone](https://demogar.github.io/molaui/?path=/story/components-data-display-table--no-results-on-a-phone)
 - [Paginated](https://demogar.github.io/molaui/?path=/story/components-data-display-table--paginated)
 - [Primitives](https://demogar.github.io/molaui/?path=/story/components-data-display-table--primitives)
+- [ResizableColumns](https://demogar.github.io/molaui/?path=/story/components-data-display-table--resizable-columns)
+- [RowsOnAPhone](https://demogar.github.io/molaui/?path=/story/components-data-display-table--rows-on-a-phone)
 - [ScrolledToTheEnd](https://demogar.github.io/molaui/?path=/story/components-data-display-table--scrolled-to-the-end)
 - [ScrollsSideways](https://demogar.github.io/molaui/?path=/story/components-data-display-table--scrolls-sideways)
 - [ServerSide](https://demogar.github.io/molaui/?path=/story/components-data-display-table--server-side)
 - [SkeletonRows](https://demogar.github.io/molaui/?path=/story/components-data-display-table--skeleton-rows)
+- [TenThousandRuns](https://demogar.github.io/molaui/?path=/story/components-data-display-table--ten-thousand-runs)
 - [Virtualized](https://demogar.github.io/molaui/?path=/story/components-data-display-table--virtualized)
 
 ## API
@@ -128,6 +141,7 @@ A native checkbox, drawn as a cut square. Native, so space toggles it, forms sub
 | --- | --- | --- | --- |
 | `numeric` | `boolean` | `false` | Right-align, for a column of figures. Header and cells must agree or the label floats off its numbers. |
 | `onSort` | `(() => void)` |  | Called when the header's sort control is pressed. The page decides the next direction; only used with `sort`. |
+| `resizer` | `ReactNode` |  | A column resize handle, drawn after the label and outside the sort control, so the two are separate tab stops. DataTable passes its own with `resizableColumns`; give the header `relative` (or keep it sticky) so the handle can sit on its trailing edge. |
 | `sort` | `TableSortDirection` |  | Makes the header a sort control. `none` renders the control in its idle state; `aria-sort` is only set on the column actually sorted, because announcing "not sorted" on every column is noise. |
 
 `className`, `ref`, `id` and the other DOM props go to `<th data-slot="table-head">`.
@@ -163,13 +177,19 @@ Renders no element of its own, so it takes no `className` or `ref`.
 | `getRowId` (required) | `(row: Row) => string` |  | A stable id per row. Selection is kept by id, so it survives sorting, paging and a refetch that returns new objects. |
 | `rows` (required) | `Row[]` |  | The data. Every row when the table sorts and pages itself; one page, already sorted, when `manual`. Never mutated. |
 | `bulkActions` | `((context: DataTableBulkContext) => ReactNode)` |  | Actions for the selected rows, shown in the bar above the table while any are selected. |
+| `canExpand` | `((row: Row) => boolean)` |  | Whether a row has anything to expand. Rows that return `false` get no button. |
 | `caption` | `ReactNode` |  | A visible caption naming the table. Prefer it to `label` when the page has room: a visible name helps every reader, not only assistive tech. |
 | `columnMenu` | `boolean` | `false` | Adds a "Columns" menu to the bar above the table. |
+| `columnWidths` | `Readonly<Record<string, number>>` |  | Controlled column widths in pixels, by column key. Pair with `onColumnWidthsChange`. |
+| `defaultColumnWidths` | `Readonly<Record<string, number>>` |  | Column widths in pixels at the start, by key, when the table owns them. |
+| `defaultExpanded` | `Iterable<string>` |  | Row ids expanded at the start when the table owns expansion. |
 | `defaultHiddenColumns` | `Iterable<string>` |  | Column keys hidden at the start when the table owns visibility. The reader can bring them back from the column menu. |
 | `defaultPage` | `number` | `1` | The page the table starts on when it owns paging, 1-based. Defaults to 1. |
 | `defaultSelection` | `Iterable<string>` |  | Row ids selected at the start when the table owns selection. |
 | `defaultSort` | `DataTableSort` |  | The sort the table starts with when it owns sorting. Clicking a sorted header cycles ascending → descending → off. |
 | `empty` | `ReactNode \| DataTableEmpty` |  | What shows when there are no rows: an empty state as data (title, description, kind, actions), or a node that becomes its description. Use `kind: "no- results"` when filters emptied it. |
+| `expanded` | `ReadonlySet<string>` |  | Controlled expanded rows, by id. Pair with `onExpandedChange`. |
+| `expandLabel` | `((row: Row) => string)` |  | How a row's disclosure button is named, e.g. `(run) => \`Details of ${run.id}\``. |
 | `frameClassName` | `string` |  | Classes for the scrolling frame around the table. |
 | `framed` | `boolean` | `false` | Bounds the table with a keyline on a raised ground, for a table that is the panel rather than sitting in one. |
 | `hiddenColumns` | `ReadonlySet<string>` |  | Controlled hidden columns, by key. |
@@ -177,6 +197,8 @@ Renders no element of its own, so it takes no `className` or `ref`.
 | `loading` | `boolean` | `false` | Shows skeleton rows at the real row height in place of the body and says "Loading…" in the bar, so the table does not jump when the data lands. |
 | `manual` | `boolean` | `false` | Sorting and paging are done by the server: rows are one page, already sorted. |
 | `noun` | `{ one: string; other: string; }` | `{ one: 'row', other: 'rows' }` | What a row is, for counts: `{ one: 'run', other: 'runs' }`. |
+| `onColumnWidthsChange` | `((widths: Record<string, number>) => void)` |  | Called with every column's width after a resize — to remember the layout between visits. The first resize fixes each column at its rendered width. |
+| `onExpandedChange` | `((expanded: Set<string>) => void)` |  | Called with the new set of expanded row ids. |
 | `onHiddenColumnsChange` | `((hidden: Set<string>) => void)` |  | Called with the new set of hidden column keys — to remember the choice between visits. |
 | `onPageChange` | `((page: number) => void)` |  | Called with the new page, 1-based. With `manual`, fetch that page here. |
 | `onSelectionChange` | `((selection: Set<string>) => void)` |  | Called with the new set of selected ids, across every page. |
@@ -184,12 +206,17 @@ Renders no element of its own, so it takes no `className` or `ref`.
 | `page` | `number` |  | Controlled page, 1-based. |
 | `pageSize` | `number` |  | Rows per page. Setting it turns pagination on. |
 | `paginationVariant` | `"pages" \| "compact"` | `compact` | `compact` (the default) is previous/next with the range; `pages` numbers the pages, for a table where jumping matters more than stepping. |
+| `renderExpanded` | `((row: Row) => ReactNode)` |  | What a row shows when it is expanded. Setting it adds a disclosure button at the start of each row, and a detail row under it while open. |
+| `resizableColumns` | `boolean` | `false` | Puts a resize handle on the trailing edge of each column header but the last, which takes the room that is left. Drag it, or focus it and use the arrow keys; in right-to-left the keys follow the edge. |
 | `rowCount` | `number` |  | The total across every page, when `manual`. |
 | `rowLabel` | `((row: Row) => string)` |  | How a row checkbox is named, e.g. `(run) => \`Select ${run.id}\``. |
 | `selectable` | `boolean` | `false` | Adds a checkbox column and a select-all in the header. Select-all covers the current page only, so paging never selects rows nobody has seen. |
 | `selection` | `ReadonlySet<string>` |  | Controlled selection. Pair with `onSelectionChange`. |
 | `sort` | `DataTableSort \| null` |  | Controlled sort. `null` is "no sort"; leave undefined to let the table own it. |
+| `stackWhenNarrow` | `boolean` | `false` | Below a 36rem container, draws each row as a block of label and value pairs instead of a row that scrolls sideways — for action tables used on a phone. The header stays as a bar of the sort and select-all controls. The table keeps its table semantics. |
+| `stickyFirstColumn` | `boolean` | `false` | Keeps the first visible column, and the checkbox and disclosure columns before it, in place while the table scrolls sideways, with an ink edge where the frozen part ends. |
 | `stickyHeader` | `boolean` | `false` | Keeps the header row visible while the body scrolls. Give the frame a height with `frameClassName`. |
+| `virtualize` | `boolean` | `false` | Renders only the rows in view, plus a margin, between two spacer rows, and sets `aria-rowcount` and `aria-rowindex` so assistive tech still hears the full count. Give the frame a height with `frameClassName`. The rows that are not rendered cannot be found with the browser's find-in-page, reached in a screen reader's browse mode or printed, so pair a long virtual table with a filter. Not combined with `stackWhenNarrow`, whose rows vary in height. |
 | `wrapperClassName` | `string` |  | Classes for the outer element that holds the bar, the table and the pagination. |
 
 `className`, `ref`, `id` and the other DOM props go to `<table data-slot="table">`.
@@ -219,6 +246,10 @@ Types: `TableCellProps`, `TableCheckboxProps`, `TableEmptyProps`, `TableHeadProp
 | Space | Selects or clears the focused row checkbox, or every row on the page from the header box. |
 | ArrowUp or ArrowDown or ArrowLeft or ArrowRight | Scrolls the table frame when it overflows and has focus. |
 | Escape | Closes the column menu and returns focus to the Columns button. |
+| Enter or Space | Expands or collapses the focused row’s details, with `renderExpanded`. |
+| ArrowLeft or ArrowRight | On a column resize handle, moves the column’s edge by 16px. In right-to-left the edge is on the left, and the arrow pointing away from the column widens it. |
+| Shift+ArrowLeft or Shift+ArrowRight | On a column resize handle, moves the edge by 64px. |
+| Home or End | On a column resize handle, makes the column its narrowest or its widest. |
 
 ### Mola handles
 
@@ -226,16 +257,21 @@ Types: `TableCellProps`, `TableCheckboxProps`, `TableEmptyProps`, `TableHeadProp
 - Sets `aria-sort` on the sorted column only, and `aria-selected` on selected rows.
 - Uses native checkboxes, and announces the selection count once through a polite status.
 - Marks a loading `DataTable` with `aria-busy` and hides its skeleton rows from assistive tech.
+- With `virtualize`, sets `aria-rowcount` and `aria-rowindex` so the full count is heard, and keeps the focused row rendered while it is scrolled away.
+- Makes each column resize handle a focusable separator with its width as `aria-valuenow`, so it can be found and moved without a pointer.
+- Gives each row’s disclosure button `aria-expanded`, and `aria-controls` pointing at its detail row while open.
+- Keeps table semantics in the stacked phone layout, with explicit roles, and hides the repeated cell labels from assistive tech, which already hears the column header.
 
 ### You handle
 
 - Name the table with `label` or `aria-label`, or a `caption`.
-- Give `rowLabel` so each row checkbox says which row it selects.
+- Give `rowLabel` so each row checkbox says which row it selects, and `expandLabel` so each disclosure button says which row it opens.
 - Mark figure columns `numeric`, on the header and the cells alike.
+- Give a virtual table a filter or search: find-in-page and a screen reader’s browse mode reach only the rows in view.
 
 ### Testing status
 
-- Automated, jsdom: each of its 13 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 18 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

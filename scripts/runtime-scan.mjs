@@ -53,9 +53,18 @@ export const LAYOUT_TRANSITIONS_ALLOWED = [
  */
 export const INFINITE_ANIMATIONS_MAX = 24
 
-/** Per-story budgets for the heaviest compositions: rendered nodes, and the longest task with the a11y addon off. */
+/**
+ * Per-story budgets for the heaviest compositions: rendered nodes, and the
+ * longest task with the a11y addon off.
+ *
+ * The ten-thousand-run table is the budget for `virtualize` (#104): about 490
+ * nodes with the window in place. Rendered whole, the same table is over
+ * 180,000 nodes and a load of several seconds, so a change that stops the
+ * window holding fails here by two orders of magnitude, not by a margin.
+ */
 export const BUDGETS = {
   'components-layout-app-shell--cayuco': { nodes: 1200, longTaskMs: 400 },
+  'components-data-display-table--ten-thousand-runs': { nodes: 700, longTaskMs: 400 },
 }
 
 export async function runtimeScan(page, id) {

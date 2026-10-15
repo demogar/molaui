@@ -212,8 +212,9 @@
       "screenReadersByHand": false
     },
     "Components/Data display/Table": {
-      "stories": 13,
+      "stories": 18,
       "unitTests": [
+        "src/components/table/data-table-features.test.tsx",
         "src/components/table/table.test.tsx"
       ],
       "keyboardInUnitTests": true,
