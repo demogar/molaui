@@ -2,7 +2,7 @@ import './styles/index.css'
 
 export { cn } from './lib/cn'
 export type { Variants } from './lib/variants'
-export { contrast, mixOklab, parseHex, toHex } from './tokens/color'
+export { contrast, mixOklab, parseHex, toHex, type RGB } from './tokens/color'
 
 // Right-to-left: see lib/direction.ts.
 export { DirectionProvider, useDirection, type TextDirection } from './lib/direction'

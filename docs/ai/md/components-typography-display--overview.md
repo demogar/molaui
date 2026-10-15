@@ -46,6 +46,8 @@ Each story is a live example in Storybook.
 | --- | --- | --- | --- |
 | `as` | `"h1" \| "h2" \| "p"` | `h1` | The heading element. Defaults to h1; the visual register does not change. |
 
+`className`, `ref`, `id` and the other DOM props go to `<h1 data-slot="display">`.
+
 Types: `DisplayProps`
 
 ## Accessibility

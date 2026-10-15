@@ -5,6 +5,7 @@ import { Search } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { useControllable } from '../../lib/use-controllable'
 import { Kbd } from '../typography'
 
 /**
@@ -102,9 +103,14 @@ export function useCommandShortcut(onTrigger: () => void, { key = 'k' }: { key?:
  */
 const ANNOUNCE_DELAY_MS = 350
 
-export interface CommandPaletteProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+export interface CommandPaletteProps extends Omit<React.ComponentProps<'div'>, 'children' | 'role'> {
+  /** Whether the palette is open, when the page owns that (it usually does, to bind ⌘K). */
+  open?: boolean
+  /** Open on first render, for a palette that owns its own state. */
+  defaultOpen?: boolean
+  onOpenChange?: (open: boolean) => void
+  /** Rendered as the button that opens the palette, e.g. a `SearchInput`-shaped `Button`. */
+  trigger?: React.ReactElement
   groups: CommandGroup[]
   placeholder?: string
   /** Shown when nothing matches. Receives the query. */
@@ -113,14 +119,25 @@ export interface CommandPaletteProps {
   label?: string
 }
 
+/**
+ * `className`, `ref` and the rest of the DOM props go to the dialog popup,
+ * the element that is the palette. Controlled or not: every other overlay
+ * offered `defaultOpen`, and a palette that was controlled-only made the
+ * simplest case — a button that opens it — need a state hook in the page.
+ */
 export function CommandPalette({
-  open,
+  open: openProp,
+  defaultOpen = false,
   onOpenChange,
+  trigger,
   groups,
   placeholder = 'Type a command or search…',
   renderEmpty,
   label = 'Command palette',
+  className,
+  ...props
 }: CommandPaletteProps) {
+  const [open, setOpen] = useControllable({ value: openProp, defaultValue: defaultOpen, onChange: onOpenChange })
   const [query, setQuery] = React.useState('')
   // The highlight is held by id, not position, so it survives the list
   // re-sorting under it; `null` means "the first enabled match".
@@ -166,7 +183,7 @@ export function CommandPalette({
 
   function select(item: CommandItem | undefined) {
     if (!item || item.disabled) return
-    onOpenChange(false)
+    setOpen(false)
     item.onSelect()
   }
 
@@ -188,7 +205,7 @@ export function CommandPalette({
   return (
     <DialogPrimitive.Root
       open={open}
-      onOpenChange={(next) => onOpenChange(next)}
+      onOpenChange={(next) => setOpen(next)}
       onOpenChangeComplete={(isOpen) => {
         if (!isOpen) {
           setQuery('')
@@ -197,15 +214,18 @@ export function CommandPalette({
         }
       }}
     >
+      {trigger ? <DialogPrimitive.Trigger render={trigger} /> : null}
       <DialogPrimitive.Portal>
         <DialogPrimitive.Backdrop className="fixed inset-0 z-(--z-overlay) bg-backdrop transition-opacity duration-(--motion-base) data-starting-style:opacity-0 data-ending-style:opacity-0" />
         <DialogPrimitive.Popup
+          {...props}
           data-slot="command-palette"
           className={cn(
             'fixed top-[12dvh] left-1/2 z-(--z-overlay) flex max-h-[min(34rem,76dvh)] w-[calc(100vw-2rem)] max-w-xl -translate-x-1/2 flex-col',
             'bg-cloth-pale text-ink rounded-none outline-none shadow-overlay',
             'transition-[opacity,scale] duration-(--motion-base)',
             'data-starting-style:scale-[0.98] data-starting-style:opacity-0 data-ending-style:opacity-0 data-ending-style:duration-(--motion-cut)',
+            className,
           )}
         >
           <DialogPrimitive.Title className="sr-only">{label}</DialogPrimitive.Title>

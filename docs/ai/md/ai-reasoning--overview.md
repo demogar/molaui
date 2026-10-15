@@ -55,6 +55,8 @@ The model's thinking, behind a disclosure.
 | `startedAt` | `number \| Date` |  |  |
 | `status` | `"streaming" \| "done"` | `done` | `streaming` while the model is still thinking. |
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="reasoning">`.
+
 Types: `ReasoningProps`
 
 ## Accessibility

@@ -75,6 +75,8 @@ A file or context item attached to the next prompt. The filename is a literal.
 | `detail` | `string` |  | e.g. "CSV · 48 KB". |
 | `onRemove` | `(() => void)` |  |  |
 
+`className`, `ref`, `id` and the other DOM props go to `<span data-slot="attachment-chip">`.
+
 ### `PromptInput` (component)
 
 The composer.
@@ -95,6 +97,8 @@ The composer.
 | `submitOn` | `"enter" \| "mod-enter"` | `enter` | `enter`: Enter sends, Shift+Enter is a newline — chat convention. `mod-enter`: ⌘/Ctrl+Enter sends, Enter is a newline — for long prompts, where an accidental send costs a model run. |
 | `toolbar` | `ReactNode` |  | Leading controls in the footer — a model picker, a tool toggle. |
 | `value` | `string` |  |  |
+
+`className`, `ref`, `id` and the other DOM props go to `<form data-slot="prompt-input">`.
 
 Types: `AttachmentChipProps`, `PromptInputProps`
 

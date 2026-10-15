@@ -1,6 +1,7 @@
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { deprecate } from '../../lib/deprecate'
 
 /**
  * The reading voice, for long-form text someone is saying to the reader — an
@@ -26,13 +27,17 @@ import { cn } from '../../lib/cn'
  * shouts over the sentence around it.
  */
 export interface ProseProps extends React.ComponentProps<'div'> {
-  /** `sm` for a chat column or a side panel; `base` for a document. */
-  size?: 'sm' | 'base'
+  /**
+   * `sm` for a chat column or a side panel; `md` for a document. `base` is
+   * deprecated since 0.7.0 and removed in 1.0.0: use `md`, the same size.
+   */
+  size?: 'sm' | 'md' | 'base'
   /** Let the text run the full width of its container instead of the reading measure. */
   fluid?: boolean
 }
 
-export function Prose({ size = 'base', fluid = false, className, ...props }: ProseProps) {
+export function Prose({ size = 'md', fluid = false, className, ...props }: ProseProps) {
+  if (size === 'base') deprecate('prose-size-base', { what: '<Prose size="base">', instead: '<Prose size="md">', removal: '1.0.0' })
   return (
     <div
       data-slot="prose"

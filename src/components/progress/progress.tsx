@@ -5,6 +5,7 @@ import { Progress as ProgressPrimitive } from '@base-ui/react/progress'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { deprecate } from '../../lib/deprecate'
 
 /**
  * Two components that look alike and mean different things, which is why they
@@ -43,8 +44,8 @@ function fillStyle(value: number, min = 0, max = 100): React.CSSProperties {
   const fraction = max > min ? Math.min(1, Math.max(0, (value - min) / (max - min))) : 0
   return { width: '100%', scale: `${fraction} 1` }
 }
-const sizeClasses = { sm: 'h-1.5', md: 'h-2.5', lg: 'h-4' } as const
-type Size = keyof typeof sizeClasses
+export type ProgressSize = 'sm' | 'md' | 'lg'
+const sizeClasses: Record<ProgressSize, string> = { sm: 'h-1.5', md: 'h-2.5', lg: 'h-4' }
 
 export interface ProgressProps extends Omit<ProgressPrimitive.Root.Props, 'className' | 'children'> {
   className?: string
@@ -54,12 +55,17 @@ export interface ProgressProps extends Omit<ProgressPrimitive.Root.Props, 'class
   showValue?: boolean
   /** Replaces the value text, e.g. "212 / 300 prompts". */
   valueText?: (formatted: string | null, value: number | null) => React.ReactNode
-  size?: Size
-  /** Fill colour. Ink is in-flight; verde/rojo for a finished state that stays on screen. */
-  tone?: 'ink' | 'success' | 'danger'
+  size?: ProgressSize
+  /**
+   * Fill colour. `neutral` (ink) is in-flight; `success` and `danger` (verde,
+   * rojo) for a finished state that stays on screen. `ink` is deprecated
+   * since 0.7.0 and removed in 1.0.0: use `neutral`, the same fill under the
+   * status word every other `tone` uses.
+   */
+  tone?: 'neutral' | 'success' | 'danger' | 'ink'
 }
 
-const FILL = { ink: 'bg-ink', success: 'bg-verde', danger: 'bg-danger' } as const
+const FILL = { neutral: 'bg-ink', ink: 'bg-ink', success: 'bg-verde', danger: 'bg-danger' } as const
 
 export function Progress({
   className,
@@ -67,12 +73,13 @@ export function Progress({
   showValue = true,
   valueText,
   size = 'md',
-  tone = 'ink',
+  tone = 'neutral',
   value,
   min,
   max,
   ...props
 }: ProgressProps) {
+  if (tone === 'ink') deprecate('progress-tone-ink', { what: '<Progress tone="ink">', instead: '<Progress tone="neutral">', removal: '1.0.0' })
   const indeterminate = value === null
   return (
     <ProgressPrimitive.Root data-slot="progress" value={value} min={min} max={max} className={cn('grid w-full gap-2', className)} {...props}>
@@ -109,7 +116,7 @@ export interface MeterProps extends Omit<MeterPrimitive.Root.Props, 'className' 
    */
   thresholds?: { warn?: number; danger?: number }
   valueText?: (formatted: string, value: number) => React.ReactNode
-  size?: Size
+  size?: ProgressSize
 }
 
 /** Which band a reading is in — exported for the stat tiles and tables that colour a number to match. */

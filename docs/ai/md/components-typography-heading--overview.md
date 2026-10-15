@@ -44,12 +44,15 @@ Each story is a live example in Storybook.
 
 ### `Heading` (component)
 
-- `size`: `1`, `2`, `3`, `4`
+- `visualLevel`: `1`, `2`, `3`, `4`
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `level` (required) | `HeadingLevel` |  |  |
-| `size` | `1 \| 2 \| 3 \| 4` |  | Visual size, when it must differ from the outline level. |
+| `size` (deprecated) | `HeadingLevel` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `visualLevel`, which takes the same values. `codemods/prop-vocabulary.ts` rewrites call sites. |
+| `visualLevel` | `1 \| 2 \| 3 \| 4` |  | The level it should look like, when that must differ from the outline level. |
+
+`className`, `ref`, `id` and the other DOM props go to `<h2 data-slot="heading">`.
 
 ### `headingVariants` (function)
 

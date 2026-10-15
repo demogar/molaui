@@ -63,12 +63,11 @@ Loading is a cut shape whose content has not arrived, so a block keeps the keyli
 | `shape` | `"block" \| "text" \| "line" \| "avatar"` |  |  |
 | `size` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` |  |  |
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="skeleton">`.
+
 ### `SkeletonGroup` (component)
 
 The region that is loading, and the one place that says so.
-
-- `shape`: `block`, `text`, `line`, `avatar` (default `block`)
-- `size`: `xs`, `sm`, `md`, `lg`, `xl` (default `md`)
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -77,16 +76,19 @@ The region that is loading, and the one place that says so.
 | `loading` (required) | `boolean` |  | While true the bones show and the region is busy. |
 | `children` | `ReactNode` |  | The real content, shown once loaded. |
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="skeleton-group">`.
+
 ### `SkeletonText` (component)
 
 Lines of text that have not arrived. The last line is short, because a paragraph ends ragged; a block of equal bars reads as a table.
 
-- `shape`: `block`, `text`, `line`, `avatar` (default `block`)
-- `size`: `xs`, `sm`, `md`, `lg`, `xl` (default `md`)
-
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `lines` | `number` | `3` |  |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="skeleton-text">`.
+
+### `skeletonVariants` (function)
 
 Types: `SkeletonGroupProps`, `SkeletonProps`, `SkeletonTextProps`
 

@@ -54,6 +54,8 @@ The system's three dividers, in rising order of weight and rarity.
 | `up` | `boolean` | `false` | Teeth pointing up — for the top edge of a filled panel. |
 | `variant` | `"keyline" \| "relleno" \| "diente"` | `keyline` | `keyline` — the decorative 1px rule. Between rows, between fields. `relleno` — the filler slit: a band of colour cut by fine ink lines. For the seam between two parts of a page, not between list items. `diente`  — the sawtooth left where one ground is cut away from another. For the major seam only, where the page gives way to a filled panel. Set `color` on the element to choose the ground. |
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="divider">`.
+
 Types: `DividerBand`, `DividerProps`
 
 ## Accessibility

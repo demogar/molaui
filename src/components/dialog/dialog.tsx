@@ -7,7 +7,9 @@ import { X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { useControllable } from '../../lib/use-controllable'
 import { type Variants } from '../../lib/variants'
+import { slotUnlessRendered } from '../../lib/slot'
 import { Button, IconButton } from '../button'
 import { fieldControlClasses, fieldControlSizes } from '../field/field-control'
 
@@ -37,7 +39,7 @@ import { fieldControlClasses, fieldControlSizes } from '../field/field-control'
  * itself, so it forwards `finalFocus` by name, with the same type.
  */
 
-const dialogPopupVariants = cva(
+export const dialogContentVariants = cva(
   [
     'fixed top-1/2 left-1/2 z-(--z-overlay) flex max-h-[calc(100dvh-2rem)] w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col',
     'bg-cloth-pale text-ink rounded-none outline-none',
@@ -64,16 +66,21 @@ const backdropClasses = [
   'data-starting-style:opacity-0 data-ending-style:opacity-0',
 ]
 
-const bandClass = { oro: 'band-oro', rojo: 'band-rojo', anil: 'band-anil', verde: 'band-verde' } as const
-type Band = keyof typeof bandClass
+export type DialogBand = 'oro' | 'rojo' | 'anil' | 'verde'
+const bandClass: Record<DialogBand, string> = { oro: 'band-oro', rojo: 'band-rojo', anil: 'band-anil', verde: 'band-verde' }
 
 export const Dialog = DialogPrimitive.Root
-export const DialogTrigger = DialogPrimitive.Trigger
-export const DialogClose = DialogPrimitive.Close
+export function DialogTrigger(props: DialogPrimitive.Trigger.Props) {
+  return <DialogPrimitive.Trigger {...slotUnlessRendered('dialog-trigger', props.render)} {...props} />
+}
+
+export function DialogClose(props: DialogPrimitive.Close.Props) {
+  return <DialogPrimitive.Close {...slotUnlessRendered('dialog-close', props.render)} {...props} />
+}
 
 export interface DialogContentProps
   extends Omit<DialogPrimitive.Popup.Props, 'className' | 'title'>,
-    Variants<typeof dialogPopupVariants> {
+    Variants<typeof dialogContentVariants> {
   className?: string
   /** The dialog's accessible name. Required: an unnamed modal is announced as "dialog" and nothing else. */
   title: React.ReactNode
@@ -81,7 +88,7 @@ export interface DialogContentProps
   /** Action row under the body: right-aligned, or stacked full width with the last action on top when the row is under 24rem. Usually a `ghost` cancel and one primary. */
   footer?: React.ReactNode
   /** The layer revealed in the top seam. */
-  band?: Band
+  band?: DialogBand
   /** Hide the corner close button. Only when the footer carries an explicit way out. */
   hideClose?: boolean
 }
@@ -100,7 +107,7 @@ export function DialogContent({
   return (
     <DialogPrimitive.Portal>
       <DialogPrimitive.Backdrop className={cn(backdropClasses)} />
-      <DialogPrimitive.Popup data-slot="dialog" className={cn(dialogPopupVariants({ size }), className)} {...props}>
+      <DialogPrimitive.Popup data-slot="dialog" className={cn(dialogContentVariants({ size }), className)} {...props}>
         <DialogFrame
           band={band}
           title={<DialogPrimitive.Title className={titleClasses}>{title}</DialogPrimitive.Title>}
@@ -154,7 +161,7 @@ function DialogFrame({
   error,
   children,
 }: {
-  band: Band
+  band: DialogBand
   title: React.ReactNode
   description: React.ReactNode
   close: React.ReactNode
@@ -185,7 +192,7 @@ function DialogFrame({
   )
 }
 
-export interface AlertDialogProps {
+export interface AlertDialogProps extends Omit<React.ComponentProps<'div'>, 'title' | 'children' | 'role'> {
   open?: boolean
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
@@ -255,6 +262,8 @@ export interface AlertDialogProps {
  * control points at its error, so focus on the confirm reads the reason with
  * the verb. It is not added to the dialog's own description, which would
  * read it a second time whenever the dialog is announced again.
+ *
+ * `className`, `ref` and the rest of the DOM props go to the dialog popup.
  */
 export function AlertDialog({
   open,
@@ -270,9 +279,10 @@ export function AlertDialog({
   tone = 'danger',
   error,
   finalFocus,
+  className,
+  ...props
 }: AlertDialogProps) {
-  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen ?? false)
-  const isOpen = open ?? uncontrolledOpen
+  const [isOpen, setOpenState] = useControllable({ value: open, defaultValue: defaultOpen ?? false, onChange: onOpenChange })
   const [typed, setTyped] = React.useState('')
   const [pending, setPending] = React.useState(false)
   const cancelRef = React.useRef<HTMLButtonElement>(null)
@@ -281,8 +291,7 @@ export function AlertDialog({
   const showError = error !== undefined && error !== null && error !== false && !pending
 
   const setOpen = (next: boolean) => {
-    if (open === undefined) setUncontrolledOpen(next)
-    onOpenChange?.(next)
+    setOpenState(next)
     if (!next) setTyped('')
   }
 
@@ -307,10 +316,11 @@ export function AlertDialog({
       <AlertDialogPrimitive.Portal>
         <AlertDialogPrimitive.Backdrop className={cn(backdropClasses)} />
         <AlertDialogPrimitive.Popup
+          {...props}
           data-slot="alert-dialog"
           initialFocus={cancelRef}
           finalFocus={finalFocus}
-          className={dialogPopupVariants({ size: 'sm' })}
+          className={cn(dialogContentVariants({ size: 'sm' }), className)}
         >
           <DialogFrame
             band={tone === 'danger' ? 'rojo' : 'oro'}

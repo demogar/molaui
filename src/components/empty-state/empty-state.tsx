@@ -3,6 +3,7 @@ import { Inbox, Lock, SearchX, TriangleAlert } from 'lucide-react'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { deprecate } from '../../lib/deprecate'
 import { type Variants } from '../../lib/variants'
 import { wrappingButtonSlot } from '../button/wrapping-slot'
 
@@ -17,7 +18,7 @@ import { wrappingButtonSlot } from '../button/wrapping-slot'
  * with it, and the copy sits on a raised-cloth plate so it never reads across
  * the slits.
  *
- * Four variants, because they are four different conversations with the
+ * Four kinds, because they are four different conversations with the
  * operator and conflating them is how an empty filter result ends up telling
  * someone to "create your first saved reply":
  *
@@ -29,12 +30,16 @@ import { wrappingButtonSlot } from '../button/wrapping-slot'
  * The icon is a small ink square-cut glyph, not an illustration. An
  * illustration in an internal tool is charm the operator scrolls past on the
  * fortieth visit; the words have to do the work either way.
+ *
+ * The prop was `variant` until 0.7.0. `variant` is a presentation everywhere
+ * else (solid or outline, seam or flat); these are four categories of
+ * state, which is what `kind` names (docs/adr/0010-prop-vocabulary.md).
  */
 export const emptyStateVariants = cva(
   'relative grid place-items-center rounded-none bg-cloth-shade relleno-field shadow-cut px-6',
   {
     variants: {
-      variant: {
+      kind: {
         empty: 'band-cloth',
         'no-results': 'band-cloth',
         error: 'band-danger',
@@ -46,13 +51,13 @@ export const emptyStateVariants = cva(
         lg: 'py-24',
       },
     },
-    defaultVariants: { variant: 'empty', size: 'md' },
+    defaultVariants: { kind: 'empty', size: 'md' },
   },
 )
 
-type Variant = NonNullable<Variants<typeof emptyStateVariants>['variant']>
+export type EmptyStateKind = NonNullable<Variants<typeof emptyStateVariants>['kind']>
 
-const ICON: Record<Variant, React.ComponentType<{ className?: string; strokeWidth?: number }>> = {
+const ICON: Record<EmptyStateKind, React.ComponentType<{ className?: string; strokeWidth?: number }>> = {
   empty: Inbox,
   'no-results': SearchX,
   error: TriangleAlert,
@@ -66,12 +71,18 @@ export interface EmptyStateProps
   description?: React.ReactNode
   /** One or two buttons. The first is the way forward. */
   actions?: React.ReactNode
-  /** Replace the variant's icon, or `false` for none. */
+  /** Replace the kind's icon, or `false` for none. */
   icon?: React.ReactNode | false
   headingLevel?: 2 | 3 | 4
+  /**
+   * @deprecated Since 0.7.0; removed in 1.0.0. Use `kind`, which takes the
+   * same values. `codemods/prop-vocabulary.ts` rewrites call sites.
+   */
+  variant?: EmptyStateKind
 }
 
 export function EmptyState({
+  kind,
   variant,
   size,
   title,
@@ -82,15 +93,21 @@ export function EmptyState({
   className,
   ...props
 }: EmptyStateProps) {
-  const v = variant ?? 'empty'
+  if (variant !== undefined) {
+    deprecate('empty-state-variant', { what: '<EmptyState variant>', instead: '<EmptyState kind>', removal: '1.0.0' })
+  }
+  const v = kind ?? variant ?? 'empty'
   const Icon = ICON[v]
   const Heading = `h${headingLevel}` as const
   return (
     <div
       data-slot="empty-state"
+      data-kind={v}
+      // Kept beside data-kind until the `variant` prop goes, for selectors
+      // written against it.
       data-variant={v}
       role={v === 'error' ? 'alert' : undefined}
-      className={cn(emptyStateVariants({ variant: v, size }), className)}
+      className={cn(emptyStateVariants({ kind: v, size }), className)}
       {...props}
     >
       {v === 'error' || v === 'no-permission' ? (

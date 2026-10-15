@@ -9,7 +9,7 @@ const meta = {
   args: { level: 2, children: 'Rollout results' },
   argTypes: {
     level: { control: 'inline-radio', options: [1, 2, 3, 4] },
-    size: { control: 'inline-radio', options: [undefined, 1, 2, 3, 4] },
+    visualLevel: { control: 'inline-radio', options: [undefined, 1, 2, 3, 4] },
   },
   parameters: {
     docs: {

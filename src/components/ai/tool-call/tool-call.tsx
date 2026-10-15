@@ -5,6 +5,7 @@ import { Check, Plus, RotateCcw, ShieldAlert, Wrench, X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { useControllable } from '../../../lib/use-controllable'
 import { Button } from '../../button'
 import { CodeBlock } from '../../code'
 import { FailureReportedContext } from '../run-error/failure-reported'
@@ -37,8 +38,11 @@ export interface ToolCallProps extends Omit<React.ComponentProps<'div'>, 'childr
   onRetry?: () => void
   /** Present when `status` is `waiting`: the call is held for a person. */
   approval?: ToolCallApproval
+  /** Whether the details are expanded, when the page owns that. Waiting and failed calls are always expanded. */
+  open?: boolean
   /** Start expanded. Waiting and failed calls are always expanded. */
   defaultOpen?: boolean
+  onOpenChange?: (open: boolean) => void
 }
 
 /**
@@ -80,7 +84,9 @@ export function ToolCall({
   error,
   onRetry,
   approval,
+  open: openProp,
   defaultOpen = false,
+  onOpenChange,
   className,
   ...props
 }: ToolCallProps) {
@@ -91,7 +97,7 @@ export function ToolCall({
   const hasBody = args !== undefined || result !== undefined || failed || waiting
   // Always controlled: a live call goes from running to failed, and passing
   // `open` only once forced switched Base UI from uncontrolled to controlled.
-  const [openState, setOpenState] = React.useState(defaultOpen)
+  const [openState, setOpenState] = useControllable({ value: openProp, defaultValue: defaultOpen, onChange: onOpenChange })
   // Inside an AgentRun step whose RunError already raised the alarm, the
   // error is this call's record, not a second alert.
   const reported = React.useContext(FailureReportedContext)
@@ -240,7 +246,13 @@ export interface ToolCallGroupProps extends React.ComponentProps<'div'> {
  */
 export function ToolCallGroup({ label, count, className, children, ...props }: ToolCallGroupProps) {
   return (
-    <div role="group" aria-label={label ?? `${count} tools in parallel`} className={cn('flex flex-col gap-2', className)} {...props}>
+    <div
+      data-slot="tool-call-group"
+      role="group"
+      aria-label={label ?? `${count} tools in parallel`}
+      className={cn('flex flex-col gap-2', className)}
+      {...props}
+    >
       <p className="m-0 rotulo text-ink-muted">{label ?? `${count} tools in parallel`}</p>
       <div className="flex flex-col gap-2 border-s-(length:--bar-w) border-ink ps-3">{children}</div>
     </div>

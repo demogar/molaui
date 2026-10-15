@@ -3,17 +3,17 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Heading } from '../typography/heading'
 import { Rotulo } from '../typography/rotulo'
 import { Text } from '../typography/text'
-import { Panel, type PanelTone } from './panel'
+import { Panel, type PanelLayer } from './panel'
 
-const TONES: PanelTone[] = ['pale', 'cloth', 'shade', 'ink', 'rojo', 'anil', 'verde', 'oro']
+const LAYERS: PanelLayer[] = ['pale', 'cloth', 'shade', 'ink', 'rojo', 'anil', 'verde', 'oro']
 
 const meta = {
   title: 'Components/Layout/Panel',
   tags: ['stable'],
   component: Panel,
-  args: { tone: 'pale', edge: 'cut', padding: 'md' },
+  args: { layer: 'pale', edge: 'cut', padding: 'md' },
   argTypes: {
-    tone: { control: 'select', options: TONES },
+    layer: { control: 'select', options: LAYERS },
     edge: { control: 'inline-radio', options: ['cut', 'band', 'none'] },
     padding: { control: 'inline-radio', options: ['none', 'sm', 'md', 'lg'] },
     band: { control: 'inline-radio', options: ['oro', 'rojo', 'anil', 'verde', 'cloth'] },
@@ -21,10 +21,10 @@ const meta = {
   render: (args) => (
     <Panel {...args} className="max-w-sm">
       <Heading level={3}>Weekly digest agent</Heading>
-      <Text size="sm" tone={2} className="mt-2">
+      <Text size="sm" variant="secondary" className="mt-2">
         Summarises the week’s escalated tickets for the support channel every Monday.
       </Text>
-      <Text size="xs" tone="muted" className="mt-3">
+      <Text size="xs" variant="muted" className="mt-3">
         Last run 2 h ago · 14 tool calls
       </Text>
     </Panel>
@@ -47,19 +47,19 @@ export const Default: Story = {}
 export const Grounds: Story = {
   render: () => (
     <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-5">
-      {TONES.map((tone) => (
-        <Panel key={tone} tone={tone}>
-          <Heading level={3}>{tone}</Heading>
-          <Text size="sm" tone={2} className="mt-1">
+      {LAYERS.map((layer) => (
+        <Panel key={layer} layer={layer}>
+          <Heading level={3}>{layer}</Heading>
+          <Text size="sm" variant="secondary" className="mt-1">
             Secondary ink on this ground.
           </Text>
-          <Text size="xs" tone="muted" className="mt-1">
+          <Text size="xs" variant="muted" className="mt-1">
             Muted ink on this ground.
           </Text>
           <Rotulo
             className="mt-4"
-            band={tone === 'ink' ? 'oro' : ['pale', 'cloth', 'shade'].includes(tone) ? 'rojo' : 'cloth'}
-            plain={tone === 'oro'}
+            band={layer === 'ink' ? 'oro' : ['pale', 'cloth', 'shade'].includes(layer) ? 'rojo' : 'cloth'}
+            plain={layer === 'oro'}
           >
             Label
           </Rotulo>

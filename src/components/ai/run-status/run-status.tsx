@@ -65,58 +65,46 @@ export function isRetryableStatus(status: RunStatusValue): boolean {
  *   cancelled   hollow + slash         — stopped by a person, not broken
  *   timed_out   hollow + rojo foot     — ran out rather than broke
  */
-export function RunStatusGlyph({
-  status,
-  className,
-}: {
+export interface RunStatusGlyphProps extends Omit<React.ComponentProps<'span'>, 'children'> {
   status: RunStatusValue
-  className?: string
-}) {
-  const base = 'relative inline-block size-[0.8125em] shrink-0 overflow-hidden shadow-cut'
-  switch (status) {
-    case 'queued':
-      return <span aria-hidden data-part="glyph" data-status={status} className={cn(base, 'bg-cloth-pale', className)} />
-    case 'running':
-      return <span aria-hidden data-part="glyph" data-status={status} className={cn(base, 'band-accent relleno-working', className)} />
-    case 'streaming':
-      return <span aria-hidden data-part="glyph" data-status={status} className={cn(base, 'band-anil relleno-working', className)} />
-    case 'waiting':
-      return (
-        <span
-          aria-hidden
-          data-part="glyph"
-          data-status={status}
-          className={cn(base, 'bg-cloth-pale', 'after:absolute after:inset-x-0 after:bottom-0 after:h-1/2 after:bg-oro', className)}
-        />
-      )
-    case 'succeeded':
-      return <span aria-hidden data-part="glyph" data-status={status} className={cn(base, 'bg-verde', className)} />
-    case 'failed':
-      return (
-        <span aria-hidden data-part="glyph" data-status={status} className={cn(base, 'bg-danger text-on-layer', className)}>
-          <svg viewBox="0 0 10 10" className="absolute inset-0 size-full">
-            <path d="M2.5 2.5l5 5M7.5 2.5l-5 5" stroke="currentColor" strokeWidth="1.6" />
-          </svg>
-        </span>
-      )
-    case 'cancelled':
-      return (
-        <span aria-hidden data-part="glyph" data-status={status} className={cn(base, 'bg-cloth-pale text-ink-muted', className)}>
-          <svg viewBox="0 0 10 10" className="absolute inset-0 size-full">
-            <path d="M1 9L9 1" stroke="currentColor" strokeWidth="1.4" />
-          </svg>
-        </span>
-      )
-    case 'timed_out':
-      return (
-        <span
-          aria-hidden
-          data-part="glyph"
-          data-status={status}
-          className={cn(base, 'bg-cloth-pale', 'after:absolute after:inset-x-0 after:bottom-0 after:h-[30%] after:bg-danger', className)}
-        />
-      )
-  }
+}
+
+const GLYPH: Record<RunStatusValue, { className: string; mark?: React.ReactNode }> = {
+  queued: { className: 'bg-cloth-pale' },
+  running: { className: 'band-accent relleno-working' },
+  streaming: { className: 'band-anil relleno-working' },
+  waiting: { className: 'bg-cloth-pale after:absolute after:inset-x-0 after:bottom-0 after:h-1/2 after:bg-oro' },
+  succeeded: { className: 'bg-verde' },
+  failed: {
+    className: 'bg-danger text-on-layer',
+    mark: <path d="M2.5 2.5l5 5M7.5 2.5l-5 5" stroke="currentColor" strokeWidth="1.6" />,
+  },
+  cancelled: {
+    className: 'bg-cloth-pale text-ink-muted',
+    mark: <path d="M1 9L9 1" stroke="currentColor" strokeWidth="1.4" />,
+  },
+  timed_out: { className: 'bg-cloth-pale after:absolute after:inset-x-0 after:bottom-0 after:h-[30%] after:bg-danger' },
+}
+
+/** `className`, `ref` and the rest of the DOM props go to the glyph's `<span>`. */
+export function RunStatusGlyph({ status, className, ...props }: RunStatusGlyphProps) {
+  const { className: look, mark } = GLYPH[status]
+  return (
+    <span
+      aria-hidden
+      {...props}
+      data-slot="run-status-glyph"
+      data-part="glyph"
+      data-status={status}
+      className={cn('relative inline-block size-[0.8125em] shrink-0 overflow-hidden shadow-cut', look, className)}
+    >
+      {mark ? (
+        <svg viewBox="0 0 10 10" className="absolute inset-0 size-full">
+          {mark}
+        </svg>
+      ) : null}
+    </span>
+  )
 }
 
 const labelVariants = cva('', {

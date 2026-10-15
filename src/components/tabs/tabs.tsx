@@ -30,12 +30,12 @@ import { useScrollEdge } from '../../lib/scroll-edge'
  * start loading because a keyboard user passed over it.
  */
 
-type Variant = 'underline' | 'panel'
-const VariantContext = React.createContext<Variant>('underline')
+export type TabsVariant = 'underline' | 'panel'
+const VariantContext = React.createContext<TabsVariant>('underline')
 
 export interface TabsProps extends Omit<TabsPrimitive.Root.Props, 'className'> {
   className?: string
-  variant?: Variant
+  variant?: TabsVariant
 }
 
 export function Tabs({ className, variant = 'underline', ...props }: TabsProps) {

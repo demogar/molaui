@@ -34,8 +34,14 @@ import { Label } from '../field/label'
  */
 
 export const SelectRoot = SelectPrimitive.Root
-export const SelectValue = SelectPrimitive.Value
-export const SelectGroup = SelectPrimitive.Group
+
+export function SelectValue(props: SelectPrimitive.Value.Props) {
+  return <SelectPrimitive.Value data-slot="select-value" {...props} />
+}
+
+export function SelectGroup(props: SelectPrimitive.Group.Props) {
+  return <SelectPrimitive.Group data-slot="select-group" {...props} />
+}
 
 export interface SelectTriggerProps extends SelectPrimitive.Trigger.Props {
   size?: FieldControlSize
@@ -165,6 +171,7 @@ export function SelectItem({ className, children, description, ...props }: Selec
 export function SelectGroupLabel({ className, ...props }: SelectPrimitive.GroupLabel.Props & { className?: string }) {
   return (
     <SelectPrimitive.GroupLabel
+      data-slot="select-group-label"
       className={cn('px-2 pt-2.5 pb-1.5 rotulo text-ink-muted', className)}
       {...props}
     />
@@ -172,7 +179,7 @@ export function SelectGroupLabel({ className, ...props }: SelectPrimitive.GroupL
 }
 
 export function SelectSeparator({ className, ...props }: SelectPrimitive.Separator.Props & { className?: string }) {
-  return <SelectPrimitive.Separator className={cn('mx-1 my-1 h-px bg-keyline', className)} {...props} />
+  return <SelectPrimitive.Separator data-slot="select-separator" className={cn('mx-1 my-1 h-px bg-keyline', className)} {...props} />
 }
 
 /* ── the simple API ─────────────────────────────────────────────────── */
@@ -189,7 +196,8 @@ export interface SelectOptionGroup<V extends string = string> {
   items: SelectOption<V>[]
 }
 
-export interface SelectProps<V extends string = string> {
+export interface SelectProps<V extends string = string>
+  extends Omit<SelectTriggerProps, 'value' | 'defaultValue' | 'children' | 'placeholder' | 'size' | 'disabled'> {
   /** Flat options, or labelled groups. */
   items: SelectOption<V>[] | SelectOptionGroup<V>[]
   value?: V | null
@@ -206,11 +214,13 @@ export interface SelectProps<V extends string = string> {
   disabled?: boolean
   required?: boolean
   name?: string
-  id?: string
-  className?: string
-  'aria-label'?: string
-  'aria-describedby'?: string
-  'aria-invalid'?: boolean | 'true' | 'false'
+  /** Classes for the wrapper that holds `label` and the trigger. Only rendered with a `label`. */
+  wrapperClassName?: string
+  /**
+   * Props for Base UI's `Select.Root`, for what the one-line form does not
+   * name: `open`, `onOpenChange`, `modal`, `readOnly`.
+   */
+  rootProps?: Omit<SelectPrimitive.Root.Props<V>, 'items' | 'value' | 'defaultValue' | 'onValueChange' | 'children'>
 }
 
 function isGrouped<V extends string>(
@@ -222,6 +232,12 @@ function isGrouped<V extends string>(
 /**
  * The one-line form, for the nine selects in ten that are a label and a list.
  * The parts above are exported for the tenth.
+ *
+ * `className`, `ref`, `id` and the rest of the DOM props go to the trigger,
+ * with or without a `label`; the wrapper a `label` adds takes
+ * `wrapperClassName`. `className` used to move to that wrapper when a label
+ * was set, so `className="w-64"` sized the trigger in one place and the
+ * whole field in another.
  */
 export function Select<V extends string = string>({
   items,
@@ -235,25 +251,19 @@ export function Select<V extends string = string>({
   required,
   name,
   id,
-  className,
-  ...aria
+  wrapperClassName,
+  rootProps,
+  ...props
 }: SelectProps<V>) {
   const uid = React.useId()
   const triggerId = id ?? `${uid}-trigger`
   const flat = isGrouped(items) ? items.flatMap((group) => group.items) : items
 
-  const trigger = (
-    <SelectTrigger
-      id={triggerId}
-      size={size}
-      placeholder={placeholder}
-      className={label ? undefined : className}
-      {...aria}
-    />
-  )
+  const trigger = <SelectTrigger {...props} id={triggerId} size={size} placeholder={placeholder} />
 
   return (
     <SelectRoot<V>
+      {...rootProps}
       items={flat.map((item) => ({ value: item.value, label: item.label }))}
       value={value}
       defaultValue={defaultValue}
@@ -263,7 +273,7 @@ export function Select<V extends string = string>({
       name={name}
     >
       {label ? (
-        <div className={cn('flex flex-col gap-2', className)}>
+        <div data-slot="select-field" className={cn('flex flex-col gap-2', wrapperClassName)}>
           <Label htmlFor={triggerId} required={required}>
             {label}
           </Label>

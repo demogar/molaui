@@ -65,7 +65,7 @@ Each story is a live example in Storybook.
 
 ### `EmptyState` (component)
 
-- `variant`: `empty`, `no-results`, `error`, `no-permission` (default `empty`)
+- `kind`: `empty`, `no-results`, `error`, `no-permission` (default `empty`)
 - `size`: `sm`, `md`, `lg` (default `md`)
 
 | Prop | Type | Default | Description |
@@ -74,15 +74,18 @@ Each story is a live example in Storybook.
 | `actions` | `ReactNode` |  | One or two buttons. The first is the way forward. |
 | `description` | `ReactNode` |  |  |
 | `headingLevel` | `2 \| 3 \| 4` | `3` |  |
-| `icon` | `ReactNode` |  | Replace the variant's icon, or `false` for none. |
+| `icon` | `ReactNode` |  | Replace the kind's icon, or `false` for none. |
+| `kind` | `"empty" \| "no-results" \| "error" \| "no-permission"` |  |  |
 | `size` | `"sm" \| "md" \| "lg"` |  |  |
-| `variant` | `"empty" \| "no-results" \| "error" \| "no-permission"` |  |  |
+| `variant` (deprecated) | `EmptyStateKind` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `kind`, which takes the same values. `codemods/prop-vocabulary.ts` rewrites call sites. |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="empty-state">`.
 
 ### `emptyStateVariants` (function)
 
 The state a panel is in when it has nothing to show — designed as a condition rather than as an apology.
 
-Types: `EmptyStateProps`
+Types: `EmptyStateKind`, `EmptyStateProps`
 
 ## Accessibility
 

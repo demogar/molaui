@@ -27,7 +27,7 @@ export const skeletonShimmer = [
   'motion-reduce:after:hidden forced-colors:after:hidden',
 ]
 
-const skeletonVariants = cva(['rounded-none bg-cloth-shade', skeletonShimmer], {
+export const skeletonVariants = cva(['rounded-none bg-cloth-shade', skeletonShimmer], {
   variants: {
     shape: {
       /** A card, a chart, an image: keeps the keyline every other shape has. */
@@ -111,7 +111,7 @@ export interface SkeletonTextProps extends React.ComponentProps<'div'> {
  */
 export function SkeletonText({ lines = 3, className, ...props }: SkeletonTextProps) {
   return (
-    <div aria-hidden className={cn('flex flex-col gap-[0.6em]', className)} {...props}>
+    <div data-slot="skeleton-text" aria-hidden className={cn('flex flex-col gap-[0.6em]', className)} {...props}>
       {Array.from({ length: lines }, (_, i) => (
         <Skeleton key={i} shape="text" className={i === lines - 1 && lines > 1 ? 'w-3/5' : undefined} />
       ))}

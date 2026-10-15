@@ -64,6 +64,8 @@ Each story is a live example in Storybook.
 | `meta` | `ReactNode[]` |  |  |
 | `tabs` | `ReactNode` |  | A Tabs list. Sits on the header's bottom edge so the active tab cuts into it. |
 
+`className`, `ref`, `id` and the other DOM props go to `<header data-slot="page-header">`.
+
 Types: `PageHeaderProps`
 
 ## Accessibility

@@ -1,6 +1,6 @@
 export { AppShell, SidebarContext, SidebarToggle, Topbar } from './app-shell'
-export type { AppShellProps, SidebarContextValue, TopbarProps } from './app-shell'
+export type { AppShellProps, SidebarContextValue, SidebarToggleProps, TopbarProps } from './app-shell'
 export { NavItem, NavSection, Sidebar } from './sidebar'
-export type { NavItemProps, SidebarProps } from './sidebar'
+export type { NavItemProps, NavSectionProps, SidebarProps } from './sidebar'
 export { PageHeader } from './page-header'
 export type { PageHeaderProps } from './page-header'

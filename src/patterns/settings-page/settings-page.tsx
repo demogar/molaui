@@ -354,7 +354,7 @@ export function SettingsPage({
                   description="Email an agent’s owner when it fails twice within an hour."
                   checked={draft.failedRunEmails}
                   onCheckedChange={(checked) => set('failedRunEmails', checked)}
-                  className="pb-4"
+                  wrapperClassName="pb-4"
                 />
                 <Switch
                   labelPosition="start"
@@ -362,7 +362,7 @@ export function SettingsPage({
                   description="Every Monday, each agent’s evaluation scores and how they moved."
                   checked={draft.weeklyDigest}
                   onCheckedChange={(checked) => set('weeklyDigest', checked)}
-                  className="py-4"
+                  wrapperClassName="py-4"
                 />
                 <Switch
                   labelPosition="start"
@@ -370,7 +370,7 @@ export function SettingsPage({
                   description="Email admins at 80% and 100% of the monthly limit."
                   checked={draft.spendAlerts}
                   onCheckedChange={(checked) => set('spendAlerts', checked)}
-                  className="pt-4"
+                  wrapperClassName="pt-4"
                 />
               </div>
             </SettingsSection>
@@ -504,7 +504,7 @@ function SettingsSection({
       )}
     >
       <div className="min-w-0">
-        <Heading level={2} size={3} id={id}>
+        <Heading level={2} visualLevel={3} id={id}>
           {title}
         </Heading>
         <p className="mt-1.5 mb-0 text-sm text-ink-2">{description}</p>

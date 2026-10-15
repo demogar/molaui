@@ -3,7 +3,9 @@
 import { Columns3, X } from 'lucide-react'
 import * as React from 'react'
 
+import { cn } from '../../lib/cn'
 import { useScrollEdge } from '../../lib/scroll-edge'
+import { useControllable } from '../../lib/use-controllable'
 import { Button } from '../button'
 import type { EmptyStateProps } from '../empty-state'
 import { Menu, MenuCheckboxItem, MenuContent, MenuGroup, MenuGroupLabel, MenuTrigger } from '../menu'
@@ -65,7 +67,7 @@ export interface DataTableSort {
 }
 
 /** The empty state, as data. A bare node is still accepted and becomes the description. */
-export type DataTableEmpty = Pick<EmptyStateProps, 'title' | 'description' | 'actions' | 'variant'>
+export type DataTableEmpty = Pick<EmptyStateProps, 'title' | 'description' | 'actions' | 'kind' | 'variant'>
 
 export interface DataTableBulkContext {
   /** The selected row ids, across every page. */
@@ -74,7 +76,7 @@ export interface DataTableBulkContext {
   clear: () => void
 }
 
-export interface DataTableProps<Row> {
+export interface DataTableProps<Row> extends Omit<React.ComponentProps<'table'>, 'children' | 'aria-label'> {
   columns: DataTableColumn<Row>[]
   rows: Row[]
   getRowId: (row: Row) => string
@@ -123,8 +125,10 @@ export interface DataTableProps<Row> {
   empty?: React.ReactNode | DataTableEmpty
   stickyHeader?: boolean
   framed?: boolean
+  /** Classes for the scrolling frame around the table. */
   frameClassName?: string
-  className?: string
+  /** Classes for the outer element that holds the bar, the table and the pagination. */
+  wrapperClassName?: string
 }
 
 function compare(a: SortValue, b: SortValue): number {
@@ -134,17 +138,6 @@ function compare(a: SortValue, b: SortValue): number {
   if (b instanceof Date) b = b.getTime()
   if (typeof a === 'number' && typeof b === 'number') return a - b
   return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: 'base' })
-}
-
-/** Controlled when `value` is defined, otherwise owned here — the one pattern every prop pair uses. */
-function useControllable<T>(value: T | undefined, initial: () => T, onChange?: (next: T) => void) {
-  const [own, setOwn] = React.useState<T>(initial)
-  const current = value !== undefined ? value : own
-  const set = (next: T) => {
-    if (value === undefined) setOwn(next)
-    onChange?.(next)
-  }
-  return [current, set] as const
 }
 
 function isEmptyData(empty: unknown): empty is DataTableEmpty {
@@ -185,21 +178,27 @@ export function DataTable<Row>({
   stickyHeader = false,
   framed = false,
   frameClassName,
+  wrapperClassName,
   className,
+  ...props
 }: DataTableProps<Row>) {
   const bulkEdge = useScrollEdge<HTMLDivElement>()
-  const [sort, setSortState] = useControllable<DataTableSort | null>(controlledSort, () => defaultSort ?? null, onSortChange)
-  const [page, setPage] = useControllable<number>(controlledPage, () => defaultPage, onPageChange)
-  const [selection, setSelection] = useControllable<ReadonlySet<string>>(
-    controlledSelection,
-    () => new Set(defaultSelection ?? []),
-    onSelectionChange as ((next: ReadonlySet<string>) => void) | undefined,
-  )
-  const [hidden, setHidden] = useControllable<ReadonlySet<string>>(
-    controlledHidden,
-    () => new Set(defaultHiddenColumns ?? []),
-    onHiddenColumnsChange as ((next: ReadonlySet<string>) => void) | undefined,
-  )
+  const [sort, setSortState] = useControllable<DataTableSort | null>({
+    value: controlledSort,
+    defaultValue: () => defaultSort ?? null,
+    onChange: onSortChange,
+  })
+  const [page, setPage] = useControllable<number>({ value: controlledPage, defaultValue: defaultPage, onChange: onPageChange })
+  const [selection, setSelection] = useControllable<ReadonlySet<string>>({
+    value: controlledSelection,
+    defaultValue: () => new Set(defaultSelection ?? []),
+    onChange: onSelectionChange as ((next: ReadonlySet<string>) => void) | undefined,
+  })
+  const [hidden, setHidden] = useControllable<ReadonlySet<string>>({
+    value: controlledHidden,
+    defaultValue: () => new Set(defaultHiddenColumns ?? []),
+    onChange: onHiddenColumnsChange as ((next: ReadonlySet<string>) => void) | undefined,
+  })
 
   const visibleColumns = columns.filter((c) => !hidden.has(c.key))
 
@@ -281,6 +280,7 @@ export function DataTable<Row>({
 
   const table = (
     <Table
+      {...props}
       aria-label={label}
       aria-busy={loading || undefined}
       stickyHeader={stickyHeader}
@@ -341,6 +341,7 @@ export function DataTable<Row>({
           <TableEmpty
             colSpan={columnCount}
             title={emptyProps.title}
+            kind={emptyProps.kind}
             variant={emptyProps.variant}
             actions={emptyProps.actions}
           >
@@ -401,7 +402,7 @@ export function DataTable<Row>({
   const showBulk = bulkActions !== undefined && selectedCount > 0
 
   return (
-    <div data-slot="data-table" className="flex min-w-0 flex-col gap-2">
+    <div data-slot="data-table" className={cn('flex min-w-0 flex-col gap-2', wrapperClassName)}>
       {hasBar ? (
         // A fixed height, so the bar trading its count for the bulk actions
         // never pushes the table down under the pointer.
@@ -478,11 +479,10 @@ export function DataTable<Row>({
   )
 }
 
-export interface DataTableColumnMenuProps<Row> {
+export interface DataTableColumnMenuProps<Row> extends Omit<React.ComponentProps<'button'>, 'children' | 'onToggle' | 'hidden'> {
   columns: DataTableColumn<Row>[]
   hidden: ReadonlySet<string>
   onToggle: (key: string, visible: boolean) => void
-  className?: string
 }
 
 /**
@@ -492,11 +492,12 @@ export interface DataTableColumnMenuProps<Row> {
  * column marked `hideable: false` is shown checked and disabled, so the menu
  * still says it exists.
  */
-export function DataTableColumnMenu<Row>({ columns, hidden, onToggle, className }: DataTableColumnMenuProps<Row>) {
+/** `className`, `ref` and the rest of the DOM props go to the "Columns" button. */
+export function DataTableColumnMenu<Row>({ columns, hidden, onToggle, ...props }: DataTableColumnMenuProps<Row>) {
   const visibleCount = columns.filter((c) => !hidden.has(c.key)).length
   return (
     <Menu>
-      <MenuTrigger render={<Button variant="secondary" size="sm" icon={<Columns3 />} className={className} />}>
+      <MenuTrigger render={<Button {...props} variant="secondary" size="sm" icon={<Columns3 />} />}>
         Columns
       </MenuTrigger>
       <MenuContent align="end">

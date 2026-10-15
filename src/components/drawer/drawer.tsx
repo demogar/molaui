@@ -7,6 +7,7 @@ import { X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { slotUnlessRendered } from '../../lib/slot'
 import { IconButton } from '../button'
 import { actionRowClasses } from '../dialog/dialog'
 
@@ -75,8 +76,13 @@ export function Drawer({ side = 'end', ...props }: DrawerProps) {
   )
 }
 
-export const DrawerTrigger = DrawerPrimitive.Trigger
-export const DrawerClose = DrawerPrimitive.Close
+export function DrawerTrigger(props: DrawerPrimitive.Trigger.Props) {
+  return <DrawerPrimitive.Trigger {...slotUnlessRendered('drawer-trigger', props.render)} {...props} />
+}
+
+export function DrawerClose(props: DrawerPrimitive.Close.Props) {
+  return <DrawerPrimitive.Close {...slotUnlessRendered('drawer-close', props.render)} {...props} />
+}
 
 const viewportVariants = cva('fixed inset-0 z-(--z-overlay) flex', {
   variants: {
@@ -137,13 +143,13 @@ const backdropClasses = [
   'data-swiping:duration-0 data-starting-style:opacity-0 data-ending-style:opacity-0',
 ]
 
-const bandClass = {
+export type DrawerBand = 'oro' | 'rojo' | 'anil' | 'verde'
+const bandClass: Record<DrawerBand, string> = {
   oro: 'band-oro',
   rojo: 'band-rojo',
   anil: 'band-anil',
   verde: 'band-verde',
-} as const
-type Band = keyof typeof bandClass
+}
 
 const titleClasses = 'm-0 font-display text-xl font-bold leading-snug tracking-display wdth-display'
 const descriptionClasses = 'mt-1.5 mb-0 text-sm text-ink-2'
@@ -158,7 +164,7 @@ export interface DrawerContentProps extends Omit<DrawerPrimitive.Popup.Props, 'c
   /** Width of a side drawer, or height of a bottom sheet. Always capped by the viewport. */
   size?: 'sm' | 'md' | 'lg'
   /** The layer revealed in the top seam. */
-  band?: Band
+  band?: DrawerBand
   /** Hide the close button. Only when the footer carries an explicit way out. */
   hideClose?: boolean
 }

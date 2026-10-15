@@ -20,6 +20,10 @@ export interface Prop {
   required: boolean
   default?: string
   description?: string
+  /** The literal values, when `type` names an alias rather than spelling them out. */
+  values?: string[]
+  /** The `@deprecated` note: since when, what to use, when it goes. */
+  deprecated?: string
 }
 
 export interface Export {
@@ -30,6 +34,8 @@ export interface Export {
   props?: Prop[]
   inherits?: string[]
   variants?: Record<string, { values: string[]; default?: string }>
+  /** Where `className`, `ref` and the other DOM props go. `element: null` renders no element. */
+  forwards?: { element: string | null; className?: string }
 }
 
 export interface Alternative {

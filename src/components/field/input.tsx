@@ -14,42 +14,29 @@ export interface InputProps extends Omit<React.ComponentProps<'input'>, 'size'> 
 }
 
 /**
- * A text control. Without adornments it is the bare `<input>` wearing the
- * shared control classes; with them, the CUT moves to a wrapper and the input
- * inside goes transparent, so the icon or unit sits inside the same keyline
- * as the text rather than beside it — a unit outside the box reads as a
- * second field.
+ * A text control: an `<input>` inside a box that wears the shared control
+ * classes. The box is always there, so the icon or unit of an adorned input
+ * sits inside the same keyline as the text rather than beside it — a unit
+ * outside the box reads as a second field.
  *
- * The wrapper takes the focus ring with `:focus-within`, which is the one way
+ * `className` styles the box (`data-slot="input-group"`); `ref`, `id` and
+ * every other prop go to the `<input>` (`data-slot="input"`). Until 0.7.0
+ * the box was drawn only with adornments, and `className` went to the
+ * `<input>` without them and to the box with them, so `className="w-64"`
+ * changed meaning when an icon was added.
+ *
+ * The box takes the focus ring with `:focus-within`, which is the one way
  * the ring can surround the adornments as well as the text. Clicking an
- * adornment is not a dead zone: the wrapper is a `<label>`-free div, so the
- * leading slot forwards its pointer-down to the input instead.
+ * adornment is not a dead zone: the box is a `<label>`-free div, so a press
+ * on it or on the leading slot is forwarded to the input instead.
  */
-export function Input({
-  className,
-  size = 'md',
-  leading,
-  trailing,
-  disabled,
-  ...props
-}: InputProps) {
-  if (!leading && !trailing) {
-    return (
-      <InputPrimitive
-        data-slot="input"
-        disabled={disabled}
-        className={cn(fieldControlClasses, fieldControlSizes[size], className)}
-        {...props}
-      />
-    )
-  }
-
+export function Input({ className, size = 'md', leading, trailing, disabled, ...props }: InputProps) {
   return (
     <div
       data-slot="input-group"
       data-disabled={disabled ? '' : undefined}
       onPointerDown={(event) => {
-        // Pressing the wrapper or an adornment focuses the text, as a native
+        // Pressing the box or an adornment focuses the text, as a native
         // input's padding would. Buttons inside `trailing` keep their own press.
         const target = event.target as HTMLElement
         if (target.closest('button, a, input')) return
@@ -64,6 +51,8 @@ export function Input({
         'has-[[aria-invalid=true]]:band-danger has-[[aria-invalid=true]]:cut-band',
         'has-[[aria-invalid=true]]:focus-within:cut-band-focus',
         'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
+        // Read-only was styled on the bare input only; the box carries it now.
+        'has-[input:read-only]:bg-cloth-shade',
         '[&_svg]:size-(--icon) [&_svg]:shrink-0',
         className,
       )}

@@ -36,7 +36,7 @@ export const Flush: Story = { args: { gap: 'flush' } }
 
 export const Editorial: Story = {
   args: {
-    size: 'editorial',
+    variant: 'editorial',
     label: 'Incident',
     gap: 'spaced',
     items: [
@@ -70,7 +70,7 @@ export const Steps: StoryObj<typeof StepList> = {
 export const StepsInverse: StoryObj<typeof StepList> = {
   render: () => (
     <StepList
-      tone="inverse"
+      inverse
       titleAs="p"
       items={[
         { label: 'Before', title: 'Write the hypothesis down', note: 'One sentence, one metric.' },

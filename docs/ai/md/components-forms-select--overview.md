@@ -54,20 +54,22 @@ The one-line form, for the nine selects in ten that are a label and a list. The 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `items` (required) | `SelectOption<V>[] \| SelectOptionGroup<V>[]` |  | Flat options, or labelled groups. |
-| `aria-describedby` | `string` |  |  |
-| `aria-invalid` | `boolean \| "true" \| "false"` |  |  |
-| `aria-label` | `string` |  |  |
-| `className` | `string` |  |  |
+| `className` | `string` |  | CSS class applied to the element, or a function that returns a class based on the component's state. |
 | `defaultValue` | `string \| null` |  |  |
 | `disabled` | `boolean` |  |  |
-| `id` | `string` |  |  |
 | `label` | `ReactNode` |  | A visible label rendered above the trigger. Omit it when the select sits inside `Field`, which renders its own — and spread Field's control props onto this component instead. |
 | `name` | `string` |  |  |
 | `onValueChange` | `((value: V \| null) => void)` |  |  |
 | `placeholder` | `ReactNode` | `Select…` |  |
 | `required` | `boolean` |  |  |
-| `size` | `"sm" \| "lg" \| "md"` | `md` |  |
+| `rootProps` | `Omit<Props<V, false>, "defaultValue" \| "children" \| "value" \| "items" \| "onValueChange">` |  | Props for Base UI's `Select.Root`, for what the one-line form does not name: `open`, `onOpenChange`, `modal`, `readOnly`. |
+| `size` | `"sm" \| "md" \| "lg"` | `md` |  |
 | `value` | `string \| null` |  |  |
+| `wrapperClassName` | `string` |  | Classes for the wrapper that holds `label` and the trigger. Only rendered with a `label`. |
+
+Also accepts the props of `NativeButtonProps`.
+
+`className`, `ref`, `id` and the other DOM props go to `<button data-slot="select-trigger">`.
 
 ### `SelectContent` (component)
 
@@ -78,9 +80,15 @@ The one-line form, for the nine selects in ten that are a label and a list. The 
 
 Also accepts the props of `SelectPopupProps`.
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="select-content">`.
+
 ### `SelectGroup` (component)
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="select-group">`.
+
 ### `SelectGroupLabel` (component)
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="select-group-label">`.
 
 ### `SelectItem` (component)
 
@@ -91,11 +99,17 @@ Also accepts the props of `SelectPopupProps`.
 
 Also accepts the props of `NativeButtonProps`, `SelectItemProps`.
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="select-item">`.
+
 ### `SelectRoot` (component)
 
 A select is two shapes in this system, and they are different materials.
 
+Renders no element of its own, so it takes no `className` or `ref`.
+
 ### `SelectSeparator` (component)
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="select-separator">`.
 
 ### `SelectTrigger` (component)
 
@@ -103,11 +117,15 @@ A select is two shapes in this system, and they are different materials.
 | --- | --- | --- | --- |
 | `className` | `string` |  | CSS class applied to the element, or a function that returns a class based on the component's state. |
 | `placeholder` | `ReactNode` |  | Shown when there is no value. |
-| `size` | `"sm" \| "lg" \| "md"` | `md` |  |
+| `size` | `"sm" \| "md" \| "lg"` | `md` |  |
 
 Also accepts the props of `NativeButtonProps`, `SelectTriggerProps`.
 
+`className`, `ref`, `id` and the other DOM props go to `<button data-slot="select-trigger">`.
+
 ### `SelectValue` (component)
+
+`className`, `ref`, `id` and the other DOM props go to `<span data-slot="select-value">`.
 
 Types: `SelectContentProps`, `SelectItemProps`, `SelectOption`, `SelectOptionGroup`, `SelectProps`, `SelectTriggerProps`
 

@@ -7,6 +7,7 @@ export {
   ToolbarSeparator,
   ToolbarToggle,
   ToolbarToggleGroup,
+  toolbarVariants,
 } from './toolbar'
 export type {
   ToolbarButtonProps,
@@ -14,6 +15,7 @@ export type {
   ToolbarOverflowItem,
   ToolbarOverflowProps,
   ToolbarProps,
+  ToolbarSeparatorProps,
   ToolbarToggleGroupProps,
   ToolbarToggleProps,
 } from './toolbar'

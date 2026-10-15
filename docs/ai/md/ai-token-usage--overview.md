@@ -57,6 +57,8 @@ What a run consumed.
 | `costUsd` | `number` |  | Cost in USD, if the platform knows it. |
 | `variant` | `"full" \| "inline"` | `full` | `full`: a definition list and meter. `inline`: one line, for a run header. |
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="token-usage">`.
+
 ### `contextLevel` (function)
 
 Types: `TokenUsageProps`

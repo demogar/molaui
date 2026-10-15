@@ -86,6 +86,8 @@ One turn of a conversation.
 | `timestamp` | `string \| Date` |  |  |
 | `timeZone` | `string` |  | IANA zone the time is shown in, such as `"UTC"` or `"America/Panama"`. Without it the time is the reader's own and appears only after hydration, because the server cannot know the reader's zone; pass one to have the time in the server HTML. |
 
+`className`, `ref`, `id` and the other DOM props go to `<article data-slot="message">`.
+
 ### `Thread` (component)
 
 The scrolling transcript.
@@ -94,6 +96,8 @@ The scrolling transcript.
 | --- | --- | --- | --- |
 | `label` (required) | `string` |  | Names the region. Required: a transcript is a landmark worth finding. |
 | `stickThreshold` | `number` | `48` | Distance from the bottom, in px, that still counts as "at the bottom". |
+
+`className`, `ref`, `id` and the other DOM props go to `<section data-slot="thread">`.
 
 Types: `MessageProps`, `MessageRole`, `ThreadProps`
 

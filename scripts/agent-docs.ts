@@ -49,6 +49,7 @@ export interface PropRow {
   required: boolean
   default?: string
   description?: string
+  deprecated?: string
 }
 
 export interface ExportRow {
@@ -58,6 +59,16 @@ export interface ExportRow {
   props?: PropRow[]
   inherits?: string[]
   variants?: Record<string, { values: string[]; default?: string }>
+  /** Where `className`, `ref` and the other DOM props go; see src/docs/usage/forwards.ts. */
+  forwards?: { element: string | null; className?: string }
+}
+
+/** The sentence that says where a component's `className`, `ref` and DOM props land. */
+export function forwardsLine(forwards: ExportRow['forwards']): string {
+  if (!forwards) return ''
+  if (forwards.element === null) return 'Renders no element of its own, so it takes no `className` or `ref`.'
+  if (!forwards.className) return `\`className\`, \`ref\`, \`id\` and the other DOM props go to \`${forwards.element}\`.`
+  return `\`className\` goes to \`${forwards.className}\`; \`ref\`, \`id\` and the other DOM props go to \`${forwards.element}\`.`
 }
 
 export interface ComponentPage {
@@ -129,13 +140,14 @@ function twinHeader(site: string, title: string, source: string) {
 }
 
 export function propsTable(item: ExportRow) {
-  if (!item.props?.length) return ''
+  const where = forwardsLine(item.forwards)
+  if (!item.props?.length) return where ? `${where}\n` : ''
   const rows = item.props.map(
     (p) =>
-      `| \`${p.name}\`${p.required ? ' (required)' : ''} | \`${cell(p.type)}\` | ${p.default ? `\`${cell(p.default)}\`` : ''} | ${cell(p.description ?? '')} |`,
+      `| \`${p.name}\`${p.required ? ' (required)' : ''}${p.deprecated ? ' (deprecated)' : ''} | \`${cell(p.type)}\` | ${p.default ? `\`${cell(p.default)}\`` : ''} | ${cell(p.deprecated ? `Deprecated: ${p.deprecated}` : (p.description ?? ''))} |`,
   )
   const extra = item.inherits?.length ? `\nAlso accepts the props of ${item.inherits.map((n) => `\`${n}\``).join(', ')}.\n` : ''
-  return `| Prop | Type | Default | Description |\n| --- | --- | --- | --- |\n${rows.join('\n')}\n${extra}`
+  return `| Prop | Type | Default | Description |\n| --- | --- | --- | --- |\n${rows.join('\n')}\n${extra}${where ? `\n${where}\n` : ''}`
 }
 
 function exportsBlock(page: ComponentPage, level: string) {

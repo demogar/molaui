@@ -1,6 +1,7 @@
-import { render, screen } from '@/test/render'
+import { render, screen, waitFor, within } from '@/test/render'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import * as React from 'react'
+import { describe, expect, it, vi } from 'vitest'
 
 import { AppShell, Topbar } from './app-shell'
 import { PageHeader } from './page-header'
@@ -122,5 +123,81 @@ describe('AppShell sheet', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Open navigation' }))
     await userEvent.click(await screen.findByRole('button', { name: 'Close navigation' }))
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+})
+
+/**
+ * The shape of React Router's and Next's `<Link>`: it takes `to`, renders an
+ * anchor, and turns a plain click into a client-side navigation by
+ * preventing the browser's.
+ */
+function RouterLink({
+  to,
+  navigate,
+  onClick,
+  ...props
+}: React.ComponentProps<'a'> & { to: string; navigate: (to: string) => void }) {
+  return (
+    <a
+      {...props}
+      href={to}
+      onClick={(event) => {
+        onClick?.(event)
+        event.preventDefault()
+        navigate(to)
+      }}
+    />
+  )
+}
+
+describe('NavItem with a router link', () => {
+  it('renders the router link with the item classes, current page and ref, and routes without a document load', async () => {
+    const navigate = vi.fn()
+    const onClick = vi.fn()
+    const ref = React.createRef<HTMLAnchorElement>()
+    render(
+      <Sidebar label="Main">
+        <NavSection title="Platform">
+          <NavItem render={<RouterLink to="/runs" navigate={navigate} />} active ref={ref} onClick={onClick} data-testid="runs">
+            Runs
+          </NavItem>
+        </NavSection>
+      </Sidebar>,
+    )
+    const link = screen.getByRole('link', { name: 'Runs' })
+    expect(link).toHaveAttribute('href', '/runs')
+    expect(link).toHaveAttribute('aria-current', 'page')
+    expect(link).toHaveAttribute('data-slot', 'nav-item')
+    expect(link).toHaveAttribute('data-testid', 'runs')
+    expect(link.className).toContain('aria-[current=page]:bg-ink-soft')
+    expect(ref.current).toBe(link)
+
+    const click = new MouseEvent('click', { bubbles: true, cancelable: true })
+    link.dispatchEvent(click)
+    expect(click.defaultPrevented).toBe(true)
+    expect(navigate).toHaveBeenCalledWith('/runs')
+    expect(onClick).toHaveBeenCalledTimes(1)
+  })
+
+  it('still closes the mobile sheet after a routed click', async () => {
+    const navigate = vi.fn()
+    const user = userEvent.setup()
+    render(
+      <AppShell
+        topbar={<Topbar start={<span>Cayuco</span>} />}
+        sidebar={
+          <Sidebar label="Main">
+            <NavItem render={<RouterLink to="/agents" navigate={navigate} />}>Agents</NavItem>
+          </Sidebar>
+        }
+      >
+        <p>Work</p>
+      </AppShell>,
+    )
+    await user.click(screen.getByRole('button', { name: 'Open navigation' }))
+    const sheet = await screen.findByRole('dialog')
+    await user.click(within(sheet).getByRole('link', { name: 'Agents' }))
+    expect(navigate).toHaveBeenCalledWith('/agents')
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
   })
 })

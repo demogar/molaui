@@ -10,7 +10,9 @@ import { type Variants } from '../../lib/variants'
  * compact. Seven steps and no more — a layout that needs an eighth is a layout
  * that needs a divider, not another number.
  */
-const GAP = {
+export type Gap = 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+
+const GAP: Record<Gap, string> = {
   none: 'gap-0',
   '2xs': 'gap-1',
   xs: 'gap-2',
@@ -18,9 +20,7 @@ const GAP = {
   md: 'gap-4',
   lg: 'gap-6',
   xl: 'gap-10',
-} as const
-
-export type Gap = keyof typeof GAP
+}
 
 export const stackVariants = cva('flex', {
   variants: {
@@ -48,7 +48,7 @@ export interface StackProps extends React.ComponentProps<'div'>, Variants<typeof
 
 /** Vertical rhythm: children down a column, one gap between them. */
 export function Stack({ className, direction, gap, align, justify, wrap, ...props }: StackProps) {
-  return <div className={cn(stackVariants({ direction, gap, align, justify, wrap }), className)} {...props} />
+  return <div data-slot="stack" className={cn(stackVariants({ direction, gap, align, justify, wrap }), className)} {...props} />
 }
 
 export type InlineProps = Omit<StackProps, 'direction'>
@@ -60,11 +60,11 @@ export type InlineProps = Omit<StackProps, 'direction'>
  */
 export function Inline({ className, gap = 'sm', align = 'center', wrap = true, justify, ...props }: InlineProps) {
   return (
-    <div className={cn(stackVariants({ direction: 'row', gap, align, justify, wrap }), className)} {...props} />
+    <div data-slot="inline" className={cn(stackVariants({ direction: 'row', gap, align, justify, wrap }), className)} {...props} />
   )
 }
 
 /** One thing on the left, one on the right: a panel header, a table toolbar. */
 export function RowBetween({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div className={cn('flex min-w-0 items-center justify-between gap-6', className)} {...props} />
+  return <div data-slot="row-between" className={cn('flex min-w-0 items-center justify-between gap-6', className)} {...props} />
 }

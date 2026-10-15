@@ -5,6 +5,7 @@ import * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { useMergedRefs } from '../../lib/merge-props'
+import { useControllable } from '../../lib/use-controllable'
 import { Input, type InputProps } from './input'
 
 export interface SearchInputProps extends Omit<InputProps, 'leading' | 'trailing' | 'type'> {
@@ -50,14 +51,18 @@ export function SearchInput({
   // the clear button used to stop working when a ref was passed.
   const inputRef = React.useRef<HTMLInputElement>(null)
   const ref = useMergedRefs(inputRef, refProp)
-  const isControlled = value !== undefined
-  const [inner, setInner] = React.useState(String(defaultValue ?? ''))
-  const current = isControlled ? String(value ?? '') : inner
+  // The text is tracked even when uncontrolled, because the clear button
+  // and the shortcut cap swap on whether there is any. The change itself is
+  // reported through the input's own `onChange`, so no value callback here.
+  const [current, setCurrent] = useControllable({
+    value: value === undefined ? undefined : String(value ?? ''),
+    defaultValue: String(defaultValue ?? ''),
+  })
 
   function clear() {
     const input = inputRef.current
     if (!input) return
-    if (!isControlled) setInner('')
+    setCurrent('')
     // Route the clear through a real input event so a controlled parent's
     // onChange sees it exactly as it would see the user deleting the text.
     const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set
@@ -72,7 +77,7 @@ export function SearchInput({
       type="search"
       role="searchbox"
       placeholder={placeholder}
-      value={isControlled ? value : inner}
+      value={value ?? current}
       className={cn('[&_input::-webkit-search-cancel-button]:appearance-none', className)}
       leading={<Search />}
       trailing={
@@ -97,7 +102,7 @@ export function SearchInput({
       {...props}
       ref={ref}
       onChange={(event) => {
-        if (!isControlled) setInner(event.target.value)
+        setCurrent(event.target.value)
         onChange?.(event)
       }}
     />

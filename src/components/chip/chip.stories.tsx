@@ -65,10 +65,10 @@ export const SingleChoice: Story = {
 export const Comfortable: Story = {
   render: () => (
     <ChipGroup legend="Audience" className="max-w-md">
-      <Chip size="comfortable" defaultChecked>
+      <Chip size="md" defaultChecked>
         New workspaces in their first week
       </Chip>
-      <Chip size="comfortable">Returning after 30 days away</Chip>
+      <Chip size="md">Returning after 30 days away</Chip>
     </ChipGroup>
   ),
 }

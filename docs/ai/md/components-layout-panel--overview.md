@@ -47,24 +47,27 @@ Each story is a live example in Storybook.
 
 ### `Panel` (component)
 
-- `tone`: `pale`, `cloth`, `shade`, `ink`, `rojo`, `anil`, `verde`, `oro` (default `pale`)
+- `layer`: `pale`, `cloth`, `shade`, `ink`, `rojo`, `anil`, `verde`, `oro` (default `pale`)
 - `edge`: `cut`, `band`, `none` (default `cut`)
 - `padding`: `none`, `sm`, `md`, `lg` (default `md`)
 - `band`: `oro`, `rojo`, `anil`, `verde`, `cloth` (default `oro`)
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `as` | `"div" \| "article" \| "aside" \| "section"` | `div` | Render as a landmark-free `section` (named by its heading) instead of a `div`. |
+| `as` | `"article" \| "aside" \| "div" \| "section"` | `div` | Render as a landmark-free `section` (named by its heading) instead of a `div`. |
 | `band` | `"oro" \| "rojo" \| "anil" \| "verde" \| "cloth"` |  |  |
 | `edge` | `"cut" \| "band" \| "none"` |  |  |
+| `layer` | `"pale" \| "cloth" \| "shade" \| "ink" \| "rojo" \| "anil" \| "verde" \| "oro"` |  |  |
 | `padding` | `"none" \| "sm" \| "md" \| "lg"` |  |  |
-| `tone` | `"pale" \| "cloth" \| "shade" \| "ink" \| "rojo" \| "anil" \| "verde" \| "oro"` |  |  |
+| `tone` (deprecated) | `PanelLayer` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `layer`, which takes the same values. `codemods/prop-vocabulary.ts` rewrites call sites. |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="panel">`.
 
 ### `panelVariants` (function)
 
 The cut surface: a region of one ground, bounded by a hard edge.
 
-Types: `PanelProps`, `PanelTone`
+Types: `PanelLayer`, `PanelProps`, `PanelTone`
 
 ## Accessibility
 

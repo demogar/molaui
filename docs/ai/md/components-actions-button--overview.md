@@ -70,12 +70,11 @@ Each story is a live example in Storybook.
 
 Also accepts the props of `ButtonProps`, `NativeButtonProps`.
 
+`className`, `ref`, `id` and the other DOM props go to `<button data-slot="button">`.
+
 ### `ButtonArrow` (component)
 
-The arrow micro-interaction, exported so a router `<Link>` styled with `buttonVariants` gets the same one.
-
-- `variant`: `primary`, `secondary`, `danger`, `ghost` (default `primary`)
-- `size`: `sm`, `md`, `lg` (default `md`)
+`className`, `ref`, `id` and the other DOM props go to `<svg data-slot="button-arrow">`.
 
 ### `IconButton` (component)
 
@@ -86,16 +85,18 @@ A square button that carries only an icon. `label` is required and becomes the a
 | `label` (required) | `string` |  | The accessible name. Required: an icon is not a label. |
 | `className` | `string` |  |  |
 | `loading` | `boolean` |  | Work is in flight. The label stays (so the button never changes width mid-click), a strip of working relleno runs along its foot, and the button stops accepting presses while staying focusable and announced as busy. |
-| `size` | `"sm" \| "lg" \| "md"` |  |  |
-| `variant` | `"danger" \| "primary" \| "secondary" \| "ghost"` |  |  |
+| `size` | `"sm" \| "md" \| "lg"` |  |  |
+| `variant` | `"secondary" \| "danger" \| "primary" \| "ghost"` |  |  |
 
 Also accepts the props of `ButtonProps`, `NativeButtonProps`.
+
+`className`, `ref`, `id` and the other DOM props go to `<button data-slot="button">`.
 
 ### `buttonVariants` (function)
 
 A button is a cut shape, so its edge is a `box-shadow` keyline rather than a `border`. The signature hover reveals a band of the layer beneath the shape, which means the edge has to grow by several pixels without moving anything around it. A border would reflow the toolbar; a shadow does not.
 
-Types: `ButtonProps`, `IconButtonProps`
+Types: `ButtonArrowProps`, `ButtonProps`, `IconButtonProps`
 
 ## Accessibility
 

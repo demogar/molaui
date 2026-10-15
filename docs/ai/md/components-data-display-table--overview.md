@@ -75,9 +75,15 @@ Each story is a live example in Storybook.
 | `framed` | `boolean` | `false` | Bound the table with a keyline on a raised ground — for a table that is the panel. |
 | `stickyHeader` | `boolean` | `false` | Keep the header row visible while the body scrolls. Give the frame a height via `frameClassName`. |
 
+`className`, `ref`, `id` and the other DOM props go to `<table data-slot="table">`.
+
 ### `TableBody` (component)
 
+`className`, `ref`, `id` and the other DOM props go to `<tbody data-slot="table-body">`.
+
 ### `TableCaption` (component)
+
+`className`, `ref`, `id` and the other DOM props go to `<caption data-slot="table-caption">`.
 
 ### `TableCell` (component)
 
@@ -85,6 +91,8 @@ Each story is a live example in Storybook.
 | --- | --- | --- | --- |
 | `numeric` | `boolean` | `false` | Right-aligned tabular figures. |
 | `truncate` | `boolean` | `false` | Cut long content to one line with an ellipsis. The full text goes in `title` when the content is a string, so it is never lost — only folded. |
+
+`className`, `ref`, `id` and the other DOM props go to `<td data-slot="table-cell">`.
 
 ### `TableCheckbox` (component)
 
@@ -94,11 +102,25 @@ A native checkbox, drawn as a cut square. Native, so space toggles it, forms sub
 | --- | --- | --- | --- |
 | `indeterminate` | `boolean` | `false` | Some but not all rows are selected. A DOM property, not an attribute, so it is set by effect. |
 
+`className` goes to `<span data-slot="table-checkbox">`; `ref`, `id` and the other DOM props go to `<input>`.
+
 ### `TableEmpty` (component)
 
-The empty state, as a row. It spans the table rather than replacing it, so the headers stay and the reader still knows what would have been here.
+`className`, `ref` and the rest of the DOM props go to the `<tr>`.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `colSpan` (required) | `number` |  |  |
+| `actions` | `ReactNode` |  | One or two buttons; for a filtered table, the one that clears the filters. |
+| `kind` | `"empty" \| "no-results" \| "error" \| "no-permission"` |  |  |
+| `title` | `ReactNode` | `Nothing here yet` |  |
+| `variant` (deprecated) | `"empty" \| "no-results" \| "error" \| "no-permission"` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `kind`, as on `EmptyState`. |
+
+`className`, `ref`, `id` and the other DOM props go to `<tr data-slot="table-empty">`.
 
 ### `TableFooter` (component)
+
+`className`, `ref`, `id` and the other DOM props go to `<tfoot data-slot="table-footer">`.
 
 ### `TableHead` (component)
 
@@ -106,9 +128,13 @@ The empty state, as a row. It spans the table rather than replacing it, so the h
 | --- | --- | --- | --- |
 | `numeric` | `boolean` | `false` | Right-align, for a column of figures. Header and cells must agree or the label floats off its numbers. |
 | `onSort` | `(() => void)` |  |  |
-| `sort` | `SortDirection` |  | Makes the header a sort control. `none` renders the control in its idle state; `aria-sort` is only set on the column actually sorted, because announcing "not sorted" on every column is noise. |
+| `sort` | `TableSortDirection` |  | Makes the header a sort control. `none` renders the control in its idle state; `aria-sort` is only set on the column actually sorted, because announcing "not sorted" on every column is noise. |
+
+`className`, `ref`, `id` and the other DOM props go to `<th data-slot="table-head">`.
 
 ### `TableHeader` (component)
+
+`className`, `ref`, `id` and the other DOM props go to `<thead data-slot="table-header">`.
 
 ### `TableRow` (component)
 
@@ -116,9 +142,18 @@ The empty state, as a row. It spans the table rather than replacing it, so the h
 | --- | --- | --- | --- |
 | `selected` | `boolean` | `false` | The row is part of the current selection. Gold, because gold is the layer this system marks a choice with — it is also the text-selection colour — while añil stays free to mean "information". The fill is a wash, not the layer, so every ink in the row still clears AA; and an ink bar on the leading edge carries the state for anyone who cannot see the hue. |
 
+`className`, `ref`, `id` and the other DOM props go to `<tr data-slot="table-row">`.
+
 ### `TableSkeletonRows` (component)
 
 Loading rows: real rows at the real height, so the table does not jump when the data lands. Bar widths vary by a fixed pattern rather than at random, so a re-render does not make the skeleton twitch.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `columns` (required) | `number` |  |  |
+| `rows` | `number` | `5` | How many rows to draw. |
+
+Renders no element of its own, so it takes no `className` or `ref`.
 
 ### `DataTable` (component)
 
@@ -129,14 +164,13 @@ Loading rows: real rows at the real height, so the table does not jump when the 
 | `rows` (required) | `Row[]` |  |  |
 | `bulkActions` | `((context: DataTableBulkContext) => ReactNode)` |  | Actions for the selected rows, shown in the bar above the table while any are selected. |
 | `caption` | `ReactNode` |  |  |
-| `className` | `string` |  |  |
 | `columnMenu` | `boolean` | `false` | Adds a "Columns" menu to the bar above the table. |
 | `defaultHiddenColumns` | `Iterable<string>` |  |  |
 | `defaultPage` | `number` | `1` |  |
 | `defaultSelection` | `Iterable<string>` |  |  |
 | `defaultSort` | `DataTableSort` |  |  |
 | `empty` | `ReactNode \| DataTableEmpty` |  |  |
-| `frameClassName` | `string` |  |  |
+| `frameClassName` | `string` |  | Classes for the scrolling frame around the table. |
 | `framed` | `boolean` | `false` |  |
 | `hiddenColumns` | `ReadonlySet<string>` |  | Controlled hidden columns, by key. |
 | `label` | `string` |  | Names the table for assistive tech when there is no visible caption. |
@@ -156,19 +190,23 @@ Loading rows: real rows at the real height, so the table does not jump when the 
 | `selection` | `ReadonlySet<string>` |  | Controlled selection. Pair with `onSelectionChange`. |
 | `sort` | `DataTableSort \| null` |  | Controlled sort. `null` is "no sort"; leave undefined to let the table own it. |
 | `stickyHeader` | `boolean` | `false` |  |
+| `wrapperClassName` | `string` |  | Classes for the outer element that holds the bar, the table and the pagination. |
+
+`className`, `ref`, `id` and the other DOM props go to `<table data-slot="table">`.
 
 ### `DataTableColumnMenu` (component)
 
-Which columns show. Toggling does not close the menu, because columns are chosen several at a time. The last visible column cannot be hidden — a table with no columns is not a state worth being able to reach — and a column marked `hideable: false` is shown checked and disabled, so the menu still says it exists.
+`className`, `ref` and the rest of the DOM props go to the "Columns" button.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `columns` (required) | `DataTableColumn<Row>[]` |  |  |
 | `hidden` (required) | `ReadonlySet<string>` |  |  |
 | `onToggle` (required) | `(key: string, visible: boolean) => void` |  |  |
-| `className` | `string` |  |  |
 
-Types: `TableCellProps`, `TableCheckboxProps`, `TableHeadProps`, `TableProps`, `TableRowProps`, `DataTableBulkContext`, `DataTableColumn`, `DataTableColumnMenuProps`, `DataTableEmpty`, `DataTableProps`, `DataTableSort`, `SortValue`
+`className`, `ref`, `id` and the other DOM props go to `<button data-slot="button">`.
+
+Types: `TableCellProps`, `TableCheckboxProps`, `TableEmptyProps`, `TableHeadProps`, `TableProps`, `TableRowProps`, `TableSkeletonRowsProps`, `TableSortDirection`, `DataTableBulkContext`, `DataTableColumn`, `DataTableColumnMenuProps`, `DataTableEmpty`, `DataTableProps`, `DataTableSort`, `SortValue`
 
 ## Accessibility
 

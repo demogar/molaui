@@ -174,3 +174,40 @@ describe('CommandPalette keyboard', () => {
     await waitFor(() => expect(screen.queryByRole('dialog', { name: 'Command palette' })).not.toBeInTheDocument())
   })
 })
+
+describe('CommandPalette, uncontrolled', () => {
+  it('opens from its own trigger, closes on a choice and opens again', async () => {
+    const onSelect = vi.fn()
+    const user = userEvent.setup()
+    render(<CommandPalette trigger={<button type="button">Commands</button>} groups={make(onSelect)} />)
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Commands' }))
+    const input = await screen.findByRole('combobox')
+    await waitFor(() => expect(input).toHaveFocus())
+    await user.keyboard('{Enter}')
+    expect(onSelect).toHaveBeenCalledTimes(1)
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+    await user.click(screen.getByRole('button', { name: 'Commands' }))
+    expect(await screen.findByRole('dialog')).toBeInTheDocument()
+  })
+
+  it('starts open with defaultOpen and reports changes without needing state', async () => {
+    const onOpenChange = vi.fn()
+    const user = userEvent.setup()
+    render(<CommandPalette defaultOpen onOpenChange={onOpenChange} groups={make()} />)
+    const input = await screen.findByRole('combobox')
+    await waitFor(() => expect(input).toHaveFocus())
+    await user.keyboard('{Escape}')
+    expect(onOpenChange).toHaveBeenCalledWith(false)
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+  })
+
+  it('puts className, ref and data-* on the dialog popup', async () => {
+    const ref = { current: null as HTMLDivElement | null }
+    render(<CommandPalette defaultOpen groups={make()} className="probe" data-testid="palette" ref={ref} />)
+    const dialog = await screen.findByRole('dialog')
+    expect(dialog).toHaveAttribute('data-testid', 'palette')
+    expect(dialog).toHaveClass('probe')
+    expect(ref.current).toBe(dialog)
+  })
+})

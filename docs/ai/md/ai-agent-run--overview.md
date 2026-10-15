@@ -82,6 +82,8 @@ A long-running agent run, as a timeline.
 | `summary` | `ReactNode` |  | Shown under the timeline once the run has finished. |
 | `usage` | `Pick<TokenUsageProps, "input" \| "output" \| "cached" \| "costUsd" \| "contextWindow">` |  |  |
 
+`className`, `ref`, `id` and the other DOM props go to `<section data-slot="agent-run">`.
+
 Types: `AgentRunFailure`, `AgentRunProps`, `AgentStep`, `AgentStepKind`
 
 ## Accessibility

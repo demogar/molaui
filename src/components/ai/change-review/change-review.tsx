@@ -4,6 +4,7 @@ import { Check, MessageSquareWarning, X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { useControllable } from '../../../lib/use-controllable'
 import { Button } from '../../button'
 import { Field, Textarea } from '../../field'
 import { RunStatusGlyph } from '../run-status'
@@ -106,9 +107,13 @@ export function ChangeReview({
 }: ChangeReviewProps) {
   const Heading = headingLevel === 2 ? 'h2' : 'h3'
   const headingId = React.useId()
-  const [internal, setInternal] = React.useState<ChangeDecision | null>(defaultDecision)
-  const controlled = decisionProp !== undefined
-  const decision = controlled ? decisionProp : internal
+  const [decision, setDecision] = useControllable<ChangeDecision | null>({
+    value: decisionProp,
+    defaultValue: defaultDecision,
+    onChange: (next) => {
+      if (next) onDecide?.(next.status, next.reason)
+    },
+  })
 
   const outcomeRef = React.useRef<HTMLDivElement>(null)
   // Focus moves only after a decision made here, not when one arrives already
@@ -123,8 +128,7 @@ export function ChangeReview({
 
   const decide = (status: ChangeDecisionStatus, reason: string | undefined) => {
     decidedHere.current = true
-    if (!controlled) setInternal({ status, ...(reason ? { reason } : {}) })
-    onDecide?.(status, reason)
+    setDecision({ status, ...(reason ? { reason } : {}) })
   }
 
   return (

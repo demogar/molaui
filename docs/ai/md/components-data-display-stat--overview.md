@@ -59,7 +59,13 @@ Each story is a live example in Storybook.
 
 ### `Sparkline` (component)
 
-An ink polyline — no fill, no gradient, no axis. A sparkline is the shape of the recent past and nothing more; the moment it grows a gridline it is a chart pretending to be a glyph. The last point is a square cut out in gold (it is the "now" the figure beside it states), drawn as a square because a blade does not cut circles.
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `values` (required) | `number[]` |  |  |
+| `height` | `number` | `24` |  |
+| `width` | `number` | `72` |  |
+
+`className`, `ref`, `id` and the other DOM props go to `<svg data-slot="sparkline">`.
 
 ### `Stat` (component)
 
@@ -72,6 +78,8 @@ An ink polyline — no fill, no gradient, no axis. A sparkline is the shape of t
 | `trend` | `number[]` |  | The recent series, oldest first. Drawn in ink with the latest point cut out in the accent. |
 | `unit` | `ReactNode` |  | Set smaller beside the figure: "ms", "runs", "%". |
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="stat">`.
+
 ### `StatGroup` (component)
 
 Tiles cut from one panel rather than four floating cards: one ink keyline around the group, decorative keylines between tiles. Four separate cut shapes in a row would put eight ink edges where the eye needs one.
@@ -80,7 +88,9 @@ Tiles cut from one panel rather than four floating cards: one ink keyline around
 | --- | --- | --- | --- |
 | `columns` | `2 \| 3 \| 4 \| 5` | `4` | Columns when there is room for them. Tiles wrap down to two, then one. |
 
-Types: `StatDelta`, `StatGroupProps`, `StatProps`
+`className`, `ref`, `id` and the other DOM props go to `<dl data-slot="stat-group">`.
+
+Types: `SparklineProps`, `StatDelta`, `StatGroupProps`, `StatProps`
 
 ## Accessibility
 

@@ -5,6 +5,7 @@ import { CalendarDays, Check } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { useControllable } from '../../lib/use-controllable'
 import { type FieldControlSize, fieldControlClasses, fieldControlSizes } from '../field/field-control'
 import { Input } from '../field/input'
 import { Label } from '../field/label'
@@ -76,7 +77,8 @@ import {
  * shared month and year.
  */
 
-export interface DateRangePickerProps {
+export interface DateRangePickerProps
+  extends Omit<React.ComponentProps<'button'>, 'value' | 'defaultValue' | 'onChange' | 'children' | 'type' | 'name'> {
   value?: DateRange
   defaultValue?: DateRange
   onValueChange?: (value: DateRange) => void
@@ -100,19 +102,19 @@ export interface DateRangePickerProps {
    * has it. Turn it off only where presets and the grid cover every case.
    */
   typedEntry?: boolean
+  /** Whether the calendar is open, when the page owns that. */
+  open?: boolean
   /** Open the calendar on first render. */
   defaultOpen?: boolean
+  onOpenChange?: (open: boolean) => void
   /** Submitted as `<name>-start` and `<name>-end`, `yyyy-mm-dd`. */
   name?: string
   size?: FieldControlSize
   disabled?: boolean
   required?: boolean
   placeholder?: string
-  id?: string
-  className?: string
-  'aria-label'?: string
-  'aria-describedby'?: string
-  'aria-invalid'?: boolean | 'true' | 'false'
+  /** Classes for the outer element that holds the trigger. `className` styles the trigger itself. */
+  wrapperClassName?: string
 }
 
 const EMPTY: DateRange = { start: null, end: null }
@@ -140,7 +142,9 @@ export function DateRangePicker({
   isDateDisabled,
   today: todayProp,
   typedEntry = true,
+  open: openProp,
   defaultOpen = false,
+  onOpenChange,
   name,
   size = 'md',
   disabled,
@@ -148,20 +152,24 @@ export function DateRangePicker({
   placeholder = 'Choose a period',
   id,
   className,
+  wrapperClassName,
   'aria-describedby': describedByProp,
   'aria-invalid': invalid,
-  'aria-label': ariaLabel,
+  ...triggerProps
 }: DateRangePickerProps) {
   const uid = React.useId()
   const valueId = `${uid}-value`
   const formatId = `${uid}-format`
-  const isControlled = valueProp !== undefined
-  const [inner, setInner] = React.useState<DateRange>(defaultValue)
-  const value = isControlled ? valueProp : inner
-  const [open, setOpen] = React.useState(defaultOpen)
+  const [value, setValue] = useControllable<DateRange>({ value: valueProp, defaultValue, onChange: onValueChange })
+  const [open, setOpen] = useControllable({ value: openProp, defaultValue: defaultOpen, onChange: onOpenChange })
   // Read by the inputs' blur handler: closing with Escape returns focus to
   // the trigger, and the blur that causes must not commit what was typed.
+  // Set at once by `setOpenState`, and kept in step with an `open` the page
+  // changes itself.
   const openRef = React.useRef(open)
+  React.useLayoutEffect(() => {
+    openRef.current = open
+  }, [open])
   // The half-chosen range lives only while the popup is open; closing it
   // without completing it leaves the committed value untouched.
   const [draft, setDraft] = React.useState<DateRange | null>(null)
@@ -188,8 +196,7 @@ export function DateRangePicker({
 
   /** Make `next` the value, keeping the popup as it is. */
   function apply(next: DateRange) {
-    if (!isControlled) setInner(next)
-    onValueChange?.(next)
+    setValue(next)
     setDraft(null)
   }
 
@@ -288,11 +295,12 @@ export function DateRangePicker({
       open={open}
       onOpenChange={setOpenState}
     >
-      <div ref={anchorRef} data-slot="date-range-picker" className={className}>
+      <div ref={anchorRef} data-slot="date-range-picker" className={wrapperClassName}>
         <PopoverPrimitive.Trigger
+          {...triggerProps}
+          data-slot="date-range-picker-trigger"
           id={id}
           disabled={disabled}
-          aria-label={ariaLabel}
           aria-required={required || undefined}
           aria-invalid={invalid === true || invalid === 'true' ? true : undefined}
           aria-describedby={[valueId, describedByProp].filter(Boolean).join(' ')}
@@ -302,6 +310,7 @@ export function DateRangePicker({
             'flex cursor-default items-center justify-between gap-3 text-start',
             'focus-visible:focus-ring data-popup-open:focus-ring',
             'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
+            className,
           )}
         >
           {/* `dir="auto"`: a formatted period is text in the locale's own

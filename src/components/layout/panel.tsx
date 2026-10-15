@@ -2,12 +2,13 @@ import { cva } from 'class-variance-authority'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { deprecate } from '../../lib/deprecate'
 import { type Variants } from '../../lib/variants'
 
 /**
  * The cut surface: a region of one ground, bounded by a hard edge.
  *
- * Tones are grounds, and grounds decide the ink. That is why tone is the
+ * Layers are grounds, and grounds decide the ink. That is why `layer` is the
  * Panel's prop and not a background class the caller adds: a filled layer
  * (rojo, añil, verde) applies `on-layer`, which redefines the whole ink ramp —
  * a child's own `text-ink-muted` beats an inherited `color`, so a panel that
@@ -22,10 +23,15 @@ import { type Variants } from '../../lib/variants'
  *   band  keyline, revealed band, keyline — the signature, for the ONE panel
  *         on a screen that is the point of the screen.
  *   none  a ground with no edge, for a region that sits inside another.
+ *
+ * The prop was `tone` until 0.7.0. Everywhere else `tone` is a status
+ * (neutral, info, success, warn, danger, accent), and a Panel's value is a
+ * layer of cloth, so the same word meant two unrelated things; see
+ * docs/adr/0010-prop-vocabulary.md.
  */
 export const panelVariants = cva('relative min-w-0 rounded-none', {
   variants: {
-    tone: {
+    layer: {
       pale: 'bg-cloth-pale text-ink',
       cloth: 'bg-cloth text-ink',
       shade: 'bg-cloth-shade text-ink',
@@ -56,24 +62,39 @@ export const panelVariants = cva('relative min-w-0 rounded-none', {
   },
   compoundVariants: [
     // An ink panel's keyline is its own ground: the edge has to be cloth to exist.
-    { tone: 'ink', edge: 'cut', class: 'cut-keyline-on-ink' },
+    { layer: 'ink', edge: 'cut', class: 'cut-keyline-on-ink' },
   ],
-  defaultVariants: { tone: 'pale', edge: 'cut', padding: 'md', band: 'oro' },
+  defaultVariants: { layer: 'pale', edge: 'cut', padding: 'md', band: 'oro' },
 })
 
-export type PanelTone = NonNullable<Variants<typeof panelVariants>['tone']>
+export type PanelLayer = NonNullable<Variants<typeof panelVariants>['layer']>
+
+/** @deprecated Since 0.7.0; removed in 1.0.0. Use `PanelLayer`. */
+export type PanelTone = PanelLayer
 
 export interface PanelProps extends React.ComponentProps<'div'>, Variants<typeof panelVariants> {
   /** Render as a landmark-free `section` (named by its heading) instead of a `div`. */
   as?: 'div' | 'section' | 'article' | 'aside'
+  /**
+   * @deprecated Since 0.7.0; removed in 1.0.0. Use `layer`, which takes the
+   * same values. `codemods/prop-vocabulary.ts` rewrites call sites.
+   */
+  tone?: PanelLayer
 }
 
-export function Panel({ as: Tag = 'div', className, tone, edge, padding, band, ...props }: PanelProps) {
+export function Panel({ as: Tag = 'div', className, layer: layerProp, tone, edge, padding, band, ...props }: PanelProps) {
+  if (tone !== undefined) {
+    deprecate('panel-tone', { what: '<Panel tone>', instead: '<Panel layer>', removal: '1.0.0' })
+  }
+  const layer = layerProp ?? tone ?? 'pale'
   return (
     <Tag
       data-slot="panel"
-      data-tone={tone ?? 'pale'}
-      className={cn(panelVariants({ tone, edge, padding, band }), className)}
+      data-layer={layer}
+      // Kept beside data-layer until the `tone` prop goes, for selectors
+      // written against it.
+      data-tone={layer}
+      className={cn(panelVariants({ layer, edge, padding, band }), className)}
       {...props}
     />
   )

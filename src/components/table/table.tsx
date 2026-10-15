@@ -5,6 +5,7 @@ import * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { useMergedRefs } from '../../lib/merge-props'
+import { deprecate } from '../../lib/deprecate'
 import { useScrollEdge } from '../../lib/scroll-edge'
 import { EmptyState, type EmptyStateProps } from '../empty-state'
 import { skeletonShimmer } from '../skeleton/skeleton'
@@ -170,7 +171,7 @@ export function TableRow({ selected = false, className, ...props }: TableRowProp
   )
 }
 
-type SortDirection = 'ascending' | 'descending' | 'none'
+export type TableSortDirection = 'ascending' | 'descending' | 'none'
 
 export interface TableHeadProps extends React.ComponentProps<'th'> {
   /** Right-align, for a column of figures. Header and cells must agree or the label floats off its numbers. */
@@ -180,7 +181,7 @@ export interface TableHeadProps extends React.ComponentProps<'th'> {
    * state; `aria-sort` is only set on the column actually sorted, because
    * announcing "not sorted" on every column is noise.
    */
-  sort?: SortDirection
+  sort?: TableSortDirection
   onSort?: () => void
 }
 
@@ -311,27 +312,39 @@ export function TableCaption({ className, ...props }: React.ComponentProps<'capt
  * where that table's scroll begins. Before the frame is measured (server
  * render, no ResizeObserver) the block is the cell's width, as it was.
  */
+export interface TableEmptyProps extends Omit<React.ComponentProps<'tr'>, 'title'> {
+  colSpan: number
+  title?: React.ReactNode
+  kind?: EmptyStateProps['kind']
+  /**
+   * @deprecated Since 0.7.0; removed in 1.0.0. Use `kind`, as on
+   * `EmptyState`.
+   */
+  variant?: EmptyStateProps['kind']
+  /** One or two buttons; for a filtered table, the one that clears the filters. */
+  actions?: React.ReactNode
+}
+
+/** `className`, `ref` and the rest of the DOM props go to the `<tr>`. */
 export function TableEmpty({
   colSpan,
   title = 'Nothing here yet',
+  kind,
   variant,
   actions,
   children,
-}: {
-  colSpan: number
-  title?: React.ReactNode
-  variant?: EmptyStateProps['variant']
-  /** One or two buttons; for a filtered table, the one that clears the filters. */
-  actions?: React.ReactNode
-  children?: React.ReactNode
-}) {
+  ...props
+}: TableEmptyProps) {
+  if (variant !== undefined) {
+    deprecate('table-empty-variant', { what: '<TableEmpty variant>', instead: '<TableEmpty kind>', removal: '1.0.0' })
+  }
   return (
-    <tr data-slot="table-empty">
+    <tr {...props} data-slot="table-empty">
       <td colSpan={colSpan} className="p-0">
         <div className="sticky start-0 w-[var(--table-viewport,100%)] max-w-full">
           <EmptyState
             size="sm"
-            variant={variant}
+            kind={kind ?? variant}
             title={title}
             description={children}
             actions={actions}
@@ -341,6 +354,12 @@ export function TableEmpty({
       </td>
     </tr>
   )
+}
+
+export interface TableSkeletonRowsProps {
+  /** How many rows to draw. */
+  rows?: number
+  columns: number
 }
 
 /**
@@ -354,8 +373,11 @@ export function TableEmpty({
  * band now crosses the whole row (the row is its containing block), over bars
  * that stay put; in a framed table the band is the frame's own cloth, so
  * between the bars it does not show, and the look is what it was.
+ *
+ * No `className`, `ref` or rest props: it renders several rows and no
+ * element of its own, so there is no one element they could honestly go to.
  */
-export function TableSkeletonRows({ rows = 5, columns }: { rows?: number; columns: number }) {
+export function TableSkeletonRows({ rows = 5, columns }: TableSkeletonRowsProps) {
   const widths = ['w-3/4', 'w-1/2', 'w-2/3', 'w-5/12', 'w-7/12']
   return (
     <>
@@ -394,7 +416,7 @@ export function TableCheckbox({ indeterminate = false, className, ref: refProp, 
   }, [indeterminate])
 
   return (
-    <span className={cn('relative inline-grid size-4 shrink-0 place-items-center align-middle', className)}>
+    <span data-slot="table-checkbox" className={cn('relative inline-grid size-4 shrink-0 place-items-center align-middle', className)}>
       <input
         type="checkbox"
         className={cn(

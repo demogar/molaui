@@ -2,6 +2,7 @@ import { cva } from 'class-variance-authority'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { deprecate } from '../../lib/deprecate'
 import { type Variants } from '../../lib/variants'
 
 /**
@@ -42,12 +43,16 @@ export const chipVariants = cva(
     variants: {
       size: {
         /** Filter chips: one line, never wraps. */
-        default: 'h-(--control-h-sm) px-[calc(var(--control-px)*0.85)] leading-none whitespace-nowrap',
+        sm: 'h-(--control-h-sm) px-[calc(var(--control-px)*0.85)] leading-none whitespace-nowrap',
         /** Longer labels, which do wrap. */
+        md: 'min-h-(--control-h) px-(--control-px) py-2 leading-snug',
+        /** @deprecated Since 0.7.0; removed in 1.0.0. Use `sm`, the same chip. */
+        default: 'h-(--control-h-sm) px-[calc(var(--control-px)*0.85)] leading-none whitespace-nowrap',
+        /** @deprecated Since 0.7.0; removed in 1.0.0. Use `md`, the same chip. */
         comfortable: 'min-h-(--control-h) px-(--control-px) py-2 leading-snug',
       },
     },
-    defaultVariants: { size: 'default' },
+    defaultVariants: { size: 'sm' },
   },
 )
 
@@ -62,9 +67,24 @@ export interface ChipProps
   count?: number
 }
 
-export function Chip({ className, size, type = 'checkbox', count, children, ...props }: ChipProps) {
+const RENAMED_SIZE = { default: 'sm', comfortable: 'md' } as const
+
+/**
+ * `className` and `style` go to the `<label>`, which is the chip you see;
+ * `ref` and every other prop go to the `<input>`, which is the control a
+ * form, a test or a screen reader talks to. `style` used to go to the
+ * visually hidden input with the rest, where it did nothing.
+ */
+export function Chip({ className, style, size, type = 'checkbox', count, children, ...props }: ChipProps) {
+  if (size === 'default' || size === 'comfortable') {
+    deprecate(`chip-size-${size}`, {
+      what: `<Chip size="${size}">`,
+      instead: `<Chip size="${RENAMED_SIZE[size]}">`,
+      removal: '1.0.0',
+    })
+  }
   return (
-    <label data-slot="chip" className={cn(chipVariants({ size }), className)}>
+    <label data-slot="chip" className={cn(chipVariants({ size }), className)} style={style}>
       <input type={type} className="sr-only" {...props} />
       {children}
       {count !== undefined ? (

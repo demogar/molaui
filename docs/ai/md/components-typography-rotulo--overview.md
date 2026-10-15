@@ -53,6 +53,8 @@ The label register — Archivo pushed out along its width axis, cut short by a b
 | `band` | `RotuloBand` | `ink` | The revealed band before the label. Defaults to ink: on light cloth gold measures 1.66:1 and the mark disappears, and rojo, the default until 2026-10, is the danger colour on a product screen (docs/adr/0008-the-rojo-register.md). Rojo stays available for editorial pages; gold is for ink grounds. |
 | `plain` | `boolean` | `false` | Drop the band and keep only the lettering — for a label inside a dense header. |
 
+`className`, `ref`, `id` and the other DOM props go to `<p data-slot="rotulo">`.
+
 Types: `RotuloBand`, `RotuloProps`
 
 ## Accessibility

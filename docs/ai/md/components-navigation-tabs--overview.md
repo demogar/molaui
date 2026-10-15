@@ -59,9 +59,11 @@ Each story is a live example in Storybook.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `className` | `string` |  |  |
-| `variant` | `Variant` | `underline` |  |
+| `variant` | `TabsVariant` | `underline` |  |
 
 Also accepts the props of `TabsRootProps`.
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="tabs">`.
 
 ### `TabsList` (component)
 
@@ -72,6 +74,8 @@ Also accepts the props of `TabsRootProps`.
 
 Also accepts the props of `TabsListProps`.
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="tabs-list">`.
+
 ### `TabsPanel` (component)
 
 | Prop | Type | Default | Description |
@@ -79,6 +83,8 @@ Also accepts the props of `TabsListProps`.
 | `className` | `string` |  |  |
 
 Also accepts the props of `TabsPanelProps`.
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="tabs-panel">`.
 
 ### `TabsTab` (component)
 
@@ -90,7 +96,9 @@ Also accepts the props of `TabsPanelProps`.
 
 Also accepts the props of `NativeButtonProps`, `TabsTabProps`.
 
-Types: `TabsListProps`, `TabsPanelProps`, `TabsProps`, `TabsTabProps`
+`className`, `ref`, `id` and the other DOM props go to `<button data-slot="tabs-tab">`.
+
+Types: `TabsListProps`, `TabsPanelProps`, `TabsProps`, `TabsTabProps`, `TabsVariant`
 
 ## Accessibility
 

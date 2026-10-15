@@ -48,7 +48,11 @@ Each story is a live example in Storybook.
 
 A non-modal panel anchored to the control that opened it — filters on a table column, the details of a run step, a share sheet.
 
+Renders no element of its own, so it takes no `className` or `ref`.
+
 ### `PopoverClose` (component)
+
+`className`, `ref`, `id` and the other DOM props go to `<button data-slot="popover-close">`.
 
 ### `PopoverContent` (component)
 
@@ -63,7 +67,11 @@ A non-modal panel anchored to the control that opened it — filters on a table 
 
 Also accepts the props of `PopoverPopupProps`.
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="popover">`.
+
 ### `PopoverTrigger` (component)
+
+`className`, `ref`, `id` and the other DOM props go to `<button data-slot="popover-trigger">`.
 
 ### `floatingSurface` (constant)
 

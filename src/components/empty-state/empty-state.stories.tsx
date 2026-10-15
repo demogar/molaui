@@ -14,7 +14,7 @@ const meta = {
     actions: <Button icon={<Plus />}>New saved reply</Button>,
   },
   argTypes: {
-    variant: { control: 'inline-radio', options: ['empty', 'no-results', 'error', 'no-permission'] },
+    kind: { control: 'inline-radio', options: ['empty', 'no-results', 'error', 'no-permission'] },
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
   },
   parameters: {
@@ -34,7 +34,7 @@ export const Empty: Story = {}
 
 export const NoResults: Story = {
   args: {
-    variant: 'no-results',
+    kind: 'no-results',
     title: 'No runs match these filters',
     description: '3 filters are hiding 1,284 runs.',
     actions: <Button variant="secondary">Clear filters</Button>,
@@ -43,7 +43,7 @@ export const NoResults: Story = {
 
 export const LoadError: Story = {
   args: {
-    variant: 'error',
+    kind: 'error',
     title: 'Traces did not load',
     description: 'The trace store returned 503. Nothing was lost; this panel will try again on its own in 30s.',
     actions: (
@@ -56,7 +56,7 @@ export const LoadError: Story = {
 
 export const NoPermission: Story = {
   args: {
-    variant: 'no-permission',
+    kind: 'no-permission',
     title: 'Billing is restricted',
     description: 'Workspace owners can see cost data. Ask Priya or Tomás for access.',
     actions: <Button variant="secondary">Request access</Button>,

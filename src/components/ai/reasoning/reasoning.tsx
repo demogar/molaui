@@ -68,7 +68,7 @@ export function Reasoning({
           <StreamingText
             text={text}
             status={thinking ? 'streaming' : 'done'}
-            tone="muted"
+            variant="muted"
             doneAnnouncement="Reasoning complete."
             className="text-base"
           />

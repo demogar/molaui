@@ -69,12 +69,24 @@ export function componentMarkdown(c: Component, data: Data, via?: string) {
         '| Prop | Type | Default | Description |',
         '| --- | --- | --- | --- |',
         ...x.props.map(
-          (p) => `| \`${p.name}\`${p.required ? ' (required)' : ''} | \`${cell(p.type)}\` | ${p.default ? `\`${cell(p.default)}\`` : ''} | ${cell(p.description ?? '')} |`,
+          (p) =>
+            `| \`${p.name}\`${p.required ? ' (required)' : ''}${p.deprecated ? ' (deprecated)' : ''} | \`${cell(p.type)}\` | ${p.default ? `\`${cell(p.default)}\`` : ''} | ${cell(p.deprecated ? `Deprecated: ${p.deprecated}` : (p.description ?? ''))} |`,
         ),
         '',
       )
     }
     if (x.inherits?.length) out.push(`Also accepts the props of ${x.inherits.map((n) => `\`${n}\``).join(', ')}.`, '')
+    if (x.forwards) {
+      const f = x.forwards
+      out.push(
+        f.element === null
+          ? 'Renders no element of its own, so it takes no `className` or `ref`.'
+          : f.className
+            ? `\`className\` goes to \`${f.className}\`; \`ref\`, \`id\` and the other DOM props go to \`${f.element}\`.`
+            : `\`className\`, \`ref\`, \`id\` and the other DOM props go to \`${f.element}\`.`,
+        '',
+      )
+    }
   }
   const types = c.exports.filter((x) => x.kind === 'type').map((x) => `\`${x.name}\``)
   if (types.length) out.push(`Types: ${types.join(', ')}`, '')

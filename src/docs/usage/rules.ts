@@ -74,4 +74,12 @@ export const RULES: Rule[] = [
     rule: 'A screen reflows at 320px: only a region meant to scroll sideways (a table, code, a tab or chip row) may, and it carries the `scroll-edge` utility with `useScrollEdge()` as its ref. Table, Tabs and CodeBlock already do.',
     why: 'WCAG 1.4.10 is measured at 320px, and a region that scrolls with no cue reads as complete: a table hid its Status column and its only action that way.',
   },
+  {
+    rule: 'Props share one vocabulary: `tone` is a status (`neutral`, `info`, `success`, `warn`, `danger`, `accent`), `variant` a presentation (`solid`, `outline`, `seam`), `kind` a category (`EmptyState kind="no-results"`), and `size` the t-shirt scale (`xs` to `xl`).',
+    why: 'A word that means one thing on every component can be guessed instead of looked up, by a person or an agent.',
+  },
+  {
+    rule: 'Every component takes `ref`, `id`, `data-*` and the other DOM props of the element it documents. `className` and `style` style the box you see (the element with the cut); `ref` and the rest go to the control you focus. A wrapper around a label has `wrapperClassName`.',
+    why: 'A `className` that moved to another element when a `label` was added changed meaning silently.',
+  },
 ]

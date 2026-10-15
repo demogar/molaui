@@ -56,11 +56,13 @@ Each story is a live example in Storybook.
 | --- | --- | --- | --- |
 | `className` | `string` |  |  |
 | `label` | `ReactNode` |  |  |
-| `size` | `"sm" \| "lg" \| "md"` | `md` |  |
+| `size` | `ProgressSize` | `md` |  |
 | `thresholds` | `{ warn?: number; danger?: number; } \| undefined` | `{ warn: 0.75, danger: 0.9 }` | Fractions of the range at which the fill changes: gold past `warn`, rojo past `danger`. Drawn on the track as ticks. Pass `{}` for none. |
 | `valueText` | `((formatted: string, value: number) => ReactNode)` |  |  |
 
 Also accepts the props of `MeterRootProps`.
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="meter">`.
 
 ### `Progress` (component)
 
@@ -69,17 +71,19 @@ Also accepts the props of `MeterRootProps`.
 | `className` | `string` |  |  |
 | `label` | `ReactNode` |  | Visible label; also the accessible name. Use `aria-label` when there is no room for one. |
 | `showValue` | `boolean` | `true` | Show the formatted value at the end of the label row. Ignored while indeterminate. |
-| `size` | `"sm" \| "lg" \| "md"` | `md` |  |
-| `tone` | `"danger" \| "success" \| "ink"` | `ink` | Fill colour. Ink is in-flight; verde/rojo for a finished state that stays on screen. |
+| `size` | `ProgressSize` | `md` |  |
+| `tone` | `"neutral" \| "danger" \| "success" \| "ink"` | `neutral` | Fill colour. `neutral` (ink) is in-flight; `success` and `danger` (verde, rojo) for a finished state that stays on screen. `ink` is deprecated since 0.7.0 and removed in 1.0.0: use `neutral`, the same fill under the status word every other `tone` uses. |
 | `valueText` | `((formatted: string \| null, value: number \| null) => ReactNode)` |  | Replaces the value text, e.g. "212 / 300 prompts". |
 
 Also accepts the props of `ProgressRootProps`.
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="progress">`.
 
 ### `meterLevel` (function)
 
 Which band a reading is in — exported for the stat tiles and tables that colour a number to match.
 
-Types: `MeterProps`, `ProgressProps`
+Types: `MeterProps`, `ProgressProps`, `ProgressSize`
 
 ## Accessibility
 

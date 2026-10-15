@@ -47,10 +47,16 @@ Each story is a live example in Storybook.
 
 ### `DescriptionList` (component)
 
+- `layout`: `inline`, `stacked`, `grid` (default `inline`)
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `items` (required) | `DescriptionItem[]` |  |  |
-| `layout` | `"grid" \| "inline" \| "stacked"` | `inline` |  |
+| `layout` | `"inline" \| "stacked" \| "grid"` | `inline` |  |
+
+`className`, `ref`, `id` and the other DOM props go to `<dl data-slot="description-list">`.
+
+### `descriptionListVariants` (function)
 
 Types: `DescriptionItem`, `DescriptionListProps`
 

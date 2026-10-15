@@ -144,7 +144,11 @@ export const defaultFileUploadMessages: FileUploadMessages = {
   list: 'Files',
 }
 
-export interface FileUploadProps {
+export interface FileUploadProps
+  extends Omit<
+    React.ComponentProps<'div'>,
+    'children' | 'onChange' | 'defaultValue' | 'id' | 'aria-label' | 'aria-describedby' | 'aria-invalid'
+  > {
   /** Native `accept`: `.jsonl,.csv`, `application/pdf`, `image/*`. Enforced on drop as well as in the picker. */
   accept?: string
   /** Bytes, per file. */
@@ -169,8 +173,7 @@ export interface FileUploadProps {
   onReject?: (rejections: FileRejection[]) => void
   /** Copy, for another language. Merged over the English defaults. */
   messages?: Partial<FileUploadMessages>
-  className?: string
-  /* Field wiring, spread from `{...control}`. */
+  /* Field wiring, spread from `{...control}`: these go to the browse button, the control. */
   id?: string
   required?: boolean
   'aria-describedby'?: string
@@ -181,6 +184,11 @@ export interface FileUploadProps {
 let nextId = 0
 const makeId = () => `upload-${++nextId}`
 
+/**
+ * `className`, `ref` and the DOM props go to the root, the region that holds
+ * the dropzone and the list; the Field wiring (`id`, `aria-*`) goes to the
+ * browse button, the control a label names.
+ */
 export function FileUpload({
   accept,
   maxSize,
@@ -201,6 +209,7 @@ export function FileUpload({
   'aria-describedby': describedBy,
   'aria-invalid': ariaInvalid,
   'aria-label': ariaLabel,
+  ...props
 }: FileUploadProps) {
   const t = { ...defaultFileUploadMessages, ...messageOverrides }
   const uid = React.useId()
@@ -354,7 +363,7 @@ export function FileUpload({
   const describedByIds = [constraints ? constraintsId : null, describedBy].filter(Boolean).join(' ') || undefined
 
   return (
-    <div data-slot="file-upload" className={cn('flex flex-col gap-3', className)}>
+    <div {...props} data-slot="file-upload" className={cn('flex flex-col gap-3', className)}>
       <div
         data-slot="file-upload-dropzone"
         data-dragging={dragging ? '' : undefined}

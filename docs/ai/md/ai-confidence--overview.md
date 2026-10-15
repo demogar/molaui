@@ -56,6 +56,8 @@ How sure the system is, in three steps and in words.
 | `level` (required) | `ConfidenceLevel` |  |  |
 | `basis` | `string` |  | What the confidence rests on — "3 sources agree", "single source". |
 
+`className`, `ref`, `id` and the other DOM props go to `<span data-slot="confidence">`.
+
 ### `UncertaintyNote` (component)
 
 Where the model flags its own doubt, in the answer, next to the claim.
@@ -64,6 +66,8 @@ Where the model flags its own doubt, in the answer, next to the claim.
 | --- | --- | --- | --- |
 | `action` | `ReactNode` |  | An action that resolves it — "Open the dashboard". |
 | `title` | `string` | `The model is unsure` | The short claim — "Unverified figure". Defaults to "The model is unsure". |
+
+`className`, `ref`, `id` and the other DOM props go to `<aside data-slot="uncertainty-note">`.
 
 Types: `ConfidenceLevel`, `ConfidenceProps`, `UncertaintyNoteProps`
 

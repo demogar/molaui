@@ -69,6 +69,8 @@ Each story is a live example in Storybook.
 | `added` (required) | `number` |  |  |
 | `removed` (required) | `number` |  |  |
 
+`className`, `ref`, `id` and the other DOM props go to `<span data-slot="change-count">`.
+
 ### `ChangeReview` (component)
 
 An agent proposes a change; a person reviews it and decides.
@@ -86,6 +88,8 @@ An agent proposes a change; a person reviews it and decides.
 | `reviewer` | `string` |  | Who decided, shown with the outcome — "M. Herrera". |
 | `summary` | `ReactNode` |  | The agent's explanation of the change, in its own words. Set as prose. |
 
+`className`, `ref`, `id` and the other DOM props go to `<section data-slot="change-review">`.
+
 ### `FieldChanges` (component)
 
 A change to a record rather than a file: a feature flag, a customer's plan, a schedule. Each field reads before → after.
@@ -95,6 +99,8 @@ A change to a record rather than a file: a feature flag, a customer's plan, a sc
 | `changes` (required) | `readonly FieldChange[]` |  |  |
 | `title` (required) | `ReactNode` |  | What the record is — "Feature flag help_panel_v2". |
 | `headingLevel` | `3 \| 4 \| 5` | `4` |  |
+
+`className`, `ref`, `id` and the other DOM props go to `<section data-slot="field-changes">`.
 
 ### `FileDiff` (component)
 
@@ -110,6 +116,8 @@ One file's change, as a reviewer reads it.
 | `kind` | `FileChangeKind` | `modified` |  |
 | `layout` | `"unified" \| "split"` | `unified` | `unified` is one column of lines. `split` sets old against new side by side once the diff's container is 48rem wide, and stays unified below that — a phone has no room for two columns of code. |
 | `previousPath` | `string` |  | The path before a rename. |
+
+`className`, `ref`, `id` and the other DOM props go to `<section data-slot="file-diff">`.
 
 ### `countChanges` (function)
 

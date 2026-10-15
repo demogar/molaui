@@ -444,7 +444,7 @@ describe('DataTable — paging, server data, bulk actions and columns', () => {
         columns={columns}
         rows={[]}
         getRowId={(r) => r.id}
-        empty={{ variant: 'no-results', title: 'No runs match', description: 'Nothing failed today.', actions: <button type="button">Clear filters</button> }}
+        empty={{ kind: 'no-results', title: 'No runs match', description: 'Nothing failed today.', actions: <button type="button">Clear filters</button> }}
       />,
     )
     expect(screen.getByRole('heading', { name: 'No runs match' })).toBeInTheDocument()

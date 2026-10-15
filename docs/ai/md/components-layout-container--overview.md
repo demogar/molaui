@@ -40,11 +40,14 @@ Each story is a live example in Storybook.
 
 ### `Container` (component)
 
-- `size`: `page`, `wide`, `prose`, `full` (default `page`)
+- `width`: `page`, `wide`, `prose`, `full` (default `page`)
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `size` | `"page" \| "wide" \| "prose" \| "full"` |  |  |
+| `size` (deprecated) | `ContainerWidth` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `width`, which takes the same values. `codemods/prop-vocabulary.ts` rewrites call sites. |
+| `width` | `"page" \| "wide" \| "prose" \| "full"` |  |  |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="container">`.
 
 ### `Section` (component)
 
@@ -53,22 +56,27 @@ Each story is a live example in Storybook.
 | `divided` | `boolean` | `false` | A keyline between this section and the one above it. |
 | `rhythm` | `"page" \| "panel"` | `panel` | `page` is the editorial 56/80/112px rhythm; `panel` is the tool rhythm. |
 
+`className`, `ref`, `id` and the other DOM props go to `<section data-slot="section">`.
+
 ### `SectionHeader` (component)
+
+`className`, `ref` and the rest of the DOM props go to the outer `<div>`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `title` (required) | `ReactNode` |  |  |
 | `actions` | `ReactNode` |  | Actions, aligned to the heading's baseline on the right. |
-| `className` | `string` |  |  |
 | `label` | `string` |  | The section's label. It renders UNDER the heading, not above it: a small label above a heading pre-announces what the heading is about to say better. Below, the same string reads as what kind of section this is. |
 | `lead` | `ReactNode` |  |  |
 | `level` | `1 \| 2 \| 3` | `2` |  |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="section-header">`.
 
 ### `containerVariants` (function)
 
 The page column. `page` is the editorial width the system was born at; `wide` is for tools, where a table with twelve columns deserves the screen; `prose` is the reading measure and never widens.
 
-Types: `ContainerProps`, `SectionHeaderProps`, `SectionProps`
+Types: `ContainerProps`, `ContainerWidth`, `SectionHeaderProps`, `SectionProps`
 
 ## Accessibility
 

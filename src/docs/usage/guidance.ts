@@ -1058,8 +1058,12 @@ export const USAGE: Record<string, Usage> = {
     ],
     practices: [
       {
-        do: 'Mark the current destination with active, and set countTone to attention only for things that need a person.',
+        do: 'Mark the current destination with active, and set countTone to danger only for things that need a person.',
         dont: 'Fill every count in rojo; totals are not alarms.',
+      },
+      {
+        do: 'Render each NavItem as your router’s link with render={<Link to="/runs" />}, so the shell navigates without reloading the page.',
+        dont: 'Wrap a NavItem in your own link, or pass a plain href in a single-page app; the first nests links, the second reloads the document.',
       },
     ],
     content: [
@@ -1250,7 +1254,7 @@ export const USAGE: Record<string, Usage> = {
     ],
     practices: [
       {
-        do: 'Pass renderLink to use your router’s link.',
+        do: 'Pass renderLink your router’s link, as an element (<Link />) or a function that returns one.',
         dont: 'Link the current page; a link to where you already are does nothing.',
       },
     ],

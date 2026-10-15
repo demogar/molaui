@@ -160,11 +160,11 @@ const BIDI_MARKS = /[‎‏؜‪-‮⁦-⁩]/g
 
 const NUMERIC: Intl.DateTimeFormatOptions = { day: '2-digit', month: '2-digit', year: 'numeric' }
 
-type Part = 'day' | 'month' | 'year'
+export type DatePart = 'day' | 'month' | 'year'
 
 export interface DatePattern {
   /** The order the locale writes the parts in. */
-  order: Part[]
+  order: DatePart[]
   /** What a person should type, e.g. `DD/MM/YYYY` or `MM/DD/YYYY`. */
   pattern: string
 }
@@ -178,7 +178,7 @@ export interface DatePattern {
  */
 export function getDatePattern(locale: DateLocale): DatePattern {
   const parts = new Intl.DateTimeFormat(locale, NUMERIC).formatToParts(new Date(2026, 10, 23))
-  const order: Part[] = []
+  const order: DatePart[] = []
   let separator = '/'
   for (const part of parts) {
     if (part.type === 'day' || part.type === 'month' || part.type === 'year') order.push(part.type)
@@ -238,7 +238,7 @@ export function parseInputDate(text: string, locale: DateLocale): ParseResult {
   const numbers = clean.split(/\D+/).filter(Boolean)
   if (numbers.length !== 3) return { ok: false, reason: 'format' }
   const { order } = getDatePattern(locale)
-  const value: Record<Part, number> = { day: 0, month: 0, year: 0 }
+  const value: Record<DatePart, number> = { day: 0, month: 0, year: 0 }
   order.forEach((part, i) => {
     value[part] = Number(numbers[i])
   })

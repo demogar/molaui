@@ -200,7 +200,7 @@ export interface RecommendationBadgeProps
 
 export function RecommendationBadge({ className, level, children, ...props }: RecommendationBadgeProps) {
   return (
-    <span className={cn(recommendationVariants({ level }), className)} {...props}>
+    <span data-slot="recommendation-badge" className={cn(recommendationVariants({ level }), className)} {...props}>
       {children ?? RECOMMENDATION_LABELS[level ?? 'essential']}
     </span>
   )

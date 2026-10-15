@@ -72,13 +72,14 @@ export interface ComboboxOptionGroup {
   items: ComboboxOption[]
 }
 
-type Items = ComboboxOption[] | ComboboxOptionGroup[]
+/** Flat options, or labelled groups. */
+export type ComboboxItems = ComboboxOption[] | ComboboxOptionGroup[]
 
-function isGrouped(items: Items): items is ComboboxOptionGroup[] {
+function isGrouped(items: ComboboxItems): items is ComboboxOptionGroup[] {
   return items.length > 0 && 'items' in items[0]!
 }
 
-function flatten(items: Items): ComboboxOption[] {
+function flatten(items: ComboboxItems): ComboboxOption[] {
   return isGrouped(items) ? items.flatMap((group) => group.items) : items
 }
 
@@ -170,9 +171,14 @@ function OptionList({ grouped }: { grouped: boolean }) {
 
 /* ── Combobox ──────────────────────────────────────────────────────── */
 
-interface ComboboxCommonProps {
+/**
+ * What both forms share. Every DOM prop of the `<input>` is accepted too,
+ * and goes to it with `ref`; `className` goes to the box around it.
+ */
+export interface ComboboxCommonProps
+  extends Omit<React.ComponentProps<'input'>, 'value' | 'defaultValue' | 'onChange' | 'size' | 'children' | 'multiple' | 'type'> {
   /** Flat options, or labelled groups. With `filter={null}`, the options to show right now. */
-  items: Items
+  items: ComboboxItems
   placeholder?: string
   /**
    * A visible label above the field. Omit it inside `Field`, which renders
@@ -184,8 +190,8 @@ interface ComboboxCommonProps {
   readOnly?: boolean
   required?: boolean
   name?: string
-  id?: string
-  className?: string
+  /** Classes for the wrapper that holds `label` and the field. Only rendered with a `label`. */
+  wrapperClassName?: string
   /** What the popup says when nothing matches. */
   emptyMessage?: React.ReactNode
   /** Results are on their way: the popup shows the working texture and "Searching…". */
@@ -205,9 +211,6 @@ interface ComboboxCommonProps {
   clearLabel?: string
   /** Accessible name of the button that opens the list. */
   triggerLabel?: string
-  'aria-label'?: string
-  'aria-describedby'?: string
-  'aria-invalid'?: boolean | 'true' | 'false'
 }
 
 export interface ComboboxSingleProps extends ComboboxCommonProps {
@@ -215,6 +218,12 @@ export interface ComboboxSingleProps extends ComboboxCommonProps {
   value?: string | null
   defaultValue?: string | null
   onValueChange?: (value: string | null) => void
+  /**
+   * Only with `multiple`: a single value has no chips to remove. Typed
+   * `never` so passing it here is an error rather than a silent no-op —
+   * an optional discriminant does not narrow the union by itself.
+   */
+  removeLabel?: never
 }
 
 export interface ComboboxMultipleProps extends ComboboxCommonProps {
@@ -233,7 +242,7 @@ export type ComboboxProps = ComboboxSingleProps | ComboboxMultipleProps
  * UI in option objects; with a server search the selected option may have
  * scrolled out of `items`, and its label still has to be shown in the field.
  */
-function useOptionCache(items: Items) {
+function useOptionCache(items: ComboboxItems) {
   // One Map for the component's life, filled as items arrive. It only ever
   // gains entries, so writing to it during render is idempotent.
   const [cache] = React.useState(() => new Map<string, ComboboxOption>())
@@ -243,6 +252,11 @@ function useOptionCache(items: Items) {
 
 const multiMinHeight = { sm: 'min-h-(--control-h-sm)', md: 'min-h-(--control-h)', lg: 'min-h-(--control-h-lg)' } as const
 
+/**
+ * `className` goes to the box around the input (the element with the cut),
+ * `ref`, `id` and the other DOM props to the `<input>`, with or without a
+ * `label`; the wrapper a `label` adds takes `wrapperClassName`.
+ */
 export function Combobox(props: ComboboxProps) {
   const {
     items,
@@ -255,6 +269,7 @@ export function Combobox(props: ComboboxProps) {
     name,
     id,
     className,
+    wrapperClassName,
     emptyMessage = 'No matches',
     loading = false,
     status,
@@ -263,9 +278,14 @@ export function Combobox(props: ComboboxProps) {
     locale,
     clearLabel = 'Clear selection',
     triggerLabel = 'Show options',
-    'aria-label': ariaLabel,
     'aria-describedby': ariaDescribedBy,
-    'aria-invalid': ariaInvalid,
+    // Taken out so the rest is only the input's DOM props.
+    multiple: _multiple,
+    value: _value,
+    defaultValue: _defaultValue,
+    onValueChange: _onValueChange,
+    removeLabel: _removeLabel,
+    ...inputProps
   } = props
   const uid = React.useId()
   const inputId = id ?? `${uid}-input`
@@ -286,7 +306,7 @@ export function Combobox(props: ComboboxProps) {
     'has-[[aria-invalid=true]]:band-danger has-[[aria-invalid=true]]:cut-band',
     'has-[[aria-invalid=true]]:focus-within:cut-band-focus',
     'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
-    label ? undefined : className,
+    className,
   )
 
   const endButtons = disabled || readOnly ? null : (
@@ -300,11 +320,7 @@ export function Combobox(props: ComboboxProps) {
     </>
   )
 
-  const inputAria = {
-    id: inputId,
-    'aria-label': ariaLabel,
-    'aria-invalid': ariaInvalid,
-  }
+  const inputAria = { ...inputProps, id: inputId }
 
   const shared = {
     items,
@@ -423,7 +439,7 @@ export function Combobox(props: ComboboxProps) {
   return root(
     <>
       {label ? (
-        <div className={cn('flex flex-col gap-2', className)}>
+        <div data-slot="combobox-field" className={cn('flex flex-col gap-2', wrapperClassName)}>
           <Label htmlFor={inputId} required={required}>
             {label}
           </Label>
@@ -450,7 +466,8 @@ export function Combobox(props: ComboboxProps) {
 
 /* ── Autocomplete ──────────────────────────────────────────────────── */
 
-export interface AutocompleteProps {
+export interface AutocompleteProps
+  extends Omit<React.ComponentProps<'input'>, 'value' | 'defaultValue' | 'onChange' | 'size' | 'children' | 'type'> {
   /** Suggestions. Plain strings, or options with a description line. */
   items: (string | ComboboxOption)[]
   value?: string
@@ -464,23 +481,23 @@ export interface AutocompleteProps {
   readOnly?: boolean
   required?: boolean
   name?: string
-  id?: string
-  className?: string
+  /** Classes for the wrapper that holds `label` and the input. Only rendered with a `label`. */
+  wrapperClassName?: string
   /** What the popup says when nothing matches. Omit to close the popup instead. */
   emptyMessage?: React.ReactNode
   loading?: boolean
   status?: React.ReactNode
   /** Locale for the built-in matching. Omitted, the runtime's locale is used. */
   locale?: Intl.LocalesArgument
-  autoComplete?: string
-  'aria-label'?: string
-  'aria-describedby'?: string
-  'aria-invalid'?: boolean | 'true' | 'false'
 }
 
 /**
  * Free text with suggestions: a run label, a tag, a search. The typed text is
  * the value; picking a suggestion only fills it in.
+ *
+ * `className`, `ref` and the rest of the DOM props go to the `<input>`, which
+ * is also the box, with or without a `label`; the wrapper a `label` adds
+ * takes `wrapperClassName`.
  */
 export function Autocomplete({
   items,
@@ -496,12 +513,13 @@ export function Autocomplete({
   name,
   id,
   className,
+  wrapperClassName,
   emptyMessage,
   loading = false,
   status,
   locale,
   autoComplete = 'off',
-  ...aria
+  ...inputProps
 }: AutocompleteProps) {
   const uid = React.useId()
   const inputId = id ?? `${uid}-input`
@@ -512,12 +530,12 @@ export function Autocomplete({
 
   const input = (
     <AutocompletePrimitive.Input
+      {...inputProps}
       data-slot="autocomplete"
       id={inputId}
       placeholder={placeholder}
       autoComplete={autoComplete}
-      className={cn(fieldControlClasses, fieldControlSizes[size], label ? undefined : className)}
-      {...aria}
+      className={cn(fieldControlClasses, fieldControlSizes[size], className)}
     />
   )
 
@@ -535,7 +553,7 @@ export function Autocomplete({
       locale={locale}
     >
       {label ? (
-        <div className={cn('flex flex-col gap-2', className)}>
+        <div data-slot="autocomplete-field" className={cn('flex flex-col gap-2', wrapperClassName)}>
           <Label htmlFor={inputId} required={required}>
             {label}
           </Label>

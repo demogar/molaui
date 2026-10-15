@@ -35,7 +35,7 @@ export interface DescriptionItem {
   id?: string
 }
 
-const listVariants = cva('m-0', {
+export const descriptionListVariants = cva('m-0', {
   variants: {
     layout: {
       inline: '',
@@ -80,13 +80,13 @@ const detailVariants = cva('m-0 min-w-0 text-ink', {
 
 export interface DescriptionListProps
   extends Omit<React.ComponentProps<'dl'>, 'children'>,
-    Variants<typeof listVariants> {
+    Variants<typeof descriptionListVariants> {
   items: DescriptionItem[]
 }
 
 export function DescriptionList({ items, layout = 'inline', className, ...props }: DescriptionListProps) {
   return (
-    <dl data-slot="description-list" className={cn(listVariants({ layout }), className)} {...props}>
+    <dl data-slot="description-list" className={cn(descriptionListVariants({ layout }), className)} {...props}>
       {items.map((item, i) => (
         <div
           key={item.id ?? (typeof item.term === 'string' ? item.term : i)}

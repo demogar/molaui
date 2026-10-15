@@ -55,6 +55,8 @@ Decorative by contract: a swatch is always hidden from assistive technology, so 
 | `size` | `"sm" \| "md"` |  |  |
 | `tone` | `"neutral" \| "info" \| "success" \| "warn" \| "danger" \| "accent"` |  |  |
 
+`className`, `ref`, `id` and the other DOM props go to `<span data-slot="swatch">`.
+
 ### `swatchVariants` (function)
 
 A colour key: the small square before a legend entry, a filter chip's label or a flat callout's title, that ties the words to a colour used elsewhere — map pins, a column of urgencies, a chart series.

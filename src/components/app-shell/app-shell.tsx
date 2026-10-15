@@ -5,6 +5,7 @@ import { Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { useControllable } from '../../lib/use-controllable'
 import { IconButton } from '../button'
 
 /**
@@ -71,17 +72,17 @@ export function AppShell({
   className,
   ...props
 }: AppShellProps) {
-  const [ownCollapsed, setOwnCollapsed] = React.useState(defaultSidebarCollapsed)
+  const [collapsed, setCollapsed] = useControllable({
+    value: sidebarCollapsed,
+    defaultValue: defaultSidebarCollapsed,
+    onChange: onSidebarCollapsedChange,
+  })
   const [mobileOpen, setMobileOpen] = React.useState(false)
-  const collapsed = sidebarCollapsed ?? ownCollapsed
   const uid = React.useId()
 
   const shell: ShellState = {
     collapsed,
-    setCollapsed: (next) => {
-      if (sidebarCollapsed === undefined) setOwnCollapsed(next)
-      onSidebarCollapsedChange?.(next)
-    },
+    setCollapsed,
     setMobileOpen,
     sidebarId: `${uid}-sidebar`,
     mainId: `${uid}-main`,
@@ -175,17 +176,23 @@ export function AppShell({
   )
 }
 
+export type SidebarToggleProps = Omit<React.ComponentProps<'span'>, 'children'>
+
 /**
  * The control that collapses the sidebar on desktop and opens the sheet on
  * mobile. Two buttons, one shown per breakpoint, rather than one button that
  * asks `matchMedia` what it is: CSS decides which exists, so the server render
  * is already right and nothing flickers on hydration.
+ *
+ * The two sit in one `<span>` (`data-slot="sidebar-toggle"`), which takes
+ * `className`, `ref` and the rest of the DOM props: there is one element to
+ * place, measure or test, whichever button the breakpoint shows.
  */
-export function SidebarToggle({ className }: { className?: string }) {
+export function SidebarToggle({ className, ...props }: SidebarToggleProps) {
   const shell = React.useContext(ShellContext)
   if (!shell) return null
   return (
-    <>
+    <span {...props} data-slot="sidebar-toggle" className={cn('inline-flex', className)}>
       <IconButton
         variant="ghost"
         size="sm"
@@ -193,7 +200,7 @@ export function SidebarToggle({ className }: { className?: string }) {
         aria-controls={shell.sidebarId}
         aria-expanded={!shell.collapsed}
         onClick={() => shell.setCollapsed(!shell.collapsed)}
-        className={cn('hidden nav:inline-flex', className)}
+        className="hidden nav:inline-flex"
       >
         {shell.collapsed ? <PanelLeftOpen className="flip-rtl" /> : <PanelLeftClose className="flip-rtl" />}
       </IconButton>
@@ -202,11 +209,11 @@ export function SidebarToggle({ className }: { className?: string }) {
         size="sm"
         label="Open navigation"
         onClick={() => shell.setMobileOpen(true)}
-        className={cn('nav:hidden', className)}
+        className="nav:hidden"
       >
         <Menu />
       </IconButton>
-    </>
+    </span>
   )
 }
 

@@ -152,7 +152,7 @@ export function SourcesScreen({
       <div className="flex flex-col gap-4 p-4 sm:p-6">
         {status === 'error' ? (
           <EmptyState
-            variant="error"
+            kind="error"
             size="lg"
             headingLevel={2}
             title="Knowledge sources didn’t load"
@@ -165,7 +165,7 @@ export function SourcesScreen({
           />
         ) : status === 'no-permission' ? (
           <EmptyState
-            variant="no-permission"
+            kind="no-permission"
             size="lg"
             headingLevel={2}
             title="Only workspace admins can see sources"
@@ -232,7 +232,7 @@ export function SourcesScreen({
                 ) : visible.length === 0 ? (
                   <TableEmpty
                     colSpan={COLUMNS}
-                    variant="no-results"
+                    kind="no-results"
                     title={`No sources match “${query.trim()}”`}
                     actions={
                       <Button size="sm" variant="secondary" icon={<RotateCcw />} onClick={clearSearch}>

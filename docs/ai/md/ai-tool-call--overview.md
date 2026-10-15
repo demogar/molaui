@@ -83,10 +83,14 @@ One tool invocation: what the model asked a system to do, with what, and what ca
 | `durationMs` | `number` |  |  |
 | `endedAt` | `number \| Date` |  |  |
 | `error` | `string` |  | The error, verbatim. |
+| `onOpenChange` | `((open: boolean) => void)` |  |  |
 | `onRetry` | `(() => void)` |  |  |
+| `open` | `boolean` |  | Whether the details are expanded, when the page owns that. Waiting and failed calls are always expanded. |
 | `result` | `unknown` |  | What came back. Objects as JSON; strings as text. |
 | `startedAt` | `number \| Date` |  |  |
 | `title` | `string` |  | What the call is for, in words — "Query rollout results". Optional; the name is always shown. |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="tool-call">`.
 
 ### `ToolCallGroup` (component)
 
@@ -96,6 +100,8 @@ Calls the model made at the same time. Drawn as a bracket on the left — one in
 | --- | --- | --- | --- |
 | `count` (required) | `number` |  |  |
 | `label` | `string` |  | Defaults to "N tools in parallel". |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="tool-call-group">`.
 
 Types: `ToolCallApproval`, `ToolCallGroupProps`, `ToolCallProps`
 

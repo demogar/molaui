@@ -56,9 +56,11 @@ Vertical rhythm: children down a column, one gap between them.
 | --- | --- | --- | --- |
 | `align` | `"start" \| "center" \| "end" \| "stretch" \| "baseline"` |  |  |
 | `direction` | `"column" \| "row"` |  |  |
-| `gap` | `"xs" \| "sm" \| "lg" \| "md" \| "none" \| "2xs" \| "xl"` |  |  |
+| `gap` | `Gap` |  |  |
 | `justify` | `"start" \| "center" \| "end" \| "between"` |  |  |
 | `wrap` | `true \| false` |  |  |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="stack">`.
 
 ### `Inline` (component)
 
@@ -67,13 +69,17 @@ A row that wraps — toolbars, badge rows, button groups. Wraps by default, beca
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `align` | `"start" \| "center" \| "end" \| "stretch" \| "baseline"` | `center` |  |
-| `gap` | `"xs" \| "sm" \| "lg" \| "md" \| "none" \| "2xs" \| "xl"` | `sm` |  |
+| `gap` | `Gap` | `sm` |  |
 | `justify` | `"start" \| "center" \| "end" \| "between"` |  |  |
 | `wrap` | `boolean` | `true` |  |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="inline">`.
 
 ### `RowBetween` (component)
 
 One thing on the left, one on the right: a panel header, a table toolbar.
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="row-between">`.
 
 ### `stackVariants` (function)
 

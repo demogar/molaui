@@ -26,8 +26,10 @@ The frame an internal tool lives in. Exactly the viewport tall, and only `<main>
 
 ### Do and don’t
 
-- Do: Mark the current destination with active, and set countTone to attention only for things that need a person.
+- Do: Mark the current destination with active, and set countTone to danger only for things that need a person.
 - Don’t: Fill every count in rojo; totals are not alarms.
+- Do: Render each NavItem as your router’s link with render={<Link to="/runs" />}, so the shell navigates without reloading the page.
+- Don’t: Wrap a NavItem in your own link, or pass a plain href in a single-page app; the first nests links, the second reloads the document.
 
 ### Content
 
@@ -55,9 +57,13 @@ Each story is a live example in Storybook.
 | `onSidebarCollapsedChange` | `((collapsed: boolean) => void)` |  |  |
 | `sidebarCollapsed` | `boolean` |  | Controlled collapse of the desktop sidebar. |
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="app-shell">`.
+
 ### `SidebarToggle` (component)
 
 The control that collapses the sidebar on desktop and opens the sheet on mobile. Two buttons, one shown per breakpoint, rather than one button that asks `matchMedia` what it is: CSS decides which exists, so the server render is already right and nothing flickers on hydration.
+
+`className`, `ref`, `id` and the other DOM props go to `<span data-slot="sidebar-toggle">`.
 
 ### `Topbar` (component)
 
@@ -69,6 +75,8 @@ The bar across the top. Raised cloth bounded by one ink rule — the single stru
 | `end` | `ReactNode` |  | Notifications, help, the signed-in user. |
 | `start` | `ReactNode` |  | The product mark or switcher. |
 
+`className`, `ref`, `id` and the other DOM props go to `<header data-slot="topbar">`.
+
 ### `NavItem` (component)
 
 One destination. Active is an ink bar on the leading edge plus a washed ground and a heavier label — three cues, so it never depends on the wash alone, which nearly disappears on some displays.
@@ -79,12 +87,18 @@ One destination. Active is an ink bar on the leading edge plus a washed ground a
 | `active` | `boolean` | `false` | The current page. Sets `aria-current="page"`. |
 | `count` | `number` |  | A count beside the label: open items, failures. |
 | `countLabel` | `string` |  | Read with the count: "3 failed". Without it the number is read alone. |
-| `countTone` | `"neutral" \| "attention"` | `neutral` | `attention` fills the count in the danger colour — for failures that need a person, not for totals. |
+| `countTone` | `"neutral" \| "danger" \| "attention"` | `neutral` | `danger` fills the count in the danger colour — for failures that need a person, not for totals. `attention` is deprecated since 0.7.0 and removed in 1.0.0: use `danger`, the same fill under the status word every `tone` uses. |
 | `icon` | `ReactNode` |  |  |
+
+`className`, `ref`, `id` and the other DOM props go to `<a data-slot="nav-item">`.
 
 ### `NavSection` (component)
 
-A titled group of items. The title is in the rótulo register; collapsed to a rail it becomes a short keyline, and the words stay for screen readers so the groups are still announced.
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `title` | `string` |  | The group's title, in the rótulo register. Names the list. |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="nav-section">`.
 
 ### `Sidebar` (component)
 
@@ -94,9 +108,11 @@ A titled group of items. The title is in the rótulo register; collapsed to a ra
 | `footer` | `ReactNode` |  |  |
 | `header` | `ReactNode` |  |  |
 
+`className`, `ref`, `id` and the other DOM props go to `<nav data-slot="sidebar-nav">`.
+
 ### `SidebarContext` (constant)
 
-Types: `AppShellProps`, `SidebarContextValue`, `TopbarProps`, `NavItemProps`, `SidebarProps`
+Types: `AppShellProps`, `SidebarContextValue`, `SidebarToggleProps`, `TopbarProps`, `NavItemProps`, `NavSectionProps`, `SidebarProps`
 
 ## Accessibility
 

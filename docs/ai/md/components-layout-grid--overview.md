@@ -48,6 +48,8 @@ Each story is a live example in Storybook.
 | `gap` | `"tight" \| "default" \| "wide" \| "seamless"` |  |  |
 | `minItem` | `string` |  | For `cols="auto"`: the narrowest a cell may get, as a CSS length. |
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="grid">`.
+
 ### `gridVariants` (function)
 
 The responsive column patterns that recur. `auto` is the one a tool reaches for most: as many columns of at least `minItem` as fit, which is what a grid of stat tiles or agent cards actually wants — it never needs a breakpoint.

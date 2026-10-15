@@ -49,11 +49,11 @@ Each story is a live example in Storybook.
 
 ### `SegmentedControl` (component)
 
+`className`, `ref` and the rest of the DOM props go to the group.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `aria-label` (required) | `string` |  | Names the group. Required: three buttons reading "Table", "Board", "List" mean nothing until a screen reader hears "View". |
 | `options` (required) | `SegmentedOption<V>[]` |  |  |
-| `className` | `string` |  |  |
 | `defaultValue` | `string` |  |  |
 | `disabled` | `boolean` |  |  |
 | `fill` | `boolean` | `false` | Segments share the full width equally. |
@@ -62,7 +62,9 @@ Each story is a live example in Storybook.
 | `size` | `"sm" \| "md"` | `md` |  |
 | `value` | `string` |  |  |
 
-Types: `SegmentedControlProps`, `SegmentedOption`
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="segmented-control">`.
+
+Types: `SegmentedControlBaseProps`, `SegmentedControlProps`, `SegmentedOption`
 
 ## Accessibility
 

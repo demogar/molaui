@@ -51,24 +51,33 @@ Each story is a live example in Storybook.
 
 Ruled, ordered steps — a runbook, an onboarding checklist, the stages of a rollout. Where `Timeline` is a spine with a node per event, this is a stack of ruled bands with a label column, and merging the two would mean a component whose every rule is conditional.
 
-- `tone`: `default`, `inverse`
+- `inverse`: `false`, `true`
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `tone` | `"default" \| "inverse"` | `default` | `inverse` sets the list on an ink panel. |
+| `items` (required) | `StepListItem[]` |  |  |
+| `inverse` | `false \| true` |  | Set the list on an ink panel. |
+| `titleAs` | `"h3" \| "h4" \| "p"` | `h3` |  |
+| `tone` (deprecated) | `"default" \| "inverse"` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `inverse`: `tone` is a status everywhere else, and this was a ground. |
+
+`className`, `ref`, `id` and the other DOM props go to `<ol data-slot="step-list">`.
 
 ### `Timeline` (component)
+
+`className`, `ref` and the rest of the DOM props go to the `<ol>`.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `items` (required) | `TimelineItem[]` |  |  |
 | `label` (required) | `string` |  | Names the list, since the spine carries no heading of its own. |
-| `className` | `string` |  |  |
 | `gap` | `"spaced" \| "flush"` | `spaced` | `spaced`   separate events, a gap between rows. `flush`    one continuous journey, carried by the connector alone. |
-| `size` | `"default" \| "editorial"` | `default` | `default`   product scale: semibold titles at body size. `editorial` the travel-guide scale it was born at, for a narrative. |
+| `size` (deprecated) | `TimelineVariant` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `variant`, which takes the same values: a type scale is a presentation, and `size` is the t-shirt scale everywhere else. |
 | `titleAs` | `"h3" \| "h4" \| "p"` | `p` | The element each title renders as. Defaults to a non-heading, since most logs are not outlines. |
+| `variant` | `TimelineVariant` |  | `default`   product scale: semibold titles at body size. `editorial` the travel-guide scale it was born at, for a narrative. |
 
-Types: `StepListItem`, `TimelineItem`, `TimelineProps`, `TimelineTone`
+`className`, `ref`, `id` and the other DOM props go to `<ol data-slot="timeline">`.
+
+Types: `StepListItem`, `StepListProps`, `TimelineItem`, `TimelineProps`, `TimelineTone`, `TimelineVariant`
 
 ## Accessibility
 

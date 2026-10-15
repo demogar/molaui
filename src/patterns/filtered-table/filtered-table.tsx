@@ -356,7 +356,7 @@ export function RunsAdminScreen() {
           framed
           className="min-w-[52rem]"
           empty={{
-            variant: 'no-results',
+            kind: 'no-results',
             title: 'No runs match these filters',
             description: 'Try another agent, a wider date range, or clear the filters to see every run.',
             actions: (

@@ -48,25 +48,29 @@ Each story is a live example in Storybook.
 
 ### `Chip` (component)
 
-- `size`: `default`, `comfortable` (default `default`)
+`className` and `style` go to the `<label>`, which is the chip you see; `ref` and every other prop go to the `<input>`, which is the control a form, a test or a screen reader talks to. `style` used to go to the visually hidden input with the rest, where it did nothing.
+
+- `size`: `sm`, `md`, `default`, `comfortable` (default `sm`)
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `children` (required) | `ReactNode` |  | The visible label. Also the control's accessible name, via the wrapping `<label>`. |
 | `count` | `number` |  | A count after the label: how many rows this filter would leave. Tabular, so a row of chips does not jitter as counts change. |
-| `size` | `"default" \| "comfortable"` |  |  |
+| `size` | `"sm" \| "md" \| "default" \| "comfortable"` |  |  |
 | `type` | `"checkbox" \| "radio"` | `checkbox` | `radio` for one-of-N within a `name` group, `checkbox` for multi-select. |
+
+`className` goes to `<label data-slot="chip">`; `ref`, `id` and the other DOM props go to `<input>`.
 
 ### `ChipGroup` (component)
 
 A row of chips inside a real fieldset. The legend is what a screen reader says before the first chip — "Status, group" — so "Failed" is heard as a status filter rather than as an alarming word on its own.
 
-- `size`: `default`, `comfortable` (default `default`)
-
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `legend` (required) | `ReactNode` |  | What the chips filter. Rendered as the legend, so each chip is announced in its context. |
 | `hideLegend` | `boolean` | `false` | Hide the legend visually while keeping it for assistive technology — for a toolbar row whose meaning is obvious from position. |
+
+`className`, `ref`, `id` and the other DOM props go to `<fieldset data-slot="chip-group">`.
 
 ### `chipVariants` (function)
 

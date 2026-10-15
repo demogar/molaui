@@ -133,11 +133,18 @@ export function Button({
 }
 
 /** The arrow micro-interaction, exported so a router `<Link>` styled with `buttonVariants` gets the same one. */
-export function ButtonArrow() {
+export type ButtonArrowProps = React.ComponentProps<typeof ArrowRight>
+
+export function ButtonArrow({ className, ...props }: ButtonArrowProps) {
   return (
     <ArrowRight
       aria-hidden
-      className="transition-transform group-hover/button:translate-x-[3px] flip-rtl rtl:group-hover/button:-translate-x-[3px]"
+      {...props}
+      data-slot="button-arrow"
+      className={cn(
+        'transition-transform group-hover/button:translate-x-[3px] flip-rtl rtl:group-hover/button:-translate-x-[3px]',
+        className,
+      )}
     />
   )
 }

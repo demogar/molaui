@@ -74,30 +74,46 @@ The confirmation for an action that destroys something. Built on Base UI's Alert
 | `finalFocus` | `boolean \| RefObject<HTMLElement \| null> \| ((closeType: InteractionType) => boolean \| void \| HTMLElement \| null)` |  | Where focus goes when the dialog closes: Base UI's `finalFocus`. By default it returns to the trigger, which is right after Cancel. After a confirm that removed the trigger (a deleted row's button), return the element a reader would carry on from: the next row's action, or the list's heading. A function receives how the dialog was closed. |
 | `onOpenChange` | `((open: boolean) => void)` |  |  |
 | `open` | `boolean` |  |  |
-| `tone` | `"danger" \| "neutral"` | `danger` | `danger` cuts the seam in rojo and arms the confirm button in red. |
+| `tone` | `"neutral" \| "danger"` | `danger` | `danger` cuts the seam in rojo and arms the confirm button in red. |
 | `trigger` | `ReactElement<unknown, string \| JSXElementConstructor<any>>` |  | Rendered as the trigger, e.g. a danger `Button`. |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="alert-dialog">`.
 
 ### `Dialog` (component)
 
+Renders no element of its own, so it takes no `className` or `ref`.
+
 ### `DialogClose` (component)
 
+`className`, `ref`, `id` and the other DOM props go to `<button data-slot="dialog-close">`.
+
 ### `DialogContent` (component)
+
+- `size`: `sm`, `md`, `lg` (default `md`)
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `title` (required) | `ReactNode` |  | The dialog's accessible name. Required: an unnamed modal is announced as "dialog" and nothing else. |
-| `band` | `"rojo" \| "anil" \| "verde" \| "oro"` | `oro` | The layer revealed in the top seam. |
+| `band` | `DialogBand` | `oro` | The layer revealed in the top seam. |
 | `className` | `string` |  |  |
 | `description` | `ReactNode` |  |  |
 | `footer` | `ReactNode` |  | Action row under the body: right-aligned, or stacked full width with the last action on top when the row is under 24rem. Usually a `ghost` cancel and one primary. |
 | `hideClose` | `boolean` | `false` | Hide the corner close button. Only when the footer carries an explicit way out. |
-| `size` | `"sm" \| "lg" \| "md"` |  |  |
+| `size` | `"sm" \| "md" \| "lg"` |  |  |
 
 Also accepts the props of `DialogPopupProps`.
 
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="dialog">`.
+
 ### `DialogTrigger` (component)
 
-Types: `AlertDialogProps`, `DialogContentProps`
+`className`, `ref`, `id` and the other DOM props go to `<button data-slot="dialog-trigger">`.
+
+### `dialogContentVariants` (function)
+
+A modal is a panel cut out of the page and laid on top of it, so it is the one place a seam earns the full relleno: an 11px strip of the layer colour slit with ink along its top edge. In the source mola that strip is how a panel announces where one layer ends and the next begins; here it is how a dialog says "you are now inside something" without a title bar or a tint. Gold by default, rojo on a destructive confirm — the band is the only place the dialog's intent shows before a word is read.
+
+Types: `AlertDialogProps`, `DialogBand`, `DialogContentProps`
 
 ## Accessibility
 

@@ -6,6 +6,7 @@ import * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { mergeProps } from '../../lib/merge-props'
+import { useControllable } from '../../lib/use-controllable'
 import { type FieldControlSize, fieldControlClasses, fieldControlSizes } from '../field/field-control'
 import { Label } from '../field/label'
 
@@ -45,97 +46,54 @@ import { Label } from '../field/label'
  * For units Intl knows, prefer `format={{ style: 'unit', unit: 'millisecond' }}`
  * or a currency format: the unit is then in the value itself, localised.
  *
- * ── props that belong to the text go to the input ──
- * The rest of the props land on Base UI's Root, a `<div>`. That used to
- * include `ref`, `autoFocus`, `onKeyDown` and `onBlur`, so a ref held the
- * wrapper, autofocus did nothing and a key handler saw the div as its
- * target. Those, and the other focus, key and clipboard props in
- * `INPUT_PROPS`, are routed to the `<input>` instead, typed for it, and a
- * consumer's `onKeyDown` is merged with the PageUp/PageDown handler rather
- * than replacing it.
+ * ── the DOM props go to the input ──
+ * `ref`, `id`, `data-*`, `aria-*`, focus, key and clipboard props all go to
+ * the `<input>`, the element that takes focus and the value; `className`
+ * styles the box around it (the element with the cut), with or without a
+ * `label`; the wrapper a `label` adds takes `wrapperClassName`. The rest
+ * used to land on Base UI's Root, a `<div>`, so a ref held the wrapper,
+ * autofocus did nothing and a key handler saw the div as its target. Only
+ * the number field's own settings (`min`, `step`, `format`, `name`…) go to
+ * the Root, and a consumer's `onKeyDown` is merged with the PageUp/PageDown
+ * handler rather than replacing it.
  */
-
-// The input-owned keys are spelled out twice, in the Omit and the Pick,
-// rather than through a shared alias, so the published declaration names
-// them instead of pointing at a type the package does not export.
 export interface NumberInputProps
   extends Omit<
-      NumberFieldPrimitive.Root.Props,
-      | 'className'
-      | 'children'
-      | 'render'
-      | 'onValueChange'
-      | 'ref'
-      | 'autoFocus'
-      | 'autoComplete'
-      | 'enterKeyHint'
-      | 'onKeyDown'
-      | 'onKeyUp'
-      | 'onFocus'
-      | 'onBlur'
-      | 'onBeforeInput'
-      | 'onInput'
-      | 'onPaste'
-      | 'onCopy'
-      | 'onCut'
-      | 'onSelect'
-    >,
-    Pick<
-      React.ComponentProps<'input'>,
-      | 'autoFocus'
-      | 'autoComplete'
-      | 'enterKeyHint'
-      | 'onKeyDown'
-      | 'onKeyUp'
-      | 'onFocus'
-      | 'onBlur'
-      | 'onBeforeInput'
-      | 'onInput'
-      | 'onPaste'
-      | 'onCopy'
-      | 'onCut'
-      | 'onSelect'
-    > {
-  /** The text input, not the wrapper: the element that takes focus and the value. */
-  ref?: React.Ref<HTMLInputElement>
+    React.ComponentProps<'input'>,
+    'value' | 'defaultValue' | 'onChange' | 'size' | 'children' | 'min' | 'max' | 'step' | 'type'
+  > {
   /** Visible label above the field. Omit inside `Field`, which renders its own. */
   label?: React.ReactNode
   size?: FieldControlSize
-  className?: string
+  /** Classes for the wrapper that holds `label` and the field. Only rendered with a `label`. */
+  wrapperClassName?: string
   /** Short unit suffix inside the cut: "tokens", "ms", "%". Also added to the accessible description. */
   unit?: string
-  placeholder?: string
+  value?: number | null
+  defaultValue?: number
   onValueChange?: (value: number | null) => void
+  /** Called when the value is committed: on blur, Enter or a stepper press, not per keystroke. */
+  onValueCommitted?: NumberFieldPrimitive.Root.Props['onValueCommitted']
+  min?: number
+  max?: number
+  /** ArrowUp/Down step. */
+  step?: number | 'any'
+  /** Shift+Arrow and PageUp/PageDown step. */
+  largeStep?: number
+  /** Alt+Arrow step. */
+  smallStep?: number
+  allowOutOfRange?: boolean
+  /** Let the wheel change a focused, hovered field. Off by default; see above. */
+  allowWheelScrub?: boolean
+  snapOnStep?: boolean
+  /** `Intl.NumberFormat` options: grouping, decimals, a unit or a currency. */
+  format?: Intl.NumberFormatOptions
+  /** BCP 47 tag for parsing and formatting. `undefined` uses the runtime's locale. */
+  locale?: Intl.LocalesArgument
   /** Accessible names of the steppers. */
   incrementLabel?: string
   decrementLabel?: string
-  'aria-label'?: string
-  'aria-describedby'?: string
-  'aria-invalid'?: boolean | 'true' | 'false'
 }
-
-/**
- * Props that mean something only on the text input, not on the wrapper: the
- * same keys as the Omit and Pick above, kept in step by hand. A key added
- * here but not to the Pick would still be typed for the div.
- */
-const INPUT_PROPS = {
-  autoFocus: true,
-  autoComplete: true,
-  enterKeyHint: true,
-  onKeyDown: true,
-  onKeyUp: true,
-  onFocus: true,
-  onBlur: true,
-  onBeforeInput: true,
-  onInput: true,
-  onPaste: true,
-  onCopy: true,
-  onCut: true,
-  onSelect: true,
-} as const satisfies Partial<Record<keyof React.ComponentProps<'input'>, true>>
-
-type InputOwnedProps = Pick<NumberInputProps, keyof typeof INPUT_PROPS>
 
 const stepperClasses = [
   'grid h-full aspect-square shrink-0 place-items-center text-ink-2 select-none',
@@ -149,42 +107,45 @@ export function NumberInput({
   label,
   size = 'md',
   className,
+  style,
+  wrapperClassName,
   unit,
-  placeholder,
   id,
   value,
   defaultValue,
   onValueChange,
+  onValueCommitted,
   min,
   max,
   step,
   largeStep = 10,
+  smallStep,
+  allowOutOfRange,
+  allowWheelScrub,
+  snapOnStep,
+  format,
+  locale,
   incrementLabel = 'Increase',
   decrementLabel = 'Decrease',
-  'aria-label': ariaLabel,
   'aria-describedby': ariaDescribedBy,
-  'aria-invalid': ariaInvalid,
   required,
   disabled,
   readOnly,
-  ref,
-  ...rest
+  name,
+  form,
+  ...inputProps
 }: NumberInputProps) {
-  const { inputOwned, props } = partitionInputProps(rest)
   const uid = React.useId()
   const inputId = id ?? `${uid}-input`
   const unitId = `${uid}-unit`
 
   // Held here as well as in Base UI so PageUp/PageDown can step from the
   // current value; Base UI gets it back as a controlled `value`.
-  const isControlled = value !== undefined
-  const [inner, setInner] = React.useState<number | null>(defaultValue ?? null)
-  const current = isControlled ? value : inner
-
-  function commit(next: number | null) {
-    if (!isControlled) setInner(next)
-    onValueChange?.(next)
-  }
+  const [current, commit] = useControllable<number | null>({
+    value,
+    defaultValue: defaultValue ?? null,
+    onChange: onValueChange,
+  })
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key !== 'PageUp' && event.key !== 'PageDown') return
@@ -218,7 +179,7 @@ export function NumberInput({
     .filter((n): n is number => typeof n === 'number' && Number.isFinite(n))
     .map((n) => {
       try {
-        return new Intl.NumberFormat(props.locale ?? 'en-US', props.format).format(n).length
+        return new Intl.NumberFormat(locale ?? 'en-US', format).format(n).length
       } catch {
         return String(n).length
       }
@@ -228,6 +189,7 @@ export function NumberInput({
   const field = (
     <NumberFieldPrimitive.Group
       data-slot="number-input"
+      style={style}
       className={cn(
         fieldControlClasses,
         fieldControlSizes[size],
@@ -236,18 +198,14 @@ export function NumberInput({
         'has-[[aria-invalid=true]]:band-danger has-[[aria-invalid=true]]:cut-band',
         'has-[[aria-invalid=true]]:focus-within:cut-band-focus',
         'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
-        label ? undefined : className,
+        className,
       )}
     >
       <NumberFieldPrimitive.Input
         // The consumer's handlers sit to the right, so they run first and
         // can call event.preventBaseUIHandler() to stop PageUp/PageDown.
-        {...mergeProps<'input'>({ onKeyDown }, inputOwned)}
-        ref={ref}
-        placeholder={placeholder}
-        aria-label={ariaLabel}
+        {...mergeProps<'input'>({ onKeyDown }, inputProps)}
         aria-describedby={describedBy}
-        aria-invalid={ariaInvalid}
         style={minChars ? { minWidth: `${minChars}ch` } : undefined}
         className="h-full w-0 min-w-0 flex-1 border-0 bg-transparent p-0 [font-size:inherit] text-ink tabular-nums outline-none placeholder:text-ink-muted focus:shadow-none focus-visible:shadow-none disabled:cursor-not-allowed disabled:text-ink-muted"
       />
@@ -271,20 +229,29 @@ export function NumberInput({
 
   return (
     <NumberFieldPrimitive.Root
-      {...props}
       // Base UI puts the Root's id on the input and points the steppers'
       // aria-controls at it; an id set on the input itself breaks that link.
       id={inputId}
       value={current}
       onValueChange={(next) => commit(next)}
+      onValueCommitted={onValueCommitted}
       min={min}
       max={max}
       step={step}
       largeStep={largeStep}
+      smallStep={smallStep}
+      allowOutOfRange={allowOutOfRange}
+      allowWheelScrub={allowWheelScrub}
+      snapOnStep={snapOnStep}
+      format={format}
+      locale={locale}
       required={required}
       disabled={disabled}
       readOnly={readOnly}
-      className={label ? cn('flex flex-col gap-2', className) : 'contents'}
+      name={name}
+      form={form}
+      data-slot={label ? 'number-input-field' : undefined}
+      className={label ? cn('flex flex-col gap-2', wrapperClassName) : 'contents'}
     >
       {label ? (
         <Label htmlFor={inputId} required={required}>
@@ -294,16 +261,6 @@ export function NumberInput({
       {field}
     </NumberFieldPrimitive.Root>
   )
-}
-
-function partitionInputProps<P extends InputOwnedProps>(all: P) {
-  const inputOwned: Record<string, unknown> = {}
-  const props: Record<string, unknown> = {}
-  for (const [key, value] of Object.entries(all)) {
-    if (Object.hasOwn(INPUT_PROPS, key)) inputOwned[key] = value
-    else props[key] = value
-  }
-  return { inputOwned: inputOwned as InputOwnedProps, props: props as Omit<P, keyof InputOwnedProps> }
 }
 
 function decimalPlaces(n: number) {

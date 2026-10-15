@@ -4,6 +4,7 @@ import { ArrowUp, Square, WifiOff } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { useControllable } from '../../../lib/use-controllable'
 import { Button } from '../../button'
 
 export interface PromptInputProps
@@ -83,17 +84,10 @@ export function PromptInput({
   className,
   ...props
 }: PromptInputProps) {
-  const [inner, setInner] = React.useState(defaultValue)
-  const controlled = valueProp !== undefined
-  const value = controlled ? valueProp : inner
+  const [value, setValue] = useControllable({ value: valueProp, defaultValue, onChange: onValueChange })
   const textareaRef = React.useRef<HTMLTextAreaElement>(null)
   const fieldId = React.useId()
   const hintId = `${fieldId}-hint`
-
-  const setValue = (next: string) => {
-    if (!controlled) setInner(next)
-    onValueChange?.(next)
-  }
 
   // Grow with the content up to `maxRows`, then scroll. Measured from
   // scrollHeight after collapsing to auto, which is the only measurement that

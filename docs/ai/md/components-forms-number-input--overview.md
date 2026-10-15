@@ -55,20 +55,28 @@ Each story is a live example in Storybook.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `aria-describedby` | `string` |  | Identifies the element (or elements) that describes the object. |
-| `aria-invalid` | `boolean \| "true" \| "false"` |  | Indicates the entered value does not conform to the format expected by the application. |
-| `aria-label` | `string` |  | Defines a string value that labels the current element. |
-| `className` | `string` |  |  |
+| `allowOutOfRange` | `boolean` |  |  |
+| `allowWheelScrub` | `boolean` |  | Let the wheel change a focused, hovered field. Off by default; see above. |
 | `decrementLabel` | `string` | `Decrease` |  |
+| `defaultValue` | `number` |  |  |
+| `format` | `NumberFormatOptions` |  | `Intl.NumberFormat` options: grouping, decimals, a unit or a currency. |
 | `incrementLabel` | `string` | `Increase` | Accessible names of the steppers. |
 | `label` | `ReactNode` |  | Visible label above the field. Omit inside `Field`, which renders its own. |
+| `largeStep` | `number` | `10` | Shift+Arrow and PageUp/PageDown step. |
+| `locale` | `LocalesArgument` |  | BCP 47 tag for parsing and formatting. `undefined` uses the runtime's locale. |
+| `max` | `number` |  |  |
+| `min` | `number` |  |  |
 | `onValueChange` | `((value: number \| null) => void)` |  |  |
-| `placeholder` | `string` |  |  |
-| `ref` | `Ref<HTMLInputElement>` |  | The text input, not the wrapper: the element that takes focus and the value. |
-| `size` | `"sm" \| "lg" \| "md"` | `md` |  |
+| `onValueCommitted` | `((value: number \| null, eventDetails: NumberFieldRootCommitEventDetails) => void)` |  | Called when the value is committed: on blur, Enter or a stepper press, not per keystroke. |
+| `size` | `"sm" \| "md" \| "lg"` | `md` |  |
+| `smallStep` | `number` |  | Alt+Arrow step. |
+| `snapOnStep` | `boolean` |  |  |
+| `step` | `number \| "any"` |  | ArrowUp/Down step. |
 | `unit` | `string` |  | Short unit suffix inside the cut: "tokens", "ms", "%". Also added to the accessible description. |
+| `value` | `number \| null` |  |  |
+| `wrapperClassName` | `string` |  | Classes for the wrapper that holds `label` and the field. Only rendered with a `label`. |
 
-Also accepts the props of `NumberFieldRootProps`.
+`className` goes to `<div data-slot="number-input">`; `ref`, `id` and the other DOM props go to `<input>`.
 
 Types: `NumberInputProps`
 

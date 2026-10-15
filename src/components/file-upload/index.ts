@@ -7,4 +7,4 @@ export type {
   UploadContext,
 } from './file-upload'
 export { describeAccept, formatFileSize, matchesAccept, validateFiles } from './file-upload-utils'
-export type { FileRejection, FileRejectionReason } from './file-upload-utils'
+export type { FileRejection, FileRejectionReason, FileValidationOptions } from './file-upload-utils'

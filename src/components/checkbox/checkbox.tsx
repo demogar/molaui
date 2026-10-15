@@ -45,20 +45,27 @@ export const checkboxBoxClasses = [
 
 export interface CheckboxProps extends Omit<CheckboxPrimitive.Root.Props, 'className'> {
   className?: string
+  /** Classes for the label row a `label` adds around the control. `className` always styles the control itself. */
+  wrapperClassName?: string
   /** Visible label. The whole label is the press target. */
   label?: React.ReactNode
   /** Second line under the label. Linked as the control's description. */
   description?: React.ReactNode
 }
 
-export function Checkbox({ className, label, description, ...props }: CheckboxProps) {
+/**
+ * `className`, `ref` and the DOM props go to the control, with or without a
+ * `label`; the row a `label` adds takes `wrapperClassName`. `className` used
+ * to move to that row when a label was set.
+ */
+export function Checkbox({ className, wrapperClassName, label, description, ...props }: CheckboxProps) {
   const uid = React.useId()
   const descriptionId = description ? `${uid}-description` : undefined
 
   const box = (
     <CheckboxPrimitive.Root
       data-slot="checkbox"
-      className={cn(checkboxBoxClasses, !label && className)}
+      className={cn(checkboxBoxClasses, className)}
       {...props}
       // Joined, not replaced: Field passes its hint and error here, and the
       // control's own description comes first because it is drawn first.
@@ -88,7 +95,7 @@ export function Checkbox({ className, label, description, ...props }: CheckboxPr
       label={label}
       description={description}
       descriptionId={descriptionId}
-      className={className}
+      className={wrapperClassName}
     />
   )
 }

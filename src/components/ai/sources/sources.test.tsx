@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@/test/render'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import type * as React from 'react'
+import { describe, expect, it, vi } from 'vitest'
 
 import { StreamingText } from '../streaming-text'
 
@@ -109,5 +110,46 @@ describe('SourceList', () => {
       <SourceList sources={[{ id: 2, title: 'T', href: 'https://example.com', domain: 'example.com' }]} />,
     )
     expect(container.querySelector('#source-2')).toBeInTheDocument()
+  })
+})
+
+describe('Citation with a router link', () => {
+  function RouterLink({ href, onClick, ...props }: React.ComponentProps<'a'>) {
+    return (
+      <a
+        {...props}
+        href={href}
+        data-router
+        onClick={(event) => {
+          onClick?.(event)
+          event.preventDefault()
+        }}
+      />
+    )
+  }
+
+  it('renders the marker as the given link, keeping its name and classes', () => {
+    render(<Citation n={2} title="Rollout notes" href="/docs/rollout" render={<RouterLink />} />)
+    const link = screen.getByRole('link', { name: 'Source 2: Rollout notes' })
+    expect(link).toHaveAttribute('data-router')
+    expect(link).toHaveAttribute('href', '/docs/rollout')
+    expect(link).toHaveAttribute('data-slot', 'citation')
+  })
+
+  it('renders the preview card trigger as the given link too', () => {
+    const onClick = vi.fn()
+    render(
+      <Citation
+        n={1}
+        href="/docs/a"
+        onClick={onClick}
+        source={{ id: 1, title: 'Index policy', href: '/docs/a', domain: 'docs.cayuco.example' }}
+        render={<RouterLink />}
+      />,
+    )
+    const link = screen.getByRole('link', { name: 'Source 1: Index policy' })
+    expect(link).toHaveAttribute('data-router')
+    link.click()
+    expect(onClick).toHaveBeenCalledTimes(1)
   })
 })

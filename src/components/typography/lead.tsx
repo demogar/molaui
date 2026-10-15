@@ -14,6 +14,7 @@ import { cn } from '../../lib/cn'
 export function Lead({ className, ...props }: React.ComponentProps<'p'>) {
   return (
     <p
+      data-slot="lead"
       className={cn('m-0 max-w-reading font-text text-lg leading-body text-ink-2', className)}
       {...props}
     />

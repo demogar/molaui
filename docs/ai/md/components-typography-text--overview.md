@@ -45,8 +45,9 @@ Each story is a live example in Storybook.
 
 ### `Text` (component)
 
-- `size`: `xs`, `sm`, `base`, `lg` (default `base`)
-- `tone`: `default`, `2`, `muted`, `danger`, `success` (default `default`)
+- `size`: `xs`, `sm`, `md`, `lg`, `base` (default `md`)
+- `variant`: `default`, `secondary`, `muted` (default `default`)
+- `tone`: `neutral`, `danger`, `success`, `default`, `2`, `muted` (default `neutral`)
 - `weight`: `regular`, `medium`, `semibold` (default `regular`)
 - `tabular`: `true`, `false` (default `false`)
 - `truncate`: `true`, `false` (default `false`)
@@ -54,11 +55,15 @@ Each story is a live example in Storybook.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `as` | `"div" \| "p" \| "span"` | `p` |  |
-| `size` | `"xs" \| "sm" \| "base" \| "lg"` |  |  |
+| `ref` | `Ref<HTMLElement>` |  |  |
+| `size` | `"xs" \| "sm" \| "md" \| "lg" \| "base"` |  |  |
 | `tabular` | `true \| false` |  |  |
-| `tone` | `"default" \| 2 \| "muted" \| "danger" \| "success"` |  |  |
+| `tone` | `"neutral" \| "danger" \| "success" \| "default" \| 2 \| "muted"` |  |  |
 | `truncate` | `true \| false` |  |  |
+| `variant` | `"default" \| "secondary" \| "muted"` |  |  |
 | `weight` | `"regular" \| "medium" \| "semibold"` |  |  |
+
+`className`, `ref`, `id` and the other DOM props go to `<p data-slot="text">`.
 
 ### `textVariants` (function)
 

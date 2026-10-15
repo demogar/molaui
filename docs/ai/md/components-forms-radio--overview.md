@@ -46,13 +46,18 @@ Each story is a live example in Storybook.
 
 ### `Radio` (component)
 
+`className`, `ref` and the DOM props go to the control, with or without a `label`; the row a `label` adds takes `wrapperClassName`. `className` used to move to that row when a label was set.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `className` | `string` |  |  |
 | `description` | `ReactNode` |  |  |
 | `label` | `ReactNode` |  |  |
+| `wrapperClassName` | `string` |  | Classes for the label row a `label` adds around the control. `className` always styles the control itself. |
 
 Also accepts the props of `NativeButtonProps`, `RadioRootProps`.
+
+`className`, `ref`, `id` and the other DOM props go to `<span data-slot="radio">`.
 
 ### `RadioGroup` (component)
 
@@ -66,6 +71,8 @@ The group, named by a visible label in the rótulo register via `aria-labelledby
 | `orientation` | `"horizontal" \| "vertical"` | `vertical` |  |
 
 Also accepts the props of `RadioGroupProps`.
+
+`className` goes to `<div data-slot="radio-group-field">`; `ref`, `id` and the other DOM props go to `<div>`.
 
 Types: `RadioGroupProps`, `RadioProps`
 

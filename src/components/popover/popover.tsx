@@ -4,6 +4,7 @@ import { Popover as PopoverPrimitive } from '@base-ui/react/popover'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { slotUnlessRendered } from '../../lib/slot'
 import { floatingSurface } from './surface'
 
 /**
@@ -22,8 +23,13 @@ import { floatingSurface } from './surface'
  */
 
 export const Popover = PopoverPrimitive.Root
-export const PopoverTrigger = PopoverPrimitive.Trigger
-export const PopoverClose = PopoverPrimitive.Close
+export function PopoverTrigger(props: PopoverPrimitive.Trigger.Props) {
+  return <PopoverPrimitive.Trigger {...slotUnlessRendered('popover-trigger', props.render)} {...props} />
+}
+
+export function PopoverClose(props: PopoverPrimitive.Close.Props) {
+  return <PopoverPrimitive.Close {...slotUnlessRendered('popover-close', props.render)} {...props} />
+}
 
 export interface PopoverContentProps extends Omit<PopoverPrimitive.Popup.Props, 'className' | 'title'> {
   className?: string

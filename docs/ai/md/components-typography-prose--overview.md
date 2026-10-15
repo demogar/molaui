@@ -47,7 +47,9 @@ Each story is a live example in Storybook.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `fluid` | `boolean` | `false` | Let the text run the full width of its container instead of the reading measure. |
-| `size` | `"sm" \| "base"` | `base` | `sm` for a chat column or a side panel; `base` for a document. |
+| `size` | `"sm" \| "md" \| "base"` | `md` | `sm` for a chat column or a side panel; `md` for a document. `base` is deprecated since 0.7.0 and removed in 1.0.0: use `md`, the same size. |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="prose">`.
 
 Types: `ProseProps`
 

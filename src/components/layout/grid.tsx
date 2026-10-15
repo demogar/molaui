@@ -37,6 +37,7 @@ export interface GridProps extends React.ComponentProps<'div'>, Variants<typeof 
 export function Grid({ className, cols, gap, minItem, style, ...props }: GridProps) {
   return (
     <div
+      data-slot="grid"
       className={cn(gridVariants({ cols, gap }), className)}
       style={minItem ? ({ ...style, '--grid-min': minItem } as React.CSSProperties) : style}
       {...props}
