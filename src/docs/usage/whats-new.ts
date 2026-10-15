@@ -9,10 +9,9 @@ import { minorOf } from './changes'
  *
  * changes.test.ts checks that every version here has a page with the matching
  * title, that the sidebar lists them in this order, and that every released
- * one is in CHANGELOG.md. It also fails when a minor in CHANGELOG.md older
- * than the newest has no page here: the page for a release lands in the pull
- * request after it, and must be there before the next release's PR (see the
- * test for why not in the release PR itself).
+ * one is in CHANGELOG.md. It also fails when any minor in CHANGELOG.md, the
+ * newest included, has no page here: a release PR that starts a new minor is
+ * red until its page is on main, so the version that goes out has its page.
  */
 export const WHATS_NEW = ['0.7.0', '0.6.0', '0.5.0', '0.4.0', '0.3.0', '0.2.0'] as const
 
