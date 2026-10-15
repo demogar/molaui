@@ -50,7 +50,7 @@ Each story is a live example in Storybook.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `items` (required) | `DescriptionItem[]` |  |  |
-| `layout` | `"grid" \| "inline" \| "stacked" \| null` | `inline` |  |
+| `layout` | `"grid" \| "inline" \| "stacked"` | `inline` |  |
 
 Types: `DescriptionItem`, `DescriptionListProps`
 

@@ -16,9 +16,9 @@ function Capture({ onReady }: { onReady: (api: Api) => void }) {
   return null
 }
 
-function setup() {
+function setup(props: { timeout?: number } = {}) {
   render(
-    <ToastProvider>
+    <ToastProvider {...props}>
       <Capture
         onReady={(a) => {
           api = a
@@ -105,6 +105,32 @@ describe('Toast', () => {
       expect(screen.getByText('Index rebuilt')).toBeInTheDocument()
       advance(1_000)
       expect(screen.queryByText('Index rebuilt')).not.toBeInTheDocument()
+    })
+
+    it("uses the provider's timeout, not a fixed 5s, when a running toast becomes a result", () => {
+      vi.useFakeTimers()
+      setup({ timeout: 8_000 })
+      let id = ''
+      act(() => {
+        id = api.running({ title: 'Re-indexing' })
+      })
+      act(() => api.update(id, { tone: 'success', title: 'Index rebuilt' }))
+      advance(7_000)
+      expect(screen.getByText('Index rebuilt')).toBeInTheDocument()
+      advance(2_000)
+      expect(screen.queryByText('Index rebuilt')).not.toBeInTheDocument()
+    })
+
+    it('keeps a running toast open when only its words change', () => {
+      vi.useFakeTimers()
+      setup()
+      let id = ''
+      act(() => {
+        id = api.running({ title: 'Re-indexing', description: '12 of 1,204 documents' })
+      })
+      act(() => api.update(id, { description: '812 of 1,204 documents' }))
+      advance(10 * 60_000)
+      expect(screen.getByText('812 of 1,204 documents')).toBeInTheDocument()
     })
 
     it('pauses the timeout while the pointer is over the stack', () => {

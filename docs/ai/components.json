@@ -4253,12 +4253,12 @@
             },
             {
               "name": "size",
-              "type": "\"sm\" | \"lg\" | \"md\" | null",
+              "type": "\"sm\" | \"lg\" | \"md\"",
               "required": false
             },
             {
               "name": "variant",
-              "type": "\"danger\" | \"primary\" | \"secondary\" | \"ghost\" | null",
+              "type": "\"danger\" | \"primary\" | \"secondary\" | \"ghost\"",
               "required": false
             }
           ],
@@ -4803,7 +4803,7 @@
             },
             {
               "name": "layout",
-              "type": "\"grid\" | \"inline\" | \"stacked\" | null",
+              "type": "\"grid\" | \"inline\" | \"stacked\"",
               "required": false,
               "default": "inline"
             }
@@ -7406,7 +7406,7 @@
               "type": "number",
               "required": false,
               "default": "5000",
-              "description": "Default auto-dismiss, ms."
+              "description": "Default auto-dismiss, ms. Also the timeout a running toast starts when `update()` turns it into a result."
             }
           ]
         },
@@ -11869,7 +11869,7 @@
             },
             {
               "name": "gap",
-              "type": "\"xs\" | \"sm\" | \"lg\" | \"md\" | \"none\" | \"2xs\" | \"xl\" | null",
+              "type": "\"xs\" | \"sm\" | \"lg\" | \"md\" | \"none\" | \"2xs\" | \"xl\"",
               "required": false
             },
             {
@@ -11892,24 +11892,24 @@
           "props": [
             {
               "name": "align",
-              "type": "\"start\" | \"center\" | \"end\" | \"stretch\" | \"baseline\" | null",
+              "type": "\"start\" | \"center\" | \"end\" | \"stretch\" | \"baseline\"",
               "required": false,
               "default": "center"
             },
             {
               "name": "gap",
-              "type": "\"xs\" | \"sm\" | \"lg\" | \"md\" | \"none\" | \"2xs\" | \"xl\" | null",
+              "type": "\"xs\" | \"sm\" | \"lg\" | \"md\" | \"none\" | \"2xs\" | \"xl\"",
               "required": false,
               "default": "sm"
             },
             {
               "name": "justify",
-              "type": "\"start\" | \"center\" | \"end\" | \"between\" | null",
+              "type": "\"start\" | \"center\" | \"end\" | \"between\"",
               "required": false
             },
             {
               "name": "wrap",
-              "type": "boolean | null",
+              "type": "boolean",
               "required": false,
               "default": "true"
             }
@@ -12110,7 +12110,7 @@
             },
             {
               "name": "size",
-              "type": "\"sm\" | \"lg\" | \"md\" | null",
+              "type": "\"sm\" | \"lg\" | \"md\"",
               "required": false,
               "default": "sm"
             },
@@ -12280,7 +12280,7 @@
             },
             {
               "name": "size",
-              "type": "\"sm\" | \"lg\" | \"md\" | null",
+              "type": "\"sm\" | \"lg\" | \"md\"",
               "required": false,
               "default": "sm"
             },
@@ -13567,7 +13567,7 @@
             },
             {
               "name": "size",
-              "type": "\"sm\" | \"lg\" | \"md\" | null",
+              "type": "\"sm\" | \"lg\" | \"md\"",
               "required": false
             }
           ],
@@ -16184,6 +16184,12 @@
       "kind": "function",
       "source": "src/lib/cn.ts",
       "description": "Join class names, letting later Tailwind utilities override earlier conflicting ones."
+    },
+    {
+      "name": "Variants",
+      "kind": "type",
+      "source": "src/lib/variants.ts",
+      "description": "A component's cva variants as props, without `null`."
     },
     {
       "name": "contrast",

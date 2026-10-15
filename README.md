@@ -165,6 +165,10 @@ Tailwind's default palette, radii, shadows, easings and other scales Mola replac
 `@demogar/mola-ui/tokens.css` is plain custom properties — both themes and all densities work anywhere.
 Designing in Figma? [`tokens/mola.tokens.json`](tokens/mola.tokens.json) is every token in the W3C Design Tokens format (2025.10).
 
+**Browser support:** Chrome 123, Edge 123, Firefox 128 and Safari 17.5, or later. Every theme colour
+is a `light-dark()` pair, which those versions are the first to support, and the stylesheet is built
+for them with no fallbacks for older browsers.
+
 ## For AI agents
 
 Mola UI documents itself for coding agents as well as for people, from the same source:

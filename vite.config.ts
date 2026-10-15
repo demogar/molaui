@@ -27,6 +27,9 @@ import pkg from './package.json' with { type: 'json' }
  * else. src/test/use-client.test.ts decides which modules need it; the Next.js
  * fixture in test/consumers proves it survives this build.
  */
+/** The oldest browsers the stylesheet is built for. */
+export const BROWSER_FLOOR = ['chrome123', 'edge123', 'firefox128', 'safari17.5'] as const
+
 const external = [
   ...Object.keys(pkg.peerDependencies),
   ...Object.keys(pkg.dependencies),
@@ -63,6 +66,14 @@ export default defineConfig({
   resolve: { alias: { '@': resolve(import.meta.dirname, 'src') } },
   build: {
     target: 'es2022',
+    // The browser floor, stated in the README. Without it the CSS target
+    // follows `target` (es2022, roughly Safari 15), so Lightning CSS lowered
+    // every light-dark() pair into --lightningcss-light/dark variable pairs
+    // (~7 kB) for browsers the package cannot support anyway: light-dark()
+    // itself needs Chrome 123 and Safari 17.5, and Tailwind v4's @property
+    // needs Firefox 128. src/styles/support.test.ts keeps this list and the
+    // README's in step.
+    cssTarget: [...BROWSER_FLOOR],
     sourcemap: true,
     cssCodeSplit: false,
     lib: {

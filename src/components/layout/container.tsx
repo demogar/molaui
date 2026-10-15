@@ -1,7 +1,8 @@
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type Variants } from '../../lib/variants'
 
 /**
  * The page column. `page` is the editorial width the system was born at;
@@ -22,7 +23,7 @@ export const containerVariants = cva('mx-auto w-full px-4 sm:px-6 lg:px-9', {
   defaultVariants: { size: 'page' },
 })
 
-export interface ContainerProps extends React.ComponentProps<'div'>, VariantProps<typeof containerVariants> {}
+export interface ContainerProps extends React.ComponentProps<'div'>, Variants<typeof containerVariants> {}
 
 export function Container({ className, size, ...props }: ContainerProps) {
   return <div className={cn(containerVariants({ size }), className)} {...props} />

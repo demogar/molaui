@@ -144,17 +144,24 @@
      * running step. Mixed into raised cloth so the ground still carries the
      * whole ink ramp — worst case is --ink-muted on --anil-soft, 4.61 / 4.96
      * (dark's worst is --verde-soft, 4.91).
-     * Deepen a wash past these percentages and that stops being true. */
-    --rojo-soft: color-mix(in oklab, var(--rojo) 12%, var(--cloth-pale));
-    --anil-soft: color-mix(in oklab, var(--anil) 12%, var(--cloth-pale));
-    --verde-soft: color-mix(in oklab, var(--verde) 12%, var(--cloth-pale));
+     * Deepen a wash past these percentages and that stops being true.
+     *
+     * The ground is written first (88% cloth, 12% rojo, not 12% rojo then
+     * cloth) because Tailwind's color-mix polyfill emits the FIRST colour as
+     * the fallback for a browser without color-mix(). Written layer-first, an
+     * old Safari painted a solid rojo region under --ink-muted text; written
+     * ground-first, it paints plain raised cloth, which the whole ink ramp
+     * was measured on. src/styles/fallbacks.test.ts holds every mix to it. */
+    --rojo-soft: color-mix(in oklab, var(--cloth-pale) 88%, var(--rojo));
+    --anil-soft: color-mix(in oklab, var(--cloth-pale) 88%, var(--anil));
+    --verde-soft: color-mix(in oklab, var(--cloth-pale) 88%, var(--verde));
     /* Gold is the brightest layer in the dark theme, so its wash is mixed
      * thinner there: at 20% --ink-muted on it measured 4.00 and failed. */
     --oro-soft: light-dark(
-      color-mix(in oklab, var(--oro) 20%, var(--cloth-pale)),
-      color-mix(in oklab, var(--oro) 10%, var(--cloth-pale))
+      color-mix(in oklab, var(--cloth-pale) 80%, var(--oro)),
+      color-mix(in oklab, var(--cloth-pale) 90%, var(--oro))
     );
-    --ink-soft: color-mix(in oklab, var(--ink) 7%, var(--cloth-pale));
+    --ink-soft: color-mix(in oklab, var(--cloth-pale) 93%, var(--ink));
 
     /* A label on a wash: the wash eats the contrast --ink-muted was measured
      * against, so tinted regions take one step darker ink. */

@@ -1,7 +1,8 @@
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type Variants } from '../../lib/variants'
 
 /**
  * Term and value pairs — the properties panel of every run, document and
@@ -79,7 +80,7 @@ const detailVariants = cva('m-0 min-w-0 text-ink', {
 
 export interface DescriptionListProps
   extends Omit<React.ComponentProps<'dl'>, 'children'>,
-    VariantProps<typeof listVariants> {
+    Variants<typeof listVariants> {
   items: DescriptionItem[]
 }
 

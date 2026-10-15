@@ -302,8 +302,9 @@ export function CommandPalette({
                           </span>
                           {item.shortcut ? (
                             <span className="flex shrink-0 gap-1 text-xs tabular-nums text-ink-muted group-aria-selected/option:text-on-ink-muted">
-                              {item.shortcut.map((key) => (
-                                <span key={key} className="min-w-4 text-center">
+                              {/* By position, not glyph: G G repeats a key. */}
+                              {item.shortcut.map((key, i) => (
+                                <span key={i} className="min-w-4 text-center">
                                   {key}
                                 </span>
                               ))}

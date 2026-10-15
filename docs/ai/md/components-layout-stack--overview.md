@@ -56,7 +56,7 @@ Vertical rhythm: children down a column, one gap between them.
 | --- | --- | --- | --- |
 | `align` | `"start" \| "center" \| "end" \| "stretch" \| "baseline"` |  |  |
 | `direction` | `"column" \| "row"` |  |  |
-| `gap` | `"xs" \| "sm" \| "lg" \| "md" \| "none" \| "2xs" \| "xl" \| null` |  |  |
+| `gap` | `"xs" \| "sm" \| "lg" \| "md" \| "none" \| "2xs" \| "xl"` |  |  |
 | `justify` | `"start" \| "center" \| "end" \| "between"` |  |  |
 | `wrap` | `true \| false` |  |  |
 
@@ -66,10 +66,10 @@ A row that wraps — toolbars, badge rows, button groups. Wraps by default, beca
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `align` | `"start" \| "center" \| "end" \| "stretch" \| "baseline" \| null` | `center` |  |
-| `gap` | `"xs" \| "sm" \| "lg" \| "md" \| "none" \| "2xs" \| "xl" \| null` | `sm` |  |
-| `justify` | `"start" \| "center" \| "end" \| "between" \| null` |  |  |
-| `wrap` | `boolean \| null` | `true` |  |
+| `align` | `"start" \| "center" \| "end" \| "stretch" \| "baseline"` | `center` |  |
+| `gap` | `"xs" \| "sm" \| "lg" \| "md" \| "none" \| "2xs" \| "xl"` | `sm` |  |
+| `justify` | `"start" \| "center" \| "end" \| "between"` |  |  |
+| `wrap` | `boolean` | `true` |  |
 
 ### `RowBetween` (component)
 

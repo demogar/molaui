@@ -3,11 +3,12 @@
 import { Toggle } from '@base-ui/react/toggle'
 import { ToggleGroup } from '@base-ui/react/toggle-group'
 import { Toolbar as ToolbarPrimitive } from '@base-ui/react/toolbar'
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
 import { Ellipsis, Search } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type Variants } from '../../lib/variants'
 import { buttonVariants } from '../button'
 import { fieldControlClasses, fieldControlSizes } from '../field/field-control'
 import { Menu, MenuContent, MenuItem, MenuTrigger } from '../menu'
@@ -39,7 +40,7 @@ const toolbarVariants = cva('flex flex-wrap items-center gap-1', {
 
 export interface ToolbarProps
   extends Omit<ToolbarPrimitive.Root.Props, 'className'>,
-    VariantProps<typeof toolbarVariants> {
+    Variants<typeof toolbarVariants> {
   className?: string
   /** Names the toolbar: "Run actions", "Text formatting". */
   'aria-label': string
@@ -63,7 +64,7 @@ export function ToolbarSeparator({ className }: { className?: string }) {
 
 export interface ToolbarButtonProps
   extends Omit<ToolbarPrimitive.Button.Props, 'className'>,
-    VariantProps<typeof buttonVariants> {
+    Variants<typeof buttonVariants> {
   className?: string
   icon?: React.ReactNode
 }
@@ -98,7 +99,7 @@ const toggleClasses = [
 
 export interface ToolbarToggleProps
   extends Omit<ToolbarPrimitive.Button.Props, 'className' | 'value'>,
-    Pick<VariantProps<typeof buttonVariants>, 'size'> {
+    Pick<Variants<typeof buttonVariants>, 'size'> {
   className?: string
   icon?: React.ReactNode
   /** Identifies the toggle inside a `ToolbarToggleGroup`. */

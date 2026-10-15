@@ -1,9 +1,10 @@
 import { Button as ButtonPrimitive } from '@base-ui/react/button'
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
 import { ArrowRight } from 'lucide-react'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type Variants } from '../../lib/variants'
 
 /**
  * A button is a cut shape, so its edge is a `box-shadow` keyline rather than a
@@ -79,7 +80,7 @@ export const buttonVariants = cva(
 
 export interface ButtonProps
   extends Omit<ButtonPrimitive.Props, 'className'>,
-    VariantProps<typeof buttonVariants> {
+    Variants<typeof buttonVariants> {
   className?: string
   /** Trailing arrow that slides 3px on hover — for actions that move you somewhere. */
   withArrow?: boolean

@@ -86,9 +86,11 @@ export function Tooltip({
             <span>{content}</span>
             {shortcut && shortcut.length > 0 ? (
               <span className="flex items-center gap-0.5">
-                {shortcut.map((key) => (
+                {/* Keyed by position: the same glyph can appear twice (⇧ ⇧), and
+                    a shortcut's keys never reorder. */}
+                {shortcut.map((key, i) => (
                   <kbd
-                    key={key}
+                    key={i}
                     className="inline-grid h-[18px] min-w-[18px] place-items-center px-1 font-ui text-2xs font-semibold text-on-ink-muted shadow-[0_0_0_1px_var(--keyline-on-ink)]"
                   >
                     {key}

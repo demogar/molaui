@@ -1,7 +1,7 @@
 import { composeStories, setProjectAnnotations } from '@storybook/react-vite'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import * as preview from '../../../.storybook/preview'
 import { Button } from '../button'
@@ -51,5 +51,18 @@ describe('Tooltip', () => {
     )
     const keys = (await screen.findByText('Search', { selector: 'span' })).parentElement!.querySelectorAll('kbd')
     expect([...keys].map((k) => k.textContent)).toEqual(['⌘', 'K'])
+  })
+
+  it('renders a repeated key twice without a duplicate React key', async () => {
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {})
+    render(
+      <Tooltip content="Reopen last run" shortcut={['⇧', '⇧']} defaultOpen>
+        <Button>Reopen</Button>
+      </Tooltip>,
+    )
+    const keys = (await screen.findByText('Reopen last run', { selector: 'span' })).parentElement!.querySelectorAll('kbd')
+    expect([...keys].map((k) => k.textContent)).toEqual(['⇧', '⇧'])
+    expect(error.mock.calls.flat().join(' ')).not.toMatch(/same key/)
+    error.mockRestore()
   })
 })

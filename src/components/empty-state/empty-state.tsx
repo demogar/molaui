@@ -1,8 +1,9 @@
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
 import { Inbox, Lock, SearchX, TriangleAlert } from 'lucide-react'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type Variants } from '../../lib/variants'
 
 /**
  * The state a panel is in when it has nothing to show — designed as a
@@ -48,7 +49,7 @@ export const emptyStateVariants = cva(
   },
 )
 
-type Variant = NonNullable<VariantProps<typeof emptyStateVariants>['variant']>
+type Variant = NonNullable<Variants<typeof emptyStateVariants>['variant']>
 
 const ICON: Record<Variant, React.ComponentType<{ className?: string; strokeWidth?: number }>> = {
   empty: Inbox,
@@ -59,7 +60,7 @@ const ICON: Record<Variant, React.ComponentType<{ className?: string; strokeWidt
 
 export interface EmptyStateProps
   extends Omit<React.ComponentProps<'div'>, 'title'>,
-    VariantProps<typeof emptyStateVariants> {
+    Variants<typeof emptyStateVariants> {
   title: React.ReactNode
   description?: React.ReactNode
   /** One or two buttons. The first is the way forward. */

@@ -138,4 +138,16 @@ describe('useCommandShortcut', () => {
     await userEvent.keyboard('{Meta>}k{/Meta}')
     expect(onTrigger).toHaveBeenCalledTimes(2)
   })
+
+  it('renders a repeated shortcut key twice without a duplicate React key', async () => {
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const groups: CommandGroup[] = [
+      { heading: 'Go to', items: [{ id: 'runs', label: 'Runs', shortcut: ['G', 'G'], onSelect() {} }] },
+    ]
+    render(<CommandPalette open onOpenChange={() => {}} groups={groups} />)
+    const option = await screen.findByRole('option', { name: /Runs/ })
+    expect(option.textContent).toContain('GG')
+    expect(error.mock.calls.flat().join(' ')).not.toMatch(/same key/)
+    error.mockRestore()
+  })
 })

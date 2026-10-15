@@ -1,9 +1,13 @@
+import { composeStories } from '@storybook/react-vite'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
 import { ToolCall } from '../tool-call'
 import { AgentRun, type AgentStep } from './agent-run'
+import * as stories from './agent-run.stories'
+
+const { WaitingForApproval } = composeStories(stories)
 
 const steps: AgentStep[] = [
   { id: 'a', kind: 'reasoning', title: 'Plan', status: 'succeeded', durationMs: 2400 },
@@ -64,5 +68,13 @@ describe('AgentRun', () => {
   it('shows the run id as a literal', () => {
     render(<AgentRun name="Agent" runId="run_01JA" status="succeeded" steps={steps} />)
     expect(screen.getByText('run_01JA')).toHaveClass('literal')
+  })
+
+  // The story's open step used to start at the fixture date, so its live clock
+  // read the days since then ("220h 03m") in the story and its screenshot.
+  it('shows the waiting story in minutes, not the days since the fixture date', () => {
+    render(<WaitingForApproval />)
+    expect(document.body.textContent).not.toMatch(/\d+h\b/)
+    expect(document.body.textContent).toMatch(/1m 0\ds/)
   })
 })

@@ -2,11 +2,12 @@
 
 import { AlertDialog as AlertDialogPrimitive } from '@base-ui/react/alert-dialog'
 import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
 import { X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type Variants } from '../../lib/variants'
 import { Button, IconButton } from '../button'
 import { fieldControlClasses, fieldControlSizes } from '../field/field-control'
 
@@ -72,7 +73,7 @@ export const DialogClose = DialogPrimitive.Close
 
 export interface DialogContentProps
   extends Omit<DialogPrimitive.Popup.Props, 'className' | 'title'>,
-    VariantProps<typeof dialogPopupVariants> {
+    Variants<typeof dialogPopupVariants> {
   className?: string
   /** The dialog's accessible name. Required: an unnamed modal is announced as "dialog" and nothing else. */
   title: React.ReactNode

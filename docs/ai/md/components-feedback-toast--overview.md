@@ -53,7 +53,7 @@ Mount once near the root. Renders the viewport, bottom-right, into a portal.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `limit` | `number` | `3` | Toasts kept visible at once; older ones fold away. |
-| `timeout` | `number` | `5000` | Default auto-dismiss, ms. |
+| `timeout` | `number` | `5000` | Default auto-dismiss, ms. Also the timeout a running toast starts when `update()` turns it into a result. |
 
 ### `useToast` (hook)
 
