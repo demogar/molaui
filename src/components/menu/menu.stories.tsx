@@ -207,7 +207,7 @@ export const HardStates: Story = {
       story: { inline: false, height: '520px' },
       description: {
         story:
-          'A menu is modal, so the right-to-left one is the one shown open: inside `DirectionProvider` the icons, shortcuts and submenu side mirror and the danger item still highlights in rojo. A long item label wraps inside the menu’s width rather than stretching it across the page; a trigger that cannot open yet is disabled and says why beside it, as a disabled item inside an open menu does (Row actions). A menu has no error state: an action that fails reports where its result would have appeared.',
+          'A menu is modal, so the right-to-left one is the one shown open: inside `DirectionProvider` the icons, shortcuts and submenu side mirror (a shortcut moves to the row’s left end, but its keys keep their typing order) and the danger item still highlights in rojo. A long item label wraps inside the menu’s width rather than stretching it across the page; a trigger that cannot open yet is disabled and says why beside it, as a disabled item inside an open menu does (Row actions). A menu has no error state: an action that fails reports where its result would have appeared.',
       },
     },
   },

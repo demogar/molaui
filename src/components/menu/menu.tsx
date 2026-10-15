@@ -99,8 +99,14 @@ export function MenuContent({
   )
 }
 
-/** Right-aligned key hint. */
-export function MenuShortcut({ className, ...props }: React.ComponentProps<'span'>) {
+/**
+ * Right-aligned key hint. The keys are left to right in every direction (see
+ * Kbd): in a right-to-left menu `⌘S` would otherwise render as S⌘. `dir` is
+ * on an inner span, not the root, because a logical margin resolves against
+ * the element's own direction: on the root, `ms-auto ps-4` became a left
+ * margin in a right-to-left row and pushed the hint against the label.
+ */
+export function MenuShortcut({ className, children, ...props }: React.ComponentProps<'span'>) {
   return (
     <span
       data-slot="menu-shortcut"
@@ -109,7 +115,9 @@ export function MenuShortcut({ className, ...props }: React.ComponentProps<'span
         className,
       )}
       {...props}
-    />
+    >
+      <span dir="ltr">{children}</span>
+    </span>
   )
 }
 

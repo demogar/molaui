@@ -114,7 +114,7 @@ export const HardStates: Story = {
       story: { inline: false, height: '360px' },
       description: {
         story:
-          'A long label wraps at the tooltip’s maximum width rather than running across the page; in right to left the label and its shortcut keys swap sides; a disabled control stays focusable (`focusableWhenDisabled`) so its tooltip can say why it is disabled, the one place a tooltip carries a reason. A tooltip has no error state: it is a label, and an error is never left to something that does not exist on touch.',
+          'A long label wraps at the tooltip’s maximum width rather than running across the page; in right to left the label and its shortcut keys swap sides, while the keys themselves keep their typing order, ⌘ then C; a disabled control stays focusable (`focusableWhenDisabled`) so its tooltip can say why it is disabled, the one place a tooltip carries a reason. A tooltip has no error state: it is a label, and an error is never left to something that does not exist on touch.',
       },
     },
   },

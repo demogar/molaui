@@ -122,7 +122,7 @@ Also accepts the props of `MenuRadioItemProps`, `NativeButtonProps`.
 
 ### `MenuShortcut` (component)
 
-Right-aligned key hint.
+Right-aligned key hint. The keys are left to right in every direction (see Kbd): in a right-to-left menu `⌘S` would otherwise render as S⌘. `dir` is on an inner span, not the root, because a logical margin resolves against the element's own direction: on the root, `ms-auto ps-4` became a left margin in a right-to-left row and pushed the hint against the label.
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="menu-shortcut">`.
 

@@ -103,12 +103,14 @@ export function Tooltip({
           >
             <span>{content}</span>
             {shortcut && shortcut.length > 0 ? (
-              <span className="flex items-center gap-0.5">
+              <span dir="ltr" className="flex items-center gap-0.5">
                 {/* Keyed by position: the same glyph can appear twice (⇧ ⇧), and
-                    a shortcut's keys never reorder. */}
+                    a shortcut's keys never reorder, not even in a right-to-left
+                    page (see Kbd), hence `dir="ltr"` on the row and each key. */}
                 {shortcut.map((key, i) => (
                   <kbd
                     key={i}
+                    dir="ltr"
                     className="inline-grid h-[18px] min-w-[18px] place-items-center px-1 font-ui text-2xs font-semibold text-on-ink-muted rule-ring"
                   >
                     {key}

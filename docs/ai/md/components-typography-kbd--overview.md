@@ -59,6 +59,7 @@ Nothing in it takes focus, so there is no keyboard table.
 ### Mola handles
 
 - Renders a `<kbd>`, and nests a chord's keys inside one outer `<kbd>`, as the HTML spec describes.
+- Keeps keys left to right in a right-to-left page, isolated from the text around them: a shortcut is typed in a fixed order, so ⌘K never reads K⌘ and Ctrl K never reads K Ctrl.
 
 ### You handle
 

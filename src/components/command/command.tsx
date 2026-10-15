@@ -363,8 +363,13 @@ export function CommandPalette({
                             ) : null}
                           </span>
                           {item.hotkey || item.shortcut ? (
-                            <span className="flex shrink-0 gap-1 text-xs tabular-nums text-ink-muted group-aria-selected/option:text-on-ink-muted">
-                              {/* By position, not glyph: G G repeats a key. */}
+                            <span
+                              dir="ltr"
+                              className="flex shrink-0 gap-1 text-xs tabular-nums text-ink-muted group-aria-selected/option:text-on-ink-muted"
+                            >
+                              {/* By position, not glyph: G G repeats a key. Left to
+                                  right in every direction (see Kbd): G then R is not
+                                  R then G in a right-to-left palette. */}
                               {(item.hotkey ? formatHotkey(item.hotkey, platform, keyWords).flat() : item.shortcut!).map((key, i) => (
                                 <span key={i} className="min-w-4 text-center">
                                   {key}
