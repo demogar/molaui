@@ -2608,25 +2608,25 @@ Anatomy:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `defaultOpen` | `boolean` |  |  |
-| `defaultValue` | `Date \| null` | `null` |  |
-| `disabled` | `boolean` |  |  |
+| `defaultOpen` | `boolean` |  | Open the calendar on first render. |
+| `defaultValue` | `Date \| null` | `null` | The moment shown on first render, uncontrolled. `null` or omitted starts empty. |
+| `disabled` | `boolean` |  | Stated, not faded: both halves are disabled and go to the shaded cloth. |
 | `hourCycle` | `12 \| 24` |  | Overrides the locale's clock. |
 | `id` | `string` |  | Given to the date input, so a `<label for>` focuses it. |
-| `isDateDisabled` | `((date: Date) => boolean)` |  |  |
+| `isDateDisabled` | `((date: Date) => boolean)` |  | Days inside `min`–`max` that still cannot be chosen, as on DatePicker. |
 | `locale` | `LocalesArgument` |  | BCP 47 tag for names, digits, the typed date order, the clock and the week start. |
-| `max` | `Date \| null` |  |  |
-| `messages` | `Partial<DateTimePickerMessages>` |  |  |
-| `min` | `Date \| null` |  |  |
+| `max` | `Date \| null` |  | The latest moment, inclusive. Later days are unavailable in the calendar, and a later time on the same day is refused with a sentence under both halves. |
+| `messages` | `Partial<DateTimePickerMessages>` |  | The words "Date" and "Time" that name each half, and TimePicker's segment names and sentences, for translation. |
+| `min` | `Date \| null` |  | The earliest moment, inclusive. Earlier days are unavailable in the calendar, and an earlier time on the same day is refused with a sentence under both halves. |
 | `minuteStep` | `number` |  | Minutes per Up or Down press in the minute segment. |
 | `name` | `string` |  | Submitted as `yyyy-mm-ddThh:mm`, local time, as `<input type="datetime-local">` writes it. |
-| `onOpenChange` | `((open: boolean) => void)` |  |  |
+| `onOpenChange` | `((open: boolean) => void)` |  | Called when the calendar opens or closes, as on DatePicker. |
 | `onValueChange` | `((value: Date \| null) => void)` |  | Called with the combined moment once both halves hold an allowed value, and with `null` when either is emptied. |
 | `open` | `boolean` |  | Whether the calendar is open, when the page owns that. |
-| `required` | `boolean` |  |  |
-| `size` | `"sm" \| "md" \| "lg"` | `md` |  |
+| `required` | `boolean` |  | Marks both halves required for form validation. Inside `Field`, the label carries the required mark. |
+| `size` | `"sm" \| "md" \| "lg"` | `md` | Control height for both halves, shared with Input. Defaults to `md`; density rescales every size. |
 | `today` | `Date` |  | As on DatePicker: inject "now" for stable stories, and pass the server's date when server rendering. |
-| `value` | `Date \| null` |  |  |
+| `value` | `Date \| null` |  | The moment, controlled, in local time. `null` is none; leave it `undefined` to let the picker hold its own state. |
 | `weekStartsOn` | `number` |  | 0 = Sunday … 6 = Saturday. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="date-time-picker">`.
@@ -2635,8 +2635,8 @@ Anatomy:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `defaultValue` | `string \| null` | `null` |  |
-| `disabled` | `boolean` |  |  |
+| `defaultValue` | `string \| null` | `null` | The time shown on first render, uncontrolled. `null` or omitted starts with every segment empty. |
+| `disabled` | `boolean` |  | Stated, not faded: every segment is disabled and the field goes to the shaded cloth. |
 | `hourCycle` | `12 \| 24` |  | Overrides the locale's clock, for a product that always shows one. |
 | `id` | `string` |  | Given to the first segment, so a `<label for>` (as `Field` writes it) focuses it. |
 | `locale` | `LocalesArgument` |  | BCP 47 tag for the clock (12- or 24-hour), the day-period words and the digits. `undefined` uses the runtime's locale. |
@@ -2646,9 +2646,9 @@ Anatomy:
 | `minuteStep` | `number` | `1` | Minutes per Up or Down press in the minute segment; typing still takes any minute. |
 | `name` | `string` |  | Submitted as `HH:mm`, whatever the display locale. |
 | `onValueChange` | `((value: string \| null) => void)` |  | Called on blur or Enter with a complete, allowed time, or `null` when emptied. |
-| `required` | `boolean` |  |  |
-| `size` | `"sm" \| "md" \| "lg"` | `md` |  |
-| `value` | `string \| null` |  | `HH:mm`, 24-hour, as `<input type="time">` writes it; `null` for none. |
+| `required` | `boolean` |  | Marks every segment required for form validation. Inside `Field`, the label carries the required mark. |
+| `size` | `"sm" \| "md" \| "lg"` | `md` | Control height, shared with Input and DatePicker so the picker lines up in a form row. Defaults to `md`; density rescales every size. |
+| `value` | `string \| null` |  | The time, controlled: `HH:mm`, 24-hour, as `<input type="time">` writes it; `null` for none. Leave it `undefined` to let the picker hold its own state. |
 | `wrapperClassName` | `string` |  | Classes for the outer element that holds the field and its error. |
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="time-picker-field">`.

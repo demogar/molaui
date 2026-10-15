@@ -106,8 +106,12 @@ const DEFAULT_MESSAGES: TimePickerMessages = {
 
 export interface TimePickerProps
   extends Omit<React.ComponentProps<'div'>, 'defaultValue' | 'onChange' | 'children' | 'role'> {
-  /** `HH:mm`, 24-hour, as `<input type="time">` writes it; `null` for none. */
+  /**
+   * The time, controlled: `HH:mm`, 24-hour, as `<input type="time">` writes it;
+   * `null` for none. Leave it `undefined` to let the picker hold its own state.
+   */
   value?: TimeString | null
+  /** The time shown on first render, uncontrolled. `null` or omitted starts with every segment empty. */
   defaultValue?: TimeString | null
   /** Called on blur or Enter with a complete, allowed time, or `null` when emptied. */
   onValueChange?: (value: TimeString | null) => void
@@ -123,8 +127,14 @@ export interface TimePickerProps
   max?: TimeString | null
   /** Submitted as `HH:mm`, whatever the display locale. */
   name?: string
+  /**
+   * Control height, shared with Input and DatePicker so the picker lines up in a
+   * form row. Defaults to `md`; density rescales every size.
+   */
   size?: FieldControlSize
+  /** Stated, not faded: every segment is disabled and the field goes to the shaded cloth. */
   disabled?: boolean
+  /** Marks every segment required for form validation. Inside `Field`, the label carries the required mark. */
   required?: boolean
   /** Given to the first segment, so a `<label for>` (as `Field` writes it) focuses it. */
   id?: string

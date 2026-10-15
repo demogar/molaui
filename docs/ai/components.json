@@ -12604,18 +12604,21 @@
             {
               "name": "defaultOpen",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Open the calendar on first render."
             },
             {
               "name": "defaultValue",
               "type": "Date | null",
               "required": false,
-              "default": "null"
+              "default": "null",
+              "description": "The moment shown on first render, uncontrolled. `null` or omitted starts empty."
             },
             {
               "name": "disabled",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Stated, not faded: both halves are disabled and go to the shaded cloth."
             },
             {
               "name": "hourCycle",
@@ -12632,7 +12635,8 @@
             {
               "name": "isDateDisabled",
               "type": "((date: Date) => boolean)",
-              "required": false
+              "required": false,
+              "description": "Days inside `min`–`max` that still cannot be chosen, as on DatePicker."
             },
             {
               "name": "locale",
@@ -12643,17 +12647,20 @@
             {
               "name": "max",
               "type": "Date | null",
-              "required": false
+              "required": false,
+              "description": "The latest moment, inclusive. Later days are unavailable in the calendar, and a later time on the same day is refused with a sentence under both halves."
             },
             {
               "name": "messages",
               "type": "Partial<DateTimePickerMessages>",
-              "required": false
+              "required": false,
+              "description": "The words \"Date\" and \"Time\" that name each half, and TimePicker's segment names and sentences, for translation."
             },
             {
               "name": "min",
               "type": "Date | null",
-              "required": false
+              "required": false,
+              "description": "The earliest moment, inclusive. Earlier days are unavailable in the calendar, and an earlier time on the same day is refused with a sentence under both halves."
             },
             {
               "name": "minuteStep",
@@ -12670,7 +12677,8 @@
             {
               "name": "onOpenChange",
               "type": "((open: boolean) => void)",
-              "required": false
+              "required": false,
+              "description": "Called when the calendar opens or closes, as on DatePicker."
             },
             {
               "name": "onValueChange",
@@ -12687,13 +12695,15 @@
             {
               "name": "required",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Marks both halves required for form validation. Inside `Field`, the label carries the required mark."
             },
             {
               "name": "size",
               "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false,
-              "default": "md"
+              "default": "md",
+              "description": "Control height for both halves, shared with Input. Defaults to `md`; density rescales every size."
             },
             {
               "name": "today",
@@ -12704,7 +12714,8 @@
             {
               "name": "value",
               "type": "Date | null",
-              "required": false
+              "required": false,
+              "description": "The moment, controlled, in local time. `null` is none; leave it `undefined` to let the picker hold its own state."
             },
             {
               "name": "weekStartsOn",
@@ -12726,12 +12737,14 @@
               "name": "defaultValue",
               "type": "string | null",
               "required": false,
-              "default": "null"
+              "default": "null",
+              "description": "The time shown on first render, uncontrolled. `null` or omitted starts with every segment empty."
             },
             {
               "name": "disabled",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Stated, not faded: every segment is disabled and the field goes to the shaded cloth."
             },
             {
               "name": "hourCycle",
@@ -12791,19 +12804,21 @@
             {
               "name": "required",
               "type": "boolean",
-              "required": false
+              "required": false,
+              "description": "Marks every segment required for form validation. Inside `Field`, the label carries the required mark."
             },
             {
               "name": "size",
               "type": "\"sm\" | \"md\" | \"lg\"",
               "required": false,
-              "default": "md"
+              "default": "md",
+              "description": "Control height, shared with Input and DatePicker so the picker lines up in a form row. Defaults to `md`; density rescales every size."
             },
             {
               "name": "value",
               "type": "string | null",
               "required": false,
-              "description": "`HH:mm`, 24-hour, as `<input type=\"time\">` writes it; `null` for none."
+              "description": "The time, controlled: `HH:mm`, 24-hour, as `<input type=\"time\">` writes it; `null` for none. Leave it `undefined` to let the picker hold its own state."
             },
             {
               "name": "wrapperClassName",

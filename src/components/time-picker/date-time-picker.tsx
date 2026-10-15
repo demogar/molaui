@@ -51,7 +51,12 @@ export interface DateTimePickerMessages extends TimePickerMessages {
 
 export interface DateTimePickerProps
   extends Omit<React.ComponentProps<'div'>, 'defaultValue' | 'onChange' | 'children' | 'role'> {
+  /**
+   * The moment, controlled, in local time. `null` is none; leave it `undefined` to
+   * let the picker hold its own state.
+   */
   value?: Date | null
+  /** The moment shown on first render, uncontrolled. `null` or omitted starts empty. */
   defaultValue?: Date | null
   /** Called with the combined moment once both halves hold an allowed value, and with `null` when either is emptied. */
   onValueChange?: (value: Date | null) => void
@@ -63,22 +68,37 @@ export interface DateTimePickerProps
   minuteStep?: number
   /** 0 = Sunday … 6 = Saturday. */
   weekStartsOn?: number
+  /**
+   * The earliest moment, inclusive. Earlier days are unavailable in the calendar,
+   * and an earlier time on the same day is refused with a sentence under both halves.
+   */
   min?: Date | null
+  /**
+   * The latest moment, inclusive. Later days are unavailable in the calendar, and a
+   * later time on the same day is refused with a sentence under both halves.
+   */
   max?: Date | null
+  /** Days inside `min`–`max` that still cannot be chosen, as on DatePicker. */
   isDateDisabled?: (date: Date) => boolean
   /** As on DatePicker: inject "now" for stable stories, and pass the server's date when server rendering. */
   today?: Date
   /** Whether the calendar is open, when the page owns that. */
   open?: boolean
+  /** Open the calendar on first render. */
   defaultOpen?: boolean
+  /** Called when the calendar opens or closes, as on DatePicker. */
   onOpenChange?: (open: boolean) => void
   /** Submitted as `yyyy-mm-ddThh:mm`, local time, as `<input type="datetime-local">` writes it. */
   name?: string
+  /** Control height for both halves, shared with Input. Defaults to `md`; density rescales every size. */
   size?: FieldControlSize
+  /** Stated, not faded: both halves are disabled and go to the shaded cloth. */
   disabled?: boolean
+  /** Marks both halves required for form validation. Inside `Field`, the label carries the required mark. */
   required?: boolean
   /** Given to the date input, so a `<label for>` focuses it. */
   id?: string
+  /** The words "Date" and "Time" that name each half, and TimePicker's segment names and sentences, for translation. */
   messages?: Partial<DateTimePickerMessages>
 }
 

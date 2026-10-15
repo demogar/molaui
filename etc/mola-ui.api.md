@@ -818,35 +818,24 @@ export interface DateTimePickerMessages extends TimePickerMessages {
 
 // @public (undocumented)
 export interface DateTimePickerProps extends Omit<React_2.ComponentProps<'div'>, 'defaultValue' | 'onChange' | 'children' | 'role'> {
-    // (undocumented)
     defaultOpen?: boolean;
-    // (undocumented)
     defaultValue?: Date | null;
-    // (undocumented)
     disabled?: boolean;
     hourCycle?: 12 | 24;
     id?: string;
-    // (undocumented)
     isDateDisabled?: (date: Date) => boolean;
     locale?: DateLocale;
-    // (undocumented)
     max?: Date | null;
-    // (undocumented)
     messages?: Partial<DateTimePickerMessages>;
-    // (undocumented)
     min?: Date | null;
     minuteStep?: number;
     name?: string;
-    // (undocumented)
     onOpenChange?: (open: boolean) => void;
     onValueChange?: (value: Date | null) => void;
     open?: boolean;
-    // (undocumented)
     required?: boolean;
-    // (undocumented)
     size?: FieldControlSize;
     today?: Date;
-    // (undocumented)
     value?: Date | null;
     weekStartsOn?: number;
 }
@@ -2534,9 +2523,7 @@ export interface TimePickerMessages {
 
 // @public (undocumented)
 export interface TimePickerProps extends Omit<React_2.ComponentProps<'div'>, 'defaultValue' | 'onChange' | 'children' | 'role'> {
-    // (undocumented)
     defaultValue?: TimeString | null;
-    // (undocumented)
     disabled?: boolean;
     hourCycle?: 12 | 24;
     id?: string;
@@ -2547,9 +2534,7 @@ export interface TimePickerProps extends Omit<React_2.ComponentProps<'div'>, 'de
     minuteStep?: number;
     name?: string;
     onValueChange?: (value: TimeString | null) => void;
-    // (undocumented)
     required?: boolean;
-    // (undocumented)
     size?: FieldControlSize;
     value?: TimeString | null;
     wrapperClassName?: string;
