@@ -8,8 +8,7 @@ import { found } from '../../test/found'
 import { repoRoot, walk } from '../../test/story-index'
 import { builtFrom, componentImports, compositionFiles } from './composition'
 import { COMPOSITIONS, usedIn } from './composition-data'
-import { PATTERNS } from './patterns'
-import { isPattern } from './showcases'
+import { isPattern, PATTERNS } from './patterns'
 
 const read = (path: string) => readFileSync(join(repoRoot, path), 'utf8')
 
@@ -47,26 +46,25 @@ describe('composition', () => {
   const storyFiles = found(walk(join(repoRoot, 'src'), (name) => name.endsWith('.stories.tsx')), 40, 'stories files').map((path) => path.slice(repoRoot.length + 1))
   const titleOf = (file: string) => read(file).match(/title: '([^']+)'/)?.[1] ?? ''
 
-  it('matches the imports of every pattern and showcase', () => {
+  it('matches the imports of every pattern', () => {
     const derived = Object.fromEntries(
       storyFiles
         .filter((file) => COMPOSITIONS[titleOf(file)])
         .map((file) => {
           const title = titleOf(file)
-          const kind = isPattern(title) ? 'pattern' : 'showcase'
           const dir = file.split('/').slice(0, -1).join('/')
-          const files = compositionFiles(kind, file, readdirSync(join(repoRoot, dir)).map((name) => `${dir}/${name}`))
+          const files = compositionFiles(readdirSync(join(repoRoot, dir)).map((name) => `${dir}/${name}`))
           const result = builtFrom(files.map((path) => ({ path, text: read(path) })), pageOf)
           expect(result.unknown, `${title} imports names no docs page documents`).toEqual([])
-          return [title, { kind, builtFrom: result.titles }]
+          return [title, { kind: 'pattern', builtFrom: result.titles }]
         }),
     )
     expect(derived).toEqual(COMPOSITIONS)
   })
 
-  it('covers every pattern page', () => {
+  it('covers every pattern page, and only pattern pages', () => {
     const patterns = storyFiles.map(titleOf).filter(isPattern).sort()
-    expect(Object.keys(COMPOSITIONS).filter(isPattern).sort()).toEqual(patterns)
+    expect(Object.keys(COMPOSITIONS).sort()).toEqual(patterns)
   })
 
   it('describes exactly the parts each pattern imports', () => {
@@ -84,6 +82,6 @@ describe('composition', () => {
 
   it('reads the other way round for "Used in"', () => {
     expect(usedIn('Components/Feedback/Empty state')).toContain('Patterns/List and detail')
-    expect(usedIn('AI/Prompt input')).toEqual(['AI/Agent console'])
+    expect(usedIn('AI/Prompt input')).toEqual(['Patterns/Agent console'])
   })
 })

@@ -109,5 +109,5 @@ Nothing in it takes focus, so there is no keyboard table.
 
 ### Used in
 
-- [Agent console](https://demogar.github.io/molaui/md/ai-agent-console--overview.md) (showcase)
+- [Agent console](https://demogar.github.io/molaui/md/patterns-agent-console--overview.md) (pattern)
 - [Agent hand-off](https://demogar.github.io/molaui/md/patterns-agent-hand-off--overview.md) (pattern)

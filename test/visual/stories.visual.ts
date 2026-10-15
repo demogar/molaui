@@ -155,7 +155,7 @@ if (forcedToo.length !== FORCED_TOO.size) throw new Error(`A forced-colours stor
  */
 const patterns = firstOfEach.filter((s) => s.title.startsWith('Patterns/'))
 // A renamed title would quietly empty the matrix rather than fail it.
-if (patterns.length < 6) throw new Error(`expected the six patterns, found ${patterns.length}`)
+if (patterns.length < 8) throw new Error(`expected the eight patterns, found ${patterns.length}`)
 const patternModes: Mode[] = [{ name: 'spacious', theme: 'light', density: 'spacious' }]
 
 /** Every screenshot in a fixed order, which `mine()` deals across shards. */

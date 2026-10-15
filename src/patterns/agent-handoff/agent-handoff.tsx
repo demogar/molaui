@@ -14,6 +14,7 @@ import { Button } from '../../components/button'
 import { Callout } from '../../components/callout'
 import { EmptyState } from '../../components/empty-state'
 import { Field, Textarea } from '../../components/field'
+import { Skeleton, SkeletonGroup, SkeletonText } from '../../components/skeleton'
 import { HANDOFF, type Handoff, usd } from './_data'
 
 /**
@@ -44,6 +45,13 @@ import { HANDOFF, type Handoff, usd } from './_data'
  * to reassign, and Take over stays, because replying without a refund is
  * still theirs to do.
  *
+ * ── loading keeps the screen's shape ──
+ * Before the hand-off arrives, the page has its breadcrumb and a plain
+ * title, and the body is the decision panel and the run drawn as skeletons
+ * in their real columns, inside one SkeletonGroup that says "Loading the
+ * hand-off" once. There is no Take over yet: taking over a ticket nobody can
+ * see would hand the person nothing to finish.
+ *
  * ── focus follows the decision ──
  * Approving, denying and taking over each remove the button that was
  * pressed. Focus moves to the hand-off's heading, which now says what
@@ -57,6 +65,8 @@ type Outcome = 'waiting' | 'refunding' | 'refunded' | 'refund-failed' | 'taken-o
 export interface AgentHandoffScreenProps {
   /** `null` when nothing is waiting for this person. */
   handoff?: Handoff | null
+  /** The hand-off has not arrived yet: the panel and the run as skeletons. */
+  loading?: boolean
   /** Whether this person may approve a refund this size. */
   canApprove?: boolean
   /** The refund the agent runs once approved. Rejects with an Error whose message is the tool's error. */
@@ -157,8 +167,26 @@ function steps(h: Handoff, outcome: Outcome): AgentStep[] {
   ]
 }
 
+/** The decision panel, the conversation and the run, in their columns, before any of them has arrived. */
+function HandoffSkeleton() {
+  return (
+    <div className="grid grid-cols-1 gap-6 @4xl/handoff:grid-cols-[minmax(0,1fr)_minmax(20rem,26rem)]">
+      <div className="grid min-w-0 grid-cols-1 content-start gap-6">
+        <div className="grid gap-4 bg-cloth-pale p-4 shadow-cut sm:p-5">
+          <Skeleton shape="text" className="h-6 w-2/3" />
+          <SkeletonText lines={3} />
+          <Skeleton className="h-28" />
+        </div>
+        <Skeleton className="h-40" />
+      </div>
+      <Skeleton className="h-96 self-start" />
+    </div>
+  )
+}
+
 export function AgentHandoffScreen({
   handoff = HANDOFF,
+  loading = false,
   canApprove = true,
   refund = () => wait(1_200),
   defaultOutcome = 'waiting',
@@ -172,6 +200,18 @@ export function AgentHandoffScreen({
   const [reply, setReply] = React.useState(handoff?.draftReply ?? '')
   const headingRef = React.useRef<HTMLHeadingElement>(null)
   const uid = React.useId()
+
+  if (loading) {
+    return (
+      <>
+        <PageHeader
+          breadcrumb={<Breadcrumb items={[{ label: 'Support', href: '#support' }, { label: 'Escalations', href: '#escalations' }]} />}
+          title="Hand-off"
+        />
+        <SkeletonGroup loading label="Loading the hand-off" fallback={<HandoffSkeleton />} className="@container/handoff p-4 sm:p-6" />
+      </>
+    )
+  }
 
   if (!handoff) {
     return (

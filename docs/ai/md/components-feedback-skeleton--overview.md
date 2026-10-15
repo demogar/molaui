@@ -126,6 +126,13 @@ Nothing in it takes focus, so there is no keyboard table.
 
 - [Empty state](https://demogar.github.io/molaui/md/components-feedback-empty-state--overview.md)
 
+### Used in
+
+- [Agent hand-off](https://demogar.github.io/molaui/md/patterns-agent-hand-off--overview.md) (pattern)
+- [Form validation](https://demogar.github.io/molaui/md/patterns-form-validation--overview.md) (pattern)
+- [List and detail](https://demogar.github.io/molaui/md/patterns-list-and-detail--overview.md) (pattern)
+- [Settings page](https://demogar.github.io/molaui/md/patterns-settings-page--overview.md) (pattern)
+
 ## Changes
 
 From CHANGELOG.md, newest first.

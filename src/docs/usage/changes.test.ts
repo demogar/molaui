@@ -21,12 +21,12 @@ import {
   unknownScopes,
   unknownSections,
 } from './changes'
-import { isShowcase } from './showcases'
+import { isPattern } from './patterns'
 import { WHATS_NEW, whatsNewTitle } from './whats-new'
 
 const raw = readFileSync(join(repoRoot, 'CHANGELOG.md'), 'utf8')
 const releases = parseChangelog(raw)
-const components = new Set(storyTitles.filter((title) => !isShowcase(title)))
+const components = new Set(storyTitles.filter((title) => !isPattern(title)))
 
 /**
  * A release as release-please writes it, taken from the open 0.4.0 release

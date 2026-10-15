@@ -32,6 +32,7 @@ Read from its imports.
 - [Badge](https://demogar.github.io/molaui/md/components-feedback-badge--overview.md): Whether the reply is a draft or sent, as a dot, a word and a tone.
 - [Callout](https://demogar.github.io/molaui/md/components-feedback-callout--overview.md): Who can approve, when the person cannot; and the result, once the refund is issued.
 - [Empty state](https://demogar.github.io/molaui/md/components-feedback-empty-state--overview.md): The queue with nothing waiting.
+- [Skeleton](https://demogar.github.io/molaui/md/components-feedback-skeleton--overview.md): The decision panel, the conversation and the run, in their columns, while the hand-off loads.
 - [Field](https://demogar.github.io/molaui/md/components-forms-field--overview.md): The person’s reply after taking over, a labelled Textarea that starts from the agent’s draft.
 - [Page header](https://demogar.github.io/molaui/md/components-layout-page-header--overview.md): The ticket’s subject, who handed it off, the status and Take over.
 - [Breadcrumb](https://demogar.github.io/molaui/md/components-navigation-breadcrumb--overview.md): Where the ticket sits: Support, Escalations, the ticket id.
@@ -39,7 +40,7 @@ Read from its imports.
 ## States
 
 - Empty: Nothing needs the person: the empty state says what will appear and when. Story: https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--nothing-waiting
-- Loading: Not shown. While the refund runs, the hand-off says “Issuing the refund” and the call carries the working relleno; a hand-off still loading would use Skeleton in the panel’s shape, as the Empty states pattern does for a table. (No story.)
+- Loading: The panel, the conversation and the run as skeletons in their columns, with one polite “Loading the hand-off” and no Take over yet. Once approved, the refund in flight is “Issuing the refund” with the call’s working relleno. Story: https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--loading
 - Error: The approved refund failed: the call shows the error verbatim with Retry call, nothing reaches the customer, and Take over stays. Story: https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--refund-fails
 - No permission: The person may not approve a refund this size: the proposal shows without Approve, the callout names who can and offers to reassign, and Take over stays. Story: https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--no-permission
 
@@ -60,6 +61,7 @@ Someone who may not approve a refund this size still sees the proposal, without 
 
 - [Approved](https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--approved)
 - [Default](https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--default)
+- [Loading](https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--loading)
 - [NoPermission](https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--no-permission)
 - [NothingWaiting](https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--nothing-waiting)
 - [RefundFails](https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--refund-fails)

@@ -26,6 +26,28 @@ afterEach(() => {
   window.location.hash = ''
 })
 
+describe('SettingsPage states', () => {
+  it('while loading, says so once, keeps the settings pages and offers no Save or Delete', () => {
+    renderPage({ loading: true })
+    expect(status()).toHaveTextContent('Loading settings')
+    expect(screen.getByRole('navigation', { name: 'Settings' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Save changes' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Delete workspace' })).not.toBeInTheDocument()
+  })
+
+  it('a member reads the values as text, with who can change them, and no control that refuses', () => {
+    renderPage({ canEdit: false })
+    expect(screen.getByRole('region', { name: 'Only workspace admins can change these settings' })).toHaveTextContent(
+      'Ana Ruiz or Kai Morales',
+    )
+    expect(screen.getByText('workspaces/support')).toBeInTheDocument()
+    expect(screen.getByText('Pause new runs')).toBeInTheDocument()
+    expect(screen.queryByRole('textbox')).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Save changes' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Delete workspace' })).not.toBeInTheDocument()
+  })
+})
+
 describe('SettingsPage', () => {
   it('opens clean: nothing to save, and says so', () => {
     renderPage()

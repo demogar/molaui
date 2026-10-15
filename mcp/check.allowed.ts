@@ -74,14 +74,14 @@ export const ALLOWED: Record<string, Allowed[]> = {
   'src/patterns/filtered-table/filtered-table.tsx': [
     { rule: 12, match: /hand-styled `<button/, why: 'The run id in a table cell, styled as an underlined literal that opens the drawer: a Button would put a control in every row.' },
   ],
+  'src/patterns/agent-console/agent-console.tsx': [
+    { rule: 12, match: /hand-styled `<button/, why: 'The empty thread\'s suggested prompts: multi-line cards with a revealed band, which no Button variant draws; each is still a real button.' },
+  ],
   'src/patterns/list-and-detail/list-and-detail.tsx': [
     { rule: 12, match: /hand-styled `<button/, why: 'A whole list row that selects the record, with aria-current: a row, not a Button, and Mola has no list-row component.' },
   ],
 
   /* Stories and their fixtures. */
-  'src/components/ai/agent-console.stories.tsx': [
-    { rule: 12, match: /hand-styled `<button/, why: 'The empty thread\'s suggested prompts: multi-line cards with a revealed band, which no Button variant draws; each is still a real button.' },
-  ],
   'src/components/app-shell/_story-data/cayuco-chrome.tsx': [
     { rule: 12, match: /hand-styled `<button/, why: 'A search-field-shaped trigger that opens the command palette; it is a button, but it must read as an input, which Button does not.' },
   ],

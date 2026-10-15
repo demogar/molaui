@@ -15,7 +15,7 @@
  *   docs/ai/tokens.json       every token with its role and both theme values,
  *                             and each colour's scopes and promised pairings,
  *                             for the MCP server (mcp/)
- *   docs/ai/composition.json  which components each pattern and showcase is
+ *   docs/ai/composition.json  which components each pattern is
  *                             built from, read from its imports; the docs
  *                             pages render "Built from" and "Used in" from it
  *   snippets/mola-ui.code-snippets
@@ -55,7 +55,7 @@ import { type Phase, phaseOf, PHASES } from '../src/docs/usage/lifecycle'
 import { docsId, storyId } from '../src/docs/usage/links'
 import { PATTERN_STATES, type PatternStateId, PATTERNS, type PatternUsage } from '../src/docs/usage/patterns'
 import { RULES } from '../src/docs/usage/rules'
-import { isPattern } from '../src/docs/usage/showcases'
+import { isPattern } from '../src/docs/usage/patterns'
 import { SCOPES } from '../src/tokens/scopes'
 
 const root = resolve(import.meta.dirname, '..')
@@ -255,7 +255,7 @@ for (const file of storyFiles) {
  * Which docs page documents an export. A folder can hold several stories
  * files (layout has one per part), so prefer the one named like the export's
  * source file, then the one whose meta.component it is, then one that imports
- * it, then any page in the folder with usage guidance (not a showcase).
+ * it, then any page in the folder with usage guidance (not a pattern).
  */
 async function titleFor(info: ExportInfo): Promise<string | null> {
   if (!info.source.startsWith('src/components/')) return null
@@ -302,7 +302,7 @@ interface Entry {
   anatomy?: { slot: string; parts: { part: string; name: string; does: string; selector: string }[] }
   exports: ExportEntry[]
   stories: { name: string; id: string; url: string }[]
-  /** The patterns and showcases that import it, read from their source. */
+  /** The patterns that import it, read from their source. */
   usedIn?: string[]
   /** Its entries in CHANGELOG.md, newest first, matched by commit scope (src/docs/usage/changes.ts). */
   changes?: ChangeEntry[]
@@ -418,7 +418,7 @@ if (undocumented.length) {
 const sorted = [...entries.values()].sort((a, b) => a.title.localeCompare(b.title))
 for (const entry of sorted) entry.exports.sort((a, b) => Number(b.kind === 'component') - Number(a.kind === 'component'))
 
-/* ── composition: what each pattern and showcase is built from ──────── */
+/* ── composition: what each pattern is built from ───────────────────── */
 
 /** Every exported name, to the docs page that documents it. */
 const pageOf = new Map(sorted.flatMap((e) => e.exports.map((x) => [x.name, e.title] as const)))
@@ -426,9 +426,12 @@ const pageOf = new Map(sorted.flatMap((e) => e.exports.map((x) => [x.name, e.tit
 const compositions: Record<string, Composition> = {}
 const unknownParts: string[] = []
 for (const s of stories.filter((x) => !entries.has(x.title)).sort((a, b) => a.title.localeCompare(b.title))) {
-  const kind = isPattern(s.title) ? 'pattern' : 'showcase'
+  // A page with no component entry is a pattern; there is no other kind
+  // (usage.test.ts fails a non-pattern page with no guidance).
+  if (!isPattern(s.title)) throw new Error(`${s.title} is neither a component page nor a pattern`)
+  const kind = 'pattern' as const
   const dir = dirname(s.file)
-  const files = compositionFiles(kind, s.file, readdirSync(resolve(root, dir)).map((name) => `${dir}/${name}`))
+  const files = compositionFiles(readdirSync(resolve(root, dir)).map((name) => `${dir}/${name}`))
   const result = builtFrom(files.map((path) => ({ path, text: readFileSync(resolve(root, path), 'utf8') })), pageOf)
   // A composed screen imports the library only through what it exports, so
   // a copied pattern works against the package. A name with no docs page is
@@ -463,13 +466,13 @@ const patternGuidance = (usage: PatternUsage, title: string) => ({
   states: Object.fromEntries(
     (Object.keys(PATTERN_STATES) as PatternStateId[]).map((id) => {
       const state = usage.states[id]
-      return [id, { ...(state.story ? { story: storyUrl(storyId(title, state.story)) } : {}), note: state.note }]
+      return [id, { ...(state.story ? { story: storyUrl(storyId(title, state.story)) } : {}), ...(state.applies === false ? { applies: false as const } : {}), note: state.note }]
     }),
   ),
   accessibility: usage.accessibility,
 })
 
-const showcases = stories.filter((s) => !entries.has(s.title)).map((s) => ({
+const screens = stories.filter((s) => !entries.has(s.title)).map((s) => ({
   title: s.title,
   kind: compositions[s.title]!.kind,
   docs: docsUrl(s.title),
@@ -556,7 +559,7 @@ const manifest = {
     attributes: { 'data-theme': ['light', 'dark'], 'data-density': ['compact', 'comfortable', 'spacious'], dir: ['ltr', 'rtl'] },
   },
   components: sorted,
-  patterns: showcases,
+  patterns: screens,
   utilities,
 }
 
@@ -653,7 +656,7 @@ ${byLayer('ai').map(linkLine).join('\n')}
 
 ## Patterns
 
-${showcases.map((s) => `- [${s.title.split('/').at(-1)}](${s.docs}) ([Markdown](${twinUrl(SITE, s.title)}))${s.summary ? `: ${s.summary}` : ''}`).join('\n')}
+${screens.map((s) => `- [${s.title.split('/').at(-1)}](${s.docs}) ([Markdown](${twinUrl(SITE, s.title)}))${s.summary ? `: ${s.summary}` : ''}`).join('\n')}
 `
 
 function propsTable(item: ExportEntry) {
@@ -710,7 +713,7 @@ function fullEntry(e: Entry) {
   return parts.join('\n')
 }
 
-function patternEntry(p: (typeof showcases)[number]) {
+function patternEntry(p: (typeof screens)[number]) {
   const g = p.guidance!
   const name = (title: string) => title.split('/').at(-1)
   return [
@@ -750,7 +753,7 @@ ${byLayer('ai').map(fullEntry).join('\n')}
 
 Whole Cayuco screens composed from the components above, with nothing written for them. They live in \`src/patterns/\` and are not part of the package: copy one and adapt it.
 
-${showcases.filter((s) => s.guidance).map(patternEntry).join('\n')}
+${screens.filter((s) => s.guidance).map(patternEntry).join('\n')}
 ## Utilities
 
 ${utilities.map((u) => `- \`${u.name}\` (${u.kind}, ${u.source})${u.description ? `: ${u.description}` : ''}`).join('\n')}
@@ -768,7 +771,7 @@ ${categories.map((c) => `## ${c}\n\n${byLayer('components').filter((e) => e.cate
 ${byLayer('ai').map(fullEntry).join('\n')}`
 
 const patternsText = `${topicHeader('patterns', 'Whole Cayuco screens composed from the components, with nothing written for them. They live in `src/patterns/` and are not part of the package: copy one and adapt it.')}
-${showcases.filter((s) => s.guidance).map(patternEntry).join('\n')}`
+${screens.filter((s) => s.guidance).map(patternEntry).join('\n')}`
 
 /**
  * The rules on their own. They head every other llms file, but an agent that
@@ -798,7 +801,7 @@ Attributes on \`<html>\` or a subtree, never props: ${Object.entries(manifest.to
 const mdx = mdxPages()
 const twins: [string, string][] = [
   ...sorted.map((e) => [e.title, componentTwin(e, SITE)] as const),
-  ...showcases.map((s) => [s.title, screenTwin(s, SITE)] as const),
+  ...screens.map((s) => [s.title, screenTwin(s, SITE)] as const),
   ...mdx
     .filter((page) => !SERVED_AS_IS[page.title])
     .map((page) => [page.title, mdxTwin(page, { site: SITE, pages: mdx, description: pkg.description })] as const),
@@ -837,7 +840,7 @@ const outputs: [string, string][] = [
     'docs/ai/composition.json',
     `${JSON.stringify(
       {
-        $comment: 'Generated by scripts/export-manifest.ts from the imports of each pattern and showcase. Do not edit: run `npm run manifest`.',
+        $comment: 'Generated by scripts/export-manifest.ts from the imports of each pattern. Do not edit: run `npm run manifest`.',
         compositions,
       },
       null,

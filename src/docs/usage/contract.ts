@@ -21,7 +21,7 @@ import { type Phase, phasesIn } from './lifecycle'
  *                           and the evidence behind it
  *   6. Related              the components this page sends readers to, the
  *                           ones that send readers here, and the patterns
- *                           and showcases it is used in
+ *                           it is used in
  *   7. Changes (optional)   what changed in it, release by release, read
  *                           from CHANGELOG.md by commit scope (changes.ts)
  *
@@ -82,7 +82,7 @@ export interface PageData {
   alternatives: RelatedLink[]
   /** Components whose own "When not to" sends readers here. */
   pointingHere: RelatedLink[]
-  /** Patterns and showcases that import it, read from their source (composition.ts). */
+  /** Patterns that import it, read from their source (composition.ts). */
   usedIn: RelatedLink[]
   /** Its entries in CHANGELOG.md, newest first; empty when it has none. */
   changes: ChangeEntry[]

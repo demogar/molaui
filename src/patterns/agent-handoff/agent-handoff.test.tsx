@@ -7,6 +7,14 @@ import { AgentHandoffScreen } from './agent-handoff'
 const handoffHeading = () => screen.getAllByRole('heading', { level: 2 })[0]!
 
 describe('AgentHandoffScreen', () => {
+  it('while loading, says so once, keeps the shape and offers nothing to press', () => {
+    const { container } = render(<AgentHandoffScreen loading />)
+    expect(screen.getByRole('status')).toHaveTextContent('Loading the hand-off')
+    expect(container.querySelector('[aria-busy="true"]')).not.toBeNull()
+    expect(screen.queryByRole('button', { name: 'Take over' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Approve refund' })).not.toBeInTheDocument()
+  })
+
   it('leads with what the agent needs and why, and nothing is sent yet', () => {
     render(<AgentHandoffScreen />)
     expect(handoffHeading()).toHaveTextContent('The agent needs your approval')

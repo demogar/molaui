@@ -10,7 +10,7 @@ import { Code } from '../../components/code'
 import { AlertDialog } from '../../components/dialog'
 import { EmptyState } from '../../components/empty-state'
 import { RelativeTime } from '../../components/relative-time'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../components/table'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableSkeletonRows } from '../../components/table'
 import { useToast } from '../../components/toast'
 import { ADMINS, API_KEYS, type ApiKey } from './_data'
 
@@ -45,6 +45,13 @@ import { ADMINS, API_KEYS, type ApiKey } from './_data'
  * message in its own state and clears it when the dialog opens for another
  * key, so one key's failure is never shown under another key's question.
  *
+ * ── loading is the table's shape ──
+ * While the list loads, the table keeps its real headers over skeleton rows,
+ * marked `aria-busy`, and one polite status says so. The heading says
+ * "Keys" rather than "0 active keys": a count it does not have yet would be
+ * a wrong answer, not a placeholder. Create key stays in the header:
+ * making a key does not depend on the list having loaded.
+ *
  * ── where focus goes afterwards ──
  * Cancel or Escape returns focus to the row's Revoke button, Base UI's
  * default. A revoke that succeeds removes that button, because a revoked key
@@ -66,6 +73,8 @@ export interface ApiKeysScreenProps {
   defaultConfirmingId?: string
   /** Open with this failure already in the dialog. */
   defaultError?: string
+  /** The list has not arrived yet: the table's headers over skeleton rows. */
+  loading?: boolean
 }
 
 const ENV_LABEL = { live: 'Live', test: 'Test' } as const
@@ -97,6 +106,7 @@ export function ApiKeysScreen({
   revoke = () => wait(900),
   defaultConfirmingId,
   defaultError,
+  loading = false,
 }: ApiKeysScreenProps) {
   const [keys, setKeys] = React.useState(initialKeys)
   // Which key, and whether the dialog is open, are kept apart so the dialog
@@ -159,7 +169,7 @@ export function ApiKeysScreen({
             Ask {ADMINS.join(' or ')} if a key needs revoking.
           </Callout>
         ) : null}
-        {keys.length === 0 ? (
+        {keys.length === 0 && !loading ? (
           <EmptyState
             size="lg"
             headingLevel={2}
@@ -170,9 +180,15 @@ export function ApiKeysScreen({
         ) : (
           <section aria-labelledby={headingId} className="grid gap-3">
             <h2 ref={headingRef} id={headingId} tabIndex={-1} className="m-0 font-ui text-base font-bold text-ink">
-              {active} active {active === 1 ? 'key' : 'keys'}
+              {loading ? 'Keys' : `${active} active ${active === 1 ? 'key' : 'keys'}`}
             </h2>
-            <Table framed aria-labelledby={headingId} className="min-w-[44rem]">
+            {/* Mounted from the first render, with only its words changing:
+                a live region that appears together with its text is not
+                reliably announced. */}
+            <p role="status" className="sr-only">
+              {loading ? 'Loading API keys' : ''}
+            </p>
+            <Table framed aria-labelledby={headingId} aria-busy={loading || undefined} className="min-w-[44rem]">
               <TableHeader>
                 <TableRow>
                   <TableHead>Name</TableHead>
@@ -188,7 +204,9 @@ export function ApiKeysScreen({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {keys.map((key) => {
+                {loading ? (
+                  <TableSkeletonRows columns={canRevoke ? 6 : 5} rows={3} />
+                ) : keys.map((key) => {
                   const revoked = key.state === 'revoked'
                   return (
                     <TableRow key={key.id}>

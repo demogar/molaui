@@ -48,7 +48,7 @@ describe('links into Storybook', () => {
   })
 
   it('knows the ids Storybook assigns', () => {
-    for (const id of ['mola-ui-introduction--overview', 'components-feedback-callout--overview', 'ai-agent-console--console']) {
+    for (const id of ['mola-ui-introduction--overview', 'components-feedback-callout--overview', 'patterns-agent-console--console']) {
       expect(knownIds).toContain(id)
     }
   })

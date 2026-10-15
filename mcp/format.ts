@@ -96,7 +96,7 @@ export function componentMarkdown(c: Component, data: Data, via?: string) {
     if (a.keyboard?.length) out.push('| Key | What happens |', '| --- | --- |', ...a.keyboard.map((k) => `| ${k.keys.join(' or ')} | ${cell(k.action)} |`), '')
     out.push('### Mola handles', '', list(a.handles), '', '### You handle', '', list(a.you), '')
   }
-  if (c.usedIn?.length) out.push('## Used in', '', list(c.usedIn.map((t) => `${nameOf(t)} (${t.startsWith('Patterns/') ? 'pattern' : 'showcase'})`)), '')
+  if (c.usedIn?.length) out.push('## Used in', '', list(c.usedIn.map((t) => `${nameOf(t)} (pattern)`)), '')
   out.push('## Examples', '', list(c.stories.map((s) => `[${s.name}](${s.url})`)), '')
   if (c.changes?.length) {
     out.push(
@@ -154,13 +154,11 @@ export function componentBrief(c: Component, data: Data, via?: string) {
 export function patternMarkdown(p: Pattern) {
   const g = p.guidance
   const out: (string | false | undefined)[] = [`# ${nameOf(p.title)} (${p.kind})`, '', g?.summary ?? p.summary, '', `Docs: ${p.docs}`, `Markdown: ${markdownUrl(p.docs)}`, '']
-  if (p.kind === 'pattern') {
-    out.push('Patterns live in `src/patterns/` in the repository and are not exported by the package: copy the screen and adapt it.', '')
-  }
+  out.push('Patterns live in `src/patterns/` in the repository and are not exported by the package: copy the screen and adapt it.', '')
   if (g) {
     out.push('## When to use', '', list(g.use), '', '## When not to', '', list(g.avoid.map((a) => `${a.when}${a.use ? ` Use ${a.label ?? nameOf(a.use)}.` : ''}`)), '')
     out.push('## Built from', '', list(g.parts.map((part) => `${nameOf(part.title)}: ${part.role}`)), '')
-    out.push('## States', '', list(Object.entries(g.states).map(([id, s]) => `${id}: ${s.note}${s.story ? ` Story: ${s.story}` : ''}`)), '')
+    out.push('## States', '', list(Object.entries(g.states).map(([id, s]) => `${id}: ${s.note}${s.story ? ` Story: ${s.story}` : s.applies === false ? ' (Does not apply.)' : ''}`)), '')
     out.push('## Accessibility', '', list(g.accessibility), '')
   } else {
     if (p.description) out.push(p.description, '')

@@ -1,6 +1,6 @@
 /**
  * STORY-ONLY. The Cayuco top bar and sidebar, shared by every story that
- * shows a whole screen, so the app shell and the filtered-table showcase are
+ * shows a whole screen, so the app shell and the filtered-table pattern are
  * the same product rather than two drawings of it. Not exported from the
  * package.
  */

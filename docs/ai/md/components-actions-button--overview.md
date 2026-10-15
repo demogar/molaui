@@ -144,11 +144,11 @@ Types: `ButtonArrowProps`, `ButtonProps`, `IconButtonProps`
 
 ### Used in
 
-- [Agent console](https://demogar.github.io/molaui/md/ai-agent-console--overview.md) (showcase)
-- [Form example](https://demogar.github.io/molaui/md/components-forms-form-example--overview.md) (showcase)
+- [Agent console](https://demogar.github.io/molaui/md/patterns-agent-console--overview.md) (pattern)
 - [Agent hand-off](https://demogar.github.io/molaui/md/patterns-agent-hand-off--overview.md) (pattern)
 - [Confirmation](https://demogar.github.io/molaui/md/patterns-confirmation--overview.md) (pattern)
 - [Empty states](https://demogar.github.io/molaui/md/patterns-empty-states--overview.md) (pattern)
 - [Filtered table](https://demogar.github.io/molaui/md/patterns-filtered-table--overview.md) (pattern)
+- [Form validation](https://demogar.github.io/molaui/md/patterns-form-validation--overview.md) (pattern)
 - [List and detail](https://demogar.github.io/molaui/md/patterns-list-and-detail--overview.md) (pattern)
 - [Settings page](https://demogar.github.io/molaui/md/patterns-settings-page--overview.md) (pattern)

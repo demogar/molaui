@@ -24,8 +24,10 @@ Read from its imports.
 
 - [Button](https://demogar.github.io/molaui/md/components-actions-button--overview.md): Export and New run in the header, and the bulk actions on a selection.
 - [Description list](https://demogar.github.io/molaui/md/components-data-display-description-list--overview.md): The chosen run’s details in the drawer.
-- [Table](https://demogar.github.io/molaui/md/components-data-display-table--overview.md): DataTable: sorting, selection, the bulk-action bar, the Columns menu, pages, and the no-results state.
+- [Table](https://demogar.github.io/molaui/md/components-data-display-table--overview.md): DataTable: sorting, selection, the bulk-action bar, the Columns menu, pages, loading rows and the no-results state.
 - [Badge](https://demogar.github.io/molaui/md/components-feedback-badge--overview.md): Each run’s status, as a dot, a word and a tone.
+- [Callout](https://demogar.github.io/molaui/md/components-feedback-callout--overview.md): Who can start or cancel runs, for a viewer who cannot.
+- [Empty state](https://demogar.github.io/molaui/md/components-feedback-empty-state--overview.md): A failed load, in the table’s place, with Retry.
 - [Combobox](https://demogar.github.io/molaui/md/components-forms-combobox--overview.md): The agent filter.
 - [Date picker](https://demogar.github.io/molaui/md/components-forms-date-picker--overview.md): DateRangePicker with presets, for when runs started.
 - [Field](https://demogar.github.io/molaui/md/components-forms-field--overview.md): A visible label on every filter, and the search box.
@@ -35,10 +37,10 @@ Read from its imports.
 
 ## States
 
-- Empty: Not a story: filtering to nothing gives the no-results empty state inside the table, with Clear filters. It never offers to create a first run. A workspace with no runs at all is the first-run case in Empty states. (No story.)
-- Loading: Not a story: Refresh shows the table’s own loading rows in place, keeping the filters. A first load would do the same. (No story.)
-- Error: Not shown. A failed load would be an error empty state with Retry in the table’s place, as in Empty states. (No story.)
-- No permission: Not shown. Someone who may not cancel runs should see the selection without Cancel, not a Cancel that fails. (No story.)
+- Empty: Filters that match nothing give the no-results empty state inside the table, with Clear filters. It never offers to create a first run; a workspace with no runs at all is the first-run case in Empty states. Story: https://demogar.github.io/molaui/?path=/story/patterns-filtered-table--no-results
+- Loading: The filters stay and the toggles drop their counts; the table keeps its headers over its loading rows, and its bar says “Loading…”. Refresh does the same in place. Story: https://demogar.github.io/molaui/?path=/story/patterns-filtered-table--loading
+- Error: An error empty state with Retry in the table’s place, saying what is still true, with the filters kept. Not a table of zero rows, which would claim “0 runs”. Story: https://demogar.github.io/molaui/?path=/story/patterns-filtered-table--load-error
+- No permission: A viewer selects and exports, but the bulk bar has no Cancel and the header no New run; a callout names who can cancel. Story: https://demogar.github.io/molaui/?path=/story/patterns-filtered-table--no-permission
 
 ## Accessibility
 
@@ -53,4 +55,8 @@ A whole Cayuco admin screen, composed from the system with nothing written for i
 
 ## Examples
 
+- [LoadError](https://demogar.github.io/molaui/?path=/story/patterns-filtered-table--load-error)
+- [Loading](https://demogar.github.io/molaui/?path=/story/patterns-filtered-table--loading)
+- [NoPermission](https://demogar.github.io/molaui/?path=/story/patterns-filtered-table--no-permission)
+- [NoResults](https://demogar.github.io/molaui/?path=/story/patterns-filtered-table--no-results)
 - [Runs](https://demogar.github.io/molaui/?path=/story/patterns-filtered-table--runs)

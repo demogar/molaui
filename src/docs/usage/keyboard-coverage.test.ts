@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest'
 import { foundModules } from '../../test/found'
 import { ACCESSIBILITY } from './accessibility'
 import { chordsInKeyboardText, pressedKeys, untestedKeys } from './keyboard-coverage'
-import { isShowcase } from './showcases'
+import { isPattern } from './patterns'
 
 type StoryModule = { default: { title: string } }
 const modules = foundModules(import.meta.glob<StoryModule>('../../**/*.stories.tsx', { eager: true }), 40, 'stories files')
@@ -22,7 +22,7 @@ describe('keyboard tables are pressed by the tests', () => {
     const gaps = Object.entries(modules).flatMap(([path, mod]) => {
       const title = mod.default.title
       const rows = ACCESSIBILITY[title]?.keyboard
-      if (isShowcase(title) || !rows?.length) return []
+      if (isPattern(title) || !rows?.length) return []
       const dir = dirname(resolve(import.meta.dirname, path))
       const sources = globSync('*.test.tsx', { cwd: dir }).map((name) => readFileSync(resolve(dir, name), 'utf8'))
       const missing = untestedKeys(rows, sources)

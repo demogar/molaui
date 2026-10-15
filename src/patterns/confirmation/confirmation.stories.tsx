@@ -88,3 +88,15 @@ export const NoKeys: Story = {
     },
   },
 }
+
+export const Loading: Story = {
+  args: { loading: true },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The list has not arrived. The table keeps its headers over skeleton rows, marked busy, and one polite status says “Loading API keys”. The heading says “Keys” until there is a count to give.',
+      },
+    },
+  },
+}

@@ -10,7 +10,7 @@ import * as preview from '../../../.storybook/preview'
 import { foundModules } from '../../test/found'
 import { utilityReader } from '../blocks/anatomy-utilities'
 import { ANATOMY, anatomyRoot, ownedParts, partElement, pinnedParts, ROOT_PART } from './anatomy'
-import { isShowcase } from './showcases'
+import { isPattern } from './patterns'
 
 /**
  * The anatomy legend against the component it describes, rendered for real.
@@ -51,7 +51,7 @@ describe('anatomy', () => {
   for (const [title, anatomy] of Object.entries(ANATOMY)) {
     describe(title, () => {
       it('is a component page', () => {
-        expect(isShowcase(title)).toBe(false)
+        expect(isPattern(title)).toBe(false)
       })
 
       it('every pinned part is in the diagram’s story, on the first instance', async () => {

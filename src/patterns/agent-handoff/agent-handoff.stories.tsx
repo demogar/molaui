@@ -103,3 +103,15 @@ export const NothingWaiting: Story = {
     },
   },
 }
+
+export const Loading: Story = {
+  args: { loading: true },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The hand-off has not arrived. The decision panel, the conversation and the run are skeletons in their real columns, and one polite status says “Loading the hand-off”. Take over waits for a ticket to take.',
+      },
+    },
+  },
+}

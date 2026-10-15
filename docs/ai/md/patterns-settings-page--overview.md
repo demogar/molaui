@@ -23,6 +23,9 @@ A long settings form saved as a whole, with errors on save, a guard on leaving w
 Read from its imports.
 
 - [Button](https://demogar.github.io/molaui/md/components-actions-button--overview.md): Save changes and Discard in the sticky bar, and Delete workspace in the danger zone.
+- [Description list](https://demogar.github.io/molaui/md/components-data-display-description-list--overview.md): Each section’s values as text, for a member who may not change them.
+- [Callout](https://demogar.github.io/molaui/md/components-feedback-callout--overview.md): Who can change the settings, for a member who cannot.
+- [Skeleton](https://demogar.github.io/molaui/md/components-feedback-skeleton--overview.md): The form’s sections while the settings load.
 - [Toast](https://demogar.github.io/molaui/md/components-feedback-toast--overview.md): Saved, and Discard with Undo, so neither needs a dialog.
 - [Field](https://demogar.github.io/molaui/md/components-forms-field--overview.md): Every label, hint and error, around Input and Textarea.
 - [Form](https://demogar.github.io/molaui/md/components-forms-form--overview.md): Form around the settings, and FormErrorSummary at its top: on a failed Save it lists every error as a link and takes focus.
@@ -37,10 +40,10 @@ Read from its imports.
 
 ## States
 
-- Empty: Not applicable: a settings form always has values. A section with nothing to set would say why in its description. (No story.)
-- Loading: Not shown. Saving is shown: Save changes carries its working strip and stays focusable. A first load would keep the form’s shape with Skeleton. (No story.)
+- Empty: A settings form always has values. A section with nothing to set would say why in its description. (Does not apply.)
+- Loading: The header and the settings pages stay; the form is its sections as skeletons, saying “Loading settings” once, with no Save bar or danger zone yet. Saving itself is Save changes’ working strip. Story: https://demogar.github.io/molaui/?path=/story/patterns-settings-page--loading
 - Error: Save pressed with three problems: the summary at the top lists them as links and has focus, each field says what is wrong and what to do, and the bar counts what needs fixing. Story: https://demogar.github.io/molaui/?path=/story/patterns-settings-page--with-validation-errors
-- No permission: Not shown. Someone who may not change settings should see the values as read-only text with who can change them, not a form that refuses on Save. (No story.)
+- No permission: A member sees the values as text, section by section, with a callout naming who can change them; no form of disabled controls, no Save bar, no danger zone. Story: https://demogar.github.io/molaui/?path=/story/patterns-settings-page--read-only
 
 ## Accessibility
 
@@ -61,4 +64,6 @@ The danger zone sits after the form, not in it: deleting the workspace is immedi
 
 - [Default](https://demogar.github.io/molaui/?path=/story/patterns-settings-page--default)
 - [Dirty](https://demogar.github.io/molaui/?path=/story/patterns-settings-page--dirty)
+- [Loading](https://demogar.github.io/molaui/?path=/story/patterns-settings-page--loading)
+- [ReadOnly](https://demogar.github.io/molaui/?path=/story/patterns-settings-page--read-only)
 - [WithValidationErrors](https://demogar.github.io/molaui/?path=/story/patterns-settings-page--with-validation-errors)

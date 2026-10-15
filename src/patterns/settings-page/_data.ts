@@ -37,6 +37,9 @@ export const MODELS: { value: ModelId; label: string; description: string }[] = 
   { value: 'cayuco-swift-2', label: 'cayuco-swift-2', description: 'Fast · tagging and classification' },
 ]
 
+/** Who can change the settings, named to a member who cannot. */
+export const ADMINS = ['Ana Ruiz', 'Kai Morales']
+
 /** What deleting the workspace takes with it — the confirm names every part. */
 export const WORKSPACE_CONTENTS = { agents: 8, indexes: 4, documents: 1204 }
 

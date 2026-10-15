@@ -236,7 +236,7 @@ export function AccessibilitySection({ page }: { page: PageData }) {
 
 /**
  * Related: where to go instead, who sends readers here, and where the
- * component is used. "Used in" is read from the patterns' and showcases'
+ * component is used. "Used in" is read from the patterns'
  * imports (docs/ai/composition.json), so it lists only screens that really
  * import the component, and gains a screen the day one starts to.
  */
@@ -277,7 +277,7 @@ export function RelatedSection({ page }: { page: PageData }) {
               {page.usedIn.map((link) => (
                 <li key={link.title}>
                   <Link link={link} />
-                  <span className="text-ink-muted"> · {link.title.startsWith('Patterns/') ? 'pattern' : 'showcase'}</span>
+                  <span className="text-ink-muted"> · pattern</span>
                 </li>
               ))}
             </ul>

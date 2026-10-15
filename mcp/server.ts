@@ -312,8 +312,8 @@ export function createServer(data: Data) {
     {
       title: 'Get a pattern',
       description:
-        'A whole screen composed from the components (a pattern such as "Confirmation" or "Filtered table", or a showcase such as "Agent console"): when to use it, what it is built from, its states and accessibility.',
-      inputSchema: { name: z.string().min(1).describe('Pattern or showcase name, e.g. "Settings page".') },
+        'A whole screen composed from the components (a pattern such as "Confirmation", "Filtered table" or "Agent console"): when to use it, what it is built from, its states and accessibility.',
+      inputSchema: { name: z.string().min(1).describe('Pattern name, e.g. "Settings page".') },
       annotations: READ_ONLY,
     },
     async ({ name }) => {

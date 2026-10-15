@@ -116,4 +116,13 @@ describe('ApiKeysScreen', () => {
     expect(screen.getByRole('heading', { level: 2, name: 'No API keys yet' })).toBeInTheDocument()
     expect(screen.queryByRole('table')).not.toBeInTheDocument()
   })
+
+  it('while loading, keeps the table’s shape, gives no count and offers no Revoke', () => {
+    setup({ loading: true })
+    const table = screen.getByRole('table', { name: 'Keys' })
+    expect(table).toHaveAttribute('aria-busy', 'true')
+    expect(screen.getByRole('status')).toHaveTextContent('Loading API keys')
+    expect(screen.queryByRole('button', { name: /^Revoke/ })).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Create key' })).toBeInTheDocument()
+  })
 })

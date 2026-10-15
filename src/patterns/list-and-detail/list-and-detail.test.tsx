@@ -11,6 +11,34 @@ import { AgentsScreen } from './list-and-detail'
 
 const agentButton = (name: RegExp) => screen.getByRole('button', { name })
 
+describe('AgentsScreen states', () => {
+  it('while loading, says so once and offers no agent to open', () => {
+    const { container } = render(<AgentsScreen status="loading" />)
+    expect(screen.getByRole('status')).toHaveTextContent('Loading agents')
+    expect(container.querySelector('[aria-busy="true"]')).not.toBeNull()
+    expect(screen.queryByRole('button', { name: /^Support triage/ })).not.toBeInTheDocument()
+  })
+
+  it('a failed load says what is still true, offers Retry, and keeps Create agent', async () => {
+    const user = userEvent.setup()
+    let retried = 0
+    render(<AgentsScreen status="error" onRetry={() => (retried += 1)} />)
+    expect(screen.getByRole('heading', { level: 2, name: 'Agents didn’t load' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Create agent' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Retry' }))
+    expect(retried).toBe(1)
+  })
+
+  it('a viewer browses every agent with nothing to press and fail at, and is told who can', () => {
+    render(<AgentsScreen canManage={false} />)
+    expect(agentButton(/^Support triage/)).toBeInTheDocument()
+    expect(screen.getByRole('region', { name: 'Only workspace admins can create or change agents' })).toHaveTextContent('Ana Ruiz or Kai Morales')
+    expect(screen.queryByRole('button', { name: 'Create agent' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /^(Pause|Resume) agent$/ })).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'View runs' })).toBeInTheDocument()
+  })
+})
+
 describe('AgentsScreen', () => {
   it('shows the first agent and marks it as the current one', () => {
     render(<AgentsScreen />)

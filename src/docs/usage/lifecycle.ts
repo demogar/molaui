@@ -38,7 +38,7 @@ export function phasesIn(tags: readonly string[] | undefined): Phase[] {
   return (tags ?? []).filter((tag): tag is Phase => (NAMES as string[]).includes(tag))
 }
 
-/** The one phase of a component page, or undefined when it has none (a showcase or a pattern) or more than one. */
+/** The one phase of a component page, or undefined when it has none (a pattern) or more than one. */
 export function phaseOf(tags: readonly string[] | undefined): Phase | undefined {
   const found = phasesIn(tags)
   return found.length === 1 ? found[0] : undefined

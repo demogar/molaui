@@ -126,7 +126,7 @@ Types: `NumberInputMessages`, `NumberInputProps`
 
 ### Used in
 
-- [Form example](https://demogar.github.io/molaui/md/components-forms-form-example--overview.md) (showcase)
+- [Form validation](https://demogar.github.io/molaui/md/patterns-form-validation--overview.md) (pattern)
 - [Settings page](https://demogar.github.io/molaui/md/patterns-settings-page--overview.md) (pattern)
 
 ## Changes

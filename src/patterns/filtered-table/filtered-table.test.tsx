@@ -2,11 +2,45 @@ import { render, screen, waitFor, within } from '@/test/render'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 
-import { RunsAdminScreen } from './filtered-table'
+import { RUNS, RunsAdminScreen } from './filtered-table'
 
 const table = () => screen.getByRole('table', { name: 'Agent runs' })
 const bodyRows = () => within(table()).getAllByRole('row').slice(1)
 const toggle = (name: RegExp) => screen.getByRole('button', { name })
+
+describe('RunsAdminScreen states', () => {
+  it('a search that matches nothing says so in the table and offers Clear filters, never a first run', () => {
+    render(<RunsAdminScreen defaultQuery="run_nothing" />)
+    expect(within(table()).getByText('No runs match these filters')).toBeInTheDocument()
+    expect(within(table()).getByRole('button', { name: 'Clear filters' })).toBeInTheDocument()
+    expect(screen.queryByText(/first run/i)).not.toBeInTheDocument()
+  })
+
+  it('while loading, keeps the filters, drops the counts and marks the table busy', () => {
+    render(<RunsAdminScreen status="loading" />)
+    expect(screen.getByRole('search', { name: 'Runs' })).toBeInTheDocument()
+    expect(toggle(/^Failed$/)).toBeInTheDocument()
+    expect(screen.getByText('Loading…')).toBeInTheDocument()
+  })
+
+  it('a failed load replaces the table with an error and Retry, keeping the filters', async () => {
+    const user = userEvent.setup()
+    let retried = 0
+    render(<RunsAdminScreen status="error" onRetry={() => (retried += 1)} />)
+    expect(screen.queryByRole('table')).not.toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 2, name: 'Runs didn’t load' })).toBeInTheDocument()
+    expect(screen.getByRole('search', { name: 'Runs' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Retry' }))
+    expect(retried).toBe(1)
+  })
+
+  it('a viewer selects and exports, but is offered no Cancel or New run, and is told who can', () => {
+    render(<RunsAdminScreen canManage={false} defaultSelection={RUNS.slice(1, 3).map((run) => run.id)} />)
+    expect(screen.getByRole('region', { name: 'Only workspace admins can start or cancel runs' })).toHaveTextContent('Ana Ruiz or Kai Morales')
+    expect(screen.queryByRole('button', { name: /^Cancel( \d+)?$/ })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'New run' })).not.toBeInTheDocument()
+  })
+})
 
 describe('RunsAdminScreen', () => {
   it('labels every filter and starts with none applied', () => {

@@ -6,17 +6,18 @@ import { ACCESSIBILITY, NON_INTERACTIVE } from './accessibility'
 import { pageData, SECTIONS } from './contract'
 import { USAGE } from './guidance'
 import { phasesIn } from './lifecycle'
-import { PATTERNS } from './patterns'
-import { isPattern, isShowcase } from './showcases'
+import { isPattern, PATTERNS } from './patterns'
 
 type StoryModule = { default: { title: string; tags?: string[] } } & Record<string, unknown>
 const modules = foundModules(import.meta.glob<StoryModule>('../../**/*.stories.tsx', { eager: true }), 40, 'stories files')
 const metas = Object.values(modules).map((mod) => mod.default)
-const components = metas.filter((meta) => !isShowcase(meta.title))
+const components = metas.filter((meta) => !isPattern(meta.title))
 
 describe('usage guidance', () => {
+  // There is no exemption list: a page outside Patterns/ is a component page
+  // and needs guidance, so a composed demo cannot sit outside the contract.
   it('covers every component page', () => {
-    const missing = storyTitles.filter((title) => !isShowcase(title) && !USAGE[title])
+    const missing = storyTitles.filter((title) => !isPattern(title) && !USAGE[title])
     expect(missing).toEqual([])
   })
 
@@ -53,10 +54,10 @@ describe('component page contract', () => {
     expect(gaps).toEqual([])
   })
 
-  it('every component page has exactly one lifecycle phase, and showcases have none', () => {
+  it('every component page has exactly one lifecycle phase, and patterns have none', () => {
     const wrong = metas.flatMap((meta) => {
       const phases = phasesIn(meta.tags)
-      const expected = isShowcase(meta.title) ? 0 : 1
+      const expected = isPattern(meta.title) ? 0 : 1
       return phases.length === expected ? [] : [`${meta.title}: ${phases.join(', ') || 'no phase'}`]
     })
     expect(wrong).toEqual([])
@@ -92,6 +93,16 @@ describe('pattern guidance', () => {
       ...(p.accessibility.length ? [] : [`${title}: at least one accessibility note`]),
       ...Object.entries(p.states).flatMap(([id, state]) => (state.note.trim() ? [] : [`${title}: a note for the ${id} state`])),
     ])
+    expect(gaps).toEqual([])
+  })
+
+  it('shows every state that applies in a story, and marks the rest as not applying', () => {
+    const gaps = Object.entries(PATTERNS).flatMap(([title, p]) =>
+      Object.entries(p.states).flatMap(([id, state]) => {
+        if (state.applies === false) return state.story ? [`${title} › ${id}: marked as not applying, but points at ${state.story}`] : []
+        return state.story ? [] : [`${title} › ${id}: not shown; add a story for it, or mark it \`applies: false\` if it cannot happen`]
+      }),
+    )
     expect(gaps).toEqual([])
   })
 

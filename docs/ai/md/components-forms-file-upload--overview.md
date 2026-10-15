@@ -133,7 +133,7 @@ Types: `FileUploadMessageTemplates`, `FileUploadItem`, `FileUploadMessageFunctio
 
 ### Used in
 
-- [Form example](https://demogar.github.io/molaui/md/components-forms-form-example--overview.md) (showcase)
+- [Form validation](https://demogar.github.io/molaui/md/patterns-form-validation--overview.md) (pattern)
 
 ## Changes
 

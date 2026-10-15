@@ -99,7 +99,7 @@ export function changeLine(c: ChangeEntry) {
 
 export interface ScreenPage {
   title: string
-  kind: 'pattern' | 'showcase'
+  kind: 'pattern'
   docs: string
   summary?: string
   description?: string
@@ -109,7 +109,7 @@ export interface ScreenPage {
     use: string[]
     avoid: Usage['avoid']
     parts: { title: string; role: string }[]
-    states: Record<string, { story?: string; note: string }>
+    states: Record<string, { story?: string; applies?: false; note: string }>
     accessibility: string[]
   }
   stories: { name: string; id: string; url: string }[]
@@ -255,7 +255,7 @@ export function componentTwin(page: ComponentPage, site: string) {
     data.alternatives.length ? ['### Use instead, when it fits better', '', list(data.alternatives.map(link)), ''] : [],
     data.pointingHere.length ? ['### Pages that send readers here', '', list(data.pointingHere.map(link)), ''] : [],
     page.usedIn?.length
-      ? ['### Used in', '', list(page.usedIn.map((t) => `${link(t)} (${t.startsWith('Patterns/') ? 'pattern' : 'showcase'})`)), '']
+      ? ['### Used in', '', list(page.usedIn.map((t) => `${link(t)} (pattern)`)), '']
       : [],
   ].flat()
   if (related.length) out.push('## Related', '', ...related)
@@ -263,7 +263,7 @@ export function componentTwin(page: ComponentPage, site: string) {
   return tidy(out.join('\n'))
 }
 
-/* ── a pattern or showcase ──────────────────────────────────────────── */
+/* ── a pattern ──────────────────────────────────────────────────────── */
 
 export function patternSection(p: ScreenPage, site: string, level = '###') {
   const g = p.guidance!
@@ -294,7 +294,7 @@ export function patternSection(p: ScreenPage, site: string, level = '###') {
     list(
       (Object.keys(PATTERN_STATES) as PatternStateId[]).map((id) => {
         const state = g.states[id]!
-        return `${PATTERN_STATES[id]}: ${state.note}${state.story ? ` Story: ${state.story}` : ' (No story.)'}`
+        return `${PATTERN_STATES[id]}: ${state.note}${state.story ? ` Story: ${state.story}` : ' (Does not apply.)'}`
       }),
     ),
     '',
