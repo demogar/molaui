@@ -419,8 +419,15 @@ export function DataTable<Row>({
               </Button>
               {/* On a narrow screen the actions scroll inside the bar rather
                   than wrapping it: the bar's height is the promise that the
-                  table does not move. */}
-              <div className="scroll-cloth ms-auto flex min-w-0 items-center gap-1.5 overflow-x-auto py-0.5 [&>*]:shrink-0">
+                  table does not move. A scroller clips whatever paints
+                  outside its children, and the cut is a box-shadow: with no
+                  inline padding the first action lost its leading keyline and
+                  the last its trailing one, so the outer buttons read as
+                  blocks with an edge missing. `p-0.5` is room for the 1.5px
+                  cut. The focus ring is 6.5px and the bar has 4px above and
+                  below its buttons, so here it is drawn inside the button,
+                  under the kept cut, rather than clipped to a sliver. */}
+              <div className="scroll-cloth ms-auto flex min-w-0 items-center gap-1.5 overflow-x-auto p-0.5 [&>*]:shrink-0 [&>*]:focus-visible:shadow-[var(--cut),var(--focus-ring-inset)]">
                 {bulkActions({ selection: new Set(selection), clear: clearSelection })}
               </div>
             </div>
