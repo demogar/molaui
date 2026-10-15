@@ -133,17 +133,13 @@ function StatDeltaLine({ delta }: { delta: StatDelta }) {
  *
  * Decorative: the figure and the delta already say what it shows.
  */
-export function Sparkline({
-  values,
-  width = 72,
-  height = 24,
-  className,
-}: {
+export interface SparklineProps extends Omit<React.ComponentProps<'svg'>, 'values' | 'children'> {
   values: number[]
   width?: number
   height?: number
-  className?: string
-}) {
+}
+
+export function Sparkline({ values, width = 72, height = 24, className, ...props }: SparklineProps) {
   // No values is no shape: draw nothing rather than an svg of NaN. One value
   // has no past to draw, only the "now" square, set at the end where the
   // latest point always sits (`i / (length - 1)` divided by zero there and
@@ -162,6 +158,8 @@ export function Sparkline({
   return (
     <svg
       aria-hidden
+      {...props}
+      data-slot="sparkline"
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}

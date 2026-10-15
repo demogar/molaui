@@ -3,6 +3,7 @@
 import { Columns3, X } from 'lucide-react'
 import * as React from 'react'
 
+import { cn } from '../../lib/cn'
 import { useScrollEdge } from '../../lib/scroll-edge'
 import { useControllable } from '../../lib/use-controllable'
 import { Button } from '../button'
@@ -75,7 +76,7 @@ export interface DataTableBulkContext {
   clear: () => void
 }
 
-export interface DataTableProps<Row> {
+export interface DataTableProps<Row> extends Omit<React.ComponentProps<'table'>, 'children' | 'aria-label'> {
   columns: DataTableColumn<Row>[]
   rows: Row[]
   getRowId: (row: Row) => string
@@ -124,8 +125,10 @@ export interface DataTableProps<Row> {
   empty?: React.ReactNode | DataTableEmpty
   stickyHeader?: boolean
   framed?: boolean
+  /** Classes for the scrolling frame around the table. */
   frameClassName?: string
-  className?: string
+  /** Classes for the outer element that holds the bar, the table and the pagination. */
+  wrapperClassName?: string
 }
 
 function compare(a: SortValue, b: SortValue): number {
@@ -175,7 +178,9 @@ export function DataTable<Row>({
   stickyHeader = false,
   framed = false,
   frameClassName,
+  wrapperClassName,
   className,
+  ...props
 }: DataTableProps<Row>) {
   const bulkEdge = useScrollEdge<HTMLDivElement>()
   const [sort, setSortState] = useControllable<DataTableSort | null>({
@@ -275,6 +280,7 @@ export function DataTable<Row>({
 
   const table = (
     <Table
+      {...props}
       aria-label={label}
       aria-busy={loading || undefined}
       stickyHeader={stickyHeader}
@@ -396,7 +402,7 @@ export function DataTable<Row>({
   const showBulk = bulkActions !== undefined && selectedCount > 0
 
   return (
-    <div data-slot="data-table" className="flex min-w-0 flex-col gap-2">
+    <div data-slot="data-table" className={cn('flex min-w-0 flex-col gap-2', wrapperClassName)}>
       {hasBar ? (
         // A fixed height, so the bar trading its count for the bulk actions
         // never pushes the table down under the pointer.
@@ -473,11 +479,10 @@ export function DataTable<Row>({
   )
 }
 
-export interface DataTableColumnMenuProps<Row> {
+export interface DataTableColumnMenuProps<Row> extends Omit<React.ComponentProps<'button'>, 'children' | 'onToggle' | 'hidden'> {
   columns: DataTableColumn<Row>[]
   hidden: ReadonlySet<string>
   onToggle: (key: string, visible: boolean) => void
-  className?: string
 }
 
 /**
@@ -487,11 +492,12 @@ export interface DataTableColumnMenuProps<Row> {
  * column marked `hideable: false` is shown checked and disabled, so the menu
  * still says it exists.
  */
-export function DataTableColumnMenu<Row>({ columns, hidden, onToggle, className }: DataTableColumnMenuProps<Row>) {
+/** `className`, `ref` and the rest of the DOM props go to the "Columns" button. */
+export function DataTableColumnMenu<Row>({ columns, hidden, onToggle, ...props }: DataTableColumnMenuProps<Row>) {
   const visibleCount = columns.filter((c) => !hidden.has(c.key)).length
   return (
     <Menu>
-      <MenuTrigger render={<Button variant="secondary" size="sm" icon={<Columns3 />} className={className} />}>
+      <MenuTrigger render={<Button {...props} variant="secondary" size="sm" icon={<Columns3 />} />}>
         Columns
       </MenuTrigger>
       <MenuContent align="end">

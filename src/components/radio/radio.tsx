@@ -40,18 +40,25 @@ const radioClasses = [
 
 export interface RadioProps extends Omit<RadioPrimitive.Root.Props, 'className'> {
   className?: string
+  /** Classes for the label row a `label` adds around the control. `className` always styles the control itself. */
+  wrapperClassName?: string
   label?: React.ReactNode
   description?: React.ReactNode
 }
 
-export function Radio({ className, label, description, ...props }: RadioProps) {
+/**
+ * `className`, `ref` and the DOM props go to the control, with or without a
+ * `label`; the row a `label` adds takes `wrapperClassName`. `className` used
+ * to move to that row when a label was set.
+ */
+export function Radio({ className, wrapperClassName, label, description, ...props }: RadioProps) {
   const uid = React.useId()
   const descriptionId = description ? `${uid}-description` : undefined
 
   const control = (
     <RadioPrimitive.Root
       data-slot="radio"
-      className={cn(radioClasses, !label && className)}
+      className={cn(radioClasses, className)}
       {...props}
       // Joined, not replaced: Field passes its hint and error here, and the
       // control's own description comes first because it is drawn first.
@@ -70,7 +77,7 @@ export function Radio({ className, label, description, ...props }: RadioProps) {
       label={label}
       description={description}
       descriptionId={descriptionId}
-      className={className}
+      className={wrapperClassName}
     />
   )
 }

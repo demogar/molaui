@@ -35,7 +35,7 @@ export interface KbdChordProps extends React.ComponentProps<'kbd'> {
 
 export function KbdChord({ keys, className, ...props }: KbdChordProps) {
   return (
-    <kbd className={cn('inline-flex items-center gap-1 font-ui', className)} {...props}>
+    <kbd data-slot="kbd-chord" className={cn('inline-flex items-center gap-1 font-ui', className)} {...props}>
       {keys.map((key, i) => (
         <Kbd key={`${key}-${i}`}>{key}</Kbd>
       ))}

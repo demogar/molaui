@@ -15,6 +15,7 @@ export interface SectionProps extends React.ComponentProps<'section'> {
 export function Section({ divided = false, rhythm = 'panel', className, ...props }: SectionProps) {
   return (
     <section
+      data-slot="section"
       className={cn(
         rhythm === 'page' ? 'py-14 sm:py-20 lg:py-28' : 'py-8 sm:py-10',
         divided && 'border-t border-keyline',
@@ -25,7 +26,7 @@ export function Section({ divided = false, rhythm = 'panel', className, ...props
   )
 }
 
-export interface SectionHeaderProps {
+export interface SectionHeaderProps extends Omit<React.ComponentProps<'div'>, 'title'> {
   title: React.ReactNode
   lead?: React.ReactNode
   /**
@@ -37,12 +38,16 @@ export interface SectionHeaderProps {
   /** Actions, aligned to the heading's baseline on the right. */
   actions?: React.ReactNode
   level?: 1 | 2 | 3
-  className?: string
 }
 
-export function SectionHeader({ title, lead, label, actions, level = 2, className }: SectionHeaderProps) {
+/** `className`, `ref` and the rest of the DOM props go to the outer `<div>`. */
+export function SectionHeader({ title, lead, label, actions, level = 2, className, ...props }: SectionHeaderProps) {
   return (
-    <div className={cn('mb-8 flex flex-wrap items-end justify-between gap-x-6 gap-y-4', className)}>
+    <div
+      {...props}
+      data-slot="section-header"
+      className={cn('mb-8 flex flex-wrap items-end justify-between gap-x-6 gap-y-4', className)}
+    >
       <div className="max-w-160 min-w-0">
         <Heading level={level}>{title}</Heading>
         {lead ? <Lead className="mt-3">{lead}</Lead> : null}

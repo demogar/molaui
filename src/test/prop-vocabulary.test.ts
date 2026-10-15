@@ -176,8 +176,8 @@ describe('tone, variant, kind and size each have one meaning', () => {
   })
 
   it('every deprecated value is still there to deprecate', () => {
-    const props = new Map(
-      manifest.components.flatMap((c) => (c.exports ?? []).flatMap((e) => (e.props ?? []).map((p) => [`${e.name}.${p.name}`, p] as const))),
+    const props = new Map<string, Prop>(
+      manifest.components.flatMap((c) => (c.exports ?? []).flatMap((e) => (e.props ?? []).map((p): [string, Prop] => [`${e.name}.${p.name}`, p]))),
     )
     for (const [id, retired] of Object.entries(DEPRECATED_VALUES)) {
       const prop = props.get(id)

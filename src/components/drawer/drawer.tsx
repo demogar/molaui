@@ -7,6 +7,7 @@ import { X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { slotUnlessRendered } from '../../lib/slot'
 import { IconButton } from '../button'
 import { actionRowClasses } from '../dialog/dialog'
 
@@ -75,8 +76,13 @@ export function Drawer({ side = 'end', ...props }: DrawerProps) {
   )
 }
 
-export const DrawerTrigger = DrawerPrimitive.Trigger
-export const DrawerClose = DrawerPrimitive.Close
+export function DrawerTrigger(props: DrawerPrimitive.Trigger.Props) {
+  return <DrawerPrimitive.Trigger {...slotUnlessRendered('drawer-trigger', props.render)} {...props} />
+}
+
+export function DrawerClose(props: DrawerPrimitive.Close.Props) {
+  return <DrawerPrimitive.Close {...slotUnlessRendered('drawer-close', props.render)} {...props} />
+}
 
 const viewportVariants = cva('fixed inset-0 z-(--z-overlay) flex', {
   variants: {

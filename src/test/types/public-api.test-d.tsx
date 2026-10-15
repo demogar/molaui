@@ -66,6 +66,32 @@ export const comboboxMultiple = (
 // @ts-expect-error a multiple combobox does not take a single value
 export const comboboxMultipleWithString: ComboboxProps = { multiple: true, items: [], value: 'eu-west' }
 expectTypeOf<Extract<ComboboxProps, { multiple: true }>['value']>().toEqualTypeOf<string[] | undefined>()
+// A single combobox has no chips, so it has nothing to remove. `multiple` is
+// optional on the single form, and an absent discriminant does not narrow a
+// union: `removeLabel` was accepted here and silently ignored.
+// @ts-expect-error removeLabel needs multiple
+export const comboboxSingleWithRemoveLabel = <Combobox items={[]} removeLabel={(label) => `Remove ${label}`} />
+// @ts-expect-error removeLabel needs multiple, and multiple={false} is not it
+export const comboboxFalseWithRemoveLabel = <Combobox multiple={false} items={[]} removeLabel={(label) => `Remove ${label}`} />
+
+/* 2b. Every component takes its element's ref, and the simple-API forms
+   type it as the element they forward it to: the input, the trigger. */
+export const comboboxRef = (
+  <Combobox
+    items={[]}
+    ref={(node) => {
+      expectTypeOf(node).toEqualTypeOf<HTMLInputElement | null>()
+    }}
+  />
+)
+export const selectRef = (
+  <Select
+    items={[]}
+    ref={(node) => {
+      expectTypeOf(node).toEqualTypeOf<HTMLButtonElement | null>()
+    }}
+  />
+)
 
 /* 3. Select infers its value union from the options. */
 export const select = (

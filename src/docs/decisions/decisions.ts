@@ -111,6 +111,16 @@ const NOTES: Record<string, Notes> = {
       'Foundations/Accessibility': 'Reflow is audited at 320px: only a region carrying the scroll-edge cue may scroll sideways.',
     },
   },
+  '0010': {
+    name: 'One prop vocabulary',
+    decided:
+      '`tone` is a status, `variant` a presentation, `kind` a category and `size` the t-shirt scale, on every component. `className` styles the box you see; `ref` and the other DOM props go to the control you focus.',
+    governs: {
+      'Mola UI/Versioning':
+        'The props that meant something else were renamed in 0.7.0 under the deprecation steps on this page, with a codemod, and the old spellings go in 1.0.0.',
+      'Foundations/Layers and elevation': 'A Panel or Placeholder picks its ground with `layer`, the word this page uses; `tone` is kept for status.',
+    },
+  },
 }
 
 export interface Decision extends Notes {

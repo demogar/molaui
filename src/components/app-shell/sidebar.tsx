@@ -27,6 +27,7 @@ export function Sidebar({ label, header, footer, className, children, ...props }
         <div className="shrink-0 px-2 pt-3 pb-1">{header}</div>
       ) : null}
       <nav
+        data-slot="sidebar-nav"
         aria-label={label}
         className={cn('flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overflow-x-hidden px-2 py-3 scroll-cloth', className)}
         {...props}
@@ -45,11 +46,17 @@ export function Sidebar({ label, header, footer, className, children, ...props }
  * a rail it becomes a short keyline, and the words stay for screen readers so
  * the groups are still announced.
  */
-export function NavSection({ title, className, children }: { title?: string; className?: string; children: React.ReactNode }) {
+export interface NavSectionProps extends Omit<React.ComponentProps<'div'>, 'title'> {
+  /** The group's title, in the rótulo register. Names the list. */
+  title?: string
+  children: React.ReactNode
+}
+
+export function NavSection({ title, className, children, ...props }: NavSectionProps) {
   const { collapsed } = React.useContext(SidebarContext)
   const id = React.useId()
   return (
-    <div data-slot="nav-section" className={className}>
+    <div {...props} data-slot="nav-section" className={className}>
       {title ? (
         <p
           id={id}

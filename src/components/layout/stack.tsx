@@ -48,7 +48,7 @@ export interface StackProps extends React.ComponentProps<'div'>, Variants<typeof
 
 /** Vertical rhythm: children down a column, one gap between them. */
 export function Stack({ className, direction, gap, align, justify, wrap, ...props }: StackProps) {
-  return <div className={cn(stackVariants({ direction, gap, align, justify, wrap }), className)} {...props} />
+  return <div data-slot="stack" className={cn(stackVariants({ direction, gap, align, justify, wrap }), className)} {...props} />
 }
 
 export type InlineProps = Omit<StackProps, 'direction'>
@@ -60,11 +60,11 @@ export type InlineProps = Omit<StackProps, 'direction'>
  */
 export function Inline({ className, gap = 'sm', align = 'center', wrap = true, justify, ...props }: InlineProps) {
   return (
-    <div className={cn(stackVariants({ direction: 'row', gap, align, justify, wrap }), className)} {...props} />
+    <div data-slot="inline" className={cn(stackVariants({ direction: 'row', gap, align, justify, wrap }), className)} {...props} />
   )
 }
 
 /** One thing on the left, one on the right: a panel header, a table toolbar. */
 export function RowBetween({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div className={cn('flex min-w-0 items-center justify-between gap-6', className)} {...props} />
+  return <div data-slot="row-between" className={cn('flex min-w-0 items-center justify-between gap-6', className)} {...props} />
 }

@@ -47,7 +47,7 @@ export const SettingsList: Story = {
             description={description as string}
             defaultChecked={on as boolean}
             labelPosition="start"
-            className="grid w-full"
+            wrapperClassName="grid w-full"
           />
         </div>
       ))}

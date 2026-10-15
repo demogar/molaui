@@ -214,10 +214,13 @@ function Inlines({
  * ascenders. A thin bar caret reads as a text field waiting for input; a block
  * reads as output being written, which is the opposite thing.
  */
-export function Caret({ className }: { className?: string }) {
+export type CaretProps = Omit<React.ComponentProps<'span'>, 'children'>
+
+export function Caret({ className, ...props }: CaretProps) {
   return (
     <span
       aria-hidden
+      {...props}
       data-slot="caret"
       className={cn(
         'ms-[0.08em] inline-block h-[0.95em] w-[0.5em] translate-y-[0.14em] bg-current animate-mola-caret',

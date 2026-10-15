@@ -246,7 +246,13 @@ export interface ToolCallGroupProps extends React.ComponentProps<'div'> {
  */
 export function ToolCallGroup({ label, count, className, children, ...props }: ToolCallGroupProps) {
   return (
-    <div role="group" aria-label={label ?? `${count} tools in parallel`} className={cn('flex flex-col gap-2', className)} {...props}>
+    <div
+      data-slot="tool-call-group"
+      role="group"
+      aria-label={label ?? `${count} tools in parallel`}
+      className={cn('flex flex-col gap-2', className)}
+      {...props}
+    >
       <p className="m-0 rotulo text-ink-muted">{label ?? `${count} tools in parallel`}</p>
       <div className="flex flex-col gap-2 border-s-(length:--bar-w) border-ink ps-3">{children}</div>
     </div>

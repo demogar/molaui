@@ -111,7 +111,7 @@ export interface SkeletonTextProps extends React.ComponentProps<'div'> {
  */
 export function SkeletonText({ lines = 3, className, ...props }: SkeletonTextProps) {
   return (
-    <div aria-hidden className={cn('flex flex-col gap-[0.6em]', className)} {...props}>
+    <div data-slot="skeleton-text" aria-hidden className={cn('flex flex-col gap-[0.6em]', className)} {...props}>
       {Array.from({ length: lines }, (_, i) => (
         <Skeleton key={i} shape="text" className={i === lines - 1 && lines > 1 ? 'w-3/5' : undefined} />
       ))}

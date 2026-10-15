@@ -77,7 +77,8 @@ import {
  * shared month and year.
  */
 
-export interface DateRangePickerProps {
+export interface DateRangePickerProps
+  extends Omit<React.ComponentProps<'button'>, 'value' | 'defaultValue' | 'onChange' | 'children' | 'type' | 'name'> {
   value?: DateRange
   defaultValue?: DateRange
   onValueChange?: (value: DateRange) => void
@@ -112,11 +113,8 @@ export interface DateRangePickerProps {
   disabled?: boolean
   required?: boolean
   placeholder?: string
-  id?: string
-  className?: string
-  'aria-label'?: string
-  'aria-describedby'?: string
-  'aria-invalid'?: boolean | 'true' | 'false'
+  /** Classes for the outer element that holds the trigger. `className` styles the trigger itself. */
+  wrapperClassName?: string
 }
 
 const EMPTY: DateRange = { start: null, end: null }
@@ -154,9 +152,10 @@ export function DateRangePicker({
   placeholder = 'Choose a period',
   id,
   className,
+  wrapperClassName,
   'aria-describedby': describedByProp,
   'aria-invalid': invalid,
-  'aria-label': ariaLabel,
+  ...triggerProps
 }: DateRangePickerProps) {
   const uid = React.useId()
   const valueId = `${uid}-value`
@@ -296,11 +295,12 @@ export function DateRangePicker({
       open={open}
       onOpenChange={setOpenState}
     >
-      <div ref={anchorRef} data-slot="date-range-picker" className={className}>
+      <div ref={anchorRef} data-slot="date-range-picker" className={wrapperClassName}>
         <PopoverPrimitive.Trigger
+          {...triggerProps}
+          data-slot="date-range-picker-trigger"
           id={id}
           disabled={disabled}
-          aria-label={ariaLabel}
           aria-required={required || undefined}
           aria-invalid={invalid === true || invalid === 'true' ? true : undefined}
           aria-describedby={[valueId, describedByProp].filter(Boolean).join(' ')}
@@ -310,6 +310,7 @@ export function DateRangePicker({
             'flex cursor-default items-center justify-between gap-3 text-start',
             'focus-visible:focus-ring data-popup-open:focus-ring',
             'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
+            className,
           )}
         >
           {/* `dir="auto"`: a formatted period is text in the locale's own

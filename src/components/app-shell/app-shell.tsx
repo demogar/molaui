@@ -176,17 +176,23 @@ export function AppShell({
   )
 }
 
+export type SidebarToggleProps = Omit<React.ComponentProps<'span'>, 'children'>
+
 /**
  * The control that collapses the sidebar on desktop and opens the sheet on
  * mobile. Two buttons, one shown per breakpoint, rather than one button that
  * asks `matchMedia` what it is: CSS decides which exists, so the server render
  * is already right and nothing flickers on hydration.
+ *
+ * The two sit in one `<span>` (`data-slot="sidebar-toggle"`), which takes
+ * `className`, `ref` and the rest of the DOM props: there is one element to
+ * place, measure or test, whichever button the breakpoint shows.
  */
-export function SidebarToggle({ className }: { className?: string }) {
+export function SidebarToggle({ className, ...props }: SidebarToggleProps) {
   const shell = React.useContext(ShellContext)
   if (!shell) return null
   return (
-    <>
+    <span {...props} data-slot="sidebar-toggle" className={cn('inline-flex', className)}>
       <IconButton
         variant="ghost"
         size="sm"
@@ -194,7 +200,7 @@ export function SidebarToggle({ className }: { className?: string }) {
         aria-controls={shell.sidebarId}
         aria-expanded={!shell.collapsed}
         onClick={() => shell.setCollapsed(!shell.collapsed)}
-        className={cn('hidden nav:inline-flex', className)}
+        className="hidden nav:inline-flex"
       >
         {shell.collapsed ? <PanelLeftOpen className="flip-rtl" /> : <PanelLeftClose className="flip-rtl" />}
       </IconButton>
@@ -203,11 +209,11 @@ export function SidebarToggle({ className }: { className?: string }) {
         size="sm"
         label="Open navigation"
         onClick={() => shell.setMobileOpen(true)}
-        className={cn('nav:hidden', className)}
+        className="nav:hidden"
       >
         <Menu />
       </IconButton>
-    </>
+    </span>
   )
 }
 

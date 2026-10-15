@@ -5,9 +5,10 @@ import { CalendarDays } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { mergeProps } from '../../lib/merge-props'
 import { useControllable } from '../../lib/use-controllable'
 import { type FieldControlSize } from '../field/field-control'
-import { Input } from '../field/input'
+import { Input, type InputProps } from '../field/input'
 import { floatingSurface } from '../popover/surface'
 import { Calendar } from './calendar'
 import {
@@ -45,12 +46,21 @@ import {
  * error still applies on top, for rules this component cannot know, such
  * as "required".
  *
+ * ── where the props go ──
+ * `className` styles the field's box (the element with the cut); `ref`,
+ * `id` and the other DOM props go to the `<input>`; the outer element that
+ * also holds the error takes `wrapperClassName`.
+ *
  * ── the popup is anchored to the whole control ──
  * The calendar is positioned against the input group, not the small button,
  * so it lines up with the field's edge rather than hanging off an icon.
  */
 
-export interface DatePickerProps {
+export interface DatePickerProps
+  extends Omit<
+    InputProps,
+    'value' | 'defaultValue' | 'onChange' | 'size' | 'leading' | 'trailing' | 'type' | 'children' | 'min' | 'max'
+  > {
   value?: Date | null
   defaultValue?: Date | null
   onValueChange?: (value: Date | null) => void
@@ -80,11 +90,8 @@ export interface DatePickerProps {
   required?: boolean
   /** Defaults to the locale's format, e.g. `DD/MM/YYYY`. */
   placeholder?: string
-  id?: string
-  className?: string
-  'aria-label'?: string
-  'aria-describedby'?: string
-  'aria-invalid'?: boolean | 'true' | 'false'
+  /** Classes for the outer element that holds the field and its error. */
+  wrapperClassName?: string
 }
 
 const errorClasses = 'flex items-start gap-2 text-xs leading-snug font-medium text-ink-danger'
@@ -126,9 +133,10 @@ export function DatePicker({
   placeholder,
   id,
   className,
+  wrapperClassName,
   'aria-describedby': describedByProp,
   'aria-invalid': invalidProp,
-  'aria-label': ariaLabel,
+  ...inputProps
 }: DatePickerProps) {
   const uid = React.useId()
   const formatId = `${uid}-format`
@@ -178,27 +186,33 @@ export function DatePicker({
 
   return (
     <PopoverPrimitive.Root open={open} onOpenChange={setOpen}>
-      <div ref={anchorRef} data-slot="date-picker" className={cn('flex flex-col gap-2', className)}>
+      <div ref={anchorRef} data-slot="date-picker" className={cn('flex flex-col gap-2', wrapperClassName)}>
         <Input
+          autoComplete="off"
+          inputMode="numeric"
+          // The consumer's handlers are merged with these, and run first.
+          {...mergeProps<'input'>(
+            {
+              onChange: (event) => setText(event.target.value),
+              onBlur: commit,
+              onKeyDown: (event) => {
+                if (event.key === 'Enter') {
+                  event.preventDefault()
+                  commit()
+                }
+              },
+            },
+            inputProps,
+          )}
           id={id}
           size={size}
           value={text}
           disabled={disabled}
           required={required}
           placeholder={placeholder ?? pattern}
-          autoComplete="off"
-          inputMode="numeric"
-          aria-label={ariaLabel}
           aria-describedby={describedBy}
           aria-invalid={error || invalidProp === true || invalidProp === 'true' ? true : undefined}
-          onChange={(event) => setText(event.target.value)}
-          onBlur={commit}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              event.preventDefault()
-              commit()
-            }
-          }}
+          className={className}
           trailing={
             <PopoverPrimitive.Trigger
               aria-label={buttonLabel}

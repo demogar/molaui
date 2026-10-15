@@ -6,6 +6,7 @@ import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { deprecate } from '../../lib/deprecate'
+import { slotUnlessRendered } from '../../lib/slot'
 import { floatingSurface } from '../popover/surface'
 
 /**
@@ -30,9 +31,17 @@ import { floatingSurface } from '../popover/surface'
  */
 
 export const Menu = MenuPrimitive.Root
-export const MenuTrigger = MenuPrimitive.Trigger
-export const MenuGroup = MenuPrimitive.Group
-export const MenuRadioGroup = MenuPrimitive.RadioGroup
+export function MenuTrigger(props: MenuPrimitive.Trigger.Props) {
+  return <MenuPrimitive.Trigger {...slotUnlessRendered('menu-trigger', props.render)} {...props} />
+}
+
+export function MenuGroup(props: MenuPrimitive.Group.Props) {
+  return <MenuPrimitive.Group data-slot="menu-group" {...props} />
+}
+
+export function MenuRadioGroup(props: MenuPrimitive.RadioGroup.Props) {
+  return <MenuPrimitive.RadioGroup data-slot="menu-radio-group" {...props} />
+}
 export const MenuSubmenu = MenuPrimitive.SubmenuRoot
 
 const itemClasses = [
@@ -89,6 +98,7 @@ export function MenuContent({
 export function MenuShortcut({ className, ...props }: React.ComponentProps<'span'>) {
   return (
     <span
+      data-slot="menu-shortcut"
       className={cn(
         'ms-auto ps-4 font-ui text-xs tabular-nums tracking-figures text-ink-muted group-data-highlighted/item:text-on-ink-muted',
         className,
@@ -191,6 +201,7 @@ export function MenuRadioItem({ className, children, closeOnClick = false, ...pr
 export function MenuGroupLabel({ className, ...props }: Omit<MenuPrimitive.GroupLabel.Props, 'className'> & { className?: string }) {
   return (
     <MenuPrimitive.GroupLabel
+      data-slot="menu-group-label"
       className={cn('px-2.5 pt-2 pb-1.5 rotulo text-ink-muted', className)}
       {...props}
     />
@@ -198,7 +209,7 @@ export function MenuGroupLabel({ className, ...props }: Omit<MenuPrimitive.Group
 }
 
 export function MenuSeparator({ className, ...props }: Omit<MenuPrimitive.Separator.Props, 'className'> & { className?: string }) {
-  return <MenuPrimitive.Separator className={cn('my-1.5 h-px bg-keyline', className)} {...props} />
+  return <MenuPrimitive.Separator data-slot="menu-separator" className={cn('my-1.5 h-px bg-keyline', className)} {...props} />
 }
 
 export interface MenuSubmenuTriggerProps extends Omit<MenuPrimitive.SubmenuTrigger.Props, 'className'> {

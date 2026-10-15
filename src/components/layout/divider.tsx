@@ -53,6 +53,7 @@ export function Divider({
   const vertical = orientation === 'vertical'
   return (
     <div
+      data-slot="divider"
       role="none"
       aria-orientation={props.role === 'separator' ? orientation : undefined}
       className={cn(

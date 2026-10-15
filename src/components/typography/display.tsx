@@ -34,5 +34,5 @@ export function Display({ as: Tag = 'h1', className, ...props }: DisplayProps) {
     className,
   )
   const hasLeading = /(^|\s)leading-|(^|\s)text-\S+\/\S/.test(merged)
-  return <Tag className={hasLeading ? merged : `${merged} leading-tight`} {...props} />
+  return <Tag data-slot="display" className={hasLeading ? merged : `${merged} leading-tight`} {...props} />
 }

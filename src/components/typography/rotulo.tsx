@@ -40,6 +40,7 @@ export interface RotuloProps extends React.ComponentProps<'p'> {
 export function Rotulo({ className, band = 'ink', plain = false, ...props }: RotuloProps) {
   return (
     <p
+      data-slot="rotulo"
       className={cn(
         'm-0 flex items-center gap-2.5 rotulo text-ink-muted',
         !plain && 'before:h-(--bar-w) before:w-7 before:shrink-0 before:bg-(--band) before:content-[""]',

@@ -36,7 +36,7 @@ export function TooltipProvider({ delay = 500, closeDelay = 0, ...props }: Toolt
   return <TooltipPrimitive.Provider delay={delay} closeDelay={closeDelay} {...props} />
 }
 
-export interface TooltipProps {
+export interface TooltipProps extends Omit<React.ComponentProps<'div'>, 'children' | 'content' | 'role'> {
   /** The element that triggers it. Must be focusable — usually a Button or IconButton. */
   children: React.ReactElement
   content: React.ReactNode
@@ -49,9 +49,14 @@ export interface TooltipProps {
   onOpenChange?: TooltipPrimitive.Root.Props['onOpenChange']
   /** Overrides the provider's delay for this tooltip. */
   delay?: number
-  className?: string
+  /** Never open: for a trigger whose label is already visible in this state. */
+  disabled?: boolean
 }
 
+/**
+ * `className`, `ref` and the rest of the DOM props go to the tooltip popup;
+ * the trigger is `children`, which keeps its own.
+ */
 export function Tooltip({
   children,
   content,
@@ -62,14 +67,17 @@ export function Tooltip({
   defaultOpen,
   onOpenChange,
   delay,
+  disabled,
   className,
+  ...props
 }: TooltipProps) {
   return (
-    <TooltipPrimitive.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
+    <TooltipPrimitive.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} disabled={disabled}>
       <TooltipPrimitive.Trigger delay={delay} render={children} />
       <TooltipPrimitive.Portal>
         <TooltipPrimitive.Positioner side={side} align={align} sideOffset={6} className="z-(--z-popover)">
           <TooltipPrimitive.Popup
+            {...props}
             data-slot="tooltip"
             className={cn(
               'on-ink flex max-w-xs items-center gap-2 rounded-none px-2 py-1.5',

@@ -25,14 +25,18 @@ import { ChoiceField } from '../checkbox/choice-field'
  */
 export interface SwitchProps extends Omit<SwitchPrimitive.Root.Props, 'className'> {
   className?: string
+  /** Classes for the label row a `label` adds around the control. `className` always styles the switch itself. */
+  wrapperClassName?: string
   label?: React.ReactNode
   description?: React.ReactNode
   /** Put the label before the switch — for settings lists, where labels align left and switches right. */
   labelPosition?: 'start' | 'end'
 }
 
+/** `className`, `ref` and the DOM props go to the switch, with or without a `label`; see `Checkbox`. */
 export function Switch({
   className,
+  wrapperClassName,
   label,
   description,
   labelPosition = 'end',
@@ -51,7 +55,7 @@ export function Switch({
         'hover:cut-band focus-visible:focus-ring',
         'data-checked:bg-verde data-checked:forced-selected',
         'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:hover:shadow-cut',
-        !label && className,
+        className,
       )}
       {...props}
       // Joined, not replaced: Field passes its hint and error here, and the
@@ -79,7 +83,7 @@ export function Switch({
       description={description}
       descriptionId={descriptionId}
       labelPosition={labelPosition}
-      className={className}
+      className={wrapperClassName}
     />
   )
 }

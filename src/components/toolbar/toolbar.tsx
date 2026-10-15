@@ -9,6 +9,9 @@ import * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { type Variants } from '../../lib/variants'
+import { slotUnlessRendered } from '../../lib/slot'
+import { useMergedRefs } from '../../lib/merge-props'
+import { deprecate } from '../../lib/deprecate'
 import { buttonVariants } from '../button'
 import { fieldControlClasses, fieldControlSizes } from '../field/field-control'
 import { Menu, MenuContent, MenuItem, MenuTrigger } from '../menu'
@@ -56,12 +59,18 @@ export function Toolbar({ variant, className, ...props }: ToolbarProps) {
  * three filter buttons ran 86px past a 320px phone.
  */
 export function ToolbarGroup({ className, ...props }: Omit<ToolbarPrimitive.Group.Props, 'className'> & { className?: string }) {
-  return <ToolbarPrimitive.Group className={cn('flex flex-wrap items-center gap-1', className)} {...props} />
+  return <ToolbarPrimitive.Group data-slot="toolbar-group" className={cn('flex flex-wrap items-center gap-1', className)} {...props} />
 }
 
-export function ToolbarSeparator({ className }: { className?: string }) {
+export interface ToolbarSeparatorProps extends Omit<ToolbarPrimitive.Separator.Props, 'className'> {
+  className?: string
+}
+
+export function ToolbarSeparator({ className, ...props }: ToolbarSeparatorProps) {
   return (
     <ToolbarPrimitive.Separator
+      {...props}
+      data-slot="toolbar-separator"
       className={cn('mx-1 h-5 w-px self-center bg-keyline data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-5', className)}
     />
   )
@@ -84,7 +93,11 @@ export function ToolbarButton({
   ...props
 }: ToolbarButtonProps) {
   return (
-    <ToolbarPrimitive.Button className={cn(buttonVariants({ variant, size }), className)} {...props}>
+    <ToolbarPrimitive.Button
+      {...slotUnlessRendered('toolbar-button', props.render)}
+      className={cn(buttonVariants({ variant, size }), className)}
+      {...props}
+    >
       {icon ? <span aria-hidden className="contents">{icon}</span> : null}
       {children}
     </ToolbarPrimitive.Button>
@@ -221,14 +234,13 @@ export interface ToolbarOverflowItem {
   tone?: 'neutral' | 'danger' | 'default'
 }
 
-export interface ToolbarOverflowProps {
+export interface ToolbarOverflowProps extends Omit<React.ComponentProps<'div'>, 'children'> {
   /** In priority order: the first items stay visible longest. */
   items: ToolbarOverflowItem[]
   /** The name of the menu button that collects what does not fit. */
   moreLabel?: string
   /** Which end of the free space the buttons hug. */
   align?: 'start' | 'end'
-  className?: string
 }
 
 const GAP = 4 // gap-1
@@ -245,9 +257,20 @@ const GAP = 4 // gap-1
  *
  * Without layout (the server, jsdom) every item renders: the safe failure is
  * a row that wraps, never an action that cannot be reached.
+ *
+ * `className`, `ref` and the rest of the DOM props go to the row.
  */
-export function ToolbarOverflow({ items, moreLabel = 'More actions', align = 'end', className }: ToolbarOverflowProps) {
+export function ToolbarOverflow({ items, moreLabel = 'More actions', align = 'end', className, ref, ...props }: ToolbarOverflowProps) {
+  if (items.some((item) => item.tone === 'default')) {
+    deprecate('toolbar-overflow-tone-default', {
+      what: 'A ToolbarOverflow item with tone: "default"',
+      instead: 'tone: "neutral"',
+      removal: '1.0.0',
+    })
+  }
   const frameRef = React.useRef<HTMLDivElement>(null)
+  // The row measures itself, and the consumer may hold it too.
+  const mergedRef = useMergedRefs(frameRef, ref)
   const measureRef = React.useRef<HTMLDivElement>(null)
   const [visible, setVisible] = React.useState(items.length)
   // Re-measure when the labels change, not whenever the caller passes a new
@@ -293,7 +316,8 @@ export function ToolbarOverflow({ items, moreLabel = 'More actions', align = 'en
 
   return (
     <div
-      ref={frameRef}
+      {...props}
+      ref={mergedRef}
       data-slot="toolbar-overflow"
       className={cn('relative flex min-w-0 flex-1 items-center gap-1', align === 'end' && 'justify-end', className)}
     >

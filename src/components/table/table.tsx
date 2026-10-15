@@ -416,7 +416,7 @@ export function TableCheckbox({ indeterminate = false, className, ref: refProp, 
   }, [indeterminate])
 
   return (
-    <span className={cn('relative inline-grid size-4 shrink-0 place-items-center align-middle', className)}>
+    <span data-slot="table-checkbox" className={cn('relative inline-grid size-4 shrink-0 place-items-center align-middle', className)}>
       <input
         type="checkbox"
         className={cn(

@@ -58,7 +58,7 @@ import {
  * and lose a sighted keyboard user's place.
  */
 
-export interface CalendarProps {
+export interface CalendarProps extends Omit<React.ComponentProps<'div'>, 'onSelect' | 'children'> {
   /** The selected day, or the range. A single date is a range whose ends match. */
   selected?: DateRange
   /** Called with the day a person chose. Range logic belongs to the caller. */
@@ -95,7 +95,6 @@ export interface CalendarProps {
   headingId?: string
   /** Render the heading as the popup's title instead of a plain element. */
   renderHeading?: (props: { id: string; className: string; children: React.ReactNode }) => React.ReactNode
-  className?: string
 }
 
 export function Calendar({
@@ -114,6 +113,7 @@ export function Calendar({
   headingId: headingIdProp,
   renderHeading,
   className,
+  ...props
 }: CalendarProps) {
   const direction = useDirection()
   const uid = React.useId()
@@ -207,7 +207,7 @@ export function Calendar({
   const headingText = formatMonthYear(month, locale)
 
   return (
-    <div data-slot="calendar" className={cn('grid w-max gap-2', className)}>
+    <div {...props} data-slot="calendar" className={cn('grid w-max gap-2', className)}>
       <div className="flex items-center gap-2">
         <IconButton
           variant="ghost"

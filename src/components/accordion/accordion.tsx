@@ -104,10 +104,18 @@ export interface AccordionPanelProps extends Omit<AccordionPrimitive.Panel.Props
   className?: string
 }
 
+/**
+ * `ref` and the DOM props go to the panel; `className` goes to the content
+ * inside it. The panel animates its own height, and
+ * padding on it would be clipped while it does, so the padding a consumer
+ * adds belongs to the content.
+ */
 export function AccordionPanel({ className, children, hiddenUntilFound = true, ...props }: AccordionPanelProps) {
   return (
     <AccordionPrimitive.Panel data-slot="accordion-panel" hiddenUntilFound={hiddenUntilFound} className={cn(panelClasses)} {...props}>
-      <div className={cn('px-2 pb-4', className)}>{children}</div>
+      <div className={cn('px-2 pb-4', className)}>
+        {children}
+      </div>
     </AccordionPrimitive.Panel>
   )
 }
@@ -116,7 +124,9 @@ export function AccordionPanel({ className, children, hiddenUntilFound = true, .
  * One disclosure on its own — "Show 12 more fields", "Raw response". No rules,
  * no heading semantics: it is a control inside something else, not a section.
  */
-export const Collapsible = CollapsiblePrimitive.Root
+export function Collapsible(props: CollapsiblePrimitive.Root.Props) {
+  return <CollapsiblePrimitive.Root data-slot="collapsible" {...props} />
+}
 
 export interface CollapsibleTriggerProps extends Omit<CollapsiblePrimitive.Trigger.Props, 'className'> {
   className?: string
@@ -147,6 +157,7 @@ export interface CollapsiblePanelProps extends Omit<CollapsiblePrimitive.Panel.P
   className?: string
 }
 
+/** `className` goes to the content inside the panel, for the reason given on `AccordionPanel`. */
 export function CollapsiblePanel({ className, children, ...props }: CollapsiblePanelProps) {
   return (
     <CollapsiblePrimitive.Panel
@@ -157,7 +168,9 @@ export function CollapsiblePanel({ className, children, ...props }: CollapsibleP
       )}
       {...props}
     >
-      <div className={cn('pt-2', className)}>{children}</div>
+      <div className={cn('pt-2', className)}>
+        {children}
+      </div>
     </CollapsiblePrimitive.Panel>
   )
 }

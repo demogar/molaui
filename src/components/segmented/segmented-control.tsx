@@ -34,22 +34,30 @@ export interface SegmentedOption<V extends string = string> {
   disabled?: boolean
 }
 
-export interface SegmentedControlProps<V extends string = string> {
+export interface SegmentedControlBaseProps<V extends string = string>
+  extends Omit<React.ComponentProps<'div'>, 'defaultValue' | 'onChange' | 'children' | 'aria-label' | 'aria-labelledby'> {
   options: SegmentedOption<V>[]
   value?: V
   defaultValue?: V
   onValueChange?: (value: V) => void
-  /** Names the group. Required: three buttons reading "Table", "Board", "List" mean nothing until a screen reader hears "View". */
-  'aria-label': string
   size?: 'sm' | 'md'
   /** Render icons only; labels become the accessible names. */
   iconOnly?: boolean
   /** Segments share the full width equally. */
   fill?: boolean
   disabled?: boolean
-  className?: string
 }
 
+/**
+ * A name is required: three buttons reading "Table", "Board", "List" mean
+ * nothing until a screen reader hears "View". It can be an `aria-label`, or
+ * an `aria-labelledby` pointing at a visible heading; the second used to be
+ * refused, which forced a duplicate, invisible name next to a visible one.
+ */
+export type SegmentedControlProps<V extends string = string> = SegmentedControlBaseProps<V> &
+  ({ 'aria-label': string; 'aria-labelledby'?: string } | { 'aria-label'?: string; 'aria-labelledby': string })
+
+/** `className`, `ref` and the rest of the DOM props go to the group. */
 export function SegmentedControl<V extends string = string>({
   options,
   value,
@@ -60,10 +68,11 @@ export function SegmentedControl<V extends string = string>({
   fill = false,
   disabled,
   className,
-  ...aria
+  ...props
 }: SegmentedControlProps<V>) {
   return (
     <ToggleGroup
+      {...props}
       data-slot="segmented-control"
       value={value === undefined ? undefined : [value]}
       defaultValue={defaultValue === undefined ? undefined : [defaultValue]}
@@ -74,7 +83,6 @@ export function SegmentedControl<V extends string = string>({
         fill && 'flex w-full',
         className,
       )}
-      {...aria}
       onValueChange={(next) => {
         // Pressing the active segment would empty the group; ignore it.
         const chosen = next[0] as V | undefined
