@@ -4,7 +4,9 @@ import { Tooltip as TooltipPrimitive } from '@base-ui/react/tooltip'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { type MessagesOverride, useMessages } from '../../lib/messages'
 import { useControllable } from '../../lib/use-controllable'
+import { type TooltipMessages, tooltipMessages } from './messages'
 
 /**
  * A tooltip is the inverse panel at its smallest: ink ground, cloth type. It
@@ -46,36 +48,6 @@ export function TooltipProvider({ delay = 500, closeDelay = 0, ...props }: Toolt
   return <TooltipPrimitive.Provider delay={delay} closeDelay={closeDelay} {...props} />
 }
 
-/** Words for the key glyphs a screen reader cannot say. */
-const KEY_NAMES: Record<string, string> = {
-  '⌘': 'Command',
-  '⇧': 'Shift',
-  '⌥': 'Option',
-  '⌃': 'Control',
-  '⏎': 'Enter',
-  '↵': 'Enter',
-  '⌫': 'Backspace',
-  '⌦': 'Delete',
-  '⎋': 'Escape',
-  '⇥': 'Tab',
-  '↑': 'Up arrow',
-  '↓': 'Down arrow',
-  '←': 'Left arrow',
-  '→': 'Right arrow',
-  Esc: 'Escape',
-  Ctrl: 'Control',
-  Alt: 'Alt',
-  Cmd: 'Command',
-  '.': 'Period',
-  ',': 'Comma',
-  '/': 'Slash',
-}
-
-/** "⌘ ⇧ R" → "Command Shift R". */
-function spokenShortcut(keys: string[]): string {
-  return keys.map((key) => KEY_NAMES[key] ?? key).join(' ')
-}
-
 export interface TooltipProps extends Omit<React.ComponentProps<'div'>, 'children' | 'content' | 'role'> {
   /** The element that triggers it. Must be focusable — usually a Button or IconButton. */
   children: React.ReactElement
@@ -101,6 +73,8 @@ export interface TooltipProps extends Omit<React.ComponentProps<'div'>, 'childre
   delay?: number
   /** Never open: for a trigger whose label is already visible in this state. */
   disabled?: boolean
+  /** Overrides the words the tooltip says on its own: the spoken names of shortcut keys. */
+  messages?: MessagesOverride<TooltipMessages>
 }
 
 /**
@@ -118,9 +92,11 @@ export function Tooltip({
   onOpenChange,
   delay,
   disabled,
+  messages,
   className,
   ...props
 }: TooltipProps) {
+  const [t] = useMessages('tooltip', tooltipMessages, messages)
   const generatedId = React.useId()
   const popupId = props.id ?? generatedId
   // Base UI owns the open state; this mirrors it so the trigger is described
@@ -185,7 +161,7 @@ export function Tooltip({
                     </kbd>
                   ))}
                 </span>
-                <span className="sr-only">, {spokenShortcut(shortcut)}</span>
+                <span className="sr-only">, {shortcut.map((key) => t.keys[key] ?? key).join(' ')}</span>
               </>
             ) : null}
           </TooltipPrimitive.Popup>

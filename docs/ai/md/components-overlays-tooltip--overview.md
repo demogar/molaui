@@ -56,6 +56,7 @@ Each story is a live example in Storybook.
 | `defaultOpen` | `boolean` |  | Shows it on first render without controlling it afterwards. |
 | `delay` | `number` |  | Overrides the provider's delay for this tooltip. |
 | `disabled` | `boolean` |  | Never open: for a trigger whose label is already visible in this state. |
+| `messages` | `MessagesOverride<TooltipMessages>` |  | Overrides the words the tooltip says on its own: the spoken names of shortcut keys. |
 | `onOpenChange` | `((open: boolean, eventDetails: TooltipRootChangeEventDetails) => void)` |  | Called when hover, focus or Escape would open or close it, with the next state. |
 | `open` | `boolean` |  | Whether it is showing, when you control it. Rarely needed: hover and focus open it already. |
 | `shortcut` | `string[]` |  | Keys, in order: `['⌘', 'K']`. |
@@ -69,7 +70,7 @@ A tooltip is the inverse panel at its smallest: ink ground, cloth type. It is th
 
 Renders no element of its own, so it takes no `className` or `ref`.
 
-Types: `TooltipProps`
+Types: `TooltipMessages`, `TooltipProps`
 
 ## Accessibility
 
