@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react'
+import { render, screen, within } from '@/test/render'
 import { createRef } from 'react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
@@ -52,7 +52,24 @@ describe('Table primitives', () => {
         </Table>,
       )
       await userEvent.tab()
-      expect(screen.getByRole('table', { name: 'Runs' }).parentElement).toHaveFocus()
+      const frame = screen.getByRole('table', { name: 'Runs' }).parentElement!
+      expect(frame).toHaveFocus()
+
+      // jsdom does not scroll, so this checks what the browser needs to: the
+      // focused frame receives the arrow keys and nothing cancels them, which
+      // leaves the browser's native scrolling of a focused overflow box intact.
+      const cancelled: string[] = []
+      const listen = (event: KeyboardEvent) => {
+        if (event.defaultPrevented) cancelled.push(event.key)
+      }
+      document.addEventListener('keydown', listen)
+      await userEvent.keyboard('{ArrowRight}')
+      await userEvent.keyboard('{ArrowLeft}')
+      await userEvent.keyboard('{ArrowDown}')
+      await userEvent.keyboard('{ArrowUp}')
+      document.removeEventListener('keydown', listen)
+      expect(cancelled).toEqual([])
+      expect(frame).toHaveFocus()
 
       scroll.mockReturnValue(390)
       const { container } = render(
@@ -183,6 +200,21 @@ describe('DataTable', () => {
     expect(costs()).toEqual(['10', '3', '1'])
     await userEvent.click(sortByCost)
     expect(costs()).toEqual(['3', '10', '1'])
+  })
+
+  it('sorts from the keyboard: Enter and Space on the focused column header', async () => {
+    const user = userEvent.setup()
+    render(<DataTable label="t" columns={columns} rows={rows} getRowId={(r) => r.id} />)
+    const costs = () =>
+      screen
+        .getAllByRole('row')
+        .slice(1)
+        .map((row) => within(row).getAllByRole('cell')[1]?.textContent)
+    screen.getByRole('button', { name: 'Cost' }).focus()
+    await user.keyboard('{Enter}')
+    expect(costs()).toEqual(['1', '3', '10'])
+    await user.keyboard(' ')
+    expect(costs()).toEqual(['10', '3', '1'])
   })
 
   it('does not mutate the rows it was given', async () => {

@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor } from '@/test/render'
 import userEvent from '@testing-library/user-event'
 import { useState } from 'react'
 import { describe, expect, it, vi } from 'vitest'
@@ -149,5 +149,28 @@ describe('useCommandShortcut', () => {
     expect(option.textContent).toContain('GG')
     expect(error.mock.calls.flat().join(' ')).not.toMatch(/same key/)
     error.mockRestore()
+  })
+})
+
+describe('CommandPalette keyboard', () => {
+  it('moves the highlight up with ArrowUp, wrapping from the first command to the last', async () => {
+    const user = userEvent.setup()
+    render(<Harness onSelect={() => {}} />)
+    const input = await screen.findByRole('combobox')
+    await waitFor(() => expect(input).toHaveFocus())
+    await user.keyboard('{ArrowUp}')
+    expect(input.getAttribute('aria-activedescendant')).toBe(screen.getByRole('option', { name: 'Settings' }).id)
+    await user.keyboard('{ArrowUp}')
+    // Purge index is disabled, so ArrowUp from Settings lands on Toggle theme.
+    expect(input.getAttribute('aria-activedescendant')).toBe(screen.getByRole('option', { name: 'Toggle theme' }).id)
+  })
+
+  it('closes with Escape', async () => {
+    const user = userEvent.setup()
+    render(<Harness onSelect={() => {}} />)
+    const input = await screen.findByRole('combobox')
+    await waitFor(() => expect(input).toHaveFocus())
+    await user.keyboard('{Escape}')
+    await waitFor(() => expect(screen.queryByRole('dialog', { name: 'Command palette' })).not.toBeInTheDocument())
   })
 })

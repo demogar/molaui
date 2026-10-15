@@ -1,4 +1,4 @@
-import { render, screen, waitFor, within } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@/test/render'
 import userEvent from '@testing-library/user-event'
 import * as React from 'react'
 import { describe, expect, it, vi } from 'vitest'
@@ -18,14 +18,14 @@ function Example() {
 }
 
 describe('Dialog', () => {
-  it.each([
-    ['Enter', '{Enter}'],
-    ['Space', ' '],
-  ])('opens from its trigger with %s and stays open', async (_name, key) => {
+  // The keys are written out, not passed in, so the keyboard-table gate
+  // (src/docs/usage/keyboard-coverage.ts) can see that both are pressed.
+  it.each(['Enter', 'Space'])('opens from its trigger with %s and stays open', async (key) => {
     render(<Example />)
     const trigger = screen.getByRole('button', { name: 'Open' })
     trigger.focus()
-    await userEvent.keyboard(key)
+    if (key === 'Enter') await userEvent.keyboard('{Enter}')
+    else await userEvent.keyboard(' ')
     const dialog = await screen.findByRole('dialog', { name: 'Rename' })
     // Past the keystroke, so a popup that opened and was dismissed by the same key would show.
     await new Promise((resolve) => setTimeout(resolve, 100))
@@ -214,5 +214,30 @@ describe('AlertDialog', () => {
     await userEvent.click(within(dialog).getByRole('button', { name: 'Delete' }))
     await waitFor(() => expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument())
     await waitFor(() => expect(screen.getByRole('button', { name: 'Next row' })).toHaveFocus())
+  })
+})
+
+describe('Dialog keyboard', () => {
+  it('moves through its controls with Tab and Shift+Tab, and focus stays inside', async () => {
+    const user = userEvent.setup()
+    render(<Example />)
+    await user.click(screen.getByRole('button', { name: 'Open' }))
+    const dialog = await screen.findByRole('dialog', { name: 'Rename' })
+    await waitFor(() => expect(dialog).toContainElement(document.activeElement as HTMLElement))
+    const visited = new Set<Element | null>()
+    for (let i = 0; i < 5; i++) {
+      await user.tab()
+      await waitFor(() => expect(dialog).toContainElement(document.activeElement as HTMLElement))
+      visited.add(document.activeElement)
+    }
+    for (let i = 0; i < 5; i++) {
+      await user.tab({ shift: true })
+      await waitFor(() => expect(dialog).toContainElement(document.activeElement as HTMLElement))
+      visited.add(document.activeElement)
+    }
+    // Name, Save and Close: every control was reached, none outside.
+    expect(visited).toContain(screen.getByRole('textbox', { name: 'Name' }))
+    expect(visited).toContain(screen.getByRole('button', { name: 'Save' }))
+    expect(visited).toContain(screen.getByRole('button', { name: 'Close' }))
   })
 })

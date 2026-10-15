@@ -1,5 +1,5 @@
 import { composeStories, setProjectAnnotations } from '@storybook/react-vite'
-import { act, render } from '@testing-library/react'
+import { act, render } from '@/test/render'
 import axe from 'axe-core'
 import type * as React from 'react'
 import { describe, expect, it } from 'vitest'

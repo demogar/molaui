@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react'
+import { act, render, screen } from '@/test/render'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { RunStatus, isActiveStatus, isRetryableStatus } from './run-status'

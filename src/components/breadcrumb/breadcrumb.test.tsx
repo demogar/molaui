@@ -1,5 +1,6 @@
-import { render, screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { render, screen } from '@/test/render'
+import userEvent from '@testing-library/user-event'
+import { describe, expect, it, vi } from 'vitest'
 
 import { Breadcrumb, middleTruncate } from './breadcrumb'
 
@@ -32,6 +33,34 @@ describe('Breadcrumb', () => {
       />,
     )
     expect(screen.getByRole('link', { name: 'Home' })).toHaveAttribute('data-router')
+  })
+
+  it('moves through the links with Tab and follows the focused one with Enter', async () => {
+    const follow = vi.fn()
+    render(
+      <Breadcrumb
+        items={[{ label: 'Agents', href: '/agents' }, { label: 'Runs', href: '/runs' }, { label: 'Run #1' }]}
+        renderLink={({ href, className, children }) => (
+          <a
+            href={href}
+            className={className}
+            onClick={(event) => {
+              // jsdom does not navigate; record where the link would go.
+              event.preventDefault()
+              follow(href)
+            }}
+          >
+            {children}
+          </a>
+        )}
+      />,
+    )
+    await userEvent.tab()
+    expect(screen.getByRole('link', { name: 'Agents' })).toHaveFocus()
+    await userEvent.tab()
+    expect(screen.getByRole('link', { name: 'Runs' })).toHaveFocus()
+    await userEvent.keyboard('{Enter}')
+    expect(follow).toHaveBeenCalledWith('/runs')
   })
 })
 

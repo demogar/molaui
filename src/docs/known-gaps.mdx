@@ -17,20 +17,6 @@ the result written down. Roles, names and live regions are checked by axe on eve
 but axe can't tell you how a page sounds. Every component page says this in its testing status, so
 the claim can't outlive the gap.
 
-### Not every interactive component has a keyboard unit test
-
-**Status: open.** **12 of the 37 interactive component pages** have unit tests that only click; the
-testing status on each of those pages says "Keyboard in unit tests: not yet". The remaining pages
-have nothing that takes focus, so there is no key to press. The keyboard table on every page comes from the source and the Base UI
-primitive behind it, and the testing status on each page says whether its tests press keys. Both
-the row and the figure in this paragraph are generated from the test files, and a check fails when
-they disagree, so the number changes when a test is added.
-
-**Stable is a promise about the API, not about the testing.** Every component page is Stable,
-including those: their props will not break without a deprecation (see
-[Versioning](?path=/docs/mola-ui-versioning--overview)). It does not mean every behaviour has a
-test behind it. The testing status on each page is where that is stated.
-
 ### Thread's "Jump to latest" has not been tested by hand
 
 **Status: open.** A Thread follows new turns only while the reader is at the bottom, and offers

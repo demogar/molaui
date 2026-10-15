@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen } from '@/test/render'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 
@@ -28,6 +28,34 @@ describe('RadioGroup', () => {
     screen.getByRole('radio', { name: 'Retry' }).focus()
     await userEvent.keyboard('{ArrowDown}')
     expect(screen.getByRole('radio', { name: 'Skip' })).toBeChecked()
+  })
+
+  it('is one tab stop at the checked radio; arrows move and check, wrapping; Space checks', async () => {
+    const user = userEvent.setup()
+    render(
+      <>
+        <Group />
+        <button type="button">After</button>
+      </>,
+    )
+    await user.tab()
+    expect(screen.getByRole('radio', { name: 'Retry' })).toHaveFocus()
+    await user.keyboard('{ArrowRight}')
+    expect(screen.getByRole('radio', { name: 'Skip' })).toBeChecked()
+    await user.keyboard('{ArrowRight}')
+    await user.keyboard('{ArrowRight}')
+    // Wraps from the last radio back to the first.
+    expect(screen.getByRole('radio', { name: 'Retry' })).toHaveFocus()
+    expect(screen.getByRole('radio', { name: 'Retry' })).toBeChecked()
+    await user.keyboard('{ArrowUp}')
+    expect(screen.getByRole('radio', { name: 'Halt' })).toBeChecked()
+    await user.keyboard('{ArrowLeft}')
+    expect(screen.getByRole('radio', { name: 'Skip' })).toBeChecked()
+    await user.keyboard(' ')
+    expect(screen.getByRole('radio', { name: 'Skip' })).toBeChecked()
+    // Tab again leaves the group rather than visiting the other radios.
+    await user.tab()
+    expect(screen.getByRole('button', { name: 'After' })).toHaveFocus()
   })
 
   it('selects from the label text', async () => {

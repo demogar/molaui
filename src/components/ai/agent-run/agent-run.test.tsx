@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/react-vite'
-import { render, screen } from '@testing-library/react'
+import { render, screen } from '@/test/render'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
@@ -55,6 +55,46 @@ describe('AgentRun', () => {
     expect(screen.queryByRole('button', { name: 'Cancel run' })).not.toBeInTheDocument()
     await userEvent.click(screen.getByRole('button', { name: 'Retry run' }))
     expect(onRetry).toHaveBeenCalledOnce()
+  })
+
+  it('tabs through Cancel run, Copy run id and each step with detail, and back with Shift+Tab', async () => {
+    const onCancel = vi.fn()
+    render(
+      <AgentRun
+        name="Agent"
+        runId="run_1"
+        status="running"
+        onCancel={onCancel}
+        steps={[
+          { id: 'a', kind: 'reasoning', title: 'Plan', status: 'succeeded', durationMs: 2400, detail: <p>Plan detail</p> },
+          { id: 'b', kind: 'tool', title: 'Query', status: 'running', startedAt: Date.now() },
+        ]}
+      />,
+    )
+    const cancel = screen.getByRole('button', { name: 'Cancel run' })
+    const copy = screen.getByRole('button', { name: 'Copy run id' })
+    const step = screen.getByRole('button', { name: /Plan/ })
+    await userEvent.tab()
+    expect(cancel).toHaveFocus()
+    await userEvent.tab()
+    expect(copy).toHaveFocus()
+    await userEvent.tab()
+    expect(step).toHaveFocus()
+    // A step without detail is not a stop.
+    expect(screen.queryByRole('button', { name: /Query/ })).not.toBeInTheDocument()
+
+    await userEvent.keyboard('{Enter}')
+    expect(step).toHaveAttribute('aria-expanded', 'true')
+    expect(screen.getByText('Plan detail')).toBeInTheDocument()
+    await userEvent.keyboard(' ')
+    expect(step).toHaveAttribute('aria-expanded', 'false')
+
+    await userEvent.tab({ shift: true })
+    expect(copy).toHaveFocus()
+    await userEvent.tab({ shift: true })
+    expect(cancel).toHaveFocus()
+    await userEvent.keyboard('{Enter}')
+    expect(onCancel).toHaveBeenCalledOnce()
   })
 
   it('announces a change of run status once, not on mount', () => {

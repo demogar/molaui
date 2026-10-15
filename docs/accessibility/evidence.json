@@ -6,7 +6,9 @@
       "unitTests": [
         "src/components/ai/agent-run/agent-run.test.tsx"
       ],
-      "keyboardInUnitTests": false,
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "AI/Change review": {
@@ -15,6 +17,8 @@
         "src/components/ai/change-review/change-review.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "AI/Confidence": {
@@ -23,6 +27,8 @@
         "src/components/ai/confidence/confidence.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "AI/Message": {
@@ -30,7 +36,9 @@
       "unitTests": [
         "src/components/ai/message/message.test.tsx"
       ],
-      "keyboardInUnitTests": false,
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "AI/Prompt input": {
@@ -39,6 +47,8 @@
         "src/components/ai/prompt-input/prompt-input.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "AI/Reasoning": {
@@ -46,7 +56,9 @@
       "unitTests": [
         "src/components/ai/reasoning/reasoning.test.tsx"
       ],
-      "keyboardInUnitTests": false,
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "AI/Run error": {
@@ -55,6 +67,8 @@
         "src/components/ai/run-error/run-error.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "AI/Run status": {
@@ -63,6 +77,8 @@
         "src/components/ai/run-status/run-status.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "AI/Sources": {
@@ -71,6 +87,8 @@
         "src/components/ai/sources/sources.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "AI/Streaming text": {
@@ -79,6 +97,8 @@
         "src/components/ai/streaming-text/streaming-text.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "AI/Token usage": {
@@ -87,6 +107,8 @@
         "src/components/ai/token-usage/token-usage.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "AI/Tool call": {
@@ -94,7 +116,9 @@
       "unitTests": [
         "src/components/ai/tool-call/tool-call.test.tsx"
       ],
-      "keyboardInUnitTests": false,
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Actions/Button": {
@@ -103,6 +127,8 @@
         "src/components/button/button.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Data display/Avatar": {
@@ -111,6 +137,8 @@
         "src/components/avatar/avatar.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Data display/Code": {
@@ -118,7 +146,9 @@
       "unitTests": [
         "src/components/code/code.test.tsx"
       ],
-      "keyboardInUnitTests": false,
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Data display/Description list": {
@@ -127,6 +157,8 @@
         "src/components/description-list/description-list.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Data display/Stat": {
@@ -135,6 +167,8 @@
         "src/components/stat/stat.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Data display/Swatch": {
@@ -143,6 +177,8 @@
         "src/components/swatch/swatch.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Data display/Table": {
@@ -151,6 +187,8 @@
         "src/components/table/table.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Data display/Timeline": {
@@ -159,6 +197,8 @@
         "src/components/timeline/timeline.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Feedback/Badge": {
@@ -167,6 +207,8 @@
         "src/components/badge/badge.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Feedback/Callout": {
@@ -174,7 +216,9 @@
       "unitTests": [
         "src/components/callout/callout.test.tsx"
       ],
-      "keyboardInUnitTests": false,
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Feedback/Empty state": {
@@ -183,6 +227,8 @@
         "src/components/empty-state/empty-state.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Feedback/Placeholder": {
@@ -191,6 +237,8 @@
         "src/components/placeholder/placeholder.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Feedback/Progress": {
@@ -199,6 +247,8 @@
         "src/components/progress/progress.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Feedback/Skeleton": {
@@ -207,6 +257,8 @@
         "src/components/skeleton/skeleton.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Feedback/Toast": {
@@ -214,7 +266,9 @@
       "unitTests": [
         "src/components/toast/toast.test.tsx"
       ],
-      "keyboardInUnitTests": false,
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Forms/Checkbox": {
@@ -223,6 +277,8 @@
         "src/components/checkbox/checkbox.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Forms/Chip": {
@@ -231,6 +287,8 @@
         "src/components/chip/chip.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Forms/Combobox": {
@@ -239,6 +297,8 @@
         "src/components/combobox/combobox.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Forms/Date picker": {
@@ -247,6 +307,8 @@
         "src/components/date-picker/date-picker.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Forms/Field": {
@@ -254,7 +316,9 @@
       "unitTests": [
         "src/components/field/field.test.tsx"
       ],
-      "keyboardInUnitTests": false,
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Forms/File upload": {
@@ -263,6 +327,8 @@
         "src/components/file-upload/file-upload.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Forms/Number input": {
@@ -271,6 +337,8 @@
         "src/components/number-input/number-input.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Forms/Radio": {
@@ -279,6 +347,8 @@
         "src/components/radio/radio.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Forms/Segmented control": {
@@ -286,7 +356,9 @@
       "unitTests": [
         "src/components/segmented/segmented-control.test.tsx"
       ],
-      "keyboardInUnitTests": false,
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Forms/Select": {
@@ -295,6 +367,8 @@
         "src/components/select/select.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Forms/Slider": {
@@ -303,6 +377,8 @@
         "src/components/slider/slider.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Forms/Switch": {
@@ -311,6 +387,8 @@
         "src/components/switch/switch.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Layout/App shell": {
@@ -318,7 +396,9 @@
       "unitTests": [
         "src/components/app-shell/app-shell.test.tsx"
       ],
-      "keyboardInUnitTests": false,
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Layout/Container": {
@@ -327,6 +407,8 @@
         "src/components/layout/layout.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Layout/Divider": {
@@ -335,6 +417,8 @@
         "src/components/layout/layout.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Layout/Grid": {
@@ -343,6 +427,8 @@
         "src/components/layout/layout.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Layout/Page header": {
@@ -351,6 +437,8 @@
         "src/components/app-shell/app-shell.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Layout/Panel": {
@@ -359,6 +447,8 @@
         "src/components/layout/layout.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Layout/Stack": {
@@ -367,6 +457,8 @@
         "src/components/layout/layout.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Layout/Toolbar": {
@@ -375,6 +467,8 @@
         "src/components/toolbar/toolbar.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Navigation/Accordion": {
@@ -383,6 +477,8 @@
         "src/components/accordion/accordion.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Navigation/Breadcrumb": {
@@ -390,7 +486,9 @@
       "unitTests": [
         "src/components/breadcrumb/breadcrumb.test.tsx"
       ],
-      "keyboardInUnitTests": false,
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Navigation/Pagination": {
@@ -398,7 +496,9 @@
       "unitTests": [
         "src/components/pagination/pagination.test.tsx"
       ],
-      "keyboardInUnitTests": false,
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Navigation/Tabs": {
@@ -407,6 +507,8 @@
         "src/components/tabs/tabs.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Overlays/Command palette": {
@@ -415,6 +517,8 @@
         "src/components/command/command.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Overlays/Dialog": {
@@ -423,6 +527,8 @@
         "src/components/dialog/dialog.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Overlays/Drawer": {
@@ -431,6 +537,8 @@
         "src/components/drawer/drawer.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Overlays/Menu": {
@@ -439,6 +547,8 @@
         "src/components/menu/menu.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Overlays/Popover": {
@@ -447,6 +557,8 @@
         "src/components/popover/popover.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Overlays/Tooltip": {
@@ -455,6 +567,8 @@
         "src/components/tooltip/tooltip.test.tsx"
       ],
       "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
       "screenReadersByHand": false
     },
     "Components/Typography/Display": {
@@ -463,6 +577,8 @@
         "src/components/typography/typography.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Typography/Heading": {
@@ -471,6 +587,8 @@
         "src/components/typography/typography.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Typography/Kbd": {
@@ -479,6 +597,8 @@
         "src/components/typography/typography.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Typography/Lead": {
@@ -487,6 +607,8 @@
         "src/components/typography/typography.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Typography/Meta": {
@@ -495,6 +617,8 @@
         "src/components/typography/typography.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Typography/Prose": {
@@ -503,6 +627,8 @@
         "src/components/typography/typography.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Typography/Pullquote": {
@@ -511,6 +637,8 @@
         "src/components/typography/typography.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Typography/Rotulo": {
@@ -519,6 +647,8 @@
         "src/components/typography/typography.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     },
     "Components/Typography/Text": {
@@ -527,6 +657,8 @@
         "src/components/typography/typography.test.tsx"
       ],
       "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
       "screenReadersByHand": false
     }
   }

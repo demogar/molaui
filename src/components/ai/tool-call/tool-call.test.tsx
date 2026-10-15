@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen } from '@/test/render'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
@@ -40,5 +40,57 @@ describe('ToolCall', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Approve' }))
     expect(onDeny).toHaveBeenCalledOnce()
     expect(onApprove).toHaveBeenCalledOnce()
+  })
+
+  it('opens from its header with Enter or Space, then tabs into the payload, whose block scrolls with the arrows', async () => {
+    render(<ToolCall name="query_rollout" status="succeeded" args={{ id: 'ro-0412' }} />)
+    const header = screen.getByRole('button', { name: /query_rollout/ })
+    await userEvent.tab()
+    expect(header).toHaveFocus()
+    await userEvent.keyboard('{Enter}')
+    expect(header).toHaveAttribute('aria-expanded', 'true')
+    await userEvent.keyboard(' ')
+    expect(header).toHaveAttribute('aria-expanded', 'false')
+    await userEvent.keyboard(' ')
+    expect(header).toHaveAttribute('aria-expanded', 'true')
+
+    await userEvent.tab()
+    expect(screen.getByRole('button', { name: 'Wrap lines' })).toHaveFocus()
+    await userEvent.tab()
+    expect(screen.getByRole('button', { name: 'Copy to clipboard' })).toHaveFocus()
+    await userEvent.tab()
+    const block = document.activeElement as HTMLElement
+    expect(block.tagName).toBe('PRE')
+    expect(block).toHaveAccessibleName('arguments')
+    // jsdom does not scroll; what the component owns is that the block takes
+    // focus and nothing cancels the arrow keys, so the browser scrolls it.
+    const prevented: string[] = []
+    const record = (event: KeyboardEvent) => {
+      if (event.defaultPrevented) prevented.push(event.key)
+    }
+    window.addEventListener('keydown', record)
+    await userEvent.keyboard('{ArrowDown}')
+    await userEvent.keyboard('{ArrowUp}')
+    await userEvent.keyboard('{ArrowRight}')
+    await userEvent.keyboard('{ArrowLeft}')
+    window.removeEventListener('keydown', record)
+    expect(prevented).toEqual([])
+    expect(block).toHaveFocus()
+  })
+
+  it('reaches Approve and Deny with Tab and decides with Enter or Space', async () => {
+    const onApprove = vi.fn()
+    const onDeny = vi.fn()
+    render(
+      <ToolCall name="update_flag" status="waiting" approval={{ reason: 'Writes to production.', onApprove, onDeny }} />,
+    )
+    await userEvent.tab()
+    expect(screen.getByRole('button', { name: 'Approve' })).toHaveFocus()
+    await userEvent.keyboard('{Enter}')
+    expect(onApprove).toHaveBeenCalledOnce()
+    await userEvent.tab()
+    expect(screen.getByRole('button', { name: 'Deny' })).toHaveFocus()
+    await userEvent.keyboard(' ')
+    expect(onDeny).toHaveBeenCalledOnce()
   })
 })

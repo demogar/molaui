@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen } from '@/test/render'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
@@ -30,6 +30,34 @@ describe('Button', () => {
     expect(onClick).not.toHaveBeenCalled()
     await userEvent.tab()
     expect(button).toHaveFocus()
+  })
+
+  it('activates with Enter and Space, but not while disabled or loading', async () => {
+    const onClick = vi.fn()
+    const { rerender } = render(<Button onClick={onClick}>Save</Button>)
+    await userEvent.tab()
+    expect(screen.getByRole('button', { name: 'Save' })).toHaveFocus()
+    await userEvent.keyboard('{Enter}')
+    await userEvent.keyboard(' ')
+    expect(onClick).toHaveBeenCalledTimes(2)
+
+    rerender(
+      <Button loading onClick={onClick}>
+        Save
+      </Button>,
+    )
+    await userEvent.keyboard('{Enter}')
+    await userEvent.keyboard(' ')
+    expect(onClick).toHaveBeenCalledTimes(2)
+
+    rerender(
+      <Button disabled onClick={onClick}>
+        Save
+      </Button>,
+    )
+    await userEvent.keyboard('{Enter}')
+    await userEvent.keyboard(' ')
+    expect(onClick).toHaveBeenCalledTimes(2)
   })
 
   it('keeps the label when loading, so the width does not jump', () => {

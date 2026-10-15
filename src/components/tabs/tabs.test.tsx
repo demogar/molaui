@@ -1,5 +1,5 @@
 import { DirectionProvider } from '@base-ui/react/direction-provider'
-import { render, screen } from '@testing-library/react'
+import { render, screen } from '@/test/render'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 
@@ -39,6 +39,20 @@ describe('Tabs', () => {
     await userEvent.keyboard('{Enter}')
     expect(output).toHaveAttribute('aria-selected', 'true')
     expect(screen.getByRole('tabpanel')).toHaveTextContent('Panel B')
+  })
+
+  it('jumps to the first and last tab with Home and End, and selects with Space', async () => {
+    const user = userEvent.setup()
+    render(<Example />)
+    await user.tab()
+    await user.keyboard('{End}')
+    const cost = screen.getByRole('tab', { name: 'Cost' })
+    expect(cost).toHaveFocus()
+    await user.keyboard(' ')
+    expect(cost).toHaveAttribute('aria-selected', 'true')
+    expect(screen.getByRole('tabpanel')).toHaveTextContent('Panel C')
+    await user.keyboard('{Home}')
+    expect(screen.getByRole('tab', { name: 'Trace' })).toHaveFocus()
   })
 
   it('moves toward the reading direction right-to-left', async () => {

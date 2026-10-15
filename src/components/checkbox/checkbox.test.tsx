@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen } from '@/test/render'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
@@ -59,5 +59,19 @@ describe('Checkbox inside Field', () => {
   it('keeps its own description when Field has no hint to add', () => {
     render(<Field label="Policy">{(control) => <Checkbox {...control} label="Retry" description="Up to three times." />}</Field>)
     expect(screen.getByRole('checkbox', { name: 'Policy' })).toHaveAccessibleDescription('Up to three times.')
+  })
+})
+
+describe('Checkbox keyboard', () => {
+  it('takes focus with Tab, toggles with Space and not with Enter', async () => {
+    const user = userEvent.setup()
+    render(<Checkbox label="Stream" />)
+    await user.tab()
+    const box = screen.getByRole('checkbox', { name: 'Stream' })
+    expect(box).toHaveFocus()
+    await user.keyboard('{Enter}')
+    expect(box).not.toBeChecked()
+    await user.keyboard(' ')
+    expect(box).toBeChecked()
   })
 })

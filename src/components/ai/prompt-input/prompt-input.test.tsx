@@ -1,8 +1,8 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen } from '@/test/render'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
-import { PromptInput } from './prompt-input'
+import { AttachmentChip, PromptInput } from './prompt-input'
 
 const field = () => screen.getByRole('textbox', { name: 'Message' })
 
@@ -30,6 +30,50 @@ describe('PromptInput', () => {
     expect(onSubmit).not.toHaveBeenCalled()
     await userEvent.type(field(), '{Control>}{Enter}{/Control}')
     expect(onSubmit).toHaveBeenCalledWith('a\nb')
+  })
+
+  it('in mod-enter mode, Cmd+Enter sends too', async () => {
+    const onSubmit = vi.fn()
+    render(<PromptInput label="Message" submitOn="mod-enter" onSubmit={onSubmit} />)
+    await userEvent.type(field(), 'ship it')
+    await userEvent.keyboard('{Meta>}{Enter}{/Meta}')
+    expect(onSubmit).toHaveBeenCalledWith('ship it')
+  })
+
+  it('tabs through remove, the field, the toolbar and Send, and Enter or Space activates them', async () => {
+    const onSubmit = vi.fn()
+    const onRemove = vi.fn()
+    render(
+      <PromptInput
+        label="Message"
+        defaultValue="Summarise the export"
+        onSubmit={onSubmit}
+        attachments={<AttachmentChip name="export.csv" onRemove={onRemove} />}
+        toolbar={<button type="button">Attach</button>}
+      />,
+    )
+    // The attachments sit above the field in the DOM, so their remove buttons come first.
+    await userEvent.tab()
+    expect(screen.getByRole('button', { name: 'Remove export.csv' })).toHaveFocus()
+    await userEvent.keyboard(' ')
+    expect(onRemove).toHaveBeenCalledOnce()
+    await userEvent.tab()
+    expect(field()).toHaveFocus()
+    await userEvent.tab()
+    expect(screen.getByRole('button', { name: 'Attach' })).toHaveFocus()
+    await userEvent.tab()
+    expect(screen.getByRole('button', { name: 'Send' })).toHaveFocus()
+    await userEvent.keyboard('{Enter}')
+    expect(onSubmit).toHaveBeenCalledWith('Summarise the export')
+  })
+
+  it('stops the run from the keyboard', async () => {
+    const onStop = vi.fn()
+    render(<PromptInput label="Message" status="generating" onSubmit={vi.fn()} onStop={onStop} />)
+    screen.getByRole('button', { name: 'Stop' }).focus()
+    await userEvent.keyboard(' ')
+    await userEvent.keyboard('{Enter}')
+    expect(onStop).toHaveBeenCalledTimes(2)
   })
 
   it('turns send into stop while generating, and keeps the field editable', async () => {

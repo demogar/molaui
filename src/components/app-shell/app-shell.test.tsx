@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen } from '@/test/render'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 
@@ -62,6 +62,49 @@ describe('AppShell', () => {
     const agents = Array.from(sheet.querySelectorAll('a')).find((a) => a.textContent?.includes('Agents'))!
     await userEvent.click(agents)
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+})
+
+describe('AppShell keyboard', () => {
+  it('starts with the skip link, which Enter follows to the main region', async () => {
+    render(<Shell />)
+    await userEvent.tab()
+    expect(screen.getByRole('link', { name: 'Skip to content' })).toHaveFocus()
+    await userEvent.keyboard('{Enter}')
+    expect(window.location.hash).toBe(`#${screen.getByRole('main').id}`)
+  })
+
+  it('toggles the sidebar with Enter and Space, then reaches the navigation links, which Enter follows', async () => {
+    render(<Shell />)
+    await userEvent.tab()
+    await userEvent.tab()
+    expect(screen.getByRole('button', { name: 'Collapse sidebar' })).toHaveFocus()
+    await userEvent.keyboard('{Enter}')
+    expect(screen.getByRole('button', { name: 'Expand sidebar' })).toHaveAttribute('aria-expanded', 'false')
+    await userEvent.keyboard(' ')
+    expect(screen.getByRole('button', { name: 'Collapse sidebar' })).toHaveAttribute('aria-expanded', 'true')
+    // The narrow-screen sheet button is next in the DOM; CSS hides one of the two.
+    await userEvent.tab()
+    expect(screen.getByRole('button', { name: 'Open navigation' })).toHaveFocus()
+    await userEvent.tab()
+    await userEvent.tab()
+    const agents = screen.getByRole('link', { name: 'Agents' })
+    expect(agents).toHaveFocus()
+    await userEvent.keyboard('{Enter}')
+    expect(window.location.hash).toBe('#agents')
+  })
+
+  it('opens the navigation sheet from the keyboard, and Escape closes it and returns focus', async () => {
+    render(<Shell />)
+    const open = screen.getByRole('button', { name: 'Open navigation' })
+    open.focus()
+    await userEvent.keyboard('{Enter}')
+    expect(await screen.findByRole('dialog', { name: 'Navigation' })).toBeInTheDocument()
+    await userEvent.keyboard('{Escape}')
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(open).toHaveFocus()
+    await userEvent.keyboard(' ')
+    expect(await screen.findByRole('dialog', { name: 'Navigation' })).toBeInTheDocument()
   })
 })
 

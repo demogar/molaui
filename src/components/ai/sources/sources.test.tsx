@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@/test/render'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 
@@ -60,6 +60,24 @@ describe('Citation', () => {
     const marker = screen.getByRole('link', { name: 'Source 2: Segment breakdown' })
     fireEvent.pointerDown(marker, { pointerType: 'mouse' })
     expect(fireEvent.click(marker)).toBe(true)
+  })
+})
+
+describe('Citation keyboard', () => {
+  it('follows the focused marker to its source card with Enter', async () => {
+    const user = userEvent.setup()
+    render(
+      <>
+        <Citation n={2} source={SOURCES[1]} />
+        <SourceList sources={SOURCES} />
+      </>,
+    )
+    await user.tab()
+    const marker = screen.getByRole('link', { name: 'Source 2: Segment breakdown' })
+    expect(marker).toHaveFocus()
+    await user.keyboard('{Enter}')
+    // jsdom does not scroll, but following an in-page link updates the hash.
+    expect(window.location.hash).toBe('#source-2')
   })
 })
 

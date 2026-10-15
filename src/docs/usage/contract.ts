@@ -56,6 +56,8 @@ export interface Evidence {
   stories: number
   unitTests: string[]
   keyboardInUnitTests: boolean
+  keysUntested: string[]
+  pressesKeys: boolean
   screenReadersByHand: boolean
 }
 
@@ -175,7 +177,7 @@ export const SECTIONS: Section[] = [
         ...(a11y.you.length ? [] : ['at least one "You handle"']),
         ...(interactive && !a11y.keyboard?.length ? ['a keyboard table (it is interactive)'] : []),
         ...(!interactive && a11y.keyboard ? ['no keyboard table (it is in NON_INTERACTIVE)'] : []),
-        ...(!interactive && page.evidence?.keyboardInUnitTests
+        ...(!interactive && page.evidence?.pressesKeys
           ? ['to leave NON_INTERACTIVE: its unit tests press keys, so it has something to operate']
           : []),
         ...(page.evidence ? [] : ['an entry in docs/accessibility/evidence.json']),

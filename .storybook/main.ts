@@ -24,7 +24,10 @@ const config: StorybookConfig = {
     },
     '@storybook/addon-a11y',
   ],
-  framework: { name: '@storybook/react-vite', options: {} },
+  // Strict mode, as the Next.js consumer runs in development: a component
+  // that breaks when React remounts it (a timer started in render, an effect
+  // left uncleaned, a stream that restarts) must break here first.
+  framework: { name: '@storybook/react-vite', options: { strictMode: true } },
   core: { disableTelemetry: true },
   docs: { defaultName: 'Overview' },
   typescript: { reactDocgen: 'react-docgen-typescript' },

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen } from '@/test/render'
 import userEvent from '@testing-library/user-event'
 import { createRef, useState } from 'react'
 import { describe, expect, it, vi } from 'vitest'
@@ -134,6 +134,26 @@ describe('SearchInput with a consumer ref', () => {
     const input = screen.getByRole('searchbox', { name: 'Search runs' })
     expect(ref.current).toBe(input)
     await userEvent.click(screen.getByRole('button', { name: 'Clear search' }))
+    expect(input).toHaveValue('')
+    expect(input).toHaveFocus()
+  })
+})
+
+describe('Field keyboard', () => {
+  it('moves focus to the control with Tab', async () => {
+    const user = userEvent.setup()
+    render(<Field label="Run name">{(control) => <Input {...control} />}</Field>)
+    await user.tab()
+    expect(screen.getByRole('textbox', { name: 'Run name' })).toHaveFocus()
+  })
+
+  it.each(['Enter', 'Space'])('empties a search field from its clear button with %s and returns focus to it', async (key) => {
+    const user = userEvent.setup()
+    render(<SearchInput aria-label="Search runs" defaultValue="timeout" />)
+    const input = screen.getByRole('searchbox', { name: 'Search runs' })
+    screen.getByRole('button', { name: 'Clear search' }).focus()
+    if (key === 'Enter') await user.keyboard('{Enter}')
+    else await user.keyboard(' ')
     expect(input).toHaveValue('')
     expect(input).toHaveFocus()
   })

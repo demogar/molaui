@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen } from '@/test/render'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
@@ -21,6 +21,18 @@ describe('Switch', () => {
     await userEvent.keyboard(' ')
     expect(screen.getByRole('switch')).not.toBeChecked()
     expect(onCheckedChange).toHaveBeenCalledTimes(2)
+  })
+
+  it('is reached with Tab and turns on and off with Enter', async () => {
+    const user = userEvent.setup()
+    render(<Switch label="Web search" />)
+    await user.tab()
+    const control = screen.getByRole('switch', { name: 'Web search' })
+    expect(control).toHaveFocus()
+    await user.keyboard('{Enter}')
+    expect(control).toBeChecked()
+    await user.keyboard('{Enter}')
+    expect(control).not.toBeChecked()
   })
 
   it('does not toggle when disabled', async () => {

@@ -218,9 +218,9 @@ export function AccessibilitySection({ page }: { page: PageData }) {
             </EvidenceRow>
             <EvidenceRow check="Keyboard in unit tests">
               {evidence.keyboardInUnitTests
-                ? `Yes: ${evidence.unitTests.map(file).join(', ')} ${evidence.unitTests.length === 1 ? 'presses keys, and runs' : 'press keys, and run'} on every pull request.`
+                ? `Yes: ${evidence.unitTests.map(file).join(', ')} ${evidence.unitTests.length === 1 ? 'presses' : 'press'} every key in the table above, and ${evidence.unitTests.length === 1 ? 'runs' : 'run'} on every pull request.`
                 : interactive
-                  ? `Not yet: ${evidence.unitTests.map(file).join(', ') || 'its unit tests'} ${evidence.unitTests.length === 1 ? 'uses' : 'use'} the pointer only. The keys above come from the source and the Base UI primitive it wraps.`
+                  ? `Not yet: ${evidence.unitTests.map(file).join(', ') || 'its unit tests'} ${evidence.unitTests.length === 1 ? 'does' : 'do'} not press ${evidence.keysUntested.join(', ')}. The keys above come from the source and the Base UI primitive it wraps.`
                   : 'Not applicable: nothing in it takes focus.'}
             </EvidenceRow>
             <EvidenceRow check="Screen readers">

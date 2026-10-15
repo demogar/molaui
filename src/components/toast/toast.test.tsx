@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor } from '@/test/render'
 import userEvent from '@testing-library/user-event'
 import { useEffect } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
@@ -62,6 +62,103 @@ describe('Toast', () => {
     expect(undone).toBe(true)
     await userEvent.click(screen.getByRole('button', { name: 'Dismiss' }))
     await waitFor(() => expect(screen.queryByText('Archived')).not.toBeInTheDocument())
+  })
+
+  /**
+   * The keyboard table on the page: F6 into the region, Tab through it, Enter
+   * and Space on its buttons, Escape on a toast, and Shift+Tab back out to
+   * where focus was.
+   */
+  describe('keyboard', () => {
+    function setupWithStart() {
+      render(
+        <ToastProvider>
+          <button type="button">Start</button>
+          <Capture
+            onReady={(a) => {
+              api = a
+            }}
+          />
+        </ToastProvider>,
+      )
+    }
+
+    it('F6 moves focus to the region; Tab moves through the toast; Enter and Space press its buttons', async () => {
+      const user = userEvent.setup()
+      setupWithStart()
+      let undone = false
+      act(() => {
+        api.show({ title: 'Archived', timeout: 0, action: { label: 'Undo', onClick: () => (undone = true) } })
+      })
+      await screen.findByRole('button', { name: 'Undo' })
+      screen.getByRole('button', { name: 'Start' }).focus()
+      await user.keyboard('{F6}')
+      const toast = screen.getByText('Archived').closest('[data-slot="toast"]') as HTMLElement
+      const region = toast.parentElement!
+      expect(region.contains(document.activeElement)).toBe(true)
+      const undo = screen.getByRole('button', { name: 'Undo' })
+      const dismiss = screen.getByRole('button', { name: 'Dismiss' })
+      // Tab from the region lands in the toast, then on each of its buttons.
+      for (let i = 0; i < 4 && document.activeElement !== undo; i++) await user.tab()
+      expect(undo).toHaveFocus()
+      await user.keyboard('{Enter}')
+      expect(undone).toBe(true)
+      dismiss.focus()
+      await user.keyboard(' ')
+      await waitFor(() => expect(screen.queryByText('Archived')).not.toBeInTheDocument())
+    })
+
+    it('Escape closes the toast that has focus', async () => {
+      const user = userEvent.setup()
+      setupWithStart()
+      act(() => {
+        api.show({ title: 'Settings saved', timeout: 0 })
+      })
+      await screen.findByText('Settings saved')
+      screen.getByRole('button', { name: 'Start' }).focus()
+      await user.keyboard('{F6}')
+      const toast = screen.getByText('Settings saved').closest('[data-slot="toast"]') as HTMLElement
+      for (let i = 0; i < 4 && !toast.contains(document.activeElement); i++) await user.tab()
+      expect(toast.contains(document.activeElement)).toBe(true)
+      await user.keyboard('{Escape}')
+      await waitFor(() => expect(screen.queryByText('Settings saved')).not.toBeInTheDocument())
+    })
+
+    it('Shift+Tab from the start of the region returns focus to where it was', async () => {
+      const user = userEvent.setup()
+      setupWithStart()
+      act(() => {
+        api.show({ title: 'Settings saved', timeout: 0 })
+      })
+      await screen.findByText('Settings saved')
+      const start = screen.getByRole('button', { name: 'Start' })
+      start.focus()
+      await user.keyboard('{F6}')
+      expect(start).not.toHaveFocus()
+      await user.tab({ shift: true })
+      expect(start).toHaveFocus()
+    })
+
+    it('F6 pauses the timers while the region has focus', () => {
+      vi.useFakeTimers()
+      try {
+        setupWithStart()
+        act(() => {
+          api.show({ title: 'Settings saved' })
+        })
+        const start = screen.getByRole('button', { name: 'Start' })
+        start.focus()
+        // user-event's own delays hang on a fake clock, so the key is fired directly.
+        fireEvent.keyDown(start, { key: 'F6' })
+        expect(start).not.toHaveFocus()
+        act(() => {
+          vi.advanceTimersByTime(20_000)
+        })
+        expect(screen.getByText('Settings saved')).toBeInTheDocument()
+      } finally {
+        vi.useRealTimers()
+      }
+    })
   })
 
   /**

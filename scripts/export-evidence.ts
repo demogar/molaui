@@ -3,8 +3,8 @@
  *
  *   docs/accessibility/evidence.json   per component page: how many stories
  *                                      the axe run covers, which unit tests
- *                                      sit next to it, and whether they drive
- *                                      the keyboard
+ *                                      sit next to it, and which keys of its
+ *                                      keyboard table they press
  *
  * The evidence table is generated rather than written by hand because a
  * hand-written "keyboard tested: yes" is a claim nobody re-checks when the
@@ -25,43 +25,70 @@ import { dirname, relative, resolve } from 'node:path'
 
 import { isExportStory } from 'storybook/internal/csf'
 
+import { ACCESSIBILITY } from '../src/docs/usage/accessibility'
+import { documentedKeys, pressedKeys, untestedKeys } from '../src/docs/usage/keyboard-coverage'
 import { isShowcase } from '../src/docs/usage/showcases'
 
 const root = resolve(import.meta.dirname, '..')
 const OUT = 'docs/accessibility/evidence.json'
 const rel = (path: string) => relative(root, path).split('\\').join('/')
 
-/**
- * A test drives the keyboard if it presses keys through user-event or fires
- * key events: `userEvent.keyboard(…)`, `user.tab()`, `fireEvent.keyDown(…)`,
- * or a `{Enter}`-style key inside `userEvent.type(…)`. A test that only
- * clicks does not count, even if the click lands on a button that would
- * also take Enter.
- */
-const KEYBOARD = /\.(keyboard|tab)\(|fireEvent\.key(Down|Up|Press)\(|\.type\(.*\{[A-Z][A-Za-z]*[>}]/
-
 interface Evidence {
   /** Stories on the page; each is rendered and checked with axe in jsdom by src/test/stories.test.tsx. */
   stories: number
   /** The unit test files in the component's folder. */
   unitTests: string[]
-  /** Whether any of them presses keys. */
+  /**
+   * Whether they press every key the page's keyboard table names
+   * (src/docs/usage/keyboard-coverage.ts). It used to be true when a test
+   * pressed any key at all, so one `.tab()` made a whole menu "keyboard
+   * tested"; a page with no keyboard table is never true.
+   */
   keyboardInUnitTests: boolean
+  /** Keys the table names that no unit test presses; keyboard-coverage.test.ts keeps it empty. */
+  keysUntested: string[]
+  /**
+   * Whether they press any key; a page in NON_INTERACTIVE that does is a
+   * contradiction (contract.ts). A page without a table never counts the
+   * presses of a folder it shares with a page that has one.
+   */
+  pressesKeys: boolean
   /** Always false until someone tests the component with a screen reader by hand and says so here. */
   screenReadersByHand: false
 }
 
+const storyFiles = globSync('src/**/*.stories.tsx', { cwd: root }).sort()
+const titles = new Map<string, string>()
+for (const file of storyFiles) {
+  const mod = (await import(resolve(root, file))) as { default: { title: string } }
+  titles.set(file, mod.default.title)
+}
+/**
+ * Folders whose stories include a page with a keyboard table. Their tests'
+ * key presses belong to that page: Page header shares app-shell/ with App
+ * shell, and App shell's keyboard tests do not make Page header operable.
+ */
+const keyboardFolders = new Set(
+  storyFiles.filter((file) => ACCESSIBILITY[titles.get(file) ?? '']?.keyboard?.length).map((file) => dirname(file)),
+)
+
 const components: Record<string, Evidence> = {}
-for (const file of globSync('src/**/*.stories.tsx', { cwd: root }).sort()) {
+for (const file of storyFiles) {
   const mod = (await import(resolve(root, file))) as Record<string, unknown> & { default: { title: string } }
   const title = mod.default.title
   if (isShowcase(title)) continue
   const dir = dirname(resolve(root, file))
   const tests = globSync('*.test.tsx', { cwd: dir }).sort().map((name) => resolve(dir, name))
+  const sources = tests.map((path) => readFileSync(path, 'utf8'))
+  const rows = ACCESSIBILITY[title]?.keyboard
+  const keysUntested = untestedKeys(rows, sources)
   components[title] = {
     stories: Object.keys(mod).filter((key) => key !== 'default' && isExportStory(key, mod.default as never)).length,
     unitTests: tests.map(rel),
-    keyboardInUnitTests: tests.some((path) => KEYBOARD.test(readFileSync(path, 'utf8'))),
+    keyboardInUnitTests: documentedKeys(rows).length > 0 && keysUntested.length === 0,
+    keysUntested,
+    pressesKeys:
+      (Boolean(rows?.length) || !keyboardFolders.has(dirname(file))) && sources.some((source) => pressedKeys(source).size > 0),
     screenReadersByHand: false,
   }
 }
@@ -91,5 +118,5 @@ if (process.argv.includes('--check')) {
 } else {
   writeFileSync(resolve(root, OUT), text)
   const keyboard = Object.values(sorted).filter((e) => e.keyboardInUnitTests).length
-  console.log(`Wrote ${OUT}: ${Object.keys(sorted).length} component pages, ${keyboard} with keyboard unit tests.`)
+  console.log(`Wrote ${OUT}: ${Object.keys(sorted).length} component pages, ${keyboard} whose unit tests press every documented key.`)
 }

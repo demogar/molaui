@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen } from '@/test/render'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 
@@ -16,5 +16,17 @@ describe('Reasoning', () => {
     const trigger = screen.getByRole('button', { name: /Thinking/ })
     await userEvent.click(trigger)
     expect(screen.getByText('Hmm')).toBeInTheDocument()
+  })
+
+  it('takes focus on its summary line, and Enter or Space opens and closes it', async () => {
+    render(<Reasoning text="Checked both cohorts first." durationMs={2_000} />)
+    const trigger = screen.getByRole('button', { name: 'Thought for 2.0s' })
+    await userEvent.tab()
+    expect(trigger).toHaveFocus()
+    await userEvent.keyboard('{Enter}')
+    expect(trigger).toHaveAttribute('aria-expanded', 'true')
+    expect(screen.getByText('Checked both cohorts first.')).toBeInTheDocument()
+    await userEvent.keyboard(' ')
+    expect(trigger).toHaveAttribute('aria-expanded', 'false')
   })
 })
