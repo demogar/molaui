@@ -4,6 +4,8 @@ import { Tabs as TabsPrimitive } from '@base-ui/react/tabs'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { useMergedRefs } from '../../lib/merge-props'
+import { useScrollEdge } from '../../lib/scroll-edge'
 
 /**
  * Two variants, for two jobs.
@@ -46,21 +48,26 @@ export function Tabs({ className, variant = 'underline', ...props }: TabsProps) 
 
 export interface TabsListProps extends Omit<TabsPrimitive.List.Props, 'className'> {
   className?: string
+  ref?: React.Ref<HTMLDivElement>
 }
 
-export function TabsList({ className, children, ...props }: TabsListProps) {
+export function TabsList({ className, children, ref, ...props }: TabsListProps) {
   const variant = React.useContext(VariantContext)
+  // The list scrolls sideways when the tabs outgrow it, and says so with the
+  // scroll-edge cue; "Guard|" cut flat at the edge was the only hint before.
+  const setRef = useMergedRefs(ref, useScrollEdge<HTMLDivElement>())
   return (
     <TabsPrimitive.List
+      {...props}
+      ref={setRef}
       data-slot="tabs-list"
       data-part="list"
       className={cn(
-        'scroll-cloth relative z-(--z-lift) flex items-end overflow-x-auto overflow-y-hidden',
+        'scroll-cloth scroll-edge relative z-(--z-lift) flex items-end overflow-x-auto overflow-y-hidden',
         variant === 'underline' && 'gap-1 rule-b',
         variant === 'panel' && 'gap-0.5 px-(--cut-w) pt-[6.5px]',
         className,
       )}
-      {...props}
     >
       {children}
       {variant === 'underline' ? (

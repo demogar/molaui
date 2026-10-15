@@ -287,7 +287,7 @@ export function RunsAdminScreen() {
               )}
             </Field>
           </div>
-          <Toolbar aria-label="Run status" className="flex-nowrap overflow-x-auto px-2 py-1.5 rule-t scroll-cloth">
+          <Toolbar aria-label="Run status" className="px-2 py-1.5 rule-t">
             <ToolbarToggleGroup
               aria-label="Status"
               value={[status]}

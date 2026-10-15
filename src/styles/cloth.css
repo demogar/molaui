@@ -824,3 +824,38 @@
   scrollbar-width: thin;
   scrollbar-color: var(--ink-muted) transparent;
 }
+
+/* ── scroll-edge ──────────────────────────────────────────────────────
+ * A region that scrolls sideways (a table, a tab list, a chip row, code)
+ * draws a stitched ink edge on its trailing side while there is more past
+ * it. Without it the cut keyline closes the box on the right, and a table
+ * whose Status column and Revoke button are off-screen reads as complete.
+ * Stitched rather than solid so it cannot be mistaken for that keyline: a
+ * solid edge means "the panel ends", a stitched one "the cloth goes on".
+ *
+ * The state comes from `useScrollEdge` (src/lib/scroll-edge.ts), which keeps
+ * `data-overflow-end` on the element; a consumer's own scroller can set the
+ * attribute itself. `--scroll-edge` marks the region as one meant to scroll,
+ * for the browser audit.
+ *
+ * It is a border, the one place this system uses a border on something that
+ * can take focus, because it is not the element's edge but a mark inside it:
+ * the cut keyline (an outer shadow) still draws the edge around it. A border
+ * is the only paint on a scroller that its content cannot cover: content is
+ * clipped to the padding box, while a background or an inset shadow is
+ * painted under it, and the sticky header's ground hid exactly the top of the
+ * cue. It is only there while the region overflows, so a region that fits
+ * keeps its exact layout, and toggling it cannot flip the overflow: at the
+ * end the 2px it gives back only moves the end. Logical, so right-to-left
+ * draws it on the left, where that scroll ends. */
+@utility scroll-edge {
+  --scroll-edge: 1;
+  &[data-overflow-end] {
+    border-inline-end: 2px dashed var(--ink);
+  }
+  @media (forced-colors: active) {
+    &[data-overflow-end] {
+      border-inline-end-color: CanvasText;
+    }
+  }
+}

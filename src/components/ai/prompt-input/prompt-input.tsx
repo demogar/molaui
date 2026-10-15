@@ -168,9 +168,14 @@ export function PromptInput({
           'disabled:cursor-not-allowed disabled:text-ink-muted',
         )}
       />
-      <div className="flex items-center gap-2 px-2 pb-2">
-        <div data-part="toolbar" className="flex min-w-0 flex-1 items-center gap-2">{toolbar}</div>
-        <p id={hintId} data-part="hint" className="m-0 flex items-center gap-2 font-ui text-xs text-ink-muted">
+      {/* The toolbar never shrinks below its controls; when the row is too
+          narrow for it and the hint and Send, the hint and Send wrap to a line
+          of their own, at the end. The toolbar used to shrink as a box while
+          its model picker kept its width, and at 320px the picker was painted
+          over the token estimate. */}
+      <div className="flex flex-wrap items-center gap-2 px-2 pb-2">
+        <div data-part="toolbar" className="flex min-w-0 max-w-full flex-[1_0_auto] flex-wrap items-center gap-2">{toolbar}</div>
+        <p id={hintId} data-part="hint" className="m-0 ms-auto flex items-center gap-2 font-ui text-xs text-ink-muted">
           {offline ? (
             <span className="flex items-center gap-1.5 text-ink-warn">
               <WifiOff aria-hidden className="size-(--icon-sm)" />

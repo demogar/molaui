@@ -24,6 +24,12 @@
 // visually hidden input and draw the ring on the wrapper (`focus-within`,
 // `has-focus-visible`) — a field, a slider thumb, a switch.
 
+// It also reports edges that a clipping ancestor cuts (scripts/shadow-clip.mjs):
+// every resting keyline once, and a focus ring that is cut further than its
+// element's resting keyline.
+
+import { installShadowClip, restingShadowClips } from './shadow-clip.mjs'
+
 // The busiest story (the app shell) has 64 stops; the cap only stops a page
 // that keeps generating focusable elements from holding a worker forever.
 const MAX_STOPS = 150
@@ -64,7 +70,15 @@ function installProbe() {
     const slot = el.closest('[data-slot]')?.getAttribute('data-slot')
     return `${role}${slot ? ` in ${slot}` : ''}${name ? ` "${name}"` : ''}`
   }
-  window.__focusScan = { snapshot, describe, prev: null, seen: new Set() }
+  // The deepest cut among the element and the three ancestors that may
+  // carry its ring (scripts/shadow-clip.mjs).
+  const clip = (el) => {
+    let worst = 0
+    for (let node = el, depth = 0; node && node.nodeType === 1 && depth < 4; node = node.parentElement, depth++)
+      worst = Math.max(worst, window.__shadowClip(node)?.by ?? 0)
+    return worst
+  }
+  window.__focusScan = { snapshot, describe, clip, prev: null, seen: new Set() }
 }
 
 /**
@@ -79,7 +93,11 @@ function step(last) {
     // Tab from the last stop of a page, or from the only stop in a focus
     // trap, can leave focus where it was; take it away to see the rest state.
     if (s.prev.el === document.activeElement) s.prev.el.blur()
-    if (s.prev.el.isConnected && s.snapshot(s.prev.el) === s.prev.focused) found.push(s.prev.label)
+    if (s.prev.el.isConnected && s.snapshot(s.prev.el) === s.prev.focused) found.push(`focus not visible: ${s.prev.label}`)
+    // A ring cut by more than the resting keyline is: the resting cut is
+    // reported once, by the keyline check, not once per stop.
+    else if (s.prev.el.isConnected && s.prev.cut > s.clip(s.prev.el))
+      found.push(`focus ring clipped by ${s.prev.cut}px: ${s.prev.label}`)
     s.prev = null
   }
   const el = document.activeElement
@@ -89,20 +107,21 @@ function step(last) {
   s.seen.add(el)
   // Base UI's focus guards hand focus straight on; they are never painted.
   if (!el.hasAttribute('data-base-ui-focus-guard') && el.matches(':focus-visible'))
-    s.prev = { el, focused: s.snapshot(el), label: s.describe(el) }
+    s.prev = { el, focused: s.snapshot(el), cut: s.clip(el), label: s.describe(el) }
   return { found, more: true }
 }
 
-/** Returns one finding per focusable element whose focus cannot be seen. */
+/** Returns one finding per focusable element whose focus cannot be seen or is cut, and per clipped keyline. */
 export async function focusScan(page) {
   // Transitions would make "focused" a mid-ease value that may still equal
   // the resting one. The scan is about the end state.
   await page.addStyleTag({ content: '*, *::before, *::after { transition: none !important; }' })
+  await page.evaluate(installShadowClip)
   await page.evaluate(installProbe)
+  const blind = await page.evaluate(restingShadowClips)
   await page.evaluate(() => {
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
   })
-  const blind = []
   for (let i = 0; i <= MAX_STOPS; i++) {
     await page.keyboard.press('Tab')
     const { found, more } = await page.evaluate(step, i === MAX_STOPS)
@@ -114,5 +133,5 @@ export async function focusScan(page) {
   await page.evaluate(() => {
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
   })
-  return blind.map((label) => `focus not visible: ${label}`)
+  return blind
 }

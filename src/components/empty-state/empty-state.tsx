@@ -4,6 +4,7 @@ import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { type Variants } from '../../lib/variants'
+import { wrappingButtonSlot } from '../button/wrapping-slot'
 
 /**
  * The state a panel is in when it has nothing to show — designed as a
@@ -103,7 +104,7 @@ export function EmptyState({
         ) : null}
         <Heading data-part="title" className="m-0 font-display text-lg font-bold leading-snug tracking-display wdth-display">{title}</Heading>
         {description ? <p data-part="description" className="mt-1.5 mb-0 text-sm text-ink-2">{description}</p> : null}
-        {actions ? <div data-part="actions" className="mt-4 flex flex-wrap justify-center gap-2">{actions}</div> : null}
+        {actions ? <div data-part="actions" className={cn('mt-4 flex max-w-full flex-wrap justify-center gap-2', wrappingButtonSlot)}>{actions}</div> : null}
       </div>
     </div>
   )

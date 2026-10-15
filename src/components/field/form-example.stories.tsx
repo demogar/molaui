@@ -108,7 +108,7 @@ function AgentConfigForm() {
       ref={formRef}
       noValidate
       onSubmit={onSubmit}
-      className="grid max-w-2xl gap-0 bg-cloth-pale shadow-cut"
+      className="grid max-w-2xl grid-cols-1 gap-0 bg-cloth-pale shadow-cut"
       aria-labelledby="agent-config-title"
     >
       <header className="flex flex-col gap-1 px-6 pt-6 pb-5">
@@ -120,7 +120,7 @@ function AgentConfigForm() {
 
       <div className="relleno band-oro" aria-hidden />
 
-      <div className="grid gap-6 px-6 py-6 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 px-6 py-6 sm:grid-cols-2">
         <Field label="Name" required error={errors.name} hint="Used in run ids: refund-reviewer-…">
           {(control) => <Input {...control} name="name" placeholder="refund-reviewer" autoComplete="off" />}
         </Field>
@@ -163,7 +163,7 @@ function AgentConfigForm() {
 
       <div className="h-px bg-keyline" aria-hidden />
 
-      <div className="grid gap-6 px-6 py-6 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 px-6 py-6 sm:grid-cols-2">
         <Field label="Token budget per run" required error={errors.budget} hint="Up to 200,000.">
           {(control) => (
             <NumberInput
@@ -224,7 +224,7 @@ function AgentConfigForm() {
 
       <div className="h-px bg-keyline" aria-hidden />
 
-      <div className="grid gap-8 px-6 py-6 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-8 px-6 py-6 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
           <CheckboxGroup legend="Tools" value={tools} onValueChange={setTools}>
             {TOOLS.map((tool) => (

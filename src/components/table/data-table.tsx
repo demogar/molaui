@@ -3,6 +3,7 @@
 import { Columns3, X } from 'lucide-react'
 import * as React from 'react'
 
+import { useScrollEdge } from '../../lib/scroll-edge'
 import { Button } from '../button'
 import type { EmptyStateProps } from '../empty-state'
 import { Menu, MenuCheckboxItem, MenuContent, MenuGroup, MenuGroupLabel, MenuTrigger } from '../menu'
@@ -186,6 +187,7 @@ export function DataTable<Row>({
   frameClassName,
   className,
 }: DataTableProps<Row>) {
+  const bulkEdge = useScrollEdge<HTMLDivElement>()
   const [sort, setSortState] = useControllable<DataTableSort | null>(controlledSort, () => defaultSort ?? null, onSortChange)
   const [page, setPage] = useControllable<number>(controlledPage, () => defaultPage, onPageChange)
   const [selection, setSelection] = useControllable<ReadonlySet<string>>(
@@ -427,7 +429,7 @@ export function DataTable<Row>({
                   cut. The focus ring is 6.5px and the bar has 4px above and
                   below its buttons, so here it is drawn inside the button,
                   under the kept cut, rather than clipped to a sliver. */}
-              <div className="scroll-cloth ms-auto flex min-w-0 items-center gap-1.5 overflow-x-auto p-0.5 [&>*]:shrink-0 [&>*]:focus-visible:cut-ink [&>*]:focus-visible:focus-ring-inset">
+              <div ref={bulkEdge} className="scroll-cloth scroll-edge ms-auto flex min-w-0 items-center gap-1.5 overflow-x-auto p-0.5 [&>*]:shrink-0 [&>*]:focus-visible:cut-ink [&>*]:focus-visible:focus-ring-inset">
                 {bulkActions({ selection: new Set(selection), clear: clearSelection })}
               </div>
             </div>

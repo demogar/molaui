@@ -221,7 +221,10 @@ export function DrawerContent({
           {children ? (
             <DrawerPrimitive.Content
               className={cn(
-                'scroll-cloth min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 pb-6 text-sm',
+                // `pt-2 -mt-2`: room above the first control for its focus ring,
+                // which the scrolling body otherwise cut flat, at no change
+                // to where the content sits.
+                'scroll-cloth -mt-2 min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 pt-2 pb-6 text-sm',
                 bottom && !footer && 'pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))]',
               )}
             >

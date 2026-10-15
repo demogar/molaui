@@ -13,6 +13,7 @@ import { Switch } from '../../components/switch'
 import { useToast } from '../../components/toast'
 import { Heading } from '../../components/typography'
 import { cn } from '../../lib/cn'
+import { useScrollEdge } from '../../lib/scroll-edge'
 import {
   MODELS,
   SAVED_SETTINGS,
@@ -96,6 +97,7 @@ export function SettingsPage({
   saveDelay = 800,
 }: SettingsPageProps) {
   const toast = useToast()
+  const navEdge = useScrollEdge<HTMLUListElement>()
   const [saved, setSaved] = React.useState(initialSaved)
   const [draft, setDraft] = React.useState<WorkspaceSettings>({ ...initialSaved, ...defaultDraft })
   const [errors, setErrors] = React.useState<SettingsErrors>(() =>
@@ -219,9 +221,12 @@ export function SettingsPage({
         description={`Settings for everyone in ${saved.name}. Changes apply to runs started after you save.`}
       />
 
-      <div className="grid gap-x-8 gap-y-4 px-4 pt-4 sm:px-6 @4xl/settings:grid-cols-[11rem_minmax(0,1fr)] @4xl/settings:pt-6">
+      <div className="grid grid-cols-1 gap-x-8 gap-y-4 px-4 pt-4 sm:px-6 @4xl/settings:grid-cols-[11rem_minmax(0,1fr)] @4xl/settings:pt-6">
         <nav aria-label="Settings" className="@4xl/settings:sticky @4xl/settings:top-6 @4xl/settings:self-start">
-          <ul className="m-0 flex list-none gap-px overflow-x-auto p-0 scroll-cloth @4xl/settings:flex-col">
+          {/* `-m-2 p-2`: the list scrolls, so it clips, and with no padding
+              it cut every item's focus ring flat; the padding is the room the
+              ring needs, and the margin keeps the items where they were. */}
+          <ul ref={navEdge} className="-m-2 flex list-none gap-px overflow-x-auto p-2 scroll-cloth scroll-edge @4xl/settings:flex-col">
             {SETTINGS_PAGES.map((page) => (
               <NavItem key={page.href} href={page.href} active={page.label === 'General'} className="shrink-0">
                 {page.label}
@@ -293,7 +298,11 @@ export function SettingsPage({
                   />
                 )}
               </Field>
-              <div className="grid gap-5 @lg/form:grid-cols-2">
+              {/* Side by side only when each field has room for six control
+                  heights, which follows density: a container query in rem
+                  put the two limits side by side at spacious too, where the
+                  steppers and the unit grew and the number got 21px. */}
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,calc(var(--control-h)*6)),1fr))] gap-5">
                 <Field label="Monthly spend limit" required error={errors.monthlyLimit} hint="At least $50.">
                   {(control) => (
                     <NumberInput
@@ -391,7 +400,9 @@ export function SettingsPage({
                   {status}
                 </span>
               </p>
-              <div className="ms-auto flex shrink-0 items-center gap-2">
+              {/* Wraps, Save under Discard, when the two do not fit: at
+                  spacious on a 320px phone they were 323px side by side. */}
+              <div className="ms-auto flex max-w-full flex-wrap items-center justify-end gap-2">
                 <Button type="button" variant="ghost" disabled={!dirty || saving} onClick={discard}>
                   Discard
                 </Button>
@@ -488,7 +499,7 @@ function SettingsSection({
     <section
       aria-labelledby={id}
       className={cn(
-        'grid gap-x-8 gap-y-4 border-b border-keyline py-8 first:pt-2 @2xl/form:grid-cols-[14rem_minmax(0,1fr)]',
+        'grid grid-cols-1 gap-x-8 gap-y-4 border-b border-keyline py-8 first:pt-2 @2xl/form:grid-cols-[14rem_minmax(0,1fr)]',
         className,
       )}
     >

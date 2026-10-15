@@ -1,8 +1,11 @@
 // Browser audit over every story and every docs page: axe (with real colour
 // contrast) in both themes, that every `data-theme` subtree paints its own
-// ground, a visible focus indicator on every tab stop, horizontal overflow at phone width, console errors,
-// and runtime cost (layout transitions, infinite animations, budgets; scripts/runtime-scan.mjs). Exits
-// non-zero on any finding, so CI can gate on it.
+// ground, a visible focus indicator on every tab stop, horizontal overflow at
+// 390px, reflow at 320px (clipped or overlapping text, squeezed numbers,
+// sideways scrolling without the scroll-edge cue; the composed screens also at
+// spacious density), console errors, and runtime cost (layout transitions,
+// infinite animations, budgets; scripts/runtime-scan.mjs). Exits non-zero on
+// any finding, so CI can gate on it.
 //   node scripts/audit.mjs <base> [--out <dir>] [--only <id substring>] [--workers <n>] [--shard <i>/<n>]
 //   node scripts/audit.mjs --serve storybook-static [--out <dir>]   (npm run audit)
 //
@@ -62,6 +65,205 @@ for (const theme of ['light', 'dark']) {
 const mine = jobs.filter((_, i) => i % shards === shard - 1)
 const WIDE = { width: 1280, height: 900 }
 const PHONE = { width: 390, height: 900 }
+// Short as well as narrow: the agent console's composer only landed on its
+// run panel once the phone was shorter than the 900px the wide pass uses.
+const REFLOW = { width: 320, height: 568 }
+// The composed screens: every pattern, the agent console, the app shell and
+// the form example.
+const COMPOSED = /^(patterns-|ai-agent-console--|components-layout-app-shell--|components-forms-form-example--)/
+
+/**
+ * Runs in the page at 320px. The document must not scroll sideways, and on a
+ * story page no text may be hidden from someone reading it:
+ *
+ *   - clipped: a text run reaches past an ancestor that clips it
+ *     (`overflow` other than visible) and that ancestor cannot be scrolled to
+ *     reveal it. A scroller that really scrolls is allowed, because its
+ *     overflow is reachable, but one that scrolls sideways must carry the
+ *     `scroll-edge` cue, or nothing tells the reader there is more;
+ *     a deliberate ellipsis (`text-overflow` or `line-clamp`) is allowed,
+ *     because the cut is drawn.
+ *   - overlapped: two text runs paint over each other. The page-level
+ *     overflow measure passed while the agent console's composer sat on top
+ *     of its run panel: nothing was wider than the page, the grid row was
+ *     just shorter than its content.
+ *   - squeezed: a number field narrower than the number in it. Spacious
+ *     density once left a six-digit token limit in a 21px input showing
+ *     "40,0". Text fields are left alone: a long URL or sentence scrolls in
+ *     its field by design, with the caret to show where you are, but a
+ *     number is read whole, and a cut one reads as a different number.
+ *
+ * Docs pages get only the page-level measure: their examples are the same
+ * stories, checked on their own pages, inside Storybook's fixed-width frame.
+ */
+async function clipped(story) {
+  for (const t of document.querySelectorAll('.docblock-argstable')) t.style.display = 'none'
+  for (let i = 0; i < 2; i++) await new Promise((resolve) => requestAnimationFrame(resolve))
+  const found = []
+  const over = document.documentElement.scrollWidth - window.innerWidth
+  if (over > 1) found.push(`overflows by ${over}px`)
+  if (!story) return found
+
+  const roots = [document.getElementById('storybook-root'), ...document.querySelectorAll('body > [data-base-ui-portal]')].filter(Boolean)
+  const label = (el) => {
+    const slot = el.closest('[data-slot]')?.getAttribute('data-slot')
+    const text = (el.textContent ?? '').trim().replace(/\s+/g, ' ').slice(0, 40)
+    return `${slot ? `${slot} ` : ''}"${text}"`
+  }
+  // `checkVisibility` also catches `content-visibility: hidden`, which is how
+  // a closed accordion panel keeps its text findable. Visually hidden text
+  // (sr-only) is clipped on purpose.
+  const shown = (el) => {
+    if (!el.checkVisibility({ opacityProperty: true, visibilityProperty: true })) return false
+    for (let n = el; n; n = n.parentElement) {
+      const s = getComputedStyle(n)
+      if (s.clipPath !== 'none' || (s.clip && s.clip !== 'auto')) return false
+    }
+    return true
+  }
+  const cuts = (s) => s.textOverflow === 'ellipsis' || s.webkitLineClamp !== 'none'
+  const inner = (a) => {
+    const box = a.getBoundingClientRect()
+    const left = box.left + a.clientLeft
+    const top = box.top + a.clientTop
+    return { left, top, right: left + a.clientWidth, bottom: top + a.clientHeight }
+  }
+
+  // A sticky header or a sticky save bar sits over the content scrolling
+  // beneath it by design, and scrolling uncovers that content; only things in
+  // the same pinned (or unpinned) layer are compared for overlap.
+  const pinned = (el) => {
+    for (let a = el; a && a !== document.body; a = a.parentElement)
+      if (/sticky|fixed/.test(getComputedStyle(a).position)) return a
+    return null
+  }
+
+  const reported = new Set()
+  const report = (key, message) => {
+    if (reported.has(key) || reported.size >= 6) return
+    reported.add(key)
+    found.push(message)
+  }
+
+  // Each text run's line boxes are walked up through their ancestors and cut
+  // down to what is actually on screen. A scroller that scrolls, or an
+  // ellipsis, trims the box (the rest is reachable, or the cut is drawn); a
+  // clipping ancestor that cannot scroll is a finding. What is left is what
+  // the overlap check compares, so a truncated cell or a row scrolled out of
+  // its frame is not mistaken for text painted over its neighbour.
+  const boxes = []
+  for (const [rootIndex, root] of roots.entries()) {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT)
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+      if (!node.data.trim()) continue
+      const el = node.parentElement
+      if (!el || el.closest('svg, script, style')) continue
+      const range = document.createRange()
+      range.selectNodeContents(node)
+      const rects = [...range.getClientRects()].filter((r) => r.width > 1 && r.height > 1)
+      if (!rects.length || !shown(el)) continue
+      for (const line of rects) {
+        let r = { left: line.left, top: line.top, right: line.right, bottom: line.bottom }
+        for (let a = el; a && a !== document.body && r; a = a.parentElement) {
+          const s = getComputedStyle(a)
+          const clipsX = s.overflowX !== 'visible'
+          const clipsY = s.overflowY !== 'visible'
+          if (!clipsX && !clipsY) continue
+          const box = inner(a)
+          // Sideways scrolling is reflow failing unless the region is meant to
+          // scroll (a table, code, a tab or chip row) and says so with the
+          // scroll-edge cue; an app shell's <main> scrolling sideways at 320
+          // is the page overflowing with extra steps.
+          const scrollsX = /auto|scroll/.test(s.overflowX) && a.scrollWidth > a.clientWidth + 1
+          // The cue is the `scroll-edge` utility (which sets `--scroll-edge`)
+          // drawn from `useScrollEdge`'s attributes, and it must be showing:
+          // a region with more past its trailing edge carries
+          // `data-overflow-end`.
+          const cued =
+            s.getPropertyValue('--scroll-edge').trim() === '1' &&
+            a.hasAttribute('data-scroll-edge') &&
+            (a.scrollWidth - a.clientWidth - Math.abs(a.scrollLeft) <= 1 || a.hasAttribute('data-overflow-end'))
+          if (scrollsX && !cued)
+            report(a, `scrolls sideways without the scroll-edge cue (${a.scrollWidth - a.clientWidth}px): ${label(a)}`)
+          const trimX = cuts(s) || scrollsX
+          const trimY = /auto|scroll/.test(s.overflowY) && a.scrollHeight > a.clientHeight + 1
+          const outX = clipsX && !trimX && (r.left < box.left - 1 || r.right > box.right + 1)
+          const outY = clipsY && !trimY && (r.top < box.top - 1 || r.bottom > box.bottom + 1)
+          if (outX || outY) {
+            const by = Math.round(
+              outX ? Math.max(box.left - r.left, r.right - box.right) : Math.max(box.top - r.top, r.bottom - box.bottom),
+            )
+            report(a, `text clipped by ${by}px: ${label(el)} inside ${label(a)}`)
+            r = null
+            break
+          }
+          if (clipsX) r = { ...r, left: Math.max(r.left, box.left), right: Math.min(r.right, box.right) }
+          if (clipsY) r = { ...r, top: Math.max(r.top, box.top), bottom: Math.min(r.bottom, box.bottom) }
+          if (r.right - r.left < 1 || r.bottom - r.top < 1) r = null
+        }
+        if (r) boxes.push({ el, r, root: rootIndex, pinned: pinned(el) })
+      }
+    }
+  }
+
+  // Controls join the overlap check as whole boxes: the agent console's
+  // composer sat on its run panel's empty-state text without any two text
+  // runs touching. Each box is cut to what its clipping ancestors show.
+  for (const [rootIndex, root] of roots.entries()) {
+    for (const el of root.querySelectorAll('button, input:not([type=hidden]), textarea, select, a[href], [role="button"], [role="combobox"]')) {
+      if (!shown(el)) continue
+      const b = el.getBoundingClientRect()
+      if (b.width < 2 || b.height < 2) continue
+      let r = { left: b.left, top: b.top, right: b.right, bottom: b.bottom }
+      for (let a = el.parentElement; a && a !== document.body && r; a = a.parentElement) {
+        const s = getComputedStyle(a)
+        if (s.overflowX === 'visible' && s.overflowY === 'visible') continue
+        const box = inner(a)
+        if (s.overflowX !== 'visible') r = { ...r, left: Math.max(r.left, box.left), right: Math.min(r.right, box.right) }
+        if (s.overflowY !== 'visible') r = { ...r, top: Math.max(r.top, box.top), bottom: Math.min(r.bottom, box.bottom) }
+        if (r.right - r.left < 1 || r.bottom - r.top < 1) r = null
+      }
+      if (r) boxes.push({ el, r, root: rootIndex, pinned: pinned(el), control: true })
+    }
+  }
+
+  // Overlap: visible line boxes of different elements in the same layer
+  // intersecting by more than a sliver, or a line box under a control it is
+  // not part of. A dialog over the page is a layer on purpose, so a portal is
+  // only compared with itself. Bucketed by 50px rows, so a long page is not
+  // n².
+  const rows = new Map()
+  for (const b of boxes)
+    for (let y = Math.floor(b.r.top / 50); y <= Math.floor(b.r.bottom / 50); y++) rows.set(y, [...(rows.get(y) ?? []), b])
+  for (const row of rows.values()) {
+    for (let i = 0; i < row.length; i++) {
+      for (let j = i + 1; j < row.length; j++) {
+        const p = row[i]
+        const q = row[j]
+        if (p.root !== q.root || p.pinned !== q.pinned || (p.control && q.control) || p.el === q.el || p.el.contains(q.el) || q.el.contains(p.el)) continue
+        const w = Math.min(p.r.right, q.r.right) - Math.max(p.r.left, q.r.left)
+        const h = Math.min(p.r.bottom, q.r.bottom) - Math.max(p.r.top, q.r.top)
+        const shorter = Math.min(p.r.bottom - p.r.top, q.r.bottom - q.r.top)
+        if (w > 2 && h > shorter / 3) {
+          const [text, other] = p.control ? [q, p] : [p, q]
+          report(`${label(p.el)}|${label(q.el)}`, `text overlaps: ${label(text.el)} and ${other.control ? `the control ${other.el.tagName.toLowerCase()} ` : ''}${label(other.el)}`)
+        }
+      }
+    }
+  }
+
+  for (const root of roots) {
+    for (const input of root.querySelectorAll('input[inputmode="numeric"], input[inputmode="decimal"], input[type="number"]')) {
+      if (!input.value || !shown(input) || getComputedStyle(input).textOverflow === 'ellipsis') continue
+      if (input.scrollWidth > input.clientWidth + 1)
+        report(
+          input,
+          `value does not fit its field (${input.clientWidth}px for ${input.scrollWidth}px): ${label(input.closest('[data-slot]') ?? input)} = "${input.value.slice(0, 20)}"`,
+        )
+    }
+  }
+  return found
+}
 
 const IGNORED_CONSOLE = [
   /Download the React DevTools/,
@@ -249,6 +451,27 @@ async function audit(page, job, errors) {
       return document.documentElement.scrollWidth - window.innerWidth
     })
     if (over > 1) found.push(`[390px] overflows by ${over}px`)
+    // WCAG 1.4.10 defines reflow at 320 CSS px, so the same page is narrowed
+    // once more rather than loaded again. 390 stays: it is the phone most
+    // people hold, and a layout can break at one width and not the other.
+    await page.setViewportSize(REFLOW)
+    const story = job.viewMode === 'story'
+    found.push(...(await page.evaluate(clipped, story)).map((f) => `[320px] ${f}`))
+    // Density is an attribute on <html>, so the spacious pass is the same
+    // page with the attribute flipped, not another load. Spacious is the one
+    // that breaks: it grows every control while the columns stay the same
+    // width. It shrank the settings page's six-digit token limit to a 21px
+    // field at 768 and 1024, where the form sits beside its section heading,
+    // and was fine at 320, where it does not; so it is measured at all three.
+    // It runs on the composed screens, where components meet a real layout;
+    // the visual tests hold the same screens at all three densities.
+    if (story && COMPOSED.test(job.id)) {
+      await page.evaluate(() => (document.documentElement.dataset.density = 'spacious'))
+      for (const width of [1024, 768, 320]) {
+        await page.setViewportSize({ ...REFLOW, width })
+        found.push(...(await page.evaluate(clipped, story)).map((f) => `[${width}px spacious] ${f}`))
+      }
+    }
   }
   for (const e of errors) {
     if (IGNORED_CONSOLE.some((re) => re.test(e))) continue

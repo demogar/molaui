@@ -220,10 +220,12 @@ export function AgentsScreen({ agents = AGENTS, defaultSelectedId, defaultView =
                     className={cn(
                       'group/agent flex w-full cursor-pointer flex-col gap-1.5 px-4 py-3 text-start sm:px-5',
                       'bg-transparent text-ink transition-colors',
-                      'hover:bg-ink-soft focus-visible:focus-ring focus-visible:outline-none',
+                      // Rows run edge to edge of a scrolling list, so the ring is drawn
+                      // inside: an outer ring was cut off on both sides by the list.
+                      'hover:bg-ink-soft focus-visible:focus-ring-inset focus-visible:outline-none',
                       'aria-[current=true]:bg-ink-soft aria-[current=true]:forced-selected',
                       'aria-[current=true]:bar-start-ink',
-                      'aria-[current=true]:focus-visible:focus-ring',
+                      'aria-[current=true]:focus-visible:focus-ring-inset',
                     )}
                   >
                     <span className="flex w-full items-center justify-between gap-3">

@@ -7,6 +7,9 @@ export { contrast, mixOklab, parseHex, toHex } from './tokens/color'
 // Right-to-left: see lib/direction.ts.
 export { DirectionProvider, useDirection, type TextDirection } from './lib/direction'
 
+// Sideways-scrolling regions: see lib/scroll-edge.ts and the scroll-edge utility.
+export { useScrollEdge } from './lib/scroll-edge'
+
 // Typography & layout
 export * from './components/typography'
 export * from './components/layout'

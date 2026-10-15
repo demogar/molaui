@@ -122,18 +122,24 @@ export function ToolCall({
             )}
           />
           <Wrench aria-hidden className="size-(--icon-sm) shrink-0 text-ink-muted" />
-          <span className="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
-            <span data-part="name" className="literal truncate text-sm font-medium text-ink">{name}</span>
-            {title ? <span data-part="title" className="truncate font-ui text-sm text-ink-muted">{title}</span> : null}
+          {/* The status wraps under the name before the name gives way. Side by
+              side, a 390px phone truncated the tool name to "billing.i…" while
+              "Needs approval" kept its full width, and the name is the literal
+              the person is approving. The name keeps at least 10rem. */}
+          <span className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2.5 gap-y-1">
+            <span className="flex min-w-[min(100%,10rem)] flex-1 flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
+              <span data-part="name" className="literal truncate text-sm font-medium text-ink">{name}</span>
+              {title ? <span data-part="title" className="truncate font-ui text-sm text-ink-muted">{title}</span> : null}
+            </span>
+            <RunStatus
+              data-part="status"
+              status={status}
+              startedAt={startedAt}
+              endedAt={endedAt}
+              durationMs={durationMs}
+              className="ms-auto shrink-0"
+            />
           </span>
-          <RunStatus
-            data-part="status"
-            status={status}
-            startedAt={startedAt}
-            endedAt={endedAt}
-            durationMs={durationMs}
-            className="shrink-0"
-          />
         </Collapsible.Trigger>
         {hasBody ? (
           <Collapsible.Panel data-part="body" className="border-t border-keyline">

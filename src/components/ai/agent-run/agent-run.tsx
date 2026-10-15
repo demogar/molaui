@@ -241,21 +241,26 @@ function StepRow({ step, last, nextStarted }: { step: AgentStep; last: boolean; 
   // switched it from uncontrolled to controlled mid-life, which it rejects.
   const [openState, setOpenState] = React.useState(step.defaultOpen ?? false)
 
+  // The status wraps under the title rather than squeezing it. Side by side
+  // at any width, a 320px phone left the kind label narrower than its word,
+  // and "Approval" was painted under "Needs approval". The title keeps at
+  // least 9rem, and below that the status takes its own line, still at the
+  // end.
   const headline = (
-    <>
-      <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+    <span className="flex min-w-0 flex-1 flex-wrap items-start gap-x-2 gap-y-1">
+      <span className="flex min-w-[min(100%,9rem)] flex-1 flex-col gap-0.5">
         <span className="rotulo text-ink-muted">{KIND_LABEL[step.kind]}</span>
         <span className={cn('font-ui text-sm leading-snug', step.status === 'queued' ? 'text-ink-muted' : 'text-ink')}>
           {step.title}
         </span>
       </span>
-      <span className="flex shrink-0 flex-col items-end gap-0.5 pt-[1px]">
+      <span className="ms-auto flex shrink-0 flex-col items-end gap-0.5 pt-[1px]">
         <span className={cn('rotulo', active ? 'text-ink' : 'text-ink-muted')}>
           {step.status === 'succeeded' ? <span className="sr-only">{RUN_STATUS_LABEL[step.status]}</span> : RUN_STATUS_LABEL[step.status]}
         </span>
         {ms !== undefined ? <span className="font-ui text-xs tabular text-ink-2">{formatDuration(ms)}</span> : null}
       </span>
-    </>
+    </span>
   )
 
   return (

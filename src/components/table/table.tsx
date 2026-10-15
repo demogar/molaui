@@ -5,6 +5,7 @@ import * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { useMergedRefs } from '../../lib/merge-props'
+import { useScrollEdge } from '../../lib/scroll-edge'
 import { EmptyState, type EmptyStateProps } from '../empty-state'
 import { skeletonShimmer } from '../skeleton/skeleton'
 
@@ -48,10 +49,11 @@ export function Table({
 }: TableProps) {
   const frameRef = React.useRef<HTMLDivElement>(null)
   const overflows = useOverflows(frameRef)
+  const setFrame = useMergedRefs(frameRef, useScrollEdge<HTMLDivElement>())
   return (
     <TableContext.Provider value={{ stickyHeader }}>
       <div
-        ref={frameRef}
+        ref={setFrame}
         data-slot="table-frame"
         // A scrolling region has to be reachable by keyboard, or its overflow is
         // unreachable to anyone without a wheel. Named by the table inside it.
@@ -61,7 +63,7 @@ export function Table({
         // that fits should not add a stop to the tab order.
         tabIndex={stickyHeader || overflows ? 0 : undefined}
         className={cn(
-          'relative w-full overflow-auto scroll-cloth',
+          'relative w-full overflow-auto scroll-cloth scroll-edge',
           framed && 'bg-cloth-pale shadow-cut',
           'focus-visible:focus-ring',
           frameClassName,
@@ -261,6 +263,11 @@ export function TableCell({
       title={title ?? (truncate && typeof children === 'string' ? children : undefined)}
       className={cn(
         'h-(--row-h) px-3 align-middle',
+        // A machine literal in a cell never breaks: an id is read character
+        // by character (ADR 0003), and at 768 "cayuco-" / "steady-3" on two
+        // lines read as two ids. The column takes the width, and the frame
+        // scrolls with its edge cue when there is not enough.
+        '[&_.literal]:whitespace-nowrap [&_code]:whitespace-nowrap',
         numeric && 'text-end tabular-nums',
         truncate && 'max-w-0 truncate',
         className,

@@ -2,6 +2,7 @@ import { CircleHelp } from 'lucide-react'
 import type * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { wrappingButtonSlot } from '../../button/wrapping-slot'
 
 export type ConfidenceLevel = 'high' | 'medium' | 'low'
 
@@ -73,7 +74,7 @@ export function UncertaintyNote({ title = 'The model is unsure', action, classNa
       <div className="min-w-0 flex-1">
         <p className="m-0 font-ui text-sm font-semibold text-ink">{title}</p>
         <div className="mt-1 font-ui text-sm text-ink-on-tint">{children}</div>
-        {action ? <div className="mt-3">{action}</div> : null}
+        {action ? <div className={cn('mt-3', wrappingButtonSlot)}>{action}</div> : null}
       </div>
     </aside>
   )

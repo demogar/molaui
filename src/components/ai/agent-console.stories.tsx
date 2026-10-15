@@ -163,7 +163,11 @@ function AgentConsole() {
     : []
 
   return (
-    <div className="grid h-dvh min-h-[640px] grid-rows-[auto_minmax(0,1fr)] bg-cloth text-ink">
+    // One screen tall only from `lg`, where the transcript and the run panel
+    // sit side by side and each scrolls inside itself. Below it they stack,
+    // and a fixed-height grid made them share one row: at 390px the composer
+    // was painted over the run panel's empty state. Stacked, the page scrolls.
+    <div className="grid min-h-dvh grid-rows-[auto_1fr] bg-cloth text-ink lg:h-dvh lg:min-h-[640px] lg:grid-rows-[auto_minmax(0,1fr)]">
       <header className="flex items-center justify-between gap-4 border-b border-ink bg-cloth-pale px-4 py-2.5">
         <div className="flex items-center gap-3">
           <span aria-hidden className="grid size-6 place-items-center bg-ink">

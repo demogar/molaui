@@ -4,6 +4,7 @@ import { Check, Copy, WrapText } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { useScrollEdge } from '../../lib/scroll-edge'
 import { IconButton } from '../button'
 import { JSON_TOKEN_CLASS, tokenizeJson } from './highlight-json'
 
@@ -82,6 +83,7 @@ export function CodeBlock({
   const [wrap, setWrap] = React.useState(initialWrap)
   const [copied, setCopied] = React.useState(false)
   const labelId = React.useId()
+  const edgeRef = useScrollEdge<HTMLDivElement>()
 
   React.useEffect(() => {
     if (!copied) return
@@ -156,8 +158,9 @@ export function CodeBlock({
           LTR while the header follows the page: in an Arabic interface the
           label and buttons mirror and the source does not. */}
       <div
+        ref={edgeRef}
         dir="ltr"
-        className="flex overflow-auto scroll-cloth [--code-lh:calc(var(--text-xs)*1.7)]"
+        className="flex overflow-auto scroll-cloth scroll-edge [--code-lh:calc(var(--text-xs)*1.7)]"
         style={maxHeight ? { maxHeight } : undefined}
       >
         {lineNumbers ? (

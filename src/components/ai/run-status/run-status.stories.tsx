@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import * as React from 'react'
 
+import { useScrollEdge } from '../../../lib/scroll-edge'
 import { RUN_STATUS_LABEL, RunStatus, type RunStatusValue } from './run-status'
 
 const STATUSES = Object.keys(RUN_STATUS_LABEL) as RunStatusValue[]
@@ -29,11 +30,20 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+/** The matrix scrolls sideways on a phone, with the scroll-edge cue. */
+function Scrolls({ children }: { children: React.ReactNode }) {
+  return (
+    <div ref={useScrollEdge()} className="max-w-full overflow-x-auto scroll-cloth scroll-edge">
+      {children}
+    </div>
+  )
+}
+
 export const Playground: Story = {}
 
 export const AllStatuses: Story = {
   render: () => (
-    <div className="max-w-full overflow-x-auto">
+    <Scrolls>
       <table className="border-collapse text-start">
         <thead>
           <tr className="border-b border-ink">
@@ -58,7 +68,7 @@ export const AllStatuses: Story = {
           ))}
         </tbody>
       </table>
-    </div>
+    </Scrolls>
   ),
 }
 
