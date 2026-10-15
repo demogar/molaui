@@ -33,7 +33,7 @@ import { wrappingButtonSlot } from '../button/wrapping-slot'
  *
  * The prop was `variant` until 0.7.0. `variant` is a presentation everywhere
  * else (solid or outline, seam or flat); these are four categories of
- * state, which is what `kind` names (docs/adr/0008-prop-vocabulary.md).
+ * state, which is what `kind` names (docs/adr/0009-prop-vocabulary.md).
  */
 export const emptyStateVariants = cva(
   'relative grid place-items-center rounded-none bg-cloth-shade relleno-field shadow-cut px-6',

@@ -6,16 +6,13 @@
 
 import { Accordion as Accordion_2 } from '@base-ui/react/accordion';
 import { AlertDialog as AlertDialog_2 } from '@base-ui/react/alert-dialog';
-import { AlertDialogCloseProps } from '@base-ui/react';
+import { ArrowRight } from 'lucide-react';
 import { Button as Button_2 } from '@base-ui/react/button';
 import { Checkbox as Checkbox_2 } from '@base-ui/react/checkbox';
 import { CheckboxGroup as CheckboxGroup_2 } from '@base-ui/react/checkbox-group';
 import { ClassProp } from 'class-variance-authority/types';
 import { ClassValue } from 'clsx';
 import { Collapsible as Collapsible_2 } from '@base-ui/react/collapsible';
-import { CollapsibleRootProps } from '@base-ui/react';
-import { ContextMenuGroupProps } from '@base-ui/react';
-import { ContextMenuRadioGroupProps } from '@base-ui/react';
 import { Dialog as Dialog_2 } from '@base-ui/react/dialog';
 import { DirectionProvider } from '@base-ui/react/direction-provider';
 import { Drawer as Drawer_2 } from '@base-ui/react/drawer';
@@ -23,14 +20,11 @@ import { Menu as Menu_2 } from '@base-ui/react/menu';
 import { Meter as Meter_2 } from '@base-ui/react/meter';
 import { NumberField } from '@base-ui/react/number-field';
 import { Popover as Popover_2 } from '@base-ui/react/popover';
-import { PopoverCloseProps } from '@base-ui/react';
 import { Progress as Progress_2 } from '@base-ui/react/progress';
 import { Radio as Radio_2 } from '@base-ui/react/radio';
 import { RadioGroup as RadioGroup_2 } from '@base-ui/react/radio-group';
 import * as React_2 from 'react';
 import { Select as Select_2 } from '@base-ui/react/select';
-import { SelectGroupProps } from '@base-ui/react';
-import { SelectValueProps } from '@base-ui/react';
 import { Slider as Slider_2 } from '@base-ui/react/slider';
 import { Switch as Switch_2 } from '@base-ui/react/switch';
 import { Tabs as Tabs_2 } from '@base-ui/react/tabs';
@@ -39,6 +33,7 @@ import { ToggleGroup } from '@base-ui/react/toggle-group';
 import { Toolbar as Toolbar_2 } from '@base-ui/react/toolbar';
 import { Tooltip as Tooltip_2 } from '@base-ui/react/tooltip';
 import { useDirection } from '@base-ui/react/direction-provider';
+import { useRender } from '@base-ui/react/use-render';
 import { VariantProps } from 'class-variance-authority';
 
 // @public (undocumented)
@@ -53,7 +48,7 @@ export interface AccordionItemProps extends Omit<Accordion_2.Item.Props, 'classN
     className?: string;
 }
 
-// @public (undocumented)
+// @public
 export function AccordionPanel(input: AccordionPanelProps): React_2.JSX.Element;
 
 // @public (undocumented)
@@ -140,7 +135,7 @@ export type AgentStepKind = 'reasoning' | 'tool' | 'message' | 'handoff' | 'appr
 export function AlertDialog(input: AlertDialogProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface AlertDialogProps {
+export interface AlertDialogProps extends Omit<React_2.ComponentProps<'div'>, 'title' | 'children' | 'role'> {
     // (undocumented)
     cancelLabel?: string;
     confirmationText?: string;
@@ -196,24 +191,12 @@ export interface AttachmentChipProps extends React_2.ComponentProps<'span'> {
 export function Autocomplete(input: AutocompleteProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface AutocompleteProps {
-    // (undocumented)
-    'aria-describedby'?: string;
-    // (undocumented)
-    'aria-invalid'?: boolean | 'true' | 'false';
-    // (undocumented)
-    'aria-label'?: string;
-    // (undocumented)
-    autoComplete?: string;
-    // (undocumented)
-    className?: string;
+export interface AutocompleteProps extends Omit<React_2.ComponentProps<'input'>, 'value' | 'defaultValue' | 'onChange' | 'size' | 'children' | 'type'> {
     // (undocumented)
     defaultValue?: string;
     // (undocumented)
     disabled?: boolean;
     emptyMessage?: React_2.ReactNode;
-    // (undocumented)
-    id?: string;
     items: (string | ComboboxOption)[];
     // (undocumented)
     label?: React_2.ReactNode;
@@ -235,6 +218,7 @@ export interface AutocompleteProps {
     status?: React_2.ReactNode;
     // (undocumented)
     value?: string;
+    wrapperClassName?: string;
 }
 
 // @public (undocumented)
@@ -251,10 +235,11 @@ export interface AvatarGroupProps extends React_2.ComponentProps<'div'> {
     size?: AvatarProps['size'];
 }
 
-// Warning: (ae-forgotten-export) The symbol "LAYERS" needs to be exported by the entry point index.d.ts
-//
+// @public
+export type AvatarLayer = 'bg-anil text-on-layer' | 'bg-verde text-on-layer' | 'bg-oro text-on-oro' | 'bg-ink text-on-ink';
+
 // @public (undocumented)
-export function avatarLayer(name: string): (typeof LAYERS)[number];
+export function avatarLayer(name: string): AvatarLayer;
 
 // @public (undocumented)
 export interface AvatarProps extends Omit<React_2.ComponentProps<'span'>, 'children'>, Variants<typeof avatarVariants> {
@@ -266,7 +251,7 @@ export interface AvatarProps extends Omit<React_2.ComponentProps<'span'>, 'child
 
 // @public (undocumented)
 export const avatarVariants: (props?: ({
-    size?: "xs" | "sm" | "lg" | "md" | "xl" | null | undefined;
+    size?: "xs" | "sm" | "md" | "lg" | "xl" | null | undefined;
 } & ClassProp) | undefined) => string;
 
 // @public (undocumented)
@@ -283,7 +268,7 @@ export type BadgeTone = NonNullable<Variants<typeof badgeVariants>['tone']>;
 
 // @public
 export const badgeVariants: (props?: ({
-    tone?: "danger" | "success" | "warn" | "neutral" | "info" | "accent" | null | undefined;
+    tone?: "neutral" | "danger" | "success" | "warn" | "info" | "accent" | null | undefined;
     variant?: "solid" | "soft" | "outline" | null | undefined;
 } & ClassProp) | undefined) => string;
 
@@ -309,23 +294,27 @@ export interface BreadcrumbItem {
     label: React_2.ReactNode;
 }
 
+// @public
+export type BreadcrumbLinkRender = React_2.ReactElement | ((props: React_2.ComponentProps<'a'> & {
+    href: string;
+    className: string;
+}) => React_2.ReactElement);
+
 // @public (undocumented)
 export interface BreadcrumbProps extends Omit<React_2.ComponentProps<'nav'>, 'children'> {
     // (undocumented)
     items: BreadcrumbItem[];
-    // (undocumented)
-    renderLink?: (props: {
-        href: string;
-        className: string;
-        children: React_2.ReactNode;
-    }) => React_2.ReactNode;
+    renderLink?: BreadcrumbLinkRender;
 }
 
 // @public (undocumented)
 export function Button(input: ButtonProps): React_2.JSX.Element;
 
+// @public (undocumented)
+export function ButtonArrow(input: ButtonArrowProps): React_2.JSX.Element;
+
 // @public
-export function ButtonArrow(): React_2.JSX.Element;
+export type ButtonArrowProps = React_2.ComponentProps<typeof ArrowRight>;
 
 // @public (undocumented)
 export interface ButtonProps extends Omit<Button_2.Props, 'className'>, Variants<typeof buttonVariants> {
@@ -338,19 +327,17 @@ export interface ButtonProps extends Omit<Button_2.Props, 'className'>, Variants
 
 // @public
 export const buttonVariants: (props?: ({
-    variant?: "danger" | "primary" | "secondary" | "ghost" | null | undefined;
-    size?: "sm" | "lg" | "md" | null | undefined;
+    variant?: "secondary" | "danger" | "primary" | "ghost" | null | undefined;
+    size?: "sm" | "md" | "lg" | null | undefined;
 } & ClassProp) | undefined) => string;
 
 // @public (undocumented)
 export function Calendar(input: CalendarProps): React_2.JSX.Element;
 
 // @public
-export interface CalendarProps {
+export interface CalendarProps extends Omit<React_2.ComponentProps<'div'>, 'onSelect' | 'children'> {
     activeCellRef?: React_2.Ref<HTMLTableCellElement>;
     autoFocus?: boolean;
-    // (undocumented)
-    className?: string;
     defaultFocusedDate?: Date | null;
     headingId?: string;
     isDateDisabled?: (date: Date) => boolean;
@@ -392,14 +379,15 @@ export type CalloutVariant = NonNullable<Variants<typeof calloutVariants>['varia
 
 // @public
 export const calloutVariants: (props?: ({
-    tone?: "danger" | "success" | "warn" | "neutral" | "info" | null | undefined;
+    tone?: "neutral" | "danger" | "success" | "warn" | "info" | null | undefined;
     variant?: "flat" | "seam" | null | undefined;
 } & ClassProp) | undefined) => string;
 
+// @public (undocumented)
+export function Caret(input: CaretProps): React_2.JSX.Element;
+
 // @public
-export function Caret(input: {
-    className?: string;
-}): React_2.JSX.Element;
+export type CaretProps = Omit<React_2.ComponentProps<'span'>, 'children'>;
 
 // @public
 export function ChangeCount(input: ChangeCountProps): React_2.JSX.Element;
@@ -440,7 +428,7 @@ export interface ChangeReviewProps extends Omit<React_2.ComponentProps<'section'
     title: React_2.ReactNode;
 }
 
-// @public (undocumented)
+// @public
 export function Checkbox(input: CheckboxProps): React_2.JSX.Element;
 
 // @public
@@ -464,9 +452,10 @@ export interface CheckboxProps extends Omit<Checkbox_2.Root.Props, 'className'> 
     className?: string;
     description?: React_2.ReactNode;
     label?: React_2.ReactNode;
+    wrapperClassName?: string;
 }
 
-// @public (undocumented)
+// @public
 export function Chip(input: ChipProps): React_2.JSX.Element;
 
 // @public
@@ -487,7 +476,7 @@ export interface ChipProps extends Omit<React_2.ComponentProps<'input'>, 'size' 
 
 // @public
 export const chipVariants: (props?: ({
-    size?: "default" | "comfortable" | null | undefined;
+    size?: "sm" | "md" | "default" | "comfortable" | null | undefined;
 } & ClassProp) | undefined) => string;
 
 // @public
@@ -498,6 +487,7 @@ export interface CitationProps extends Omit<React_2.ComponentProps<'a'>, 'childr
     cardSide?: 'top' | 'bottom';
     // (undocumented)
     n: number;
+    render?: React_2.ReactElement | ((props: React_2.ComponentProps<'a'>) => React_2.ReactElement);
     source?: Source;
     title?: string;
 }
@@ -531,9 +521,9 @@ export interface CodeBlockProps extends Omit<React_2.ComponentProps<'figure'>, '
 export type CodeLanguage = 'json' | 'text' | 'shell' | 'sql' | 'ts' | 'python' | 'markdown';
 
 // @public
-export const Collapsible: React_2.ForwardRefExoticComponent<Omit<CollapsibleRootProps, "ref"> & React_2.RefAttributes<HTMLDivElement>>;
+export function Collapsible(props: Collapsible_2.Root.Props): React_2.JSX.Element;
 
-// @public (undocumented)
+// @public
 export function CollapsiblePanel(input: CollapsiblePanelProps): React_2.JSX.Element;
 
 // @public (undocumented)
@@ -551,11 +541,39 @@ export interface CollapsibleTriggerProps extends Omit<Collapsible_2.Trigger.Prop
     className?: string;
 }
 
-// @public (undocumented)
+// @public
 export function Combobox(props: ComboboxProps): React_2.ReactNode;
 
-// Warning: (ae-forgotten-export) The symbol "ComboboxCommonProps" needs to be exported by the entry point index.d.ts
-//
+// @public
+export interface ComboboxCommonProps extends Omit<React_2.ComponentProps<'input'>, 'value' | 'defaultValue' | 'onChange' | 'size' | 'children' | 'multiple' | 'type'> {
+    clearLabel?: string;
+    // (undocumented)
+    disabled?: boolean;
+    emptyMessage?: React_2.ReactNode;
+    filter?: null | ((option: ComboboxOption, query: string) => boolean);
+    items: ComboboxItems;
+    label?: React_2.ReactNode;
+    loading?: boolean;
+    locale?: Intl.LocalesArgument;
+    // (undocumented)
+    name?: string;
+    onInputValueChange?: (query: string) => void;
+    // (undocumented)
+    placeholder?: string;
+    // (undocumented)
+    readOnly?: boolean;
+    // (undocumented)
+    required?: boolean;
+    // (undocumented)
+    size?: FieldControlSize;
+    status?: React_2.ReactNode;
+    triggerLabel?: string;
+    wrapperClassName?: string;
+}
+
+// @public
+export type ComboboxItems = ComboboxOption[] | ComboboxOptionGroup[];
+
 // @public (undocumented)
 export interface ComboboxMultipleProps extends ComboboxCommonProps {
     // (undocumented)
@@ -599,6 +617,7 @@ export interface ComboboxSingleProps extends ComboboxCommonProps {
     multiple?: false;
     // (undocumented)
     onValueChange?: (value: string | null) => void;
+    removeLabel?: never;
     // (undocumented)
     value?: string | null;
 }
@@ -629,21 +648,22 @@ export interface CommandItem {
     shortcut?: string[];
 }
 
-// @public (undocumented)
+// @public
 export function CommandPalette(input: CommandPaletteProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface CommandPaletteProps {
+export interface CommandPaletteProps extends Omit<React_2.ComponentProps<'div'>, 'children' | 'role'> {
+    defaultOpen?: boolean;
     // (undocumented)
     groups: CommandGroup[];
     label?: string;
     // (undocumented)
-    onOpenChange: (open: boolean) => void;
-    // (undocumented)
-    open: boolean;
+    onOpenChange?: (open: boolean) => void;
+    open?: boolean;
     // (undocumented)
     placeholder?: string;
     renderEmpty?: (query: string) => React_2.ReactNode;
+    trigger?: React_2.ReactElement;
 }
 
 // @public
@@ -663,19 +683,22 @@ export interface ConfidenceProps extends Omit<React_2.ComponentProps<'span'>, 'c
 export function Container(input: ContainerProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface ContainerProps extends React_2.ComponentProps<'div'>, Variants<typeof containerVariants> {
+export interface ContainerProps extends Omit<React_2.ComponentProps<'div'>, 'width'>, Variants<typeof containerVariants> {
+    // @deprecated (undocumented)
+    size?: ContainerWidth;
 }
 
 // @public
 export const containerVariants: (props?: ({
-    size?: "page" | "prose" | "wide" | "full" | null | undefined;
+    width?: "page" | "prose" | "wide" | "full" | null | undefined;
 } & ClassProp) | undefined) => string;
+
+// @public (undocumented)
+export type ContainerWidth = NonNullable<Variants<typeof containerVariants>['width']>;
 
 // @public (undocumented)
 export function contextLevel(ratio: number): 'ok' | 'warn' | 'danger';
 
-// Warning: (ae-forgotten-export) The symbol "RGB" needs to be exported by the entry point index.d.ts
-//
 // @public
 export function contrast(a: RGB, b: RGB): number;
 
@@ -716,9 +739,7 @@ export interface DataTableColumn<Row> {
 export function DataTableColumnMenu<Row>(input: DataTableColumnMenuProps<Row>): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface DataTableColumnMenuProps<Row> {
-    // (undocumented)
-    className?: string;
+export interface DataTableColumnMenuProps<Row> extends Omit<React_2.ComponentProps<'button'>, 'children' | 'onToggle' | 'hidden'> {
     // (undocumented)
     columns: DataTableColumn<Row>[];
     // (undocumented)
@@ -728,15 +749,13 @@ export interface DataTableColumnMenuProps<Row> {
 }
 
 // @public
-export type DataTableEmpty = Pick<EmptyStateProps, 'title' | 'description' | 'actions' | 'variant'>;
+export type DataTableEmpty = Pick<EmptyStateProps, 'title' | 'description' | 'actions' | 'kind' | 'variant'>;
 
 // @public (undocumented)
-export interface DataTableProps<Row> {
+export interface DataTableProps<Row> extends Omit<React_2.ComponentProps<'table'>, 'children' | 'aria-label'> {
     bulkActions?: (context: DataTableBulkContext) => React_2.ReactNode;
     // (undocumented)
     caption?: React_2.ReactNode;
-    // (undocumented)
-    className?: string;
     columnMenu?: boolean;
     // (undocumented)
     columns: DataTableColumn<Row>[];
@@ -750,7 +769,6 @@ export interface DataTableProps<Row> {
     defaultSort?: DataTableSort;
     // (undocumented)
     empty?: React_2.ReactNode | DataTableEmpty;
-    // (undocumented)
     frameClassName?: string;
     // (undocumented)
     framed?: boolean;
@@ -787,6 +805,7 @@ export interface DataTableProps<Row> {
     sort?: DataTableSort | null;
     // (undocumented)
     stickyHeader?: boolean;
+    wrapperClassName?: string;
 }
 
 // @public (undocumented)
@@ -801,9 +820,11 @@ export interface DataTableSort {
 export type DateLocale = Intl.LocalesArgument;
 
 // @public (undocumented)
+export type DatePart = 'day' | 'month' | 'year';
+
+// @public (undocumented)
 export interface DatePattern {
-    // Warning: (ae-forgotten-export) The symbol "Part" needs to be exported by the entry point index.d.ts
-    order: Part[];
+    order: DatePart[];
     pattern: string;
 }
 
@@ -811,22 +832,12 @@ export interface DatePattern {
 export function DatePicker(input: DatePickerProps): React_2.JSX.Element;
 
 // @public
-export interface DatePickerProps {
-    // (undocumented)
-    'aria-describedby'?: string;
-    // (undocumented)
-    'aria-invalid'?: boolean | 'true' | 'false';
-    // (undocumented)
-    'aria-label'?: string;
-    // (undocumented)
-    className?: string;
+export interface DatePickerProps extends Omit<InputProps, 'value' | 'defaultValue' | 'onChange' | 'size' | 'leading' | 'trailing' | 'type' | 'children' | 'min' | 'max'> {
     defaultOpen?: boolean;
     // (undocumented)
     defaultValue?: Date | null;
     // (undocumented)
     disabled?: boolean;
-    // (undocumented)
-    id?: string;
     // (undocumented)
     isDateDisabled?: (date: Date) => boolean;
     locale?: DateLocale;
@@ -836,7 +847,10 @@ export interface DatePickerProps {
     min?: Date | null;
     name?: string;
     // (undocumented)
+    onOpenChange?: (open: boolean) => void;
+    // (undocumented)
     onValueChange?: (value: Date | null) => void;
+    open?: boolean;
     placeholder?: string;
     // (undocumented)
     required?: boolean;
@@ -846,6 +860,7 @@ export interface DatePickerProps {
     // (undocumented)
     value?: Date | null;
     weekStartsOn?: number;
+    wrapperClassName?: string;
 }
 
 // @public (undocumented)
@@ -860,22 +875,12 @@ export interface DateRange {
 export function DateRangePicker(input: DateRangePickerProps): React_2.JSX.Element;
 
 // @public
-export interface DateRangePickerProps {
-    // (undocumented)
-    'aria-describedby'?: string;
-    // (undocumented)
-    'aria-invalid'?: boolean | 'true' | 'false';
-    // (undocumented)
-    'aria-label'?: string;
-    // (undocumented)
-    className?: string;
+export interface DateRangePickerProps extends Omit<React_2.ComponentProps<'button'>, 'value' | 'defaultValue' | 'onChange' | 'children' | 'type' | 'name'> {
     defaultOpen?: boolean;
     // (undocumented)
     defaultValue?: DateRange;
     // (undocumented)
     disabled?: boolean;
-    // (undocumented)
-    id?: string;
     // (undocumented)
     isDateDisabled?: (date: Date) => boolean;
     // (undocumented)
@@ -886,7 +891,10 @@ export interface DateRangePickerProps {
     min?: Date | null;
     name?: string;
     // (undocumented)
+    onOpenChange?: (open: boolean) => void;
+    // (undocumented)
     onValueChange?: (value: DateRange) => void;
+    open?: boolean;
     // (undocumented)
     placeholder?: string;
     presets?: DateRangePreset[];
@@ -900,6 +908,7 @@ export interface DateRangePickerProps {
     value?: DateRange;
     // (undocumented)
     weekStartsOn?: number;
+    wrapperClassName?: string;
 }
 
 // @public (undocumented)
@@ -933,29 +942,32 @@ export interface DescriptionItem {
 // @public (undocumented)
 export function DescriptionList(input: DescriptionListProps): React_2.JSX.Element;
 
-// Warning: (ae-forgotten-export) The symbol "listVariants" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
-export interface DescriptionListProps extends Omit<React_2.ComponentProps<'dl'>, 'children'>, Variants<typeof listVariants> {
+export interface DescriptionListProps extends Omit<React_2.ComponentProps<'dl'>, 'children'>, Variants<typeof descriptionListVariants> {
     // (undocumented)
     items: DescriptionItem[];
 }
 
 // @public (undocumented)
+export const descriptionListVariants: (props?: ({
+    layout?: "grid" | "inline" | "stacked" | null | undefined;
+} & ClassProp) | undefined) => string;
+
+// @public (undocumented)
 export const Dialog: <Payload>(props: Dialog_2.Root.Props<Payload>) => React_2.JSX.Element;
 
 // @public (undocumented)
-export const DialogClose: React_2.ForwardRefExoticComponent<Omit<AlertDialogCloseProps, "ref"> & React_2.RefAttributes<HTMLButtonElement>>;
+export type DialogBand = 'oro' | 'rojo' | 'anil' | 'verde';
+
+// @public (undocumented)
+export function DialogClose(props: Dialog_2.Close.Props): React_2.JSX.Element;
 
 // @public (undocumented)
 export function DialogContent(input: DialogContentProps): React_2.JSX.Element;
 
-// Warning: (ae-forgotten-export) The symbol "dialogPopupVariants" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
-export interface DialogContentProps extends Omit<Dialog_2.Popup.Props, 'className' | 'title'>, Variants<typeof dialogPopupVariants> {
-    // Warning: (ae-forgotten-export) The symbol "Band" needs to be exported by the entry point index.d.ts
-    band?: Band;
+export interface DialogContentProps extends Omit<Dialog_2.Popup.Props, 'className' | 'title'>, Variants<typeof dialogContentVariants> {
+    band?: DialogBand;
     // (undocumented)
     className?: string;
     // (undocumented)
@@ -965,8 +977,13 @@ export interface DialogContentProps extends Omit<Dialog_2.Popup.Props, 'classNam
     title: React_2.ReactNode;
 }
 
+// @public
+export const dialogContentVariants: (props?: ({
+    size?: "sm" | "md" | "lg" | null | undefined;
+} & ClassProp) | undefined) => string;
+
 // @public (undocumented)
-export const DialogTrigger: Dialog_2.Trigger;
+export function DialogTrigger(props: Dialog_2.Trigger.Props): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface DiffHunk {
@@ -1037,15 +1054,17 @@ export interface DividerProps extends React_2.ComponentProps<'div'> {
 export function Drawer(input: DrawerProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export const DrawerClose: Drawer_2.Close;
+export type DrawerBand = 'oro' | 'rojo' | 'anil' | 'verde';
+
+// @public (undocumented)
+export function DrawerClose(props: Drawer_2.Close.Props): React_2.JSX.Element;
 
 // @public (undocumented)
 export function DrawerContent(input: DrawerContentProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface DrawerContentProps extends Omit<Drawer_2.Popup.Props, 'className' | 'title'> {
-    // Warning: (ae-forgotten-export) The symbol "Band_2" needs to be exported by the entry point index.d.ts
-    band?: Band_2;
+    band?: DrawerBand;
     // (undocumented)
     className?: string;
     // (undocumented)
@@ -1065,10 +1084,13 @@ export interface DrawerProps extends Omit<Drawer_2.Root.Props, 'swipeDirection'>
 export type DrawerSide = 'start' | 'end' | 'bottom';
 
 // @public (undocumented)
-export const DrawerTrigger: Drawer_2.Trigger;
+export function DrawerTrigger(props: Drawer_2.Trigger.Props): React_2.JSX.Element;
 
 // @public (undocumented)
 export function EmptyState(input: EmptyStateProps): React_2.JSX.Element;
+
+// @public (undocumented)
+export type EmptyStateKind = NonNullable<Variants<typeof emptyStateVariants>['kind']>;
 
 // @public (undocumented)
 export interface EmptyStateProps extends Omit<React_2.ComponentProps<'div'>, 'title'>, Variants<typeof emptyStateVariants> {
@@ -1080,12 +1102,14 @@ export interface EmptyStateProps extends Omit<React_2.ComponentProps<'div'>, 'ti
     icon?: React_2.ReactNode | false;
     // (undocumented)
     title: React_2.ReactNode;
+    // @deprecated (undocumented)
+    variant?: EmptyStateKind;
 }
 
 // @public
 export const emptyStateVariants: (props?: ({
-    variant?: "error" | "empty" | "no-results" | "no-permission" | null | undefined;
-    size?: "sm" | "lg" | "md" | null | undefined;
+    kind?: "error" | "empty" | "no-results" | "no-permission" | null | undefined;
+    size?: "sm" | "md" | "lg" | null | undefined;
 } & ClassProp) | undefined) => string;
 
 // @public (undocumented)
@@ -1180,7 +1204,7 @@ export interface FileRejection {
 // @public (undocumented)
 export type FileRejectionReason = 'type' | 'size' | 'count';
 
-// @public (undocumented)
+// @public
 export function FileUpload(input: FileUploadProps): React_2.JSX.Element;
 
 // @public (undocumented)
@@ -1227,7 +1251,7 @@ export interface FileUploadMessages {
 }
 
 // @public (undocumented)
-export interface FileUploadProps {
+export interface FileUploadProps extends Omit<React_2.ComponentProps<'div'>, 'children' | 'onChange' | 'defaultValue' | 'id' | 'aria-label' | 'aria-describedby' | 'aria-invalid'> {
     // (undocumented)
     'aria-describedby'?: string;
     // (undocumented)
@@ -1235,8 +1259,6 @@ export interface FileUploadProps {
     // (undocumented)
     'aria-label'?: string;
     accept?: string;
-    // (undocumented)
-    className?: string;
     defaultFiles?: FileUploadItem[];
     // (undocumented)
     disabled?: boolean;
@@ -1260,6 +1282,17 @@ export interface FileUploadProps {
 // @public
 export type FileUploadStatus = 'attached' | 'queued' | 'uploading' | 'done' | 'failed';
 
+// @public (undocumented)
+export interface FileValidationOptions {
+    // (undocumented)
+    accept?: string;
+    existing?: number;
+    // (undocumented)
+    maxFiles?: number;
+    // (undocumented)
+    maxSize?: number;
+}
+
 // @public
 export function filterCommands(groups: CommandGroup[], query: string): CommandGroup[];
 
@@ -1281,10 +1314,8 @@ export function formatFileSize(bytes: number, locale?: Intl.LocalesArgument): st
 // @public
 export function formatRunErrorDetails(input: Pick<RunErrorProps, 'kind' | 'step' | 'stepNumber' | 'stepCount' | 'tool' | 'error' | 'runId' | 'at'>): string;
 
-// Warning: (ae-forgotten-export) The symbol "GAP" needs to be exported by the entry point index.d.ts
-//
-// @public (undocumented)
-export type Gap = keyof typeof GAP;
+// @public
+export type Gap = 'none' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 // @public
 export function getDatePattern(locale: DateLocale): DatePattern;
@@ -1316,12 +1347,14 @@ export type HeadingLevel = 1 | 2 | 3 | 4;
 export interface HeadingProps extends React_2.ComponentProps<'h2'> {
     // (undocumented)
     level: HeadingLevel;
+    // @deprecated (undocumented)
     size?: HeadingLevel;
+    visualLevel?: HeadingLevel;
 }
 
 // @public
 export const headingVariants: (props?: ({
-    size?: 2 | 1 | 3 | 4 | null | undefined;
+    visualLevel?: 2 | 1 | 3 | 4 | null | undefined;
 } & ClassProp) | undefined) => string;
 
 // @public
@@ -1452,7 +1485,7 @@ export interface MenuContentProps extends Omit<Menu_2.Popup.Props, 'className'> 
 }
 
 // @public (undocumented)
-export const MenuGroup: React_2.ForwardRefExoticComponent<Omit<ContextMenuGroupProps, "ref"> & React_2.RefAttributes<HTMLDivElement>>;
+export function MenuGroup(props: Menu_2.Group.Props): React_2.JSX.Element;
 
 // @public (undocumented)
 export function MenuGroupLabel(input: Omit<Menu_2.GroupLabel.Props, 'className'> & {
@@ -1469,11 +1502,11 @@ export interface MenuItemProps extends Omit<Menu_2.Item.Props, 'className'> {
     icon?: React_2.ReactNode;
     // (undocumented)
     shortcut?: string;
-    tone?: 'default' | 'danger';
+    tone?: 'neutral' | 'danger' | 'default';
 }
 
 // @public (undocumented)
-export const MenuRadioGroup: React_2.NamedExoticComponent<Omit<ContextMenuRadioGroupProps, "ref"> & React_2.RefAttributes<HTMLDivElement>>;
+export function MenuRadioGroup(props: Menu_2.RadioGroup.Props): React_2.JSX.Element;
 
 // @public
 export function MenuRadioItem(input: MenuRadioItemProps): React_2.JSX.Element;
@@ -1507,7 +1540,7 @@ export interface MenuSubmenuTriggerProps extends Omit<Menu_2.SubmenuTrigger.Prop
 }
 
 // @public (undocumented)
-export const MenuTrigger: Menu_2.Trigger;
+export function MenuTrigger(props: Menu_2.Trigger.Props): React_2.JSX.Element;
 
 // @public
 export function Message(input: MessageProps): React_2.JSX.Element;
@@ -1553,10 +1586,8 @@ export interface MeterProps extends Omit<Meter_2.Root.Props, 'className' | 'chil
     className?: string;
     // (undocumented)
     label?: React_2.ReactNode;
-    // Warning: (ae-forgotten-export) The symbol "Size" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
-    size?: Size;
+    size?: ProgressSize;
     thresholds?: {
         warn?: number;
         danger?: number;
@@ -1575,48 +1606,60 @@ export function mixOklab(a: RGB, pct: number, b: RGB): RGB;
 export function NavItem(input: NavItemProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface NavItemProps extends Omit<React_2.ComponentProps<'a'>, 'children'> {
+export interface NavItemProps extends Omit<useRender.ComponentProps<'a'>, 'children'> {
     active?: boolean;
     children: string;
     count?: number;
     countLabel?: string;
-    countTone?: 'neutral' | 'attention';
+    countTone?: 'neutral' | 'danger' | 'attention';
     // (undocumented)
     icon?: React_2.ReactNode;
 }
 
+// @public (undocumented)
+export function NavSection(input: NavSectionProps): React_2.JSX.Element;
+
 // @public
-export function NavSection(input: {
-    title?: string;
-    className?: string;
+export interface NavSectionProps extends Omit<React_2.ComponentProps<'div'>, 'title'> {
+    // (undocumented)
     children: React_2.ReactNode;
-}): React_2.JSX.Element;
+    title?: string;
+}
 
 // @public (undocumented)
 export function NumberInput(input: NumberInputProps): React_2.JSX.Element;
 
 // @public
-export interface NumberInputProps extends Omit<NumberField.Root.Props, 'className' | 'children' | 'render' | 'onValueChange' | 'ref' | 'autoFocus' | 'autoComplete' | 'enterKeyHint' | 'onKeyDown' | 'onKeyUp' | 'onFocus' | 'onBlur' | 'onBeforeInput' | 'onInput' | 'onPaste' | 'onCopy' | 'onCut' | 'onSelect'>, Pick<React_2.ComponentProps<'input'>, 'autoFocus' | 'autoComplete' | 'enterKeyHint' | 'onKeyDown' | 'onKeyUp' | 'onFocus' | 'onBlur' | 'onBeforeInput' | 'onInput' | 'onPaste' | 'onCopy' | 'onCut' | 'onSelect'> {
+export interface NumberInputProps extends Omit<React_2.ComponentProps<'input'>, 'value' | 'defaultValue' | 'onChange' | 'size' | 'children' | 'min' | 'max' | 'step' | 'type'> {
     // (undocumented)
-    'aria-describedby'?: string;
-    // (undocumented)
-    'aria-invalid'?: boolean | 'true' | 'false';
-    // (undocumented)
-    'aria-label'?: string;
-    // (undocumented)
-    className?: string;
+    allowOutOfRange?: boolean;
+    allowWheelScrub?: boolean;
     // (undocumented)
     decrementLabel?: string;
+    // (undocumented)
+    defaultValue?: number;
+    format?: Intl.NumberFormatOptions;
     incrementLabel?: string;
     label?: React_2.ReactNode;
+    largeStep?: number;
+    locale?: Intl.LocalesArgument;
+    // (undocumented)
+    max?: number;
+    // (undocumented)
+    min?: number;
     // (undocumented)
     onValueChange?: (value: number | null) => void;
-    // (undocumented)
-    placeholder?: string;
-    ref?: React_2.Ref<HTMLInputElement>;
+    onValueCommitted?: NumberField.Root.Props['onValueCommitted'];
     // (undocumented)
     size?: FieldControlSize;
+    smallStep?: number;
+    // (undocumented)
+    snapOnStep?: boolean;
+    step?: number | 'any';
     unit?: string;
+    // (undocumented)
+    value?: number | null;
+    wrapperClassName?: string;
 }
 
 // @public (undocumented)
@@ -1662,18 +1705,23 @@ export interface PaginationProps extends Omit<React_2.ComponentProps<'nav'>, 'on
 export function Panel(input: PanelProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface PanelProps extends React_2.ComponentProps<'div'>, Variants<typeof panelVariants> {
-    as?: 'div' | 'section' | 'article' | 'aside';
-}
+export type PanelLayer = NonNullable<Variants<typeof panelVariants>['layer']>;
 
 // @public (undocumented)
-export type PanelTone = NonNullable<Variants<typeof panelVariants>['tone']>;
+export interface PanelProps extends React_2.ComponentProps<'div'>, Variants<typeof panelVariants> {
+    as?: 'div' | 'section' | 'article' | 'aside';
+    // @deprecated (undocumented)
+    tone?: PanelLayer;
+}
+
+// @public @deprecated (undocumented)
+export type PanelTone = PanelLayer;
 
 // @public
 export const panelVariants: (props?: ({
-    tone?: "ink" | "oro" | "rojo" | "anil" | "verde" | "cloth" | "pale" | "shade" | null | undefined;
+    layer?: "ink" | "oro" | "rojo" | "anil" | "verde" | "cloth" | "pale" | "shade" | null | undefined;
     edge?: "cut" | "none" | "band" | null | undefined;
-    padding?: "none" | "sm" | "lg" | "md" | null | undefined;
+    padding?: "none" | "sm" | "md" | "lg" | null | undefined;
     band?: "oro" | "rojo" | "anil" | "verde" | "cloth" | null | undefined;
 } & ClassProp) | undefined) => string;
 
@@ -1704,8 +1752,9 @@ export function Placeholder(input: PlaceholderProps): React_2.JSX.Element;
 export interface PlaceholderProps extends React_2.ComponentProps<'div'> {
     alt: string;
     label?: string;
+    layer?: 'shade' | 'deep';
     name: string;
-    // (undocumented)
+    // @deprecated (undocumented)
     tone?: 'default' | 'deep';
 }
 
@@ -1713,7 +1762,7 @@ export interface PlaceholderProps extends React_2.ComponentProps<'div'> {
 export const Popover: typeof Popover_2.Root;
 
 // @public (undocumented)
-export const PopoverClose: React_2.ForwardRefExoticComponent<Omit<PopoverCloseProps, "ref"> & React_2.RefAttributes<HTMLButtonElement>>;
+export function PopoverClose(props: Popover_2.Close.Props): React_2.JSX.Element;
 
 // @public (undocumented)
 export function PopoverContent(input: PopoverContentProps): React_2.JSX.Element;
@@ -1734,7 +1783,7 @@ export interface PopoverContentProps extends Omit<Popover_2.Popup.Props, 'classN
 }
 
 // @public (undocumented)
-export const PopoverTrigger: Popover_2.Trigger;
+export function PopoverTrigger(props: Popover_2.Trigger.Props): React_2.JSX.Element;
 
 // @public (undocumented)
 export function Progress(input: ProgressProps): React_2.JSX.Element;
@@ -1746,10 +1795,13 @@ export interface ProgressProps extends Omit<Progress_2.Root.Props, 'className' |
     label?: React_2.ReactNode;
     showValue?: boolean;
     // (undocumented)
-    size?: Size;
-    tone?: 'ink' | 'success' | 'danger';
+    size?: ProgressSize;
+    tone?: 'neutral' | 'success' | 'danger' | 'ink';
     valueText?: (formatted: string | null, value: number | null) => React_2.ReactNode;
 }
+
+// @public (undocumented)
+export type ProgressSize = 'sm' | 'md' | 'lg';
 
 // @public
 export function PromptInput(input: PromptInputProps): React_2.JSX.Element;
@@ -1783,22 +1835,20 @@ export function Prose(input: ProseProps): React_2.JSX.Element;
 // @public
 export interface ProseProps extends React_2.ComponentProps<'div'> {
     fluid?: boolean;
-    size?: 'sm' | 'base';
+    size?: 'sm' | 'md' | 'base';
 }
 
 // @public
 export function Pullquote(input: PullquoteProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface PullquoteProps {
+export interface PullquoteProps extends Omit<React_2.ComponentProps<'figure'>, 'children'> {
     // (undocumented)
     children: React_2.ReactNode;
     cite?: string;
-    // (undocumented)
-    className?: string;
 }
 
-// @public (undocumented)
+// @public
 export function Radio(input: RadioProps): React_2.JSX.Element;
 
 // @public
@@ -1823,6 +1873,7 @@ export interface RadioProps extends Omit<Radio_2.Root.Props, 'className'> {
     description?: React_2.ReactNode;
     // (undocumented)
     label?: React_2.ReactNode;
+    wrapperClassName?: string;
 }
 
 // @public
@@ -1858,6 +1909,9 @@ export type RecommendationLevel = NonNullable<Variants<typeof recommendationVari
 export const recommendationVariants: (props?: ({
     level?: "time" | "essential" | "highly" | "detour" | null | undefined;
 } & ClassProp) | undefined) => string;
+
+// @public
+export type RGB = readonly [number, number, number];
 
 // @public
 export function Rotulo(input: RotuloProps): React_2.JSX.Element;
@@ -1909,10 +1963,13 @@ export interface RunErrorProps extends Omit<React_2.ComponentProps<'div'>, 'chil
 export function RunStatus(input: RunStatusProps): React_2.JSX.Element;
 
 // @public
-export function RunStatusGlyph(input: {
+export function RunStatusGlyph(input: RunStatusGlyphProps): React_2.JSX.Element;
+
+// @public
+export interface RunStatusGlyphProps extends Omit<React_2.ComponentProps<'span'>, 'children'> {
+    // (undocumented)
     status: RunStatusValue;
-    className?: string;
-}): React_2.JSX.Element;
+}
 
 // @public (undocumented)
 export interface RunStatusProps extends Omit<React_2.ComponentProps<'span'>, 'children'> {
@@ -1941,14 +1998,12 @@ export interface SearchInputProps extends Omit<InputProps, 'leading' | 'trailing
 // @public (undocumented)
 export function Section(input: SectionProps): React_2.JSX.Element;
 
-// @public (undocumented)
+// @public
 export function SectionHeader(input: SectionHeaderProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface SectionHeaderProps {
+export interface SectionHeaderProps extends Omit<React_2.ComponentProps<'div'>, 'title'> {
     actions?: React_2.ReactNode;
-    // (undocumented)
-    className?: string;
     label?: string;
     // (undocumented)
     lead?: React_2.ReactNode;
@@ -1964,14 +2019,11 @@ export interface SectionProps extends React_2.ComponentProps<'section'> {
     rhythm?: 'page' | 'panel';
 }
 
-// @public (undocumented)
+// @public
 export function SegmentedControl<V extends string = string>(input: SegmentedControlProps<V>): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface SegmentedControlProps<V extends string = string> {
-    'aria-label': string;
-    // (undocumented)
-    className?: string;
+export interface SegmentedControlBaseProps<V extends string = string> extends Omit<React_2.ComponentProps<'div'>, 'defaultValue' | 'onChange' | 'children' | 'aria-label' | 'aria-labelledby'> {
     // (undocumented)
     defaultValue?: V;
     // (undocumented)
@@ -1987,6 +2039,15 @@ export interface SegmentedControlProps<V extends string = string> {
     // (undocumented)
     value?: V;
 }
+
+// @public
+export type SegmentedControlProps<V extends string = string> = SegmentedControlBaseProps<V> & ({
+    'aria-label': string;
+    'aria-labelledby'?: string;
+} | {
+    'aria-label'?: string;
+    'aria-labelledby': string;
+});
 
 // @public
 export interface SegmentedOption<V extends string = string> {
@@ -2013,7 +2074,7 @@ export interface SelectContentProps extends Select_2.Popup.Props {
 }
 
 // @public (undocumented)
-export const SelectGroup: React_2.ForwardRefExoticComponent<Omit<SelectGroupProps, "ref"> & React_2.RefAttributes<HTMLDivElement>>;
+export function SelectGroup(props: Select_2.Group.Props): React_2.JSX.Element;
 
 // @public (undocumented)
 export function SelectGroupLabel(input: Select_2.GroupLabel.Props & {
@@ -2051,21 +2112,11 @@ export interface SelectOptionGroup<V extends string = string> {
 }
 
 // @public (undocumented)
-export interface SelectProps<V extends string = string> {
-    // (undocumented)
-    'aria-describedby'?: string;
-    // (undocumented)
-    'aria-invalid'?: boolean | 'true' | 'false';
-    // (undocumented)
-    'aria-label'?: string;
-    // (undocumented)
-    className?: string;
+export interface SelectProps<V extends string = string> extends Omit<SelectTriggerProps, 'value' | 'defaultValue' | 'children' | 'placeholder' | 'size' | 'disabled'> {
     // (undocumented)
     defaultValue?: V | null;
     // (undocumented)
     disabled?: boolean;
-    // (undocumented)
-    id?: string;
     items: SelectOption<V>[] | SelectOptionGroup<V>[];
     label?: React_2.ReactNode;
     // (undocumented)
@@ -2076,10 +2127,12 @@ export interface SelectProps<V extends string = string> {
     placeholder?: React_2.ReactNode;
     // (undocumented)
     required?: boolean;
+    rootProps?: Omit<Select_2.Root.Props<V>, 'items' | 'value' | 'defaultValue' | 'onValueChange' | 'children'>;
     // (undocumented)
     size?: FieldControlSize;
     // (undocumented)
     value?: V | null;
+    wrapperClassName?: string;
 }
 
 // @public
@@ -2103,7 +2156,7 @@ export interface SelectTriggerProps extends Select_2.Trigger.Props {
 }
 
 // @public (undocumented)
-export const SelectValue: React_2.ForwardRefExoticComponent<Omit<SelectValueProps, "ref"> & React_2.RefAttributes<HTMLSpanElement>>;
+export function SelectValue(props: Select_2.Value.Props): React_2.JSX.Element;
 
 // @public (undocumented)
 export function Sidebar(input: SidebarProps): React_2.JSX.Element;
@@ -2128,9 +2181,10 @@ export interface SidebarProps extends Omit<React_2.ComponentProps<'nav'>, 'aria-
 }
 
 // @public
-export function SidebarToggle(input: {
-    className?: string;
-}): React_2.JSX.Element | null;
+export function SidebarToggle(input: SidebarToggleProps): React_2.JSX.Element | null;
+
+// @public (undocumented)
+export type SidebarToggleProps = Omit<React_2.ComponentProps<'span'>, 'children'>;
 
 // @public
 export function Skeleton(input: SkeletonProps): React_2.JSX.Element;
@@ -2146,8 +2200,6 @@ export interface SkeletonGroupProps extends Omit<React_2.ComponentProps<'div'>, 
     loading: boolean;
 }
 
-// Warning: (ae-forgotten-export) The symbol "skeletonVariants" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 export interface SkeletonProps extends React_2.ComponentProps<'div'>, Variants<typeof skeletonVariants> {
 }
@@ -2160,6 +2212,12 @@ export interface SkeletonTextProps extends React_2.ComponentProps<'div'> {
     // (undocumented)
     lines?: number;
 }
+
+// @public (undocumented)
+export const skeletonVariants: (props?: ({
+    shape?: "line" | "text" | "block" | "avatar" | null | undefined;
+    size?: "xs" | "sm" | "md" | "lg" | "xl" | null | undefined;
+} & ClassProp) | undefined) => string;
 
 // @public (undocumented)
 export function Slider(input: SliderProps): React_2.JSX.Element;
@@ -2202,13 +2260,18 @@ export interface SourceListProps extends Omit<React_2.ComponentProps<'ol'>, 'chi
     timeZone?: string;
 }
 
+// @public (undocumented)
+export function Sparkline(input: SparklineProps): React_2.JSX.Element | null;
+
 // @public
-export function Sparkline(input: {
-    values: number[];
-    width?: number;
+export interface SparklineProps extends Omit<React_2.ComponentProps<'svg'>, 'values' | 'children'> {
+    // (undocumented)
     height?: number;
-    className?: string;
-}): React_2.JSX.Element | null;
+    // (undocumented)
+    values: number[];
+    // (undocumented)
+    width?: number;
+}
 
 // @public
 export function Stack(input: StackProps): React_2.JSX.Element;
@@ -2220,7 +2283,7 @@ export interface StackProps extends React_2.ComponentProps<'div'>, Variants<type
 // @public (undocumented)
 export const stackVariants: (props?: ({
     direction?: "row" | "column" | null | undefined;
-    gap?: "none" | "xs" | "sm" | "lg" | "md" | "2xs" | "xl" | null | undefined;
+    gap?: Gap | null | undefined;
     align?: "center" | "start" | "end" | "stretch" | "baseline" | null | undefined;
     justify?: "center" | "start" | "end" | "between" | null | undefined;
     wrap?: boolean | null | undefined;
@@ -2271,12 +2334,7 @@ export interface StatusDotProps extends React_2.ComponentProps<'span'> {
 }
 
 // @public
-export function StepList(input: {
-    items: StepListItem[];
-    tone?: 'default' | 'inverse';
-    titleAs?: 'h3' | 'h4' | 'p';
-    className?: string;
-}): React_2.JSX.Element;
+export function StepList(input: StepListProps): React_2.JSX.Element;
 
 // @public (undocumented)
 export interface StepListItem {
@@ -2287,6 +2345,17 @@ export interface StepListItem {
     note?: React_2.ReactNode;
     // (undocumented)
     title: React_2.ReactNode;
+}
+
+// @public (undocumented)
+export interface StepListProps extends Omit<React_2.ComponentProps<'ol'>, 'children'> {
+    inverse?: boolean;
+    // (undocumented)
+    items: StepListItem[];
+    // (undocumented)
+    titleAs?: 'h3' | 'h4' | 'p';
+    // @deprecated (undocumented)
+    tone?: 'default' | 'inverse';
 }
 
 // @public
@@ -2300,7 +2369,9 @@ export interface StreamingTextProps extends Omit<React_2.ComponentProps<'div'>, 
     // (undocumented)
     status?: StreamStatus;
     text: string;
+    // @deprecated (undocumented)
     tone?: 'default' | 'muted';
+    variant?: 'default' | 'muted';
 }
 
 // @public (undocumented)
@@ -2318,12 +2389,12 @@ export type SwatchTone = NonNullable<Variants<typeof swatchVariants>['tone']>;
 
 // @public
 export const swatchVariants: (props?: ({
-    tone?: "danger" | "success" | "warn" | "neutral" | "info" | "accent" | null | undefined;
+    tone?: "neutral" | "danger" | "success" | "warn" | "info" | "accent" | null | undefined;
     size?: "sm" | "md" | null | undefined;
     shape?: "round" | "square" | null | undefined;
 } & ClassProp) | undefined) => string;
 
-// @public (undocumented)
+// @public
 export function Switch(input: SwitchProps): React_2.JSX.Element;
 
 // @public
@@ -2335,6 +2406,7 @@ export interface SwitchProps extends Omit<Switch_2.Root.Props, 'className'> {
     // (undocumented)
     label?: React_2.ReactNode;
     labelPosition?: 'start' | 'end';
+    wrapperClassName?: string;
 }
 
 // @public (undocumented)
@@ -2364,13 +2436,20 @@ export interface TableCheckboxProps extends Omit<React_2.ComponentProps<'input'>
 }
 
 // @public
-export function TableEmpty(input: {
-    colSpan: number;
-    title?: React_2.ReactNode;
-    variant?: EmptyStateProps['variant'];
+export function TableEmpty(input: TableEmptyProps): React_2.JSX.Element;
+
+// @public
+export interface TableEmptyProps extends Omit<React_2.ComponentProps<'tr'>, 'title'> {
     actions?: React_2.ReactNode;
-    children?: React_2.ReactNode;
-}): React_2.JSX.Element;
+    // (undocumented)
+    colSpan: number;
+    // (undocumented)
+    kind?: EmptyStateProps['kind'];
+    // (undocumented)
+    title?: React_2.ReactNode;
+    // @deprecated (undocumented)
+    variant?: EmptyStateProps['kind'];
+}
 
 // @public (undocumented)
 export function TableFooter(input: React_2.ComponentProps<'tfoot'>): React_2.JSX.Element;
@@ -2386,8 +2465,7 @@ export interface TableHeadProps extends React_2.ComponentProps<'th'> {
     numeric?: boolean;
     // (undocumented)
     onSort?: () => void;
-    // Warning: (ae-forgotten-export) The symbol "SortDirection" needs to be exported by the entry point index.d.ts
-    sort?: SortDirection;
+    sort?: TableSortDirection;
 }
 
 // @public (undocumented)
@@ -2406,10 +2484,17 @@ export interface TableRowProps extends React_2.ComponentProps<'tr'> {
 }
 
 // @public
-export function TableSkeletonRows(input: {
-    rows?: number;
+export function TableSkeletonRows(input: TableSkeletonRowsProps): React_2.JSX.Element;
+
+// @public (undocumented)
+export interface TableSkeletonRowsProps {
+    // (undocumented)
     columns: number;
-}): React_2.JSX.Element;
+    rows?: number;
+}
+
+// @public (undocumented)
+export type TableSortDirection = 'ascending' | 'descending' | 'none';
 
 // @public (undocumented)
 export function Tabs(input: TabsProps): React_2.JSX.Element;
@@ -2438,10 +2523,8 @@ export interface TabsPanelProps extends Omit<Tabs_2.Panel.Props, 'className'> {
 export interface TabsProps extends Omit<Tabs_2.Root.Props, 'className'> {
     // (undocumented)
     className?: string;
-    // Warning: (ae-forgotten-export) The symbol "Variant" needs to be exported by the entry point index.d.ts
-    //
     // (undocumented)
-    variant?: Variant;
+    variant?: TabsVariant;
 }
 
 // @public (undocumented)
@@ -2455,6 +2538,9 @@ export interface TabsTabProps extends Omit<Tabs_2.Tab.Props, 'className'> {
     // (undocumented)
     icon?: React_2.ReactNode;
 }
+
+// @public
+export type TabsVariant = 'underline' | 'panel';
 
 // @public (undocumented)
 function Text_2(input: TextProps): React_2.JSX.Element;
@@ -2474,12 +2560,15 @@ export { TextDirection }
 export interface TextProps extends Omit<React_2.HTMLAttributes<HTMLElement>, 'color'>, Variants<typeof textVariants> {
     // (undocumented)
     as?: 'p' | 'span' | 'div';
+    // (undocumented)
+    ref?: React_2.Ref<HTMLElement>;
 }
 
 // @public
 export const textVariants: (props?: ({
-    size?: "base" | "xs" | "sm" | "lg" | null | undefined;
-    tone?: 2 | "default" | "muted" | "danger" | "success" | null | undefined;
+    size?: "base" | "xs" | "sm" | "md" | "lg" | null | undefined;
+    variant?: "default" | "secondary" | "muted" | null | undefined;
+    tone?: 2 | "default" | "muted" | "neutral" | "danger" | "success" | null | undefined;
     weight?: "regular" | "medium" | "semibold" | null | undefined;
     tabular?: boolean | null | undefined;
     truncate?: boolean | null | undefined;
@@ -2494,7 +2583,7 @@ export interface ThreadProps extends React_2.ComponentProps<'section'> {
     stickThreshold?: number;
 }
 
-// @public (undocumented)
+// @public
 export function Timeline(input: TimelineProps): React_2.JSX.Element;
 
 // @public (undocumented)
@@ -2511,19 +2600,22 @@ export interface TimelineItem {
 }
 
 // @public (undocumented)
-export interface TimelineProps {
-    // (undocumented)
-    className?: string;
+export interface TimelineProps extends Omit<React_2.ComponentProps<'ol'>, 'children'> {
     gap?: 'spaced' | 'flush';
     // (undocumented)
     items: TimelineItem[];
     label: string;
-    size?: 'default' | 'editorial';
+    // @deprecated (undocumented)
+    size?: TimelineVariant;
     titleAs?: 'h3' | 'h4' | 'p';
+    variant?: TimelineVariant;
 }
 
 // @public
 export type TimelineTone = 'neutral' | 'success' | 'danger' | 'warn' | 'info' | 'active';
+
+// @public (undocumented)
+export type TimelineVariant = 'default' | 'editorial';
 
 // @public (undocumented)
 export interface ToastOptions {
@@ -2554,7 +2646,7 @@ export interface ToastProviderProps {
 }
 
 // @public
-export type ToastTone = 'neutral' | 'success' | 'danger' | 'info' | 'running';
+export type ToastTone = 'neutral' | 'info' | 'success' | 'warn' | 'danger' | 'running';
 
 // @public (undocumented)
 export function toHex(input: RGB): string;
@@ -2622,20 +2714,16 @@ export interface ToolbarOverflowItem {
     label: string;
     // (undocumented)
     onSelect: () => void;
-    tone?: 'default' | 'danger';
+    tone?: 'neutral' | 'danger' | 'default';
 }
 
 // @public (undocumented)
-export interface ToolbarOverflowProps {
+export interface ToolbarOverflowProps extends Omit<React_2.ComponentProps<'div'>, 'children'> {
     align?: 'start' | 'end';
-    // (undocumented)
-    className?: string;
     items: ToolbarOverflowItem[];
     moreLabel?: string;
 }
 
-// Warning: (ae-forgotten-export) The symbol "toolbarVariants" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
 export interface ToolbarProps extends Omit<Toolbar_2.Root.Props, 'className'>, Variants<typeof toolbarVariants> {
     'aria-label': string;
@@ -2644,9 +2732,13 @@ export interface ToolbarProps extends Omit<Toolbar_2.Root.Props, 'className'>, V
 }
 
 // @public (undocumented)
-export function ToolbarSeparator(input: {
+export function ToolbarSeparator(input: ToolbarSeparatorProps): React_2.JSX.Element;
+
+// @public (undocumented)
+export interface ToolbarSeparatorProps extends Omit<Toolbar_2.Separator.Props, 'className'> {
+    // (undocumented)
     className?: string;
-}): React_2.JSX.Element;
+}
 
 // @public
 export function ToolbarToggle(input: ToolbarToggleProps): React_2.JSX.Element;
@@ -2675,6 +2767,11 @@ export interface ToolbarToggleProps extends Omit<Toolbar_2.Button.Props, 'classN
     pressed?: boolean;
     value?: string;
 }
+
+// @public
+export const toolbarVariants: (props?: ({
+    variant?: "panel" | "bare" | null | undefined;
+} & ClassProp) | undefined) => string;
 
 // @public
 export function ToolCall(input: ToolCallProps): React_2.JSX.Element;
@@ -2714,7 +2811,10 @@ export interface ToolCallProps extends Omit<React_2.ComponentProps<'div'>, 'chil
     error?: string;
     name: string;
     // (undocumented)
+    onOpenChange?: (open: boolean) => void;
+    // (undocumented)
     onRetry?: () => void;
+    open?: boolean;
     result?: unknown;
     // (undocumented)
     startedAt?: number | Date;
@@ -2723,21 +2823,20 @@ export interface ToolCallProps extends Omit<React_2.ComponentProps<'div'>, 'chil
     title?: string;
 }
 
-// @public (undocumented)
+// @public
 export function Tooltip(input: TooltipProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface TooltipProps {
+export interface TooltipProps extends Omit<React_2.ComponentProps<'div'>, 'children' | 'content' | 'role'> {
     // (undocumented)
     align?: Tooltip_2.Positioner.Props['align'];
     children: React_2.ReactElement;
-    // (undocumented)
-    className?: string;
     // (undocumented)
     content: React_2.ReactNode;
     // (undocumented)
     defaultOpen?: boolean;
     delay?: number;
+    disabled?: boolean;
     // (undocumented)
     onOpenChange?: Tooltip_2.Root.Props['onOpenChange'];
     // (undocumented)
@@ -2799,17 +2898,17 @@ export function useScrollEdge<T extends HTMLElement = HTMLElement>(): (el: T | n
 export function useToast(): {
     show: (options: ToastOptions) => string;
     success: (options: Omit<ToastOptions, "tone">) => string;
+    danger: (options: Omit<ToastOptions, "tone">) => string;
     error: (options: Omit<ToastOptions, "tone">) => string;
+    warn: (options: Omit<ToastOptions, "tone">) => string;
     info: (options: Omit<ToastOptions, "tone">) => string;
     running: (options: Omit<ToastOptions, "tone">) => string;
     update: (id: string, options: Partial<ToastOptions>) => void;
     dismiss: (id?: string) => void;
 };
 
-// Warning: (ae-forgotten-export) The symbol "ValidateOptions" needs to be exported by the entry point index.d.ts
-//
 // @public
-export function validateFiles(files: readonly File[], options: ValidateOptions): {
+export function validateFiles(files: readonly File[], options: FileValidationOptions): {
     accepted: File[];
     rejected: FileRejection[];
 };

@@ -16,7 +16,7 @@ import { type Variants } from '../../lib/variants'
  * with an `<h3>` underneath, and the outline lies.
  *
  * The three inks are `variant`, a presentation; `tone` is kept for status,
- * as on every other component (docs/adr/0008-prop-vocabulary.md). Until
+ * as on every other component (docs/adr/0009-prop-vocabulary.md). Until
  * 0.7.0 they were one prop, `tone="2"`, which put a number among the status
  * words and let `tone="muted"` and `tone="danger"` look like peers.
  */
