@@ -1,0 +1,134 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+import { ReleaseStatus } from './blocks/changes'
+
+<Meta title="Mola UI/Migration" />
+
+# Migration
+
+What to change in your app when you upgrade across a breaking release. Before 1.0.0, a breaking
+change ships in a minor release (`0.6` to `0.7`), never in a patch
+([Versioning](?path=/docs/mola-ui-versioning--overview)). Each section below covers one such
+release and lists every breaking change in it, with the pull request, who it affects and what to
+do. A release with no breaking changes has no section.
+
+A test reads `CHANGELOG.md` and fails if a release with breaking changes has no section here, or if
+a breaking pull request in it is not listed. So a breaking release cannot ship without its guide.
+
+## 0.6 to 0.7
+
+<ReleaseStatus version="0.7.0" />
+
+Five pull requests in 0.7 are breaking. The prop renames have a codemod (see
+[Codemods](?path=/docs/mola-ui-codemods--overview)). The rest are a dependency to install, a type
+to fix where the compiler points, or a class name to search for. A class can sit in a string, a
+template or a `cn()` call, where no tool can prove it is Mola's. A search you review is safer
+there than a rewrite you can't.
+
+### One prop vocabulary, and `className` on the box you see (pull request [146](https://github.com/demogar/molaui/pull/146))
+
+`tone` now always means a status, `variant` a presentation, `kind` a category and `size` the
+t-shirt scale ([ADR 0010](?path=/docs/decisions-0010-one-prop-vocabulary--overview)). The old names,
+such as `Panel tone`, `Heading size` and `Container size`, still work, warn once in development
+and go in 1.0.0. These changed at once:
+
+- `className` goes to the control on `Checkbox`, `Radio`, `Switch`, `Select`, `Combobox`,
+  `Autocomplete` and `NumberInput` when a `label` is set; to the field's box on `DatePicker`; and
+  to the trigger on `DateRangePicker`. The label wrapper or outer element takes `wrapperClassName`.
+  `Input` always renders its box, so its `className` is the box with or without adornments.
+- The cva functions take the new keys: `panelVariants({ layer })`, `emptyStateVariants({ kind })`,
+  `containerVariants({ width })`, `headingVariants({ visualLevel })`. `dialogPopupVariants` is
+  exported as `dialogContentVariants`.
+- `NumberInput`'s DOM props go to the `<input>`. `SidebarToggle` renders one
+  `<span data-slot="sidebar-toggle">` around its two buttons.
+- `Breadcrumb`'s `renderLink` must return an element.
+
+**Who it affects:** code that styled a labelled form control's wrapper through `className`, called
+the cva functions with the old keys, or returned something other than an element from
+`renderLink`. The deprecated props affect no one yet.
+
+**What to do:** run the codemod for the renames from a checkout of this repository, then move any
+`className` meant for a labelled control's wrapper to `wrapperClassName`.
+
+```bash
+npx tsx codemods/prop-vocabulary.ts ../your-app/src --dry   # list what would change
+npx tsx codemods/prop-vocabulary.ts ../your-app/src
+```
+
+### Base UI is a peer dependency (pull request [121](https://github.com/demogar/molaui/pull/121))
+
+`@base-ui/react` moved from a pinned dependency to a peer dependency (`^1.9.0`). With a pinned
+dependency, an app on a newer 1.x got a second copy, and Mola's `DirectionProvider` stopped
+reaching the components that read it.
+
+**Who it affects:** apps installed with yarn, or with pnpm set to `auto-install-peers=false`.
+npm 7 and later, and pnpm 8 and later by default, install peers for you.
+
+**What to do:** install it beside Mola, as the install line has always said.
+
+```bash
+npm install @base-ui/react@^1.9.0
+```
+
+### NumberInput's ref and handlers reach the input (pull request [122](https://github.com/demogar/molaui/pull/122))
+
+`ref` on `NumberInput` now resolves to the `<input>` (it was the wrapping `<div>`). `onKeyDown`,
+`onKeyUp`, `onFocus`, `onBlur`, the clipboard and input handlers, and `autoFocus` now go to the
+input too, and are typed for it.
+
+**Who it affects:** code that measured or focused the wrapper through the ref, or handled those
+events on the wrapper.
+
+**What to do:** the compiler points at a handler typed for a `<div>`; type it for an
+`HTMLInputElement`. If you need the wrapper, put your own element around the field and use that.
+Calling `.focus()` on the ref now focuses the input directly.
+
+### Tailwind's default scales are closed, and `max-w-prose` is `max-w-reading` (pull request [123](https://github.com/demogar/molaui/pull/123))
+
+`@demogar/mola-ui/tailwind.css` now removes Tailwind's defaults wherever Mola has its own scale
+([ADR 0007](?path=/docs/decisions-0007-a-closed-bridge--overview)): colours, radii, shadows, blurs,
+easings, animations, line heights, letter spacing, fonts, the containers above `5xl` and the
+breakpoints. `tokens/mola.tokens.json` also changed shape: it is now valid W3C Design Tokens
+(2025.10).
+
+**Who it affects:** apps that import `tailwind.css` into their own Tailwind build. In those apps,
+`bg-red-500` or `shadow-lg` now produce no CSS, so the element renders unstyled rather than
+failing. Apps that import the compiled `styles.css` are not affected. Figma files loaded from the
+old token JSON are affected.
+
+**What to do:** search your source for the default utilities and move each to its Mola token.
+
+| Was | Now |
+| --- | --- |
+| `max-w-prose` | `max-w-reading` (the same 65ch measure) |
+| `max-w-6xl`, `max-w-7xl` | `max-w-page` (1180px) or `max-w-wide` (1440px) |
+| `bg-red-500`, `text-gray-600` and the rest of the default palette | a role: `bg-danger`, `text-ink-muted`, `bg-cloth-pale` |
+| `shadow-lg`, `shadow-md` | `shadow-raised`, or `shadow-cut` for an edge |
+| `rounded-*` | nothing: the radius is zero |
+| `leading-relaxed`, `leading-normal` | `leading-body` or `leading-reading` |
+| `ease-in-out`, `ease-in` | `ease-cut`, or nothing: a bare `transition` already runs on it |
+| `font-sans` | `font-ui` |
+
+```bash
+grep -rnE "max-w-prose|max-w-[67]xl|shadow-(sm|md|lg|xl)|rounded-|leading-(relaxed|normal|loose)|ease-in|font-sans" src/
+```
+
+If your app needs Tailwind's defaults back, import `@demogar/mola-ui/tokens.css` instead of
+`tailwind.css` and bridge only the Mola names you use. Reload `tokens/mola.tokens.json` into Tokens
+Studio to pick up the new shape.
+
+### Variant props refuse `null`, and the stylesheet is built for current browsers (pull request [128](https://github.com/demogar/molaui/pull/128))
+
+Every props interface built from a `cva()` variant used to accept `null` (`size={null}`), which
+picked no variant at all. The props now take the variant names or `undefined`. The compiled
+stylesheets are also built for a stated floor (Chrome 123, Edge 123, Firefox 128 and Safari 17.5)
+and no longer rewrite `light-dark()` for older browsers.
+
+**Who it affects:** code that passed `null` to a variant prop, which is now a type error, and apps
+that must support browsers older than that floor.
+
+**What to do:** pass `undefined`, or leave the prop out, where the compiler points. For older
+browsers, use the `tailwind.css` route and build for your own target. Lightning CSS lowers
+`light-dark()` there. Re-theme subtrees with `data-theme`, as
+[Getting started](?path=/docs/mola-ui-getting-started--overview) says, so a lowered token still
+changes theme.

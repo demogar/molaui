@@ -4,6 +4,15 @@ Markdown version of https://demogar.github.io/molaui/?path=/docs/mola-ui-getting
 
 # Getting started
 
+From an empty app to a themed screen, in the order you need it: install, add the stylesheet, set
+up the app root, render a component, then theme, density and direction. Rendering on the server,
+connecting a coding agent and Figma come after.
+
+**Try it first.** The [playground](https://stackblitz.com/github/demogar/molaui/tree/main/examples/playground?file=src/app.jsx)
+is a small Vite app with Mola installed from npm and the compiled stylesheet imported. It opens in
+your browser on StackBlitz, with nothing to install. Its source is
+[`examples/playground`](https://github.com/demogar/molaui/tree/main/examples/playground).
+
 ## Install
 
 ```bash
@@ -16,7 +25,13 @@ npm install @fontsource-variable/archivo @fontsource-variable/alegreya @fontsour
 Mola share one copy (Mola re-exports Base UI's `DirectionProvider`, which only works with one).
 The package is ESM only; `require()` works too, on Node 22.12 or later.
 
-## Import the stylesheet and the faces once
+## Add the stylesheet
+
+There are two routes, and an app takes one. If your app does not run Tailwind, import the compiled
+stylesheet. If it already runs Tailwind v4, import Mola's layers into your own build instead, so
+the page ships one Tailwind, not two. Both routes need the three faces.
+
+### The compiled stylesheet
 
 ```tsx
 // styles.tsx: import it once, from your app entry
@@ -29,7 +44,7 @@ import '@demogar/mola-ui/styles.css'
 Archivo must be the **`wdth`** build. Labels and headings are set on the width axis, and the
 static build falls back to a normal-width face.
 
-### What `styles.css` does to your page
+#### What `styles.css` does to your page
 
 `@demogar/mola-ui/styles.css` is pre-compiled. Of the utilities, it holds only the ones the
 components use, and nothing from the stories. It also holds two things that apply to the **whole
@@ -57,6 +72,58 @@ size and colour. Your `body`, your headings and your native controls stay as the
 difference to know: the layout and typography components (Stack, Grid, Heading, Text and the
 rest) render plain elements with no `data-slot`, so they keep your page's defaults. A `Heading`
 keeps the margin your CSS gives an `h2`.
+
+### Already on Tailwind v4?
+
+Import the faces as above, then import the un-compiled layers into your own build instead of
+`styles.css`:
+
+```css
+@import 'tailwindcss';
+@import '@demogar/mola-ui/tailwind.css';
+@source '../node_modules/@demogar/mola-ui/dist';
+```
+
+The `@source` path is relative to the CSS file that contains it, so the example is for a stylesheet
+one folder below the project root (`src/app.css`). It points Tailwind at the package's compiled
+JavaScript: without it Tailwind never sees the classes the components use, and they render unstyled.
+
+Every token is then a utility in your app too: `bg-cloth-pale`, `text-ink-muted`, `shadow-cut`,
+`relleno`, `cut-band band-danger`, `rule-b`, `z-(--z-popover)`.
+
+The import also closes Tailwind's own scales where Mola has an answer: the default colour palette,
+radii, shadows, blurs, easings, animations, line heights, letter spacing, font families and the
+container steps above `5xl` stop compiling, so `bg-red-500` or `shadow-lg` in your app produces no
+CSS. That is the point of adopting the system: one scale, not two. Spacing, font weights and the
+`text-*` sizes stay as Tailwind has them, and the `sm:` … `2xl:` breakpoints keep Tailwind's widths,
+with Mola's `nav:` added ([Responsive](https://demogar.github.io/molaui/?path=/docs/foundations-responsive--overview)). An app that
+needs the defaults back can import only `@demogar/mola-ui/tokens.css` and bridge the names it wants.
+
+### Not on React?
+
+The components are React, but the system is not. `@demogar/mola-ui/tokens.css` is plain CSS custom
+properties with no build step, and the `cloth` utilities are plain CSS under Tailwind. A Vue or
+server-rendered app gets the full palette, both themes and the three densities with:
+
+```vue
+<script setup>
+import '@demogar/mola-ui/tokens.css'
+</script>
+
+<template>
+  <button class="mola-button" data-density="compact">Run agent</button>
+</template>
+
+<style scoped>
+.mola-button {
+  height: var(--control-h);
+  padding-inline: var(--control-px);
+  background: var(--ink);
+  color: var(--on-ink);
+  box-shadow: var(--cut);
+}
+</style>
+```
 
 ## Set up the app root
 
@@ -133,28 +200,6 @@ taken from a story on the component's page, so it is markup the docs show and th
 and Tab moves through its words. Its description has the import line to add. Copy the file again
 after you upgrade, since the snippets follow the stories.
 
-## How to read a component page
-
-Every component page has the same sections in the same order, so you always know where to look.
-
-1. **Summary and status.** What the component is for, in one sentence, and its lifecycle phase:
-   Experimental, Stable or Deprecated. [Versioning](https://demogar.github.io/molaui/?path=/docs/mola-ui-versioning--overview)
-   says what each phase promises. Under it, the decisions behind the component.
-2. **Usage.** When to use it, when not to and what to use instead, do and don't, and how to word it.
-3. **Examples.** The main example with its controls, then every documented state.
-4. **Accessibility.** The keys it answers to, what Mola handles and what you must still do, and
-   how it is tested: what runs on every pull request, and what has not been tested yet.
-5. **Related.** The components this page sends you to, and the ones that send readers here.
-6. **Changes.** What changed in the component, release by release, with the pull request and the
-   commit. It is read from the changelog by each commit's scope, so it appears only on components
-   that have changed. [What's new](https://demogar.github.io/molaui/?path=/docs/mola-ui-what-s-new-0-6--overview) has the
-   highlights of each release.
-
-Usage comes before the examples on purpose. "Should I use this at all?" is the first question,
-and the answer is often a different component. A test holds every component page to this order,
-and fails a page that would leave a section empty. What the pages don't have yet is listed on
-[Known gaps](https://demogar.github.io/molaui/?path=/docs/mola-ui-known-gaps--overview).
-
 ## Theme
 
 Two themes, chosen by `color-scheme`. With no attribute the system follows the operating system;
@@ -166,11 +211,12 @@ page is one attribute.
 <section data-theme="light">…</section>
 ```
 
-Re-theme a subtree with `data-theme`, not by setting `color-scheme` on it yourself. Builds that
-minify with Lightning CSS (Vite's production build, and the compiled `styles.css`) rewrite `light-dark()` for browsers older
-than Chrome 123 and Safari 17.5, and in that form a token only changes theme where it is declared:
-on `:root` and on every `[data-theme]` element. This applies whether you use the compiled
-stylesheet or `tailwind.css` in your own Tailwind build.
+Re-theme a subtree with `data-theme`, not by setting `color-scheme` on it yourself. A build that
+minifies with Lightning CSS for browsers older than Chrome 123 and Safari 17.5 rewrites
+`light-dark()`, and a Vite production build does by default. In that form a token only changes
+theme where it is declared: on `:root` and on every `[data-theme]` element. This applies whether
+you import the compiled stylesheet into your build or `tailwind.css` into your own Tailwind.
+To use your own colours, see [Theming](https://demogar.github.io/molaui/?path=/docs/foundations-theming--overview).
 
 ### Let people choose a theme
 
@@ -276,30 +322,6 @@ side a submenu opens on, need the provider too. Set both, once, at the root: `di
 `dir` belongs on `<html>`, not on a wrapper, for the same reason as the theme: menus and dialogs
 portal to `<body>` and must mirror too. See Foundations / Accessibility for what changes.
 
-## Already on Tailwind v4?
-
-Import the un-compiled layers into your own build instead of shipping a second Tailwind:
-
-```css
-@import 'tailwindcss';
-@import '@demogar/mola-ui/tailwind.css';
-@source '../node_modules/@demogar/mola-ui/dist';
-```
-
-The `@source` path is relative to the CSS file that contains it, so the example is for a stylesheet
-one folder below the project root (`src/app.css`). It points Tailwind at the package's compiled
-JavaScript: without it Tailwind never sees the classes the components use, and they render unstyled.
-
-Every token is then a utility in your app too: `bg-cloth-pale`, `text-ink-muted`, `shadow-cut`,
-`relleno`, `cut-band band-danger`, `rule-b`, `z-(--z-popover)`.
-
-The import also closes Tailwind's own scales where Mola has an answer: the default colour palette,
-radii, shadows, blurs, easings, animations, line heights, letter spacing, font families and the
-container steps above `5xl` stop compiling, so `bg-red-500` or `shadow-lg` in your app produces no
-CSS. That is the point of adopting the system: one scale, not two. Spacing, font weights, the
-`text-*` sizes and the `sm:` … `2xl:` breakpoints stay as Tailwind has them. An app that needs the
-defaults back can import only `@demogar/mola-ui/tokens.css` and bridge the names it wants.
-
 ## React Server Components
 
 Components can be rendered from a server component (the Next.js App Router, for example). Every
@@ -390,32 +412,6 @@ export const fonts = [archivo.variable, alegreya.variable, martianMono.variable]
 }
 ```
 
-## Not on React?
-
-The components are React, but the system is not. `@demogar/mola-ui/tokens.css` is plain CSS custom
-properties with no build step, and the `cloth` utilities are plain CSS under Tailwind. A Vue or
-server-rendered app gets the full palette, both themes and the three densities with:
-
-```vue
-<script setup>
-import '@demogar/mola-ui/tokens.css'
-</script>
-
-<template>
-  <button class="mola-button" data-density="compact">Run agent</button>
-</template>
-
-<style scoped>
-.mola-button {
-  height: var(--control-h);
-  padding-inline: var(--control-px);
-  background: var(--ink);
-  color: var(--on-ink);
-  box-shadow: var(--cut);
-}
-</style>
-```
-
 ## Connect an AI agent (MCP)
 
 The package ships `mola-ui-mcp`, a read-only [MCP](https://modelcontextprotocol.io) server. A
@@ -500,3 +496,16 @@ translucent colours, with their alpha. Load it with Tokens
 Studio to get Figma variables that match the browser to the hex. It is generated from
 `tokens.css` (`npm run tokens`) and CI fails if it is stale, so the design file cannot drift from
 the code.
+
+## Read next
+
+- **[Introduction](https://demogar.github.io/molaui/?path=/docs/mola-ui-introduction--overview)**: how
+  every component page is laid out, so you know where to look.
+- **[Choosing a component](https://demogar.github.io/molaui/?path=/docs/mola-ui-choosing-a-component--overview)**: which component
+  for which job, and what to use instead.
+- **[Theming](https://demogar.github.io/molaui/?path=/docs/foundations-theming--overview)**: where your own colours can go, and how
+  to measure them.
+- **[Responsive](https://demogar.github.io/molaui/?path=/docs/foundations-responsive--overview)**: the breakpoints, container
+  queries and the 320px rule.
+- **[Migration](https://demogar.github.io/molaui/?path=/docs/mola-ui-migration--overview)**: what to change when you upgrade across
+  a breaking release.

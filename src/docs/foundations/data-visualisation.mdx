@@ -1,0 +1,78 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+import { DecisionsBehind } from '../blocks/decisions'
+import { RunsChart, SeriesTable } from '../blocks/series'
+
+<Meta title="Foundations/Data visualisation" />
+
+# Data visualisation
+
+<DecisionsBehind foundation="Foundations/Data visualisation" />
+
+Mola UI ships the small charts a working screen needs, and the rules for drawing anything larger.
+It does not ship a chart library, and it does not have a categorical palette. Every colour in the
+system already means something, so a chart takes its colours from the same roles as the rest of
+the screen.
+
+## What ships
+
+- **[Stat](?path=/docs/components-data-display-stat--overview)** with a `Sparkline`: an ink line with
+  no fill and no axis, and the latest point drawn as a gold square with an ink keyline. It is
+  decorative, because the figure and the change beside it already say what it shows.
+- **[Progress and Meter](?path=/docs/components-feedback-progress--overview)**: how far a task has
+  gone, and where a reading sits against its warning and danger thresholds.
+- **[Token usage](?path=/docs/ai-token-usage--overview)**: a model's context budget, spent and
+  remaining.
+
+For anything else (a line chart of runs per day, a bar chart of cost per agent), bring your own
+chart library and draw it by the rules below.
+
+## Colour
+
+<SeriesTable />
+
+Each series is a graphic mark, so it owes 3:1 against every ground a chart sits on (WCAG 1.4.11).
+The ratios above are computed from `tokens.css`. The contrast contract promises every one of them,
+so a palette change that broke a series would fail the build.
+
+- **Start in ink.** Most charts need one colour. Bars that carry their own labels need no colour to
+  tell them apart, and a bar chart sorted by value reads better than a coloured one.
+- **The comparison is muted and dashed.** Last week, the target, the baseline. Dashed, so it is
+  still told apart in greyscale and by someone who cannot tell the colours apart.
+- **Add a colour only when two lines must be told apart at a glance**, and stop at four. Añil,
+  verde and the warning gold also mean information, success and warning. Name each line at its end
+  so that its colour is never the only key, and give each line its own dash or marker as well.
+  Past four lines, use a table or small multiples.
+- **Rojo is never a series.** On a product screen it means something can be lost or has failed
+  ([ADR 0008](?path=/docs/decisions-0008-the-rojo-register--overview)). Use it for a threshold that
+  has been crossed, through the danger role (`--danger`), and say so in words.
+- **Gold marks one point, not a line.** It measures under 3:1 on light cloth, so it is a square with
+  an ink keyline, as the sparkline draws "now".
+- **Gridlines are `--keyline`.** It is under 3:1 on purpose, so a gridline can never be read as data
+  or as a control edge.
+
+## Shape and type
+
+- **No curves and no gradients.** Lines are mitred polylines, points are squares, and areas are flat
+  fills. The system has no radius, and a chart is not an exception.
+- **Figures are Archivo with tabular numerals** (the `tabular` utility), right-aligned in tables.
+  Martian Mono is for machine literals, not for numbers
+  ([ADR 0003](?path=/docs/decisions-0003-monospace-for-literals--overview)).
+- **Label directly.** Put the series name at the end of its line and the value on the bar. A legend
+  sends the eye away from the data and back.
+
+## A worked example
+
+<RunsChart />
+
+This week in ink and last week dashed in muted ink. Today's point is a gold square with an ink
+keyline, and each line is named at its end. Under the chart, the same numbers are in a table,
+which is the chart's text alternative. A chart is an image to a screen reader. Give it a name that
+says what it shows, and put the numbers somewhere a screen reader can read them.
+
+## Checklist
+
+1. One colour unless two series must be told apart, and never more than four.
+2. No rojo unless something has failed or crossed a danger threshold, and then the words say so.
+3. Each series named on the chart, with a dash or marker as well as its colour.
+4. The numbers available as text: a table, or the figure beside the chart.
+5. Checked in both themes and in greyscale.

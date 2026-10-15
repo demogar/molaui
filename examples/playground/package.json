@@ -1,0 +1,23 @@
+{
+  "name": "mola-ui-playground",
+  "private": true,
+  "type": "module",
+  "description": "Mola UI from npm in a small Vite app, for trying it in the browser. Opened from Getting started on StackBlitz.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@base-ui/react": "1.9.0",
+    "@demogar/mola-ui": "0.6.0",
+    "@fontsource-variable/alegreya": "5.3.0",
+    "@fontsource-variable/archivo": "5.3.0",
+    "@fontsource-variable/martian-mono": "5.3.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "6.1.2",
+    "vite": "8.3.4"
+  }
+}

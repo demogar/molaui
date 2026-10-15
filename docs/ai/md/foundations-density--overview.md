@@ -7,27 +7,55 @@ Markdown version of https://demogar.github.io/molaui/?path=/docs/foundations-den
 The decisions behind this page are architecture decision records: see [Decisions](https://demogar.github.io/molaui/md/decisions-all-decisions--overview.md).
 
 The one axis an internal tool needs that an editorial site does not. One attribute re-scales
-control heights, row heights, the small end of the type scale and the spacing unit — together, so a
-dense table and its toolbar never disagree about what "small" means.
+control heights, row heights, the small end of the type scale, the icons and the spacing unit —
+together, so a dense table and its toolbar never disagree about what "small" means.
 
-| Metric | `compact` | `comfortable` (default) | `spacious` |
-| --- | --- | --- | --- |
-| Control height | 28px | 36px | 48px |
-| Row height | 30px | 40px | 52px |
-| Body text | 13px | 14px | 17px |
-| Default icon | 14px | 16px | 18px |
-| Spacing unit | 3.5px | 4px | 4px |
-| Use it for | logs, run tables, traces | the product default | forms, onboarding, settings |
+## The same screen, three densities
 
-Every value each density sets, read live from `tokens.css`, is on
-[Spacing](https://demogar.github.io/molaui/?path=/docs/foundations-spacing--overview).
+Each frame below holds the same real components: a field, two buttons, a table with status badges.
+None of them takes a size. Only the frame's `data-density` attribute differs.
+
+> Not included in the Markdown version: an interactive `DensitySpecimen` block. See it on the page: https://demogar.github.io/molaui/?path=/docs/foundations-density--overview
+
+## What each density sets
+
+> Not included in the Markdown version: an interactive `DensityMetrics` block. See it on the page: https://demogar.github.io/molaui/?path=/docs/foundations-density--overview
+
+Every value is read from `tokens.css`. [Spacing](https://demogar.github.io/molaui/?path=/docs/foundations-spacing--overview) has
+the full list, including the small and large controls and the rest of the type scale.
+
+- **`compact`**: logs, run tables, traces. Screens where people scan many rows and act on few.
+- **`comfortable`**: the product default, for everything that has no reason to be otherwise.
+- **`spacious`**: forms, onboarding, settings. Screens read once and carefully, and the density
+  someone chooses when they need larger text and bigger targets.
 
 `spacious` is the original editorial metric of the system this grew from, kept so its lineage is one
 attribute away. That is why its spacing unit stays at 4px: the editorial site was laid out on it, and
-spacious exists to reproduce it exactly. Its type and its icons grow; its gaps and padding do not
-(ADR 0005, amended 2026-10-14).
+spacious exists to reproduce it exactly. Its type, its controls and its icons grow; its gaps and
+padding do not ([ADR 0005](https://demogar.github.io/molaui/?path=/docs/decisions-0005-density-is-a-surface--overview), amended
+2026-10-14).
 
-> Not included in the Markdown version: an interactive `Specimen` block. See it on the page: https://demogar.github.io/molaui/?path=/docs/foundations-density--overview
+## What does not change
+
+- **The display end of the type scale.** A dense tool is dense in its rows, not its page titles.
+  `text-2xl` and above are the same in every density.
+- **Prose.** A model's answer or a long description stays at its reading size. Shrinking it to fit
+  a compact screen would make it harder to read and save nothing.
+- **The floor.** Nothing drops below 11px text or a 24px target, even in compact.
+- **The cut.** Keylines, bands, the focus ring and the radius (zero) are the same in every density.
+
+## Choosing a density
+
+- **Set it on a surface, not on a component.** `data-density="compact"` on a log panel re-scales
+  the table, its toolbar and its filters together. A compact table under a comfortable toolbar is
+  the drift density exists to stop.
+- **Nest it when one part of a screen is denser.** A comfortable settings page can hold a compact
+  audit log. The attribute works on any element, and its children follow the nearest one.
+- **Let people choose.** Density is a preference as much as a product decision. Offer it beside
+  the theme, and put it on `<html>` so menus and dialogs, which portal to `<body>`, follow it.
+- **Spacious still reflows at 320px.** A larger density is no excuse for sideways scrolling, because
+  the people who choose it are often the ones who also zoom. See
+  [Responsive](https://demogar.github.io/molaui/?path=/docs/foundations-responsive--overview).
 
 ## How it works
 
