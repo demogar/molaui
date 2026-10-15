@@ -7,6 +7,7 @@ import { Field, Input, Textarea } from '../field'
 import { FormErrorSummary } from '../form'
 import { Select } from '../select'
 import { Stepper, type StepperStep } from './stepper'
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 
 const STEPS: StepperStep[] = [
   { id: 'basics', title: 'Basics', description: 'What the agent is called and what it is for.' },
@@ -182,6 +183,70 @@ export const Translated: Story = {
     docs: {
       description: {
         story: 'Every word the stepper writes itself comes from `messages`: the buttons, the “Step 2 of 3” line and the four state words.',
+      },
+    },
+  },
+}
+
+const fields = (step: StepperStep) => <p className="m-0 text-sm text-ink-2">{step.description}</p>
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <Stepper
+          label="Steps to connect a ticket archive"
+          defaultStep="permissions"
+          steps={[
+            { id: 'source', title: 'Choose the ticket archive to connect', description: 'Where the agent reads from.' },
+            { id: 'permissions', title: 'Grant read access to archived and escalated tickets', description: 'Read only. Nothing is written back.' },
+            { id: 'confirm', title: 'Confirm', description: 'Check the connection before it is saved.' },
+          ]}
+        >
+          {fields}
+        </Stepper>
+      </HardState>
+      <HardState state="rtl">
+        <Stepper
+          label="خطوات إنشاء وكيل"
+          defaultStep="model"
+          steps={[
+            { id: 'basics', title: 'الأساسيات', description: 'اسم الوكيل والغرض منه.' },
+            { id: 'model', title: 'النموذج', description: 'النموذج الذي يبدأ به كل تشغيل.' },
+            { id: 'review', title: 'المراجعة', description: 'راجع الوكيل قبل إنشائه.' },
+          ]}
+          messages={{
+            back: 'رجوع',
+            continue: 'متابعة',
+            finish: 'إنشاء الوكيل',
+            stepOf: (position: number, total: number) => `الخطوة ${position} من ${total}`,
+            states: { upcoming: 'لم تبدأ', current: 'الحالية', complete: 'تمّت', invalid: 'تحتاج إلى تصحيح' },
+          }}
+        >
+          {fields}
+        </Stepper>
+      </HardState>
+      <HardState state="error">
+        <Stepper
+          label="Steps to create a refund agent"
+          defaultStep="limits"
+          steps={[
+            { id: 'naming', title: 'Naming', description: 'What the agent is called.', invalid: true },
+            { id: 'limits', title: 'Limits', description: 'How far a run may go before it stops.' },
+          ]}
+        >
+          {fields}
+        </Stepper>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Step titles longer than their column wrap inside it, so the bars stay one row; in right to left the steps run from the right, the buttons swap sides and every word comes from `messages`; a step sent back says so in a glyph, “Needs fixing” and rojo. A stepper has no disabled state: steps not yet reached are text, not disabled buttons, because skipping ahead would skip the checks.',
       },
     },
   },

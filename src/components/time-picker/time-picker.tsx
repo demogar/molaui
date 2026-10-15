@@ -398,7 +398,7 @@ export function TimePicker({
           'focus-within:focus-ring focus-within:hover:focus-ring',
           'has-[[aria-invalid=true]]:band-danger has-[[aria-invalid=true]]:cut-band',
           'has-[[aria-invalid=true]]:focus-within:cut-band-focus',
-          'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
+          'data-disabled:cursor-not-allowed data-disabled:bg-disabled data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
           '[&_svg]:size-(--icon) [&_svg]:shrink-0',
           className,
         )}

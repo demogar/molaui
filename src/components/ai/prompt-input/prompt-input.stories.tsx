@@ -4,6 +4,7 @@ import * as React from 'react'
 import { fn } from 'storybook/test'
 
 import { Button, IconButton } from '../../button'
+import { HardState, HardStates as HardStatesFrame } from '../../../docs/blocks/hard-states'
 
 import { AttachmentChip, PromptInput } from './prompt-input'
 
@@ -82,4 +83,38 @@ export const Offline: Story = {
 
 export const LongFormSubmit: Story = {
   args: { submitOn: 'mod-enter', placeholder: 'Write a brief for the research agent…' },
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <PromptInput
+          label="Message the Cayuco research agent about the Starter plan help panel rollout"
+          onSubmit={fn()}
+          defaultValue="Compare the ticket rate per 1,000 workspaces for every Starter signup cohort since the help panel went to 50%, and tell me whether the first-reply guardrail held in each one."
+          attachments={<AttachmentChip name="ro-0412_assignments_by_plan_and_signup_cohort_final.csv" detail="CSV · 4.1 MB" onRemove={fn()} />}
+        />
+      </HardState>
+      <HardState state="rtl">
+        <PromptInput label="راسل كايوكو" placeholder="اسأل عن مقياس أو مستند" onSubmit={fn()} toolbar={<ModelPicker />} />
+      </HardState>
+      <HardState state="disabled">
+        <PromptInput label="Message Cayuco" defaultValue="Summarise the fair-play policy." onSubmit={fn()} disabled />
+      </HardState>
+      <HardState state="error">
+        <PromptInput label="Message Cayuco" status="offline" defaultValue="Draft kept while the connection is down…" onSubmit={fn()} />
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A long draft grows to its row limit and then scrolls, and a long attachment name truncates inside its chip; in right to left the send button and the estimate change sides; disabled takes the disabled ground and a send that cannot be pressed; the error is offline, where the draft stays editable and the composer says in words why it cannot be sent.',
+      },
+    },
+  },
 }

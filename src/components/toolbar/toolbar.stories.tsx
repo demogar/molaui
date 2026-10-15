@@ -12,6 +12,8 @@ import {
   ToolbarToggle,
   ToolbarToggleGroup,
 } from './toolbar'
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
+import { DirectionProvider } from '../../lib/direction'
 
 const meta = {
   title: 'Components/Layout/Toolbar',
@@ -141,4 +143,66 @@ export const Overflow: Story = {
       ))}
     </div>
   ),
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <Toolbar aria-label="Run actions, long labels" variant="panel">
+          <ToolbarButton icon={<Play />}>Re-run the failed step</ToolbarButton>
+          <ToolbarButton icon={<Link2 />}>Share the full trace</ToolbarButton>
+        </Toolbar>
+      </HardState>
+      <HardState state="rtl">
+        <DirectionProvider direction="rtl">
+          <Toolbar aria-label="إجراءات التشغيل" variant="panel">
+            <ToolbarGroup>
+              <ToolbarButton icon={<Play />}>إعادة التشغيل</ToolbarButton>
+              <ToolbarButton icon={<Copy />}>نسخ المعرّف</ToolbarButton>
+            </ToolbarGroup>
+            <ToolbarSeparator />
+            <ToolbarToggle icon={<WrapText />} defaultPressed>
+              التفاف الأسطر
+            </ToolbarToggle>
+          </Toolbar>
+        </DirectionProvider>
+      </HardState>
+      <HardState state="disabled">
+        <Toolbar aria-label="Run actions, run finished" variant="panel">
+          <ToolbarButton icon={<Play />}>Re-run</ToolbarButton>
+          <ToolbarButton icon={<Square />} disabled>
+            Stop
+          </ToolbarButton>
+        </Toolbar>
+      </HardState>
+      <HardState state="error">
+        <div className="grid gap-2">
+          <Toolbar aria-label="Filter runs, invalid" variant="panel">
+            <ToolbarInput
+              aria-label="Run id"
+              defaultValue="run_48#2"
+              aria-invalid
+              aria-describedby="toolbar-hard-error"
+              wrapperClassName="min-w-32 flex-1"
+            />
+            <ToolbarButton aria-label="Refresh" icon={<RefreshCw />} className="w-(--control-h-sm) px-0" />
+          </Toolbar>
+          <p id="toolbar-hard-error" className="m-0 text-sm text-ink-danger">
+            A run id has only letters, digits and underscores.
+          </p>
+        </div>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Long labels wrap the row onto a second line rather than running past a phone’s edge; in right to left the order, the icons and the arrow keys mirror; a disabled button stays in the row, stated, so the row does not reflow when a run finishes; an invalid field in the bar takes the danger band and says why below the bar.',
+      },
+    },
+  },
 }

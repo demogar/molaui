@@ -48,7 +48,7 @@ export interface CitationProps extends Omit<React.ComponentProps<'a'>, 'children
 const markerClass = cn(
   'relative -top-[0.1em] mx-[0.1em] inline-flex h-[1.3em] min-w-[1.3em] items-center justify-center px-[0.3em] align-baseline',
   'bg-cloth-pale font-ui text-[0.62em] font-semibold tabular text-ink no-underline shadow-cut band-accent [--cut-reveal:2px]',
-  'transition-[box-shadow,background-color] hover:cut-band data-[popup-open]:cut-band',
+  'transition-[box-shadow,background-color] hover:cut-band active:band-ink data-[popup-open]:cut-band',
 )
 
 /**
@@ -281,7 +281,7 @@ export function SourceList({ sources, timeZone, className, ...props }: SourceLis
             rel="noopener noreferrer"
             className={cn(
               'group/source grid h-full grid-cols-[auto_1fr] gap-x-3 gap-y-1 bg-cloth-pale p-3 text-ink no-underline shadow-cut band-accent [--cut-reveal:3px]',
-              'transition-[box-shadow] hover:cut-band',
+              'transition-[box-shadow] hover:cut-band active:cut-band active:band-ink',
             )}
           >
             <SourceNumber id={source.id} className="row-span-3" />

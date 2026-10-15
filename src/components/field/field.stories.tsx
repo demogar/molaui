@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { AtSign, Globe, Timer } from 'lucide-react'
 import { useState } from 'react'
 
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 import { Field } from './field'
 import { Input } from './input'
 import { Label } from './label'
@@ -187,4 +188,50 @@ export const LabelOnly: Story = {
       <Label optional>Model</Label>
     </div>
   ),
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <Field
+          label="Maximum number of tool calls the agent may make before it asks a person to continue"
+          labelAside="Default 40"
+          hint="Counted per run, across every retry; a call that times out still counts toward the limit."
+        >
+          {(control) => <Input {...control} defaultValue="40" trailing="calls" inputMode="numeric" />}
+        </Field>
+      </HardState>
+      <HardState state="rtl">
+        <div className="grid gap-6">
+          <Field label="اسم التشغيل" hint="يظهر في قائمة التشغيلات وفي التنبيهات.">
+            {(control) => <Input {...control} defaultValue="تقييم ليلي" />}
+          </Field>
+          <Field label="عنوان الويب" optional>
+            {(control) => <Input {...control} type="url" dir="ltr" leading={<Globe />} defaultValue="https://hooks.cayuco.example/runs" />}
+          </Field>
+        </div>
+      </HardState>
+      <HardState state="disabled">
+        <Field label="Owner" hint="Set by the workspace admin.">
+          {(control) => <Input {...control} disabled defaultValue="Platform team" />}
+        </Field>
+      </HardState>
+      <HardState state="error">
+        <Field label="Timeout" hint="Between 1 and 900 seconds." error="1200 is over the limit.">
+          {(control) => <Input {...control} defaultValue="1200" trailing="s" />}
+        </Field>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A long label wraps above the control and pushes its aside to a line of its own rather than overlapping it; the hint wraps under it. In right to left the label, the adornment and the text align to the right, but a URL stays left to right, pinned with `dir="ltr"`, because it reads that way in every language. Disabled is the disabled ground, muted ink, keyline kept. The error keeps the hint and adds its marked message and the rojo band.',
+      },
+    },
+  },
 }

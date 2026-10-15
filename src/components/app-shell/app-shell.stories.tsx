@@ -18,6 +18,8 @@ import { CayucoSidebar, CayucoTopbar } from './_story-data/cayuco-chrome'
 import { AppShell } from './app-shell'
 import { PageHeader } from './page-header'
 import { Toolbar, ToolbarButton, ToolbarGroup, ToolbarSeparator } from '../toolbar'
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
+import { NavItem, NavSection, Sidebar } from './sidebar'
 
 const meta = {
   title: 'Components/Layout/App shell',
@@ -286,6 +288,55 @@ export const WithNotices: Story = {
       description: {
         story:
           'The shell’s three kinds of notice, each in its place. The **banner** is a condition of the whole app, above the top bar. A **toast** is an event, said once (press ⇧F to fail a re-index). The **notification centre** under the bell keeps that event after the toast has gone, and its count changes without a word. The `?` key, or the help button, lists every shortcut bound on the page from one registry: the palette’s ⌘K or Ctrl-K, its commands’ G sequences, the toast region’s F6, and the page’s own.',
+      },
+    },
+  },
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  args: { topbar: null, sidebar: null, children: null },
+  render: () => (
+    <HardStatesFrame className="p-6">
+      <HardState state="long-label">
+        <div className="w-64 max-w-full bg-cloth shadow-cut">
+          <Sidebar label="Workspace, long names">
+            <NavSection title="Agents in the support operations workspace">
+              <NavItem href="#" icon={<Play />} active>
+                Refund and chargeback triage agent
+              </NavItem>
+              <NavItem href="#" icon={<RefreshCw />} count={128} countLabel="failed" countTone="danger">
+                Escalations waiting for a person
+              </NavItem>
+            </NavSection>
+          </Sidebar>
+        </div>
+      </HardState>
+      <HardState state="rtl">
+        <div className="w-64 max-w-full bg-cloth shadow-cut">
+          <Sidebar label="مساحة العمل">
+            <NavSection title="الوكلاء">
+              <NavItem href="#" icon={<Play />} active>
+                التشغيلات
+              </NavItem>
+              <NavItem href="#" icon={<RefreshCw />} count={3} countLabel="فشلت" countTone="danger">
+                التصعيدات
+              </NavItem>
+              <NavItem href="#" icon={<SlidersHorizontal />}>
+                الإعدادات
+              </NavItem>
+            </NavSection>
+          </Sidebar>
+        </div>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The sidebar’s parts, not a second full shell: a page has one `<main>`. A long name truncates on one line, so the rail stays a column of equal rows, and the count keeps its place at the end; in right to left the current item’s bar, the icons and the counts mirror. The shell has no disabled or error state: a destination a person cannot use is left out of the navigation rather than shown disabled, and an error belongs to the page in `<main>`.',
       },
     },
   },

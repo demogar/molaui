@@ -42,6 +42,7 @@ Each story is a live example in Storybook.
 - [Controlled](https://demogar.github.io/molaui/?path=/story/components-forms-segmented-control--controlled)
 - [Default](https://demogar.github.io/molaui/?path=/story/components-forms-segmented-control--default)
 - [Disabled](https://demogar.github.io/molaui/?path=/story/components-forms-segmented-control--disabled)
+- [HardStates](https://demogar.github.io/molaui/?path=/story/components-forms-segmented-control--hard-states)
 - [IconOnly](https://demogar.github.io/molaui/?path=/story/components-forms-segmented-control--icon-only)
 - [WithIcons](https://demogar.github.io/molaui/?path=/story/components-forms-segmented-control--with-icons)
 
@@ -90,7 +91,7 @@ Types: `SegmentedControlBaseProps`, `SegmentedControlProps`, `SegmentedOption`
 
 ### Testing status
 
-- Automated, jsdom: each of its 5 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 6 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

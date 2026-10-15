@@ -171,13 +171,15 @@ export function Pagination({
               <button
                 type="button"
                 aria-current={item === page ? 'page' : undefined}
-                aria-label={`Page ${item}`}
+                // The name carries the number as it is shown ("12,480"), or a
+                // speech-input user saying what they see does not match it.
+                aria-label={`Page ${fmt(item)}`}
                 onClick={() => onPageChange(item)}
                 className={cn(
                   'inline-grid h-(--control-h-sm) min-w-(--control-h-sm) cursor-pointer place-items-center rounded-none px-1.5',
                   'font-ui text-sm font-semibold tabular-nums text-ink-2',
                   'transition-[background-color,color]',
-                  'hover:bg-ink-soft hover:text-ink',
+                  'hover:bg-ink-soft hover:text-ink active:cut-press',
                   'aria-[current=page]:bg-ink aria-[current=page]:text-on-ink aria-[current=page]:forced-selected',
                 )}
               >

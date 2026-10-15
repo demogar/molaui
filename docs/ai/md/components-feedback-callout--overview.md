@@ -61,6 +61,7 @@ Each story is a live example in Storybook.
 - [Flat](https://demogar.github.io/molaui/?path=/story/components-feedback-callout--flat)
 - [FlatInAGrid](https://demogar.github.io/molaui/?path=/story/components-feedback-callout--flat-in-a-grid)
 - [FlatTones](https://demogar.github.io/molaui/?path=/story/components-feedback-callout--flat-tones)
+- [HardStates](https://demogar.github.io/molaui/?path=/story/components-feedback-callout--hard-states)
 - [Tones](https://demogar.github.io/molaui/?path=/story/components-feedback-callout--tones)
 - [WithActions](https://demogar.github.io/molaui/?path=/story/components-feedback-callout--with-actions)
 
@@ -113,7 +114,7 @@ Types: `CalloutProps`, `CalloutTone`, `CalloutVariant`
 
 ### Testing status
 
-- Automated, jsdom: each of its 7 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 8 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

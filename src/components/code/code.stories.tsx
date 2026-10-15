@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 
 import { Code, CodeBlock } from './code'
 
@@ -72,4 +73,33 @@ export const Inline: Story = {
       The run <Code>run_8f2c41</Code> called <Code>warehouse.query</Code> with <Code>dry_run: false</Code>.
     </p>
   ),
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <CodeBlock code={ARGS} language="json" label="arguments for warehouse.query on ro_help_panel_starter_cohorts" />
+      </HardState>
+      <HardState state="rtl">
+        <CodeBlock code={SQL} language="sql" label="الاستعلام" lineNumbers />
+        <p className="m-0 text-base text-ink-2">
+          استدعى التشغيل <Code>warehouse.query</Code> مرة واحدة.
+        </p>
+      </HardState>
+      <HardState state="error">
+        <CodeBlock code={'{\n  "query": "workspaces that opened more than 20 tick'} label="arguments · stream cut" />
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A long label truncates in the header and a long line scrolls inside the panel, never the page, at a phone’s width; in right to left the header and the copy button change sides while the code itself stays left to right, because a reordered query is a different query; the error is a payload cut off mid-stream, shown exactly as it arrived rather than repaired. Code has no disabled state: it is text to read and copy.',
+      },
+    },
+  },
 }

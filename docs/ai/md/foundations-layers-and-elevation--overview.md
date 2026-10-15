@@ -51,6 +51,33 @@ checkbox or a chip, written `band-accent` so an app can re-accent it. Red is rev
 something already about danger, as `band-danger`, because a field that flashes red under the
 pointer reads, for a moment, as an error.
 
+## Hover, pressed and disabled
+
+Every control says these three the same way, so a reader learns them once. The
+[Button states](https://demogar.github.io/molaui/?path=/story/components-actions-button--states) story shows each one beside the
+others for every variant.
+
+| State | A cut shape (button, field, checkbox, chip) | An edgeless control (ghost button, segment, tab, page number) |
+| --- | --- | --- |
+| **Hover** | The accent band is revealed: `hover:cut-band` | A wash, and secondary text steps up to ink: `hover:bg-ink-soft` |
+| **Pressed** | The band closes with ink: `active:band-ink` | The ink cut it does not otherwise have, drawn inward: `active:cut-press` |
+| **Disabled** | The disabled ground, muted ink, the keyline kept: `bg-disabled text-ink-muted shadow-cut` | Muted ink on its own ground; a fill would invent an edge |
+
+Pressed is ink in both columns. Hover and pressed used to be the same picture, and a flat system
+with no translate and no shadow has nothing else to tell the eye that the press landed. A deeper
+gold was the first idea; it needs a colour an app re-accenting the system would also have to pick,
+and in the dark theme a "deeper" gold is a lighter one. Ink is already every edge.
+
+Disabled is **stated, not faded**. `--disabled` is one step down from the page in the light theme
+and one step up in the dark theme, where a step down is toward black and a disabled field read as
+an empty frame. A primary or danger button keeps a thin band of its role inside the keyline
+(`cut-inner band-ink`, `cut-inner band-danger`), so a panel's main action keeps its place and
+a destructive action is recognisable before its confirmation is typed. A disabled control that
+can explain itself says why, beside it, with `aria-describedby`.
+
+Option rows (menu, select, listbox, calendar, tree) take no pressed step: pressing one chooses it,
+and the chosen look below is the feedback.
+
 ## Three ways to say "selected"
 
 Selection was drawn three ways, and the three mean different things. Each has one look.
@@ -123,8 +150,10 @@ Two more devices come from the same method, and neither is depth.
 | --- | --- | --- |
 | The page | Ground | `bg-cloth` |
 | Card, input, panel | Raised | `bg-cloth-pale shadow-cut` |
-| Table header, well, disabled field | One step down | `bg-cloth-shade` |
+| Table header, well | One step down | `bg-cloth-shade` |
 | Hovered control | Revealed | `cut-band band-accent` (or `band-anil`, `band-danger`) |
+| Pressed control | Revealed, closed with ink | `cut-band band-ink`, or `cut-press` with no edge |
+| Disabled control | Disabled | `bg-disabled text-ink-muted`, and `cut-inner` on a primary or danger button |
 | Item chosen for an action | Selected | `bg-selected bar-start-ink` |
 | Menu, popover, select, tooltip, toast | Floating | `bg-cloth-pale shadow-floating` |
 | Dialog, drawer, command palette | Overlay | `bg-cloth-pale shadow-overlay` |

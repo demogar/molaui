@@ -78,6 +78,44 @@
   box-shadow: var(--focus-ring-inset), var(--cut-band);
 }
 
+/* ── the states a cut shape can be in ─────────────────────────────────
+ * Hover reveals the band (`hover:cut-band`, gold). PRESSED closes it with
+ * ink: `active:band-ink` on the same element, so the revealed gold turns into
+ * the top layer for as long as the button is held. It was identical to hover,
+ * and a flat system with no translate and no shadow has nothing else to tell
+ * the eye the click landed. Deepening the gold was the first idea, but it
+ * needs a new colour that an app re-accenting the system would also have to
+ * pick, and in the dark theme "deeper" gold is lighter; ink is already the
+ * colour of every edge, so the pressed step is the same in both themes and
+ * under any accent.
+ *
+ * An edgeless control (a ghost button, a segment, a page number, a tab) has
+ * no band to close, so pressed is the cut itself, drawn inward so a clipping
+ * list cannot shave it: `active:cut-press`. Pressed is ink either way.
+ *
+ * DISABLED is stated, not faded: the --disabled ground, muted ink, the keyline
+ * kept. Primary, secondary and danger all collapsed into that one look, so a
+ * panel's main action lost its place while disabled and a destructive button
+ * was not recognisable as destructive until the person had typed the
+ * confirmation. `cut-inner` keeps a thin band of the variant's role
+ * (`band-ink` for primary, `band-danger` for danger) inside the keyline, a
+ * --focus-gap of the disabled ground between them, so the weight survives and
+ * the label stays muted. A loading button is disabled and focusable, so the
+ * band has a focused form too. Not `cut-disabled`: `cut-*` is already the
+ * coloured keyline, and --disabled is a colour, so that name was taken. */
+@utility cut-inner {
+  --cut-inner:
+    inset 0 0 0 var(--focus-gap) var(--disabled), inset 0 0 0 calc(var(--focus-gap) + var(--cut-w)) var(--band);
+  box-shadow: var(--cut), var(--cut-inner);
+  &:focus-visible {
+    box-shadow: var(--focus-ring), var(--cut-inner);
+  }
+  @media (forced-colors: active) {
+    outline: 1px solid CanvasText !important;
+    outline-offset: -1px !important;
+  }
+}
+
 @utility band-oro {
   --band: var(--oro);
 }
@@ -96,6 +134,15 @@
 }
 @utility band-cloth {
   --band: var(--cloth-pale);
+}
+/* The accent as an ink panel can carry it: gold where the panel is dark,
+ * gold taken down where the dark theme bleaches the panel to cotton (see
+ * --on-ink-accent). For `display-cut` on an ink panel, whose fill is the
+ * panel's own ink: with `band-oro` the fill had to be dark to read against
+ * the gold, so the letters were hollow on the light theme's dark panel and
+ * solid on the dark theme's light one. */
+@utility band-ink-accent {
+  --band: var(--on-ink-accent);
 }
 /* The accent reveal: what a control shows under the hand, and the texture of
  * work in progress. --accent is gold; naming the job lets an app re-accent. */
@@ -123,6 +170,7 @@
  *                                     --cut-w
  *   bar-start-<colour>                the current item, or the region a
  *   bar-bottom-<colour>               status owns: --bar-w on one edge
+ *   cut-press                         pressed, on a control with no edge
  *   cut-<colour>  cut-thin  rule-ring a keyline all the way round: a
  *                                     coloured cut, a 1px ink cut, a 1px
  *                                     decorative ring
@@ -335,6 +383,16 @@
  * swatch on light cloth, where gold alone measures 1.66:1. */
 @utility cut-thin {
   --edge-ring: 0 0 0 var(--rule-w) var(--ink);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  @media (forced-colors: active) {
+    outline: 1px solid CanvasText !important;
+    outline-offset: -1px !important;
+  }
+}
+/* Pressed, on a control with no edge of its own: the ink cut, drawn inward
+ * (see "the states a cut shape can be in" above). */
+@utility cut-press {
+  --edge-ring: inset 0 0 0 var(--cut-w) var(--ink);
   box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
   @media (forced-colors: active) {
     outline: 1px solid CanvasText !important;
@@ -678,6 +736,13 @@
  * which resolves a text-shadow ring as the effective background — measures
  * against. With band-oro the fill is --ink (9.34:1); --cloth-pale on --oro is
  * 1.80:1 and fails.
+ *
+ * ON AN INK PANEL, use `band-ink-accent text-ink`: the letter is cut through
+ * to the panel, so its fill is the panel's own ink in both themes, and the
+ * band is the gold an ink panel can carry (9.34:1 light, 5.67:1 dark).
+ * `band-oro text-on-oro` was the first form, and it forced a dark fill in
+ * both themes: on the light theme's dark panel the letters read hollow, on
+ * the dark theme's cotton panel they read solid, two different signatures.
  *
  * One per page. This is the signature, not a text style. */
 @utility display-cut {

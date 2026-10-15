@@ -64,6 +64,7 @@ lists the scopes.
 | `--on-accent` | accent and selection | `#14161a` | `#1e2126` | text: `text-on-accent` |
 | `--accent-soft` | accent and selection | `#f5ead0` | `#302f2c` | surface: `bg-accent-soft` |
 | `--selected` | accent and selection | `#f5ead0` | `#302f2c` | surface: `bg-selected` |
+| `--disabled` | disabled | `#e4e7dc` | `#2f3236` | surface: `bg-disabled` |
 | `--band` | the cut | `#edb01f` | `#f0bc3a` | edge, mark: set with `band-*` |
 | `--cut` | the cut | `0 0 0 var(--cut-w) var(--ink)` | `0 0 0 var(--cut-w) var(--ink)` |  |
 | `--focus-ring` | the cut | `0 0 0 var(--cut-w) var(--ink), 0 0 0 calc(var(--cut-w) + var(--focus-gap)) var(--cloth-pale), 0 0 0 calc(var(--cut-w) + var(--focus-gap) + 3px) var(--ink)` | `0 0 0 var(--cut-w) var(--ink), 0 0 0 calc(var(--cut-w) + var(--focus-gap)) var(--cloth-pale), 0 0 0 calc(var(--cut-w) + var(--focus-gap) + 3px) var(--ink)` |  |

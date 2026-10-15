@@ -20,7 +20,7 @@ in both themes — lighter on light, lighter on dark — so "raised" means the s
 | --- | --- | --- | --- |
 | `--cloth` | The page. | `#edeee8` | `#16181c` |
 | `--cloth-pale` | Raised: cards, inputs, menus, dialogs. | `#f6f7f2` | `#1e2126` |
-| `--cloth-shade` | One step down: table headers, wells, disabled fields. | `#e4e7dc` | `#111316` |
+| `--cloth-shade` | One step down: table headers and wells. A disabled control has its own ground, --disabled. | `#e4e7dc` | `#111316` |
 | `--cloth-deep` | The deepest cloth before a layer takes over. | `#d7dbcb` | `#2a2e34` |
 
 ## Ink — the top layer
@@ -78,6 +78,7 @@ the components to it.
 | `--accent` | The band a control reveals, the working texture, selected text. | `#edb01f` | `#f0bc3a` |
 | `--accent-soft` | A region that belongs to the accent. | `#f5ead0` | `#302f2c` |
 | `--selected` | An item chosen for an action: a selected row, the bulk-action bar. | `#f5ead0` | `#302f2c` |
+| `--disabled` | A control that cannot be used: one step down from the page in light, one step up in dark, under muted ink and a kept keyline. | `#e4e7dc` | `#2f3236` |
 
 ## Pairings that ship
 
@@ -96,6 +97,7 @@ Contrast ratios, computed from tokens.css:
 | `--ink-danger` | `--danger-soft` | 6.19 | 6.02 |
 | `--on-accent` | `--accent` | 9.34 | 9.19 |
 | `--ink-muted` | `--selected` | 5.05 | 4.98 |
+| `--ink-muted` | `--disabled` | 4.83 | 4.76 |
 | `--on-layer` | `--anil` | 7.96 | 6.80 |
 | `--on-layer` | `--verde` | 6.06 | 7.40 |
 | `--on-oro` | `--oro` | 9.34 | 9.19 |

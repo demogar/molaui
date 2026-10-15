@@ -54,6 +54,7 @@ Each story is a live example in Storybook.
 
 - [Default](https://demogar.github.io/molaui/?path=/story/components-forms-listbox--default)
 - [Disabled](https://demogar.github.io/molaui/?path=/story/components-forms-listbox--disabled)
+- [HardStates](https://demogar.github.io/molaui/?path=/story/components-forms-listbox--hard-states)
 - [Labelled](https://demogar.github.io/molaui/?path=/story/components-forms-listbox--labelled)
 - [Multiple](https://demogar.github.io/molaui/?path=/story/components-forms-listbox--multiple)
 - [Scrolling](https://demogar.github.io/molaui/?path=/story/components-forms-listbox--scrolling)
@@ -110,7 +111,7 @@ Types: `ListboxCommonProps`, `ListboxMultipleProps`, `ListboxOption`, `ListboxPr
 
 ### Testing status
 
-- Automated, jsdom: each of its 6 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 7 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

@@ -85,7 +85,7 @@ const tagClasses = [
   'transition-[background-color,color]',
   'focus-visible:focus-ring',
   'aria-selected:bg-ink aria-selected:text-on-ink aria-selected:forced-selected',
-  'aria-disabled:bg-cloth-shade aria-disabled:text-ink-muted',
+  'aria-disabled:bg-disabled aria-disabled:text-ink-muted',
   'aria-disabled:aria-selected:bg-ink aria-disabled:aria-selected:text-on-ink-muted',
   '[&_svg]:size-(--icon-sm) [&_svg]:shrink-0',
 ]

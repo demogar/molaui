@@ -50,6 +50,7 @@ A knowledge platform lives or dies on whether people check its sources, so check
 
 Each story is a live example in Storybook.
 
+- [HardStates](https://demogar.github.io/molaui/?path=/story/ai-sources--hard-states)
 - [InAnAnswer](https://demogar.github.io/molaui/?path=/story/ai-sources--in-an-answer)
 - [List](https://demogar.github.io/molaui/?path=/story/ai-sources--list)
 - [LongSnippet](https://demogar.github.io/molaui/?path=/story/ai-sources--long-snippet)
@@ -112,7 +113,7 @@ Types: `CitationProps`, `Source`, `SourceListProps`
 
 ### Testing status
 
-- Automated, jsdom: each of its 5 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 6 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

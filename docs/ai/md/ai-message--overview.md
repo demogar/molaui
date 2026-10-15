@@ -62,6 +62,7 @@ Each story is a live example in Storybook.
 
 - [Conversation](https://demogar.github.io/molaui/?path=/story/ai-message--conversation)
 - [Failed](https://demogar.github.io/molaui/?path=/story/ai-message--failed)
+- [HardStates](https://demogar.github.io/molaui/?path=/story/ai-message--hard-states)
 - [Streaming](https://demogar.github.io/molaui/?path=/story/ai-message--streaming)
 - [System](https://demogar.github.io/molaui/?path=/story/ai-message--system)
 - [ThreadStickToBottom](https://demogar.github.io/molaui/?path=/story/ai-message--thread-stick-to-bottom)
@@ -126,7 +127,7 @@ Types: `MessageProps`, `MessageRole`, `ThreadProps`
 
 ### Testing status
 
-- Automated, jsdom: each of its 5 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 6 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

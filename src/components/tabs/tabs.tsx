@@ -127,13 +127,23 @@ export function TabsTab({ className, count, icon, children, ...props }: TabsTabP
         'font-ui text-sm font-semibold text-ink-2',
         'transition-[color,background-color,box-shadow]',
         'hover:text-ink data-active:text-ink',
+        // Pressed is the inward cut every edgeless control takes; not on the
+        // active panel tab, whose own edge is the same slot.
+        'not-data-active:active:cut-press',
         // Disabled steps down to the floor of the text ramp, as in Segmented and
-        // Menu; it was a 60% fade of that floor, which drops below 3:1.
-        'data-disabled:pointer-events-none data-disabled:text-ink-muted',
+        // Menu; it was a 60% fade of that floor, which drops below 3:1. Muted
+        // text alone still read as a quiet tab rather than one that cannot be
+        // opened, so it takes the disabled ground every other disabled
+        // control has. The reason belongs beside it (`aria-describedby`), as
+        // the Underline story does.
+        'data-disabled:pointer-events-none data-disabled:bg-disabled data-disabled:text-ink-muted',
         '[&_svg]:size-(--icon) [&_svg]:shrink-0',
         // The focus ring sits inside the tab so the list's overflow clip does
         // not shave it off at either end of a scrolling row.
         'focus-visible:focus-ring-inset',
+        // The edgeless hover every other edgeless control has: a wash behind
+        // it as well as the text stepping up to ink. Tabs did only the second.
+        variant === 'underline' && 'hover:bg-ink-soft active:bg-ink-soft',
         variant === 'panel' && [
           // Resting tabs stop 3px short of the list's foot, clear of the
           // panel's keyline; the active one runs to the foot and its cloth

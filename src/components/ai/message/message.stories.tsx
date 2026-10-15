@@ -3,6 +3,7 @@ import * as React from 'react'
 import { fn } from 'storybook/test'
 
 import { Button } from '../../button'
+import { HardState, HardStates as HardStatesFrame } from '../../../docs/blocks/hard-states'
 import { ANSWER, OPERATOR_QUESTION, QUERY_ARGS, QUERY_RESULT, SOURCES } from '../_story-data/fixtures'
 import { useSimulatedStream } from '../_story-data/simulate'
 import { SourceList, citationRenderer } from '../sources'
@@ -149,6 +150,45 @@ export const ThreadStickToBottom: Story = {
       description: {
         story:
           'New turns arrive every second. While you are at the bottom the thread follows them. **Scroll up**: it stops following and offers *Jump to latest*. Scroll back down and it follows again. Auto-scrolling on every token is the most common streaming bug there is.',
+      },
+    },
+  },
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <Message role="user" author="M. Herrera-Villanueva, Support experience operations" timestamp="2026-10-05T14:01:40Z">
+          Compare the ticket rate per 1,000 workspaces for every Starter signup cohort since the help panel went to 50%, and tell me whether the first-reply guardrail held in each one.
+        </Message>
+      </HardState>
+      <HardState state="rtl">
+        <Message role="assistant" author="كايوكو" model="cayuco-deep-3" timestamp="2026-10-05T14:02:06Z" copyText="انخفض عدد التذاكر بعد الإطلاق." onFeedback={fn()}>
+          <StreamingText text="انخفض عدد التذاكر بعد الإطلاق." />
+        </Message>
+      </HardState>
+      <HardState state="error">
+        <Message
+          role="assistant"
+          author="Cayuco"
+          model="cayuco-deep-3"
+          status="error"
+          error="upstream_timeout: model did not return a token for 30000ms (req_7Hq2c91)"
+          onRetry={fn()}
+        >
+          <StreamingText text={ANSWER.slice(0, 140)} status="error" />
+        </Message>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A long author wraps in the gutter and a long prompt takes the full measure; in right to left the gutter, the band and the actions change sides while the model name stays a literal; the error keeps what arrived and states the failure verbatim beside Retry. A message has no disabled state: its actions are hidden while it streams, not disabled, so they never sit greyed out on a turn.',
       },
     },
   },

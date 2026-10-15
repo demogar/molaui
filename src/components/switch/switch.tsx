@@ -59,9 +59,9 @@ export function Switch({
         'group/switch relative inline-flex h-5 w-9 shrink-0 items-center rounded-none p-[3px]',
         'bg-cloth-shade shadow-cut band-accent [--cut-reveal:2px]',
         'transition-[background-color,box-shadow]',
-        'hover:cut-band focus-visible:focus-ring',
+        'hover:cut-band active:cut-band active:band-ink focus-visible:focus-ring',
         'data-checked:bg-verde data-checked:forced-selected',
-        'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:hover:shadow-cut',
+        'data-disabled:cursor-not-allowed data-disabled:bg-disabled data-disabled:hover:shadow-cut',
         className,
       )}
       {...props}

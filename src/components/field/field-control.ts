@@ -40,10 +40,11 @@ export const fieldControlClasses = [
   // it (`cut-band` in cloth.css says why not outside).
   'aria-invalid:focus:cut-band-focus',
   // Stated, not faded: fading would take the keyline with it.
-  'disabled:cursor-not-allowed disabled:bg-cloth-shade disabled:text-ink-muted disabled:hover:shadow-cut',
+  'disabled:cursor-not-allowed disabled:bg-disabled disabled:text-ink-muted disabled:hover:shadow-cut',
   // `:read-only` also matches every div and button, so it is scoped to the
   // two elements where it means "you cannot type here".
-  '[&:is(input,textarea):read-only]:bg-cloth-shade',
+  // Not when disabled: a disabled input matches :read-only too.
+  '[&:is(input,textarea):read-only:not(:disabled)]:bg-cloth-shade',
 ] as const
 
 /**

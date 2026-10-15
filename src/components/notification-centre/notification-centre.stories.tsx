@@ -3,6 +3,7 @@ import * as React from 'react'
 import { fn } from 'storybook/test'
 
 import { Button } from '../button'
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 import { ToastProvider, useToast } from '../toast'
 import { cayucoNotifications } from './_story-data/notifications'
 import { NotificationCentre, type NotificationItem, NotificationList } from './notification-centre'
@@ -126,6 +127,63 @@ export const WithToasts: Story = {
       description: {
         story:
           'The relationship, working. Failing a deploy raises a toast, which is announced, and adds the same event to the centre, which is not: the bell’s name gains one unread, silently. Five seconds later the toast has gone and the record is still under the bell.',
+      },
+    },
+  },
+}
+
+const LONG_ITEMS: NotificationItem[] = [
+  {
+    id: 'long-1',
+    tone: 'warn',
+    title: 'Refund and chargeback triage agent is waiting for an approval from a Support owner',
+    description: 'The refund of 1,240.00 USD to the Starter plan workspace is over the agent’s limit and needs a person.',
+    time: '4 min ago',
+  },
+  { id: 'long-2', tone: 'success', title: 'Re-indexing finished for the help panel knowledge base', time: '1 h ago', read: true },
+]
+const RTL_ITEMS: NotificationItem[] = [
+  { id: 'rtl-1', tone: 'info', title: 'نموذج جديد متاح', description: 'غيّره من إعدادات الوكيل.', time: 'قبل ٥ دقائق' },
+  { id: 'rtl-2', tone: 'success', title: 'اكتمل التشغيل', time: 'قبل ساعة', read: true },
+]
+const ERROR_ITEMS: NotificationItem[] = [
+  {
+    id: 'error-1',
+    tone: 'danger',
+    title: 'Deploy failed for Returns triage v5',
+    description: 'Tool “search_tickets” timed out after 30s',
+    time: 'Just now',
+  },
+]
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  decorators: [(Story) => <Story />],
+  render: () => (
+    <HardStatesFrame className="w-full">
+      <HardState state="long-label">
+        <div className="bg-cloth-pale shadow-cut">
+          <NotificationList label="Notifications, long" notifications={LONG_ITEMS} onMarkRead={fn()} />
+        </div>
+      </HardState>
+      <HardState state="rtl">
+        <div className="bg-cloth-pale shadow-cut">
+          <NotificationList label="الإشعارات" notifications={RTL_ITEMS} onMarkRead={fn()} />
+        </div>
+      </HardState>
+      <HardState state="error">
+        <div className="bg-cloth-pale shadow-cut">
+          <NotificationList label="Notifications, a failure" notifications={ERROR_ITEMS} onMarkRead={fn()} />
+        </div>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The list the bell opens, shown inline so all three states are in one picture. A long title and description wrap at a phone’s width, the time stays on its own line; in right to left the unread edge moves to the right with the text. A failure is the danger mark, “Error:” and the colour. There is no disabled state: when everything is read, Mark all as read is gone, not greyed out.',
       },
     },
   },

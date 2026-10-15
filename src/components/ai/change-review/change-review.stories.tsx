@@ -4,6 +4,7 @@ import { fn } from 'storybook/test'
 
 import { Button } from '../../button'
 import { CHANGE_SUMMARY, DASHBOARD_DIFF, FLAG_CHANGES, FLAG_DIFF } from '../_story-data/change'
+import { HardState, HardStates as HardStatesFrame } from '../../../docs/blocks/hard-states'
 
 import { ChangeCount } from './change-count'
 import { ChangeReview, FieldChanges, type ChangeDecision } from './change-review'
@@ -160,6 +161,44 @@ export const Counts: StoryObj<typeof ChangeCount> = {
     docs: {
       description: {
         story: 'Seen as “+12 −3”, heard as “12 lines added, 3 lines removed” — not “twelve minus three”.',
+      },
+    },
+  },
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <ChangeReview
+          title="Roll the help panel out to every Starter workspace created in the last fourteen days"
+          agent="Cayuco research agent for onboarding and support experience"
+          model="cayuco-deep-3"
+          onDecide={fn()}
+        >
+          <FieldChanges
+            title="Feature flag help_panel_v2"
+            changes={[
+              { field: 'rollout.audience', before: 'all_new_workspaces', after: 'plan_starter_created_last_14_days' },
+              { field: 'rollout.review_after', after: '2026-10-19' },
+            ]}
+          />
+        </ChangeReview>
+      </HardState>
+      <HardState state="rtl">
+        <ChangeReview title="إطلاق لوحة المساعدة" agent="وكيل البحث" model="cayuco-deep-3" onDecide={fn()}>
+          <FieldChanges title="help_panel_v2" changes={FLAG_CHANGES.slice(0, 2)} />
+        </ChangeReview>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A long title and agent wrap in the header, and a long value breaks as a literal rather than widening the before → after row; in right to left the decisions and the arrow change sides while field names and values stay left-to-right literals. A review has no disabled state, because the three decisions are always available to the reviewer, and its one error, a no without a reason, appears only once someone presses Reject (see Try it).',
       },
     },
   },

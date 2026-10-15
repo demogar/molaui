@@ -48,6 +48,7 @@ Each story is a live example in Storybook.
 - [Default](https://demogar.github.io/molaui/?path=/story/components-forms-combobox--default)
 - [FreeText](https://demogar.github.io/molaui/?path=/story/components-forms-combobox--free-text)
 - [Grouped](https://demogar.github.io/molaui/?path=/story/components-forms-combobox--grouped)
+- [HardStates](https://demogar.github.io/molaui/?path=/story/components-forms-combobox--hard-states)
 - [InvalidAndDisabled](https://demogar.github.io/molaui/?path=/story/components-forms-combobox--invalid-and-disabled)
 - [Multiple](https://demogar.github.io/molaui/?path=/story/components-forms-combobox--multiple)
 - [Sizes](https://demogar.github.io/molaui/?path=/story/components-forms-combobox--sizes)
@@ -139,7 +140,7 @@ Types: `AutocompleteProps`, `ComboboxCommonProps`, `ComboboxItems`, `ComboboxMul
 
 ### Testing status
 
-- Automated, jsdom: each of its 7 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 8 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
 import { Button } from '../../button'
+import { HardState, HardStates as HardStatesFrame } from '../../../docs/blocks/hard-states'
 import { MARKDOWN_ANSWER, SOURCES } from '../_story-data/fixtures'
 import { useSimulatedStream } from '../_story-data/simulate'
 import { SourceList, citationRenderer } from '../sources'
@@ -141,5 +142,43 @@ export const Muted: Story = {
     variant: 'muted',
     renderCitation: undefined,
     text: 'The question has two parts: did tickets drop, and is it *safe* to roll out. I’ll query `ro_0412_results`, then read the brief.',
+  },
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <Markdown
+          status="done"
+          headingLevel={3}
+          text={[
+            '### Tickets per 1,000 workspaces by plan, signup cohort and help panel variant',
+            '',
+            'The breakdown is in `analytics.ro_0412_segments_by_plan_and_signup_cohort_final`, refreshed at 14:02 UTC.',
+          ].join('\n')}
+        />
+      </HardState>
+      <HardState state="rtl">
+        <Markdown
+          status="done"
+          headingLevel={3}
+          text={['### ملخص الإطلاق', '', 'انخفض عدد التذاكر في خطة **Starter**:', '', '- قبل الإطلاق: 18', '- بعد الإطلاق: 12'].join('\n')}
+        />
+      </HardState>
+      <HardState state="error">
+        <Markdown status="error" text="The drop is concentrated in **Starter** workspaces created after the help panel went to 50%, and" />
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A long heading wraps and a long table name is a literal that breaks rather than widening the column; in right to left the list markers and the indent change sides; the error is a stream that stopped part-way, kept as it arrived rather than cleared. Markdown has no disabled state: it renders text, and nothing in it can be switched off.',
+      },
+    },
   },
 }

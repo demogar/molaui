@@ -421,13 +421,13 @@ export function FileUpload({
           'relative flex flex-wrap items-center gap-x-4 gap-y-3 p-(--control-px) py-5',
           'bg-cloth-pale relleno-field text-ink shadow-cut band-accent [--cut-reveal:3px] cursor-pointer',
           'transition-[box-shadow,background-color]',
-          'hover:cut-band',
+          'hover:cut-band active:cut-band active:band-ink',
           // Dragging: the band is revealed wider than a hover, and the field
           // takes the gold wash, so the target reads from across the screen.
           'data-dragging:cut-band data-dragging:bg-selected data-dragging:bg-none data-dragging:[--cut-reveal:5px]',
           'data-invalid:band-danger data-invalid:cut-band',
           // Stated, not faded: shade field, muted ink, keyline kept.
-          'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:bg-none data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
+          'data-disabled:cursor-not-allowed data-disabled:bg-disabled data-disabled:bg-none data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
         )}
       >
         <span
@@ -435,7 +435,7 @@ export function FileUpload({
           className={cn(
             'grid size-10 shrink-0 place-items-center bg-cloth shadow-cut [&_svg]:size-(--icon-lg)',
             dragging && 'bg-ink text-on-ink forced-selected',
-            disabled && 'bg-cloth-shade text-ink-muted',
+            disabled && 'bg-disabled text-ink-muted',
           )}
         >
           {dragging ? <ArrowDownToLine /> : <Upload />}

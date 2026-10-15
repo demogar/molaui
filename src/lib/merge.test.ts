@@ -41,7 +41,7 @@ const COLORS = [...theme.matchAll(/--color-([a-z0-9-]+):/g)].map((m) => m[1]!)
 /** The edge slots of cloth.css, one group per side; an edge and a shadow replace each other. */
 const EDGES = {
   'edge-focus': ['focus-ring', 'focus-ring-inset'],
-  'edge-ring': [{ cut: [...COLORS, 'current', 'thin', 'tab', 'gap'] }, 'rule-ring', 'keycap'],
+  'edge-ring': [{ cut: [...COLORS, 'current', 'thin', 'press', 'tab', 'gap'] }, 'rule-ring', 'keycap'],
   'edge-s': [{ 'bar-start': COLORS }, 'rule-s', 'rule-s-soft', 'cut-s'],
   'edge-e': ['rule-e', 'rule-e-soft', 'cut-e'],
   'edge-t': ['rule-t', 'rule-t-soft', 'cut-t'],
@@ -65,11 +65,11 @@ const reference = extendTailwindMerge<keyof typeof EDGES | 'band' | 'panel' | 'r
       'fvn-spacing': ['tabular'],
       leading: [{ leading: ['reading', 'body', 'snug', 'heading', 'tight'] }],
       tracking: [{ tracking: ['display', 'heading', 'label', 'figures', 'normal'] }],
-      shadow: [{ shadow: ['cut', 'raised', 'floating', 'overlay'] }, 'cut', 'cut-band', 'cut-band-focus'],
+      shadow: [{ shadow: ['cut', 'raised', 'floating', 'overlay'] }, 'cut', 'cut-band', 'cut-band-focus', 'cut-inner'],
       ease: [{ ease: ['cut'] }],
       'max-w': [{ 'max-w': ['page', 'wide', 'reading'] }],
       ...EDGES,
-      band: [{ band: ['oro', 'rojo', 'anil', 'verde', 'ink', 'cloth', 'accent', 'danger'] }],
+      band: [{ band: ['oro', 'rojo', 'anil', 'verde', 'ink', 'cloth', 'accent', 'danger', 'ink-accent'] }],
       panel: ['on-ink', 'on-layer'],
       relleno: ['relleno', 'relleno-field', 'relleno-working'],
       diente: ['diente', 'diente-up'],

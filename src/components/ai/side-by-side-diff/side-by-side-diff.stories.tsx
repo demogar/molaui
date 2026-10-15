@@ -3,6 +3,7 @@ import { fn } from 'storybook/test'
 
 import { DASHBOARD_DIFF, FLAG_DIFF, PROMPT_AFTER, PROMPT_BEFORE } from '../_story-data/change'
 import { ChangeReview, FileDiff } from '../change-review'
+import { HardState, HardStates as HardStatesFrame } from '../../../docs/blocks/hard-states'
 
 import { SideBySideDiff } from './side-by-side-diff'
 
@@ -84,6 +85,41 @@ export const InChangeReview: Story = {
     docs: {
       description: {
         story: 'Inside a `ChangeReview`, beside a `FileDiff`: the prompt is compared side by side, the dashboard reviewed as a file, and one decision covers both.',
+      },
+    },
+  },
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame className="md:grid-cols-1">
+      <HardState state="long-label">
+        <SideBySideDiff
+          title="System prompt for the support triage agent on Starter workspaces created in the last fourteen days"
+          before={PROMPT_BEFORE}
+          after={PROMPT_AFTER}
+          beforeLabel="Live"
+          afterLabel="Proposed"
+        />
+      </HardState>
+      <HardState state="rtl">
+        <SideBySideDiff
+          title="flags/help_panel_v2.yaml"
+          before={'variant: control\npercent: 50'}
+          after={'variant: panel\npercent: 100'}
+          beforeLabel="الحالي"
+          afterLabel="المقترح"
+        />
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A long title wraps and, at a phone’s width, the panes give way to one column of wrapped lines; full width, in right to left, the old pane moves to the right and the new to the left while the code inside stays left to right. A diff has no disabled state and no error state of its own: it shows two texts, and an unparseable diff is the tool’s failure, shown by the tool call that returned it.',
       },
     },
   },

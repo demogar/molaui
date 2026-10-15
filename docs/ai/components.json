@@ -18,7 +18,7 @@
       "why": "It has to survive colour blindness, a greyscale screenshot and forced colours."
     },
     {
-      "rule": "Disabled is stated, not faded. No `opacity-*` on a disabled control.",
+      "rule": "Disabled is stated, not faded. No `opacity-*` on a disabled control; a disabled control of your own stands on `bg-disabled` with `text-ink-muted` and keeps its keyline.",
       "why": "Opacity fades the keyline and the label to about 2:1, a failure axe does not report because disabled controls are exempt."
     },
     {
@@ -98,7 +98,7 @@
     "aiComponents": 14,
     "aiParts": 25,
     "pages": 78,
-    "stories": 364,
+    "stories": 413,
     "summary": "64 components and 14 AI components (78 documented pages)"
   },
   "tokens": {
@@ -445,6 +445,10 @@
             "min": 4.5
           },
           {
+            "token": "--disabled",
+            "min": 4.5
+          },
+          {
             "token": "--cloth-deep",
             "min": 4.5
           }
@@ -525,6 +529,10 @@
             "min": 4.5
           },
           {
+            "token": "--disabled",
+            "min": 4.5
+          },
+          {
             "token": "--cloth-deep",
             "min": 4.5
           }
@@ -589,6 +597,10 @@
           },
           {
             "token": "--selected",
+            "min": 4.5
+          },
+          {
+            "token": "--disabled",
             "min": 4.5
           }
         ],
@@ -1504,6 +1516,31 @@
         ]
       },
       {
+        "token": "--disabled",
+        "scopes": [
+          "surface"
+        ],
+        "why": "The ground of a disabled control; its label is --ink-muted.",
+        "utilities": [
+          "bg-disabled"
+        ],
+        "on": [],
+        "under": [
+          {
+            "token": "--ink",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-2",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-muted",
+            "min": 4.5
+          }
+        ]
+      },
+      {
         "token": "--band",
         "scopes": [
           "edge",
@@ -1760,6 +1797,11 @@
           "name": "FailureAndRecovery",
           "id": "ai-agent-run--failure-and-recovery",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-agent-run--failure-and-recovery"
+        },
+        {
+          "name": "HardStates",
+          "id": "ai-agent-run--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-agent-run--hard-states"
         },
         {
           "name": "Live",
@@ -2192,6 +2234,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/ai-change-review--diff-only"
         },
         {
+          "name": "HardStates",
+          "id": "ai-change-review--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-change-review--hard-states"
+        },
+        {
           "name": "Pending",
           "id": "ai-change-review--pending",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-change-review--pending"
@@ -2519,6 +2566,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/ai-markdown--complete"
         },
         {
+          "name": "HardStates",
+          "id": "ai-markdown--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-markdown--hard-states"
+        },
+        {
           "name": "MidStream",
           "id": "ai-markdown--mid-stream",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-markdown--mid-stream"
@@ -2818,6 +2870,11 @@
           "name": "Failed",
           "id": "ai-message--failed",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-message--failed"
+        },
+        {
+          "name": "HardStates",
+          "id": "ai-message--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-message--hard-states"
         },
         {
           "name": "Streaming",
@@ -3132,6 +3189,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/ai-prompt-input--generating"
         },
         {
+          "name": "HardStates",
+          "id": "ai-prompt-input--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-prompt-input--hard-states"
+        },
+        {
           "name": "LongFormSubmit",
           "id": "ai-prompt-input--long-form-submit",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-prompt-input--long-form-submit"
@@ -3276,6 +3338,11 @@
           "name": "Done",
           "id": "ai-reasoning--done",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-reasoning--done"
+        },
+        {
+          "name": "HardStates",
+          "id": "ai-reasoning--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-reasoning--hard-states"
         },
         {
           "name": "Opened",
@@ -3535,6 +3602,11 @@
           "name": "Failed",
           "id": "ai-run-error--failed",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-run-error--failed"
+        },
+        {
+          "name": "HardStates",
+          "id": "ai-run-error--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-run-error--hard-states"
         },
         {
           "name": "PartialAnswer",
@@ -4026,6 +4098,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/ai-side-by-side-diff--from-unified-diff"
         },
         {
+          "name": "HardStates",
+          "id": "ai-side-by-side-diff--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-side-by-side-diff--hard-states"
+        },
+        {
           "name": "InChangeReview",
           "id": "ai-side-by-side-diff--in-change-review",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-side-by-side-diff--in-change-review"
@@ -4207,6 +4284,11 @@
         }
       ],
       "stories": [
+        {
+          "name": "HardStates",
+          "id": "ai-sources--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-sources--hard-states"
+        },
         {
           "name": "InAnAnswer",
           "id": "ai-sources--in-an-answer",
@@ -4886,6 +4968,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/ai-tool-call--failed"
         },
         {
+          "name": "HardStates",
+          "id": "ai-tool-call--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-tool-call--hard-states"
+        },
+        {
           "name": "NeedsApproval",
           "id": "ai-tool-call--needs-approval",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-tool-call--needs-approval"
@@ -5158,6 +5245,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/components-actions-button--disabled"
         },
         {
+          "name": "HardStates",
+          "id": "components-actions-button--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-actions-button--hard-states"
+        },
+        {
           "name": "IconButtons",
           "id": "components-actions-button--icon-buttons",
           "url": "https://demogar.github.io/molaui/?path=/story/components-actions-button--icon-buttons"
@@ -5181,6 +5273,11 @@
           "name": "Sizes",
           "id": "components-actions-button--sizes",
           "url": "https://demogar.github.io/molaui/?path=/story/components-actions-button--sizes"
+        },
+        {
+          "name": "States",
+          "id": "components-actions-button--states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-actions-button--states"
         },
         {
           "name": "Variants",
@@ -5590,6 +5687,11 @@
         }
       ],
       "stories": [
+        {
+          "name": "HardStates",
+          "id": "components-data-display-code--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-code--hard-states"
+        },
         {
           "name": "Inline",
           "id": "components-data-display-code--inline",
@@ -7149,6 +7251,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-table--frozen-first-column"
         },
         {
+          "name": "HardStates",
+          "id": "components-data-display-table--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-table--hard-states"
+        },
+        {
           "name": "Loading",
           "id": "components-data-display-table--loading",
           "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-table--loading"
@@ -7959,6 +8066,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-banner--default"
         },
         {
+          "name": "HardStates",
+          "id": "components-feedback-banner--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-banner--hard-states"
+        },
+        {
           "name": "Tones",
           "id": "components-feedback-banner--tones",
           "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-banner--tones"
@@ -8220,6 +8332,11 @@
           "name": "FlatTones",
           "id": "components-feedback-callout--flat-tones",
           "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-callout--flat-tones"
+        },
+        {
+          "name": "HardStates",
+          "id": "components-feedback-callout--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-callout--hard-states"
         },
         {
           "name": "Tones",
@@ -8767,6 +8884,11 @@
           "name": "Empty",
           "id": "components-feedback-notification-centre--empty",
           "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-notification-centre--empty"
+        },
+        {
+          "name": "HardStates",
+          "id": "components-feedback-notification-centre--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-notification-centre--hard-states"
         },
         {
           "name": "List",
@@ -9477,6 +9599,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-toast--all-tones"
         },
         {
+          "name": "HardStates",
+          "id": "components-feedback-toast--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-toast--hard-states"
+        },
+        {
           "name": "RunningToResult",
           "id": "components-feedback-toast--running-to-result",
           "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-toast--running-to-result"
@@ -9676,6 +9803,11 @@
           "name": "Group",
           "id": "components-forms-checkbox--group",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-checkbox--group"
+        },
+        {
+          "name": "HardStates",
+          "id": "components-forms-checkbox--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-checkbox--hard-states"
         },
         {
           "name": "Horizontal",
@@ -9880,6 +10012,11 @@
           "name": "Default",
           "id": "components-forms-chip--default",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-chip--default"
+        },
+        {
+          "name": "HardStates",
+          "id": "components-forms-chip--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-chip--hard-states"
         },
         {
           "name": "SingleChoice",
@@ -10312,6 +10449,11 @@
           "name": "Grouped",
           "id": "components-forms-combobox--grouped",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-combobox--grouped"
+        },
+        {
+          "name": "HardStates",
+          "id": "components-forms-combobox--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-combobox--hard-states"
         },
         {
           "name": "InvalidAndDisabled",
@@ -10898,6 +11040,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-date-picker--disabled"
         },
         {
+          "name": "HardStates",
+          "id": "components-forms-date-picker--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-date-picker--hard-states"
+        },
+        {
           "name": "Invalid",
           "id": "components-forms-date-picker--invalid",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-date-picker--invalid"
@@ -11296,6 +11443,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-field--default"
         },
         {
+          "name": "HardStates",
+          "id": "components-forms-field--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-field--hard-states"
+        },
+        {
           "name": "HintAndError",
           "id": "components-forms-field--hint-and-error",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-field--hint-and-error"
@@ -11609,6 +11761,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-file-upload--evaluation-dataset"
         },
         {
+          "name": "HardStates",
+          "id": "components-forms-file-upload--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-file-upload--hard-states"
+        },
+        {
           "name": "Invalid",
           "id": "components-forms-file-upload--invalid",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-file-upload--invalid"
@@ -11876,6 +12033,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-form--fieldset-group"
         },
         {
+          "name": "HardStates",
+          "id": "components-forms-form--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-form--hard-states"
+        },
+        {
           "name": "WithErrors",
           "id": "components-forms-form--with-errors",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-form--with-errors"
@@ -12136,6 +12298,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-listbox--disabled"
         },
         {
+          "name": "HardStates",
+          "id": "components-forms-listbox--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-listbox--hard-states"
+        },
+        {
           "name": "Labelled",
           "id": "components-forms-listbox--labelled",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-listbox--labelled"
@@ -12393,6 +12560,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-number-input--default"
         },
         {
+          "name": "HardStates",
+          "id": "components-forms-number-input--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-number-input--hard-states"
+        },
+        {
           "name": "InvalidAndDisabled",
           "id": "components-forms-number-input--invalid-and-disabled",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-number-input--invalid-and-disabled"
@@ -12628,6 +12800,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-radio--default"
         },
         {
+          "name": "HardStates",
+          "id": "components-forms-radio--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-radio--hard-states"
+        },
+        {
           "name": "Horizontal",
           "id": "components-forms-radio--horizontal",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-radio--horizontal"
@@ -12818,6 +12995,11 @@
           "name": "Disabled",
           "id": "components-forms-segmented-control--disabled",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-segmented-control--disabled"
+        },
+        {
+          "name": "HardStates",
+          "id": "components-forms-segmented-control--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-segmented-control--hard-states"
         },
         {
           "name": "IconOnly",
@@ -13213,6 +13395,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-select--grouped-in-field"
         },
         {
+          "name": "HardStates",
+          "id": "components-forms-select--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-select--hard-states"
+        },
+        {
           "name": "InvalidAndDisabled",
           "id": "components-forms-select--invalid-and-disabled",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-select--invalid-and-disabled"
@@ -13390,6 +13577,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-slider--disabled"
         },
         {
+          "name": "HardStates",
+          "id": "components-forms-slider--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-slider--hard-states"
+        },
+        {
           "name": "Percentage",
           "id": "components-forms-slider--percentage",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-slider--percentage"
@@ -13528,6 +13720,11 @@
           "name": "Default",
           "id": "components-forms-switch--default",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-switch--default"
+        },
+        {
+          "name": "HardStates",
+          "id": "components-forms-switch--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-switch--hard-states"
         },
         {
           "name": "SettingsList",
@@ -13789,6 +13986,11 @@
           "name": "Empty",
           "id": "components-forms-tag-group--empty",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-tag-group--empty"
+        },
+        {
+          "name": "HardStates",
+          "id": "components-forms-tag-group--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-tag-group--hard-states"
         },
         {
           "name": "Removable",
@@ -14235,6 +14437,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-time-picker--date-and-time"
         },
         {
+          "name": "HardStates",
+          "id": "components-forms-time-picker--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-time-picker--hard-states"
+        },
+        {
           "name": "Locales",
           "id": "components-forms-time-picker--locales",
           "url": "https://demogar.github.io/molaui/?path=/story/components-forms-time-picker--locales"
@@ -14576,6 +14783,11 @@
           "name": "CollapsedRail",
           "id": "components-layout-app-shell--collapsed-rail",
           "url": "https://demogar.github.io/molaui/?path=/story/components-layout-app-shell--collapsed-rail"
+        },
+        {
+          "name": "HardStates",
+          "id": "components-layout-app-shell--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-layout-app-shell--hard-states"
         },
         {
           "name": "Mobile",
@@ -16006,6 +16218,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/components-layout-toolbar--filter-bar"
         },
         {
+          "name": "HardStates",
+          "id": "components-layout-toolbar--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-layout-toolbar--hard-states"
+        },
+        {
           "name": "IconOnly",
           "id": "components-layout-toolbar--icon-only",
           "url": "https://demogar.github.io/molaui/?path=/story/components-layout-toolbar--icon-only"
@@ -16304,6 +16521,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-accordion--default"
         },
         {
+          "name": "HardStates",
+          "id": "components-navigation-accordion--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-accordion--hard-states"
+        },
+        {
           "name": "SingleCollapsible",
           "id": "components-navigation-accordion--single-collapsible",
           "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-accordion--single-collapsible"
@@ -16431,6 +16653,11 @@
           "name": "Default",
           "id": "components-navigation-breadcrumb--default",
           "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-breadcrumb--default"
+        },
+        {
+          "name": "HardStates",
+          "id": "components-navigation-breadcrumb--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-breadcrumb--hard-states"
         },
         {
           "name": "LongIds",
@@ -16587,6 +16814,11 @@
           "name": "Compact",
           "id": "components-navigation-pagination--compact",
           "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-pagination--compact"
+        },
+        {
+          "name": "HardStates",
+          "id": "components-navigation-pagination--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-pagination--hard-states"
         },
         {
           "name": "NearTheEdges",
@@ -16838,6 +17070,11 @@
           "name": "Default",
           "id": "components-navigation-stepper--default",
           "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-stepper--default"
+        },
+        {
+          "name": "HardStates",
+          "id": "components-navigation-stepper--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-stepper--hard-states"
         },
         {
           "name": "States",
@@ -17106,6 +17343,11 @@
       ],
       "stories": [
         {
+          "name": "HardStates",
+          "id": "components-navigation-tabs--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-tabs--hard-states"
+        },
+        {
           "name": "Overflowing",
           "id": "components-navigation-tabs--overflowing",
           "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-tabs--overflowing"
@@ -17345,6 +17587,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-tree--default"
         },
         {
+          "name": "HardStates",
+          "id": "components-navigation-tree--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-tree--hard-states"
+        },
+        {
           "name": "KnowledgeBase",
           "id": "components-navigation-tree--knowledge-base",
           "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-tree--knowledge-base"
@@ -17538,6 +17785,11 @@
           "name": "Default",
           "id": "components-overlays-command-palette--default",
           "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-command-palette--default"
+        },
+        {
+          "name": "HardStates",
+          "id": "components-overlays-command-palette--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-command-palette--hard-states"
         },
         {
           "name": "NoMatches",
@@ -17895,6 +18147,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-dialog--destructive-confirm"
         },
         {
+          "name": "HardStates",
+          "id": "components-overlays-dialog--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-dialog--hard-states"
+        },
+        {
           "name": "LongContent",
           "id": "components-overlays-dialog--long-content",
           "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-dialog--long-content"
@@ -18156,6 +18413,11 @@
           "name": "Filters",
           "id": "components-overlays-drawer--filters",
           "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-drawer--filters"
+        },
+        {
+          "name": "HardStates",
+          "id": "components-overlays-drawer--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-drawer--hard-states"
         },
         {
           "name": "RunDetails",
@@ -18594,6 +18856,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-menu--checkbox-and-radio"
         },
         {
+          "name": "HardStates",
+          "id": "components-overlays-menu--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-menu--hard-states"
+        },
+        {
           "name": "RowActions",
           "id": "components-overlays-menu--row-actions",
           "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-menu--row-actions"
@@ -18797,6 +19064,11 @@
           "name": "ColumnFilter",
           "id": "components-overlays-popover--column-filter",
           "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-popover--column-filter"
+        },
+        {
+          "name": "HardStates",
+          "id": "components-overlays-popover--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-popover--hard-states"
         },
         {
           "name": "Plain",
@@ -19073,6 +19345,11 @@
           "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-shortcuts-dialog--default"
         },
         {
+          "name": "HardStates",
+          "id": "components-overlays-shortcuts-dialog--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-shortcuts-dialog--hard-states"
+        },
+        {
           "name": "NothingBound",
           "id": "components-overlays-shortcuts-dialog--nothing-bound",
           "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-shortcuts-dialog--nothing-bound"
@@ -19265,6 +19542,11 @@
           "name": "Default",
           "id": "components-overlays-tooltip--default",
           "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-tooltip--default"
+        },
+        {
+          "name": "HardStates",
+          "id": "components-overlays-tooltip--hard-states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-tooltip--hard-states"
         },
         {
           "name": "ToolbarGroup",

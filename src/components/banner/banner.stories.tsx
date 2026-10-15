@@ -3,6 +3,7 @@ import * as React from 'react'
 import { fn } from 'storybook/test'
 
 import { Button } from '../button'
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 import { Banner } from './banner'
 
 const meta = {
@@ -110,6 +111,44 @@ export const Announced: Story = {
       description: {
         story:
           'A banner that appears because something changed during the session passes `announce`: the message is said once, politely, from a status region that mounts empty and is filled a moment later. Never assertive, and never for a banner that is there when the page loads, which is read in order like the rest of the page.',
+      },
+    },
+  },
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame className="p-4">
+      <HardState state="long-label">
+        <Banner
+          tone="warn"
+          label="Maintenance, long"
+          title="Scheduled maintenance of the run queue and the knowledge index"
+          action={<Button size="sm" variant="secondary">View the status page</Button>}
+          onDismiss={fn()}
+        >
+          Saturday 18 October, 02:00–03:00 UTC. Runs started in that window wait in the queue and start when it ends; answers cite the previous index until then.
+        </Banner>
+      </HardState>
+      <HardState state="rtl">
+        <Banner tone="info" label="إعلان" title="إعادة تشغيل الأدوات متاحة" onDismiss={fn()}>
+          أعد تشغيل أي استدعاء أداة بمعاملات معدّلة من صفحة التتبع.
+        </Banner>
+      </HardState>
+      <HardState state="error">
+        <Banner tone="danger" label="Billing" title="Payment failed">
+          Agents stop taking new runs on 21 October unless the card on file is updated.
+        </Banner>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A long title and message wrap under the icon, and the action and Dismiss wrap to their own line rather than squeezing the message; in right to left the icon, the message and Dismiss change sides. The error is the danger tone: glyph, “Error:” and the colour. A banner has no disabled state of its own: its action is a Button with one.',
       },
     },
   },

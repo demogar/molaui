@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import * as React from 'react'
 
 import { REASONING } from '../_story-data/fixtures'
+import { HardState, HardStates as HardStatesFrame } from '../../../docs/blocks/hard-states'
 import { useSimulatedStream } from '../_story-data/simulate'
 
 import { Reasoning } from './reasoning'
@@ -44,3 +45,26 @@ function Thinking() {
 }
 
 export const Thinking_: Story = { name: 'Thinking (live)', render: () => <Thinking /> }
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <Reasoning text={REASONING} status="done" durationMs={12_400} defaultOpen />
+      </HardState>
+      <HardState state="rtl">
+        <Reasoning text="قارنت معدل التذاكر قبل الإطلاق وبعده." status="done" durationMs={4_200} defaultOpen />
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A long thought, opened at a phone’s width, wraps in the reading voice with no sideways scroll; in right to left the disclosure chevron and the duration change sides. Reasoning has no disabled and no error state: it is evidence that arrived, and a failed run is shown by the run, not by its thinking.',
+      },
+    },
+  },
+}

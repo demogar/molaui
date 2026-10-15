@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { fn } from 'storybook/test'
 
 import { Button } from '../button'
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 import { Callout } from './callout'
 
 const meta = {
@@ -145,4 +146,53 @@ export const FlatInAGrid: Story = {
       </Callout>
     </div>
   ),
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <Callout
+          tone="warn"
+          title="The Cayuco research agent uses a model that retires on 1 December, before the Starter rollout review"
+          onDismiss={fn()}
+          actions={
+            <Button size="sm" variant="secondary">
+              Switch every agent in this workspace to the replacement model
+            </Button>
+          }
+        >
+          Runs keep working until then. Switch the model in settings to keep evaluation history comparable.
+        </Callout>
+      </HardState>
+      <HardState state="rtl">
+        <Callout tone="info" title="ميزة جديدة" onDismiss={fn()}>
+          يمكنك الآن إعادة تشغيل أداة واحدة من صفحة التتبع.
+        </Callout>
+      </HardState>
+      <HardState state="error">
+        <Callout
+          tone="danger"
+          title="Ingest failed at document 812 of 1,204"
+          actions={
+            <Button size="sm" variant="secondary">
+              Retry from 812
+            </Button>
+          }
+        >
+          The source returned 403 for /policies/fair-play.md. Earlier documents were indexed.
+        </Callout>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A long title wraps beside the dismiss button and a long action label wraps rather than running past a phone’s edge; in right to left the icon and the dismiss button change sides; the error is the danger tone, glyph and words as well as the seam. A callout has no disabled state: its one control, dismiss, is always available, and an action inside it is a Button with its own.',
+      },
+    },
+  },
 }

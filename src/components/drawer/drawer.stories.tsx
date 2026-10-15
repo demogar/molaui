@@ -8,6 +8,9 @@ import { DescriptionList } from '../description-list'
 import { Field, Input } from '../field'
 import { Select } from '../select'
 import { Drawer, DrawerClose, DrawerContent, DrawerTrigger, type DrawerSide } from './drawer'
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
+import { DirectionProvider } from '../../lib/direction'
+import { wrappingButtonSlot } from '../button/wrapping-slot'
 
 const meta = {
   title: 'Components/Overlays/Drawer',
@@ -227,6 +230,70 @@ export const Sizes: Story = {
       description: {
         story:
           'Side drawers are 20, 28 and 40rem wide; bottom sheets cap their height instead. Every size yields to the viewport.',
+      },
+    },
+  },
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label" className={wrappingButtonSlot}>
+        <Drawer>
+          <DrawerTrigger render={<Button variant="secondary">View the refund and chargeback triage run</Button>} />
+          <DrawerContent
+            title="Refund and chargeback triage · run escalated to a person after three failed lookups"
+            description="Started 14:02 by the inbox router"
+          >
+            <p className="m-0 text-sm text-ink-2">The run is paused until a person answers.</p>
+          </DrawerContent>
+        </Drawer>
+      </HardState>
+      <HardState state="rtl">
+        <DirectionProvider direction="rtl">
+          <Drawer defaultOpen>
+            <DrawerTrigger render={<Button variant="secondary">تفاصيل التشغيل</Button>} />
+            <DrawerContent
+              dir="rtl"
+              lang="ar"
+              title="تفاصيل التشغيل"
+              description="فرز الدعم · بدأ الساعة ١٤:٠٢"
+              footer={
+                <>
+                  <Button variant="ghost" icon={<FileText />}>
+                    فتح التتبّع
+                  </Button>
+                  <Button icon={<RotateCcw />}>إعادة التشغيل</Button>
+                </>
+              }
+            >
+              <p className="m-0 font-text text-base leading-body text-ink">
+                فشل التصدير لأن مساحة العمل بلغت الحد الشهري للتخزين. أُحيلت التذكرة إلى فريق الحسابات مع ردّ مقترح.
+              </p>
+            </DrawerContent>
+          </Drawer>
+        </DirectionProvider>
+      </HardState>
+      <HardState state="disabled">
+        <div className="flex flex-col items-start gap-2">
+          <Button variant="secondary" disabled aria-describedby="drawer-hard-disabled-reason">
+            View run details
+          </Button>
+          <p id="drawer-hard-disabled-reason" className="m-0 text-sm text-ink-muted">
+            Details appear once the run has started.
+          </p>
+        </div>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      story: { inline: false, height: '520px' },
+      description: {
+        story:
+          'Only one modal can be open, so the right-to-left drawer is the one shown open: inside `DirectionProvider` an `end` drawer opens from the left, its close button and footer mirror and the swipe to dismiss follows. A long title wraps in the drawer’s header rather than widening it; a trigger that cannot open yet is disabled and says why. A drawer has no error state of its own: a form inside it shows its own errors, as Filters does.',
       },
     },
   },

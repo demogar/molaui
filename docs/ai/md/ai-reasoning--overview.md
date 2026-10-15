@@ -37,6 +37,7 @@ The model’s thinking, behind a disclosure. Reasoning is *evidence*, not the an
 Each story is a live example in Storybook.
 
 - [Done](https://demogar.github.io/molaui/?path=/story/ai-reasoning--done)
+- [HardStates](https://demogar.github.io/molaui/?path=/story/ai-reasoning--hard-states)
 - [Opened](https://demogar.github.io/molaui/?path=/story/ai-reasoning--opened)
 - [Thinking_](https://demogar.github.io/molaui/?path=/story/ai-reasoning--thinking)
 
@@ -80,7 +81,7 @@ Types: `ReasoningProps`
 
 ### Testing status
 
-- Automated, jsdom: each of its 3 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 4 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

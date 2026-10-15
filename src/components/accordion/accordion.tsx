@@ -69,9 +69,11 @@ export function AccordionItem({ className, ...props }: AccordionItemProps) {
 const triggerClasses = [
   'group/trigger flex w-full cursor-pointer items-center gap-3 px-2 py-3.5 text-start outline-none',
   'font-ui text-base font-semibold text-ink',
-  'transition-colors hover:bg-ink-soft',
+  // Pressed is the cut an edgeless control does not otherwise have, drawn
+  // inward: "the states a cut shape can be in", cloth.css.
+  'transition-colors hover:bg-ink-soft active:bg-ink-soft active:cut-press',
   'focus-visible:focus-ring',
-  'data-disabled:cursor-default data-disabled:text-ink-muted data-disabled:hover:bg-transparent',
+  'data-disabled:cursor-default data-disabled:text-ink-muted data-disabled:hover:bg-transparent data-disabled:active:bg-transparent data-disabled:active:shadow-none',
 ]
 
 const markerClasses =
@@ -151,7 +153,7 @@ export function CollapsibleTrigger({ className, children, ...props }: Collapsibl
       data-slot="collapsible-trigger"
       className={cn(
         'group/trigger -mx-1.5 inline-flex cursor-pointer items-center gap-1.5 px-1.5 py-1 font-ui text-sm font-semibold text-ink outline-none',
-        'transition-colors hover:bg-ink-soft',
+        'transition-colors hover:bg-ink-soft active:bg-ink-soft active:cut-press',
         'focus-visible:focus-ring',
         className,
       )}

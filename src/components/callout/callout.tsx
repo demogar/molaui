@@ -7,6 +7,7 @@ import * as React from 'react'
 import { cn } from '../../lib/cn'
 import { type Variants } from '../../lib/variants'
 import { IconButton } from '../button'
+import { wrappingButtonSlot } from '../button/wrapping-slot'
 import { Swatch } from '../swatch'
 
 /**
@@ -176,7 +177,10 @@ export function Callout({
               {children}
             </div>
           ) : null}
-          {actions ? <div data-part="actions" className="mt-3 flex flex-wrap gap-2">{actions}</div> : null}
+          {/* A callout's action is often a sentence ("Switch every agent to the
+              replacement model"), and a one-line button ran past a 320px phone;
+              the wrapping slot lets it take a second line, as in an empty state. */}
+          {actions ? <div data-part="actions" className={cn('mt-3 flex flex-wrap gap-2', wrappingButtonSlot)}>{actions}</div> : null}
         </div>
         {onDismiss ? (
           <IconButton data-part="dismiss" label="Dismiss" variant="ghost" size="sm" onClick={onDismiss} className="-mt-1 -me-1.5">

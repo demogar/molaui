@@ -53,6 +53,7 @@ Each story is a live example in Storybook.
 - [Cancelled](https://demogar.github.io/molaui/?path=/story/ai-agent-run--cancelled)
 - [FailedAtStepFour](https://demogar.github.io/molaui/?path=/story/ai-agent-run--failed-at-step-four)
 - [FailureAndRecovery](https://demogar.github.io/molaui/?path=/story/ai-agent-run--failure-and-recovery)
+- [HardStates](https://demogar.github.io/molaui/?path=/story/ai-agent-run--hard-states)
 - [Live](https://demogar.github.io/molaui/?path=/story/ai-agent-run--live)
 - [RateLimited](https://demogar.github.io/molaui/?path=/story/ai-agent-run--rate-limited)
 - [Succeeded](https://demogar.github.io/molaui/?path=/story/ai-agent-run--succeeded)
@@ -110,7 +111,7 @@ Types: `AgentRunFailure`, `AgentRunProps`, `AgentStep`, `AgentStepKind`
 
 ### Testing status
 
-- Automated, jsdom: each of its 8 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 9 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

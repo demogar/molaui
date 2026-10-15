@@ -3,6 +3,7 @@ import * as React from 'react'
 import { fn } from 'storybook/test'
 
 import { QUERY_ARGS, QUERY_RESULT } from '../_story-data/fixtures'
+import { HardState, HardStates as HardStatesFrame } from '../../../docs/blocks/hard-states'
 
 import { ToolCall, ToolCallGroup } from './tool-call'
 
@@ -83,4 +84,59 @@ export const ParallelCalls: Story = {
       <ToolCall name="fetch_dashboard" status="failed" durationMs={30_000} error="deadline exceeded after 30s" onRetry={fn()} />
     </ToolCallGroup>
   ),
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <ToolCall
+          name="query_warehouse_segments_by_plan_and_signup_cohort"
+          title="Tickets per 1,000 workspaces by plan, signup cohort and help panel variant"
+          status="succeeded"
+          durationMs={1840}
+          args={QUERY_ARGS}
+          result={QUERY_RESULT}
+        />
+      </HardState>
+      <HardState state="rtl">
+        <ToolCall name="query_rollout" title="نتائج الإطلاق" status="succeeded" durationMs={1840} args={QUERY_ARGS} result={QUERY_RESULT} />
+      </HardState>
+      <HardState state="disabled">
+        <ToolCall
+          name="update_feature_flag"
+          title="Roll out the help panel"
+          status="waiting"
+          args={{ flag: 'help_panel_v2', percent: 100 }}
+          approval={{
+            reason: 'It changes a live feature flag for every new Starter workspace.',
+            onApprove: fn(),
+            onDeny: fn(),
+            approveLabel: 'Approve rollout',
+            denyLabel: 'Deny',
+          }}
+        />
+      </HardState>
+      <HardState state="error">
+        <ToolCall
+          name="query_warehouse"
+          title="Segment breakdown"
+          status="failed"
+          durationMs={412}
+          error='PermissionDenied: role "agent_readonly" lacks SELECT on analytics.ro_0412_segments'
+          onRetry={fn()}
+        />
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A long tool name and a long title truncate on the header’s one line, the name first, so the status and duration stay in view; in right to left the disclosure chevron and the duration change sides while the literals stay left to right; disabled is the header of a call waiting for approval, which cannot be collapsed because hiding it would hide the decision; the error opens itself with the message verbatim and a retry.',
+      },
+    },
+  },
 }

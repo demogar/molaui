@@ -93,7 +93,8 @@ because keyboard direction is read from context.
 3. **State is glyph + word + colour**, never colour alone. Use `Badge`, `StatusDot`, `RunStatus`
    or `Callout`, which already do this, rather than a coloured `<span>`.
 4. **Disabled is stated, not faded.** Never put `opacity-*` on a disabled control. Pass
-   `disabled` and let the component draw it.
+   `disabled` and let the component draw it; a control of your own stands on `bg-disabled`
+   with `text-ink-muted` and keeps its keyline.
 5. **Colours only from tokens, each in its scope.** No hex, `rgb()` or arbitrary colour values.
    Every colour token is scoped to the jobs it does (surface `bg-`, text `text-`, edge
    `border-`/`decoration-`, mark `bg-`/`fill-`, overlay `bg-`), and only those utilities are

@@ -55,6 +55,7 @@ Each story is a live example in Storybook.
 - [AllRead](https://demogar.github.io/molaui/?path=/story/components-feedback-notification-centre--all-read)
 - [Default](https://demogar.github.io/molaui/?path=/story/components-feedback-notification-centre--default)
 - [Empty](https://demogar.github.io/molaui/?path=/story/components-feedback-notification-centre--empty)
+- [HardStates](https://demogar.github.io/molaui/?path=/story/components-feedback-notification-centre--hard-states)
 - [List](https://demogar.github.io/molaui/?path=/story/components-feedback-notification-centre--list)
 - [WithToasts](https://demogar.github.io/molaui/?path=/story/components-feedback-notification-centre--with-toasts)
 
@@ -119,7 +120,7 @@ Types: `NotificationCentreProps`, `NotificationItem`, `NotificationListProps`, `
 
 ### Testing status
 
-- Automated, jsdom: each of its 5 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 6 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

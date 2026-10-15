@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 
 import { Button } from '../button'
 import { ToastProvider, useToast } from './toast'
@@ -134,6 +135,64 @@ export const Stacking: Story = {
     docs: {
       description: {
         story: 'The stack peeks and shrinks; hover or focus fans it out. Swipe right or down to dismiss. F6 moves focus into the toast region.',
+      },
+    },
+  },
+}
+
+const LONG_TOAST = {
+  title: 'Re-indexing finished for the Starter plan help panel knowledge base and every linked policy document',
+  description: '1,204 documents in 3m 41s. Answers cite the new versions from now on, and the previous index is kept for seven days.',
+  action: { label: 'Open index', onClick: () => {} },
+}
+
+function HardStatesToasts() {
+  const toast = useToast()
+  // Raised by its button, not on mount. A toast is measured once, when it
+  // appears; a toast already on screen when the density changes keeps its
+  // old height and clips its action, and the browser audit changes density
+  // on the open page.
+  return (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <div>
+          <Button variant="secondary" onClick={() => toast.success(LONG_TOAST)}>
+            Show the long toast
+          </Button>
+        </div>
+      </HardState>
+      <HardState state="rtl">
+        <div>
+          <Button variant="secondary" onClick={() => toast.info({ title: 'نموذج جديد متاح', description: 'غيّره من إعدادات الوكيل.' })}>
+            إظهار الإشعار
+          </Button>
+        </div>
+      </HardState>
+      <HardState state="error">
+        <div>
+          <Button
+            variant="secondary"
+            onClick={() =>
+              toast.error({ title: 'Deploy failed', description: 'Tool “search_tickets” timed out after 30s.', action: { label: 'Retry', onClick: () => {} } })
+            }
+          >
+            Show the failure
+          </Button>
+        </div>
+      </HardState>
+    </HardStatesFrame>
+  )
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => <HardStatesToasts />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Toasts live in one region at the page’s inline end, not inside a cell, so each cell holds the button that raises its toast (raised, not shown on load: a toast is measured once, as it appears). A long title and description wrap inside the card’s 24rem, never past a phone’s edge. The Arabic toast follows the page’s direction, so the whole stack moves to the left edge on a right-to-left page; the error is the danger tone, mark and “Error:” as well as the colour. A toast has no disabled state: a notice that cannot be acted on is not raised.',
       },
     },
   },

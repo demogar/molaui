@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useEffect, useRef, useState } from 'react'
 
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 import { Field } from '../field/field'
 import { Autocomplete, Combobox, type ComboboxOption, type ComboboxOptionGroup } from './combobox'
 
@@ -248,4 +249,64 @@ export const Sizes: Story = {
       <Combobox aria-label="Large" size="lg" items={people} defaultValue="ana-rios" />
     </div>
   ),
+}
+
+const longTools: ComboboxOption[] = [
+  {
+    value: 'summarise_escalation_transcripts_for_review',
+    label: 'summarise_escalation_transcripts_for_review',
+    literal: true,
+    description: 'Condense every refund escalation transcript into a reviewer-ready summary',
+  },
+  { value: 'search_docs', label: 'search_docs', literal: true, description: 'Full-text search over the knowledge base' },
+]
+
+const arabicPeople: ComboboxOption[] = [
+  { value: 'farah-haddad', label: 'فرح حداد', description: 'السلامة · عمّان' },
+  { value: 'ana-rios', label: 'آنا ريوس', description: 'التقييم · بنما' },
+]
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  args: { items: people },
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <div className="grid gap-6">
+          <Field label="Tool the agent may call without asking a person first">
+            {(control) => <Combobox {...control} items={longTools} defaultValue="summarise_escalation_transcripts_for_review" />}
+          </Field>
+          <Field label="Notify on failure">
+            {(control) => (
+              <Combobox {...control} multiple items={people} defaultValue={['ana-rios', 'carla-pinzon', 'farah-haddad', 'hana-sato']} />
+            )}
+          </Field>
+        </div>
+      </HardState>
+      <HardState state="rtl">
+        <Field label="المراجِع">
+          {(control) => <Combobox {...control} items={arabicPeople} defaultValue="farah-haddad" placeholder="ابحث عن شخص" />}
+        </Field>
+      </HardState>
+      <HardState state="disabled">
+        <Field label="Owners" hint="Owners are set by the workspace admin.">
+          {(control) => <Combobox {...control} multiple items={people} defaultValue={['bruno-vega', 'hana-sato']} disabled />}
+        </Field>
+      </HardState>
+      <HardState state="error">
+        <Field label="Reviewer" required error="Choose who approves this run.">
+          {(control) => <Combobox {...control} items={people} placeholder="Search people" />}
+        </Field>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A long machine name truncates inside the field, which keeps its clear and open buttons in place; four chosen people wrap onto a second row of chips rather than widening the field. In right to left the buttons move to the start and the chips run from the right. Disabled is the disabled ground, and the chips lose their remove buttons. The error is `Field`’s band and message, under a field that is still empty.',
+      },
+    },
+  },
 }

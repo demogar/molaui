@@ -155,6 +155,15 @@ const NOTES: Record<string, Notes> = {
       'Foundations/Content and voice': 'Notification is an event and Announcement a standing condition; the words table holds both.',
     },
   },
+  '0015': {
+    name: 'Pressed is ink',
+    decided:
+      'Pressed closes a cut shape’s band with ink, or draws the ink cut inward on an edgeless control; disabled has its own ground, --disabled, lifted in the dark theme, and a disabled primary or danger button keeps a thin band of its role.',
+    governs: {
+      'Foundations/Layers and elevation':
+        'Hover, pressed and disabled are one vocabulary: the band revealed, the band closed with ink, and the disabled ground with the keyline kept.',
+    },
+  },
 }
 
 export interface Decision extends Notes {

@@ -4,6 +4,8 @@ import { Filter } from 'lucide-react'
 import { Button } from '../button'
 import { Checkbox } from '../checkbox'
 import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from './popover'
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
+import { DirectionProvider } from '../../lib/direction'
 
 const meta = {
   title: 'Components/Overlays/Popover',
@@ -62,4 +64,62 @@ export const Plain: Story = {
       </PopoverContent>
     </Popover>
   ),
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame className="pb-24">
+      <HardState state="long-label" className="min-h-72">
+        <Popover defaultOpen>
+          <PopoverTrigger render={<Button variant="secondary" size="sm">What counts as a step?</Button>} />
+          <PopoverContent side="bottom" align="start" aria-label="Steps, explained">
+            <p className="m-0 text-sm text-ink-2">
+              Every model call and every tool call is one step, including the calls a run retries after a tool times out or returns an error the agent can recover from.
+            </p>
+          </PopoverContent>
+        </Popover>
+      </HardState>
+      <HardState state="rtl" className="min-h-72">
+        <DirectionProvider direction="rtl">
+          <Popover defaultOpen>
+            <PopoverTrigger render={<Button variant="secondary" size="sm" icon={<Filter />}>الحالة</Button>} />
+            <PopoverContent dir="rtl" lang="ar" side="bottom" align="start" title="التصفية حسب الحالة" description="تظهر التشغيلات المطابقة لأي حالة محددة.">
+              <fieldset className="m-0 flex flex-col gap-3 border-0 p-0">
+                <legend className="sr-only">الحالة</legend>
+                {['قيد التشغيل', 'نجح', 'فشل'].map((s, i) => (
+                  <Checkbox key={s} label={s} defaultChecked={i < 2} />
+                ))}
+              </fieldset>
+              <div className="mt-4 flex justify-end gap-2">
+                <PopoverClose render={<Button variant="ghost" size="sm">إعادة الضبط</Button>} />
+                <PopoverClose render={<Button size="sm">تطبيق</Button>} />
+              </div>
+            </PopoverContent>
+          </Popover>
+        </DirectionProvider>
+      </HardState>
+      <HardState state="disabled">
+        <div className="flex flex-wrap items-center gap-3">
+          <Popover>
+            <PopoverTrigger disabled render={<Button variant="secondary" size="sm" icon={<Filter />}>Status</Button>} />
+            <PopoverContent aria-label="Filter by status">
+              <p className="m-0 text-sm text-ink-2">No statuses yet.</p>
+            </PopoverContent>
+          </Popover>
+          <span className="text-sm text-ink-muted">Filters are available once runs exist.</span>
+        </div>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      story: { inline: false, height: '640px' },
+      description: {
+        story:
+          'A popover is not modal, so the long and the right-to-left ones are both open. A long explanation wraps inside the popover’s fixed width instead of widening it; in right to left the popover aligns to the trigger’s right edge and its title, checkboxes and buttons mirror; a trigger that cannot open yet is disabled and says why beside it. A popover has no error state of its own: a form inside it shows its own errors.',
+      },
+    },
+  },
 }

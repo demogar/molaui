@@ -312,6 +312,7 @@
   --color-on-accent: var(--on-accent);
   --color-accent-soft: var(--accent-soft);
   --color-selected: var(--selected);
+  --color-disabled: var(--disabled);
 
   /* ── status ───────────────────────────────────────────────────────── */
   --color-danger: var(--danger);

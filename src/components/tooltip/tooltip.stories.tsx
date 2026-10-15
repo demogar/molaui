@@ -4,6 +4,8 @@ import { Copy, GitBranch, Pause, Play, RotateCcw, Square } from 'lucide-react'
 import { Button, IconButton } from '../button'
 import { Toolbar, ToolbarButton } from '../toolbar'
 import { Tooltip, TooltipProvider } from './tooltip'
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
+import { DirectionProvider } from '../../lib/direction'
 
 const meta = {
   title: 'Components/Overlays/Tooltip',
@@ -72,6 +74,47 @@ export const ToolbarGroup: Story = {
       description: {
         story:
           'Inside a `TooltipProvider`, the delay applies to the first hover only. Sweep the pointer along the toolbar: each next label appears immediately, with no animation, so it never lags the pointer. The row is a `Toolbar` of `ToolbarButton`s, not a `div` of buttons: one tab stop, and the arrow keys move between the controls, showing each label as focus arrives.',
+      },
+    },
+  },
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label" className="min-h-32">
+        <Tooltip content="Re-run from the last step that succeeded, keeping every tool result from before it" defaultOpen side="bottom">
+          <Button variant="secondary" size="sm" icon={<RotateCcw />}>
+            Re-run
+          </Button>
+        </Tooltip>
+      </HardState>
+      <HardState state="rtl" className="min-h-32">
+        <DirectionProvider direction="rtl">
+          <Tooltip content="نسخ معرّف التشغيل" shortcut={['⌘', 'C']} defaultOpen side="bottom" dir="rtl" lang="ar">
+            <IconButton label="نسخ معرّف التشغيل" variant="secondary">
+              <Copy />
+            </IconButton>
+          </Tooltip>
+        </DirectionProvider>
+      </HardState>
+      <HardState state="disabled" className="min-h-32">
+        <Tooltip content="Stop is available while the run is going" defaultOpen side="bottom">
+          <Button variant="secondary" size="sm" icon={<Square />} disabled focusableWhenDisabled>
+            Stop
+          </Button>
+        </Tooltip>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      story: { inline: false, height: '360px' },
+      description: {
+        story:
+          'A long label wraps at the tooltip’s maximum width rather than running across the page; in right to left the label and its shortcut keys swap sides; a disabled control stays focusable (`focusableWhenDisabled`) so its tooltip can say why it is disabled, the one place a tooltip carries a reason. A tooltip has no error state: it is a label, and an error is never left to something that does not exist on touch.',
       },
     },
   },

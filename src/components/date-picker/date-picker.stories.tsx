@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 import { DirectionProvider } from '../../lib/direction'
 import { Field } from '../field/field'
 import { Calendar } from './calendar'
@@ -297,5 +298,54 @@ export const Disabled: Story = {
         )}
       </Field>
     </div>
+  ),
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The longest value a range can hold, a period across two years, wraps inside the trigger at a phone’s width instead of pushing it wider. In right to left the calendar button moves to the start and the digits are the locale’s own. Disabled is the disabled ground with the calendar button disabled too. A rule the picker cannot know, required on submit, comes from `Field`: the rojo band and the marked message every control wears.',
+      },
+    },
+  },
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <Field
+          label="Agent runs started in the period covered by the quarterly safety report"
+          hint="Both ends are included, in the workspace’s time zone."
+        >
+          {(control) => (
+            <DateRangePicker
+              {...control}
+              locale="en-GB"
+              today={TODAY}
+              defaultValue={{ start: new Date(2025, 11, 29), end: new Date(2026, 8, 30) }}
+            />
+          )}
+        </Field>
+      </HardState>
+      <HardState state="rtl">
+        <DirectionProvider direction="rtl">
+          <Field label="موعد التقييم" hint="يبدأ التقييم الساعة 02:00">
+            {(control) => <DatePicker {...control} locale="ar-EG" today={TODAY} defaultValue={new Date(2026, 9, 9)} />}
+          </Field>
+        </DirectionProvider>
+      </HardState>
+      <HardState state="disabled">
+        <Field label="Retention ends" hint="Set by the workspace policy.">
+          {(control) => <DatePicker {...control} locale="en-GB" today={TODAY} defaultValue={new Date(2027, 3, 1)} disabled />}
+        </Field>
+      </HardState>
+      <HardState state="error">
+        <Field label="Run evaluation on" required error="Choose the day this evaluation runs.">
+          {(control) => <DatePicker {...control} locale="en-GB" today={TODAY} min={TODAY} />}
+        </Field>
+      </HardState>
+    </HardStatesFrame>
   ),
 }

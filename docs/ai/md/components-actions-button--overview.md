@@ -44,11 +44,13 @@ A cut shape. Hover reveals the band of the layer beneath — the edge grows outw
 Each story is a live example in Storybook.
 
 - [Disabled](https://demogar.github.io/molaui/?path=/story/components-actions-button--disabled)
+- [HardStates](https://demogar.github.io/molaui/?path=/story/components-actions-button--hard-states)
 - [IconButtons](https://demogar.github.io/molaui/?path=/story/components-actions-button--icon-buttons)
 - [Loading](https://demogar.github.io/molaui/?path=/story/components-actions-button--loading)
 - [OnInkPanel](https://demogar.github.io/molaui/?path=/story/components-actions-button--on-ink-panel)
 - [Primary](https://demogar.github.io/molaui/?path=/story/components-actions-button--primary)
 - [Sizes](https://demogar.github.io/molaui/?path=/story/components-actions-button--sizes)
+- [States](https://demogar.github.io/molaui/?path=/story/components-actions-button--states)
 - [Variants](https://demogar.github.io/molaui/?path=/story/components-actions-button--variants)
 - [WithIcons](https://demogar.github.io/molaui/?path=/story/components-actions-button--with-icons)
 
@@ -122,7 +124,7 @@ Types: `ButtonArrowProps`, `ButtonProps`, `IconButtonProps`
 
 ### Testing status
 
-- Automated, jsdom: each of its 8 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 10 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

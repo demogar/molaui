@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
+import { DirectionProvider } from '../../lib/direction'
 import { Field } from '../field/field'
 import { DateTimePicker } from './date-time-picker'
 import { TimePicker } from './time-picker'
@@ -154,5 +156,49 @@ export const States: Story = {
         {(control) => <TimePicker {...control} locale="en-GB" defaultValue="22:00" disabled />}
       </Field>
     </div>
+  ),
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A date and a time at a phone’s width: the two halves wrap onto two lines rather than squeezing the segments, and a long label wraps above them. In right to left, inside `DirectionProvider`, the field mirrors, and the segment order, digits and day period are the Arabic locale’s own, read from `Intl`. Disabled is the disabled ground with muted digits. An error from `Field` marks every segment invalid.',
+      },
+    },
+  },
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <Field
+          label="Deploy the retrained refund-triage model to every region at"
+          hint="Deploys start from 09:00 today, Cayuco time, and roll out one region at a time."
+        >
+          {(control) => (
+            <DateTimePicker {...control} locale="en-GB" today={TODAY} minuteStep={5} defaultValue={new Date(2026, 9, 7, 9, 30)} />
+          )}
+        </Field>
+      </HardState>
+      <HardState state="rtl">
+        <DirectionProvider direction="rtl">
+          <Field label="إيقاف الوكيل عند">
+            {(control) => <TimePicker {...control} locale="ar-EG" defaultValue="21:05" />}
+          </Field>
+        </DirectionProvider>
+      </HardState>
+      <HardState state="disabled">
+        <Field label="Quiet hours start" hint="Set by the workspace owner.">
+          {(control) => <TimePicker {...control} locale="en-GB" defaultValue="22:00" disabled />}
+        </Field>
+      </HardState>
+      <HardState state="error">
+        <Field label="Pause the agent at" error="Choose a time for the pause.">
+          {(control) => <TimePicker {...control} locale="en-GB" />}
+        </Field>
+      </HardState>
+    </HardStatesFrame>
   ),
 }

@@ -62,6 +62,7 @@ Each story is a live example in Storybook.
 
 - [Default](https://demogar.github.io/molaui/?path=/story/ai-side-by-side-diff--default)
 - [FromUnifiedDiff](https://demogar.github.io/molaui/?path=/story/ai-side-by-side-diff--from-unified-diff)
+- [HardStates](https://demogar.github.io/molaui/?path=/story/ai-side-by-side-diff--hard-states)
 - [InChangeReview](https://demogar.github.io/molaui/?path=/story/ai-side-by-side-diff--in-change-review)
 - [Narrow](https://demogar.github.io/molaui/?path=/story/ai-side-by-side-diff--narrow)
 - [NoChanges](https://demogar.github.io/molaui/?path=/story/ai-side-by-side-diff--no-changes)
@@ -111,7 +112,7 @@ Types: `SideBySideDiffProps`
 
 ### Testing status
 
-- Automated, jsdom: each of its 5 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 6 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

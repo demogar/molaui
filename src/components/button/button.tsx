@@ -39,8 +39,9 @@ export const buttonVariants = cva(
     '[&_svg]:pointer-events-none [&_svg]:shrink-0',
     // Not `opacity-50`: fading a cut shape fades its keyline with it, and its
     // label lands near 2:1 — which axe never reports, because disabled
-    // controls are exempt. Stated instead: shade field, muted ink, keyline kept.
-    'data-disabled:pointer-events-none data-disabled:bg-cloth-shade data-disabled:text-ink-muted',
+    // controls are exempt. Stated instead: the disabled ground, muted ink,
+    // keyline kept, and (below) a thin band of the variant's role inside it.
+    'data-disabled:pointer-events-none data-disabled:bg-disabled data-disabled:text-ink-muted',
   ],
   {
     variants: {
@@ -50,26 +51,34 @@ export const buttonVariants = cva(
        * something, `ghost` for low-stakes actions in dense rows.
        */
       variant: {
+        // Pressed closes the revealed band with ink (`active:band-ink`), and
+        // `active:cut-band` names the band again for a touch press, which
+        // has no hover. See "the states a cut shape can be in" in cloth.css.
         primary: [
           'bg-ink text-on-ink band-accent shadow-cut',
-          'hover:cut-band',
-          'data-disabled:shadow-cut',
+          'hover:cut-band active:cut-band active:band-ink',
+          // Disabled keeps an ink band inside the keyline: still the panel's
+          // main action, not yet available.
+          'data-disabled:cut-inner data-disabled:band-ink',
         ],
         secondary: [
           'bg-cloth-pale text-ink band-accent shadow-cut',
-          'hover:cut-band',
+          'hover:cut-band active:cut-band active:band-ink',
           'data-disabled:shadow-cut',
         ],
         danger: [
           'bg-danger text-on-layer band-danger shadow-cut',
-          'hover:bg-danger-strong hover:cut-band',
-          'data-disabled:shadow-cut',
+          'hover:bg-danger-strong hover:cut-band active:bg-danger-strong active:cut-band active:band-ink',
+          // A destructive button waiting for its confirmation still says it
+          // destroys something: a danger band inside the keyline.
+          'data-disabled:cut-inner data-disabled:band-danger',
         ],
         // Ghost has no keyline to keep, so disabled leaves the ground alone and
-        // only the ink changes; a shade fill would invent an edge.
+        // only the ink changes; a shade fill would invent an edge. Pressed is
+        // the cut it does not otherwise have, drawn inward.
         ghost: [
           'bg-transparent text-ink shadow-none',
-          'hover:bg-ink-soft',
+          'hover:bg-ink-soft active:bg-ink-soft active:cut-press',
           'data-disabled:bg-transparent',
         ],
       },

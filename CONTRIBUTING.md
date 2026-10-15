@@ -59,7 +59,7 @@ CI runs the three browser jobs side by side with `Gates`. Each can also be run o
 | Job | Locally | What it holds |
 |---|---|---|
 | Browser audit | `npm run build-storybook && npm run audit` | axe with colour contrast in both themes, every `data-theme` subtree painting its own ground, no horizontal overflow at 390px, and reflow at 320px: no text clipped by a container that cannot scroll or painted over other text or a control, no number cut in its field, and nothing scrolling sideways without the `scroll-edge` cue; every story is measured again at spacious density at 320, and the composed screens at 1024 and 768 as well. Over every story and every docs page, plus console errors. The report lands in `reports/audit/`. |
-| Visual regression | `npm run build-storybook && npm run visual` | every story in both themes, and each component's first story in compact density, RTL and forced colours, against the Linux baselines. |
+| Visual regression | `npm run build-storybook && npm run visual` | every story in both themes (hard-states stories in light only), and each component's first story in compact density, RTL and forced colours, against the Linux baselines. |
 | Consumer smoke tests | `npm run build && npm run consumers` | the packed tarball installed, built and checked in a browser in three apps: Vite on `styles.css`, Vite with its own Tailwind v4 on `tailwind.css`, and the Next.js App Router; plus script-only fixtures (`require()` from Node, and the ESLint plugin linting a bad file), the MCP bin and the ESLint plugin from a bare unpack. |
 
 For a quick look while Storybook's dev server is running, `node scripts/audit.mjs
@@ -192,6 +192,23 @@ a numbered pin measured onto each part, and a legend with the system classes eac
 read from the same elements. `src/docs/usage/anatomy.test.tsx` renders every story of the
 component and fails if a declared part is missing, or if the component owns a `data-part` that is
 not in the legend.
+
+### Hard states
+
+Every interactive component (every page with a keyboard table in
+`src/docs/usage/accessibility.ts`) ends its stories file with a `HardStates` story, named
+"Hard states" and tagged `['hard-states', '!autodocs']`. It is built from `HardStates` /
+`HardState` in `src/docs/blocks/hard-states.tsx` and shows four cells side by side: a long label at
+320px, the component in right to left with Arabic text, disabled, and its error state. A component
+with no disabled or no error state says why in `HARD_STATE_EXEMPT` (`src/docs/usage/hard-states.ts`).
+`src/docs/usage/hard-states.test.tsx` renders every one and fails a page that skips it. The sidebar's
+tag filter lists them all under `hard-states`; the visual tests photograph them in the light theme
+only, since each already holds its own right-to-left cell.
+
+To show a pseudo-class state in a story (hover, pressed, focus) without a pointer, wrap the control
+in `ForceState` from `src/docs/blocks/force-state.tsx`: it copies the component's own `:hover`,
+`:active` and `:focus-visible` rules, so the picture is what ships. The Button `States` story is
+the example.
 
 ## Rules a review will hold you to
 

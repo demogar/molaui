@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 import { RunStatusGlyph } from '../ai/run-status'
 import { Chip, ChipGroup } from './chip'
 
@@ -71,4 +72,52 @@ export const Comfortable: Story = {
       <Chip size="md">Returning after 30 days away</Chip>
     </ChipGroup>
   ),
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  render: () => (
+    <HardStatesFrame>
+      <HardState state="long-label">
+        <ChipGroup legend="Audience">
+          <Chip size="md" defaultChecked>
+            Workspaces that ran more than one hundred evaluations in their first week
+          </Chip>
+          <Chip size="md">Returning after thirty days away with an expired key</Chip>
+        </ChipGroup>
+      </HardState>
+      <HardState state="rtl">
+        <ChipGroup legend="الحالة">
+          <Chip defaultChecked count={1284}>
+            <RunStatusGlyph status="succeeded" /> ناجح
+          </Chip>
+          <Chip count={37}>
+            <RunStatusGlyph status="running" /> قيد التشغيل
+          </Chip>
+          <Chip count={12}>
+            <RunStatusGlyph status="failed" /> فاشل
+          </Chip>
+        </ChipGroup>
+      </HardState>
+      <HardState state="disabled">
+        <ChipGroup legend="Status">
+          <Chip disabled count={0}>
+            <RunStatusGlyph status="cancelled" /> Cancelled
+          </Chip>
+          <Chip disabled defaultChecked count={4}>
+            <RunStatusGlyph status="succeeded" /> Archived
+          </Chip>
+        </ChipGroup>
+      </HardState>
+    </HardStatesFrame>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A sentence-length filter takes `size="md"` and wraps; the one-line `sm` chip never does. In right to left the glyph leads from the right and the count trails at the left. A disabled chip keeps its keyline and, if checked, its fill. There is no error cell: a chip filters a view and is never submitted, so there is nothing for it to fail.',
+      },
+    },
+  },
 }

@@ -4,6 +4,8 @@ import * as React from 'react'
 import { fn } from 'storybook/test'
 
 import { Button, IconButton } from '../button'
+import { wrappingButtonSlot } from '../button/wrapping-slot'
+import { HardState, HardStates as HardStatesFrame } from '../../docs/blocks/hard-states'
 import { type CommandGroup, CommandPalette, useCommandShortcut } from '../command'
 import { Input } from '../field'
 import { ToastProvider } from '../toast'
@@ -144,5 +146,55 @@ export const NothingBound: Story = {
   args: { hotkey: false },
   parameters: {
     docs: { description: { story: 'With nothing bound, and `hotkey={false}` so the dialog binds no `?` of its own, it says so in a sentence.' } },
+  },
+}
+
+function HardStatesDemo() {
+  // A binding with a sentence for a label, so the open dialog's long-label
+  // row is in the registry the RTL cell lists.
+  useHotkeys('shift+e', fn(), { label: 'Export every failed run in the current filter as a CSV file', group: 'Runs' })
+  return (
+    <HardStatesFrame>
+      <HardState state="long-label" className={wrappingButtonSlot}>
+        <ShortcutsDialog
+          hotkey={false}
+          trigger={<Button variant="secondary">Show every keyboard shortcut on this page</Button>}
+        />
+      </HardState>
+      <HardState state="rtl">
+        <ShortcutsDialog
+          defaultOpen
+          dir="rtl"
+          lang="ar"
+          title="اختصارات لوحة المفاتيح"
+          trigger={<Button variant="secondary">الاختصارات</Button>}
+        />
+      </HardState>
+      <HardState state="disabled">
+        <div className="flex flex-col items-start gap-2">
+          <Button variant="secondary" disabled aria-describedby="shortcuts-hard-disabled-reason">
+            Show shortcuts
+          </Button>
+          <p id="shortcuts-hard-disabled-reason" className="m-0 text-sm text-ink-muted">
+            Shortcuts are off while a run is being replayed.
+          </p>
+        </div>
+      </HardState>
+    </HardStatesFrame>
+  )
+}
+
+export const HardStates: Story = {
+  name: 'Hard states',
+  tags: ['hard-states', '!autodocs'],
+  args: { defaultOpen: false },
+  render: () => <HardStatesDemo />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Only one dialog can be open, so the right-to-left one is: the keycaps sit at the start of each row and the labels at the end, and a sentence-length label wraps beside its keys instead of pushing them off the sheet. The long-label trigger wraps in its slot; the disabled trigger says why beside it. The dialog has no error state: it lists bindings that exist, and a binding that failed to register is not listed.',
+      },
+    },
   },
 }

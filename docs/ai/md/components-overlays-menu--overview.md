@@ -41,6 +41,7 @@ Actions on a thing that do not each deserve a button. The highlighted row fills 
 Each story is a live example in Storybook.
 
 - [CheckboxAndRadio](https://demogar.github.io/molaui/?path=/story/components-overlays-menu--checkbox-and-radio)
+- [HardStates](https://demogar.github.io/molaui/?path=/story/components-overlays-menu--hard-states)
 - [RowActions](https://demogar.github.io/molaui/?path=/story/components-overlays-menu--row-actions)
 
 ## API
@@ -173,7 +174,7 @@ Types: `MenuCheckboxItemProps`, `MenuContentProps`, `MenuItemProps`, `MenuRadioI
 
 ### Testing status
 
-- Automated, jsdom: each of its 2 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 3 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

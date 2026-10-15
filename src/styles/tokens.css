@@ -229,6 +229,18 @@
     --accent-soft: var(--oro-soft);
     --selected: var(--accent-soft);
 
+    /* ── disabled ─────────────────────────────────────────────────────
+     * The ground of a control that cannot be used: stated, never faded.
+     * Every disabled control wrote `bg-cloth-shade`, which is right in the
+     * light theme (a step of pigment below the page) and wrong in the dark
+     * one, where the step down is toward black: a disabled field was #111316
+     * on a #16181c page, an empty frame with a keyline and nothing in it,
+     * where in light it carried more pigment than the page. Named by its job,
+     * the dark value can go the other way: raised cloth with a tenth of ink,
+     * lifted off the page the way the light one sinks into it.
+     *   --ink-muted on --disabled  4.83 / 4.67 */
+    --disabled: light-dark(var(--cloth-shade), color-mix(in oklab, var(--cloth-pale) 90%, var(--ink)));
+
     /* ── the cut ──────────────────────────────────────────────────────
      * The signature. A cut shape is bounded by ink, then a revealed band of the
      * layer beneath, then ink again — concentric, never offset. An offset block
