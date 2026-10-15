@@ -4,7 +4,8 @@
 // targets of at least 24px at compact density, horizontal overflow at
 // 390px, reflow at 320px (clipped or overlapping text, squeezed numbers,
 // sideways scrolling without the scroll-edge cue; every story again at
-// spacious density, the composed screens at 1024 and 768 too), console errors, and runtime cost (layout transitions,
+// spacious density, the composed screens at 1024 and 768 too), anatomy pins
+// that overlap or leave their diagram (scripts/anatomy-scan.mjs), console errors, and runtime cost (layout transitions,
 // infinite animations, budgets; scripts/runtime-scan.mjs). Exits non-zero on
 // any finding, so CI can gate on it.
 //   node scripts/audit.mjs <base> [--out <dir>] [--only <id substring>] [--workers <n>] [--shard <i>/<n>]
@@ -23,6 +24,7 @@ import { join } from 'node:path'
 
 import { chromium } from 'playwright'
 
+import { anatomyScan, hasAnatomy } from './anatomy-scan.mjs'
 import { focusScan } from './focus-scan.mjs'
 import { BUDGETS, longTaskScan, runtimeScan } from './runtime-scan.mjs'
 import { serve } from './serve-static.mjs'
@@ -474,6 +476,16 @@ async function audit(page, job, errors) {
   // Pointer targets of at least 24px (scripts/target-size.mjs). Size does not
   // change with the theme, so once per story, on the light page.
   if (job.viewMode === 'story' && job.theme === 'light') found.push(...(await targetSize(page)))
+  // Anatomy pins must not overlap or leave their diagram
+  // (scripts/anatomy-scan.mjs), in both themes, here and at 390px below.
+  const anatomy = job.viewMode === 'docs' && (await hasAnatomy(page))
+  if (anatomy) found.push(...(await anatomyScan(page)))
+  if (anatomy && !job.overflow) {
+    // The dark page has no phone pass of its own; narrowing it for the pins
+    // costs one re-layout, not a page load. Only pages with a diagram pay it.
+    await page.setViewportSize(PHONE)
+    found.push(...(await anatomyScan(page)).map((f) => `[390px] ${f}`))
+  }
   if (job.overflow) {
     // Last, because it changes the page. The args table is a fixed-width grid
     // Storybook does not lay out for a phone, so it is set aside for the
@@ -486,6 +498,7 @@ async function audit(page, job, errors) {
       return document.documentElement.scrollWidth - window.innerWidth
     })
     if (over > 1) found.push(`[390px] overflows by ${over}px`)
+    if (anatomy) found.push(...(await anatomyScan(page)).map((f) => `[390px] ${f}`))
     // WCAG 1.4.10 defines reflow at 320 CSS px, so the same page is narrowed
     // once more rather than loaded again. 390 stays: it is the phone most
     // people hold, and a layout can break at one width and not the other.
