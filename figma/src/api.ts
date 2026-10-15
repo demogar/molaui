@@ -54,6 +54,7 @@ export interface VariableCollection {
   readonly variableIds: string[]
   addMode(name: string): string
   renameMode(modeId: string, name: string): void
+  remove(): void
 }
 
 export interface SolidPaint {
@@ -195,6 +196,8 @@ export interface PageNode extends BaseNode, ParentNode {
 }
 
 export interface FigmaApi {
+  /** The menu item the plugin was started from (manifest `menu`). */
+  readonly command: string
   readonly root: { readonly children: readonly PageNode[] }
   readonly variables: {
     getLocalVariableCollectionsAsync(): Promise<VariableCollection[]>

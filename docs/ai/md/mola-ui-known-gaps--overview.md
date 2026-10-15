@@ -71,7 +71,9 @@ part, or, like Dialog and Toast, their content opens outside the example frame.
 It writes every token as a Figma variable, with modes for theme and density, and draws thirteen
 core components: Button, IconButton, Input, Field, SelectTrigger, Checkbox, Radio, Switch,
 Badge, Chip, Callout, TabsTab and Panel. The other component exports are listed as `pending` in
-`figma/component-map.json`, so a design that uses them still redraws the parts. The plugin is
-tested against a fake of Figma's API, not yet in a real file, and there is no published library
-to install. The Storybook remains the reference for what a part looks like and how it behaves.
+`figma/component-map.json`, so a design that uses them still redraws the parts. Its first
+real run, on Figma's free Starter plan, stopped at Starter's one-mode-per-collection limit. The
+plugin now falls back to single-mode collections there, a path tested against a fake of Figma's
+API but not yet in a real file. There is no published library to install: publishing needs a paid
+Figma plan. The Storybook remains the reference for what a part looks like and how it behaves.
 What comes next is on the [Roadmap](https://demogar.github.io/molaui/?path=/docs/mola-ui-roadmap--overview).

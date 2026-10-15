@@ -6,7 +6,8 @@ your own file. You run it again whenever the tokens or the components change, an
 the kit in place.
 
 Why a plugin? Figma's REST API cannot create components, and its Variables endpoints need an
-Enterprise plan. A plugin can do both on any plan that has variable modes (Professional and up).
+Enterprise plan. A plugin can do both on any plan, the free Starter plan included (see
+[Starter and paid plans](#starter-and-paid-plans)).
 
 ```
 figma/
@@ -25,14 +26,57 @@ figma/
    to fix it. If it is Archivo (the face the components use), it still writes the variables
    and effect styles, then stops before the components.
 2. Open the Figma **desktop** app. Development plugins can only be imported there. Open the
-   file that will hold the kit. A new file works well, published later as a team library.
+   file that will hold the kit. A new file works well.
 3. **Plugins → Development → Import plugin from manifest…** and choose
    `figma/plugin/manifest.json` from a checkout of this repository.
-4. **Plugins → Development → Mola UI kit**. It runs without a UI and closes with a summary of
+4. **Plugins → Development → Mola UI kit → Draw or update the kit**. It runs without a UI and
+   closes with a summary that starts with the plan path it took, then lists
    what it created or updated, and anything it could not do.
 
 The plugin needs no network access (`allowedDomains: ["none"]`). Everything it draws is
 already in `code.js`.
+
+## Starter and paid plans
+
+The plugin does not ask which plan the file is on. It tries to give `Color` a second mode, and
+if Figma refuses, it takes the single-mode path. The closing message names the path it took.
+
+**Paid plans (Professional and up)** allow several modes per collection. `Color` holds `light`
+and `dark` and `Density` holds `comfortable`, `compact` and `spacious`, as the table below says.
+Pick a mode for a frame in its variable modes (Appearance in the right sidebar).
+
+**Starter** allows one mode per collection. The kit then splits each multi-mode collection:
+
+| Collection | Holds |
+| --- | --- |
+| `Color` | the mode the kit shows: `light` at first |
+| `Color · dark` | the dark values, under the same variable names |
+| `Density` | the mode the kit shows: `comfortable` at first |
+| `Density · compact`, `Density · spacious` | the other densities, under the same names |
+
+Components and effect styles bind `Color` and `Density`, so the kit renders light and
+comfortable. To see it dark, run **Plugins → Development → Mola UI kit → Show dark (Starter
+plan)**. It rewrites `Color` in place with the dark values, keeps the light ones in
+`Color · light`, and leaves every binding alone, so the whole file turns dark. **Show light**,
+**Show compact**, **Show spacious** and **Show comfortable** work the same way. A later
+**Draw or update the kit** keeps whichever mode is showing.
+
+A file that started on Starter upgrades by itself. After the plan changes, run **Draw or
+update the kit** again: `Color` and `Density` gain their other modes, the `·` alternates are
+merged into them and removed, and every variable bound in your designs keeps its id. If the
+alternates were showing dark, `dark` stays the first mode of `Color`, because Figma cannot
+reorder modes from a plugin. Drag `light` back to the front in the variables panel if you want
+light as the default.
+
+If an earlier version of the plugin stopped on Starter with a mode-limit error, just run the
+current one. It adopts the half-made collections: it renames Figma's default "Mode 1" to
+`light` or `comfortable`, fills in the variables that are already there, adds the alternates,
+and duplicates nothing.
+
+**Publishing a library needs a paid plan.** On Starter the kit is a local file. It works there
+as the place you design. You can also copy components from it and paste them into another
+file, which brings their variables along as local copies. Use one kit file per team on
+Starter, or upgrade to publish it once and let every file subscribe.
 
 ## What it creates
 
@@ -104,7 +148,7 @@ npm run figma        # rebuilds figma/plugin/code.js and figma/component-map.jso
 
 Commit the result. CI fails if it is stale (`npm run figma:check`, part of `npm run check`, and
 `figma/src/build.test.ts` in the unit suite). Then run the plugin again in the kit's file
-(**Plugins → Development → Mola UI kit**, no need to re-import).
+(**Plugins → Development → Mola UI kit → Draw or update the kit**, no need to re-import).
 
 A re-run finds everything by name and updates it in place, so ids stay the same. Designs
 bound to a variable or using an instance follow the change. It never deletes anything. A
