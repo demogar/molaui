@@ -1,6 +1,7 @@
 'use client'
 
 import { PreviewCard } from '@base-ui/react/preview-card'
+import { useRender } from '@base-ui/react/use-render'
 import { ArrowUpRight } from 'lucide-react'
 import * as React from 'react'
 
@@ -22,6 +23,12 @@ export interface Source {
 
 export interface CitationProps extends Omit<React.ComponentProps<'a'>, 'children'> {
   n: number
+  /**
+   * The element the marker renders as: your router's `<Link />` when `href`
+   * points inside the app, or a function returning one. Base UI's render
+   * prop, so the marker's classes, name and handlers are merged onto it.
+   */
+  render?: React.ReactElement | ((props: React.ComponentProps<'a'>) => React.ReactElement)
   /** The source's title, for the accessible name. "[2]" alone tells a screen reader nothing. Defaults to `source.title`. */
   title?: string
   /**
@@ -70,7 +77,7 @@ const markerClass = cn(
  * closes it. Tried first: opening on focus, which a tap also gives — but the
  * focus delay is longer than the click, so the page had already jumped.
  */
-export function Citation({ n, title, source, cardSide = 'top', href, className, ...props }: CitationProps) {
+export function Citation({ n, title, source, cardSide = 'top', href, className, render, ...props }: CitationProps) {
   const name = title ?? source?.title
   const markerProps = {
     'data-slot': 'citation',
@@ -80,8 +87,23 @@ export function Citation({ n, title, source, cardSide = 'top', href, className, 
     ...props,
   }
 
-  if (!source) return <a {...markerProps}>{n}</a>
-  return <CitationWithCard n={n} source={source} side={cardSide} markerProps={markerProps} />
+  if (!source) return <CitationMarker render={render} markerProps={markerProps} n={n} />
+  return <CitationWithCard n={n} source={source} side={cardSide} markerProps={markerProps} render={render} />
+}
+
+function CitationMarker({
+  n,
+  render,
+  markerProps,
+}: {
+  n: number
+  render: CitationProps['render']
+  markerProps: React.ComponentProps<'a'>
+}) {
+  const { ref, ...props } = markerProps
+  // The cast widens the function form's props to what Base UI declares; it
+  // passes the anchor props given here.
+  return useRender({ defaultTagName: 'a', render: render as useRender.RenderProp | undefined, ref, props: { ...props, children: n } })
 }
 
 function CitationWithCard({
@@ -89,11 +111,13 @@ function CitationWithCard({
   source,
   side,
   markerProps,
+  render,
 }: {
   n: number
   source: Source
   side: 'top' | 'bottom'
   markerProps: React.ComponentProps<'a'>
+  render: CitationProps['render']
 }) {
   const [open, setOpen] = React.useState(false)
   // The pointer that started the current press. `click` does not say whether
@@ -105,6 +129,7 @@ function CitationWithCard({
       <PreviewCard.Trigger
         delay={300}
         closeDelay={200}
+        render={render}
         {...markerProps}
         onPointerDown={(event) => {
           pointerType.current = event.pointerType

@@ -1,5 +1,6 @@
 import { render, screen } from '@/test/render'
 import userEvent from '@testing-library/user-event'
+import type * as React from 'react'
 import { describe, expect, it, vi } from 'vitest'
 
 import { Breadcrumb, middleTruncate } from './breadcrumb'
@@ -33,6 +34,31 @@ describe('Breadcrumb', () => {
       />,
     )
     expect(screen.getByRole('link', { name: 'Home' })).toHaveAttribute('data-router')
+  })
+
+  it('takes a router link element, merging href, classes and the label onto it', () => {
+    const navigate = vi.fn()
+    function RouterLink({ href, onClick, ...props }: React.ComponentProps<'a'>) {
+      return (
+        <a
+          {...props}
+          href={href}
+          data-router
+          onClick={(event) => {
+            onClick?.(event)
+            event.preventDefault()
+            navigate(href)
+          }}
+        />
+      )
+    }
+    render(<Breadcrumb items={[{ label: 'Agents', href: '/agents' }, { label: 'Here' }]} renderLink={<RouterLink />} />)
+    const link = screen.getByRole('link', { name: 'Agents' })
+    expect(link).toHaveAttribute('data-router')
+    expect(link).toHaveAttribute('href', '/agents')
+    expect(link.className).toContain('text-ink-2')
+    link.click()
+    expect(navigate).toHaveBeenCalledWith('/agents')
   })
 
   it('moves through the links with Tab and follows the focused one with Enter', async () => {

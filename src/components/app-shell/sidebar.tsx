@@ -1,8 +1,10 @@
 'use client'
 
+import { useRender } from '@base-ui/react/use-render'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { mergeProps } from '../../lib/merge-props'
 import { SidebarContext } from './app-shell'
 
 /**
@@ -66,7 +68,7 @@ export function NavSection({ title, className, children }: { title?: string; cla
   )
 }
 
-export interface NavItemProps extends Omit<React.ComponentProps<'a'>, 'children'> {
+export interface NavItemProps extends Omit<useRender.ComponentProps<'a'>, 'children'> {
   /** The visible label. A string, so it can also be the rail's tooltip. */
   children: string
   icon?: React.ReactNode
@@ -88,6 +90,14 @@ export interface NavItemProps extends Omit<React.ComponentProps<'a'>, 'children'
  * Collapsed to the rail, the label becomes screen-reader text and the native
  * `title` names the icon on hover. The count turns into a small cut mark on
  * the icon, so a failure count is still visible from the rail.
+ *
+ * ── your router's link ──
+ * It renders an `<a>` by default, and `render` swaps that for the app's own
+ * link — `render={<Link to="/runs" />}` — with the classes, `aria-current`,
+ * handlers and ref merged onto it, as every Base UI part's `render` does. A
+ * hard `<a>` made the app shell's own sidebar, the one place client routing
+ * matters most, reload the whole document on every click in Next or React
+ * Router.
  */
 export function NavItem({
   children,
@@ -97,74 +107,87 @@ export function NavItem({
   countLabel,
   countTone = 'neutral',
   className,
-  onClick,
+  render,
+  ref,
   ...props
 }: NavItemProps) {
   const { collapsed, onNavigate } = React.useContext(SidebarContext)
   const hasCount = count !== undefined && count > 0
 
-  return (
-    <li>
-      <a
-        data-slot="nav-item"
-        aria-current={active ? 'page' : undefined}
-        title={collapsed ? children : undefined}
-        className={cn(
-          'relative flex h-(--control-h) items-center gap-2.5 px-3 text-sm text-ink-2 no-underline',
-          'transition-colors',
-          'hover:bg-ink-soft hover:text-ink',
-          'aria-[current=page]:bg-ink-soft aria-[current=page]:font-semibold aria-[current=page]:text-ink',
-          'aria-[current=page]:bar-start-ink',
-          'aria-[current=page]:forced-selected',
-          // The bar and the ring are separate edge slots, so a focused current
-          // item shows both. As one box-shadow string each, the bar (a state
-          // variant, emitted after `focus-visible:`) replaced the ring, and a
-          // pair of combined strings per direction had to put it back.
-          'focus-visible:focus-ring',
-          '[&_svg]:size-(--icon) [&_svg]:shrink-0',
-          collapsed && 'justify-center px-0',
-          className,
-        )}
-        {...props}
-        // The consumer's onClick runs, then the sidebar closes on a phone.
-        onClick={(event) => {
-          onClick?.(event)
-          onNavigate()
-        }}
-      >
-        {icon ? <span aria-hidden className="relative flex">{icon}
-          {collapsed && hasCount ? (
-            <span
-              className={cn(
-                'absolute -top-1 -inset-e-1.5 size-1.5',
-                countTone === 'attention' ? 'bg-danger' : 'bg-ink-muted',
-              )}
-            />
-          ) : null}
-        </span> : null}
-        <span className={cn('min-w-0 flex-1 truncate', collapsed && 'sr-only')}>{children}</span>
-        {hasCount ? (
-          <>
-            {/* One sr-only string rather than spaced fragments: accessible-name
-                computation trims each element's own text, so ", " + "3" + " failed"
-                in three spans is read as ",3failed". */}
-            <span className="sr-only">{`, ${count}${countLabel ? ` ${countLabel}` : ''}`}</span>
-            <span
-              aria-hidden
-              className={cn(
-                'tabular-nums',
-                collapsed
-                  ? 'hidden'
-                  : countTone === 'attention'
-                    ? 'bg-danger px-1.5 py-px text-2xs font-semibold text-on-layer'
-                    : 'text-xs text-ink-muted',
-              )}
-            >
-              {count}
-            </span>
-          </>
-        ) : null}
-      </a>
-    </li>
+  const classes = cn(
+    'relative flex h-(--control-h) items-center gap-2.5 px-3 text-sm text-ink-2 no-underline',
+    'transition-colors',
+    'hover:bg-ink-soft hover:text-ink',
+    'aria-[current=page]:bg-ink-soft aria-[current=page]:font-semibold aria-[current=page]:text-ink',
+    'aria-[current=page]:bar-start-ink',
+    'aria-[current=page]:forced-selected',
+    // The bar and the ring are separate edge slots, so a focused current
+    // item shows both. As one box-shadow string each, the bar (a state
+    // variant, emitted after `focus-visible:`) replaced the ring, and a
+    // pair of combined strings per direction had to put it back.
+    'focus-visible:focus-ring',
+    '[&_svg]:size-(--icon) [&_svg]:shrink-0',
+    collapsed && 'justify-center px-0',
+    className,
   )
+
+  const content = (
+    <>
+      {icon ? <span aria-hidden className="relative flex">{icon}
+        {collapsed && hasCount ? (
+          <span
+            className={cn(
+              'absolute -top-1 -inset-e-1.5 size-1.5',
+              countTone === 'attention' ? 'bg-danger' : 'bg-ink-muted',
+            )}
+          />
+        ) : null}
+      </span> : null}
+      <span className={cn('min-w-0 flex-1 truncate', collapsed && 'sr-only')}>{children}</span>
+      {hasCount ? (
+        <>
+          {/* One sr-only string rather than spaced fragments: accessible-name
+              computation trims each element's own text, so ", " + "3" + " failed"
+              in three spans is read as ",3failed". */}
+          <span className="sr-only">{`, ${count}${countLabel ? ` ${countLabel}` : ''}`}</span>
+          <span
+            aria-hidden
+            className={cn(
+              'tabular-nums',
+              collapsed
+                ? 'hidden'
+                : countTone === 'attention'
+                  ? 'bg-danger px-1.5 py-px text-2xs font-semibold text-on-layer'
+                  : 'text-xs text-ink-muted',
+            )}
+          >
+            {count}
+          </span>
+        </>
+      ) : null}
+    </>
+  )
+
+  const element = useRender({
+    defaultTagName: 'a',
+    render,
+    ref,
+    props: {
+      'data-slot': 'nav-item',
+      // Base UI's merge: the consumer's onClick runs first, then the sidebar
+      // closes on a phone; `event.preventBaseUIHandler()` can stop that.
+      ...mergeProps<'a'>(
+        {
+          'aria-current': active ? 'page' : undefined,
+          title: collapsed ? children : undefined,
+          onClick: () => onNavigate(),
+        },
+        props,
+      ),
+      className: classes,
+      children: content,
+    },
+  })
+
+  return <li>{element}</li>
 }

@@ -1,3 +1,6 @@
+'use client'
+
+import { useRender } from '@base-ui/react/use-render'
 import type * as React from 'react'
 
 import { cn } from '../../lib/cn'
@@ -25,7 +28,12 @@ import { cn } from '../../lib/cn'
  * Long ids collapse in the middle, not at the end: `run_8f3a…c21e` keeps both
  * ends, which are the parts people compare.
  *
- * Router-agnostic: pass `renderLink` to emit your framework's `<Link>`.
+ * Router-agnostic: `renderLink` is a Base UI render prop, as `NavItem`'s
+ * `render` is — an element (`<Link />`, which receives `href`, the classes
+ * and the label) or a function that returns one
+ * (`(props) => <Link {...props} to={props.href} />` for React Router). It
+ * was a callback of its own shape; the element form is new, and the
+ * function form still receives `href`, `className` and `children`.
  */
 
 export interface BreadcrumbItem {
@@ -36,8 +44,14 @@ export interface BreadcrumbItem {
 
 export interface BreadcrumbProps extends Omit<React.ComponentProps<'nav'>, 'children'> {
   items: BreadcrumbItem[]
-  renderLink?: (props: { href: string; className: string; children: React.ReactNode }) => React.ReactNode
+  /** The element each link crumb renders as: your router's `<Link />`, or a function returning one. */
+  renderLink?: BreadcrumbLinkRender
 }
+
+/** Base UI's render prop, with the anchor props a crumb link receives. */
+export type BreadcrumbLinkRender =
+  | React.ReactElement
+  | ((props: React.ComponentProps<'a'> & { href: string; className: string }) => React.ReactElement)
 
 const linkClasses =
   'text-ink-2 no-underline decoration-ink-muted hover:text-ink hover:underline focus-visible:focus-ring focus-visible:outline-none'
@@ -57,13 +71,9 @@ export function Breadcrumb({ items, renderLink, className, ...props }: Breadcrum
               )}
             >
               {item.href && !last ? (
-                renderLink ? (
-                  renderLink({ href: item.href, className: linkClasses, children: item.label })
-                ) : (
-                  <a href={item.href} className={linkClasses}>
-                    {item.label}
-                  </a>
-                )
+                <CrumbLink href={item.href} render={renderLink}>
+                  {item.label}
+                </CrumbLink>
               ) : (
                 <span aria-current={last ? 'page' : undefined} className={cn('truncate', last ? 'font-semibold text-ink' : 'text-ink-muted')}>
                   {item.label}
@@ -75,6 +85,12 @@ export function Breadcrumb({ items, renderLink, className, ...props }: Breadcrum
       </ol>
     </nav>
   )
+}
+
+function CrumbLink({ href, render, children }: { href: string; render: BreadcrumbLinkRender | undefined; children: React.ReactNode }) {
+  // The cast widens the function form's props to what Base UI declares; it
+  // always passes the props given here, so `href` and `className` are there.
+  return useRender({ defaultTagName: 'a', render: render as useRender.RenderProp | undefined, props: { href, className: linkClasses, children } })
 }
 
 /** `run_8f3a2b91c21e` → `run_8f3a…c21e`. Both ends survive; the middle is what nobody reads. */
