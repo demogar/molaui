@@ -1,7 +1,9 @@
-import { readFileSync } from 'node:fs'
+import { readdirSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
 import { expect, type Page, test } from '@playwright/test'
+
+import { mine } from './shard'
 
 /**
  * Every story in both themes, and the first story of each component in the
@@ -166,20 +168,40 @@ async function bounds(page: Page) {
   })
 }
 
-function suite(mode: Mode, list: Entry[]) {
+/** Every screenshot in a fixed order, which `mine()` deals across shards. */
+const shots = [
+  ...everyStory.flatMap((mode) => stories.map((story) => ({ mode, story }))),
+  ...representative.flatMap((mode) => firstOfEach.map((story) => ({ mode, story }))),
+]
+const file = ({ mode, story }: (typeof shots)[number]) => `${story.id}--${mode.name}.png`
+
+for (const mode of [...everyStory, ...representative]) {
   test.describe(mode.name, () => {
     test.use({ viewport: { width: 1280, height: 900 } })
-    for (const story of list) {
-      test(story.id, async ({ page }) => {
-        await open(page, story.id, mode)
-        await expect(page).toHaveScreenshot(`${story.id}--${mode.name}.png`, {
+    shots.forEach((shot, i) => {
+      if (shot.mode !== mode || !mine(i)) return
+      test(shot.story.id, async ({ page }) => {
+        await open(page, shot.story.id, mode)
+        await expect(page).toHaveScreenshot(file(shot), {
           clip: await bounds(page),
           fullPage: true,
         })
       })
-    }
+    })
   })
 }
 
-for (const mode of everyStory) suite(mode, stories)
-for (const mode of representative) suite(mode, firstOfEach)
+/**
+ * `visual:update` writes new and changed baselines but never deletes one, so
+ * a renamed or removed story would leave its PNGs committed for good, checked
+ * out by every CI job. Any baseline no test compares against fails here,
+ * which keeps the committed set exactly the screenshots taken (see "Visual
+ * baselines" in CONTRIBUTING.md for why they are plain files and not LFS).
+ */
+if (mine(0)) {
+  test('every committed baseline belongs to a screenshot', () => {
+    const expected = new Set(shots.map(file))
+    const committed = readdirSync(resolve(import.meta.dirname, '__screenshots__/linux')).filter((f) => f.endsWith('.png'))
+    expect(committed.filter((f) => !expected.has(f))).toEqual([])
+  })
+}

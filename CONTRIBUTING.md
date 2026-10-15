@@ -112,7 +112,18 @@ When a visual change is intended, or a new story needs a baseline:
    Without it, push again (`git commit --allow-empty -m "test(visual): rerun ci"` is fine) so the
    checks run on the new baselines.
 
-When you delete or rename a story, delete its baselines too; Playwright does not prune them.
+When you delete or rename a story, delete its baselines too; Playwright does not prune them, and
+the visual suite fails on any baseline that no screenshot compares against.
+
+The baselines are plain files in git, not Git LFS, and are not recompressed. Measured on
+2026-10-14: 820 images, 23 MB, and 25.7 MB for every version ever committed, because an update
+rewrites only the images whose pixels changed. Checking them out costs each CI job about three
+seconds. LFS would need the owner to enable it, every clone and fork to install `git-lfs` (without
+it the suite compares against pointer files), and every visual shard to download the whole set on
+every run against a monthly bandwidth quota. Lossless recompression (`oxipng -o 2`) saves 22%, but
+rewriting the existing set would add 18 MB of new versions to history to save one second per
+checkout, and running it in the baseline workflow puts a downloaded binary in a job that holds a
+write token. Revisit if the set passes about 50 MB.
 
 ## Anatomy of a component
 

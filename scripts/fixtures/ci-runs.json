@@ -1,0 +1,1244 @@
+{
+ "beforeSharding": {
+  "run": 38469849299,
+  "jobs": [
+   {
+    "name": "Consumer smoke tests",
+    "status": "completed",
+    "conclusion": "success",
+    "startedAt": "2026-10-13T21:20:29Z",
+    "completedAt": "2026-10-13T21:22:13Z",
+    "steps": [
+     {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:20:30Z",
+      "completedAt": "2026-10-13T21:20:31Z"
+     },
+     {
+      "name": "Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:20:31Z",
+      "completedAt": "2026-10-13T21:20:32Z"
+     },
+     {
+      "name": "Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:20:32Z",
+      "completedAt": "2026-10-13T21:21:06Z"
+     },
+     {
+      "name": "Run actions/cache@v6",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:21:06Z",
+      "completedAt": "2026-10-13T21:21:10Z"
+     },
+     {
+      "name": "Run npm run build",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:21:10Z",
+      "completedAt": "2026-10-13T21:21:17Z"
+     },
+     {
+      "name": "Run npm run consumers",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:21:17Z",
+      "completedAt": "2026-10-13T21:22:10Z"
+     },
+     {
+      "name": "Post Run actions/cache@v6",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:22:10Z",
+      "completedAt": "2026-10-13T21:22:10Z"
+     },
+     {
+      "name": "Post Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:22:10Z",
+      "completedAt": "2026-10-13T21:22:11Z"
+     },
+     {
+      "name": "Post Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:22:11Z",
+      "completedAt": "2026-10-13T21:22:11Z"
+     },
+     {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:22:11Z",
+      "completedAt": "2026-10-13T21:22:11Z"
+     }
+    ]
+   },
+   {
+    "name": "Gates",
+    "status": "completed",
+    "conclusion": "success",
+    "startedAt": "2026-10-13T21:20:29Z",
+    "completedAt": "2026-10-13T21:23:16Z",
+    "steps": [
+     {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:20:30Z",
+      "completedAt": "2026-10-13T21:20:31Z"
+     },
+     {
+      "name": "Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:20:31Z",
+      "completedAt": "2026-10-13T21:20:32Z"
+     },
+     {
+      "name": "Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:20:32Z",
+      "completedAt": "2026-10-13T21:20:52Z"
+     },
+     {
+      "name": "Run npm run lint",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:20:52Z",
+      "completedAt": "2026-10-13T21:21:04Z"
+     },
+     {
+      "name": "Run npm run typecheck",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:21:04Z",
+      "completedAt": "2026-10-13T21:21:14Z"
+     },
+     {
+      "name": "Run npm test",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:21:14Z",
+      "completedAt": "2026-10-13T21:22:20Z"
+     },
+     {
+      "name": "Run npm run tokens:check",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:22:20Z",
+      "completedAt": "2026-10-13T21:22:21Z"
+     },
+     {
+      "name": "Run npm run manifest:check",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:22:21Z",
+      "completedAt": "2026-10-13T21:22:27Z"
+     },
+     {
+      "name": "Run npm run evidence:check",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:22:27Z",
+      "completedAt": "2026-10-13T21:22:29Z"
+     },
+     {
+      "name": "Run npm run build",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:22:29Z",
+      "completedAt": "2026-10-13T21:22:35Z"
+     },
+     {
+      "name": "Run npm run api:check",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:22:35Z",
+      "completedAt": "2026-10-13T21:22:38Z"
+     },
+     {
+      "name": "Run npm run size",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:22:38Z",
+      "completedAt": "2026-10-13T21:22:40Z"
+     },
+     {
+      "name": "Run npm run build-storybook -- --quiet",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:22:40Z",
+      "completedAt": "2026-10-13T21:22:52Z"
+     },
+     {
+      "name": "Run actions/upload-pages-artifact@v5",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:22:52Z",
+      "completedAt": "2026-10-13T21:22:54Z"
+     },
+     {
+      "name": "Post Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:22:54Z",
+      "completedAt": "2026-10-13T21:22:54Z"
+     },
+     {
+      "name": "Post Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:22:54Z",
+      "completedAt": "2026-10-13T21:22:55Z"
+     },
+     {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:22:55Z",
+      "completedAt": "2026-10-13T21:22:55Z"
+     }
+    ]
+   },
+   {
+    "name": "Browser audit",
+    "status": "completed",
+    "conclusion": "success",
+    "startedAt": "2026-10-13T21:20:30Z",
+    "completedAt": "2026-10-13T21:28:19Z",
+    "steps": [
+     {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:20:30Z",
+      "completedAt": "2026-10-13T21:20:32Z"
+     },
+     {
+      "name": "Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:20:32Z",
+      "completedAt": "2026-10-13T21:20:34Z"
+     },
+     {
+      "name": "Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:20:34Z",
+      "completedAt": "2026-10-13T21:21:09Z"
+     },
+     {
+      "name": "Run npm run build-storybook -- --quiet",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:21:09Z",
+      "completedAt": "2026-10-13T21:21:23Z"
+     },
+     {
+      "name": "Run npm run audit",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:21:23Z",
+      "completedAt": "2026-10-13T21:28:15Z"
+     },
+     {
+      "name": "Run actions/upload-artifact@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:28:15Z",
+      "completedAt": "2026-10-13T21:28:16Z"
+     },
+     {
+      "name": "Post Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:28:16Z",
+      "completedAt": "2026-10-13T21:28:16Z"
+     },
+     {
+      "name": "Post Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:28:16Z",
+      "completedAt": "2026-10-13T21:28:17Z"
+     },
+     {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:28:17Z",
+      "completedAt": "2026-10-13T21:28:17Z"
+     }
+    ]
+   },
+   {
+    "name": "Visual regression",
+    "status": "completed",
+    "conclusion": "success",
+    "startedAt": "2026-10-13T21:20:29Z",
+    "completedAt": "2026-10-13T21:27:38Z",
+    "steps": [
+     {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:20:30Z",
+      "completedAt": "2026-10-13T21:20:31Z"
+     },
+     {
+      "name": "Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:20:31Z",
+      "completedAt": "2026-10-13T21:20:33Z"
+     },
+     {
+      "name": "Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:20:33Z",
+      "completedAt": "2026-10-13T21:21:05Z"
+     },
+     {
+      "name": "Run npm run build-storybook -- --quiet",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:21:05Z",
+      "completedAt": "2026-10-13T21:21:18Z"
+     },
+     {
+      "name": "Run npm run visual",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:21:18Z",
+      "completedAt": "2026-10-13T21:27:35Z"
+     },
+     {
+      "name": "Run actions/upload-artifact@v7",
+      "status": "completed",
+      "conclusion": "skipped",
+      "startedAt": "2026-10-13T21:27:35Z",
+      "completedAt": "2026-10-13T21:27:35Z"
+     },
+     {
+      "name": "Post Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:27:35Z",
+      "completedAt": "2026-10-13T21:27:35Z"
+     },
+     {
+      "name": "Post Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:27:35Z",
+      "completedAt": "2026-10-13T21:27:35Z"
+     },
+     {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:27:35Z",
+      "completedAt": "2026-10-13T21:27:35Z"
+     }
+    ]
+   },
+   {
+    "name": "Publish Storybook",
+    "status": "completed",
+    "conclusion": "success",
+    "startedAt": "2026-10-13T21:28:24Z",
+    "completedAt": "2026-10-13T21:28:32Z",
+    "steps": [
+     {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:28:25Z",
+      "completedAt": "2026-10-13T21:28:26Z"
+     },
+     {
+      "name": "Run actions/deploy-pages@v5",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:28:26Z",
+      "completedAt": "2026-10-13T21:28:31Z"
+     },
+     {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-13T21:28:31Z",
+      "completedAt": "2026-10-13T21:28:31Z"
+     }
+    ]
+   }
+  ]
+ },
+ "sharded": {
+  "run": 38658533293,
+  "jobs": [
+   {
+    "name": "Gates",
+    "status": "completed",
+    "conclusion": "success",
+    "startedAt": "2026-10-15T00:10:58Z",
+    "completedAt": "2026-10-15T00:12:48Z",
+    "steps": [
+     {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:10:58Z",
+      "completedAt": "2026-10-15T00:10:59Z"
+     },
+     {
+      "name": "Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:10:59Z",
+      "completedAt": "2026-10-15T00:11:01Z"
+     },
+     {
+      "name": "Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:01Z",
+      "completedAt": "2026-10-15T00:11:11Z"
+     },
+     {
+      "name": "Run npm run lint",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:11Z",
+      "completedAt": "2026-10-15T00:11:21Z"
+     },
+     {
+      "name": "Run npm run typecheck",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:21Z",
+      "completedAt": "2026-10-15T00:11:29Z"
+     },
+     {
+      "name": "Run npm test",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:29Z",
+      "completedAt": "2026-10-15T00:12:23Z"
+     },
+     {
+      "name": "Run npm run tokens:check",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:12:23Z",
+      "completedAt": "2026-10-15T00:12:23Z"
+     },
+     {
+      "name": "Run npm run manifest:check",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:12:23Z",
+      "completedAt": "2026-10-15T00:12:27Z"
+     },
+     {
+      "name": "Run npm run evidence:check",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:12:27Z",
+      "completedAt": "2026-10-15T00:12:28Z"
+     },
+     {
+      "name": "Run npm run build",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:12:28Z",
+      "completedAt": "2026-10-15T00:12:33Z"
+     },
+     {
+      "name": "Run npm run api:check",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:12:33Z",
+      "completedAt": "2026-10-15T00:12:35Z"
+     },
+     {
+      "name": "Run npm run size",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:12:35Z",
+      "completedAt": "2026-10-15T00:12:36Z"
+     },
+     {
+      "name": "Run npm run build-storybook -- --quiet",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:12:36Z",
+      "completedAt": "2026-10-15T00:12:45Z"
+     },
+     {
+      "name": "Run actions/upload-pages-artifact@v5",
+      "status": "completed",
+      "conclusion": "skipped",
+      "startedAt": "2026-10-15T00:12:45Z",
+      "completedAt": "2026-10-15T00:12:45Z"
+     },
+     {
+      "name": "Post Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:12:45Z",
+      "completedAt": "2026-10-15T00:12:45Z"
+     },
+     {
+      "name": "Post Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:12:45Z",
+      "completedAt": "2026-10-15T00:12:46Z"
+     },
+     {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:12:46Z",
+      "completedAt": "2026-10-15T00:12:46Z"
+     }
+    ]
+   },
+   {
+    "name": "Consumer smoke tests",
+    "status": "completed",
+    "conclusion": "success",
+    "startedAt": "2026-10-15T00:10:58Z",
+    "completedAt": "2026-10-15T00:12:51Z",
+    "steps": [
+     {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:10:59Z",
+      "completedAt": "2026-10-15T00:11:00Z"
+     },
+     {
+      "name": "Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:00Z",
+      "completedAt": "2026-10-15T00:11:03Z"
+     },
+     {
+      "name": "Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:03Z",
+      "completedAt": "2026-10-15T00:11:35Z"
+     },
+     {
+      "name": "Run actions/cache@v6",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:35Z",
+      "completedAt": "2026-10-15T00:11:42Z"
+     },
+     {
+      "name": "Run npm run build",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:42Z",
+      "completedAt": "2026-10-15T00:11:50Z"
+     },
+     {
+      "name": "Run npm run consumers",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:50Z",
+      "completedAt": "2026-10-15T00:12:48Z"
+     },
+     {
+      "name": "Post Run actions/cache@v6",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:12:48Z",
+      "completedAt": "2026-10-15T00:12:48Z"
+     },
+     {
+      "name": "Post Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:12:48Z",
+      "completedAt": "2026-10-15T00:12:49Z"
+     },
+     {
+      "name": "Post Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:12:49Z",
+      "completedAt": "2026-10-15T00:12:49Z"
+     },
+     {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:12:49Z",
+      "completedAt": "2026-10-15T00:12:49Z"
+     }
+    ]
+   },
+   {
+    "name": "Browser audit (3/4)",
+    "status": "completed",
+    "conclusion": "success",
+    "startedAt": "2026-10-15T00:10:58Z",
+    "completedAt": "2026-10-15T00:13:16Z",
+    "steps": [
+     {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:10:58Z",
+      "completedAt": "2026-10-15T00:10:59Z"
+     },
+     {
+      "name": "Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:10:59Z",
+      "completedAt": "2026-10-15T00:11:01Z"
+     },
+     {
+      "name": "Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:01Z",
+      "completedAt": "2026-10-15T00:11:31Z"
+     },
+     {
+      "name": "Run npm run build-storybook -- --quiet",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:31Z",
+      "completedAt": "2026-10-15T00:11:45Z"
+     },
+     {
+      "name": "Run npm run audit -- --shard 3/4",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:45Z",
+      "completedAt": "2026-10-15T00:13:13Z"
+     },
+     {
+      "name": "Run actions/upload-artifact@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:13Z",
+      "completedAt": "2026-10-15T00:13:14Z"
+     },
+     {
+      "name": "Post Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:14Z",
+      "completedAt": "2026-10-15T00:13:14Z"
+     },
+     {
+      "name": "Post Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:14Z",
+      "completedAt": "2026-10-15T00:13:14Z"
+     },
+     {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:14Z",
+      "completedAt": "2026-10-15T00:13:14Z"
+     }
+    ]
+   },
+   {
+    "name": "Visual regression (2/4)",
+    "status": "completed",
+    "conclusion": "success",
+    "startedAt": "2026-10-15T00:10:58Z",
+    "completedAt": "2026-10-15T00:13:32Z",
+    "steps": [
+     {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:10:58Z",
+      "completedAt": "2026-10-15T00:10:59Z"
+     },
+     {
+      "name": "Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:10:59Z",
+      "completedAt": "2026-10-15T00:11:00Z"
+     },
+     {
+      "name": "Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:00Z",
+      "completedAt": "2026-10-15T00:11:26Z"
+     },
+     {
+      "name": "Run npm run build-storybook -- --quiet",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:26Z",
+      "completedAt": "2026-10-15T00:11:40Z"
+     },
+     {
+      "name": "Run npm run visual -- --shard=2/4",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:40Z",
+      "completedAt": "2026-10-15T00:13:30Z"
+     },
+     {
+      "name": "Run actions/upload-artifact@v7",
+      "status": "completed",
+      "conclusion": "skipped",
+      "startedAt": "2026-10-15T00:13:30Z",
+      "completedAt": "2026-10-15T00:13:30Z"
+     },
+     {
+      "name": "Post Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:30Z",
+      "completedAt": "2026-10-15T00:13:30Z"
+     },
+     {
+      "name": "Post Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:30Z",
+      "completedAt": "2026-10-15T00:13:30Z"
+     },
+     {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:30Z",
+      "completedAt": "2026-10-15T00:13:30Z"
+     }
+    ]
+   },
+   {
+    "name": "Visual regression (1/4)",
+    "status": "completed",
+    "conclusion": "success",
+    "startedAt": "2026-10-15T00:10:58Z",
+    "completedAt": "2026-10-15T00:13:35Z",
+    "steps": [
+     {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:10:59Z",
+      "completedAt": "2026-10-15T00:11:01Z"
+     },
+     {
+      "name": "Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:01Z",
+      "completedAt": "2026-10-15T00:11:02Z"
+     },
+     {
+      "name": "Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:02Z",
+      "completedAt": "2026-10-15T00:11:38Z"
+     },
+     {
+      "name": "Run npm run build-storybook -- --quiet",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:38Z",
+      "completedAt": "2026-10-15T00:11:52Z"
+     },
+     {
+      "name": "Run npm run visual -- --shard=1/4",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:52Z",
+      "completedAt": "2026-10-15T00:13:32Z"
+     },
+     {
+      "name": "Run actions/upload-artifact@v7",
+      "status": "completed",
+      "conclusion": "skipped",
+      "startedAt": "2026-10-15T00:13:32Z",
+      "completedAt": "2026-10-15T00:13:32Z"
+     },
+     {
+      "name": "Post Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:32Z",
+      "completedAt": "2026-10-15T00:13:32Z"
+     },
+     {
+      "name": "Post Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:32Z",
+      "completedAt": "2026-10-15T00:13:33Z"
+     },
+     {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:33Z",
+      "completedAt": "2026-10-15T00:13:33Z"
+     }
+    ]
+   },
+   {
+    "name": "Browser audit (1/4)",
+    "status": "completed",
+    "conclusion": "success",
+    "startedAt": "2026-10-15T00:10:58Z",
+    "completedAt": "2026-10-15T00:13:07Z",
+    "steps": [
+     {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:10:59Z",
+      "completedAt": "2026-10-15T00:11:00Z"
+     },
+     {
+      "name": "Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:00Z",
+      "completedAt": "2026-10-15T00:11:02Z"
+     },
+     {
+      "name": "Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:02Z",
+      "completedAt": "2026-10-15T00:11:30Z"
+     },
+     {
+      "name": "Run npm run build-storybook -- --quiet",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:30Z",
+      "completedAt": "2026-10-15T00:11:44Z"
+     },
+     {
+      "name": "Run npm run audit -- --shard 1/4",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:44Z",
+      "completedAt": "2026-10-15T00:13:04Z"
+     },
+     {
+      "name": "Run actions/upload-artifact@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:04Z",
+      "completedAt": "2026-10-15T00:13:05Z"
+     },
+     {
+      "name": "Post Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:05Z",
+      "completedAt": "2026-10-15T00:13:05Z"
+     },
+     {
+      "name": "Post Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:05Z",
+      "completedAt": "2026-10-15T00:13:05Z"
+     },
+     {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:05Z",
+      "completedAt": "2026-10-15T00:13:05Z"
+     }
+    ]
+   },
+   {
+    "name": "Visual regression (3/4)",
+    "status": "completed",
+    "conclusion": "success",
+    "startedAt": "2026-10-15T00:10:58Z",
+    "completedAt": "2026-10-15T00:13:29Z",
+    "steps": [
+     {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:10:58Z",
+      "completedAt": "2026-10-15T00:10:59Z"
+     },
+     {
+      "name": "Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:10:59Z",
+      "completedAt": "2026-10-15T00:11:00Z"
+     },
+     {
+      "name": "Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:00Z",
+      "completedAt": "2026-10-15T00:11:28Z"
+     },
+     {
+      "name": "Run npm run build-storybook -- --quiet",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:28Z",
+      "completedAt": "2026-10-15T00:11:42Z"
+     },
+     {
+      "name": "Run npm run visual -- --shard=3/4",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:42Z",
+      "completedAt": "2026-10-15T00:13:27Z"
+     },
+     {
+      "name": "Run actions/upload-artifact@v7",
+      "status": "completed",
+      "conclusion": "skipped",
+      "startedAt": "2026-10-15T00:13:27Z",
+      "completedAt": "2026-10-15T00:13:27Z"
+     },
+     {
+      "name": "Post Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:27Z",
+      "completedAt": "2026-10-15T00:13:27Z"
+     },
+     {
+      "name": "Post Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:27Z",
+      "completedAt": "2026-10-15T00:13:27Z"
+     },
+     {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:27Z",
+      "completedAt": "2026-10-15T00:13:27Z"
+     }
+    ]
+   },
+   {
+    "name": "Visual regression (4/4)",
+    "status": "completed",
+    "conclusion": "success",
+    "startedAt": "2026-10-15T00:10:58Z",
+    "completedAt": "2026-10-15T00:13:40Z",
+    "steps": [
+     {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:10:59Z",
+      "completedAt": "2026-10-15T00:10:59Z"
+     },
+     {
+      "name": "Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:10:59Z",
+      "completedAt": "2026-10-15T00:11:00Z"
+     },
+     {
+      "name": "Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:00Z",
+      "completedAt": "2026-10-15T00:11:27Z"
+     },
+     {
+      "name": "Run npm run build-storybook -- --quiet",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:27Z",
+      "completedAt": "2026-10-15T00:11:41Z"
+     },
+     {
+      "name": "Run npm run visual -- --shard=4/4",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:41Z",
+      "completedAt": "2026-10-15T00:13:38Z"
+     },
+     {
+      "name": "Run actions/upload-artifact@v7",
+      "status": "completed",
+      "conclusion": "skipped",
+      "startedAt": "2026-10-15T00:13:38Z",
+      "completedAt": "2026-10-15T00:13:38Z"
+     },
+     {
+      "name": "Post Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:38Z",
+      "completedAt": "2026-10-15T00:13:38Z"
+     },
+     {
+      "name": "Post Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:38Z",
+      "completedAt": "2026-10-15T00:13:38Z"
+     },
+     {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:38Z",
+      "completedAt": "2026-10-15T00:13:38Z"
+     }
+    ]
+   },
+   {
+    "name": "Browser audit (4/4)",
+    "status": "completed",
+    "conclusion": "success",
+    "startedAt": "2026-10-15T00:10:58Z",
+    "completedAt": "2026-10-15T00:13:08Z",
+    "steps": [
+     {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:10:59Z",
+      "completedAt": "2026-10-15T00:11:01Z"
+     },
+     {
+      "name": "Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:01Z",
+      "completedAt": "2026-10-15T00:11:04Z"
+     },
+     {
+      "name": "Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:04Z",
+      "completedAt": "2026-10-15T00:11:36Z"
+     },
+     {
+      "name": "Run npm run build-storybook -- --quiet",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:36Z",
+      "completedAt": "2026-10-15T00:11:48Z"
+     },
+     {
+      "name": "Run npm run audit -- --shard 4/4",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:48Z",
+      "completedAt": "2026-10-15T00:13:04Z"
+     },
+     {
+      "name": "Run actions/upload-artifact@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:04Z",
+      "completedAt": "2026-10-15T00:13:05Z"
+     },
+     {
+      "name": "Post Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:05Z",
+      "completedAt": "2026-10-15T00:13:05Z"
+     },
+     {
+      "name": "Post Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:05Z",
+      "completedAt": "2026-10-15T00:13:05Z"
+     },
+     {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:05Z",
+      "completedAt": "2026-10-15T00:13:05Z"
+     }
+    ]
+   },
+   {
+    "name": "Browser audit (2/4)",
+    "status": "completed",
+    "conclusion": "success",
+    "startedAt": "2026-10-15T00:10:58Z",
+    "completedAt": "2026-10-15T00:12:36Z",
+    "steps": [
+     {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:10:58Z",
+      "completedAt": "2026-10-15T00:10:59Z"
+     },
+     {
+      "name": "Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:10:59Z",
+      "completedAt": "2026-10-15T00:11:01Z"
+     },
+     {
+      "name": "Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:01Z",
+      "completedAt": "2026-10-15T00:11:32Z"
+     },
+     {
+      "name": "Run npm run build-storybook -- --quiet",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:32Z",
+      "completedAt": "2026-10-15T00:11:40Z"
+     },
+     {
+      "name": "Run npm run audit -- --shard 2/4",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:11:40Z",
+      "completedAt": "2026-10-15T00:12:33Z"
+     },
+     {
+      "name": "Run actions/upload-artifact@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:12:33Z",
+      "completedAt": "2026-10-15T00:12:34Z"
+     },
+     {
+      "name": "Post Run ./.github/actions/setup",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:12:34Z",
+      "completedAt": "2026-10-15T00:12:34Z"
+     },
+     {
+      "name": "Post Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:12:34Z",
+      "completedAt": "2026-10-15T00:12:34Z"
+     },
+     {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:12:34Z",
+      "completedAt": "2026-10-15T00:12:34Z"
+     }
+    ]
+   },
+   {
+    "name": "Browser audit",
+    "status": "completed",
+    "conclusion": "success",
+    "startedAt": "2026-10-15T00:13:18Z",
+    "completedAt": "2026-10-15T00:13:21Z",
+    "steps": [
+     {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:19Z",
+      "completedAt": "2026-10-15T00:13:19Z"
+     },
+     {
+      "name": "Run test \"success\" = success",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:19Z",
+      "completedAt": "2026-10-15T00:13:19Z"
+     },
+     {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:19Z",
+      "completedAt": "2026-10-15T00:13:19Z"
+     }
+    ]
+   },
+   {
+    "name": "Visual regression",
+    "status": "completed",
+    "conclusion": "success",
+    "startedAt": "2026-10-15T00:13:42Z",
+    "completedAt": "2026-10-15T00:13:46Z",
+    "steps": [
+     {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:43Z",
+      "completedAt": "2026-10-15T00:13:43Z"
+     },
+     {
+      "name": "Run test \"success\" = success",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:43Z",
+      "completedAt": "2026-10-15T00:13:43Z"
+     },
+     {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-10-15T00:13:43Z",
+      "completedAt": "2026-10-15T00:13:43Z"
+     }
+    ]
+   },
+   {
+    "name": "Publish Storybook",
+    "status": "completed",
+    "conclusion": "skipped",
+    "startedAt": "2026-10-15T00:13:46Z",
+    "completedAt": "2026-10-15T00:13:46Z",
+    "steps": []
+   }
+  ]
+ }
+}

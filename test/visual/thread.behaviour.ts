@@ -1,5 +1,7 @@
 import { expect, type Locator, test } from '@playwright/test'
 
+import { mine } from './shard'
+
 /**
  * Thread's stick-to-bottom, driven in a real browser.
  *
@@ -18,6 +20,8 @@ const distanceFromBottom = (scroller: Locator) =>
   scroller.evaluate((el) => el.scrollHeight - el.scrollTop - el.clientHeight)
 
 test.use({ viewport: { width: 1280, height: 900 } })
+// One shard runs it; the screenshots are dealt across all of them.
+test.skip(!mine(0))
 
 test('Thread follows new turns only while the reader is at the bottom', async ({ page }) => {
   await page.goto(`/iframe.html?id=${STORY}&viewMode=story&globals=theme:light`)
