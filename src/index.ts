@@ -1,6 +1,7 @@
 import './styles/index.css'
 
 export { cn } from './lib/cn'
+export type { Variants } from './lib/variants'
 export { contrast, mixOklab, parseHex, toHex } from './tokens/color'
 
 // Right-to-left: see lib/direction.ts.

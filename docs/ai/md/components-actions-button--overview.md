@@ -86,8 +86,8 @@ A square button that carries only an icon. `label` is required and becomes the a
 | `label` (required) | `string` |  | The accessible name. Required: an icon is not a label. |
 | `className` | `string` |  |  |
 | `loading` | `boolean` |  | Work is in flight. The label stays (so the button never changes width mid-click), a strip of working relleno runs along its foot, and the button stops accepting presses while staying focusable and announced as busy. |
-| `size` | `"sm" \| "lg" \| "md" \| null` |  |  |
-| `variant` | `"danger" \| "primary" \| "secondary" \| "ghost" \| null` |  |  |
+| `size` | `"sm" \| "lg" \| "md"` |  |  |
+| `variant` | `"danger" \| "primary" \| "secondary" \| "ghost"` |  |  |
 
 Also accepts the props of `ButtonProps`, `NativeButtonProps`.
 

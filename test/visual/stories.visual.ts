@@ -168,10 +168,21 @@ async function bounds(page: Page) {
   })
 }
 
+/**
+ * Stories photographed in forced colours although they are not the first of
+ * their component, because what they show is exactly what forced colours
+ * removes: the relleno slits (a gradient) and the diente teeth (a
+ * currentColor fill). Both vanished there until cloth.css gave them system
+ * colours; the first Divider story is a plain keyline and would not notice.
+ */
+const FORCED_TOO = new Set(['components-layout-divider--relleno', 'components-layout-divider--diente'])
+const forcedToo = stories.filter((s) => FORCED_TOO.has(s.id) && !firstOfEach.includes(s))
+if (forcedToo.length !== FORCED_TOO.size) throw new Error(`A forced-colours story is missing from the index: ${[...FORCED_TOO].join(', ')}`)
+
 /** Every screenshot in a fixed order, which `mine()` deals across shards. */
 const shots = [
   ...everyStory.flatMap((mode) => stories.map((story) => ({ mode, story }))),
-  ...representative.flatMap((mode) => firstOfEach.map((story) => ({ mode, story }))),
+  ...representative.flatMap((mode) => (mode.forced ? [...firstOfEach, ...forcedToo] : firstOfEach).map((story) => ({ mode, story }))),
 ]
 const file = ({ mode, story }: (typeof shots)[number]) => `${story.id}--${mode.name}.png`
 

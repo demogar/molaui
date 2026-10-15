@@ -257,7 +257,7 @@ export interface AvatarGroupProps extends React_2.ComponentProps<'div'> {
 export function avatarLayer(name: string): (typeof LAYERS)[number];
 
 // @public (undocumented)
-export interface AvatarProps extends Omit<React_2.ComponentProps<'span'>, 'children'>, VariantProps<typeof avatarVariants> {
+export interface AvatarProps extends Omit<React_2.ComponentProps<'span'>, 'children'>, Variants<typeof avatarVariants> {
     icon?: React_2.ReactNode;
     name: string;
     // (undocumented)
@@ -273,13 +273,13 @@ export const avatarVariants: (props?: ({
 export function Badge(input: BadgeProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface BadgeProps extends React_2.ComponentProps<'span'>, VariantProps<typeof badgeVariants> {
+export interface BadgeProps extends React_2.ComponentProps<'span'>, Variants<typeof badgeVariants> {
     dot?: boolean;
     pulse?: boolean;
 }
 
 // @public (undocumented)
-export type BadgeTone = NonNullable<VariantProps<typeof badgeVariants>['tone']>;
+export type BadgeTone = NonNullable<Variants<typeof badgeVariants>['tone']>;
 
 // @public
 export const badgeVariants: (props?: ({
@@ -328,7 +328,7 @@ export function Button(input: ButtonProps): React_2.JSX.Element;
 export function ButtonArrow(): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface ButtonProps extends Omit<Button_2.Props, 'className'>, VariantProps<typeof buttonVariants> {
+export interface ButtonProps extends Omit<Button_2.Props, 'className'>, Variants<typeof buttonVariants> {
     // (undocumented)
     className?: string;
     icon?: React_2.ReactNode;
@@ -375,7 +375,7 @@ export interface CalendarProps {
 export function Callout(input: CalloutProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface CalloutProps extends Omit<React_2.ComponentProps<'div'>, 'title'>, VariantProps<typeof calloutVariants> {
+export interface CalloutProps extends Omit<React_2.ComponentProps<'div'>, 'title'>, Variants<typeof calloutVariants> {
     actions?: React_2.ReactNode;
     headingLevel?: 2 | 3 | 4 | 5;
     icon?: React_2.ReactNode | false;
@@ -385,10 +385,10 @@ export interface CalloutProps extends Omit<React_2.ComponentProps<'div'>, 'title
 }
 
 // @public (undocumented)
-export type CalloutTone = NonNullable<VariantProps<typeof calloutVariants>['tone']>;
+export type CalloutTone = NonNullable<Variants<typeof calloutVariants>['tone']>;
 
 // @public (undocumented)
-export type CalloutVariant = NonNullable<VariantProps<typeof calloutVariants>['variant']>;
+export type CalloutVariant = NonNullable<Variants<typeof calloutVariants>['variant']>;
 
 // @public
 export const calloutVariants: (props?: ({
@@ -479,7 +479,7 @@ export interface ChipGroupProps extends React_2.ComponentProps<'fieldset'> {
 }
 
 // @public (undocumented)
-export interface ChipProps extends Omit<React_2.ComponentProps<'input'>, 'size' | 'type' | 'children'>, VariantProps<typeof chipVariants> {
+export interface ChipProps extends Omit<React_2.ComponentProps<'input'>, 'size' | 'type' | 'children'>, Variants<typeof chipVariants> {
     children: React_2.ReactNode;
     count?: number;
     type?: 'checkbox' | 'radio';
@@ -663,7 +663,7 @@ export interface ConfidenceProps extends Omit<React_2.ComponentProps<'span'>, 'c
 export function Container(input: ContainerProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface ContainerProps extends React_2.ComponentProps<'div'>, VariantProps<typeof containerVariants> {
+export interface ContainerProps extends React_2.ComponentProps<'div'>, Variants<typeof containerVariants> {
 }
 
 // @public
@@ -936,7 +936,7 @@ export function DescriptionList(input: DescriptionListProps): React_2.JSX.Elemen
 // Warning: (ae-forgotten-export) The symbol "listVariants" needs to be exported by the entry point index.d.ts
 //
 // @public (undocumented)
-export interface DescriptionListProps extends Omit<React_2.ComponentProps<'dl'>, 'children'>, VariantProps<typeof listVariants> {
+export interface DescriptionListProps extends Omit<React_2.ComponentProps<'dl'>, 'children'>, Variants<typeof listVariants> {
     // (undocumented)
     items: DescriptionItem[];
 }
@@ -953,7 +953,7 @@ export function DialogContent(input: DialogContentProps): React_2.JSX.Element;
 // Warning: (ae-forgotten-export) The symbol "dialogPopupVariants" needs to be exported by the entry point index.d.ts
 //
 // @public (undocumented)
-export interface DialogContentProps extends Omit<Dialog_2.Popup.Props, 'className' | 'title'>, VariantProps<typeof dialogPopupVariants> {
+export interface DialogContentProps extends Omit<Dialog_2.Popup.Props, 'className' | 'title'>, Variants<typeof dialogPopupVariants> {
     // Warning: (ae-forgotten-export) The symbol "Band" needs to be exported by the entry point index.d.ts
     band?: Band;
     // (undocumented)
@@ -1071,7 +1071,7 @@ export const DrawerTrigger: Drawer_2.Trigger;
 export function EmptyState(input: EmptyStateProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface EmptyStateProps extends Omit<React_2.ComponentProps<'div'>, 'title'>, VariantProps<typeof emptyStateVariants> {
+export interface EmptyStateProps extends Omit<React_2.ComponentProps<'div'>, 'title'>, Variants<typeof emptyStateVariants> {
     actions?: React_2.ReactNode;
     // (undocumented)
     description?: React_2.ReactNode;
@@ -1296,7 +1296,7 @@ export function getPageRange(page: number, pageCount: number, siblings?: number)
 export function Grid(input: GridProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface GridProps extends React_2.ComponentProps<'div'>, VariantProps<typeof gridVariants> {
+export interface GridProps extends React_2.ComponentProps<'div'>, Variants<typeof gridVariants> {
     minItem?: string;
 }
 
@@ -1662,12 +1662,12 @@ export interface PaginationProps extends Omit<React_2.ComponentProps<'nav'>, 'on
 export function Panel(input: PanelProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface PanelProps extends React_2.ComponentProps<'div'>, VariantProps<typeof panelVariants> {
+export interface PanelProps extends React_2.ComponentProps<'div'>, Variants<typeof panelVariants> {
     as?: 'div' | 'section' | 'article' | 'aside';
 }
 
 // @public (undocumented)
-export type PanelTone = NonNullable<VariantProps<typeof panelVariants>['tone']>;
+export type PanelTone = NonNullable<Variants<typeof panelVariants>['tone']>;
 
 // @public
 export const panelVariants: (props?: ({
@@ -1848,11 +1848,11 @@ export const RECOMMENDATION_LABELS: Record<RecommendationLevel, string>;
 export function RecommendationBadge(input: RecommendationBadgeProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface RecommendationBadgeProps extends React_2.ComponentProps<'span'>, VariantProps<typeof recommendationVariants> {
+export interface RecommendationBadgeProps extends React_2.ComponentProps<'span'>, Variants<typeof recommendationVariants> {
 }
 
 // @public (undocumented)
-export type RecommendationLevel = NonNullable<VariantProps<typeof recommendationVariants>['level']>;
+export type RecommendationLevel = NonNullable<Variants<typeof recommendationVariants>['level']>;
 
 // @public
 export const recommendationVariants: (props?: ({
@@ -2149,7 +2149,7 @@ export interface SkeletonGroupProps extends Omit<React_2.ComponentProps<'div'>, 
 // Warning: (ae-forgotten-export) The symbol "skeletonVariants" needs to be exported by the entry point index.d.ts
 //
 // @public (undocumented)
-export interface SkeletonProps extends React_2.ComponentProps<'div'>, VariantProps<typeof skeletonVariants> {
+export interface SkeletonProps extends React_2.ComponentProps<'div'>, Variants<typeof skeletonVariants> {
 }
 
 // @public
@@ -2208,13 +2208,13 @@ export function Sparkline(input: {
     width?: number;
     height?: number;
     className?: string;
-}): React_2.JSX.Element;
+}): React_2.JSX.Element | null;
 
 // @public
 export function Stack(input: StackProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface StackProps extends React_2.ComponentProps<'div'>, VariantProps<typeof stackVariants> {
+export interface StackProps extends React_2.ComponentProps<'div'>, Variants<typeof stackVariants> {
 }
 
 // @public (undocumented)
@@ -2310,11 +2310,11 @@ export type StreamStatus = 'idle' | 'streaming' | 'done' | 'error';
 export function Swatch(input: SwatchProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface SwatchProps extends Omit<React_2.ComponentProps<'span'>, 'children'>, VariantProps<typeof swatchVariants> {
+export interface SwatchProps extends Omit<React_2.ComponentProps<'span'>, 'children'>, Variants<typeof swatchVariants> {
 }
 
 // @public (undocumented)
-export type SwatchTone = NonNullable<VariantProps<typeof swatchVariants>['tone']>;
+export type SwatchTone = NonNullable<Variants<typeof swatchVariants>['tone']>;
 
 // @public
 export const swatchVariants: (props?: ({
@@ -2469,7 +2469,7 @@ export interface TextareaProps extends React_2.ComponentProps<'textarea'> {
 export { TextDirection }
 
 // @public (undocumented)
-export interface TextProps extends Omit<React_2.HTMLAttributes<HTMLElement>, 'color'>, VariantProps<typeof textVariants> {
+export interface TextProps extends Omit<React_2.HTMLAttributes<HTMLElement>, 'color'>, Variants<typeof textVariants> {
     // (undocumented)
     as?: 'p' | 'span' | 'div';
 }
@@ -2582,7 +2582,7 @@ export function Toolbar(input: ToolbarProps): React_2.JSX.Element;
 export function ToolbarButton(input: ToolbarButtonProps): React_2.JSX.Element;
 
 // @public (undocumented)
-export interface ToolbarButtonProps extends Omit<Toolbar_2.Button.Props, 'className'>, VariantProps<typeof buttonVariants> {
+export interface ToolbarButtonProps extends Omit<Toolbar_2.Button.Props, 'className'>, Variants<typeof buttonVariants> {
     // (undocumented)
     className?: string;
     // (undocumented)
@@ -2635,7 +2635,7 @@ export interface ToolbarOverflowProps {
 // Warning: (ae-forgotten-export) The symbol "toolbarVariants" needs to be exported by the entry point index.d.ts
 //
 // @public (undocumented)
-export interface ToolbarProps extends Omit<Toolbar_2.Root.Props, 'className'>, VariantProps<typeof toolbarVariants> {
+export interface ToolbarProps extends Omit<Toolbar_2.Root.Props, 'className'>, Variants<typeof toolbarVariants> {
     'aria-label': string;
     // (undocumented)
     className?: string;
@@ -2660,7 +2660,7 @@ export interface ToolbarToggleGroupProps extends Omit<ToggleGroup.Props, 'classN
 }
 
 // @public (undocumented)
-export interface ToolbarToggleProps extends Omit<Toolbar_2.Button.Props, 'className' | 'value'>, Pick<VariantProps<typeof buttonVariants>, 'size'> {
+export interface ToolbarToggleProps extends Omit<Toolbar_2.Button.Props, 'className' | 'value'>, Pick<Variants<typeof buttonVariants>, 'size'> {
     // (undocumented)
     className?: string;
     // (undocumented)
@@ -2807,6 +2807,11 @@ export function useToast(): {
 export function validateFiles(files: readonly File[], options: ValidateOptions): {
     accepted: File[];
     rejected: FileRejection[];
+};
+
+// @public
+export type Variants<T extends (...args: never[]) => unknown> = {
+    [K in keyof VariantProps<T>]?: VariantProps<T>[K] extends infer V ? (V extends null | undefined ? never : V) : never;
 };
 
 // (No @packageDocumentation comment for this package)

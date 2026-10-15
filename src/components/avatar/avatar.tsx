@@ -54,13 +54,18 @@ export function initials(name: string): string {
   return (first[0]! + (last[0] ?? first[1] ?? '')).toUpperCase()
 }
 
+// The two smallest sizes set their initials at text-2xs, the type floor, not
+// at 9 and 10px scaled down with the box: ADR 0005 holds nothing under 11px,
+// and those literals also stayed put in compact while the rest of the type
+// re-scaled. In the 20px square the label's expanded width is set back to
+// normal, so two 11px capitals still clear the keyline.
 export const avatarVariants = cva(
   'relative inline-grid shrink-0 place-items-center overflow-hidden rounded-none shadow-cut select-none',
   {
     variants: {
       size: {
-        xs: 'size-5 text-[9px]',
-        sm: 'size-6 text-[10px]',
+        xs: 'size-5 text-2xs [--wdth-label:100]',
+        sm: 'size-6 text-2xs',
         md: 'size-8 text-2xs',
         lg: 'size-10 text-xs',
         xl: 'size-14 text-base',

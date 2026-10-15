@@ -73,7 +73,7 @@ A Button that takes part in the toolbar's arrow-key focus. Ghost and small by de
 | --- | --- | --- | --- |
 | `className` | `string` |  |  |
 | `icon` | `ReactNode` |  |  |
-| `size` | `"sm" \| "lg" \| "md" \| null` | `sm` |  |
+| `size` | `"sm" \| "lg" \| "md"` | `sm` |  |
 | `variant` | `"panel" \| "bare"` | `ghost` |  |
 
 Also accepts the props of `NativeButtonProps`, `ToolbarButtonProps`.
@@ -126,7 +126,7 @@ A two-state button: "Show archived", "Wrap lines". Inside a `ToolbarToggleGroup`
 | `icon` | `ReactNode` |  |  |
 | `onPressedChange` | `((pressed: boolean) => void)` |  |  |
 | `pressed` | `boolean` |  |  |
-| `size` | `"sm" \| "lg" \| "md" \| null` | `sm` |  |
+| `size` | `"sm" \| "lg" \| "md"` | `sm` |  |
 | `value` | `string` |  | Identifies the toggle inside a `ToolbarToggleGroup`. |
 
 Also accepts the props of `NativeButtonProps`, `ToolbarButtonProps`.

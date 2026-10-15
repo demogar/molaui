@@ -250,11 +250,24 @@
     transparent 2px 9px
   );
   box-shadow: 0 0 0 1.5px var(--ink);
+  /* Forced colours drop the gradient and the box-shadow and repaint the band
+   * as Canvas, so a relleno divider was an 11px gap with nothing in it. The
+   * same slits and edge in the system's text colour, as relleno-working
+   * does, keep the seam where the user can see it. */
+  @media (forced-colors: active) {
+    forced-color-adjust: none;
+    background-color: Canvas;
+    background-image: repeating-linear-gradient(90deg, CanvasText 0 2px, transparent 2px 9px);
+    box-shadow: 0 0 0 1.5px CanvasText;
+  }
 }
 
 /* The same cut used as a field rather than a seam: this is relleno doing its
  * original job, filling an area that has nothing in it yet. Low contrast on
- * purpose — it is a texture under content, not a pattern competing with it. */
+ * purpose — it is a texture under content, not a pattern competing with it.
+ * Left to forced colours on purpose: in CanvasText the faint texture becomes
+ * full-strength stripes behind the words, which is the opposite of what it
+ * is for, and the empty state's words and edge carry the meaning. */
 @utility relleno-field {
   background-image: repeating-linear-gradient(
     90deg,
@@ -271,7 +284,12 @@
  * which is why they are keywords rather than tokens. Used only on major seams
  * — where the page ground gives way to a filled panel — because in a real
  * panel this edge is the expensive, slow part and there are only a few of them.
- * Set `color` on the element to choose which ground the teeth are cut from. */
+ * Set `color` on the element to choose which ground the teeth are cut from.
+ *
+ * Under forced colours `currentColor` is forced to the Canvas the teeth sit
+ * on, and the seam vanished. The mask survives forcing, so the teeth are
+ * painted in CanvasText instead: the edge where the layer was cut back, in
+ * the colour the user chose for edges. */
 @utility diente {
   --diente: 16px;
   height: calc(var(--diente) / 2);
@@ -282,6 +300,10 @@
   mask-size: var(--diente) 100%;
   -webkit-mask-repeat: repeat-x;
   mask-repeat: repeat-x;
+  @media (forced-colors: active) {
+    forced-color-adjust: none;
+    background-color: CanvasText;
+  }
 }
 
 /* The same seam, teeth pointing up, for the top edge of a panel. */
@@ -295,6 +317,10 @@
   mask-size: var(--diente) 100%;
   -webkit-mask-repeat: repeat-x;
   mask-repeat: repeat-x;
+  @media (forced-colors: active) {
+    forced-color-adjust: none;
+    background-color: CanvasText;
+  }
 }
 
 /* ── rótulo ───────────────────────────────────────────────────────────

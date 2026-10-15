@@ -91,7 +91,7 @@ The confirmation for an action that destroys something. Built on Base UI's Alert
 | `description` | `ReactNode` |  |  |
 | `footer` | `ReactNode` |  | Action row under the body: right-aligned, or stacked full width with the last action on top when the row is under 24rem. Usually a `ghost` cancel and one primary. |
 | `hideClose` | `boolean` | `false` | Hide the corner close button. Only when the footer carries an explicit way out. |
-| `size` | `"sm" \| "lg" \| "md" \| null` |  |  |
+| `size` | `"sm" \| "lg" \| "md"` |  |  |
 
 Also accepts the props of `DialogPopupProps`.
 

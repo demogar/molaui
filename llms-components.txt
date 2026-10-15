@@ -142,8 +142,8 @@ A square button that carries only an icon. `label` is required and becomes the a
 | `label` (required) | `string` |  | The accessible name. Required: an icon is not a label. |
 | `className` | `string` |  |  |
 | `loading` | `boolean` |  | Work is in flight. The label stays (so the button never changes width mid-click), a strip of working relleno runs along its foot, and the button stops accepting presses while staying focusable and announced as busy. |
-| `size` | `"sm" \| "lg" \| "md" \| null` |  |  |
-| `variant` | `"danger" \| "primary" \| "secondary" \| "ghost" \| null` |  |  |
+| `size` | `"sm" \| "lg" \| "md"` |  |  |
+| `variant` | `"danger" \| "primary" \| "secondary" \| "ghost"` |  |  |
 
 Also accepts the props of `ButtonProps`, `NativeButtonProps`.
 
@@ -331,7 +331,7 @@ You handle:
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `items` (required) | `DescriptionItem[]` |  |  |
-| `layout` | `"grid" \| "inline" \| "stacked" \| null` | `inline` |  |
+| `layout` | `"grid" \| "inline" \| "stacked"` | `inline` |  |
 
 Types: `DescriptionItem`, `DescriptionListProps`
 
@@ -1159,7 +1159,7 @@ Mount once near the root. Renders the viewport, bottom-right, into a portal.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `limit` | `number` | `3` | Toasts kept visible at once; older ones fold away. |
-| `timeout` | `number` | `5000` | Default auto-dismiss, ms. |
+| `timeout` | `number` | `5000` | Default auto-dismiss, ms. Also the timeout a running toast starts when `update()` turns it into a result. |
 
 #### `useToast` (hook)
 
@@ -2579,7 +2579,7 @@ Vertical rhythm: children down a column, one gap between them.
 | --- | --- | --- | --- |
 | `align` | `"start" \| "center" \| "end" \| "stretch" \| "baseline"` |  |  |
 | `direction` | `"column" \| "row"` |  |  |
-| `gap` | `"xs" \| "sm" \| "lg" \| "md" \| "none" \| "2xs" \| "xl" \| null` |  |  |
+| `gap` | `"xs" \| "sm" \| "lg" \| "md" \| "none" \| "2xs" \| "xl"` |  |  |
 | `justify` | `"start" \| "center" \| "end" \| "between"` |  |  |
 | `wrap` | `true \| false` |  |  |
 
@@ -2589,10 +2589,10 @@ A row that wraps — toolbars, badge rows, button groups. Wraps by default, beca
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `align` | `"start" \| "center" \| "end" \| "stretch" \| "baseline" \| null` | `center` |  |
-| `gap` | `"xs" \| "sm" \| "lg" \| "md" \| "none" \| "2xs" \| "xl" \| null` | `sm` |  |
-| `justify` | `"start" \| "center" \| "end" \| "between" \| null` |  |  |
-| `wrap` | `boolean \| null` | `true` |  |
+| `align` | `"start" \| "center" \| "end" \| "stretch" \| "baseline"` | `center` |  |
+| `gap` | `"xs" \| "sm" \| "lg" \| "md" \| "none" \| "2xs" \| "xl"` | `sm` |  |
+| `justify` | `"start" \| "center" \| "end" \| "between"` |  |  |
+| `wrap` | `boolean` | `true` |  |
 
 #### `RowBetween` (component)
 
@@ -2669,7 +2669,7 @@ A Button that takes part in the toolbar's arrow-key focus. Ghost and small by de
 | --- | --- | --- | --- |
 | `className` | `string` |  |  |
 | `icon` | `ReactNode` |  |  |
-| `size` | `"sm" \| "lg" \| "md" \| null` | `sm` |  |
+| `size` | `"sm" \| "lg" \| "md"` | `sm` |  |
 | `variant` | `"panel" \| "bare"` | `ghost` |  |
 
 Also accepts the props of `NativeButtonProps`, `ToolbarButtonProps`.
@@ -2722,7 +2722,7 @@ A two-state button: "Show archived", "Wrap lines". Inside a `ToolbarToggleGroup`
 | `icon` | `ReactNode` |  |  |
 | `onPressedChange` | `((pressed: boolean) => void)` |  |  |
 | `pressed` | `boolean` |  |  |
-| `size` | `"sm" \| "lg" \| "md" \| null` | `sm` |  |
+| `size` | `"sm" \| "lg" \| "md"` | `sm` |  |
 | `value` | `string` |  | Identifies the toggle inside a `ToolbarToggleGroup`. |
 
 Also accepts the props of `NativeButtonProps`, `ToolbarButtonProps`.
@@ -3190,7 +3190,7 @@ The confirmation for an action that destroys something. Built on Base UI's Alert
 | `description` | `ReactNode` |  |  |
 | `footer` | `ReactNode` |  | Action row under the body: right-aligned, or stacked full width with the last action on top when the row is under 24rem. Usually a `ghost` cancel and one primary. |
 | `hideClose` | `boolean` | `false` | Hide the corner close button. Only when the footer carries an explicit way out. |
-| `size` | `"sm" \| "lg" \| "md" \| null` |  |  |
+| `size` | `"sm" \| "lg" \| "md"` |  |  |
 
 Also accepts the props of `DialogPopupProps`.
 
