@@ -4,10 +4,11 @@
 @import 'tailwindcss' source('../src');
 @import '../src/styles/mola.css';
 
-/* An MDX page with no stories never runs the theme decorator, so the iframe
- * would follow the operating system and paint a dark ground under Storybook's
- * light documentation chrome. Storybook only: the library itself honours the
- * OS preference by default. */
+/* Until Storybook announces the toolbar's theme (docs-theme.tsx sets
+ * `data-theme` from it on every page), the iframe would follow the operating
+ * system and could paint a dark ground under the light documentation chrome
+ * for a moment. Storybook only: the library itself honours the OS preference
+ * by default. */
 :root:not([data-theme]) {
   color-scheme: light;
 }
