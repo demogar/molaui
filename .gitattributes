@@ -1,0 +1,3 @@
+# Generated, one line of inlined data: collapsed in pull request diffs. Review
+# figma/component-map.json and figma/src/ instead (npm run figma rebuilds it).
+figma/plugin/code.js linguist-generated=true -diff

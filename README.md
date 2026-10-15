@@ -166,7 +166,8 @@ with the reset scoped to them, so your page keeps its own styles.
 Already on Tailwind v4? Import `@demogar/mola-ui/tailwind.css` into your own build instead. It closes
 Tailwind's default palette, radii, shadows, easings and other scales Mola replaces (see Getting started). Not on React?
 `@demogar/mola-ui/tokens.css` is plain custom properties — both themes and all densities work anywhere.
-Designing in Figma? [`tokens/mola.tokens.json`](tokens/mola.tokens.json) is every token in the W3C Design Tokens format (2025.10).
+Designing in Figma? [`tokens/mola.tokens.json`](tokens/mola.tokens.json) is every token in the W3C Design Tokens format (2025.10),
+and [`figma/`](figma/README.md) is a Figma plugin, generated from the code, that writes those tokens as variables and draws the core components with the code's prop names.
 Using VS Code? Copy `node_modules/@demogar/mola-ui/snippets/mola-ui.code-snippets` into your project's `.vscode/` folder and
 type `mola-` in a `.tsx` file: one snippet per component, generated from its stories.
 
@@ -265,7 +266,7 @@ no longer compiles.
 ## How quality is held
 
 ```bash
-npm run check   # lint · typecheck · test · deps:audit · tokens:check · manifest:check · evidence:check · build · api:check · size · build-storybook
+npm run check   # lint · typecheck · test · deps:audit · tokens:check · manifest:check · figma:check · evidence:check · build · api:check · size · build-storybook
 ```
 
 CI runs that list, plus three browser jobs in parallel: the audit, visual regression and consumer
@@ -296,7 +297,7 @@ run takes about three minutes.
   `components.css` whose own page must stay unstyled, and a Next.js App Router app rendering the
   components from a server component, inside the root layout Getting started documents. Each is
   built and checked in a browser.
-- **Docs can't drift from the code.** The design-token JSON and the agent manifest are generated
+- **Docs can't drift from the code.** The design-token JSON, the agent manifest and the Figma kit plugin are generated
   and checked in CI; the component counts in this README are checked against the source; and a
   test resolves every link into Storybook, so a renamed story fails the build instead of a reader.
 - **What isn't tested is said.** Each component page's testing status is generated from the
@@ -318,6 +319,7 @@ src/patterns/    whole screens composed from the system (Storybook only, not in 
 src/tokens/      colour math + the contrast contract
 src/docs/        Storybook docs: introduction, principles, foundations, usage guidance, versioning, migration
 tokens/          generated DTCG tokens for Figma
+figma/           the Figma kit: a plugin generated from the tokens and the manifest (figma/README.md)
 docs/ai/         generated component manifest, tokens and Markdown pages for agents
 mcp/             the mola-ui-mcp server (bundled into dist/mcp by vite.mcp.config.ts)
 eslint/          the @demogar/mola-ui/eslint plugin over mcp/check.ts (bundled into dist/eslint by vite.eslint.config.ts)

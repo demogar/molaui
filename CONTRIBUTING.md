@@ -43,7 +43,7 @@ A change is ready when `npm run check:all` passes. It runs every job the ruleset
 order, and `scripts/check-all.test.ts` fails if a required job ever runs a script it does not:
 
 ```bash
-npm run check           # lint · typecheck · test · deps:audit · tokens:check · manifest:check · evidence:check · build · api:check · size · build-storybook  (the Gates job)
+npm run check           # lint · typecheck · test · deps:audit · tokens:check · manifest:check · figma:check · evidence:check · build · api:check · size · build-storybook  (the Gates job)
 npm run check:browser   # build-storybook · audit · visual  (Browser audit, Visual regression)
 npm run check:all       # check · check:browser · consumers  (every required job)
 ```
@@ -145,6 +145,22 @@ every run against a monthly bandwidth quota. Lossless recompression (`oxipng -o 
 rewriting the existing set would add 18 MB of new versions to history to save one second per
 checkout, and running it in the baseline workflow puts a downloaded binary in a job that holds a
 write token. Revisit if the set passes about 50 MB.
+
+### The Figma kit
+
+`figma/plugin/code.js` and `figma/component-map.json` are generated from
+`tokens/mola.tokens.json` and `docs/ai/components.json` by `npm run figma`. A change to a token, a
+prop, a cva variant, a component summary or its do and don't changes them, and
+`npm run figma:check` (and `figma/src/build.test.ts`) fails until you regenerate and commit
+them. `code.js` is one generated line of data and is collapsed in diffs (`.gitattributes`);
+review `component-map.json` and `figma/src/` instead.
+
+To draw another component in Figma, add it to `figma/src/components.ts` with its variant axes
+read from the manifest, bind every colour and length to a variable (the build test refuses a
+literal), and rerun `npm run figma`. Its entry in the map turns from `pending` to `built`. A new
+cva value on a drawn component reaches the kit by itself, or fails the build with a message
+naming the look to add. After merging, the owner reruns the plugin in the kit's Figma file
+(`figma/README.md`); nothing in CI can reach Figma.
 
 ### ARIA snapshots
 

@@ -65,9 +65,13 @@ part, or, like Dialog and Toast, their content opens outside the example frame.
 
 ## Design tools
 
-### There is no Figma component kit
+### The Figma kit covers the core components only, and has not been run in a real file
 
-**Status: open.** Only the tokens reach Figma: `tokens/mola.tokens.json`, loaded with Tokens
-Studio, gives Figma variables that match the browser. There are no Figma components, so a
-design built in Figma redraws the parts. The Storybook is the reference for what a part looks
-like and how it behaves.
+**Status: open.** The kit is a Figma plugin generated from the code (`figma/`, see its README).
+It writes every token as a Figma variable, with modes for theme and density, and draws thirteen
+core components: Button, IconButton, Input, Field, SelectTrigger, Checkbox, Radio, Switch,
+Badge, Chip, Callout, TabsTab and Panel. The other component exports are listed as `pending` in
+`figma/component-map.json`, so a design that uses them still redraws the parts. The plugin is
+tested against a fake of Figma's API, not yet in a real file, and there is no published library
+to install. The Storybook remains the reference for what a part looks like and how it behaves.
+What comes next is on the [Roadmap](https://demogar.github.io/molaui/?path=/docs/mola-ui-roadmap--overview).

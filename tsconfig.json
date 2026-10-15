@@ -18,5 +18,5 @@
     "types": ["vite/client", "node", "@testing-library/jest-dom/vitest"],
     "paths": { "@/*": ["./src/*"] }
   },
-  "include": ["src", ".storybook", "vite.config.ts", "vite.mcp.config.ts", "vite.eslint.config.ts", "vite.css.config.ts", "eslint.config.js", "scripts", "codemods", "mcp", "eslint", "test/visual"]
+  "include": ["src", "figma/src", ".storybook", "vite.config.ts", "vite.mcp.config.ts", "vite.eslint.config.ts", "vite.css.config.ts", "eslint.config.js", "scripts", "codemods", "mcp", "eslint", "test/visual"]
 }

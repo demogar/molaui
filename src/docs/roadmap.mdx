@@ -24,13 +24,15 @@ there; only a person can say how a page sounds, and whether a long-running agent
 announced too often or not enough. Thread's *Jump to latest*, which so far has only been tested
 by script, is part of this pass.
 
-### A Figma component kit
+### The rest of the Figma kit
 
-Today only the tokens reach Figma. The kit is deferred until the component APIs stop moving, so
-it is drawn once against names that will last. When it is built, a Figma component is named
-after its code export, its variant axes are the prop names with the code's exact values
-(`danger`, `sm`), and its variables are written from the exported tokens, with their scopes. A
-designer and an engineer then use the same words for the same part.
+The kit is a Figma plugin in the repository (`figma/`), generated from the tokens and the
+component manifest. It writes the variables, with their scopes and code syntax, and draws the
+core components, named after their code exports, with the prop names as variant axes and the
+code's exact values (`danger`, `sm`). It has been tested against a fake of Figma's API. It has
+not been run in a real file yet, and there is no published library. Two things are left: run it
+once in Mola's own Figma file and publish that file as a library, then draw the components
+`figma/component-map.json` lists as `pending`, starting with the overlays and the AI layer.
 
 ### 1.0.0
 
