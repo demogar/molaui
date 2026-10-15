@@ -7,6 +7,7 @@ import { Check, ChevronsUpDown, X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { nameListbox } from '../../lib/listbox-name'
 import { chipVariants } from '../chip/chip'
 import { type FieldControlSize, fieldControlClasses, fieldControlSizes } from '../field/field-control'
 import { Label } from '../field/label'
@@ -149,9 +150,9 @@ function OptionRow({ option }: { option: ComboboxOption }) {
   )
 }
 
-function OptionList({ grouped }: { grouped: boolean }) {
+function OptionList({ grouped, inputId }: { grouped: boolean; inputId: string }) {
   return (
-    <ComboboxPrimitive.List className="outline-none data-empty:hidden">
+    <ComboboxPrimitive.List ref={(list) => nameListbox(list, inputId)} className="outline-none data-empty:hidden">
       {grouped
         ? (group: ComboboxOptionGroup, index: number) => (
             <ComboboxPrimitive.Group key={group.label} items={group.items} className="block">
@@ -469,7 +470,7 @@ export function Combobox(props: ComboboxProps) {
     <>
       {label ? (
         <div data-slot="combobox-field" className={cn('flex flex-col gap-2', wrapperClassName)}>
-          <Label htmlFor={inputId} required={required}>
+          <Label id={`${uid}-label`} htmlFor={inputId} required={required}>
             {label}
           </Label>
           {field}
@@ -485,7 +486,7 @@ export function Combobox(props: ComboboxProps) {
             className={cn(popupClasses)}
           >
             <StatusLine loading={loading} status={status} empty={emptyMessage} />
-            <OptionList grouped={grouped} />
+            <OptionList grouped={grouped} inputId={inputId} />
           </ComboboxPrimitive.Popup>
         </ComboboxPrimitive.Positioner>
       </ComboboxPrimitive.Portal>
@@ -607,7 +608,7 @@ export function Autocomplete({
     >
       {label ? (
         <div data-slot="autocomplete-field" className={cn('flex flex-col gap-2', wrapperClassName)}>
-          <Label htmlFor={inputId} required={required}>
+          <Label id={`${uid}-label`} htmlFor={inputId} required={required}>
             {label}
           </Label>
           {input}
@@ -623,7 +624,10 @@ export function Autocomplete({
             className={cn(popupClasses, 'empty:hidden')}
           >
             <StatusLine loading={loading} status={status} empty={emptyMessage} />
-            <AutocompletePrimitive.List className="outline-none data-empty:hidden">
+            <AutocompletePrimitive.List
+              ref={(list) => nameListbox(list, inputId)}
+              className="outline-none data-empty:hidden"
+            >
               {(option: ComboboxOption) => (
                 <AutocompletePrimitive.Item
                   key={option.value}

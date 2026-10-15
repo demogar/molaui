@@ -41,3 +41,16 @@ because an icon follows the text beside it. As spacing steps (`size-4`) they shr
 only by accident of the unit and stayed at 16px beside 17px text in `spacious`. The type scale's
 line heights are declared beside its sizes, as ratios, so a density that re-scales a size keeps its
 rhythm.
+
+## Amendment (2026-10-14): every density reflows at 320px
+
+Density is a reader's preference, like text size, and WCAG 1.4.10 (reflow at 320 CSS px) does
+not exempt one. `spacious` is not a desktop-only presentation: someone who chose it on a phone
+gets it on the phone. So every component holds at 320px in all three densities, not only the
+composed screens (#130).
+
+Where `spacious` cannot fit, the component gives way at small viewports rather than the density
+being ignored: a calendar's days are capped at the comfortable 36px below the `sm` breakpoint,
+and pagination drops its sibling pages ("1 … 5 … 26") below 25rem, keeping a fixed slot count.
+Both still meet the 24px target size. The browser audit (`scripts/audit.mjs`) measures every
+story at spacious density at 320px, and the composed screens at 1024 and 768 as well.

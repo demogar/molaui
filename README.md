@@ -276,8 +276,8 @@ run takes about three minutes.
 - **Every story is a test**: all 303 stories render through the real Storybook config and pass axe
   in the unit suite; `scripts/audit.mjs` re-runs axe *with colour contrast* in a real browser in both
   themes, checks every story for horizontal overflow at 390px and reflow at 320px (no text clipped
-  or painted over, nothing scrolling sideways without the scroll-edge cue, the composed screens at
-  spacious density too). CI runs it on every pull request
+  or painted over, nothing scrolling sideways without the scroll-edge cue, every story again at
+  spacious density). CI runs it on every pull request
   against the static build, over every docs page as well as every story, and fails on any finding.
 - **Visual regression.** Every story is screenshotted in both themes, and each component's first
   story in compact density, right-to-left and forced colours (each pattern at spacious density too), against baselines rendered on Linux

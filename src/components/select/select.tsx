@@ -5,6 +5,7 @@ import { Check, ChevronsUpDown } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { nameListbox } from '../../lib/listbox-name'
 import { type FieldControlSize, fieldControlClasses, fieldControlSizes } from '../field/field-control'
 import { Label } from '../field/label'
 
@@ -93,7 +94,22 @@ export interface SelectContentProps extends SelectPrimitive.Popup.Props {
   sideOffset?: number
 }
 
-export function SelectContent({ className, sideOffset = 6, children, ...props }: SelectContentProps) {
+/**
+ * The trigger `Select` renders, so its listbox can be named after the same
+ * label (`nameListbox`). A composed select passes `aria-label` or
+ * `aria-labelledby` to `SelectContent` instead; they go to the listbox.
+ */
+const TriggerIdContext = React.createContext<string | undefined>(undefined)
+
+export function SelectContent({
+  className,
+  sideOffset = 6,
+  children,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
+  ...props
+}: SelectContentProps) {
+  const triggerId = React.useContext(TriggerIdContext)
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Positioner
@@ -113,7 +129,15 @@ export function SelectContent({ className, sideOffset = 6, children, ...props }:
           )}
           {...props}
         >
-          <SelectPrimitive.List>{children}</SelectPrimitive.List>
+          {/* Once a List is rendered it is the listbox and the popup becomes
+              `presentation`, so the name goes on the list. */}
+          <SelectPrimitive.List
+            aria-label={ariaLabel}
+            aria-labelledby={ariaLabelledBy}
+            ref={triggerId ? (list) => nameListbox(list, triggerId) : undefined}
+          >
+            {children}
+          </SelectPrimitive.List>
         </SelectPrimitive.Popup>
       </SelectPrimitive.Positioner>
     </SelectPrimitive.Portal>
@@ -292,7 +316,7 @@ export function Select<V extends string = string>({
     >
       {label ? (
         <div data-slot="select-field" className={cn('flex flex-col gap-2', wrapperClassName)}>
-          <Label htmlFor={triggerId} required={required}>
+          <Label id={`${uid}-label`} htmlFor={triggerId} required={required}>
             {label}
           </Label>
           {trigger}
@@ -300,37 +324,39 @@ export function Select<V extends string = string>({
       ) : (
         trigger
       )}
-      <SelectContent>
-        {isGrouped(items)
-          ? items.map((group, i) => (
-              <React.Fragment key={group.label}>
-                {i > 0 ? <SelectSeparator /> : null}
-                <SelectGroup>
-                  <SelectGroupLabel>{group.label}</SelectGroupLabel>
-                  {group.items.map((item) => (
-                    <SelectItem
-                      key={item.value}
-                      value={item.value}
-                      disabled={item.disabled}
-                      description={item.description}
-                    >
-                      {item.label}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </React.Fragment>
-            ))
-          : items.map((item) => (
-              <SelectItem
-                key={item.value}
-                value={item.value}
-                disabled={item.disabled}
-                description={item.description}
-              >
-                {item.label}
-              </SelectItem>
-            ))}
-      </SelectContent>
+      <TriggerIdContext value={triggerId}>
+        <SelectContent>
+          {isGrouped(items)
+            ? items.map((group, i) => (
+                <React.Fragment key={group.label}>
+                  {i > 0 ? <SelectSeparator /> : null}
+                  <SelectGroup>
+                    <SelectGroupLabel>{group.label}</SelectGroupLabel>
+                    {group.items.map((item) => (
+                      <SelectItem
+                        key={item.value}
+                        value={item.value}
+                        disabled={item.disabled}
+                        description={item.description}
+                      >
+                        {item.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </React.Fragment>
+              ))
+            : items.map((item) => (
+                <SelectItem
+                  key={item.value}
+                  value={item.value}
+                  disabled={item.disabled}
+                  description={item.description}
+                >
+                  {item.label}
+                </SelectItem>
+              ))}
+        </SelectContent>
+      </TriggerIdContext>
     </SelectRoot>
   )
 }

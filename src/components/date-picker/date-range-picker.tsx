@@ -402,7 +402,10 @@ export function DateRangePicker({
             ) : null}
             <div className="grid gap-3 p-3">
               {typedEntry ? (
-                <div role="group" aria-label="Type the dates" className="grid max-w-[calc(var(--control-h)*7)] gap-2">
+                // As wide as the calendar's seven days, including their 36px
+                // cap on a phone (calendar.tsx); wider, the two inputs set
+                // the popup's width and the end date ran past its edge.
+                <div role="group" aria-label="Type the dates" className="grid max-w-[calc(var(--control-h)*7)] gap-2 max-sm:max-w-[calc(min(var(--control-h),2.25rem)*7)]">
                   <div className="grid grid-cols-2 gap-2">
                     {typedInput('start', startInput)}
                     {typedInput('end', endInput)}

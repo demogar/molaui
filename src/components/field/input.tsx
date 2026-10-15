@@ -62,10 +62,15 @@ export function Input({ className, size = 'md', leading, trailing, disabled, ...
           {leading}
         </span>
       ) : null}
+      {/* `w-0` as well as `min-w-0`: a text input's min-content width is its
+          intrinsic ~20 characters, and `min-width` does not lower it, so the
+          group refused to narrow below input + adornments and pushed a 320px
+          phone at spacious density sideways. With no width of its own the
+          input contributes nothing to min-content and `flex-1` grows it back. */}
       <InputPrimitive
         data-slot="input"
         disabled={disabled}
-        className="h-full min-w-0 flex-1 border-0 bg-transparent p-0 [font-size:inherit] text-ink outline-none placeholder:text-ink-muted focus:shadow-none focus-visible:shadow-none disabled:cursor-not-allowed disabled:text-ink-muted"
+        className="h-full w-0 min-w-0 flex-1 border-0 bg-transparent p-0 [font-size:inherit] text-ink outline-none placeholder:text-ink-muted focus:shadow-none focus-visible:shadow-none disabled:cursor-not-allowed disabled:text-ink-muted"
         {...props}
       />
       {trailing ? <span className="flex shrink-0 items-center text-sm text-ink-muted tabular">{trailing}</span> : null}

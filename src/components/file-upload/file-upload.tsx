@@ -571,18 +571,22 @@ function FileRow({ item, locale, messages: t, canRetry, disabled, onRemove, onRe
       data-status={item.status}
       className="flex flex-col gap-2 px-(--control-px) py-3 not-last:border-b not-last:border-keyline-soft"
     >
-      <div className="flex min-w-0 items-center gap-3">
+      {/* The row wraps, and the name and status keep at least 8rem: on a
+          320px phone at spacious density, Retry and Remove took the width and
+          "Failed" was painted under Retry. Now the actions drop to a line of
+          their own, at the end, before the status is squeezed. */}
+      <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
         <span aria-hidden className={cn('flex shrink-0 [&_svg]:size-(--icon)', STATUS_INK[item.status])}>
           {STATUS_GLYPH[item.status]}
         </span>
-        <div className="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-3 gap-y-0.5">
+        <div className="flex min-w-32 flex-1 flex-wrap items-baseline gap-x-3 gap-y-0.5">
           {/* Names and sizes are isolated with <bdi>: in a right-to-left
               page an English "4.8 MB" otherwise reorders to "MB 4.8", and a
               name that starts with digits jumps to the wrong end. */}
           <bdi className="min-w-0 truncate text-sm font-medium text-ink" title={item.name}>
             {item.name}
           </bdi>
-          <span className="flex items-baseline gap-x-2 text-xs text-ink-muted tabular-nums">
+          <span className="flex items-baseline gap-x-2 text-xs whitespace-nowrap text-ink-muted tabular-nums">
             <bdi>{formatFileSize(item.size, locale)}</bdi>
             <span aria-hidden>·</span>
             <span className={cn('font-semibold', STATUS_INK[item.status])}>
@@ -591,7 +595,7 @@ function FileRow({ item, locale, messages: t, canRetry, disabled, onRemove, onRe
             </span>
           </span>
         </div>
-        <div className="flex shrink-0 items-center gap-1">
+        <div className="ms-auto flex shrink-0 items-center gap-1">
           {item.status === 'failed' && canRetry ? (
             <Button
               type="button"

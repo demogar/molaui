@@ -2,8 +2,8 @@
 // contrast) in both themes, that every `data-theme` subtree paints its own
 // ground, a visible focus indicator on every tab stop, horizontal overflow at
 // 390px, reflow at 320px (clipped or overlapping text, squeezed numbers,
-// sideways scrolling without the scroll-edge cue; the composed screens also at
-// spacious density), console errors, and runtime cost (layout transitions,
+// sideways scrolling without the scroll-edge cue; every story again at
+// spacious density, the composed screens at 1024 and 768 too), console errors, and runtime cost (layout transitions,
 // infinite animations, budgets; scripts/runtime-scan.mjs). Exits non-zero on
 // any finding, so CI can gate on it.
 //   node scripts/audit.mjs <base> [--out <dir>] [--only <id substring>] [--workers <n>] [--shard <i>/<n>]
@@ -69,7 +69,8 @@ const PHONE = { width: 390, height: 900 }
 // run panel once the phone was shorter than the 900px the wide pass uses.
 const REFLOW = { width: 320, height: 568 }
 // The composed screens: every pattern, the agent console, the app shell and
-// the form example.
+// the form example. Measured at spacious density at three widths; every
+// other story at 320 only.
 const COMPOSED = /^(patterns-|ai-agent-console--|components-layout-app-shell--|components-forms-form-example--)/
 
 /**
@@ -484,12 +485,16 @@ async function audit(page, job, errors) {
     // that breaks: it grows every control while the columns stay the same
     // width. It shrank the settings page's six-digit token limit to a 21px
     // field at 768 and 1024, where the form sits beside its section heading,
-    // and was fine at 320, where it does not; so it is measured at all three.
-    // It runs on the composed screens, where components meet a real layout;
-    // the visual tests hold the same screens at all three densities.
-    if (story && COMPOSED.test(job.id)) {
+    // and was fine at 320, where it does not; so the composed screens, where
+    // components meet a real layout, are measured at all three.
+    // Every other story is measured at 320 (#130): density is a reader's
+    // preference, and WCAG 1.4.10 does not exempt it, so a date picker or a
+    // number input that only reflows at comfortable fails someone who chose
+    // spacious. A lone component has no columns to squeeze it at 768 or 1024,
+    // and one more measurement of an already loaded page costs little.
+    if (story) {
       await page.evaluate(() => (document.documentElement.dataset.density = 'spacious'))
-      for (const width of [1024, 768, 320]) {
+      for (const width of COMPOSED.test(job.id) ? [1024, 768, 320] : [320]) {
         await page.setViewportSize({ ...REFLOW, width })
         found.push(...(await page.evaluate(clipped, story)).map((f) => `[${width}px spacious] ${f}`))
       }

@@ -32,6 +32,10 @@ describe('Label', () => {
       </>,
     )
     expect(screen.getByRole('textbox', { name: 'Name' })).toBeInTheDocument()
+    // Not merely aria-hidden: a name computed from a hidden label (a popup
+    // hides it while open) takes hidden children too (#142). The asterisk is
+    // generated content with empty alternative text.
+    expect(screen.getByText('Name').textContent).toBe('Name')
   })
 })
 

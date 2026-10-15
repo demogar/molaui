@@ -48,6 +48,38 @@ export function getPageRange(page: number, pageCount: number, siblings = 1): Pag
   return [1, 'ellipsis-start', ...Array.from({ length: right - left + 1 }, (_, i) => left + i), 'ellipsis-end', pageCount]
 }
 
+/**
+ * The `siblings` range and the no-siblings range in one list, each item
+ * marked with the range it belongs to, so CSS can show one or the other.
+ *
+ * On a phone the full range does not fit at spacious density: seven slots and
+ * two arrows at 36px are 364px, wider than a 320px screen (#130). Below 25rem
+ * of viewport the control drops to `siblings = 0`, five slots ("1 … 5 … 26"),
+ * which is still a fixed count, so the arrows still do not move as you page.
+ *
+ * A container query was the first choice, since the control's own width is
+ * what matters, but `container-type: inline-size` takes a box's width away
+ * from its content, and a pagination sits as a flex item beside its range
+ * text (DataTable's footer), where it collapsed to nothing. The list also
+ * wraps, as the last resort for a narrow container on a wide screen.
+ *
+ * The two ranges never show an item at the same time where they disagree, so
+ * merging them by position is enough: an ellipsis sits just after page 1 or
+ * just before the last page.
+ */
+function responsiveRange(page: number, pageCount: number, siblings: number) {
+  const wide = getPageRange(page, pageCount, siblings)
+  const narrow = siblings > 0 ? getPageRange(page, pageCount, 0) : wide
+  const at = (item: PageRangeItem) =>
+    item === 'ellipsis-start' ? 1.5 : item === 'ellipsis-end' ? pageCount - 0.5 : item
+  return [...new Set([...wide, ...narrow])]
+    .sort((a, b) => at(a) - at(b))
+    .map((item) => ({ item, wide: wide.includes(item), narrow: narrow.includes(item) }))
+}
+
+const onlyWide = 'max-[25rem]:hidden'
+const onlyNarrow = 'min-[25rem]:hidden'
+
 const fmt = (n: number) => n.toLocaleString('en-US')
 
 export interface PaginationProps extends Omit<React.ComponentProps<'nav'>, 'onChange'> {
@@ -130,11 +162,12 @@ export function Pagination({
 
   return (
     <nav aria-label={ariaLabel} data-slot="pagination" className={className} {...props}>
-      <ul className="m-0 flex list-none items-center gap-1 p-0">
+      <ul className="m-0 flex list-none flex-wrap items-center gap-1 p-0">
         <li className="me-1">{prev}</li>
-        {getPageRange(page, pageCount, siblings).map((item) =>
-          typeof item === 'number' ? (
-            <li key={item}>
+        {responsiveRange(page, pageCount, siblings).map(({ item, wide, narrow }) => {
+          const only = wide && narrow ? undefined : wide ? onlyWide : onlyNarrow
+          return typeof item === 'number' ? (
+            <li key={item} className={only}>
               <button
                 type="button"
                 aria-current={item === page ? 'page' : undefined}
@@ -152,11 +185,15 @@ export function Pagination({
               </button>
             </li>
           ) : (
-            <li key={item} aria-hidden className="grid h-(--control-h-sm) min-w-5 place-items-center text-sm text-ink-muted">
+            <li
+              key={item}
+              aria-hidden
+              className={cn('grid h-(--control-h-sm) min-w-5 place-items-center text-sm text-ink-muted', only)}
+            >
               …
             </li>
-          ),
-        )}
+          )
+        })}
         <li className="ms-1">{next}</li>
       </ul>
     </nav>

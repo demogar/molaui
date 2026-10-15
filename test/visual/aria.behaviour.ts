@@ -28,6 +28,11 @@ import { mine } from './shard'
  * rasterisation, so they live in `__aria__/` without a platform segment and
  * can be updated on any machine (`npm run visual:update`). Review the YAML
  * diff like code: every changed line is a change a screen reader hears.
+ *
+ * The match is partial: a node written without a name matches any name, and
+ * an update only rewrites a snapshot that failed. The select's listbox was
+ * pinned as a bare `listbox:` that way, so once it was named nothing changed
+ * in the file until the name was written in by hand (#142). Write names in.
  */
 
 interface Case {
@@ -38,6 +43,12 @@ interface Case {
   act?: (page: Page) => Promise<void>
   /** What to snapshot; the whole body by default, portals included. */
   target?: (page: Page) => Locator
+  /**
+   * States the snapshot cannot show. Playwright's ARIA YAML has no
+   * `[current]`, so a pagination whose current page lost `aria-current`
+   * would snapshot the same. Such states are asserted here, on the same page.
+   */
+  also?: (page: Page) => Promise<void>
 }
 
 const CASES: Case[] = [
@@ -57,7 +68,15 @@ const CASES: Case[] = [
   { name: 'accordion', story: 'components-navigation-accordion--default' },
   // Paginated rather than the selection demo: sort buttons, the column menu
   // trigger and the page navigation, over ten rows instead of every run.
-  { name: 'data-table', story: 'components-data-display-table--paginated' },
+  {
+    name: 'data-table',
+    story: 'components-data-display-table--paginated',
+    also: async (page) => {
+      const pages = page.getByRole('navigation', { name: 'Agent runs pages' })
+      await expect(pages.getByRole('button', { name: 'Page 1' })).toHaveAttribute('aria-current', 'page')
+      await expect(pages.locator('[aria-current]')).toHaveCount(1)
+    },
+  },
   { name: 'command-palette', story: 'components-overlays-command-palette--default' },
   {
     name: 'date-picker',
@@ -107,5 +126,6 @@ CASES.forEach((c, i) => {
       await settle(page)
     }
     await expect((c.target ?? ((p: Page) => p.locator('body')))(page)).toMatchAriaSnapshot({ name: `${c.name}.aria.yml` })
+    await c.also?.(page)
   })
 })
