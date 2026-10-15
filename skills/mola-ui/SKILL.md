@@ -147,6 +147,8 @@ because keyboard direction is read from context.
 | Free text with suggestions | `Autocomplete` | `Combobox` |
 | An exact number, or a value where the range matters | `NumberInput`, or `Slider` | each other |
 | One date, or a period | `DatePicker`, or `DateRangePicker` | two date pickers |
+| A time of day, or a date and a time | `TimePicker`, or `DateTimePicker` | a select of times, `<input type="time">` |
+| When something happened, as a distance from now | `RelativeTime` (`now` when server rendering) | a hand-written "3m ago" |
 | A label for an icon-only control | `IconButton` (`label` is required) + `Tooltip` | `Popover` |
 | A small anchored panel, page still usable | `Popover` | `Dialog` |
 | Actions on an object | `Menu` | `Select` |

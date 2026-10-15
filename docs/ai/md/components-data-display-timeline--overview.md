@@ -112,4 +112,5 @@ Nothing in it takes focus, so there is no keyboard table.
 
 ### Pages that send readers here
 
+- [Relative time](https://demogar.github.io/molaui/md/components-data-display-relative-time--overview.md)
 - [Pagination](https://demogar.github.io/molaui/md/components-navigation-pagination--overview.md)

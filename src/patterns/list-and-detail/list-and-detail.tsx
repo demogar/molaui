@@ -9,6 +9,7 @@ import { Button } from '../../components/button'
 import { Callout } from '../../components/callout'
 import { DescriptionList } from '../../components/description-list'
 import { EmptyState } from '../../components/empty-state'
+import { formatRelativeTime, RelativeTime } from '../../components/relative-time'
 import { Stat, StatGroup } from '../../components/stat'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../components/table'
 import { Heading } from '../../components/typography'
@@ -74,14 +75,19 @@ const integer = new Intl.NumberFormat('en-US')
 const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
 const day = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeZone: 'UTC' })
 
+// The moment the fixture was taken: every "3m ago" on this screen is measured
+// from it, with a fixed `now`, so it reads the same on the server, in the
+// browser and in every screenshot.
+const FIXTURE_NOW = Date.parse('2026-10-14T09:12:00Z')
+const AGO = { locale: 'en-US', format: 'narrow', numeric: 'always' } as const
+
 function ago(minutes: number) {
-  if (minutes < 60) return `${minutes}m ago`
-  if (minutes < 24 * 60) return `${Math.floor(minutes / 60)}h ago`
-  return `${Math.floor(minutes / (24 * 60))}d ago`
+  return <RelativeTime date={FIXTURE_NOW - minutes * 60_000} now={FIXTURE_NOW} timeZone="UTC" {...AGO} />
 }
 
+// A string, not the element: it is part of a list row's accessible name.
 function lastRun(minutes: number | null) {
-  return minutes === null ? 'Never run' : `Last run ${ago(minutes)}`
+  return minutes === null ? 'Never run' : `Last run ${formatRelativeTime(FIXTURE_NOW - minutes * 60_000, FIXTURE_NOW, AGO)}`
 }
 
 function duration(seconds: number | null) {

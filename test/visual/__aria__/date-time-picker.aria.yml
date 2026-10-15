@@ -1,0 +1,12 @@
+- text: Deploy the new model at
+- group "Deploy the new model at":
+  - textbox "Deploy the new model at Date":
+    - /placeholder: DD/MM/YYYY
+    - text: /\d+\/\d+\/\d+/
+  - button /Change date, Wednesday, 7 October \d+/
+  - text: "Format: DD/MM/YYYY"
+  - group "Deploy the new model at Time":
+    - spinbutton "Deploy the new model at Time Hour": /\d+/
+    - spinbutton "Deploy the new model at Time Minute": /\d+/
+- text: /Deploys start from \d+:\d+ today, Cayuco time\./
+- paragraph: "/Submits: \\d+-\\d+-07T09:\\d+/"

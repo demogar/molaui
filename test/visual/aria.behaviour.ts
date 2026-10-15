@@ -83,6 +83,9 @@ const CASES: Case[] = [
     story: 'components-forms-date-picker--schedule-evaluation',
     act: (page) => page.getByRole('button', { name: 'Choose date' }).click(),
   },
+  // A group of spinbuttons beside a date input: the names each half takes
+  // from the label ("Deploy the new model at Hour") are what this pins.
+  { name: 'date-time-picker', story: 'components-forms-time-picker--date-and-time' },
   { name: 'toolbar', story: 'components-layout-toolbar--run-actions' },
   { name: 'segmented-control', story: 'components-forms-segmented-control--default' },
   // The composites Mola writes out itself (ADR 0012): nothing but this and

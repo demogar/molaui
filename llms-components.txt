@@ -2,7 +2,7 @@
 
 > A design system cut like a mola: flat layers, hard keylines, revealed bands. React components for dense internal tools and AI-native interfaces. Published as `@demogar/mola-ui`: React 19, Base UI for behaviour, Tailwind v4 for styling, design tokens as CSS custom properties.
 
-57 components and 12 AI components (69 documented pages).
+59 components and 12 AI components (71 documented pages).
 
 Install and set up:
 
@@ -353,6 +353,64 @@ You handle:
 Types: `DescriptionItem`, `DescriptionListProps`
 
 Used in: Filtered table, List and detail
+
+### Relative time
+
+https://demogar.github.io/molaui/?path=/docs/components-data-display-relative-time--overview
+
+A moment as its distance from now, “3 minutes ago” or “in 2 days”, in a time element that keeps the exact moment.
+
+Phase: Experimental. Its API may change in a minor release, without a deprecation first.
+
+When to use:
+- When something last happened, where recency is the point: the last run, the last sync, an edit.
+- A countdown to something scheduled within days, such as the next evaluation, written “in 2 days”.
+- Columns and meta lines that need a short form, with format narrow.
+
+When not to:
+- An exact moment people compare or act on, such as an audit entry or a deploy window.
+- How long something has been running, counting up to the second. Use Run status.
+- Events in order, each with its own time. Use Timeline.
+
+- Do: Pass now when server rendering, or let it render after hydration; both keep the server HTML.
+- Don’t: Compute “3 minutes ago” on the server and again in the browser; the two disagree and React discards the page.
+- Do: Pass timeZone when the exact moment in the title must be in the product’s zone, such as UTC for run logs.
+- Don’t: Rely on the title alone for a moment that matters; it is not reachable by keyboard or touch.
+
+Content:
+- Lead with the event and let the time follow: “Last sync 3 minutes ago”.
+- Use one format down a column; mixing “3m ago” and “3 minutes ago” reads as two kinds of data.
+
+Mola handles:
+- Renders a `<time>` whose `dateTime` is the exact moment in ISO 8601, and whose `title` shows it to a pointer.
+- Is not a live region, so a time that moves on every minute is never announced; the current text is read when it is reached.
+- Takes the words from `Intl.RelativeTimeFormat` for the `locale`, so a screen reader hears them in the page’s language.
+
+You handle:
+- Show the exact moment in text, not only in `title`, wherever someone must act on it; a title is not reachable by keyboard or touch.
+- Say what happened beside it: “Last sync 3 minutes ago”, not “3 minutes ago” alone.
+
+#### `RelativeTime` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `date` (required) | `string \| number \| Date` |  | The moment: a `Date`, epoch milliseconds, or an ISO 8601 string. |
+| `format` | `"long" \| "short" \| "narrow"` | `long` | `long` "3 minutes ago", `short` "3 min. ago", `narrow` "3m ago" (in English). |
+| `live` | `boolean` | `true` | Keep the text current while the tab is visible. Ignored when `now` is given. |
+| `locale` | `LocalesArgument` |  | BCP 47 tag for the words and digits. `undefined` uses the runtime's locale. |
+| `now` | `number \| Date` |  | The moment to measure from. Given, the text renders on the server and does not tick; omitted, it uses the browser's clock from hydration on. |
+| `numeric` | `"auto" \| "always"` | `auto` | `auto` writes "yesterday" and "now" where the locale has them; `always` writes "1 day ago". |
+| `timeZone` | `string` |  | The zone for the exact moment in `title`, and in the server text when `now` is omitted. |
+
+`className`, `ref`, `id` and the other DOM props go to `<time data-slot="relative-time">`.
+
+#### `formatRelativeTime` (function)
+
+"3 minutes ago" for `date` seen from `now`. Exported for tables and other places that need the words without the element.
+
+Types: `RelativeTimeProps`
+
+Used in: Confirmation, Empty states, List and detail
 
 ### Stat
 
@@ -2491,6 +2549,115 @@ Anatomy:
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="tag-group">`.
 
 Types: `TagGroupBaseProps`, `TagGroupItem`, `TagGroupProps`
+
+### Time picker
+
+https://demogar.github.io/molaui/?path=/docs/components-forms-time-picker--overview
+
+TimePicker for a time of day as hour and minute spinbuttons; DateTimePicker for a moment, a DatePicker and a TimePicker read as one Date.
+
+Phase: Experimental. Its API may change in a minor release, without a deprecation first.
+
+When to use:
+- A time of day with no date, such as when a nightly evaluation runs, with TimePicker.
+- A moment, such as when a deploy starts, with DateTimePicker.
+- Times with bounds, such as staffed hours, through min and max.
+
+When not to:
+- A date with no time. Use Date picker.
+- A duration, such as a timeout in minutes. Use Number input.
+- A handful of fixed slots, such as 09:00, 13:00 and 17:00. Use Segmented control.
+
+- Do: Pass locale, so the clock, the day-period words and the separator follow it.
+- Don’t: Force hourCycle to 24 for people whose locale writes a 12-hour clock, unless the product always shows one.
+- Do: Say the time zone in the hint when it is not the reader’s own: “Evaluation workers run in UTC.”
+- Don’t: Leave people to guess whose 09:00 it is.
+
+Content:
+- Label the field by what the time is for: “Run the nightly evaluation at”, “Deploy the new model at”.
+- Rules the picker cannot know, such as required, go to Field as an instruction: “Choose a time for the pause.”
+
+Keyboard:
+- Tab: Moves through the segments in order: hour, minute and day period, then the date input and calendar button in DateTimePicker.
+- Shift+Tab: Moves back through the same stops.
+- ArrowUp or ArrowDown: Steps the focused segment, wrapping at the ends; the minute moves by `minuteStep`.
+- Home or End: Sets the focused segment to its first or last value.
+- ArrowLeft or ArrowRight: Moves to the previous or next segment.
+- Backspace or Delete: Empties the focused segment; Backspace in an empty one moves back.
+- Enter: Reads the time and states why if it is refused.
+
+Mola handles:
+- The field is a `group` named by its label, and each segment a `spinbutton` named by the label and its word, “Deploy at Hour”, with `aria-valuetext` (“9”, “PM”, “Empty”).
+- Digits type into a segment and move on when no further digit fits; a separator moves on, and the day period takes the first letter of the locale’s word.
+- An incomplete or out-of-range time is a sentence in a `role="alert"` with a mark, not colour alone, and the value is kept until the time is valid.
+- In DateTimePicker, the calendar keeps every key of the Date picker page, and a moment outside `min` or `max` is stated under both halves.
+
+You handle:
+- Name it: put it in a `Field`, or pass `aria-label`.
+- Translate the segment words and sentences through `messages`.
+- Say whose time zone a time is in when it is not the reader’s.
+
+Anatomy:
+- Field (`[data-slot="time-picker-field"]`): The cut shape of every text control: a `group` named by the label, with the focus ring around all of its segments.
+- Hour (`[data-part="hour"]`): A spinbutton, 1–12 or 0–23 as the locale counts hours.
+- Minute (`[data-part="minute"]`): A spinbutton, 0–59; Up and Down move by `minuteStep`.
+- Day period (`[data-part="day-period"]`): AM or PM in the locale’s own words; only where the locale keeps a 12-hour clock.
+- Icon (`[data-part="icon"]`): A clock, hidden from assistive technology; the label says what the field is.
+
+#### `DateTimePicker` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `defaultOpen` | `boolean` |  | Open the calendar on first render. |
+| `defaultValue` | `Date \| null` | `null` | The moment shown on first render, uncontrolled. `null` or omitted starts empty. |
+| `disabled` | `boolean` |  | Stated, not faded: both halves are disabled and go to the shaded cloth. |
+| `hourCycle` | `12 \| 24` |  | Overrides the locale's clock. |
+| `id` | `string` |  | Given to the date input, so a `<label for>` focuses it. |
+| `isDateDisabled` | `((date: Date) => boolean)` |  | Days inside `min`–`max` that still cannot be chosen, as on DatePicker. |
+| `locale` | `LocalesArgument` |  | BCP 47 tag for names, digits, the typed date order, the clock and the week start. |
+| `max` | `Date \| null` |  | The latest moment, inclusive. Later days are unavailable in the calendar, and a later time on the same day is refused with a sentence under both halves. |
+| `messages` | `Partial<DateTimePickerMessages>` |  | The words "Date" and "Time" that name each half, and TimePicker's segment names and sentences, for translation. |
+| `min` | `Date \| null` |  | The earliest moment, inclusive. Earlier days are unavailable in the calendar, and an earlier time on the same day is refused with a sentence under both halves. |
+| `minuteStep` | `number` |  | Minutes per Up or Down press in the minute segment. |
+| `name` | `string` |  | Submitted as `yyyy-mm-ddThh:mm`, local time, as `<input type="datetime-local">` writes it. |
+| `onOpenChange` | `((open: boolean) => void)` |  | Called when the calendar opens or closes, as on DatePicker. |
+| `onValueChange` | `((value: Date \| null) => void)` |  | Called with the combined moment once both halves hold an allowed value, and with `null` when either is emptied. |
+| `open` | `boolean` |  | Whether the calendar is open, when the page owns that. |
+| `required` | `boolean` |  | Marks both halves required for form validation. Inside `Field`, the label carries the required mark. |
+| `size` | `"sm" \| "md" \| "lg"` | `md` | Control height for both halves, shared with Input. Defaults to `md`; density rescales every size. |
+| `today` | `Date` |  | As on DatePicker: inject "now" for stable stories, and pass the server's date when server rendering. |
+| `value` | `Date \| null` |  | The moment, controlled, in local time. `null` is none; leave it `undefined` to let the picker hold its own state. |
+| `weekStartsOn` | `number` |  | 0 = Sunday … 6 = Saturday. |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="date-time-picker">`.
+
+#### `TimePicker` (component)
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `defaultValue` | `string \| null` | `null` | The time shown on first render, uncontrolled. `null` or omitted starts with every segment empty. |
+| `disabled` | `boolean` |  | Stated, not faded: every segment is disabled and the field goes to the shaded cloth. |
+| `hourCycle` | `12 \| 24` |  | Overrides the locale's clock, for a product that always shows one. |
+| `id` | `string` |  | Given to the first segment, so a `<label for>` (as `Field` writes it) focuses it. |
+| `locale` | `LocalesArgument` |  | BCP 47 tag for the clock (12- or 24-hour), the day-period words and the digits. `undefined` uses the runtime's locale. |
+| `max` | `string \| null` |  | The latest allowed time, `HH:mm`. |
+| `messages` | `Partial<TimePickerMessages>` |  | The segment names and the sentences, for translation. |
+| `min` | `string \| null` |  | The earliest allowed time, `HH:mm`. |
+| `minuteStep` | `number` | `1` | Minutes per Up or Down press in the minute segment; typing still takes any minute. |
+| `name` | `string` |  | Submitted as `HH:mm`, whatever the display locale. |
+| `onValueChange` | `((value: string \| null) => void)` |  | Called on blur or Enter with a complete, allowed time, or `null` when emptied. |
+| `required` | `boolean` |  | Marks every segment required for form validation. Inside `Field`, the label carries the required mark. |
+| `size` | `"sm" \| "md" \| "lg"` | `md` | Control height, shared with Input and DatePicker so the picker lines up in a form row. Defaults to `md`; density rescales every size. |
+| `value` | `string \| null` |  | The time, controlled: `HH:mm`, 24-hour, as `<input type="time">` writes it; `null` for none. Leave it `undefined` to let the picker hold its own state. |
+| `wrapperClassName` | `string` |  | Classes for the outer element that holds the field and its error. |
+
+`className`, `ref`, `id` and the other DOM props go to `<div data-slot="time-picker-field">`.
+
+#### `getTimeLayout` (function)
+
+Everything locale-specific about writing a time, read from `Intl` rather than from a table: whether the clock is 12- or 24-hour (es-PA writes `9:05 p. m.`, es-ES `21:05`), where the day period goes, and what separates the hour from the minute (`21.05` in Finnish).
+
+Types: `DateTimePickerMessages`, `DateTimePickerProps`, `TimePickerMessages`, `TimePickerProps`, `TimeLayout`, `TimeSegment`, `TimeString`
 
 ## Layout
 

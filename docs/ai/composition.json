@@ -54,6 +54,7 @@
       "builtFrom": [
         "Components/Actions/Button",
         "Components/Data display/Code",
+        "Components/Data display/Relative time",
         "Components/Data display/Table",
         "Components/Feedback/Badge",
         "Components/Feedback/Callout",
@@ -68,6 +69,7 @@
       "kind": "pattern",
       "builtFrom": [
         "Components/Actions/Button",
+        "Components/Data display/Relative time",
         "Components/Data display/Table",
         "Components/Feedback/Badge",
         "Components/Feedback/Empty state",
@@ -96,6 +98,7 @@
       "builtFrom": [
         "Components/Actions/Button",
         "Components/Data display/Description list",
+        "Components/Data display/Relative time",
         "Components/Data display/Stat",
         "Components/Data display/Table",
         "Components/Feedback/Badge",

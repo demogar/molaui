@@ -1,3 +1,4 @@
+import { formatRelativeTime } from '../relative-time/relative-time'
 /**
  * Forty agent runs on a fictional internal platform, for stories and tests.
  * Generated from a fixed seed so every render, screenshot and test sees the
@@ -77,10 +78,7 @@ export function formatDuration(seconds: number | null): string {
   return `${Math.floor(seconds / 60)}m ${String(seconds % 60).padStart(2, '0')}s`
 }
 
+/** "3m ago", in the words RelativeTime uses, as a string for cells and sentences. */
 export function formatRelative(date: Date, now = FIXTURE_NOW): string {
-  const minutes = Math.round((now.getTime() - date.getTime()) / 60_000)
-  if (minutes < 60) return `${minutes}m ago`
-  const hours = Math.floor(minutes / 60)
-  if (hours < 24) return `${hours}h ago`
-  return `${Math.floor(hours / 24)}d ago`
+  return formatRelativeTime(date, now, { locale: 'en-US', format: 'narrow', numeric: 'always' })
 }

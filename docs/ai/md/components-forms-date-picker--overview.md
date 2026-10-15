@@ -185,6 +185,7 @@ Types: `CalendarProps`, `DatePickerProps`, `DateRangePickerProps`, `DateLocale`,
 
 ### Pages that send readers here
 
+- [Time picker](https://demogar.github.io/molaui/md/components-forms-time-picker--overview.md)
 - [Field](https://demogar.github.io/molaui/md/components-forms-field--overview.md)
 
 ### Used in

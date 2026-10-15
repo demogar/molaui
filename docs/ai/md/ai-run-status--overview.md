@@ -137,6 +137,7 @@ Nothing in it takes focus, so there is no keyboard table.
 ### Pages that send readers here
 
 - [Streaming text](https://demogar.github.io/molaui/md/ai-streaming-text--overview.md)
+- [Relative time](https://demogar.github.io/molaui/md/components-data-display-relative-time--overview.md)
 
 ### Used in
 

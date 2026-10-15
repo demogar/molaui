@@ -2,7 +2,7 @@
 
 > A design system cut like a mola: flat layers, hard keylines, revealed bands. React components for dense internal tools and AI-native interfaces. Published as `@demogar/mola-ui`: React 19, Base UI for behaviour, Tailwind v4 for styling, design tokens as CSS custom properties.
 
-57 components and 12 AI components (69 documented pages).
+59 components and 12 AI components (71 documented pages).
 
 Install and set up:
 
@@ -99,6 +99,7 @@ An MCP server with the same data ships in the package: `npx -y --package @demoga
 - [Avatar](https://demogar.github.io/molaui/?path=/docs/components-data-display-avatar--overview) ([Markdown](https://demogar.github.io/molaui/md/components-data-display-avatar--overview.md)): A person or an agent as a square tile, with initials or a glyph on a colour picked from the name.
 - [Code](https://demogar.github.io/molaui/?path=/docs/components-data-display-code--overview) ([Markdown](https://demogar.github.io/molaui/md/components-data-display-code--overview.md)): Machine text: Code for an inline literal, CodeBlock for a labelled block with copy and wrap.
 - [Description list](https://demogar.github.io/molaui/?path=/docs/components-data-display-description-list--overview) ([Markdown](https://demogar.github.io/molaui/md/components-data-display-description-list--overview.md)): Term and value pairs: the properties of a run, a document or an evaluation.
+- [Relative time](https://demogar.github.io/molaui/?path=/docs/components-data-display-relative-time--overview) ([Markdown](https://demogar.github.io/molaui/md/components-data-display-relative-time--overview.md)) (Experimental): A moment as its distance from now, “3 minutes ago” or “in 2 days”, in a time element that keeps the exact moment.
 - [Stat](https://demogar.github.io/molaui/?path=/docs/components-data-display-stat--overview) ([Markdown](https://demogar.github.io/molaui/md/components-data-display-stat--overview.md)): A KPI tile: a label, a figure, a change with its direction and sentiment, and an optional sparkline.
 - [Swatch](https://demogar.github.io/molaui/?path=/docs/components-data-display-swatch--overview) ([Markdown](https://demogar.github.io/molaui/md/components-data-display-swatch--overview.md)): A small decorative colour key, square or round, in one of the badge tones, placed before the word it keys.
 - [Table](https://demogar.github.io/molaui/?path=/docs/components-data-display-table--overview) ([Markdown](https://demogar.github.io/molaui/md/components-data-display-table--overview.md)): Table primitives for rows of records, and DataTable for columns as data with sorting, selection, column visibility and pages.
@@ -130,6 +131,7 @@ An MCP server with the same data ships in the package: `npx -y --package @demoga
 - [Slider](https://demogar.github.io/molaui/?path=/docs/components-forms-slider--overview) ([Markdown](https://demogar.github.io/molaui/md/components-forms-slider--overview.md)): A value or a range on a continuous scale, with the value always printed in tabular figures.
 - [Switch](https://demogar.github.io/molaui/?path=/docs/components-forms-switch--overview) ([Markdown](https://demogar.github.io/molaui/md/components-forms-switch--overview.md)): A setting that takes effect the moment it is switched; on is verde, the colour of live.
 - [Tag group](https://demogar.github.io/molaui/?path=/docs/components-forms-tag-group--overview) ([Markdown](https://demogar.github.io/molaui/md/components-forms-tag-group--overview.md)) (Experimental): A set of short values shown as tags, which can be removed, and selected when the set is also a choice.
+- [Time picker](https://demogar.github.io/molaui/?path=/docs/components-forms-time-picker--overview) ([Markdown](https://demogar.github.io/molaui/md/components-forms-time-picker--overview.md)) (Experimental): TimePicker for a time of day as hour and minute spinbuttons; DateTimePicker for a moment, a DatePicker and a TimePicker read as one Date.
 
 ## Layout
 

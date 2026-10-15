@@ -534,6 +534,33 @@ export const USAGE: Record<string, Usage> = {
       'Set noun so counts read naturally: “3 runs selected”.',
     ],
   },
+  'Components/Data display/Relative time': {
+    summary: 'A moment as its distance from now, “3 minutes ago” or “in 2 days”, in a time element that keeps the exact moment.',
+    use: [
+      'When something last happened, where recency is the point: the last run, the last sync, an edit.',
+      'A countdown to something scheduled within days, such as the next evaluation, written “in 2 days”.',
+      'Columns and meta lines that need a short form, with format narrow.',
+    ],
+    avoid: [
+      { when: 'An exact moment people compare or act on, such as an audit entry or a deploy window.', use: null },
+      { when: 'How long something has been running, counting up to the second.', use: 'AI/Run status' },
+      { when: 'Events in order, each with its own time.', use: 'Components/Data display/Timeline' },
+    ],
+    practices: [
+      {
+        do: 'Pass now when server rendering, or let it render after hydration; both keep the server HTML.',
+        dont: 'Compute “3 minutes ago” on the server and again in the browser; the two disagree and React discards the page.',
+      },
+      {
+        do: 'Pass timeZone when the exact moment in the title must be in the product’s zone, such as UTC for run logs.',
+        dont: 'Rely on the title alone for a moment that matters; it is not reachable by keyboard or touch.',
+      },
+    ],
+    content: [
+      'Lead with the event and let the time follow: “Last sync 3 minutes ago”.',
+      'Use one format down a column; mixing “3m ago” and “3 minutes ago” reads as two kinds of data.',
+    ],
+  },
   'Components/Data display/Timeline': {
     summary: 'Timeline for events already written down, on a spine; StepList for ordered steps a person follows.',
     use: [
@@ -851,6 +878,33 @@ export const USAGE: Record<string, Usage> = {
       'Label the field by what the date is for: “Run evaluation on”, “Report period”.',
       'Leave the placeholder to the component; it is the locale’s own pattern.',
       'Rules the picker cannot know, such as required, go to Field as an instruction: “Choose a date for the evaluation.”',
+    ],
+  },
+  'Components/Forms/Time picker': {
+    summary: 'TimePicker for a time of day as hour and minute spinbuttons; DateTimePicker for a moment, a DatePicker and a TimePicker read as one Date.',
+    use: [
+      'A time of day with no date, such as when a nightly evaluation runs, with TimePicker.',
+      'A moment, such as when a deploy starts, with DateTimePicker.',
+      'Times with bounds, such as staffed hours, through min and max.',
+    ],
+    avoid: [
+      { when: 'A date with no time.', use: 'Components/Forms/Date picker' },
+      { when: 'A duration, such as a timeout in minutes.', use: 'Components/Forms/Number input' },
+      { when: 'A handful of fixed slots, such as 09:00, 13:00 and 17:00.', use: 'Components/Forms/Segmented control' },
+    ],
+    practices: [
+      {
+        do: 'Pass locale, so the clock, the day-period words and the separator follow it.',
+        dont: 'Force hourCycle to 24 for people whose locale writes a 12-hour clock, unless the product always shows one.',
+      },
+      {
+        do: 'Say the time zone in the hint when it is not the reader’s own: “Evaluation workers run in UTC.”',
+        dont: 'Leave people to guess whose 09:00 it is.',
+      },
+    ],
+    content: [
+      'Label the field by what the time is for: “Run the nightly evaluation at”, “Deploy the new model at”.',
+      'Rules the picker cannot know, such as required, go to Field as an instruction: “Choose a time for the pause.”',
     ],
   },
   'Components/Forms/Field': {

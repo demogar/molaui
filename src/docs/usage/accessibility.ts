@@ -35,6 +35,7 @@ export const NON_INTERACTIVE: ReadonlySet<string> = new Set([
   'Components/Data display/Avatar',
   'Components/Data display/Description list',
   'Components/Data display/Stat',
+  'Components/Data display/Relative time',
   'Components/Data display/Swatch',
   'Components/Data display/Timeline',
   'Components/Feedback/Badge',
@@ -334,6 +335,17 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
       'Mark figure columns `numeric`, on the header and the cells alike.',
     ],
   },
+  'Components/Data display/Relative time': {
+    handles: [
+      'Renders a `<time>` whose `dateTime` is the exact moment in ISO 8601, and whose `title` shows it to a pointer.',
+      'Is not a live region, so a time that moves on every minute is never announced; the current text is read when it is reached.',
+      'Takes the words from `Intl.RelativeTimeFormat` for the `locale`, so a screen reader hears them in the page’s language.',
+    ],
+    you: [
+      'Show the exact moment in text, not only in `title`, wherever someone must act on it; a title is not reachable by keyboard or touch.',
+      'Say what happened beside it: “Last sync 3 minutes ago”, not “3 minutes ago” alone.',
+    ],
+  },
   'Components/Data display/Timeline': {
     handles: [
       'Renders an `<ol>` named by `label`, so a screen reader says where an event sits in the sequence.',
@@ -510,6 +522,28 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
     you: [
       'Name it: put it in a `Field`, or pass `aria-label`.',
       'State rules the picker cannot know, such as “required”, through `Field`’s `error`.',
+    ],
+  },
+  'Components/Forms/Time picker': {
+    keyboard: [
+      { keys: ['Tab'], action: 'Moves through the segments in order: hour, minute and day period, then the date input and calendar button in DateTimePicker.' },
+      { keys: ['Shift+Tab'], action: 'Moves back through the same stops.' },
+      { keys: ['ArrowUp', 'ArrowDown'], action: 'Steps the focused segment, wrapping at the ends; the minute moves by `minuteStep`.' },
+      { keys: ['Home', 'End'], action: 'Sets the focused segment to its first or last value.' },
+      { keys: ['ArrowLeft', 'ArrowRight'], action: 'Moves to the previous or next segment.' },
+      { keys: ['Backspace', 'Delete'], action: 'Empties the focused segment; Backspace in an empty one moves back.' },
+      { keys: ['Enter'], action: 'Reads the time and states why if it is refused.' },
+    ],
+    handles: [
+      'The field is a `group` named by its label, and each segment a `spinbutton` named by the label and its word, “Deploy at Hour”, with `aria-valuetext` (“9”, “PM”, “Empty”).',
+      'Digits type into a segment and move on when no further digit fits; a separator moves on, and the day period takes the first letter of the locale’s word.',
+      'An incomplete or out-of-range time is a sentence in a `role="alert"` with a mark, not colour alone, and the value is kept until the time is valid.',
+      'In DateTimePicker, the calendar keeps every key of the Date picker page, and a moment outside `min` or `max` is stated under both halves.',
+    ],
+    you: [
+      'Name it: put it in a `Field`, or pass `aria-label`.',
+      'Translate the segment words and sentences through `messages`.',
+      'Say whose time zone a time is in when it is not the reader’s.',
     ],
   },
   'Components/Forms/Field': {

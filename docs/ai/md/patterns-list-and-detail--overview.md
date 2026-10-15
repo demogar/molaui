@@ -24,6 +24,7 @@ Read from its imports.
 
 - [Button](https://demogar.github.io/molaui/md/components-actions-button--overview.md): Each agent in the list, Back to agents, Create agent, and pause or start.
 - [Description list](https://demogar.github.io/molaui/md/components-data-display-description-list--overview.md): The chosen agent’s model, tools and owner.
+- [Relative time](https://demogar.github.io/molaui/md/components-data-display-relative-time--overview.md): When each recent run started, and the words of each agent’s “Last run”.
 - [Stat](https://demogar.github.io/molaui/md/components-data-display-stat--overview.md): Runs, success rate and cost for the chosen agent, as a StatGroup.
 - [Table](https://demogar.github.io/molaui/md/components-data-display-table--overview.md): The chosen agent’s recent runs.
 - [Badge](https://demogar.github.io/molaui/md/components-feedback-badge--overview.md): Each agent’s state and each run’s status, as a dot, a word and a tone.

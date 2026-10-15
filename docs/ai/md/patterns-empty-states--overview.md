@@ -23,6 +23,7 @@ One screen, every way a list can have nothing to show: first run, no results, lo
 Read from its imports.
 
 - [Button](https://demogar.github.io/molaui/md/components-actions-button--overview.md): Connect source, Show all sources, Retry and Ask for access: one way forward per condition.
+- [Relative time](https://demogar.github.io/molaui/md/components-data-display-relative-time--overview.md): When each source last synced, “14m ago”.
 - [Table](https://demogar.github.io/molaui/md/components-data-display-table--overview.md): The list, which keeps its headers while it loads, over TableSkeletonRows, and when a search matches nothing, over a TableEmpty row.
 - [Badge](https://demogar.github.io/molaui/md/components-feedback-badge--overview.md): Each source’s sync state, as a dot, a word and a tone.
 - [Empty state](https://demogar.github.io/molaui/md/components-feedback-empty-state--overview.md): First run, no results, error and no permission, each its own variant with its own action.

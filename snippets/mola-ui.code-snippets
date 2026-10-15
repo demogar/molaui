@@ -146,6 +146,14 @@
       "    ]} />$0"
     ]
   },
+  "Relative time": {
+    "scope": "typescriptreact,javascriptreact",
+    "prefix": "mola-relative-time",
+    "description": "A moment as its distance from now, “3 minutes ago” or “in 2 days”, in a time element that keeps the exact moment. import { RelativeTime } from '@demogar/mola-ui'",
+    "body": [
+      "<RelativeTime date={${1:date}} />$0"
+    ]
+  },
   "Stat": {
     "scope": "typescriptreact,javascriptreact",
     "prefix": "mola-stat",
@@ -461,6 +469,18 @@
       "      { value: 'email', label: 'Send email' },",
       "      { value: 'refund', label: 'Issue refund', disabled: true },",
       "    ]} selectionMode=\"multiple\" defaultValue={['search', 'sql']} />$0"
+    ]
+  },
+  "Time picker": {
+    "scope": "typescriptreact,javascriptreact",
+    "prefix": "mola-time-picker",
+    "description": "TimePicker for a time of day as hour and minute spinbuttons; DateTimePicker for a moment, a DatePicker and a TimePicker read as one Date. import { Field, TimePicker } from '@demogar/mola-ui'",
+    "body": [
+      "<div className=\"max-w-xs\">",
+      "  <Field label=\"${1:Hand off to a person after}\" hint=\"${2:Cayuco support is staffed from 9:00 AM to 6:00 PM.}\">",
+      "    {(control) => <TimePicker {...control} locale=\"en-US\" min=\"09:00\" max=\"18:00\" defaultValue=\"17:30\" />}",
+      "  </Field>",
+      "</div>$0"
     ]
   },
   "App shell": {

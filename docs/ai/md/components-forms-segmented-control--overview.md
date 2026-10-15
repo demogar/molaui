@@ -107,5 +107,6 @@ Types: `SegmentedControlBaseProps`, `SegmentedControlProps`, `SegmentedOption`
 ### Pages that send readers here
 
 - [Button](https://demogar.github.io/molaui/md/components-actions-button--overview.md)
+- [Time picker](https://demogar.github.io/molaui/md/components-forms-time-picker--overview.md)
 - [Slider](https://demogar.github.io/molaui/md/components-forms-slider--overview.md)
 - [Toolbar](https://demogar.github.io/molaui/md/components-layout-toolbar--overview.md)
