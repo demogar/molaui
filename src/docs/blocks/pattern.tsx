@@ -138,9 +138,11 @@ export function PatternGuide({ title }: { title: string }) {
                         Story
                       </a>
                     ) : (
+                      // Only a state marked `applies: false` gets here: usage.test.ts
+                      // fails any other state without a story.
                       <Badge tone="neutral" variant="soft">
                         <CircleDashed aria-hidden className="size-3.5" strokeWidth={2.5} />
-                        Not shown
+                        Not applicable
                       </Badge>
                     )}
                   </td>

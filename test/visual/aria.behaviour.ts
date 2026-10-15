@@ -152,7 +152,7 @@ const CASES: Case[] = [
   // and the scripted run has finished.
   {
     name: 'thread',
-    story: 'ai-agent-console--console',
+    story: 'patterns-agent-console--console',
     act: (page) => page.getByRole('button', { name: /^Which guardrails/ }).click(),
     target: (page) => page.locator('[data-slot="thread"]'),
   },

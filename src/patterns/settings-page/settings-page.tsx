@@ -4,18 +4,22 @@ import * as React from 'react'
 import { PageHeader } from '../../components/app-shell/page-header'
 import { NavItem } from '../../components/app-shell/sidebar'
 import { Button } from '../../components/button'
+import { Callout } from '../../components/callout'
+import { DescriptionList } from '../../components/description-list'
 import { AlertDialog } from '../../components/dialog'
 import { Field, Input, Textarea } from '../../components/field'
 import { Form, FormErrorSummary } from '../../components/form'
 import { NumberInput } from '../../components/number-input'
 import { Radio, RadioGroup } from '../../components/radio'
 import { Select } from '../../components/select'
+import { Skeleton, SkeletonGroup, SkeletonText } from '../../components/skeleton'
 import { Switch } from '../../components/switch'
 import { useToast } from '../../components/toast'
 import { Heading } from '../../components/typography'
 import { cn } from '../../lib/cn'
 import { useScrollEdge } from '../../lib/scroll-edge'
 import {
+  ADMINS,
   MODELS,
   SAVED_SETTINGS,
   SETTINGS_PAGES,
@@ -77,6 +81,21 @@ import {
  * Discard never brings anything back. The confirm names the workspace and
  * everything that goes with it, and asks for the slug to be typed, because a
  * reflexive Enter must not be able to delete eight agents.
+ *
+ * ── loading, and reading without the right to change ──
+ * While the settings load, the page keeps its header and its settings
+ * navigation, and the form is three sections drawn as skeletons inside one
+ * SkeletonGroup that says "Loading settings" once. There is no bar and no
+ * danger zone yet: a Save over values that have not arrived would save
+ * nothing, and a Delete beside them would be the only real control on the
+ * page.
+ *
+ * Someone who may not change settings (a member, not an admin) sees the
+ * values as text, in a description list per section, with a callout naming
+ * who can change them. A form of disabled controls was considered and
+ * rejected: it looks editable, fades what it should state, and its only
+ * answer is a refusal on Save. There is no danger zone either, for the same
+ * reason the bar is gone.
  */
 
 export interface SettingsPageProps {
@@ -88,6 +107,10 @@ export interface SettingsPageProps {
   defaultValidated?: boolean
   /** How long the fake save takes, in ms. */
   saveDelay?: number
+  /** The settings have not arrived yet: the form's sections as skeletons. */
+  loading?: boolean
+  /** Whether this person may change settings. A member sees the values as text, and who can change them. */
+  canEdit?: boolean
 }
 
 const KEYS = Object.keys(SAVED_SETTINGS) as (keyof WorkspaceSettings)[]
@@ -106,6 +129,8 @@ export function SettingsPage({
   defaultDraft,
   defaultValidated = false,
   saveDelay = 800,
+  loading = false,
+  canEdit = true,
 }: SettingsPageProps) {
   const toast = useToast()
   const navEdge = useScrollEdge<HTMLUListElement>()
@@ -245,211 +270,219 @@ export function SettingsPage({
         </nav>
 
         <div className="@container/form min-w-0 max-w-4xl">
-          <Form onSubmit={submit} aria-label="General settings">
-            <FormErrorSummary
-              ref={summaryRef}
-              description="Your changes are kept. Fix these, then save again."
-              className="mt-2"
-            />
-            <SettingsSection
-              id={`${uid}-general`}
-              title="Workspace"
-              description="How the workspace is named and found."
-            >
-              <Field label="Workspace name" required error={errors.name} hint="Shown in the workspace switcher and on every run.">
-                {(control) => (
-                  <Input {...control} value={draft.name} onChange={(event) => set('name', event.target.value)} autoComplete="off" />
-                )}
-              </Field>
-              <Field
-                label="Slug"
-                required
-                error={errors.slug}
-                hint="The workspace’s address in links and the API. Changing it breaks saved links."
-              >
-                {(control) => (
-                  // A path reads left to right in any page, prefix first, so the
-                  // whole control is LTR; the label and hint around it still follow the page.
-                  <div dir="ltr">
-                    <Input
-                      {...control}
-                      value={draft.slug}
-                      onChange={(event) => set('slug', event.target.value)}
-                      // The wrapper is `literal`, so the prefix inherits the same face and size.
-                      leading={<span>workspaces/</span>}
-                      className="literal"
-                      autoComplete="off"
-                      spellCheck={false}
+          {loading ? (
+            <SkeletonGroup loading label="Loading settings" fallback={<SettingsSkeleton />} className="mb-10" />
+          ) : !canEdit ? (
+            <ReadOnlySettings settings={saved} uid={uid} />
+          ) : (
+            <>
+              <Form onSubmit={submit} aria-label="General settings">
+                <FormErrorSummary
+                  ref={summaryRef}
+                  description="Your changes are kept. Fix these, then save again."
+                  className="mt-2"
+                />
+                <SettingsSection
+                  id={`${uid}-general`}
+                  title="Workspace"
+                  description="How the workspace is named and found."
+                >
+                  <Field label="Workspace name" required error={errors.name} hint="Shown in the workspace switcher and on every run.">
+                    {(control) => (
+                      <Input {...control} value={draft.name} onChange={(event) => set('name', event.target.value)} autoComplete="off" />
+                    )}
+                  </Field>
+                  <Field
+                    label="Slug"
+                    required
+                    error={errors.slug}
+                    hint="The workspace’s address in links and the API. Changing it breaks saved links."
+                  >
+                    {(control) => (
+                      // A path reads left to right in any page, prefix first, so the
+                      // whole control is LTR; the label and hint around it still follow the page.
+                      <div dir="ltr">
+                        <Input
+                          {...control}
+                          value={draft.slug}
+                          onChange={(event) => set('slug', event.target.value)}
+                          // The wrapper is `literal`, so the prefix inherits the same face and size.
+                          leading={<span>workspaces/</span>}
+                          className="literal"
+                          autoComplete="off"
+                          spellCheck={false}
+                        />
+                      </div>
+                    )}
+                  </Field>
+                  <Field label="Description" optional hint="One or two sentences for people joining the workspace.">
+                    {(control) => (
+                      <Textarea
+                        {...control}
+                        rows={3}
+                        autosize
+                        value={draft.description}
+                        onChange={(event) => set('description', event.target.value)}
+                      />
+                    )}
+                  </Field>
+                </SettingsSection>
+
+                <SettingsSection
+                  id={`${uid}-models`}
+                  title="Models and limits"
+                  description="What new agents run on, and how much the workspace may spend."
+                >
+                  <Field label="Default model" hint="New agents start on this model. Existing agents keep theirs.">
+                    {(control) => (
+                      <Select
+                        {...control}
+                        items={MODELS.map((model) => ({ ...model, label: <span className="literal">{model.label}</span> }))}
+                        value={draft.defaultModel}
+                        onValueChange={(value) => value && set('defaultModel', value)}
+                      />
+                    )}
+                  </Field>
+                  {/* Side by side only when each field has room for six control
+                      heights, which follows density: a container query in rem
+                      put the two limits side by side at spacious too, where the
+                      steppers and the unit grew and the number got 21px. */}
+                  <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,calc(var(--control-h)*6)),1fr))] gap-5">
+                    <Field label="Monthly spend limit" required error={errors.monthlyLimit} hint="At least $50.">
+                      {(control) => (
+                        <NumberInput
+                          {...control}
+                          locale="en-US"
+                          format={{ style: 'currency', currency: 'USD', maximumFractionDigits: 0 }}
+                          min={0}
+                          step={50}
+                          largeStep={500}
+                          value={draft.monthlyLimit}
+                          onValueChange={(value) => set('monthlyLimit', value)}
+                        />
+                      )}
+                    </Field>
+                    <Field label="Token limit per run" required error={errors.tokensPerRun} hint="Up to 200,000.">
+                      {(control) => (
+                        <NumberInput
+                          {...control}
+                          locale="en-US"
+                          unit="tokens"
+                          min={1000}
+                          step={1000}
+                          largeStep={10000}
+                          value={draft.tokensPerRun}
+                          onValueChange={(value) => set('tokensPerRun', value)}
+                        />
+                      )}
+                    </Field>
+                  </div>
+                  <RadioGroup
+                    label="When the monthly limit is reached"
+                    value={draft.onLimit}
+                    onValueChange={(value) => set('onLimit', value as WorkspaceSettings['onLimit'])}
+                  >
+                    <Radio value="pause" label="Pause new runs" description="Runs in progress finish. New runs wait until the limit resets on the 1st." />
+                    <Radio value="notify" label="Keep running and notify admins" description="Spend can pass the limit until someone acts." />
+                  </RadioGroup>
+                </SettingsSection>
+
+                <SettingsSection
+                  id={`${uid}-notifications`}
+                  title="Notifications"
+                  description="Emails sent to workspace admins and agent owners."
+                >
+                  <div className="flex flex-col divide-y divide-keyline">
+                    <Switch
+                      labelPosition="start"
+                      label="Failed runs"
+                      description="Email an agent’s owner when it fails twice within an hour."
+                      checked={draft.failedRunEmails}
+                      onCheckedChange={(checked) => set('failedRunEmails', checked)}
+                      wrapperClassName="pb-4"
+                    />
+                    <Switch
+                      labelPosition="start"
+                      label="Weekly evaluation digest"
+                      description="Every Monday, each agent’s evaluation scores and how they moved."
+                      checked={draft.weeklyDigest}
+                      onCheckedChange={(checked) => set('weeklyDigest', checked)}
+                      wrapperClassName="py-4"
+                    />
+                    <Switch
+                      labelPosition="start"
+                      label="Spend alerts"
+                      description="Email admins at 80% and 100% of the monthly limit."
+                      checked={draft.spendAlerts}
+                      onCheckedChange={(checked) => set('spendAlerts', checked)}
+                      wrapperClassName="pt-4"
                     />
                   </div>
-                )}
-              </Field>
-              <Field label="Description" optional hint="One or two sentences for people joining the workspace.">
-                {(control) => (
-                  <Textarea
-                    {...control}
-                    rows={3}
-                    autosize
-                    value={draft.description}
-                    onChange={(event) => set('description', event.target.value)}
-                  />
-                )}
-              </Field>
-            </SettingsSection>
+                </SettingsSection>
 
-            <SettingsSection
-              id={`${uid}-models`}
-              title="Models and limits"
-              description="What new agents run on, and how much the workspace may spend."
-            >
-              <Field label="Default model" hint="New agents start on this model. Existing agents keep theirs.">
-                {(control) => (
-                  <Select
-                    {...control}
-                    items={MODELS.map((model) => ({ ...model, label: <span className="literal">{model.label}</span> }))}
-                    value={draft.defaultModel}
-                    onValueChange={(value) => value && set('defaultModel', value)}
-                  />
-                )}
-              </Field>
-              {/* Side by side only when each field has room for six control
-                  heights, which follows density: a container query in rem
-                  put the two limits side by side at spacious too, where the
-                  steppers and the unit grew and the number got 21px. */}
-              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,calc(var(--control-h)*6)),1fr))] gap-5">
-                <Field label="Monthly spend limit" required error={errors.monthlyLimit} hint="At least $50.">
-                  {(control) => (
-                    <NumberInput
-                      {...control}
-                      locale="en-US"
-                      format={{ style: 'currency', currency: 'USD', maximumFractionDigits: 0 }}
-                      min={0}
-                      step={50}
-                      largeStep={500}
-                      value={draft.monthlyLimit}
-                      onValueChange={(value) => set('monthlyLimit', value)}
-                    />
-                  )}
-                </Field>
-                <Field label="Token limit per run" required error={errors.tokensPerRun} hint="Up to 200,000.">
-                  {(control) => (
-                    <NumberInput
-                      {...control}
-                      locale="en-US"
-                      unit="tokens"
-                      min={1000}
-                      step={1000}
-                      largeStep={10000}
-                      value={draft.tokensPerRun}
-                      onValueChange={(value) => set('tokensPerRun', value)}
-                    />
-                  )}
-                </Field>
-              </div>
-              <RadioGroup
-                label="When the monthly limit is reached"
-                value={draft.onLimit}
-                onValueChange={(value) => set('onLimit', value as WorkspaceSettings['onLimit'])}
-              >
-                <Radio value="pause" label="Pause new runs" description="Runs in progress finish. New runs wait until the limit resets on the 1st." />
-                <Radio value="notify" label="Keep running and notify admins" description="Spend can pass the limit until someone acts." />
-              </RadioGroup>
-            </SettingsSection>
-
-            <SettingsSection
-              id={`${uid}-notifications`}
-              title="Notifications"
-              description="Emails sent to workspace admins and agent owners."
-            >
-              <div className="flex flex-col divide-y divide-keyline">
-                <Switch
-                  labelPosition="start"
-                  label="Failed runs"
-                  description="Email an agent’s owner when it fails twice within an hour."
-                  checked={draft.failedRunEmails}
-                  onCheckedChange={(checked) => set('failedRunEmails', checked)}
-                  wrapperClassName="pb-4"
-                />
-                <Switch
-                  labelPosition="start"
-                  label="Weekly evaluation digest"
-                  description="Every Monday, each agent’s evaluation scores and how they moved."
-                  checked={draft.weeklyDigest}
-                  onCheckedChange={(checked) => set('weeklyDigest', checked)}
-                  wrapperClassName="py-4"
-                />
-                <Switch
-                  labelPosition="start"
-                  label="Spend alerts"
-                  description="Email admins at 80% and 100% of the monthly limit."
-                  checked={draft.spendAlerts}
-                  onCheckedChange={(checked) => set('spendAlerts', checked)}
-                  wrapperClassName="pt-4"
-                />
-              </div>
-            </SettingsSection>
-
-            <div
-              data-dirty={dirty || undefined}
-              className={cn(
-                'sticky bottom-0 z-(--z-sticky) -mx-4 flex flex-wrap items-center gap-x-4 gap-y-3 bg-cloth-pale px-4 py-3 sm:mx-0',
-                'cut-t',
-                // Forced colours drop box-shadows; without an edge the fields
-                // would scroll under the bar with nothing between them.
-                'forced-colors:border-t-2',
-              )}
-            >
-              <p className="m-0 flex min-w-0 flex-1 basis-full items-center gap-2 text-sm @md/form:basis-0">
-                <span
-                  aria-hidden
+                <div
+                  data-dirty={dirty || undefined}
                   className={cn(
-                    'size-2 shrink-0',
-                    errorCount > 0 ? 'bg-danger forced-ink' : dirty ? 'bg-oro forced-ink' : 'bg-transparent shadow-cut',
+                    'sticky bottom-0 z-(--z-sticky) -mx-4 flex flex-wrap items-center gap-x-4 gap-y-3 bg-cloth-pale px-4 py-3 sm:mx-0',
+                    'cut-t',
+                    // Forced colours drop box-shadows; without an edge the fields
+                    // would scroll under the bar with nothing between them.
+                    'forced-colors:border-t-2',
                   )}
-                />
-                {/* The error count is drawn outside the live region; see the doc comment. */}
-                {errorCount > 0 ? (
-                  <span dir="auto" className="font-semibold text-ink-danger">
-                    {status}
-                  </span>
-                ) : null}
-                <span role="status" dir="auto" className={cn(dirty ? 'font-semibold text-ink' : 'text-ink-muted')}>
-                  {errorCount > 0 ? '' : status}
-                </span>
-              </p>
-              {/* Wraps, Save under Discard, when the two do not fit: at
-                  spacious on a 320px phone they were 323px side by side. */}
-              <div className="ms-auto flex max-w-full flex-wrap items-center justify-end gap-2">
-                <Button type="button" variant="ghost" disabled={!dirty || saving} onClick={discard}>
-                  Discard
-                </Button>
-                <Button type="submit" disabled={!dirty} loading={saving} focusableWhenDisabled>
-                  Save changes
-                </Button>
-              </div>
-            </div>
-          </Form>
+                >
+                  <p className="m-0 flex min-w-0 flex-1 basis-full items-center gap-2 text-sm @md/form:basis-0">
+                    <span
+                      aria-hidden
+                      className={cn(
+                        'size-2 shrink-0',
+                        errorCount > 0 ? 'bg-danger forced-ink' : dirty ? 'bg-oro forced-ink' : 'bg-transparent shadow-cut',
+                      )}
+                    />
+                    {/* The error count is drawn outside the live region; see the doc comment. */}
+                    {errorCount > 0 ? (
+                      <span dir="auto" className="font-semibold text-ink-danger">
+                        {status}
+                      </span>
+                    ) : null}
+                    <span role="status" dir="auto" className={cn(dirty ? 'font-semibold text-ink' : 'text-ink-muted')}>
+                      {errorCount > 0 ? '' : status}
+                    </span>
+                  </p>
+                  {/* Wraps, Save under Discard, when the two do not fit: at
+                      spacious on a 320px phone they were 323px side by side. */}
+                  <div className="ms-auto flex max-w-full flex-wrap items-center justify-end gap-2">
+                    <Button type="button" variant="ghost" disabled={!dirty || saving} onClick={discard}>
+                      Discard
+                    </Button>
+                    <Button type="submit" disabled={!dirty} loading={saving} focusableWhenDisabled>
+                      Save changes
+                    </Button>
+                  </div>
+                </div>
+              </Form>
 
-          <SettingsSection
-            id={`${uid}-danger`}
-            title="Danger zone"
-            description="Actions here take effect at once and cannot be undone."
-            danger
-            className="mt-6 mb-10 border-b-0"
-          >
-            <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
-              <div className="min-w-0 flex-1 basis-64">
-                <p className="m-0 text-sm font-semibold text-ink">Delete this workspace</p>
-                <p className="mt-1 mb-0 text-sm text-ink-2">
-                  Removes its {WORKSPACE_CONTENTS.agents} agents, {WORKSPACE_CONTENTS.indexes} knowledge indexes and all run
-                  history, for everyone in {saved.name}.
-                </p>
-              </div>
-              <Button variant="danger" icon={<Trash2 />} onClick={() => setDeleteOpen(true)}>
-                Delete workspace
-              </Button>
-            </div>
-          </SettingsSection>
+              <SettingsSection
+                id={`${uid}-danger`}
+                title="Danger zone"
+                description="Actions here take effect at once and cannot be undone."
+                danger
+                className="mt-6 mb-10 border-b-0"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+                  <div className="min-w-0 flex-1 basis-64">
+                    <p className="m-0 text-sm font-semibold text-ink">Delete this workspace</p>
+                    <p className="mt-1 mb-0 text-sm text-ink-2">
+                      Removes its {WORKSPACE_CONTENTS.agents} agents, {WORKSPACE_CONTENTS.indexes} knowledge indexes and all run
+                      history, for everyone in {saved.name}.
+                    </p>
+                  </div>
+                  <Button variant="danger" icon={<Trash2 />} onClick={() => setDeleteOpen(true)}>
+                    Delete workspace
+                  </Button>
+                </div>
+              </SettingsSection>
+            </>
+          )}
         </div>
       </div>
 
@@ -485,6 +518,98 @@ export function SettingsPage({
           )
         }
       />
+    </div>
+  )
+}
+
+/**
+ * Three sections in the form's columns, before any value has arrived. Two or
+ * three fields a section rather than every one: each bone is a shimmer, and
+ * the audit caps how many run at once (a page of 29 was over it).
+ */
+function SettingsSkeleton() {
+  return (
+    <div className="flex flex-col">
+      {[2, 3, 2].map((rows, i) => (
+        <div
+          key={i}
+          className="grid grid-cols-1 gap-x-8 gap-y-4 border-b border-keyline py-8 first:pt-2 @2xl/form:grid-cols-[14rem_minmax(0,1fr)]"
+        >
+          <div className="flex flex-col gap-3">
+            <Skeleton shape="text" className="h-5 w-2/3" />
+            <SkeletonText lines={2} className="text-sm" />
+          </div>
+          <div className="flex flex-col gap-5 bg-cloth-pale p-5 shadow-cut">
+            {Array.from({ length: rows }, (_, j) => (
+              <div key={j} className="flex flex-col gap-2">
+                <Skeleton shape="text" className="w-1/4 text-sm" />
+                <Skeleton className="h-(--control-h)" />
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+const ON_LIMIT: Record<WorkspaceSettings['onLimit'], string> = {
+  pause: 'Pause new runs',
+  notify: 'Keep running and notify admins',
+}
+const onOff = (on: boolean) => (on ? 'On' : 'Off')
+
+/** The same sections as the form, stated as text for someone who may not change them. */
+function ReadOnlySettings({ settings, uid }: { settings: WorkspaceSettings; uid: string }) {
+  const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })
+  return (
+    <div className="flex flex-col">
+      <Callout tone="info" variant="flat" headingLevel={2} title="Only workspace admins can change these settings" className="mb-4">
+        Ask {ADMINS.join(' or ')} to change anything here.
+      </Callout>
+      <SettingsSection id={`${uid}-general`} title="Workspace" description="How the workspace is named and found.">
+        <DescriptionList
+          layout="stacked"
+          items={[
+            { term: 'Workspace name', detail: settings.name },
+            { term: 'Slug', detail: `workspaces/${settings.slug}`, literal: true },
+            { term: 'Description', detail: settings.description || 'None' },
+          ]}
+        />
+      </SettingsSection>
+      <SettingsSection
+        id={`${uid}-models`}
+        title="Models and limits"
+        description="What new agents run on, and how much the workspace may spend."
+      >
+        <DescriptionList
+          layout="stacked"
+          items={[
+            { term: 'Default model', detail: settings.defaultModel, literal: true },
+            { term: 'Monthly spend limit', detail: settings.monthlyLimit === null ? 'None' : money.format(settings.monthlyLimit) },
+            {
+              term: 'Token limit per run',
+              detail: settings.tokensPerRun === null ? 'None' : `${integer.format(settings.tokensPerRun)} tokens`,
+            },
+            { term: 'When the monthly limit is reached', detail: ON_LIMIT[settings.onLimit] },
+          ]}
+        />
+      </SettingsSection>
+      <SettingsSection
+        id={`${uid}-notifications`}
+        title="Notifications"
+        description="Emails sent to workspace admins and agent owners."
+        className="mb-10 border-b-0"
+      >
+        <DescriptionList
+          layout="stacked"
+          items={[
+            { term: 'Failed runs', detail: onOff(settings.failedRunEmails) },
+            { term: 'Weekly evaluation digest', detail: onOff(settings.weeklyDigest) },
+            { term: 'Spend alerts', detail: onOff(settings.spendAlerts) },
+          ]}
+        />
+      </SettingsSection>
     </div>
   )
 }

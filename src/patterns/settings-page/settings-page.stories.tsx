@@ -58,3 +58,28 @@ export const WithValidationErrors: Story = {
     },
   },
 }
+
+export const Loading: Story = {
+  args: { loading: true },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The settings have not arrived. The header and the settings pages stay; the form is its three sections as skeletons, in one busy region that says “Loading settings” once. No Save bar and no danger zone until there are values to act on.',
+      },
+    },
+  },
+}
+
+export const ReadOnly: Story = {
+  name: 'No permission',
+  args: { canEdit: false },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A member, not an admin. The values are stated as text, section by section, with a callout naming who can change them. Not a form of disabled controls: that would look editable and answer only with a refusal. No Save bar and no danger zone.',
+      },
+    },
+  },
+}

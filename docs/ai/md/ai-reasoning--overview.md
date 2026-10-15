@@ -101,4 +101,4 @@ Types: `ReasoningMessages`, `ReasoningProps`
 
 ### Used in
 
-- [Agent console](https://demogar.github.io/molaui/md/ai-agent-console--overview.md) (showcase)
+- [Agent console](https://demogar.github.io/molaui/md/patterns-agent-console--overview.md) (pattern)

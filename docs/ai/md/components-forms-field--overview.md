@@ -185,8 +185,8 @@ Types: `LabelMessages`, `SearchInputMessages`, `LabelProps`, `FieldControlProps`
 
 ### Used in
 
-- [Form example](https://demogar.github.io/molaui/md/components-forms-form-example--overview.md) (showcase)
 - [Agent hand-off](https://demogar.github.io/molaui/md/patterns-agent-hand-off--overview.md) (pattern)
 - [Empty states](https://demogar.github.io/molaui/md/patterns-empty-states--overview.md) (pattern)
 - [Filtered table](https://demogar.github.io/molaui/md/patterns-filtered-table--overview.md) (pattern)
+- [Form validation](https://demogar.github.io/molaui/md/patterns-form-validation--overview.md) (pattern)
 - [Settings page](https://demogar.github.io/molaui/md/patterns-settings-page--overview.md) (pattern)

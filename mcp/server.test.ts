@@ -229,10 +229,10 @@ describe('mola-ui MCP server', () => {
     expect(text).toContain('rule 2: `border-radius: 6px`')
   })
 
-  it('get_pattern returns a pattern’s guidance, and a showcase’s parts', async () => {
+  it('get_pattern returns a pattern’s guidance', async () => {
     const pattern = await call('get_pattern', { name: 'settings page' })
     for (const heading of ['## When to use', '## Built from', '## States', '## Accessibility']) expect(pattern.text).toContain(heading)
-    expect((await call('get_pattern', { name: 'Agent console' })).text).toMatch(/^# Agent console \(showcase\)/)
+    expect((await call('get_pattern', { name: 'Agent console' })).text).toMatch(/^# Agent console \(pattern\)/)
     const missing = await call('get_pattern', { name: 'Checkout' })
     expect(missing.isError).toBe(true)
     expect(missing.text).toContain('Filtered table (pattern)')

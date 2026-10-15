@@ -1,4 +1,4 @@
-import { ArrowLeft, ListTree, Pause, Play, Plus } from 'lucide-react'
+import { ArrowLeft, ListTree, Pause, Play, Plus, RotateCcw } from 'lucide-react'
 import * as React from 'react'
 import { flushSync } from 'react-dom'
 
@@ -10,6 +10,7 @@ import { Callout } from '../../components/callout'
 import { DescriptionList } from '../../components/description-list'
 import { EmptyState } from '../../components/empty-state'
 import { formatRelativeTime, RelativeTime } from '../../components/relative-time'
+import { Skeleton, SkeletonGroup, SkeletonText } from '../../components/skeleton'
 import { Stat, StatGroup } from '../../components/stat'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../components/table'
 import { Heading } from '../../components/typography'
@@ -53,6 +54,20 @@ import { type Agent, AGENTS, type AgentState, recentRuns, type RecentRunStatus }
  * washed ground and a heavier name — the same cues as the sidebar's current
  * page, so "this one is open" looks the same everywhere in the product. Each
  * agent's state is a badge with a dot, a word and a tone, never the tone alone.
+ *
+ * ── loading, failing to load, and looking without touching ──
+ * While the agents load, both panes are drawn as skeletons in their real
+ * columns inside one SkeletonGroup, which says "Loading agents" once; the
+ * split does not jump when the rows arrive. If they cannot be loaded, an
+ * error empty state with Retry takes the body, and Create agent stays,
+ * because creating does not depend on the list. A failing agent is not a
+ * load failure: it is a state of the data, shown in its own detail.
+ *
+ * A viewer may browse every agent but not change one. They see the same
+ * list and detail with nothing to press and fail at: no Create agent, no
+ * Pause or Resume, no test run, and a callout naming who can. Hiding agents
+ * from them instead was considered and rejected: a list that silently
+ * differs by role is a list nobody can talk about.
  */
 
 const STATE: Record<AgentState, { tone: BadgeTone; label: string }> = {
@@ -109,9 +124,47 @@ export interface AgentsScreenProps {
   defaultSelectedId?: string
   /** Which pane a narrow screen starts on. Ignored when there is room for both. */
   defaultView?: 'list' | 'detail'
+  /** `loading` before the agents arrive; `error` when they could not be loaded. */
+  status?: 'ready' | 'loading' | 'error'
+  /** Whether this person may create, pause and test agents. A viewer can still browse them. */
+  canManage?: boolean
+  /** Retry after a failed load. */
+  onRetry?: () => void
 }
 
-export function AgentsScreen({ agents = AGENTS, defaultSelectedId, defaultView = 'list' }: AgentsScreenProps) {
+const ADMINS = ['Ana Ruiz', 'Kai Morales']
+
+/** Both panes, in their columns, before anything has arrived. */
+function AgentsSkeleton() {
+  return (
+    <div className="grid min-h-0 flex-1 @3xl/agents:grid-cols-[minmax(17rem,20rem)_minmax(0,1fr)]">
+      <div className="flex flex-col bg-cloth-pale @3xl/agents:rule-e">
+        {Array.from({ length: 5 }, (_, i) => (
+          <SkeletonText key={i} lines={2} className="border-b border-keyline px-4 py-3 text-sm last:border-b-0 sm:px-5" />
+        ))}
+      </div>
+      <div className="flex flex-col gap-6 p-4 sm:p-6 @max-3xl/agents:hidden">
+        <Skeleton shape="text" className="h-7 w-1/2" />
+        <SkeletonText lines={2} className="text-lg" />
+        <div className="grid gap-3 @5xl/agents:grid-cols-3">
+          <Skeleton className="h-24" />
+          <Skeleton className="h-24" />
+          <Skeleton className="h-24" />
+        </div>
+        <Skeleton className="h-48" />
+      </div>
+    </div>
+  )
+}
+
+export function AgentsScreen({
+  agents = AGENTS,
+  defaultSelectedId,
+  defaultView = 'list',
+  status = 'ready',
+  canManage = true,
+  onRetry,
+}: AgentsScreenProps) {
   const [selectedId, setSelectedId] = React.useState(defaultSelectedId ?? agents[0]?.id ?? null)
   const [view, setView] = React.useState<'list' | 'detail'>(defaultView)
   const itemRefs = React.useRef(new Map<string, HTMLButtonElement>())
@@ -161,9 +214,46 @@ export function AgentsScreen({ agents = AGENTS, defaultSelectedId, defaultView =
       }
       title="Agents"
       description="The agents that work in the Support workspace, what they run on and how they are doing."
-      actions={<Button icon={<Plus />}>Create agent</Button>}
+      actions={canManage ? <Button icon={<Plus />}>Create agent</Button> : undefined}
     />
   )
+
+  const viewerNote = canManage ? null : (
+    <Callout tone="info" variant="flat" headingLevel={2} title="Only workspace admins can create or change agents">
+      You can see every agent and its runs. Ask {ADMINS.join(' or ')} to pause, resume or test one.
+    </Callout>
+  )
+
+  if (status === 'loading') {
+    return (
+      <div className="@container/agents flex h-full min-h-0 flex-col">
+        {header}
+        <SkeletonGroup loading label="Loading agents" fallback={<AgentsSkeleton />} className="flex min-h-0 flex-1 flex-col" />
+      </div>
+    )
+  }
+
+  if (status === 'error') {
+    return (
+      <div className="flex min-h-full flex-col">
+        {header}
+        <div className="p-4 sm:p-6">
+          <EmptyState
+            kind="error"
+            size="lg"
+            headingLevel={2}
+            title="Agents didn’t load"
+            description="The agents service didn’t answer within 10 seconds. Nothing has changed: live agents are still answering."
+            actions={
+              <Button variant="secondary" icon={<RotateCcw />} onClick={onRetry}>
+                Retry
+              </Button>
+            }
+          />
+        </div>
+      </div>
+    )
+  }
 
   if (agents.length === 0) {
     return (
@@ -173,7 +263,7 @@ export function AgentsScreen({ agents = AGENTS, defaultSelectedId, defaultView =
           <EmptyState
             title="No agents in Support yet"
             description="An agent answers questions and calls tools on the workspace’s behalf. Create one, try it on a few prompts, then set it live."
-            actions={<Button icon={<Plus />}>Create agent</Button>}
+            actions={canManage ? <Button icon={<Plus />}>Create agent</Button> : undefined}
             headingLevel={2}
           />
         </div>
@@ -184,6 +274,7 @@ export function AgentsScreen({ agents = AGENTS, defaultSelectedId, defaultView =
   return (
     <div className="@container/agents flex h-full min-h-0 flex-col">
       {header}
+      {viewerNote ? <div className="px-4 pt-4 sm:px-6">{viewerNote}</div> : null}
       <div className="grid min-h-0 flex-1 @3xl/agents:grid-cols-[minmax(17rem,20rem)_minmax(0,1fr)]">
         <section
           aria-labelledby={listHeadingId}
@@ -268,7 +359,7 @@ export function AgentsScreen({ agents = AGENTS, defaultSelectedId, defaultView =
             >
               Back to agents
             </Button>
-            {selected ? <AgentDetail agent={selected} headingRef={headingRef} /> : null}
+            {selected ? <AgentDetail agent={selected} headingRef={headingRef} canManage={canManage} /> : null}
           </div>
         </div>
       </div>
@@ -276,7 +367,15 @@ export function AgentsScreen({ agents = AGENTS, defaultSelectedId, defaultView =
   )
 }
 
-function AgentDetail({ agent, headingRef }: { agent: Agent; headingRef: React.Ref<HTMLHeadingElement> }) {
+function AgentDetail({
+  agent,
+  headingRef,
+  canManage,
+}: {
+  agent: Agent
+  headingRef: React.Ref<HTMLHeadingElement>
+  canManage: boolean
+}) {
   const runs = recentRuns(agent)
   const uid = React.useId()
 
@@ -293,7 +392,7 @@ function AgentDetail({ agent, headingRef }: { agent: Agent; headingRef: React.Re
           <p className="m-0 literal text-xs text-ink-muted">{agent.id}</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          {agent.state === 'paused' ? (
+          {!canManage ? null : agent.state === 'paused' ? (
             <Button variant="secondary" icon={<Play />}>
               Resume agent
             </Button>
@@ -303,7 +402,9 @@ function AgentDetail({ agent, headingRef }: { agent: Agent; headingRef: React.Re
             </Button>
           ) : null}
           {agent.state === 'draft' ? (
-            <Button icon={<Play />}>Start a test run</Button>
+            canManage ? (
+              <Button icon={<Play />}>Start a test run</Button>
+            ) : null
           ) : (
             <Button icon={<ListTree />}>View runs</Button>
           )}
@@ -409,9 +510,11 @@ function AgentDetail({ agent, headingRef }: { agent: Agent; headingRef: React.Re
             title="No runs yet"
             description="A draft agent runs only when you test it. Its test runs appear here."
             actions={
-              <Button size="sm" variant="secondary" icon={<Play />}>
-                Start a test run
-              </Button>
+              canManage ? (
+                <Button size="sm" variant="secondary" icon={<Play />}>
+                  Start a test run
+                </Button>
+              ) : undefined
             }
             headingLevel={4}
           />

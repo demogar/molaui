@@ -27,12 +27,13 @@ admin consoles, knowledge bases, agent run monitors — documented in a standalo
 - **Patterns.** Whole Cayuco screens composed only from the system, each with its decisions
   written down: a settings page with a save bar and unsaved-changes guard, a list and detail view
   that collapses to one column on a phone, a filtered table of agent runs, every empty state of a
-  list, a destructive confirm whose request can fail, and an agent handing a task to a person. Each
+  list, a destructive confirm whose request can fail, a form validated on submit, an agent console,
+  and an agent handing a task to a person. Each
   pattern page says when to use it, what it is built from (read from its imports), and where its
   empty, loading, error and no-permission states are; each component page lists the patterns it
   is used in.
 - **A working demo.** In the
-  [agent console](https://demogar.github.io/molaui/?path=/story/ai-agent-console--console), ask a
+  [agent console](https://demogar.github.io/molaui/?path=/story/patterns-agent-console--console), ask a
   question and a simulated agent plans, calls two tools and streams a cited answer, with the run
   timeline and token usage updating beside it.
 
@@ -277,7 +278,7 @@ run takes about three minutes.
   `light-dark()`, `var()`, OKLab `color-mix()` — and asserts each promised pairing. It caught a real
   dark-theme failure during the build (muted ink on the gold wash, 4.00:1) before any screen did.
 - **No hex outside `tokens.css`**, enforced by a test.
-- **Every story is a test**: all 420 stories render through the real Storybook config and pass axe
+- **Every story is a test**: all 437 stories render through the real Storybook config and pass axe
   in the unit suite; `scripts/audit.mjs` re-runs axe *with colour contrast* in a real browser in both
   themes, checks every story for horizontal overflow at 390px and reflow at 320px (no text clipped
   or painted over, nothing scrolling sideways without the scroll-edge cue, every story again at

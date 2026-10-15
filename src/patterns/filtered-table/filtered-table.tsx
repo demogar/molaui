@@ -4,10 +4,12 @@ import * as React from 'react'
 import { PageHeader } from '../../components/app-shell/page-header'
 import { Badge, type BadgeTone } from '../../components/badge'
 import { Button } from '../../components/button'
+import { Callout } from '../../components/callout'
 import { Combobox } from '../../components/combobox'
 import { DateRangePicker, type DateRange, type DateRangePreset } from '../../components/date-picker'
 import { DescriptionList } from '../../components/description-list'
 import { Drawer, DrawerContent } from '../../components/drawer'
+import { EmptyState } from '../../components/empty-state'
 import { Field, SearchInput } from '../../components/field'
 import { DataTable, type DataTableColumn } from '../../components/table'
 import {
@@ -41,6 +43,9 @@ const PRESETS: DateRangePreset[] = [
 ]
 
 const ALL_RUNS = makeAgentRuns(160, 21)
+/** The fixture's runs, for stories that open with a selection. */
+export const RUNS: readonly AgentRun[] = ALL_RUNS
+const ADMINS = ['Ana Ruiz', 'Kai Morales']
 const AGENTS = [...new Set(ALL_RUNS.map((run) => run.agent))].sort().map((agent) => ({ value: agent, label: agent }))
 
 type StatusFilter = 'all' | RunStatus
@@ -75,6 +80,19 @@ function RunStatusBadge({ status }: { status: RunStatus }) {
   )
 }
 
+export interface RunsAdminScreenProps {
+  /** `loading` before the first rows arrive; `error` when they could not be loaded. */
+  status?: 'ready' | 'loading' | 'error'
+  /** Whether this person may start and cancel runs. A viewer can still select and export. */
+  canManage?: boolean
+  /** Open with this search already typed. */
+  defaultQuery?: string
+  /** Open with these run ids selected. */
+  defaultSelection?: readonly string[]
+  /** Retry after a failed load. */
+  onRetry?: () => void
+}
+
 function inRange(date: Date, range: DateRange) {
   const d = new Date(date.getFullYear(), date.getMonth(), date.getDate())
   return (!range.start || d >= range.start) && (!range.end || d <= range.end)
@@ -100,16 +118,32 @@ function inRange(date: Date, range: DateRange) {
  * - A run opens in a `Drawer`, not a new page, so the filtered list the
  *   operator built is still there when they close it.
  *
+ * The states around the answer keep the question in place. Loading and a
+ * failed load leave the filters where they are, because the operator's
+ * question is still the right one; only the toggles' counts go, since a
+ * count of runs that have not loaded is a wrong number, not a placeholder.
+ * A failed load replaces the table with an error empty state and Retry,
+ * because a table of zero rows would say "0 runs", which is a different
+ * claim. Someone who may not start or cancel runs (a viewer) still selects
+ * and exports: the bulk bar drops Cancel rather than offering one that
+ * fails, the header drops New run, and a callout names who can.
+ *
  * Renders the page content only; the story puts it inside the Cayuco app
  * shell, as a product would put it inside its own.
  */
-export function RunsAdminScreen() {
+export function RunsAdminScreen({
+  status: loadStatus = 'ready',
+  canManage = true,
+  defaultQuery = '',
+  defaultSelection = [],
+  onRetry,
+}: RunsAdminScreenProps) {
   const [runs, setRuns] = React.useState<AgentRun[]>(ALL_RUNS)
-  const [query, setQuery] = React.useState('')
+  const [query, setQuery] = React.useState(defaultQuery)
   const [agent, setAgent] = React.useState<string | null>(null)
   const [range, setRange] = React.useState<DateRange>(LAST_7_DAYS)
   const [status, setStatus] = React.useState<StatusFilter>('all')
-  const [selection, setSelection] = React.useState<Set<string>>(new Set())
+  const [selection, setSelection] = React.useState<Set<string>>(() => new Set(defaultSelection))
   const [page, setPage] = React.useState(1)
   const [refreshing, setRefreshing] = React.useState(false)
   // The run stays set after the drawer closes, so its contents do not vanish
@@ -243,11 +277,16 @@ export function RunsAdminScreen() {
             <Button variant="secondary" icon={<Download />}>
               Export
             </Button>
-            <Button icon={<Play />}>New run</Button>
+            {canManage ? <Button icon={<Play />}>New run</Button> : null}
           </>
         }
       />
       <div className="flex flex-col gap-4 p-4 sm:p-6">
+        {canManage ? null : (
+          <Callout tone="info" variant="flat" headingLevel={2} title="Only workspace admins can start or cancel runs">
+            You can search, select and export. Ask {ADMINS.join(' or ')} if a run needs cancelling.
+          </Callout>
+        )}
         <section aria-label="Filter runs" className="bg-cloth-pale shadow-cut">
           <div role="search" aria-label="Runs" className="grid gap-3 p-3 sm:grid-cols-2 lg:grid-cols-[minmax(14rem,1fr)_14rem_17rem]">
             <Field label="Search">
@@ -300,9 +339,11 @@ export function RunsAdminScreen() {
               {STATUS_FILTERS.map((filter) => (
                 <ToolbarToggle key={filter.value} value={filter.value} className="shrink-0">
                   {filter.label}
-                  <span className="font-normal tabular-nums text-ink-muted group-data-pressed/button:text-on-ink-muted">
-                    {integer.format(counts[filter.value])}
-                  </span>
+                  {loadStatus === 'ready' ? (
+                    <span className="font-normal tabular-nums text-ink-muted group-data-pressed/button:text-on-ink-muted">
+                      {integer.format(counts[filter.value])}
+                    </span>
+                  ) : null}
                 </ToolbarToggle>
               ))}
             </ToolbarToggleGroup>
@@ -319,53 +360,78 @@ export function RunsAdminScreen() {
           </Toolbar>
         </section>
 
-        <DataTable
-          label="Agent runs"
-          noun={{ one: 'run', other: 'runs' }}
-          columns={columns}
-          rows={visible}
-          getRowId={(run) => run.id}
-          rowLabel={(run) => `Select ${run.id}`}
-          loading={refreshing}
-          defaultSort={{ key: 'startedAt', direction: 'descending' }}
-          pageSize={12}
-          paginationVariant="pages"
-          page={page}
-          onPageChange={setPage}
-          selectable
-          selection={selection}
-          onSelectionChange={setSelection}
-          bulkActions={({ selection: ids, clear }) => {
-            const cancellable = runs.filter((run) => ids.has(run.id) && (run.status === 'running' || run.status === 'queued')).length
-            return (
-              <>
-                <Button size="sm" variant="secondary" icon={<Play />} className="max-sm:hidden">
-                  Re-run
-                </Button>
-                <Button size="sm" variant="secondary" icon={<Download />} className="max-sm:hidden">
-                  Export
-                </Button>
-                <Button size="sm" variant="danger" icon={<Ban />} disabled={cancellable === 0} onClick={() => cancelRuns(ids, clear)}>
-                  {cancellable > 0 ? `Cancel ${cancellable}` : 'Cancel'}
-                </Button>
-              </>
-            )
-          }}
-          columnMenu
-          defaultHiddenColumns={['duration']}
-          framed
-          className="min-w-[52rem]"
-          empty={{
-            kind: 'no-results',
-            title: 'No runs match these filters',
-            description: 'Try another agent, a wider date range, or clear the filters to see every run.',
-            actions: (
-              <Button size="sm" variant="secondary" icon={<RotateCcw />} onClick={clearFilters}>
-                Clear filters
+        {loadStatus === 'error' ? (
+          <EmptyState
+            kind="error"
+            size="lg"
+            headingLevel={2}
+            title="Runs didn’t load"
+            description="The runs service didn’t answer within 10 seconds. Nothing has changed: running agents carry on, and your filters are kept."
+            actions={
+              <Button variant="secondary" icon={<RotateCcw />} onClick={onRetry}>
+                Retry
               </Button>
-            ),
-          }}
-        />
+            }
+          />
+        ) : (
+          <>
+            {/* The outline's level 2 for the answer. The no-results empty state
+                inside the table is a level 3 heading, and with only the page's
+                h1 above it the outline skipped a level. The visible bar already
+                says how many runs there are, so the heading is for the outline
+                alone. */}
+            <h2 className="sr-only">Agent runs</h2>
+            <DataTable
+              label="Agent runs"
+              noun={{ one: 'run', other: 'runs' }}
+              columns={columns}
+              rows={visible}
+              getRowId={(run) => run.id}
+              rowLabel={(run) => `Select ${run.id}`}
+              loading={refreshing || loadStatus === 'loading'}
+              defaultSort={{ key: 'startedAt', direction: 'descending' }}
+              pageSize={12}
+              paginationVariant="pages"
+              page={page}
+              onPageChange={setPage}
+              selectable
+              selection={selection}
+              onSelectionChange={setSelection}
+              bulkActions={({ selection: ids, clear }) => {
+                const cancellable = runs.filter((run) => ids.has(run.id) && (run.status === 'running' || run.status === 'queued')).length
+                return (
+                  <>
+                    <Button size="sm" variant="secondary" icon={<Play />} className="max-sm:hidden">
+                      Re-run
+                    </Button>
+                    <Button size="sm" variant="secondary" icon={<Download />} className="max-sm:hidden">
+                      Export
+                    </Button>
+                    {canManage ? (
+                      <Button size="sm" variant="danger" icon={<Ban />} disabled={cancellable === 0} onClick={() => cancelRuns(ids, clear)}>
+                        {cancellable > 0 ? `Cancel ${cancellable}` : 'Cancel'}
+                      </Button>
+                    ) : null}
+                  </>
+                )
+              }}
+              columnMenu
+              defaultHiddenColumns={['duration']}
+              framed
+              className="min-w-[52rem]"
+              empty={{
+                kind: 'no-results',
+                title: 'No runs match these filters',
+                description: 'Try another agent, a wider date range, or clear the filters to see every run.',
+                actions: (
+                  <Button size="sm" variant="secondary" icon={<RotateCcw />} onClick={clearFilters}>
+                    Clear filters
+                  </Button>
+                ),
+              }}
+            />
+          </>
+        )}
       </div>
 
       <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>

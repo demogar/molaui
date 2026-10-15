@@ -192,8 +192,8 @@ Types: `CalendarMessages`, `DatePickerMessages`, `DateRangePickerMessages`, `Dat
 
 ### Used in
 
-- [Form example](https://demogar.github.io/molaui/md/components-forms-form-example--overview.md) (showcase)
 - [Filtered table](https://demogar.github.io/molaui/md/patterns-filtered-table--overview.md) (pattern)
+- [Form validation](https://demogar.github.io/molaui/md/patterns-form-validation--overview.md) (pattern)
 
 ## Changes
 

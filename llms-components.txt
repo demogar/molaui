@@ -158,7 +158,7 @@ A button is a cut shape, so its edge is a `box-shadow` keyline rather than a `bo
 
 Types: `ButtonArrowProps`, `ButtonProps`, `IconButtonProps`
 
-Used in: Agent console, Form example, Agent hand-off, Confirmation, Empty states, Filtered table, List and detail, Settings page
+Used in: Agent console, Agent hand-off, Confirmation, Empty states, Filtered table, Form validation, List and detail, Settings page
 
 ## Data display
 
@@ -354,7 +354,7 @@ You handle:
 
 Types: `DescriptionItem`, `DescriptionListProps`
 
-Used in: Filtered table, List and detail
+Used in: Filtered table, Form validation, List and detail, Settings page
 
 ### Relative time
 
@@ -1103,7 +1103,7 @@ A message that belongs to a region of the page — "this agent is using a deprec
 
 Types: `CalloutMessages`, `CalloutProps`, `CalloutTone`, `CalloutVariant`
 
-Used in: Agent hand-off, Confirmation, List and detail
+Used in: Agent console, Agent hand-off, Confirmation, Filtered table, Form validation, List and detail, Settings page
 
 Changes:
 - 0.4.0 (2026-10-13), feature: add a flat variant and a swatch colour key [#20](https://github.com/demogar/molaui/issues/20)
@@ -1181,7 +1181,7 @@ The state a panel is in when it has nothing to show — designed as a condition 
 
 Types: `EmptyStateKind`, `EmptyStateProps`
 
-Used in: Agent hand-off, Confirmation, Empty states, List and detail
+Used in: Agent hand-off, Confirmation, Empty states, Filtered table, List and detail
 
 ### Notification centre
 
@@ -1466,6 +1466,8 @@ Lines of text that have not arrived. The last line is short, because a paragraph
 
 Types: `SkeletonGroupProps`, `SkeletonProps`, `SkeletonTextProps`
 
+Used in: Agent hand-off, Form validation, List and detail, Settings page
+
 Changes:
 - 0.2.0 (2026-10-06), feature: add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features [#11](https://github.com/demogar/molaui/issues/11)
 
@@ -1616,7 +1618,7 @@ A square cut from the cloth. Unchecked, it is raised cloth inside an ink keyline
 
 Types: `CheckboxGroupProps`, `CheckboxProps`
 
-Used in: Form example
+Used in: Form validation
 
 ### Chip
 
@@ -1800,7 +1802,7 @@ Free text with suggestions: a run label, a tag, a search. The typed text is the 
 
 Types: `AutocompleteMessages`, `ComboboxMessages`, `AutocompleteProps`, `ComboboxCommonProps`, `ComboboxItems`, `ComboboxMultipleProps`, `ComboboxOption`, `ComboboxOptionGroup`, `ComboboxProps`, `ComboboxSingleProps`
 
-Used in: Form example, Filtered table
+Used in: Filtered table, Form validation
 
 Changes:
 - 0.2.0 (2026-10-06), feature: add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features [#11](https://github.com/demogar/molaui/issues/11)
@@ -1941,7 +1943,7 @@ The typed format for a locale, read from `formatToParts` rather than from a tabl
 
 Types: `CalendarMessages`, `DatePickerMessages`, `DateRangePickerMessages`, `DateEntryMessages`, `CalendarProps`, `DatePickerProps`, `DateRangePickerProps`, `DateLocale`, `DatePart`, `DatePattern`, `DateRange`, `DateRangePreset`
 
-Used in: Form example, Filtered table
+Used in: Filtered table, Form validation
 
 Changes:
 - 0.2.0 (2026-10-06), feature: add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features [#11](https://github.com/demogar/molaui/issues/11)
@@ -2068,7 +2070,7 @@ Height, padding and type per size. Every value is a density token, so the same `
 
 Types: `LabelMessages`, `SearchInputMessages`, `LabelProps`, `FieldControlProps`, `FieldProps`, `FieldControlSize`, `InputProps`, `TextareaProps`, `SearchInputProps`
 
-Used in: Form example, Agent hand-off, Empty states, Filtered table, Settings page
+Used in: Agent hand-off, Empty states, Filtered table, Form validation, Settings page
 
 ### File upload
 
@@ -2157,7 +2159,7 @@ Splits a batch into the files that pass and the ones that do not, each with the 
 
 Types: `FileUploadMessageTemplates`, `FileUploadItem`, `FileUploadMessageFunctions`, `FileUploadMessages`, `FileUploadProps`, `FileUploadStatus`, `UploadContext`, `FileRejection`, `FileRejectionReason`, `FileValidationOptions`
 
-Used in: Form example
+Used in: Form validation
 
 Changes:
 - 0.2.0 (2026-10-06), feature: add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features [#11](https://github.com/demogar/molaui/issues/11)
@@ -2248,7 +2250,7 @@ Anatomy:
 
 Types: `FormErrorSummaryMessages`, `FormProps`, `FormErrorSummaryProps`, `FieldsetProps`
 
-Used in: Form example, Settings page
+Used in: Form validation, Settings page
 
 ### Listbox
 
@@ -2399,7 +2401,7 @@ You handle:
 
 Types: `NumberInputMessages`, `NumberInputProps`
 
-Used in: Form example, Settings page
+Used in: Form validation, Settings page
 
 Changes:
 - 0.2.0 (2026-10-06), feature: add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features [#11](https://github.com/demogar/molaui/issues/11)
@@ -2476,7 +2478,7 @@ Also accepts the props of `RadioGroupProps`.
 
 Types: `RadioGroupProps`, `RadioProps`
 
-Used in: Form example, Settings page
+Used in: Form validation, Settings page
 
 ### Segmented control
 
@@ -2666,7 +2668,7 @@ Also accepts the props of `NativeButtonProps`, `SelectTriggerProps`.
 
 Types: `SelectMessages`, `SelectContentProps`, `SelectItemProps`, `SelectOption`, `SelectOptionGroup`, `SelectProps`, `SelectTriggerProps`
 
-Used in: Form example, Settings page
+Used in: Form validation, Settings page
 
 ### Slider
 
@@ -2725,7 +2727,7 @@ Also accepts the props of `SliderRootProps`.
 
 Types: `SliderProps`
 
-Used in: Form example
+Used in: Form validation
 
 ### Switch
 
@@ -2782,7 +2784,7 @@ Also accepts the props of `NativeButtonProps`, `SwitchRootProps`.
 
 Types: `SwitchProps`
 
-Used in: Form example, Settings page
+Used in: Form validation, Settings page
 
 ### Tag group
 

@@ -152,5 +152,5 @@ Types: `ToolCallGroupMessages`, `ToolCallMessages`, `ToolCallApproval`, `ToolCal
 
 ### Used in
 
-- [Agent console](https://demogar.github.io/molaui/md/ai-agent-console--overview.md) (showcase)
+- [Agent console](https://demogar.github.io/molaui/md/patterns-agent-console--overview.md) (pattern)
 - [Agent hand-off](https://demogar.github.io/molaui/md/patterns-agent-hand-off--overview.md) (pattern)

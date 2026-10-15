@@ -27,7 +27,7 @@ import { isExportStory } from 'storybook/internal/csf'
 
 import { ACCESSIBILITY } from '../src/docs/usage/accessibility'
 import { documentedKeys, pressedKeys, untestedKeys } from '../src/docs/usage/keyboard-coverage'
-import { isShowcase } from '../src/docs/usage/showcases'
+import { isPattern } from '../src/docs/usage/patterns'
 
 const root = resolve(import.meta.dirname, '..')
 const OUT = 'docs/accessibility/evidence.json'
@@ -76,7 +76,7 @@ const components: Record<string, Evidence> = {}
 for (const file of storyFiles) {
   const mod = (await import(resolve(root, file))) as Record<string, unknown> & { default: { title: string } }
   const title = mod.default.title
-  if (isShowcase(title)) continue
+  if (isPattern(title)) continue
   const dir = dirname(resolve(root, file))
   const tests = globSync('*.test.tsx', { cwd: dir }).sort().map((name) => resolve(dir, name))
   const sources = tests.map((path) => readFileSync(path, 'utf8'))

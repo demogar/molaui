@@ -17,7 +17,7 @@ with fictional data from *Cayuco*, a demo operations platform.
 > - Image: The agent console after a run: a cited answer, confidence in words, and the run timeline with token usage
 
 **[The runs view](https://demogar.github.io/molaui/?path=/story/components-layout-app-shell--cayuco)** puts the application shell,
-stats and a dense table of agent runs into one screen. **[The agent console](https://demogar.github.io/molaui/?path=/story/ai-agent-console--console)**
+stats and a dense table of agent runs into one screen. **[The agent console](https://demogar.github.io/molaui/?path=/story/patterns-agent-console--console)**
 is live: ask a question, and a simulated agent plans, calls two tools and streams a cited answer.
 
 ## What this is
@@ -122,7 +122,7 @@ and fails a page that would leave a section empty. What the pages don't have yet
   release, written for a reader. Every commit is on the [Changelog](https://demogar.github.io/molaui/?path=/docs/mola-ui-changelog--overview).
 - **[AI interface layer](https://demogar.github.io/molaui/?path=/docs/ai-principles--overview)** — how latency, streaming,
   uncertainty and failure surface.
-- **[Agent console](https://demogar.github.io/molaui/?path=/story/ai-agent-console--console)** — everything composed, and working.
+- **[Agent console](https://demogar.github.io/molaui/?path=/story/patterns-agent-console--console)** — everything composed, and working.
 
 ---
 

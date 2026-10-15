@@ -18,9 +18,12 @@ import type { Alternative } from './guidance'
  * is described here that the screen does not import, or imported and not
  * described. The words are the only hand-written part.
  *
- * `states` points at a story by its export name where the state is shown.
- * Where it is not, the note says so and says what the screen would do, rather
- * than leaving the reader to assume it was handled.
+ * `states` points at the story, by its export name, that shows each state.
+ * Every state has one: a table that said "Not shown" apologised for exactly
+ * the gap a reader copying the screen would inherit, so usage.test.ts fails
+ * a state with no story. The one exception is a state that cannot happen on
+ * the screen, such as an empty settings form; it is marked `applies: false`
+ * and its note says why.
  */
 export type PatternStateId = 'empty' | 'loading' | 'error' | 'noPermission'
 
@@ -32,11 +35,23 @@ export const PATTERN_STATES: Record<PatternStateId, string> = {
 }
 
 export interface PatternState {
-  /** The export name of the story that shows this state, when one does. */
+  /** The export name of the story that shows this state. Required unless `applies` is false. */
   story?: string
+  /** `false` when the state cannot happen on this screen; the note says why, and there is no story. */
+  applies?: false
   /** What the screen does in this state, or why it has none. */
   note: string
 }
+
+/**
+ * Patterns are the only composed pages. A page is either a component page,
+ * held to the component contract (contract.ts), or a pattern, held to the
+ * guidance below; there is no third kind exempt from both. The showcases
+ * (the agent console and the form example) that once were became patterns,
+ * and the exemption list went with them, so a composed page added outside
+ * `Patterns/` fails usage.test.ts as a component page with no guidance.
+ */
+export const isPattern = (title: string) => title.startsWith('Patterns/')
 
 export interface PatternUsage {
   /** One sentence: what the screen is for. */
@@ -52,6 +67,57 @@ export interface PatternUsage {
 }
 
 export const PATTERNS: Record<string, PatternUsage> = {
+  'Patterns/Agent console': {
+    summary:
+      'A person asks an agent a question and watches it work: the transcript of what was said beside a timeline of what was done, with Stop always in reach.',
+    use: [
+      'A conversational agent whose answers rest on tool calls and sources a person should be able to check.',
+      'People need to see the agent working, step by step, and stop it part-way without losing what arrived.',
+      'Answers are read, cited and rated, and the session’s token use matters.',
+    ],
+    avoid: [
+      { when: 'The agent has stopped for a person’s decision on one action.', use: 'Patterns/Agent hand-off' },
+      { when: 'Watching a run with no conversation, such as a scheduled job.', use: 'AI/Agent run' },
+      { when: 'A single answer in a panel, without a session around it.', use: 'AI/Message' },
+    ],
+    parts: {
+      'AI/Agent run': 'The run panel: the same work as a timeline, with Cancel while it runs and Retry run once it stops.',
+      'AI/Confidence': 'How sure the answer is, as a level and a basis; and the uncertainty note on the one unverified figure.',
+      'AI/Message': 'Each turn of the Thread, the question and the answer, with copy, retry, rating, and the error when a call fails.',
+      'AI/Prompt input': 'The composer, which becomes Stop while the agent is generating.',
+      'AI/Reasoning': 'The agent’s plan, collapsed once it is done.',
+      'AI/Sources': 'The citations in the answer and the list of what was read.',
+      'AI/Streaming text': 'The answer as it arrives, in Alegreya, with its citations.',
+      'AI/Token usage': 'The session’s tokens and cost against the context window.',
+      'AI/Tool call': 'The two calls the agent makes, with their arguments and results.',
+      'Components/Actions/Button': 'The model picker in the composer’s toolbar.',
+      'Components/Feedback/Callout': 'Who can give access, in the composer’s place, for someone who may not ask.',
+    },
+    states: {
+      empty: {
+        story: 'Console',
+        note: 'Nothing asked yet: what the agent can answer, two suggested questions, and a run panel that says what will appear in it.',
+      },
+      loading: {
+        story: 'Working',
+        note: 'The agent at work: the plan and the tool calls with their clocks, the answer streaming, the run panel’s steps live, and Stop in the composer.',
+      },
+      error: {
+        story: 'ToolFails',
+        note: 'A tool call times out: the turn says so once, with the error verbatim and Retry; the run panel marks the step failed and offers Retry run, without a second alert.',
+      },
+      noPermission: {
+        story: 'NoPermission',
+        note: 'No composer to be refused by and no suggestions to press: a callout names who can grant access, and the run panel says runs by others appear there.',
+      },
+    },
+    accessibility: [
+      'The transcript is a Thread, a labelled region and not a live one, so a streaming answer is not read aloud token by token; the answer announces its own completion once.',
+      'Stop is the composer’s own button while the agent is generating, so it is where focus already is.',
+      'The answer is not repeated in the run panel, so a screen reader moving through the page hears it once.',
+      'The person’s words are in Archivo and the agent’s in Alegreya, so the two voices can be told apart without colour.',
+    ],
+  },
   'Patterns/Agent hand-off': {
     summary:
       'An agent has done what it may and stopped at what it may not: the person approves its proposed action, or takes the task over and finishes it themselves.',
@@ -77,6 +143,7 @@ export const PATTERNS: Record<string, PatternUsage> = {
       'Components/Feedback/Badge': 'Whether the reply is a draft or sent, as a dot, a word and a tone.',
       'Components/Feedback/Callout': 'Who can approve, when the person cannot; and the result, once the refund is issued.',
       'Components/Feedback/Empty state': 'The queue with nothing waiting.',
+      'Components/Feedback/Skeleton': 'The decision panel, the conversation and the run, in their columns, while the hand-off loads.',
       'Components/Forms/Field': 'The person’s reply after taking over, a labelled Textarea that starts from the agent’s draft.',
       'Components/Layout/Page header': 'The ticket’s subject, who handed it off, the status and Take over.',
       'Components/Navigation/Breadcrumb': 'Where the ticket sits: Support, Escalations, the ticket id.',
@@ -84,7 +151,8 @@ export const PATTERNS: Record<string, PatternUsage> = {
     states: {
       empty: { story: 'NothingWaiting', note: 'Nothing needs the person: the empty state says what will appear and when.' },
       loading: {
-        note: 'Not shown. While the refund runs, the hand-off says “Issuing the refund” and the call carries the working relleno; a hand-off still loading would use Skeleton in the panel’s shape, as the Empty states pattern does for a table.',
+        story: 'Loading',
+        note: 'The panel, the conversation and the run as skeletons in their columns, with one polite “Loading the hand-off” and no Take over yet. Once approved, the refund in flight is “Issuing the refund” with the call’s working relleno.',
       },
       error: {
         story: 'RefundFails',
@@ -132,7 +200,8 @@ export const PATTERNS: Record<string, PatternUsage> = {
     states: {
       empty: { story: 'NoKeys', note: 'No keys: the empty state makes the case for one per service.' },
       loading: {
-        note: 'The list loading is not shown; it would be the table’s shape with skeleton rows, as in Empty states. The request in flight is shown by AlertDialog itself: the working strip on Revoke key, and neither button nor Escape answers.',
+        story: 'Loading',
+        note: 'The table’s headers over skeleton rows, `aria-busy`, one polite “Loading API keys”, and “Keys” for a heading until there is a count. The revoke in flight is AlertDialog’s own: the working strip on Revoke key, and neither button nor Escape answers.',
       },
       error: {
         story: 'RevokeFails',
@@ -216,8 +285,10 @@ export const PATTERNS: Record<string, PatternUsage> = {
       'Components/Actions/Button': 'Export and New run in the header, and the bulk actions on a selection.',
       'Components/Data display/Description list': 'The chosen run’s details in the drawer.',
       'Components/Data display/Table':
-        'DataTable: sorting, selection, the bulk-action bar, the Columns menu, pages, and the no-results state.',
+        'DataTable: sorting, selection, the bulk-action bar, the Columns menu, pages, loading rows and the no-results state.',
       'Components/Feedback/Badge': 'Each run’s status, as a dot, a word and a tone.',
+      'Components/Feedback/Callout': 'Who can start or cancel runs, for a viewer who cannot.',
+      'Components/Feedback/Empty state': 'A failed load, in the table’s place, with Retry.',
       'Components/Forms/Combobox': 'The agent filter.',
       'Components/Forms/Date picker': 'DateRangePicker with presets, for when runs started.',
       'Components/Forms/Field': 'A visible label on every filter, and the search box.',
@@ -227,14 +298,20 @@ export const PATTERNS: Record<string, PatternUsage> = {
     },
     states: {
       empty: {
-        note: 'Not a story: filtering to nothing gives the no-results empty state inside the table, with Clear filters. It never offers to create a first run. A workspace with no runs at all is the first-run case in Empty states.',
+        story: 'NoResults',
+        note: 'Filters that match nothing give the no-results empty state inside the table, with Clear filters. It never offers to create a first run; a workspace with no runs at all is the first-run case in Empty states.',
       },
       loading: {
-        note: 'Not a story: Refresh shows the table’s own loading rows in place, keeping the filters. A first load would do the same.',
+        story: 'Loading',
+        note: 'The filters stay and the toggles drop their counts; the table keeps its headers over its loading rows, and its bar says “Loading…”. Refresh does the same in place.',
       },
-      error: { note: 'Not shown. A failed load would be an error empty state with Retry in the table’s place, as in Empty states.' },
+      error: {
+        story: 'LoadError',
+        note: 'An error empty state with Retry in the table’s place, saying what is still true, with the filters kept. Not a table of zero rows, which would claim “0 runs”.',
+      },
       noPermission: {
-        note: 'Not shown. Someone who may not cancel runs should see the selection without Cancel, not a Cancel that fails.',
+        story: 'NoPermission',
+        note: 'A viewer selects and exports, but the bulk bar has no Cancel and the header no New run; a callout names who can cancel.',
       },
     },
     accessibility: [
@@ -242,6 +319,62 @@ export const PATTERNS: Record<string, PatternUsage> = {
       'Changing a filter clears the selection, so a bulk action never lands on rows the filter now hides.',
       'The status toggles are one Toolbar, a single tab stop moved through with the arrow keys.',
       'A table wider than its frame scrolls sideways, and the frame then takes focus so the keyboard can scroll it.',
+    ],
+  },
+  'Patterns/Form validation': {
+    summary:
+      'One form with every kind of control, validated when it is submitted: a summary of the errors takes focus, and each error sits under its field.',
+    use: [
+      'A form someone fills in from top to bottom and submits once, such as an agent’s configuration.',
+      'Several fields can be wrong at once, and each needs its own message saying what to do.',
+      'The form mixes text, choices, dates, numbers, people and files, and every one needs a visible label.',
+    ],
+    avoid: [
+      { when: 'Long settings saved as a whole, with unsaved changes to guard.', use: 'Patterns/Settings page' },
+      { when: 'A single field, or a value that should apply the moment it changes.', use: 'Components/Forms/Field' },
+      { when: 'A destructive action that needs confirming rather than a form.', use: 'Patterns/Confirmation' },
+      { when: 'Only the submit behaviour (the summary and where focus goes) in a form of your own.', use: 'Components/Forms/Form' },
+    ],
+    parts: {
+      'Components/Actions/Button': 'Save agent, with its working strip, and Discard.',
+      'Components/Data display/Description list': 'The saved configuration as text, for someone who may not change it.',
+      'Components/Feedback/Callout': 'Who can change the agent, for someone who cannot.',
+      'Components/Feedback/Skeleton': 'The fields in their columns while the configuration loads.',
+      'Components/Forms/Checkbox': 'The tools, a CheckboxGroup with a legend.',
+      'Components/Forms/Combobox': 'The reviewers, several people chosen by typing.',
+      'Components/Forms/Date picker': 'The day the configuration goes live.',
+      'Components/Forms/Field': 'Every label, hint and error, around Input and Textarea and the other controls.',
+      'Components/Forms/File upload': 'The grounding documents.',
+      'Components/Forms/Form': 'Form around the fields, and FormErrorSummary at the top: on a failed Save it lists every error as a link and takes focus.',
+      'Components/Forms/Number input': 'The token budget, in tokens.',
+      'Components/Forms/Radio': 'What happens when a tool call fails.',
+      'Components/Forms/Select': 'The model.',
+      'Components/Forms/Slider': 'The temperature, between Precise and Creative.',
+      'Components/Forms/Switch': 'Whether responses stream.',
+    },
+    states: {
+      empty: {
+        story: 'AgentConfiguration',
+        note: 'A new configuration: every required field empty, and nothing flagged until Save is pressed.',
+      },
+      loading: {
+        story: 'Loading',
+        note: 'The card keeps its header; the fields are skeletons in their columns, saying “Loading the configuration” once, with no Save until there are values.',
+      },
+      error: {
+        story: 'WithErrors',
+        note: 'Save pressed with the form empty: the summary at the top lists the problems as links and has focus, and each invalid control says what is wrong and what to do.',
+      },
+      noPermission: {
+        story: 'ReadOnly',
+        note: 'The saved configuration as text, with a callout naming who can change it; no form of disabled controls and no Save to refuse.',
+      },
+    },
+    accessibility: [
+      'Errors appear on submit, not while typing. The error summary takes focus and is the one announcement: the fields’ errors are their controls’ descriptions, not alerts, while it is there.',
+      'Each link in the summary moves focus to its field, and each error clears from its field and from the summary as soon as it is fixed.',
+      '“Required” and “Optional” are words beside the label, not an asterisk alone.',
+      'The tools are one group with a legend, so the question is read before the answers.',
     ],
   },
   'Patterns/List and detail': {
@@ -264,8 +397,9 @@ export const PATTERNS: Record<string, PatternUsage> = {
       'Components/Data display/Stat': 'Runs, success rate and cost for the chosen agent, as a StatGroup.',
       'Components/Data display/Table': 'The chosen agent’s recent runs.',
       'Components/Feedback/Badge': 'Each agent’s state and each run’s status, as a dot, a word and a tone.',
-      'Components/Feedback/Callout': 'A failing agent’s problem, at the top of its detail.',
-      'Components/Feedback/Empty state': 'No agents at all, and a draft agent with no runs yet.',
+      'Components/Feedback/Callout': 'A failing agent’s problem, at the top of its detail; and who can change agents, for a viewer.',
+      'Components/Feedback/Empty state': 'No agents at all, a draft agent with no runs yet, and a failed load with Retry.',
+      'Components/Feedback/Skeleton': 'Both panes, in their columns, while the agents load.',
       'Components/Layout/Page header': 'The title, how many agents are failing, and Create agent.',
       'Components/Typography/Heading': 'The detail pane’s heading, which takes focus when an agent opens in one column.',
     },
@@ -274,11 +408,18 @@ export const PATTERNS: Record<string, PatternUsage> = {
         story: 'Empty',
         note: 'No agents: the empty state alone, whose action creates the first. A draft agent’s detail has its own “No runs yet”.',
       },
-      loading: { note: 'Not shown. The list and the detail would each keep their shape with Skeleton while they load.' },
-      error: {
-        note: 'Not shown as a load failure. A failing agent is a state of the data, shown as a danger Callout in its detail with the way to fix it.',
+      loading: {
+        story: 'Loading',
+        note: 'Both panes as skeletons in their real columns, in one busy region that says “Loading agents” once, so the split does not jump when the rows land.',
       },
-      noPermission: { note: 'Not shown. An agent the reader may not open should not be in the list, rather than open to a refusal.' },
+      error: {
+        story: 'LoadError',
+        note: 'An error empty state with Retry takes the body; Create agent stays. A failing agent is different: a state of the data, shown as a danger Callout in its detail.',
+      },
+      noPermission: {
+        story: 'NoPermission',
+        note: 'A viewer browses every agent and its runs with nothing to press and fail at (no Create, pause, resume or test run), and a callout names who can change one.',
+      },
     },
     accessibility: [
       'Each agent is a button marked `aria-current` when it is the one shown, because choosing one is navigation; a listbox could not carry the badge and second line.',
@@ -302,6 +443,9 @@ export const PATTERNS: Record<string, PatternUsage> = {
     ],
     parts: {
       'Components/Actions/Button': 'Save changes and Discard in the sticky bar, and Delete workspace in the danger zone.',
+      'Components/Data display/Description list': 'Each section’s values as text, for a member who may not change them.',
+      'Components/Feedback/Callout': 'Who can change the settings, for a member who cannot.',
+      'Components/Feedback/Skeleton': 'The form’s sections while the settings load.',
       'Components/Feedback/Toast': 'Saved, and Discard with Undo, so neither needs a dialog.',
       'Components/Forms/Field': 'Every label, hint and error, around Input and Textarea.',
       'Components/Forms/Form': 'Form around the settings, and FormErrorSummary at its top: on a failed Save it lists every error as a link and takes focus.',
@@ -315,16 +459,21 @@ export const PATTERNS: Record<string, PatternUsage> = {
       'Components/Typography/Heading': 'Each section of the form.',
     },
     states: {
-      empty: { note: 'Not applicable: a settings form always has values. A section with nothing to set would say why in its description.' },
+      empty: {
+        applies: false,
+        note: 'A settings form always has values. A section with nothing to set would say why in its description.',
+      },
       loading: {
-        note: 'Not shown. Saving is shown: Save changes carries its working strip and stays focusable. A first load would keep the form’s shape with Skeleton.',
+        story: 'Loading',
+        note: 'The header and the settings pages stay; the form is its sections as skeletons, saying “Loading settings” once, with no Save bar or danger zone yet. Saving itself is Save changes’ working strip.',
       },
       error: {
         story: 'WithValidationErrors',
         note: 'Save pressed with three problems: the summary at the top lists them as links and has focus, each field says what is wrong and what to do, and the bar counts what needs fixing.',
       },
       noPermission: {
-        note: 'Not shown. Someone who may not change settings should see the values as read-only text with who can change them, not a form that refuses on Save.',
+        story: 'ReadOnly',
+        note: 'A member sees the values as text, section by section, with a callout naming who can change them; no form of disabled controls, no Save bar, no danger zone.',
       },
     },
     accessibility: [

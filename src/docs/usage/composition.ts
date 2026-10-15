@@ -4,7 +4,7 @@
  *
  * A hand-kept "built from" list is right on the day it is written and wrong
  * the first time someone swaps a Select for a Combobox. So the list is
- * derived: scripts/export-manifest.ts reads each pattern's and showcase's
+ * derived: scripts/export-manifest.ts reads each pattern's
  * source, keeps the names it imports from `src/components/…` (by relative
  * path or the `@/` alias), maps each name to the docs page that documents it,
  * and writes the result to docs/ai/composition.json. The pattern pages render
@@ -23,8 +23,12 @@ export interface SourceFile {
   text: string
 }
 
-/** What a composition is: a pattern (a whole screen to copy) or a showcase (a demo of one layer). */
-export type CompositionKind = 'pattern' | 'showcase'
+/**
+ * What a composition is. Only `pattern` (a whole screen to copy) is left:
+ * the showcases, demos of one layer outside any page contract, became
+ * patterns. The field stays so the JSON keeps its shape for its readers.
+ */
+export type CompositionKind = 'pattern'
 
 export interface Composition {
   kind: CompositionKind
@@ -80,8 +84,8 @@ export function componentImports(file: SourceFile): string[] {
 
 /**
  * The docs pages a set of files is built from. Names with no page (an
- * internal helper imported by a showcase that lives inside the library) are
- * returned in `unknown`, so a caller can decide whether that is an error.
+ * internal helper, which a pattern may not import) are returned in
+ * `unknown`, so a caller can decide whether that is an error.
  */
 export function builtFrom(files: readonly SourceFile[], pageOf: ReadonlyMap<string, string>) {
   const titles = new Set<string>()
@@ -97,12 +101,10 @@ export function builtFrom(files: readonly SourceFile[], pageOf: ReadonlyMap<stri
 }
 
 /**
- * The files that make up a composition. A pattern is its folder's screen
- * files, not its stories: the stories only frame the screen in the Cayuco
- * shell, and the screen is what a reader copies. A showcase is its stories
- * file, because that is where it is composed.
+ * The files that make up a pattern: its folder's screen files, not its
+ * stories. The stories only frame the screen in the Cayuco shell, and the
+ * screen is what a reader copies.
  */
-export function compositionFiles(kind: CompositionKind, storiesPath: string, siblings: readonly string[]) {
-  if (kind === 'showcase') return [storiesPath]
+export function compositionFiles(siblings: readonly string[]) {
   return siblings.filter((path) => /\.tsx?$/.test(path) && !/\.(stories|test)\.tsx?$/.test(path)).sort()
 }

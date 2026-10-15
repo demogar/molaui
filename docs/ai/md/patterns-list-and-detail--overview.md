@@ -28,17 +28,18 @@ Read from its imports.
 - [Stat](https://demogar.github.io/molaui/md/components-data-display-stat--overview.md): Runs, success rate and cost for the chosen agent, as a StatGroup.
 - [Table](https://demogar.github.io/molaui/md/components-data-display-table--overview.md): The chosen agent’s recent runs.
 - [Badge](https://demogar.github.io/molaui/md/components-feedback-badge--overview.md): Each agent’s state and each run’s status, as a dot, a word and a tone.
-- [Callout](https://demogar.github.io/molaui/md/components-feedback-callout--overview.md): A failing agent’s problem, at the top of its detail.
-- [Empty state](https://demogar.github.io/molaui/md/components-feedback-empty-state--overview.md): No agents at all, and a draft agent with no runs yet.
+- [Callout](https://demogar.github.io/molaui/md/components-feedback-callout--overview.md): A failing agent’s problem, at the top of its detail; and who can change agents, for a viewer.
+- [Empty state](https://demogar.github.io/molaui/md/components-feedback-empty-state--overview.md): No agents at all, a draft agent with no runs yet, and a failed load with Retry.
+- [Skeleton](https://demogar.github.io/molaui/md/components-feedback-skeleton--overview.md): Both panes, in their columns, while the agents load.
 - [Page header](https://demogar.github.io/molaui/md/components-layout-page-header--overview.md): The title, how many agents are failing, and Create agent.
 - [Heading](https://demogar.github.io/molaui/md/components-typography-heading--overview.md): The detail pane’s heading, which takes focus when an agent opens in one column.
 
 ## States
 
 - Empty: No agents: the empty state alone, whose action creates the first. A draft agent’s detail has its own “No runs yet”. Story: https://demogar.github.io/molaui/?path=/story/patterns-list-and-detail--empty
-- Loading: Not shown. The list and the detail would each keep their shape with Skeleton while they load. (No story.)
-- Error: Not shown as a load failure. A failing agent is a state of the data, shown as a danger Callout in its detail with the way to fix it. (No story.)
-- No permission: Not shown. An agent the reader may not open should not be in the list, rather than open to a refusal. (No story.)
+- Loading: Both panes as skeletons in their real columns, in one busy region that says “Loading agents” once, so the split does not jump when the rows land. Story: https://demogar.github.io/molaui/?path=/story/patterns-list-and-detail--loading
+- Error: An error empty state with Retry takes the body; Create agent stays. A failing agent is different: a state of the data, shown as a danger Callout in its detail. Story: https://demogar.github.io/molaui/?path=/story/patterns-list-and-detail--load-error
+- No permission: A viewer browses every agent and its runs with nothing to press and fail at (no Create, pause, resume or test run), and a callout names who can change one. Story: https://demogar.github.io/molaui/?path=/story/patterns-list-and-detail--no-permission
 
 ## Accessibility
 
@@ -57,4 +58,7 @@ Each agent is a button marked `aria-current` when it is the one shown. A listbox
 
 - [Default](https://demogar.github.io/molaui/?path=/story/patterns-list-and-detail--default)
 - [Empty](https://demogar.github.io/molaui/?path=/story/patterns-list-and-detail--empty)
+- [LoadError](https://demogar.github.io/molaui/?path=/story/patterns-list-and-detail--load-error)
+- [Loading](https://demogar.github.io/molaui/?path=/story/patterns-list-and-detail--loading)
 - [Narrow](https://demogar.github.io/molaui/?path=/story/patterns-list-and-detail--narrow)
+- [NoPermission](https://demogar.github.io/molaui/?path=/story/patterns-list-and-detail--no-permission)

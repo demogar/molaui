@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { fn } from 'storybook/test'
 
 import { CayucoSidebar, CayucoTopbar } from '../../components/app-shell/_story-data/cayuco-chrome'
 import { AppShell } from '../../components/app-shell/app-shell'
@@ -67,6 +68,53 @@ export const Empty: Story = {
       description: {
         story:
           'A workspace with no agents yet. There is nothing to split, so the screen is the empty state alone, and its one action creates the first agent — the *empty* variant, never *no results*, because nothing is being filtered out.',
+      },
+    },
+  },
+}
+
+const inShell: Story['render'] = (args) => (
+  <AppShell topbar={<CayucoTopbar />} sidebar={<CayucoSidebar active="Agents" />}>
+    <AgentsScreen {...args} />
+  </AppShell>
+)
+
+export const Loading: Story = {
+  args: { status: 'loading' },
+  render: inShell,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The agents have not arrived. Both panes are skeletons in their real columns, inside one busy region that says “Loading agents” once, so the split does not jump when the rows land.',
+      },
+    },
+  },
+}
+
+export const LoadError: Story = {
+  name: 'Load error',
+  args: { status: 'error', onRetry: fn() },
+  render: inShell,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The agents could not be loaded. An error empty state with **Retry** takes the body and says what is still true. **Create agent** stays, because creating does not depend on the list. A failing agent is a different thing: a state of the data, shown in its own detail.',
+      },
+    },
+  },
+}
+
+export const NoPermission: Story = {
+  name: 'No permission',
+  args: { canManage: false },
+  render: inShell,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A viewer. Every agent and its runs are there to read, but nothing to press and fail at: no **Create agent**, no pause or resume, no test run. The callout names who can change an agent.',
       },
     },
   },

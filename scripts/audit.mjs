@@ -70,10 +70,10 @@ const PHONE = { width: 390, height: 900 }
 // Short as well as narrow: the agent console's composer only landed on its
 // run panel once the phone was shorter than the 900px the wide pass uses.
 const REFLOW = { width: 320, height: 568 }
-// The composed screens: every pattern, the agent console, the app shell and
-// the form example. Measured at spacious density at three widths; every
+// The composed screens: every pattern (the agent console and the form among
+// them) and the app shell. Measured at spacious density at three widths; every
 // other story at 320 only.
-const COMPOSED = /^(patterns-|ai-agent-console--|components-layout-app-shell--|components-forms-form-example--)/
+const COMPOSED = /^(patterns-|components-layout-app-shell--)/
 
 /**
  * Runs in the page at 320px. The document must not scroll sideways, and on a

@@ -37,7 +37,7 @@ Read from its imports.
 ## States
 
 - Empty: No keys: the empty state makes the case for one per service. Story: https://demogar.github.io/molaui/?path=/story/patterns-confirmation--no-keys
-- Loading: The list loading is not shown; it would be the table’s shape with skeleton rows, as in Empty states. The request in flight is shown by AlertDialog itself: the working strip on Revoke key, and neither button nor Escape answers. (No story.)
+- Loading: The table’s headers over skeleton rows, `aria-busy`, one polite “Loading API keys”, and “Keys” for a heading until there is a count. The revoke in flight is AlertDialog’s own: the working strip on Revoke key, and neither button nor Escape answers. Story: https://demogar.github.io/molaui/?path=/story/patterns-confirmation--loading
 - Error: The revoke failed: the dialog stays open, says “Not revoked” with the reason and that the key still works, and Revoke key tries again. Story: https://demogar.github.io/molaui/?path=/story/patterns-confirmation--revoke-fails
 - No permission: A member sees the keys but no Revoke or Create to press and fail at; the callout names the admins. Story: https://demogar.github.io/molaui/?path=/story/patterns-confirmation--member-view
 
@@ -60,6 +60,7 @@ Cancel returns focus to the row’s Revoke button. A revoke that succeeds remove
 
 - [ConfirmLiveKey](https://demogar.github.io/molaui/?path=/story/patterns-confirmation--confirm-live-key)
 - [Default](https://demogar.github.io/molaui/?path=/story/patterns-confirmation--default)
+- [Loading](https://demogar.github.io/molaui/?path=/story/patterns-confirmation--loading)
 - [MemberView](https://demogar.github.io/molaui/?path=/story/patterns-confirmation--member-view)
 - [NoKeys](https://demogar.github.io/molaui/?path=/story/patterns-confirmation--no-keys)
 - [RevokeFails](https://demogar.github.io/molaui/?path=/story/patterns-confirmation--revoke-fails)

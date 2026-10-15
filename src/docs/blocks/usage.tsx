@@ -88,7 +88,7 @@ export function UsageGuide({ usage }: { usage: Usage }) {
   )
 }
 
-/** Looks a title up in USAGE; renders nothing for a page with no entry (a showcase or a pattern). */
+/** Looks a title up in USAGE; renders nothing for a page with no entry (a pattern). */
 export function UsageFor({ title }: { title: string }) {
   const usage = USAGE[title]
   return usage ? <UsageGuide usage={usage} /> : null

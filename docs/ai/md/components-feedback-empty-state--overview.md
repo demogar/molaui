@@ -129,4 +129,5 @@ Nothing in it takes focus, so there is no keyboard table.
 - [Agent hand-off](https://demogar.github.io/molaui/md/patterns-agent-hand-off--overview.md) (pattern)
 - [Confirmation](https://demogar.github.io/molaui/md/patterns-confirmation--overview.md) (pattern)
 - [Empty states](https://demogar.github.io/molaui/md/patterns-empty-states--overview.md) (pattern)
+- [Filtered table](https://demogar.github.io/molaui/md/patterns-filtered-table--overview.md) (pattern)
 - [List and detail](https://demogar.github.io/molaui/md/patterns-list-and-detail--overview.md) (pattern)

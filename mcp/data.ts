@@ -71,7 +71,8 @@ export interface Component {
 
 export interface Pattern {
   title: string
-  kind: 'pattern' | 'showcase'
+  /** Always `pattern`: the showcases that were the other kind became patterns. Kept so readers of the JSON do not break. */
+  kind: 'pattern'
   docs: string
   summary?: string
   description?: string
@@ -81,7 +82,7 @@ export interface Pattern {
     use: string[]
     avoid: Alternative[]
     parts: { title: string; role: string }[]
-    states: Record<string, { story?: string; note: string }>
+    states: Record<string, { story?: string; applies?: false; note: string }>
     accessibility: string[]
   }
   stories: { name: string; id: string; url: string }[]
