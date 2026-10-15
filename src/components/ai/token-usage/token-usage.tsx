@@ -122,12 +122,15 @@ function ContextMeter({ ratio, level, className }: { ratio: number; level: 'ok' 
       aria-valuetext={`${pct}% of the context window${LEVEL_WORD[level] ? `, ${LEVEL_WORD[level].toLowerCase()}` : ''}`}
       className={cn('relative h-2 bg-cloth-shade shadow-cut', className)}
     >
+      {/* Scaled from the inline start rather than sized, so the ease is
+          moved by the compositor instead of laying the fill out each frame,
+          as Progress and Meter do. */}
       <div
         className={cn(
-          'absolute inset-y-0 inset-s-0 transition-[width] duration-(--motion-base)',
+          'absolute inset-0 origin-left rtl:origin-right transition-[scale] duration-(--motion-base)',
           level === 'danger' ? 'bg-rojo' : level === 'warn' ? 'bg-oro' : 'bg-ink',
         )}
-        style={{ width: `${pct}%` }}
+        style={{ scale: `${pct / 100} 1` }}
       />
       {/* The 80% threshold, cut into the track, so the reader sees the line before crossing it. */}
       <span aria-hidden className="absolute inset-y-0 inset-s-[80%] w-px bg-ink-muted" />

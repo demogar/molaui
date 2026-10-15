@@ -283,8 +283,8 @@ export type BadgeTone = NonNullable<Variants<typeof badgeVariants>['tone']>;
 
 // @public
 export const badgeVariants: (props?: ({
-    tone?: "danger" | "success" | "warn" | "info" | "accent" | "neutral" | null | undefined;
-    variant?: "outline" | "solid" | "soft" | null | undefined;
+    tone?: "danger" | "success" | "warn" | "neutral" | "info" | "accent" | null | undefined;
+    variant?: "solid" | "soft" | "outline" | null | undefined;
 } & ClassProp) | undefined) => string;
 
 // @public (undocumented)
@@ -392,7 +392,7 @@ export type CalloutVariant = NonNullable<Variants<typeof calloutVariants>['varia
 
 // @public
 export const calloutVariants: (props?: ({
-    tone?: "danger" | "success" | "warn" | "info" | "neutral" | null | undefined;
+    tone?: "danger" | "success" | "warn" | "neutral" | "info" | null | undefined;
     variant?: "flat" | "seam" | null | undefined;
 } & ClassProp) | undefined) => string;
 
@@ -668,7 +668,7 @@ export interface ContainerProps extends React_2.ComponentProps<'div'>, Variants<
 
 // @public
 export const containerVariants: (props?: ({
-    size?: "page" | "wide" | "prose" | "full" | null | undefined;
+    size?: "page" | "prose" | "wide" | "full" | null | undefined;
 } & ClassProp) | undefined) => string;
 
 // @public (undocumented)
@@ -1303,7 +1303,7 @@ export interface GridProps extends React_2.ComponentProps<'div'>, Variants<typeo
 // @public
 export const gridVariants: (props?: ({
     cols?: "auto" | "halves" | "thirds" | "quarters" | "fifths" | null | undefined;
-    gap?: "tight" | "wide" | "default" | "seamless" | null | undefined;
+    gap?: "default" | "wide" | "tight" | "seamless" | null | undefined;
 } & ClassProp) | undefined) => string;
 
 // @public (undocumented)
@@ -1671,10 +1671,10 @@ export type PanelTone = NonNullable<Variants<typeof panelVariants>['tone']>;
 
 // @public
 export const panelVariants: (props?: ({
-    tone?: "cloth" | "ink" | "rojo" | "anil" | "verde" | "oro" | "pale" | "shade" | null | undefined;
+    tone?: "oro" | "rojo" | "anil" | "verde" | "cloth" | "pale" | "shade" | "ink" | null | undefined;
     edge?: "cut" | "none" | "band" | null | undefined;
     padding?: "none" | "sm" | "lg" | "md" | null | undefined;
-    band?: "cloth" | "rojo" | "anil" | "verde" | "oro" | null | undefined;
+    band?: "oro" | "rojo" | "anil" | "verde" | "cloth" | null | undefined;
 } & ClassProp) | undefined) => string;
 
 // @public (undocumented)
@@ -2220,9 +2220,9 @@ export interface StackProps extends React_2.ComponentProps<'div'>, Variants<type
 // @public (undocumented)
 export const stackVariants: (props?: ({
     direction?: "row" | "column" | null | undefined;
-    gap?: "2xs" | "none" | "xs" | "sm" | "lg" | "md" | "xl" | null | undefined;
-    align?: "end" | "start" | "center" | "stretch" | "baseline" | null | undefined;
-    justify?: "end" | "start" | "center" | "between" | null | undefined;
+    gap?: "none" | "xs" | "sm" | "lg" | "md" | "2xs" | "xl" | null | undefined;
+    align?: "center" | "start" | "end" | "stretch" | "baseline" | null | undefined;
+    justify?: "center" | "start" | "end" | "between" | null | undefined;
     wrap?: boolean | null | undefined;
 } & ClassProp) | undefined) => string;
 
@@ -2318,7 +2318,7 @@ export type SwatchTone = NonNullable<Variants<typeof swatchVariants>['tone']>;
 
 // @public
 export const swatchVariants: (props?: ({
-    tone?: "danger" | "success" | "warn" | "info" | "accent" | "neutral" | null | undefined;
+    tone?: "danger" | "success" | "warn" | "neutral" | "info" | "accent" | null | undefined;
     size?: "sm" | "md" | null | undefined;
     shape?: "round" | "square" | null | undefined;
 } & ClassProp) | undefined) => string;
@@ -2477,7 +2477,7 @@ export interface TextProps extends Omit<React_2.HTMLAttributes<HTMLElement>, 'co
 // @public
 export const textVariants: (props?: ({
     size?: "base" | "xs" | "sm" | "lg" | null | undefined;
-    tone?: 2 | "danger" | "success" | "default" | "muted" | null | undefined;
+    tone?: 2 | "default" | "muted" | "danger" | "success" | null | undefined;
     weight?: "regular" | "medium" | "semibold" | null | undefined;
     tabular?: boolean | null | undefined;
     truncate?: boolean | null | undefined;

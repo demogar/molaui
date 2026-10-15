@@ -116,6 +116,14 @@ export function AppShell({
             className={cn(
               'hidden shrink-0 flex-col overflow-hidden bg-cloth-pale nav:flex',
               'shadow-[inset_-1px_0_0_var(--keyline)] rtl:shadow-[inset_1px_0_0_var(--keyline)]',
+              // A layout transition kept on purpose: the content takes the
+              // room the rail gives up, and that is what collapsing means.
+              // Measured, it lays out in about a millisecond a frame; the
+              // 57 ms of style work the collapse used to cost was a table
+              // beside it restyling every cell on each frame (see Table).
+              // `contain: layout` on the rail, the audit's suggestion,
+              // changed nothing measurable, because the cost is <main>
+              // reflowing, which containment on the rail cannot stop.
               'w-60 transition-[width] duration-(--motion-base) data-collapsed:w-14',
             )}
           >

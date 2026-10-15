@@ -30,6 +30,19 @@ import { cn } from '../../lib/cn'
  */
 
 const trackClasses = 'relative block w-full overflow-hidden rounded-none bg-cloth-shade shadow-cut'
+
+/**
+ * The fill is the whole track scaled down from its inline start, not a
+ * width. Base UI sizes the indicator with `width: n%`, and a transition on
+ * `width` lays the bar out again on every frame of the ease; `scale` is the
+ * same flat shape, moved by the compositor. So the width is pinned to the
+ * track and the fraction becomes the scale.
+ */
+const fillClasses = 'block h-full origin-left rtl:origin-right forced-ink'
+function fillStyle(value: number, min = 0, max = 100): React.CSSProperties {
+  const fraction = max > min ? Math.min(1, Math.max(0, (value - min) / (max - min))) : 0
+  return { width: '100%', scale: `${fraction} 1` }
+}
 const sizeClasses = { sm: 'h-1.5', md: 'h-2.5', lg: 'h-4' } as const
 type Size = keyof typeof sizeClasses
 
@@ -56,11 +69,13 @@ export function Progress({
   size = 'md',
   tone = 'ink',
   value,
+  min,
+  max,
   ...props
 }: ProgressProps) {
   const indeterminate = value === null
   return (
-    <ProgressPrimitive.Root data-slot="progress" value={value} className={cn('grid w-full gap-2', className)} {...props}>
+    <ProgressPrimitive.Root data-slot="progress" value={value} min={min} max={max} className={cn('grid w-full gap-2', className)} {...props}>
       {label || (showValue && !indeterminate) ? (
         <div className="flex items-baseline justify-between gap-4 text-sm">
           {label ? <ProgressPrimitive.Label className="min-w-0 truncate font-ui text-ink-2">{label}</ProgressPrimitive.Label> : <span />}
@@ -76,7 +91,8 @@ export function Progress({
           <span aria-hidden className="absolute inset-0 band-oro relleno-working" />
         ) : (
           <ProgressPrimitive.Indicator
-            className={cn('block h-full forced-ink transition-[width] duration-(--motion-base)', FILL[tone])}
+            className={cn(fillClasses, 'transition-[scale] duration-(--motion-base)', FILL[tone])}
+            style={fillStyle(value, min, max)}
           />
         )}
       </ProgressPrimitive.Track>
@@ -145,7 +161,8 @@ export function Meter({
       </div>
       <MeterPrimitive.Track className={cn(trackClasses, sizeClasses[size])}>
         <MeterPrimitive.Indicator
-          className={cn('block h-full forced-ink transition-[width,background-color] duration-(--motion-base)', LEVEL_FILL[level])}
+          className={cn(fillClasses, 'transition-[scale,background-color] duration-(--motion-base)', LEVEL_FILL[level])}
+          style={fillStyle(value, min, max)}
         />
         {ticks.map((t) => (
           <span

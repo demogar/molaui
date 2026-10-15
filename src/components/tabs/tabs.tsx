@@ -64,12 +64,25 @@ export function TabsList({ className, children, ...props }: TabsListProps) {
     >
       {children}
       {variant === 'underline' ? (
+        // The bar slides and stretches with transforms, not `left` and
+        // `width`: those are layout properties, so every frame of the slide
+        // laid out the bar again, and the audit's layout-transition check
+        // fails them. A one-pixel bar scaled to the tab's width is the same
+        // shape, moved by the compositor. Base UI hands over the measured
+        // position and size as numbers in the indicator's state; its CSS
+        // variables are lengths, and CSS cannot divide a length by a length to
+        // get a scale factor.
         <TabsPrimitive.Indicator
           data-part="indicator"
           className={cn(
-            'absolute bottom-0 left-(--active-tab-left) h-[3px] w-(--active-tab-width) bg-ink forced-ink',
-            'transition-[left,width] duration-(--motion-base)',
+            'absolute bottom-0 left-0 h-[3px] w-px origin-left bg-ink forced-ink',
+            'transition-[translate,scale] duration-(--motion-base)',
           )}
+          style={({ activeTabPosition, activeTabSize }) =>
+            activeTabPosition && activeTabSize
+              ? { translate: `${activeTabPosition.left}px 0`, scale: `${activeTabSize.width} 1` }
+              : {}
+          }
         />
       ) : null}
     </TabsPrimitive.List>

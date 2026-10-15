@@ -15,14 +15,25 @@ export default [
     name: 'Everything (import *)',
     path: 'dist/index.js',
     import: '*',
-    limit: '170 kB',
+    limit: '165 kB',
     modifyRolldownConfig: reactOnly,
   },
   {
     name: 'Button + Field (tree-shaken)',
     path: 'dist/index.js',
     import: '{ Button, Field }',
-    limit: '15 kB',
+    limit: '10.25 kB',
+    modifyRolldownConfig: reactOnly,
+  },
+  // Every component pays for cn(), so it gets a budget of its own. With
+  // tailwind-merge behind it this was 8 kB, 63 per cent of the smallest
+  // import; src/lib/merge.ts replaced it. A merger growing back towards that
+  // size should be a decision, not a drift.
+  {
+    name: 'cn (the class merger)',
+    path: 'dist/index.js',
+    import: '{ cn }',
+    limit: '4.5 kB',
     modifyRolldownConfig: reactOnly,
   },
   {

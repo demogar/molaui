@@ -14,6 +14,6 @@
 - [ ] `npm run check:all` passes locally (on macOS, `visual` is CI's job: baselines are Linux-only)
 - [ ] Every new state has a story (stories are axe-tested)
 - [ ] Checked in light and dark, and at compact density, if it changes anything visual
-- [ ] New colour tokens have a contrast pairing in `contract.test.ts` and an entry in `cn.ts`
+- [ ] New colour tokens have a contrast pairing in `contract.test.ts` (`cn.test.ts` checks `cn()` still reads them as colours)
 - [ ] Docs / ADRs updated if a design decision changed
 - [ ] No real company names, branding, secrets or personal data in stories, fixtures or screenshots

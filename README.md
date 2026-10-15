@@ -270,8 +270,10 @@ run takes about three minutes.
   stories and the test files, and says plainly that no screen reader has been tried by hand yet.
   The open limitations are on the
   [Known gaps](https://demogar.github.io/molaui/?path=/docs/mola-ui-known-gaps--overview) page.
-- **`tailwind-merge` knows the token vocabulary**, with a test that fails if a new colour token is
-  not registered — the silent class-dropping bug this prevents shipped in the system's first home.
+- **`cn()` knows the token vocabulary**, with a test that fails if a colour token would be read as
+  a size — the silent class-dropping bug this prevents shipped in the system's first home. The
+  merger is Mola's own: tailwind-merge's rules for the families the components write, at half the
+  bytes, and a test compares the two on every pair of utilities.
 
 ## Repository map
 
