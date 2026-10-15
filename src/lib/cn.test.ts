@@ -33,4 +33,56 @@ describe('cn', () => {
   it('treats the four voices as one font-family group', () => {
     expect(cn('font-ui', 'font-mono')).toBe('font-mono')
   })
+
+  it('knows the line heights and tracking by job, and the overlay elevation', () => {
+    expect(cn('leading-body', 'leading-heading')).toBe('leading-heading')
+    expect(cn('tracking-label', 'tracking-figures')).toBe('tracking-figures')
+    expect(cn('shadow-floating', 'shadow-overlay')).toBe('shadow-overlay')
+  })
+})
+
+describe('Mola’s own utilities', () => {
+  const cloth = readFileSync(resolve(import.meta.dirname, '../styles/cloth.css'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '')
+  /** Every @utility, a functional one (`cut-*`) tried with a colour. */
+  const utilities = [...cloth.matchAll(/^@utility ([a-z0-9]+(?:-[a-z0-9]+)*(?:-\*)?)/gm)].map((m) => m[1]!.replace(/\*$/, 'ink'))
+
+  /** The utilities that set something no other class sets, so there is nothing for them to replace. */
+  const STANDS_ALONE: Record<string, string> = {
+    rotulo: 'the whole label register at once: family, size, weight, width, tracking, case',
+    'display-cut': 'a text-shadow; nothing else in the system sets one',
+    'forced-focus': 'an outline under forced colours only',
+    'scroll-cloth': 'the scrollbar colours; nothing else sets them',
+    'flip-rtl': 'a scale under :dir(rtl) only',
+  }
+
+  it('puts every @utility in cloth.css in a group, or says why it stands alone', () => {
+    // A class the merger knows replaces a copy of itself; one it leaves alone
+    // survives twice. cn('band-oro', 'band-rojo') used to keep both.
+    expect(utilities.length).toBeGreaterThan(40)
+    const orphans = utilities.filter((u) => !(u in STANDS_ALONE) && cn(u, u) !== u)
+    expect(orphans).toEqual([])
+    expect(Object.keys(STANDS_ALONE).filter((u) => !utilities.includes(u))).toEqual([])
+  })
+
+  it('lets a later band, panel, relleno, width or forced role replace an earlier one', () => {
+    expect(cn('band-oro', 'band-danger')).toBe('band-danger')
+    expect(cn('cut', 'cut-band')).toBe('cut-band')
+    expect(cn('on-ink', 'on-layer')).toBe('on-layer')
+    expect(cn('relleno', 'relleno-working')).toBe('relleno-working')
+    expect(cn('forced-ink', 'forced-selected')).toBe('forced-selected')
+    expect(cn('wdth-display', 'wdth-label')).toBe('wdth-label')
+  })
+
+  it('adds edges on different sides and replaces one on the same side', () => {
+    expect(cn('cut-t', 'cut-b')).toBe('cut-t cut-b')
+    expect(cn('bar-start-ink', 'rule-b-soft', 'focus-ring')).toBe('bar-start-ink rule-b-soft focus-ring')
+    expect(cn('rule-b', 'cut-b')).toBe('cut-b')
+    expect(cn('bar-start-ink', 'bar-start-danger')).toBe('bar-start-danger')
+    expect(cn('cut-anil', 'cut-thin')).toBe('cut-thin')
+  })
+
+  it('lets an edge and a shadow replace each other, since each writes the whole box-shadow', () => {
+    expect(cn('shadow-cut', 'rule-b')).toBe('rule-b')
+    expect(cn('rule-b', 'shadow-none')).toBe('shadow-none')
+  })
 })

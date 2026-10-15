@@ -26,12 +26,12 @@
 export const fieldControlClasses = [
   'w-full min-w-0 rounded-none border-0 bg-cloth-pale',
   'font-ui text-ink',
-  'shadow-cut band-oro [--cut-reveal:3px]',
+  'shadow-cut band-accent [--cut-reveal:3px]',
   'placeholder:text-ink-muted',
   'transition-[box-shadow,background-color]',
   'hover:cut-band',
-  'focus:outline-none focus:shadow-[var(--focus-ring)]',
-  'aria-invalid:band-rojo aria-invalid:cut-band',
+  'focus:outline-none focus:focus-ring',
+  'aria-invalid:band-danger aria-invalid:cut-band',
   // Focus is added to invalid, not swapped for it: when focus is sent to the
   // first broken field, the person has to see that the caret landed there,
   // and also that this is the field to fix. The plain ring used to replace

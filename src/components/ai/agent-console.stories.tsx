@@ -167,7 +167,7 @@ function AgentConsole() {
       <header className="flex items-center justify-between gap-4 border-b border-ink bg-cloth-pale px-4 py-2.5">
         <div className="flex items-center gap-3">
           <span aria-hidden className="grid size-6 place-items-center bg-ink">
-            <span className="size-3 bg-rojo shadow-[0_0_0_2px_var(--oro)]" />
+            <span className="size-3 bg-accent" />
           </span>
           <p className="m-0 font-display text-base font-bold tracking-display wdth-display">Cayuco</p>
           <span className="rotulo text-ink-muted">Knowledge agent</span>
@@ -195,7 +195,7 @@ function AgentConsole() {
                       className="group flex w-full items-start gap-3 bg-cloth-pale p-3 text-start font-ui text-sm text-ink shadow-cut band-oro [--cut-reveal:3px] transition-shadow hover:cut-band"
                     >
                       <span className="flex-1">{s}</span>
-                      <ArrowRight aria-hidden className="mt-0.5 size-4 shrink-0 text-ink-muted group-hover:text-ink rtl:-scale-x-100" />
+                      <ArrowRight aria-hidden className="mt-0.5 size-4 shrink-0 text-ink-muted group-hover:text-ink flip-rtl" />
                     </button>
                   ))}
                 </div>

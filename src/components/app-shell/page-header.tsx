@@ -42,7 +42,7 @@ export function PageHeader({
       data-slot="page-header"
       className={cn(
         'flex flex-col gap-3 px-4 pt-5 sm:px-6',
-        tabs ? 'pb-0' : 'pb-5 shadow-[inset_0_-1px_0_var(--keyline)]',
+        tabs ? 'pb-0' : 'pb-5 rule-b',
         className,
       )}
       {...props}
@@ -58,7 +58,7 @@ export function PageHeader({
       {meta && meta.length > 0 ? (
         <ul data-part="meta" className="m-0 flex list-none flex-wrap items-center gap-y-1 p-0 text-xs text-ink-muted">
           {meta.map((item, i) => (
-            <li key={i} className={cn('flex items-center gap-1.5', i > 0 && 'ms-3 ps-3 shadow-[inset_1px_0_0_var(--keyline)] rtl:shadow-[inset_-1px_0_0_var(--keyline)]')}>
+            <li key={i} className={cn('flex items-center gap-1.5', i > 0 && 'ms-3 ps-3 rule-s')}>
               {item}
             </li>
           ))}

@@ -31,7 +31,7 @@ export function Sidebar({ label, header, footer, className, children, ...props }
         {children}
       </nav>
       {footer ? (
-        <div className="shrink-0 px-2 py-2 shadow-[inset_0_1px_0_var(--keyline)]">{footer}</div>
+        <div className="shrink-0 px-2 py-2 rule-t">{footer}</div>
       ) : null}
     </div>
   )
@@ -76,7 +76,7 @@ export interface NavItemProps extends Omit<React.ComponentProps<'a'>, 'children'
   count?: number
   /** Read with the count: "3 failed". Without it the number is read alone. */
   countLabel?: string
-  /** `attention` fills the count in rojo — for things that need a person, not for totals. */
+  /** `attention` fills the count in the danger colour — for failures that need a person, not for totals. */
   countTone?: 'neutral' | 'attention'
 }
 
@@ -114,15 +114,14 @@ export function NavItem({
           'transition-colors',
           'hover:bg-ink-soft hover:text-ink',
           'aria-[current=page]:bg-ink-soft aria-[current=page]:font-semibold aria-[current=page]:text-ink',
-          'aria-[current=page]:shadow-[inset_3px_0_0_var(--ink)] rtl:aria-[current=page]:shadow-[inset_-3px_0_0_var(--ink)]',
+          'aria-[current=page]:bar-start-ink',
           'aria-[current=page]:forced-selected',
-          'focus-visible:shadow-[var(--focus-ring)]',
-          // The current item's bar is a state variant, which comes after
-          // `focus-visible:` and used to replace the ring: the focused current
-          // item was pixel-identical to the unfocused one. The pair keeps both.
-          'aria-[current=page]:focus-visible:shadow-[var(--focus-ring),inset_3px_0_0_var(--ink)]',
-          'rtl:aria-[current=page]:focus-visible:shadow-[var(--focus-ring),inset_-3px_0_0_var(--ink)]',
-          '[&_svg]:size-4 [&_svg]:shrink-0',
+          // The bar and the ring are separate edge slots, so a focused current
+          // item shows both. As one box-shadow string each, the bar (a state
+          // variant, emitted after `focus-visible:`) replaced the ring, and a
+          // pair of combined strings per direction had to put it back.
+          'focus-visible:focus-ring',
+          '[&_svg]:size-(--icon) [&_svg]:shrink-0',
           collapsed && 'justify-center px-0',
           className,
         )}
@@ -138,7 +137,7 @@ export function NavItem({
             <span
               className={cn(
                 'absolute -top-1 -inset-e-1.5 size-1.5',
-                countTone === 'attention' ? 'bg-rojo' : 'bg-ink-muted',
+                countTone === 'attention' ? 'bg-danger' : 'bg-ink-muted',
               )}
             />
           ) : null}
@@ -157,7 +156,7 @@ export function NavItem({
                 collapsed
                   ? 'hidden'
                   : countTone === 'attention'
-                    ? 'bg-rojo px-1.5 py-px text-2xs font-semibold text-on-layer'
+                    ? 'bg-danger px-1.5 py-px text-2xs font-semibold text-on-layer'
                     : 'text-xs text-ink-muted',
               )}
             >

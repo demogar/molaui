@@ -20,7 +20,9 @@ export type Pair = [fg: string, bg: string, min: number, themes?: ThemeName[]]
 
 const grounds = ['--cloth', '--cloth-pale', '--cloth-shade']
 const inks = ['--ink', '--ink-2', '--ink-muted']
-const washes = ['--rojo-soft', '--anil-soft', '--verde-soft', '--oro-soft', '--ink-soft']
+// The role washes are aliases of layer washes, measured under their own
+// names so a re-accented or re-dyed role is measured too.
+const washes = ['--rojo-soft', '--anil-soft', '--verde-soft', '--oro-soft', '--ink-soft', '--danger-soft', '--accent-soft', '--selected']
 
 export const PAIRS: Pair[] = [
   // The ink ramp on every cloth ground.
@@ -29,7 +31,7 @@ export const PAIRS: Pair[] = [
   ...washes.flatMap((w) => inks.map((i): Pair => [i, w, 4.5])),
   // Layer and status colours as text on the page and on raised cloth.
   ...['--cloth', '--cloth-pale'].flatMap((g) =>
-    ['--rojo', '--rojo-deep', '--anil', '--verde', '--warn', '--danger', '--success', '--info'].map(
+    ['--rojo', '--rojo-deep', '--anil', '--verde', '--warn', '--danger', '--success', '--info', '--ink-danger'].map(
       (c): Pair => [c, g, 4.5],
     ),
   ),
@@ -42,6 +44,11 @@ export const PAIRS: Pair[] = [
   ['--on-layer', '--anil', 4.5],
   ['--on-layer', '--verde', 4.5],
   ['--on-oro', '--oro', 4.5],
+  ['--on-accent', '--accent', 4.5],
+  // A filled danger region: the danger button, a solid badge, a highlighted
+  // destructive menu item, a failure count. And pressed.
+  ['--on-layer', '--danger', 4.5],
+  ['--on-layer', '--danger-strong', 4.5],
   // The inverse panel.
   ['--on-ink', '--ink', 4.5],
   ['--on-ink-muted', '--ink', 4.5],
@@ -60,6 +67,8 @@ export const PAIRS: Pair[] = [
   ['--anil', '--anil-soft', 4.5],
   ['--verde', '--verde-soft', 4.5],
   ['--rojo-deep', '--rojo-soft', 4.5],
+  // Danger's words on its own wash: a failed tool call, an error callout.
+  ['--ink-danger', '--danger-soft', 4.5],
   // Status ink on the neutral wash: a pressed feedback button in Message.
   // --ink-warn is not promised here (4.24 in light) and nothing uses it.
   ['--ink-success', '--ink-soft', 4.5],
@@ -75,6 +84,8 @@ export const PAIRS: Pair[] = [
   ['--verde', '--verde-soft', 3],
   ['--warn', '--oro-soft', 3],
   ['--rojo', '--rojo-soft', 3],
+  // The danger bar on the danger wash (bar-start-danger on bg-danger-soft).
+  ['--danger', '--danger-soft', 3],
   // The keyline bounds every control: a UI boundary owes 3:1.
   ...grounds.map((g): Pair => ['--ink', g, 3]),
 ]

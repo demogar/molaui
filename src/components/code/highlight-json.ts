@@ -8,7 +8,12 @@
  *   key      ink        (structure, the thing you read past)
  *   string   verde
  *   number   añil
- *   boolean  rojo       true / false / null — the values that flip behaviour
+ *   boolean  ink, bold  true / false / null — the values that flip behaviour
+ *
+ * The literals were rojo until 2026-10. A failed tool call's payload sits
+ * beside its red FAILED mark, and a red `false` in it read as a second
+ * error (docs/adr/0008-the-rojo-register.md); weight sets them apart from
+ * the keys instead.
  *
  * No dependency. A general highlighter is 30–200 kB to colour a format with
  * six token kinds; this is one regex and it fails safe — anything it does not
@@ -49,7 +54,7 @@ export const JSON_TOKEN_CLASS: Record<JsonTokenKind, string> = {
   key: 'text-ink',
   string: 'text-verde',
   number: 'text-anil',
-  literal: 'text-rojo-deep',
+  literal: 'font-semibold text-ink',
   punct: 'text-ink-muted',
   plain: '',
 }

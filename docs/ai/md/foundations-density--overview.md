@@ -15,6 +15,7 @@ dense table and its toolbar never disagree about what "small" means.
 | Control height | 28px | 36px | 48px |
 | Row height | 30px | 40px | 52px |
 | Body text | 13px | 14px | 17px |
+| Default icon | 14px | 16px | 18px |
 | Spacing unit | 3.5px | 4px | 4px |
 | Use it for | logs, run tables, traces | the product default | forms, onboarding, settings |
 
@@ -22,7 +23,9 @@ Every value each density sets, read live from `tokens.css`, is on
 [Spacing](https://demogar.github.io/molaui/?path=/docs/foundations-spacing--overview).
 
 `spacious` is the original editorial metric of the system this grew from, kept so its lineage is one
-attribute away.
+attribute away. That is why its spacing unit stays at 4px: the editorial site was laid out on it, and
+spacious exists to reproduce it exactly. Its type and its icons grow; its gaps and padding do not
+(ADR 0005, amended 2026-10-14).
 
 > Not included in the Markdown version: an interactive `Specimen` block. See it on the page: https://demogar.github.io/molaui/?path=/docs/foundations-density--overview
 

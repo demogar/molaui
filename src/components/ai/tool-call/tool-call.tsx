@@ -100,10 +100,10 @@ export function ToolCall({
     <div
       data-slot="tool-call"
       data-status={status}
-      className={cn('relative bg-cloth-pale shadow-cut', waiting && 'band-oro cut-band [--cut-reveal:3px]', className)}
+      className={cn('relative bg-cloth-pale shadow-cut', waiting && 'band-accent cut-band [--cut-reveal:3px]', className)}
       {...props}
     >
-      {working ? <span aria-hidden data-part="progress" className="absolute inset-x-0 top-0 h-[3px] band-oro relleno-working" /> : null}
+      {working ? <span aria-hidden data-part="progress" className="absolute inset-x-0 top-0 h-(--bar-w) band-accent relleno-working" /> : null}
       <Collapsible.Root open={forcedOpen || openState} onOpenChange={setOpenState}>
         <Collapsible.Trigger
           data-part="header"
@@ -111,17 +111,17 @@ export function ToolCall({
           className={cn(
             'group/trigger flex w-full min-h-(--control-h) items-center gap-2.5 px-3 py-2 text-start',
             'transition-colors enabled:hover:bg-ink-soft',
-            'focus-visible:shadow-[var(--focus-ring-inset)] disabled:cursor-default',
+            'focus-visible:focus-ring-inset disabled:cursor-default',
           )}
         >
           <Plus
             aria-hidden
             className={cn(
-              'size-3.5 shrink-0 text-ink-muted transition-transform duration-(--motion-base) group-data-[panel-open]/trigger:rotate-45',
+              'size-(--icon-sm) shrink-0 text-ink-muted transition-transform duration-(--motion-base) group-data-[panel-open]/trigger:rotate-45',
               (!hasBody || forcedOpen) && 'invisible',
             )}
           />
-          <Wrench aria-hidden className="size-3.5 shrink-0 text-ink-muted" />
+          <Wrench aria-hidden className="size-(--icon-sm) shrink-0 text-ink-muted" />
           <span className="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
             <span data-part="name" className="literal truncate text-sm font-medium text-ink">{name}</span>
             {title ? <span data-part="title" className="truncate font-ui text-sm text-ink-muted">{title}</span> : null}
@@ -174,7 +174,7 @@ function ErrorBlock({
   onRetry?: () => void
 }) {
   return (
-    <div role="alert" data-part="error" className="flex flex-wrap items-start gap-x-4 gap-y-3 bg-rojo-soft px-3.5 py-3 shadow-[inset_3px_0_0_var(--rojo)] rtl:shadow-[inset_-3px_0_0_var(--rojo)]">
+    <div role="alert" data-part="error" className="flex flex-wrap items-start gap-x-4 gap-y-3 bg-danger-soft px-3.5 py-3 bar-start-danger">
       <div className="min-w-0 flex-1">
         <p className="m-0 font-ui text-sm font-semibold text-ink">
           {status === 'timed_out' ? 'The tool did not answer in time.' : 'The tool returned an error.'}
@@ -200,7 +200,7 @@ function ApprovalBlock({ approval }: { approval: ToolCallApproval }) {
   return (
     <div data-part="approval" className="flex flex-col gap-3 bg-oro-soft px-3.5 py-3">
       <div className="flex items-start gap-2.5">
-        <ShieldAlert aria-hidden className="mt-0.5 size-4 shrink-0 text-ink" />
+        <ShieldAlert aria-hidden className="mt-0.5 size-(--icon) shrink-0 text-ink" />
         <div className="min-w-0">
           <p className="m-0 font-ui text-sm font-semibold text-ink">This call needs your approval.</p>
           <div className="m-0 mt-1 font-ui text-sm text-ink-on-tint">{approval.reason}</div>
@@ -236,7 +236,7 @@ export function ToolCallGroup({ label, count, className, children, ...props }: T
   return (
     <div role="group" aria-label={label ?? `${count} tools in parallel`} className={cn('flex flex-col gap-2', className)} {...props}>
       <p className="m-0 rotulo text-ink-muted">{label ?? `${count} tools in parallel`}</p>
-      <div className="flex flex-col gap-2 border-s-[3px] border-ink ps-3">{children}</div>
+      <div className="flex flex-col gap-2 border-s-(length:--bar-w) border-ink ps-3">{children}</div>
     </div>
   )
 }

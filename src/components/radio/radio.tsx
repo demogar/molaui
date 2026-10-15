@@ -31,10 +31,10 @@ import { ChoiceField } from '../checkbox/choice-field'
  */
 const radioClasses = [
   'relative inline-grid size-4 shrink-0 place-items-center rounded-none',
-  'bg-cloth-pale shadow-cut band-oro [--cut-reveal:2px]',
+  'bg-cloth-pale shadow-cut band-accent [--cut-reveal:2px]',
   'transition-[box-shadow,background-color]',
-  'hover:cut-band focus-visible:shadow-[var(--focus-ring)]',
-  'data-invalid:band-rojo data-invalid:cut-band',
+  'hover:cut-band focus-visible:focus-ring',
+  'data-invalid:band-danger data-invalid:cut-band',
   'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:hover:shadow-cut',
 ] as const
 

@@ -407,7 +407,7 @@ export function DataTable<Row>({
           {showBulk ? (
             <div
               data-slot="data-table-bulk"
-              className="flex h-full min-w-0 flex-1 items-center gap-2 bg-oro-soft ps-3 pe-1 shadow-[inset_3px_0_0_var(--ink)] rtl:shadow-[inset_-3px_0_0_var(--ink)] forced-selected"
+              className="flex h-full min-w-0 flex-1 items-center gap-2 bg-selected ps-3 pe-1 bar-start-ink forced-selected"
             >
               {/* `dir="auto"`: a count that opens with a digit is otherwise
                   reordered in a right-to-left page, "runs selected 3". */}
@@ -427,7 +427,7 @@ export function DataTable<Row>({
                   cut. The focus ring is 6.5px and the bar has 4px above and
                   below its buttons, so here it is drawn inside the button,
                   under the kept cut, rather than clipped to a sliver. */}
-              <div className="scroll-cloth ms-auto flex min-w-0 items-center gap-1.5 overflow-x-auto p-0.5 [&>*]:shrink-0 [&>*]:focus-visible:shadow-[var(--cut),var(--focus-ring-inset)]">
+              <div className="scroll-cloth ms-auto flex min-w-0 items-center gap-1.5 overflow-x-auto p-0.5 [&>*]:shrink-0 [&>*]:focus-visible:cut-ink [&>*]:focus-visible:focus-ring-inset">
                 {bulkActions({ selection: new Set(selection), clear: clearSelection })}
               </div>
             </div>

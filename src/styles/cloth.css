@@ -97,6 +97,311 @@
 @utility band-cloth {
   --band: var(--cloth-pale);
 }
+/* The accent reveal: what a control shows under the hand, and the texture of
+ * work in progress. --accent is gold; naming the job lets an app re-accent. */
+@utility band-accent {
+  --band: var(--accent);
+}
+/* A seam cut in the danger role: a destructive dialog, an invalid field, a
+ * failed panel. On a product surface rojo is only ever this (ADR 0008). */
+@utility band-danger {
+  --band: var(--danger);
+}
+
+/* ── edges ────────────────────────────────────────────────────────────
+ * Every edge in Mola is a box-shadow, and the components used to type each
+ * one in place: 70 `shadow-[inset_3px_0_0_var(--ink)]`-style strings
+ * redrawing the same six edges, and 33 `rtl:` twins with the sign flipped,
+ * which were the largest selectors in the shipped CSS. A typo in one, or a
+ * forgotten twin, was a bar on the wrong side in Arabic that no test saw.
+ * These utilities name the edge instead, and carry their own right-to-left
+ * form, so a component writes `bar-start-ink` and is done.
+ *
+ *   rule-t  rule-b  rule-s  rule-e    a decorative keyline on one side, at
+ *                                     --rule-w; `-soft` for --keyline-soft
+ *   cut-t   cut-b   cut-s   cut-e     the blade edge on one side: ink at
+ *                                     --cut-w
+ *   bar-start-<colour>                the current item, or the region a
+ *   bar-bottom-<colour>               status owns: --bar-w on one edge
+ *   cut-<colour>  cut-thin  rule-ring a keyline all the way round: a
+ *                                     coloured cut, a 1px ink cut, a 1px
+ *                                     decorative ring
+ *   cut-tab                           the active tab: three sides, open
+ *                                     toward its panel
+ *   cut-gap                           a cut with a cloth gap outside it, for
+ *                                     shapes that overlap (an avatar stack)
+ *   keycap                            a key's edge and its foot
+ *   focus-ring  focus-ring-inset      the focus ring, as a slot
+ *
+ * One element has one box-shadow, so edges on different sides used to be
+ * written as one long string (`inset_3px_0_0_…,inset_0_-1px_0_…`). Here each
+ * side is a slot, a custom property that does not inherit, and every edge
+ * utility paints all six slots: `cut-t cut-b` is a top and a bottom edge,
+ * `bar-start-ink rule-b-soft` is a selected row's bar and its rule, and
+ * `focus-visible:focus-ring` on a current item keeps its bar while the ring
+ * is drawn. Slots do not inherit, so a bar on a row never reappears on the
+ * cells inside it. Two utilities on the same side replace each other, as
+ * `cn()` knows.
+ *
+ * `start` and `end` are the reading direction's sides. :dir(rtl) is in every
+ * browser the system supports; the attribute forms are kept because Tailwind's
+ * own `rtl:` variant matches them, and a page that sets `dir` on an element
+ * must flip the same way here as it did there.
+ *
+ * Forced colours drop box-shadows. A ring comes back as an outline, as
+ * `cut` does. A one-sided edge comes back as a border in CanvasText on the
+ * same side: it reflows the box by its width, but only in that mode, and a
+ * table without its row rules or a current item without its bar is harder to
+ * read there than one that moved a pixel. Focus needs nothing here: the base
+ * layer draws it as an important outline on every :focus-visible. */
+@property --edge-focus {
+  syntax: '*';
+  inherits: false;
+  initial-value: 0 0 transparent;
+}
+@property --edge-ring {
+  syntax: '*';
+  inherits: false;
+  initial-value: 0 0 transparent;
+}
+@property --edge-s {
+  syntax: '*';
+  inherits: false;
+  initial-value: 0 0 transparent;
+}
+@property --edge-e {
+  syntax: '*';
+  inherits: false;
+  initial-value: 0 0 transparent;
+}
+@property --edge-t {
+  syntax: '*';
+  inherits: false;
+  initial-value: 0 0 transparent;
+}
+@property --edge-b {
+  syntax: '*';
+  inherits: false;
+  initial-value: 0 0 transparent;
+}
+
+@utility rule-t {
+  --edge-t: inset 0 var(--rule-w) 0 var(--keyline);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  @media (forced-colors: active) {
+    border-block-start: var(--rule-w) solid CanvasText;
+  }
+}
+@utility rule-b {
+  --edge-b: inset 0 calc(var(--rule-w) * -1) 0 var(--keyline);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  @media (forced-colors: active) {
+    border-block-end: var(--rule-w) solid CanvasText;
+  }
+}
+@utility rule-s {
+  --edge-s: inset var(--rule-w) 0 0 var(--keyline);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  &:where(:dir(rtl), [dir='rtl'], [dir='rtl'] *) {
+    --edge-s: inset calc(var(--rule-w) * -1) 0 0 var(--keyline);
+  }
+  @media (forced-colors: active) {
+    border-inline-start: var(--rule-w) solid CanvasText;
+  }
+}
+@utility rule-e {
+  --edge-e: inset calc(var(--rule-w) * -1) 0 0 var(--keyline);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  &:where(:dir(rtl), [dir='rtl'], [dir='rtl'] *) {
+    --edge-e: inset var(--rule-w) 0 0 var(--keyline);
+  }
+  @media (forced-colors: active) {
+    border-inline-end: var(--rule-w) solid CanvasText;
+  }
+}
+@utility rule-t-soft {
+  --edge-t: inset 0 var(--rule-w) 0 var(--keyline-soft);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  @media (forced-colors: active) {
+    border-block-start: var(--rule-w) solid CanvasText;
+  }
+}
+@utility rule-b-soft {
+  --edge-b: inset 0 calc(var(--rule-w) * -1) 0 var(--keyline-soft);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  @media (forced-colors: active) {
+    border-block-end: var(--rule-w) solid CanvasText;
+  }
+}
+@utility rule-s-soft {
+  --edge-s: inset var(--rule-w) 0 0 var(--keyline-soft);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  &:where(:dir(rtl), [dir='rtl'], [dir='rtl'] *) {
+    --edge-s: inset calc(var(--rule-w) * -1) 0 0 var(--keyline-soft);
+  }
+  @media (forced-colors: active) {
+    border-inline-start: var(--rule-w) solid CanvasText;
+  }
+}
+@utility rule-e-soft {
+  --edge-e: inset calc(var(--rule-w) * -1) 0 0 var(--keyline-soft);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  &:where(:dir(rtl), [dir='rtl'], [dir='rtl'] *) {
+    --edge-e: inset var(--rule-w) 0 0 var(--keyline-soft);
+  }
+  @media (forced-colors: active) {
+    border-inline-end: var(--rule-w) solid CanvasText;
+  }
+}
+
+@utility cut-t {
+  --edge-t: inset 0 var(--cut-w) 0 var(--ink);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  @media (forced-colors: active) {
+    border-block-start: var(--cut-w) solid CanvasText;
+  }
+}
+@utility cut-b {
+  --edge-b: inset 0 calc(var(--cut-w) * -1) 0 var(--ink);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  @media (forced-colors: active) {
+    border-block-end: var(--cut-w) solid CanvasText;
+  }
+}
+@utility cut-s {
+  --edge-s: inset var(--cut-w) 0 0 var(--ink);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  &:where(:dir(rtl), [dir='rtl'], [dir='rtl'] *) {
+    --edge-s: inset calc(var(--cut-w) * -1) 0 0 var(--ink);
+  }
+  @media (forced-colors: active) {
+    border-inline-start: var(--cut-w) solid CanvasText;
+  }
+}
+@utility cut-e {
+  --edge-e: inset calc(var(--cut-w) * -1) 0 0 var(--ink);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  &:where(:dir(rtl), [dir='rtl'], [dir='rtl'] *) {
+    --edge-e: inset var(--cut-w) 0 0 var(--ink);
+  }
+  @media (forced-colors: active) {
+    border-inline-end: var(--cut-w) solid CanvasText;
+  }
+}
+
+/* The colour is a token, so the scope test reads `bar-start-anil` as an
+ * edge in --anil and refuses one whose token is not edge-scoped. */
+@utility bar-start-* {
+  --bar-color: --value(--color-*);
+  --edge-s: inset var(--bar-w) 0 0 var(--bar-color);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  &:where(:dir(rtl), [dir='rtl'], [dir='rtl'] *) {
+    --edge-s: inset calc(var(--bar-w) * -1) 0 0 var(--bar-color);
+  }
+  @media (forced-colors: active) {
+    border-inline-start: var(--bar-w) solid CanvasText;
+  }
+}
+@utility bar-bottom-* {
+  --bar-color: --value(--color-*);
+  --edge-b: inset 0 calc(var(--bar-w) * -1) 0 var(--bar-color);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  @media (forced-colors: active) {
+    border-block-end: var(--bar-w) solid CanvasText;
+  }
+}
+
+/* A cut in a colour: an outline badge in its tone, a thumb, a vertical
+ * relleno's edge. Not focusable, so no focused form; `cut` is the
+ * interactive one. */
+@utility cut-* {
+  --edge-ring: 0 0 0 var(--cut-w) --value(--color-*);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  @media (forced-colors: active) {
+    outline: 1px solid CanvasText !important;
+    outline-offset: -1px !important;
+  }
+}
+/* For a mark whose colour is the text's: a menu's checkbox square. */
+@utility cut-current {
+  --edge-ring: 0 0 0 var(--cut-w) currentColor;
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  @media (forced-colors: active) {
+    outline: 1px solid CanvasText !important;
+    outline-offset: -1px !important;
+  }
+}
+/* A 1px ink cut, for a mark too small to carry --cut-w: a gold dot or
+ * swatch on light cloth, where gold alone measures 1.66:1. */
+@utility cut-thin {
+  --edge-ring: 0 0 0 var(--rule-w) var(--ink);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  @media (forced-colors: active) {
+    outline: 1px solid CanvasText !important;
+    outline-offset: -1px !important;
+  }
+}
+/* A decorative 1px ring: a shortcut hint that is not a control. On an ink
+ * panel the `on-ink` utility turns --keyline into --keyline-on-ink. */
+@utility rule-ring {
+  --edge-ring: 0 0 0 var(--rule-w) var(--keyline);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  @media (forced-colors: active) {
+    outline: 1px solid CanvasText !important;
+    outline-offset: -1px !important;
+  }
+}
+@utility cut-tab {
+  --edge-ring:
+    calc(var(--cut-w) * -1) 0 0 0 var(--ink), var(--cut-w) 0 0 0 var(--ink), 0 calc(var(--cut-w) * -1) 0 0 var(--ink);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  @media (forced-colors: active) {
+    outline: 1px solid CanvasText !important;
+    outline-offset: -1px !important;
+  }
+}
+/* The same cloth gap the focus ring leaves, so overlapping shapes are cut
+ * apart rather than merged into one outline. */
+@utility cut-gap {
+  --edge-ring: 0 0 0 var(--cut-w) var(--ink), 0 0 0 calc(var(--cut-w) + var(--focus-gap)) var(--cloth);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  @media (forced-colors: active) {
+    outline: 1px solid CanvasText !important;
+    outline-offset: -1px !important;
+  }
+}
+/* A key: a thin edge, and a 2px foot under it where the key stands up off
+ * the page. */
+@utility keycap {
+  --edge-ring: 0 0 0 var(--rule-w) var(--ink-muted), 0 2px 0 0 var(--ink-muted);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  @media (forced-colors: active) {
+    outline: 1px solid CanvasText !important;
+    outline-offset: -1px !important;
+  }
+}
+
+/* Focus as a slot, so it adds to an edge rather than replacing it: a current
+ * sidebar item keeps its bar while focused. `focus-ring-inset` is for an
+ * item inside a clipping or framed container; see --focus-ring-inset. */
+@utility focus-ring {
+  --edge-focus: var(--focus-ring);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+}
+@utility focus-ring-inset {
+  --edge-focus: var(--focus-ring-inset);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+}
+
+/* ── right to left ────────────────────────────────────────────────────
+ * A glyph that points along the reading direction (a chevron, an arrow, a
+ * panel toggle) is mirrored on a right-to-left page. Fourteen elements wrote
+ * `rtl:-scale-x-100`; this is the name for it. */
+@utility flip-rtl {
+  &:where(:dir(rtl), [dir='rtl'], [dir='rtl'] *) {
+    scale: -1 1;
+  }
+}
 
 /* ── forced colours ───────────────────────────────────────────────────
  * Windows High Contrast (`forced-colors: active`) drops every box-shadow and
@@ -151,6 +456,12 @@
   }
 }
 @utility shadow-floating {
+  @media (forced-colors: active) {
+    outline: 1px solid CanvasText !important;
+    outline-offset: -1px !important;
+  }
+}
+@utility shadow-overlay {
   @media (forced-colors: active) {
     outline: 1px solid CanvasText !important;
     outline-offset: -1px !important;
@@ -456,6 +767,10 @@
   );
   background-size: 18px 100%;
   animation: var(--animate-mola-shuttle);
+  /* The slits travel the way the work reads: toward the end edge. */
+  &:where(:dir(rtl), [dir='rtl'], [dir='rtl'] *) {
+    animation-direction: reverse;
+  }
   /* Forced colours drop the gradient and repaint the band as Canvas, which
    * also covered the track's edge: an indeterminate bar became nothing at
    * all. The same slits in the system's text colour keep "work is

@@ -323,7 +323,7 @@ function Legend({ anatomy, layout, title }: { anatomy: Anatomy; layout: Layout |
         {pinned.map(({ part, name, does }, i) => {
           const utilities = layout?.utilities[part] ?? []
           return (
-            <li key={part} className="flex gap-3 py-3 shadow-[inset_0_-1px_0_var(--keyline)]">
+            <li key={part} className="flex gap-3 py-3 rule-b">
               <PinMark n={i + 1} className="ms-1 mt-0.5" />
               <div className="grid min-w-0 content-start gap-1">
                 <PartName anatomy={anatomy} part={part} name={name} />
@@ -347,7 +347,7 @@ function Legend({ anatomy, layout, title }: { anatomy: Anatomy; layout: Layout |
           <p className="m-0 rotulo text-ink-muted">In other states</p>
           <ul className="m-0 grid list-none gap-x-8 p-0 md:grid-cols-2">
             {others.map(({ part, name, does, story }) => (
-              <li key={part} className="grid min-w-0 content-start gap-1 py-3 shadow-[inset_0_-1px_0_var(--keyline)]">
+              <li key={part} className="grid min-w-0 content-start gap-1 py-3 rule-b">
                 <PartName anatomy={anatomy} part={part} name={name} />
                 <p className="m-0 text-ink-2">
                   {does}{' '}

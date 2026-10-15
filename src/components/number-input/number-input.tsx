@@ -142,7 +142,7 @@ const stepperClasses = [
   'transition-colors',
   'hover:bg-ink-soft hover:text-ink active:bg-ink active:text-on-ink',
   'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:bg-cloth-shade data-disabled:active:bg-cloth-shade data-disabled:active:text-ink-muted',
-  '[&_svg]:size-3.5',
+  '[&_svg]:size-(--icon-sm)',
 ] as const
 
 export function NumberInput({
@@ -208,8 +208,8 @@ export function NumberInput({
         fieldControlClasses,
         fieldControlSizes[size],
         'flex items-center gap-2 pe-0 cursor-text',
-        'focus-within:shadow-[var(--focus-ring)] focus-within:hover:shadow-[var(--focus-ring)]',
-        'has-[[aria-invalid=true]]:band-rojo has-[[aria-invalid=true]]:cut-band',
+        'focus-within:focus-ring focus-within:hover:focus-ring',
+        'has-[[aria-invalid=true]]:band-danger has-[[aria-invalid=true]]:cut-band',
         'has-[[aria-invalid=true]]:focus-within:cut-band-focus',
         'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
         label ? undefined : className,

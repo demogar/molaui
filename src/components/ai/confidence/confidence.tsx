@@ -11,7 +11,7 @@ const WORD: Record<ConfidenceLevel, string> = {
   low: 'Low confidence',
 }
 const FILLED: Record<ConfidenceLevel, number> = { high: 3, medium: 2, low: 1 }
-const FILL: Record<ConfidenceLevel, string> = { high: 'bg-verde', medium: 'bg-oro', low: 'bg-rojo' }
+const FILL: Record<ConfidenceLevel, string> = { high: 'bg-verde', medium: 'bg-oro', low: 'bg-danger' }
 
 export interface ConfidenceProps extends Omit<React.ComponentProps<'span'>, 'children'> {
   level: ConfidenceLevel
@@ -66,10 +66,10 @@ export function UncertaintyNote({ title = 'The model is unsure', action, classNa
     <aside
       data-slot="uncertainty-note"
       aria-label={title}
-      className={cn('flex gap-3 bg-anil-soft px-4 py-3 shadow-[inset_3px_0_0_var(--anil)] rtl:shadow-[inset_-3px_0_0_var(--anil)]', className)}
+      className={cn('flex gap-3 bg-anil-soft px-4 py-3 bar-start-anil', className)}
       {...props}
     >
-      <CircleHelp aria-hidden className="mt-0.5 size-4 shrink-0 text-anil" />
+      <CircleHelp aria-hidden className="mt-0.5 size-(--icon) shrink-0 text-anil" />
       <div className="min-w-0 flex-1">
         <p className="m-0 font-ui text-sm font-semibold text-ink">{title}</p>
         <div className="mt-1 font-ui text-sm text-ink-on-tint">{children}</div>

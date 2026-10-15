@@ -6,8 +6,8 @@
   "install": "npm install @demogar/mola-ui @base-ui/react @fontsource-variable/archivo @fontsource-variable/alegreya @fontsource-variable/martian-mono",
   "rules": [
     {
-      "rule": "Interactive edges use `shadow-cut` (or `shadow-floating` on overlays), never `border`. `border-keyline` is for decorative dividers only.",
-      "why": "A box-shadow edge can grow a revealed band on hover without moving its neighbours, and the named utilities keep an outline in forced-colours mode."
+      "rule": "Interactive edges use `shadow-cut` (`shadow-floating` on popups, `shadow-overlay` on dialogs and drawers), never `border`. `border-keyline` is for decorative dividers only. Every other edge is a named utility (`rule-b`, `cut-t`, `bar-start-ink`, `cut-anil`, `focus-ring`), never an arbitrary `shadow-[…]` or an `rtl:` twin.",
+      "why": "A box-shadow edge can grow a revealed band on hover without moving its neighbours; the named edges flip for right-to-left by themselves and keep an edge in forced-colours mode."
     },
     {
       "rule": "Radius is zero. `rounded-full` only for something that is genuinely a dot.",
@@ -60,6 +60,10 @@
     {
       "rule": "Do what each component’s accessibility section leaves to you, usually an accessible name or a label. The component handles roles, focus and announcements.",
       "why": "Axe catches a missing name only on the screens it is run on; the component cannot know what its button is for."
+    },
+    {
+      "rule": "On a product screen, rojo means danger and is used only through the danger role (`bg-danger`, `bg-danger-soft`, `text-ink-danger`, `band-danger`). The accent is gold, by name (`band-accent`).",
+      "why": "A red label band or bullet beside a red FAILED mark makes the failure one red thing among several (ADR 0008)."
     }
   ],
   "phases": {
@@ -132,7 +136,10 @@
           "outline",
           "ring",
           "decoration",
-          "stroke"
+          "stroke",
+          "cut",
+          "bar-start",
+          "bar-bottom"
         ],
         "publish": [
           "border",
@@ -228,6 +235,10 @@
             "min": 4.5
           },
           {
+            "token": "--ink-danger",
+            "min": 4.5
+          },
+          {
             "token": "--oro",
             "min": 4.5,
             "themes": [
@@ -288,6 +299,10 @@
           },
           {
             "token": "--info",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-danger",
             "min": 4.5
           }
         ]
@@ -406,6 +421,18 @@
             "min": 4.5
           },
           {
+            "token": "--danger-soft",
+            "min": 4.5
+          },
+          {
+            "token": "--accent-soft",
+            "min": 4.5
+          },
+          {
+            "token": "--selected",
+            "min": 4.5
+          },
+          {
             "token": "--cloth-deep",
             "min": 4.5
           }
@@ -474,6 +501,18 @@
             "min": 4.5
           },
           {
+            "token": "--danger-soft",
+            "min": 4.5
+          },
+          {
+            "token": "--accent-soft",
+            "min": 4.5
+          },
+          {
+            "token": "--selected",
+            "min": 4.5
+          },
+          {
             "token": "--cloth-deep",
             "min": 4.5
           }
@@ -526,6 +565,18 @@
           },
           {
             "token": "--ink-soft",
+            "min": 4.5
+          },
+          {
+            "token": "--danger-soft",
+            "min": 4.5
+          },
+          {
+            "token": "--accent-soft",
+            "min": 4.5
+          },
+          {
+            "token": "--selected",
             "min": 4.5
           }
         ],
@@ -779,6 +830,14 @@
           {
             "token": "--verde",
             "min": 4.5
+          },
+          {
+            "token": "--danger",
+            "min": 4.5
+          },
+          {
+            "token": "--danger-strong",
+            "min": 4.5
           }
         ],
         "under": []
@@ -803,9 +862,10 @@
         "token": "--danger",
         "scopes": [
           "mark",
-          "edge"
+          "edge",
+          "surface"
         ],
-        "why": "The status tone, for a dot, a swatch key, a bar or a ring. Words in a status take --ink-danger, which on-layer collapses on a filled panel where no status hue survives; the contract measures the tone on cloth at 4.5 because --ink-danger resolves to it.",
+        "why": "The status tone, for a dot, a swatch key, a bar or a ring, and the filled region of a danger button, a solid badge or a highlighted destructive menu item, which carries --on-layer. Words in a status take --ink-danger, which on-layer collapses on a filled panel where no status hue survives.",
         "utilities": [
           "bg-danger",
           "fill-danger",
@@ -820,9 +880,35 @@
           {
             "token": "--cloth-pale",
             "min": 4.5
+          },
+          {
+            "token": "--danger-soft",
+            "min": 3
           }
         ],
-        "under": []
+        "under": [
+          {
+            "token": "--on-layer",
+            "min": 4.5
+          }
+        ]
+      },
+      {
+        "token": "--danger-strong",
+        "scopes": [
+          "surface"
+        ],
+        "why": "The pressed danger button, carrying --on-layer.",
+        "utilities": [
+          "bg-danger-strong"
+        ],
+        "on": [],
+        "under": [
+          {
+            "token": "--on-layer",
+            "min": 4.5
+          }
+        ]
       },
       {
         "token": "--success",
@@ -916,6 +1002,18 @@
           "text-ink-danger"
         ],
         "on": [
+          {
+            "token": "--cloth",
+            "min": 4.5
+          },
+          {
+            "token": "--cloth-pale",
+            "min": 4.5
+          },
+          {
+            "token": "--danger-soft",
+            "min": 4.5
+          },
           {
             "token": "--ink-soft",
             "min": 4.5
@@ -1110,6 +1208,38 @@
         ]
       },
       {
+        "token": "--danger-soft",
+        "scopes": [
+          "surface"
+        ],
+        "utilities": [
+          "bg-danger-soft"
+        ],
+        "on": [],
+        "under": [
+          {
+            "token": "--ink",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-2",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-muted",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-danger",
+            "min": 4.5
+          },
+          {
+            "token": "--danger",
+            "min": 3
+          }
+        ]
+      },
+      {
         "token": "--ink-on-tint",
         "scopes": [
           "text"
@@ -1274,6 +1404,92 @@
         ],
         "on": [],
         "under": []
+      },
+      {
+        "token": "--accent",
+        "scopes": [
+          "surface",
+          "mark",
+          "edge"
+        ],
+        "why": "As --oro, which it names: a field, a mark, the band a control reveals.",
+        "utilities": [
+          "bg-accent",
+          "fill-accent",
+          "border-accent",
+          "decoration-accent"
+        ],
+        "on": [],
+        "under": [
+          {
+            "token": "--on-accent",
+            "min": 4.5
+          }
+        ]
+      },
+      {
+        "token": "--on-accent",
+        "scopes": [
+          "text"
+        ],
+        "utilities": [
+          "text-on-accent"
+        ],
+        "on": [
+          {
+            "token": "--accent",
+            "min": 4.5
+          }
+        ],
+        "under": []
+      },
+      {
+        "token": "--accent-soft",
+        "scopes": [
+          "surface"
+        ],
+        "utilities": [
+          "bg-accent-soft"
+        ],
+        "on": [],
+        "under": [
+          {
+            "token": "--ink",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-2",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-muted",
+            "min": 4.5
+          }
+        ]
+      },
+      {
+        "token": "--selected",
+        "scopes": [
+          "surface"
+        ],
+        "utilities": [
+          "bg-selected"
+        ],
+        "on": [],
+        "under": [
+          {
+            "token": "--ink",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-2",
+            "min": 4.5
+          },
+          {
+            "token": "--ink-muted",
+            "min": 4.5
+          }
+        ]
       },
       {
         "token": "--band",
@@ -4949,7 +5165,7 @@
           "name": "Sparkline",
           "kind": "component",
           "source": "src/components/stat/stat.tsx",
-          "description": "An ink polyline — no fill, no gradient, no axis. A sparkline is the shape of the recent past and nothing more; the moment it grows a gridline it is a chart pretending to be a glyph. The last point is a square cut out in rojo (it is the \"now\" the figure beside it states), drawn as a square because a blade does not cut circles.",
+          "description": "An ink polyline — no fill, no gradient, no axis. A sparkline is the shape of the recent past and nothing more; the moment it grows a gridline it is a chart pretending to be a glyph. The last point is a square cut out in gold (it is the \"now\" the figure beside it states), drawn as a square because a blade does not cut circles.",
           "props": []
         },
         {
@@ -4982,7 +5198,7 @@
               "name": "trend",
               "type": "number[]",
               "required": false,
-              "description": "The recent series, oldest first. Drawn in ink with the latest point cut out in rojo."
+              "description": "The recent series, oldest first. Drawn in ink with the latest point cut out in the accent."
             },
             {
               "name": "unit",
@@ -10971,7 +11187,7 @@
               "type": "\"neutral\" | \"attention\"",
               "required": false,
               "default": "neutral",
-              "description": "`attention` fills the count in rojo — for things that need a person, not for totals."
+              "description": "`attention` fills the count in the danger colour — for failures that need a person, not for totals."
             },
             {
               "name": "icon",
@@ -15161,8 +15377,8 @@
               "name": "band",
               "type": "RotuloBand",
               "required": false,
-              "default": "rojo",
-              "description": "The revealed band before the label. Defaults to rojo: on light cloth, gold measures 1.66:1 and the mark disappears. Gold is for ink grounds."
+              "default": "ink",
+              "description": "The revealed band before the label. Defaults to ink: on light cloth gold measures 1.66:1 and the mark disappears, and rojo, the default until 2026-10, is the danger colour on a product screen (docs/adr/0008-the-rojo-register.md). Rojo stays available for editorial pages; gold is for ink grounds."
             },
             {
               "name": "plain",

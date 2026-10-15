@@ -43,7 +43,7 @@ export interface StatProps extends Omit<React.ComponentProps<'div'>, 'children'>
   /** Set smaller beside the figure: "ms", "runs", "%". */
   unit?: React.ReactNode
   delta?: StatDelta
-  /** The recent series, oldest first. Drawn in ink with the latest point cut out in rojo. */
+  /** The recent series, oldest first. Drawn in ink with the latest point cut out in the accent. */
   trend?: number[]
   /** A line of context under the figure. */
   hint?: React.ReactNode
@@ -109,7 +109,7 @@ function StatDeltaLine({ delta }: { delta: StatDelta }) {
   return (
     <span data-part="delta" className="flex items-center gap-1.5 text-xs">
       <span className={cn('inline-flex items-center gap-0.5 font-semibold tabular-nums', SENTIMENT_TONE[sentiment])}>
-        <Glyph aria-hidden className="size-3.5" strokeWidth={2.5} />
+        <Glyph aria-hidden className="size-(--icon-sm)" strokeWidth={2.5} />
         <span aria-hidden dir="auto">
           {delta.value}
         </span>
@@ -127,7 +127,7 @@ function StatDeltaLine({ delta }: { delta: StatDelta }) {
 /**
  * An ink polyline — no fill, no gradient, no axis. A sparkline is the shape of
  * the recent past and nothing more; the moment it grows a gridline it is a
- * chart pretending to be a glyph. The last point is a square cut out in rojo
+ * chart pretending to be a glyph. The last point is a square cut out in gold
  * (it is the "now" the figure beside it states), drawn as a square because a
  * blade does not cut circles.
  *
@@ -176,7 +176,7 @@ export function Sparkline({
         strokeLinecap="square"
         vectorEffect="non-scaling-stroke"
       />
-      <rect x={last[0]! - 2.5} y={last[1]! - 2.5} width={5} height={5} fill="var(--rojo)" stroke="var(--ink)" strokeWidth={1} />
+      <rect x={last[0]! - 2.5} y={last[1]! - 2.5} width={5} height={5} fill="var(--accent)" stroke="var(--ink)" strokeWidth={1} />
     </svg>
   )
 }

@@ -78,7 +78,7 @@ export function Drawer({ side = 'end', ...props }: DrawerProps) {
 export const DrawerTrigger = DrawerPrimitive.Trigger
 export const DrawerClose = DrawerPrimitive.Close
 
-const viewportVariants = cva('fixed inset-0 z-50 flex', {
+const viewportVariants = cva('fixed inset-0 z-(--z-overlay) flex', {
   variants: {
     side: {
       start: 'items-stretch justify-start',
@@ -91,7 +91,7 @@ const viewportVariants = cva('fixed inset-0 z-50 flex', {
 const drawerPopupVariants = cva(
   [
     'relative flex flex-col bg-cloth-pale text-ink rounded-none outline-none',
-    'shadow-floating',
+    'shadow-overlay',
     // The finger's drag is a transform; the open/close slide is `translate`.
     // Two properties, so a release mid-drag slides on from where it was let go
     // instead of snapping back to zero first.
@@ -130,7 +130,7 @@ const drawerPopupVariants = cva(
 )
 
 const backdropClasses = [
-  'fixed inset-0 z-50 bg-backdrop',
+  'fixed inset-0 z-(--z-overlay) bg-backdrop',
   // Fades as the drawer is dragged away, so the page comes back with the finger.
   'opacity-[calc(1-var(--drawer-swipe-progress,0))]',
   'transition-opacity duration-(--motion-base)',

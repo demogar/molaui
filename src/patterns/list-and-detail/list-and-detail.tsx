@@ -183,7 +183,7 @@ export function AgentsScreen({ agents = AGENTS, defaultSelectedId, defaultView =
           aria-labelledby={listHeadingId}
           className={cn(
             'min-h-0 overflow-y-auto scroll-cloth bg-cloth-pale',
-            '@3xl/agents:shadow-[inset_-1px_0_0_var(--keyline)] @3xl/agents:rtl:shadow-[inset_1px_0_0_var(--keyline)]',
+            '@3xl/agents:rule-e',
             view === 'detail' && '@max-3xl/agents:hidden',
           )}
         >
@@ -220,10 +220,10 @@ export function AgentsScreen({ agents = AGENTS, defaultSelectedId, defaultView =
                     className={cn(
                       'group/agent flex w-full cursor-pointer flex-col gap-1.5 px-4 py-3 text-start sm:px-5',
                       'bg-transparent text-ink transition-colors',
-                      'hover:bg-ink-soft focus-visible:shadow-[var(--focus-ring)] focus-visible:outline-none',
+                      'hover:bg-ink-soft focus-visible:focus-ring focus-visible:outline-none',
                       'aria-[current=true]:bg-ink-soft aria-[current=true]:forced-selected',
-                      'aria-[current=true]:shadow-[inset_3px_0_0_var(--ink)] rtl:aria-[current=true]:shadow-[inset_-3px_0_0_var(--ink)]',
-                      'aria-[current=true]:focus-visible:shadow-[var(--focus-ring)]',
+                      'aria-[current=true]:bar-start-ink',
+                      'aria-[current=true]:focus-visible:focus-ring',
                     )}
                   >
                     <span className="flex w-full items-center justify-between gap-3">
@@ -254,7 +254,7 @@ export function AgentsScreen({ agents = AGENTS, defaultSelectedId, defaultView =
               ref={backRef}
               variant="ghost"
               size="sm"
-              icon={<ArrowLeft className="rtl:-scale-x-100" />}
+              icon={<ArrowLeft className="flip-rtl" />}
               onClick={back}
               className="-ms-2 self-start @3xl/agents:hidden"
             >

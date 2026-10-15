@@ -300,7 +300,7 @@ export function DateRangePicker({
             fieldControlClasses,
             fieldControlSizes[size],
             'flex cursor-default items-center justify-between gap-3 text-start',
-            'focus-visible:shadow-[var(--focus-ring)] data-popup-open:shadow-[var(--focus-ring)]',
+            'focus-visible:focus-ring data-popup-open:focus-ring',
             'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
           )}
         >
@@ -310,7 +310,7 @@ export function DateRangePicker({
           <span dir="auto" id={valueId} className={cn('min-w-0 truncate tabular-nums', !label && 'text-ink-muted')}>
             {label ?? placeholder}
           </span>
-          <CalendarDays aria-hidden className="size-4 shrink-0 text-ink-muted" />
+          <CalendarDays aria-hidden className="size-(--icon) shrink-0 text-ink-muted" />
         </PopoverPrimitive.Trigger>
         {name ? (
           <>
@@ -320,7 +320,7 @@ export function DateRangePicker({
         ) : null}
       </div>
       <PopoverPrimitive.Portal>
-        <PopoverPrimitive.Positioner anchor={anchorRef} side="bottom" align="start" sideOffset={6} className="z-50">
+        <PopoverPrimitive.Positioner anchor={anchorRef} side="bottom" align="start" sideOffset={6} className="z-(--z-popover)">
           <PopoverPrimitive.Popup
             data-slot="date-range-picker-popup"
             initialFocus={activeCellRef}
@@ -346,12 +346,12 @@ export function DateRangePicker({
                       className={cn(
                         'flex h-(--control-h-sm) items-center gap-2 pe-3 ps-2 text-start font-ui text-sm text-ink whitespace-nowrap',
                         'transition-colors hover:bg-ink-soft',
-                        'focus-visible:outline-none focus-visible:shadow-[var(--focus-ring)]',
+                        'focus-visible:outline-none focus-visible:focus-ring',
                         'aria-pressed:bg-ink-soft aria-pressed:font-semibold',
                         'disabled:cursor-not-allowed disabled:text-ink-muted disabled:line-through disabled:hover:bg-transparent',
                       )}
                     >
-                      <Check aria-hidden strokeWidth={2.5} className={cn('size-3.5 shrink-0', !active && 'invisible')} />
+                      <Check aria-hidden strokeWidth={2.5} className={cn('size-(--icon-sm) shrink-0', !active && 'invisible')} />
                       {preset.label}
                     </button>
                   )

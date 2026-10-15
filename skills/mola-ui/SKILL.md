@@ -84,9 +84,11 @@ because keyboard direction is read from context.
 
 ## Rules that are never broken
 
-1. **Interactive edges are `shadow-cut`** (overlays: `shadow-floating`), never `border`.
-   `border-keyline` is only for decorative dividers. Don't use arbitrary `shadow-[…]`: the named
-   utilities keep an outline in forced-colours mode.
+1. **Interactive edges are `shadow-cut`** (popups: `shadow-floating`; dialogs and drawers:
+   `shadow-overlay`), never `border`. `border-keyline` is only for decorative dividers. Don't use
+   arbitrary `shadow-[…]` or an `rtl:` twin: one-sided edges have names (`rule-b`, `cut-t`,
+   `bar-start-ink`, `cut-anil`, `focus-ring`) that flip for right-to-left and keep an edge in
+   forced-colours mode.
 2. **No radius.** No `rounded-*` except `rounded-full` on something that really is a dot.
 3. **State is glyph + word + colour**, never colour alone. Use `Badge`, `StatusDot`, `RunStatus`
    or `Callout`, which already do this, rather than a coloured `<span>`.
@@ -182,12 +184,23 @@ Status colours:
   when the tone has to colour words.
 - **Layers:** `rojo`, `anil`, `verde`, `oro`. These are fields and marks, never body text.
   `oro` is never text on light cloth.
+- **Rojo is danger.** On a product screen use it only through the danger role: `bg-danger`,
+  `hover:bg-danger-strong`, `bg-danger-soft`, `text-ink-danger`, `band-danger`. A red label band,
+  bullet or name beside a red FAILED mark makes the failure one red thing among several. Rojo as
+  an accent belongs to long-form `Prose`.
+- **Accent and selection:** `accent` (gold, by name: `band-accent`, `bg-accent`), `accent-soft`,
+  and `bg-selected` for an item chosen for an action.
 - **Washes:** `*-soft`. A wash is for a whole region, such as a selected row or a callout.
 
 Mola utilities:
 
-- `shadow-cut` is a keyline edge, and `shadow-floating` is the keyline plus elevation.
-- `cut-band band-oro` is a revealed band on hover or selection.
+- `shadow-cut` is a keyline edge; `shadow-floating` is the keyline plus a popup's elevation, and
+  `shadow-overlay` the keyline plus a dialog's.
+- `cut-band band-accent` is a revealed band on hover; `band-danger` on something destructive.
+- `rule-t`/`rule-b`/`rule-s`/`rule-e` draw a decorative keyline on one side, `cut-t`… the ink cut
+  on one side, `bar-start-<colour>` the current item's bar. Sides add up: `cut-t cut-b`.
+- Stack with `z-(--z-overlay)`, `z-(--z-popover)`, `z-(--z-toast)`; size icons with
+  `size-(--icon)` (`-xs`, `-sm`, `-lg`); mirror a directional icon with `flip-rtl`.
 - `relleno` is the divider and empty texture.
 - `rotulo` is a small label in capitals. Write its text in sentence case; the utility sets the
   capitals.

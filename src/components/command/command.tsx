@@ -198,19 +198,19 @@ export function CommandPalette({
       }}
     >
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-backdrop transition-opacity duration-(--motion-base) data-starting-style:opacity-0 data-ending-style:opacity-0" />
+        <DialogPrimitive.Backdrop className="fixed inset-0 z-(--z-overlay) bg-backdrop transition-opacity duration-(--motion-base) data-starting-style:opacity-0 data-ending-style:opacity-0" />
         <DialogPrimitive.Popup
           data-slot="command-palette"
           className={cn(
-            'fixed top-[12dvh] left-1/2 z-50 flex max-h-[min(34rem,76dvh)] w-[calc(100vw-2rem)] max-w-xl -translate-x-1/2 flex-col',
-            'bg-cloth-pale text-ink rounded-none outline-none shadow-floating',
+            'fixed top-[12dvh] left-1/2 z-(--z-overlay) flex max-h-[min(34rem,76dvh)] w-[calc(100vw-2rem)] max-w-xl -translate-x-1/2 flex-col',
+            'bg-cloth-pale text-ink rounded-none outline-none shadow-overlay',
             'transition-[opacity,scale] duration-(--motion-base)',
             'data-starting-style:scale-[0.98] data-starting-style:opacity-0 data-ending-style:opacity-0 data-ending-style:duration-(--motion-cut)',
           )}
         >
           <DialogPrimitive.Title className="sr-only">{label}</DialogPrimitive.Title>
-          <div className="flex items-center gap-3 px-4 shadow-[inset_0_-1.5px_0_var(--ink)]">
-            <Search aria-hidden className="size-[18px] shrink-0 text-ink-muted" />
+          <div className="flex items-center gap-3 px-4 cut-b">
+            <Search aria-hidden className="size-(--icon-lg) shrink-0 text-ink-muted" />
             <input
               role="combobox"
               aria-expanded={hasResults}
@@ -280,7 +280,7 @@ export function CommandPalette({
                           onClick={() => select(item)}
                           className={cn(
                             'group/option mx-2 flex min-h-(--control-h) cursor-pointer items-center gap-3 px-2.5 py-2',
-                            'font-ui text-sm text-ink [&_svg]:size-4 [&_svg]:shrink-0',
+                            'font-ui text-sm text-ink [&_svg]:size-(--icon) [&_svg]:shrink-0',
                             'aria-selected:bg-ink aria-selected:text-on-ink aria-selected:forced-selected',
                             'aria-disabled:cursor-default aria-disabled:text-ink-muted',
                             // Selected and disabled at once: muted ink on the ink fill is 2.99:1. See Menu.
@@ -323,7 +323,7 @@ export function CommandPalette({
           <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
             {announcement}
           </div>
-          <div aria-hidden className="flex items-center gap-4 bg-cloth-shade px-4 py-2 text-xs text-ink-muted shadow-[inset_0_1px_0_var(--keyline)]">
+          <div aria-hidden className="flex items-center gap-4 bg-cloth-shade px-4 py-2 text-xs text-ink-muted rule-t">
             <span className="flex items-center gap-1.5">
               <Kbd>↑</Kbd>
               <Kbd>↓</Kbd> move

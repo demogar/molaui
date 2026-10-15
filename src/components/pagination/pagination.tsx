@@ -77,12 +77,12 @@ export function Pagination({
 }: PaginationProps) {
   const prev = (
     <IconButton label="Previous page" variant="secondary" size="sm" disabled={page <= 1} onClick={() => onPageChange(page - 1)}>
-      <ChevronLeft className="rtl:-scale-x-100" />
+      <ChevronLeft className="flip-rtl" />
     </IconButton>
   )
   const next = (
     <IconButton label="Next page" variant="secondary" size="sm" disabled={page >= pageCount} onClick={() => onPageChange(page + 1)}>
-      <ChevronRight className="rtl:-scale-x-100" />
+      <ChevronRight className="flip-rtl" />
     </IconButton>
   )
 

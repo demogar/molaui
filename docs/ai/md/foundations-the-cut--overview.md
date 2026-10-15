@@ -20,6 +20,34 @@ concentric, never offset: a mola's layers are stacked, so the reveal goes all th
 Edges are `box-shadow`, not `border`, because the signature hover *grows* the edge by several
 pixels. A border would reflow the row; a shadow does not move a single neighbour.
 
+`band-accent` is the gold reveal by name, and `band-danger` the red one: on a product screen rojo
+is only ever danger ([ADR 0008](https://demogar.github.io/molaui/?path=/docs/decisions-0008-the-rojo-register--overview)),
+so a seam that means "this destroys something" says `band-danger`, and `band-rojo` is left to
+editorial pages.
+
+## Edges
+
+Every other edge is a box-shadow too, and each has a name, so a component says which edge it means
+rather than typing a shadow. The components used to type 70 of them in place, with 33 `rtl:` twins
+to flip the sign on a right-to-left page; a forgotten twin was a bar on the wrong side that no test
+saw. The named edges carry their own right-to-left form.
+
+| Utility | Draws | Width |
+| --- | --- | --- |
+| `rule-t` `rule-b` `rule-s` `rule-e` | A decorative keyline on one side, between rows or panes. `-soft` for `--keyline-soft` | `--rule-w`, 1px |
+| `cut-t` `cut-b` `cut-s` `cut-e` | The blade edge on one side: a table header's foot, an app bar, segments | `--cut-w`, 1.5px |
+| `bar-start-<colour>` `bar-bottom-<colour>` | The current item, or a region a status owns | `--bar-w`, 3px |
+| `cut-<colour>` | A keyline all the way round in a colour: an outline badge, a thumb | `--cut-w` |
+| `cut-thin` `rule-ring` | A 1px ink ring for a mark too small for the cut; a 1px decorative ring | `--rule-w` |
+| `focus-ring` `focus-ring-inset` | The focus ring, as an edge, so it adds to the others | |
+
+`s` and `e` are the start and end of the reading direction. Each side is its own slot, so edges on
+different sides add up (`cut-t cut-b`, `bar-start-ink rule-b-soft`) and a focused current item keeps
+its bar while the ring is drawn. In forced colours a ring comes back as an outline and a one-sided
+edge as a border on the same side.
+
+> Not included in the Markdown version: an interactive `Specimen` block. See it on the page: https://demogar.github.io/molaui/?path=/docs/foundations-the-cut--overview
+
 ## Hover
 
 Two gestures, chosen by whether the control has an edge:
@@ -29,7 +57,7 @@ Two gestures, chosen by whether the control has an edge:
 - **An edgeless control washes.** Ghost buttons, rows, menu items and disclosure triggers take
   `--ink-soft` behind them, and secondary text steps up to ink.
 
-Hover is never rojo, except on the danger button that is already red. Red means something can be
+Hover is never red, except on the danger button that is already red. Red means something can be
 lost or has failed; a heading or a field that flashes red as the pointer crosses it reads, for a
 moment, as an error. The editorial system turned links and accordion titles red on hover, and the
 product system dropped it for that reason.

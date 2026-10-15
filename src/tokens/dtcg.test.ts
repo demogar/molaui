@@ -13,6 +13,26 @@ describe('the DTCG validator', () => {
     expect(validateDtcg(committed)).toEqual([])
   })
 
+  it('describes every token declared in tokens.css, and states each promised colour pairing with its measured ratios', () => {
+    // A design tool shows $description beside the variable; the ratios lived
+    // only in the CSS comments before (issue #117).
+    const missing: string[] = []
+    const visit = (node: Record<string, unknown>, path: string) => {
+      for (const [key, child] of Object.entries(node)) {
+        if (key.startsWith('$') || typeof child !== 'object' || child === null) continue
+        const c = child as Record<string, unknown>
+        if ('$value' in c) {
+          if (typeof c.$description !== 'string' || !c.$description) missing.push(`${path}.${key}`)
+        } else visit(c, `${path}.${key}`)
+      }
+    }
+    for (const group of ['color', 'shadow', 'size', 'z', 'motion']) visit(committed[group], group)
+    visit(committed.density.comfortable, 'density.comfortable')
+    expect(missing).toEqual([])
+    expect(committed.color.light.ink.$description).toMatch(/--cloth ≥ 4\.5 \(15\.52 light, 15\.18 dark\)/)
+    expect(committed.color.dark.selected.$description).toMatch(/Promised to carry .*--ink-muted ≥ 4\.5 \(\d/)
+  })
+
   it('gives every density mode the same keys', () => {
     const keys = (mode: string) => Object.keys(committed.density[mode]).sort()
     expect(keys('compact')).toEqual(keys('comfortable'))

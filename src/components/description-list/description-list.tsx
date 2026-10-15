@@ -40,7 +40,7 @@ const listVariants = cva('m-0', {
     layout: {
       inline: '',
       stacked: '',
-      grid: 'grid grid-cols-1 gap-x-8 gap-y-4 pt-4 shadow-[inset_0_1.5px_0_var(--ink)] sm:grid-cols-2',
+      grid: 'grid grid-cols-1 gap-x-8 gap-y-4 pt-4 cut-t sm:grid-cols-2',
     },
   },
   defaultVariants: { layout: 'inline' },
@@ -50,9 +50,9 @@ const pairVariants = cva('min-w-0', {
   variants: {
     layout: {
       inline:
-        'flex items-baseline justify-between gap-4 py-2 shadow-[inset_0_-1px_0_var(--keyline-soft)] last:shadow-none',
+        'flex items-baseline justify-between gap-4 py-2 rule-b-soft last:shadow-none',
       stacked:
-        'grid grid-cols-1 gap-1 py-3 shadow-[inset_0_-1px_0_var(--keyline-soft)] last:shadow-none sm:grid-cols-[minmax(7rem,11rem)_1fr] sm:gap-6',
+        'grid grid-cols-1 gap-1 py-3 rule-b-soft last:shadow-none sm:grid-cols-[minmax(7rem,11rem)_1fr] sm:gap-6',
       grid: '',
     },
   },

@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest'
 import { PAIRS } from './pairings'
 import { parseRootDeclarations } from './resolve'
 import { tokenRows } from './rows'
-import { allows, COLOR_PREFIXES, COLOR_SCOPES, SCOPES, type Scope } from './scopes'
+import { allows, COLOR_PREFIXES, COLOR_SCOPES, EDITORIAL, ROJO_TOKENS, SCOPES, type Scope } from './scopes'
 
 /**
  * The scopes in ./scopes.ts are a promise the agent docs and the Figma export
@@ -103,6 +103,160 @@ describe('colour utilities in components and patterns', () => {
     // A tokenizer that silently matched nothing would pass; the components write some eight hundred.
     expect(seen).toBeGreaterThan(500)
     expect(misuses).toEqual([])
+  })
+})
+
+/** The class-like words of a file, each with the utility it ends in (the part after the last top-level `:`). */
+function words(file: string): { word: string; utility: string }[] {
+  return (source(file).match(/[\w\-:/[\]!.&()=,@>*~+%]+/g) ?? []).map((word) => {
+    let depth = 0
+    let cut = 0
+    for (let i = 0; i < word.length; i++) {
+      if (word[i] === '[' || word[i] === '(') depth++
+      else if (word[i] === ']' || word[i] === ')') depth--
+      else if (word[i] === ':' && depth === 0) cut = i + 1
+    }
+    return { word, utility: word.slice(cut).replace(/^!/, '').replace(/!$/, '') }
+  })
+}
+
+describe('arbitrary values in components and patterns', () => {
+  /**
+   * The colour check above used to skip arbitrary values, because the token
+   * was inside free text: 70 hand-typed `shadow-[…]` edges and 33 `rtl:`
+   * twins were invisible to it. The edges are utilities now (cloth.css), so
+   * an arbitrary edge has no reason to exist, and the rest of a value typed
+   * in place (a z-index, a line height, a glyph size) has a token to use
+   * instead. Each rule names what replaced it.
+   */
+  const prefixes = [...COLOR_PREFIXES].sort((a, b) => b.length - a.length)
+  const offenders = (test: (w: { word: string; utility: string }) => boolean) =>
+    files.flatMap((file) => words(file).filter(test).map(({ word }) => `${relative(src, file)}: ${word}`))
+
+  it('reads an arbitrary colour as its token, and holds it to the token’s scopes', () => {
+    // `before:bg-(--band)`, `bg-[var(--band)]`: the token is written in place,
+    // but it is still a token and its scopes still apply.
+    let seen = 0
+    const misuses = offenders(({ utility }) => {
+      const m = /^([a-z-]+)-(?:\[var\((--[a-z0-9-]+)\)\]|\((--[a-z0-9-]+)\))$/.exec(utility)
+      const prefix = m && prefixes.find((p) => p === m[1])
+      const name = m?.[2] ?? m?.[3]
+      if (!prefix || !name || !colourTokens.has(name)) return false
+      seen++
+      return !allows(name, prefix)
+    })
+    expect(seen).toBeGreaterThan(3)
+    expect(misuses).toEqual([])
+  })
+
+  it('draws every edge with a named edge utility, never a box-shadow typed in place', () => {
+    // rule-*, cut-*, bar-*, focus-ring: see "edges" in cloth.css.
+    expect(offenders(({ utility }) => /^-?(inset-|drop-|text-)?shadow-[[(]/.test(utility))).toEqual([])
+  })
+
+  it('mirrors for right-to-left inside the utility, not with a hand-written rtl: twin', () => {
+    // The edge utilities and `flip-rtl` carry their own :dir(rtl) form. What
+    // is left is movement (a drawer sliding in from its own edge, a meter
+    // growing from its start edge: a translate or a transform origin, which
+    // no edge utility owns) and a pseudo-element's animation: a utility's own
+    // :dir() cannot reach `::after`.
+    const allowed = (word: string, utility: string) =>
+      /^-?(translate-|origin-)/.test(utility) || word === 'rtl:after:[animation-direction:reverse]'
+    expect(offenders(({ word, utility }) => /(^|:)rtl:/.test(word) && !allowed(word, utility))).toEqual([])
+  })
+
+  it('stacks with the --z-* scale', () => {
+    // Toasts order themselves inside the toast viewport's own stacking
+    // context, newest on top; that is not the page's stack.
+    const local = new Set(['z-[calc(1000-var(--toast-index))]'])
+    expect(offenders(({ utility }) => /^-?z-(\d+|\[.+\])$/.test(utility) && !local.has(utility))).toEqual([])
+  })
+
+  it('sets line height and tracking from the scale', () => {
+    // A keyword (`tracking-[inherit]` on a button that takes its label's
+    // register) is not a value.
+    const keyword = /^\[(inherit|initial|normal)\]$/
+    expect(
+      offenders(({ utility }) => {
+        const m = /^(?:leading|tracking)-(\[.+\])$/.exec(utility)
+        if (m) return !keyword.test(m[1]!)
+        return /^text-.+\/\[[\d.]+\]$/.test(utility)
+      }),
+    ).toEqual([])
+  })
+
+  it('sizes every glyph with an --icon token', () => {
+    // A Lucide icon follows the text beside it, so each density re-scales
+    // it; `size-4` and `size-[18px]` did not. Read two ways: the `[&_svg]:`
+    // size a container gives its icons, and the className of each element
+    // whose name the file imports from lucide-react.
+    const glyph = /^size-(\(--icon(-xs|-sm|-lg)?\)|\[\d+%\])$/
+    const bad: string[] = []
+    let seen = 0
+    for (const file of files) {
+      const text = source(file)
+      for (const { word, utility } of words(file)) {
+        if (!/\[&_svg\]:/.test(word) || !/^size-/.test(utility)) continue
+        seen++
+        if (!glyph.test(utility)) bad.push(`${relative(src, file)}: ${word}`)
+      }
+      const icons = [...text.matchAll(/import \{([^}]+)\} from 'lucide-react'/g)].flatMap((m) =>
+        m[1]!.split(',').map((n) => n.replace(/\btype\b/, '').trim()).filter(Boolean),
+      )
+      for (const icon of icons) {
+        for (const m of text.matchAll(new RegExp(`<${icon}\\b[^>]*?className=(?:"([^"]*)"|\\{cn\\(([^)]*)\\)\\})`, 'g'))) {
+          for (const size of (m[1] ?? m[2] ?? '').match(/size-[^\s'"]+/g) ?? []) {
+            seen++
+            if (!glyph.test(size.replace(/!$/, ''))) bad.push(`${relative(src, file)}: <${icon}> ${size}`)
+          }
+        }
+      }
+    }
+    expect(seen).toBeGreaterThan(30)
+    expect(bad).toEqual([])
+  })
+})
+
+describe('the rojo register', () => {
+  /**
+   * docs/adr/0008-the-rojo-register.md: on a product surface rojo means
+   * danger and nothing else, so outside the editorial components it is used
+   * only through the danger role. ROJO_TOKENS and EDITORIAL in ./scopes.ts
+   * say what that covers; a colour-named prop map (`rojo: 'band-rojo'`) is
+   * the material on offer, not a use, and is skipped.
+   */
+  const prefixes = [...COLOR_PREFIXES].sort((a, b) => b.length - a.length)
+  const rojo = new Set(ROJO_TOKENS)
+
+  it('names only rojo tokens that exist, and editorial files that exist', () => {
+    expect(ROJO_TOKENS.filter((t) => !decls.has(t))).toEqual([])
+    expect(Object.keys(EDITORIAL).filter((f) => !files.includes(join(src, f)))).toEqual([])
+  })
+
+  it('uses rojo outside the editorial components only through the danger role', () => {
+    const misuses: string[] = []
+    for (const file of files) {
+      const rel = relative(src, file)
+      if (rel in EDITORIAL) continue
+      const text = source(file).replace(/\brojo:\s*(['"])[^'"]*\1/g, '')
+      for (const m of text.matchAll(/var\((--rojo[a-z-]*)\)/g)) misuses.push(`${rel}: var(${m[1]})`)
+      for (const word of text.match(/[\w\-:/[\]!.&()=,@>*~+%]+/g) ?? []) {
+        const utility = word.split(':').at(-1)!.replace(/^!/, '')
+        if (utility === 'band-rojo') misuses.push(`${rel}: ${word}`)
+        const prefix = prefixes.find((p) => utility.startsWith(`${p}-`) && rojo.has(`--${utility.slice(p.length + 1)}`))
+        if (prefix) misuses.push(`${rel}: ${word}`)
+      }
+    }
+    expect(misuses).toEqual([])
+  })
+
+  it('keeps rojo out of the document-wide base styles', () => {
+    // The caret, the native accent colour and every list marker on the page
+    // were rojo until 2026-10.
+    for (const sheet of ['styles/base.css', 'styles/scoped-base.css']) {
+      const text = readFileSync(join(src, sheet), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '')
+      expect(text, sheet).not.toMatch(/var\(--rojo/)
+    }
   })
 })
 

@@ -30,9 +30,9 @@ export interface DisplayProps extends React.ComponentProps<'h1'> {
 
 export function Display({ as: Tag = 'h1', className, ...props }: DisplayProps) {
   const merged = cn(
-    'm-0 font-display text-[clamp(40px,5.4vw,76px)]/[1.02] font-bold tracking-display wdth-display',
+    'm-0 font-display text-[clamp(40px,5.4vw,76px)]/tight font-bold tracking-display wdth-display',
     className,
   )
   const hasLeading = /(^|\s)leading-|(^|\s)text-\S+\/\S/.test(merged)
-  return <Tag className={hasLeading ? merged : `${merged} leading-[1.02]`} {...props} />
+  return <Tag className={hasLeading ? merged : `${merged} leading-tight`} {...props} />
 }

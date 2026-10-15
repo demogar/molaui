@@ -60,11 +60,11 @@ export function Input({
         fieldControlClasses,
         fieldControlSizes[size],
         'flex items-center gap-2 cursor-text',
-        'focus-within:shadow-[var(--focus-ring)] focus-within:hover:shadow-[var(--focus-ring)]',
-        'has-[[aria-invalid=true]]:band-rojo has-[[aria-invalid=true]]:cut-band',
+        'focus-within:focus-ring focus-within:hover:focus-ring',
+        'has-[[aria-invalid=true]]:band-danger has-[[aria-invalid=true]]:cut-band',
         'has-[[aria-invalid=true]]:focus-within:cut-band-focus',
         'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
-        '[&_svg]:size-4 [&_svg]:shrink-0',
+        '[&_svg]:size-(--icon) [&_svg]:shrink-0',
         className,
       )}
     >

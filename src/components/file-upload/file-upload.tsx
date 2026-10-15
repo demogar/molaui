@@ -397,13 +397,13 @@ export function FileUpload({
         }}
         className={cn(
           'relative flex flex-wrap items-center gap-x-4 gap-y-3 p-(--control-px) py-5',
-          'bg-cloth-pale relleno-field text-ink shadow-cut band-oro [--cut-reveal:3px] cursor-pointer',
+          'bg-cloth-pale relleno-field text-ink shadow-cut band-accent [--cut-reveal:3px] cursor-pointer',
           'transition-[box-shadow,background-color]',
           'hover:cut-band',
           // Dragging: the band is revealed wider than a hover, and the field
           // takes the gold wash, so the target reads from across the screen.
-          'data-dragging:cut-band data-dragging:bg-oro-soft data-dragging:bg-none data-dragging:[--cut-reveal:5px]',
-          'data-invalid:band-rojo data-invalid:cut-band',
+          'data-dragging:cut-band data-dragging:bg-selected data-dragging:bg-none data-dragging:[--cut-reveal:5px]',
+          'data-invalid:band-danger data-invalid:cut-band',
           // Stated, not faded: shade field, muted ink, keyline kept.
           'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:bg-none data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
         )}
@@ -411,7 +411,7 @@ export function FileUpload({
         <span
           aria-hidden
           className={cn(
-            'grid size-10 shrink-0 place-items-center bg-cloth shadow-cut [&_svg]:size-5',
+            'grid size-10 shrink-0 place-items-center bg-cloth shadow-cut [&_svg]:size-(--icon-lg)',
             dragging && 'bg-ink text-on-ink forced-selected',
             disabled && 'bg-cloth-shade text-ink-muted',
           )}
@@ -473,7 +473,7 @@ export function FileUpload({
         <ul data-slot="file-upload-rejections" className="m-0 flex list-none flex-col gap-1.5 p-0">
           {rejections.map(({ file, reason }, index) => (
             <li key={`${file.name}-${index}`} className="flex items-start gap-2 text-xs leading-snug font-medium text-ink-danger">
-              <span aria-hidden className="mt-[0.3em] size-2 shrink-0 bg-rojo shadow-cut forced-ink" />
+              <span aria-hidden className="mt-[0.3em] size-2 shrink-0 bg-danger shadow-cut forced-ink" />
               <span className="min-w-0 break-words">
                 {reason === 'type'
                   ? t.rejectType(file.name, types ?? '')
@@ -550,7 +550,7 @@ function FileRow({ item, locale, messages: t, canRetry, disabled, onRemove, onRe
       className="flex flex-col gap-2 px-(--control-px) py-3 not-last:border-b not-last:border-keyline-soft"
     >
       <div className="flex min-w-0 items-center gap-3">
-        <span aria-hidden className={cn('flex shrink-0 [&_svg]:size-4', STATUS_INK[item.status])}>
+        <span aria-hidden className={cn('flex shrink-0 [&_svg]:size-(--icon)', STATUS_INK[item.status])}>
           {STATUS_GLYPH[item.status]}
         </span>
         <div className="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-3 gap-y-0.5">

@@ -14,7 +14,7 @@ Every colour token has one or more scopes (`src/tokens/scopes.ts`). Tailwind wil
 | --- | --- | --- | --- |
 | `surface` | A ground that carries content: a page, a panel, a card, a wash, a filled layer. | `bg-` | `FRAME_FILL` `SHAPE_FILL` |
 | `text` | The colour of words, and of icons that inherit `currentColor`. | `text-` `placeholder-` `caret-` | `TEXT_FILL` |
-| `edge` | A line: a keyline, a divider, an underline, a current-item bar, the revealed band of a cut. Mola draws most edges with `box-shadow`. | `border-` `border-x-` `border-y-` `border-t-` `border-b-` `border-s-` `border-e-` `border-l-` `border-r-` `divide-` `outline-` `ring-` `decoration-` `stroke-` | `STROKE_COLOR` `EFFECT_COLOR` |
+| `edge` | A line: a keyline, a divider, an underline, a current-item bar, the revealed band of a cut. Mola draws most edges with `box-shadow`. | `border-` `border-x-` `border-y-` `border-t-` `border-b-` `border-s-` `border-e-` `border-l-` `border-r-` `divide-` `outline-` `ring-` `decoration-` `stroke-` `cut-` `bar-start-` `bar-bottom-` | `STROKE_COLOR` `EFFECT_COLOR` |
 | `mark` | A small filled graphic that is not a region: a status dot, a swatch key, a switch thumb, a rule drawn as a 1px box. | `bg-` `fill-` `stroke-` | `SHAPE_FILL` |
 | `overlay` | A translucent fill over content the system cannot know: a scrim over an image, the backdrop behind a modal. | `bg-` | `FRAME_FILL` `SHAPE_FILL` |
 
@@ -58,7 +58,8 @@ Every colour token has one or more scopes (`src/tokens/scopes.ts`). Tailwind wil
 
 | Token | Role | Light | Dark | Use as |
 | --- | --- | --- | --- | --- |
-| `--danger` |  | `#9e1e24` | `#ff8a7e` | mark, edge: `bg-danger` `fill-danger` `border-danger` `decoration-danger` |
+| `--danger` |  | `#c0272d` | `#f2685c` | mark, edge, surface: `bg-danger` `fill-danger` `border-danger` `decoration-danger` |
+| `--danger-strong` |  | `#9e1e24` | `#ff8a7e` | surface: `bg-danger-strong` |
 | `--success` |  | `#0b6b4b` | `#4cc493` | mark, edge: `bg-success` `fill-success` `border-success` `decoration-success` |
 | `--warn` |  | `#8a6410` | `#e0b45a` | mark, edge: `bg-warn` `fill-warn` `border-warn` `decoration-warn` |
 | `--info` |  | `#1b4b8f` | `#86a8ee` | mark, edge: `bg-info` `fill-info` `border-info` `decoration-info` |
@@ -76,6 +77,7 @@ Every colour token has one or more scopes (`src/tokens/scopes.ts`). Tailwind wil
 | `--verde-soft` |  | `#dce6dc` | `#253232` | surface: `bg-verde-soft` |
 | `--oro-soft` |  | `#f5ead0` | `#302f2c` | surface: `bg-oro-soft` |
 | `--ink-soft` |  | `#e4e5e1` | `#2a2d31` | surface: `bg-ink-soft` |
+| `--danger-soft` |  | `#f3e0d9` | `#352a2d` | surface: `bg-danger-soft` |
 | `--ink-on-tint` |  | `#3d4147` | `#c4c8bd` | text: `text-ink-on-tint` |
 | `--rojo-on-shade` |  | `#9e1e24` | `#ff8a7e` | text: `text-rojo-on-shade` |
 | `--rojo-rule` |  | `color-mix(in oklab, var(--rojo) 45%, transparent)` | `color-mix(in oklab, var(--rojo) 45%, transparent)` | edge: `border-rojo-rule` `decoration-rojo-rule` |
@@ -98,13 +100,22 @@ Every colour token has one or more scopes (`src/tokens/scopes.ts`). Tailwind wil
 | `--on-scrim-muted` |  | `color-mix(in oklab, #f6f7f2 78%, transparent)` | `color-mix(in oklab, #f6f7f2 78%, transparent)` | text: `text-on-scrim-muted` |
 | `--backdrop` |  | `color-mix(in oklab, var(--cloth) 82%, transparent)` | `color-mix(in oklab, var(--cloth) 82%, transparent)` | overlay: `bg-backdrop` |
 
+### accent and selection
+
+| Token | Role | Light | Dark | Use as |
+| --- | --- | --- | --- | --- |
+| `--accent` |  | `#edb01f` | `#f0bc3a` | surface, mark, edge: `bg-accent` `fill-accent` `border-accent` `decoration-accent` |
+| `--on-accent` |  | `#14161a` | `#1e2126` | text: `text-on-accent` |
+| `--accent-soft` |  | `#f5ead0` | `#302f2c` | surface: `bg-accent-soft` |
+| `--selected` |  | `#f5ead0` | `#302f2c` | surface: `bg-selected` |
+
 ### the cut
 
 | Token | Role | Light | Dark | Use as |
 | --- | --- | --- | --- | --- |
 | `--band` |  | `#edb01f` | `#f0bc3a` | edge, mark: set with `band-*` |
 | `--cut` |  | `0 0 0 var(--cut-w) var(--ink)` | `0 0 0 var(--cut-w) var(--ink)` |  |
-| `--focus-ring` |  | `0 0 0 var(--cut-w) var(--ink), 0 0 0 calc(var(--cut-w) + 2px) var(--cloth-pale), 0 0 0 calc(var(--cut-w) + 5px) var(--ink)` | `0 0 0 var(--cut-w) var(--ink), 0 0 0 calc(var(--cut-w) + 2px) var(--cloth-pale), 0 0 0 calc(var(--cut-w) + 5px) var(--ink)` |  |
+| `--focus-ring` |  | `0 0 0 var(--cut-w) var(--ink), 0 0 0 calc(var(--cut-w) + var(--focus-gap)) var(--cloth-pale), 0 0 0 calc(var(--cut-w) + var(--focus-gap) + 3px) var(--ink)` | `0 0 0 var(--cut-w) var(--ink), 0 0 0 calc(var(--cut-w) + var(--focus-gap)) var(--cloth-pale), 0 0 0 calc(var(--cut-w) + var(--focus-gap) + 3px) var(--ink)` |  |
 | `--focus-ring-inset` |  | `inset 0 0 0 2px var(--ink), inset 0 0 0 3.5px var(--cloth-pale)` | `inset 0 0 0 2px var(--ink), inset 0 0 0 3.5px var(--cloth-pale)` |  |
 
 ### elevation
@@ -112,8 +123,28 @@ Every colour token has one or more scopes (`src/tokens/scopes.ts`). Tailwind wil
 | Token | Role | Light | Dark | Use as |
 | --- | --- | --- | --- | --- |
 | `--elevation-raised` |  | `0 14px 34px -10px light-dark( color-mix(in oklab, #14161a 34%, transparent), color-mix(in oklab, #0b0c0e 80%, transparent) )` | `0 14px 34px -10px light-dark( color-mix(in oklab, #14161a 34%, transparent), color-mix(in oklab, #0b0c0e 80%, transparent) )` |  |
+| `--elevation-overlay` |  | `0 28px 64px -18px light-dark( color-mix(in oklab, #14161a 42%, transparent), color-mix(in oklab, #0b0c0e 88%, transparent) )` | `0 28px 64px -18px light-dark( color-mix(in oklab, #14161a 42%, transparent), color-mix(in oklab, #0b0c0e 88%, transparent) )` |  |
 | `--cut-w` |  | `1.5px` | `1.5px` |  |
 | `--cut-reveal` |  | `5px` | `5px` |  |
+
+### edges
+
+| Token | Role | Light | Dark | Use as |
+| --- | --- | --- | --- | --- |
+| `--rule-w` |  | `1px` | `1px` |  |
+| `--bar-w` |  | `3px` | `3px` |  |
+| `--focus-gap` |  | `2px` | `2px` |  |
+
+### stacking
+
+| Token | Role | Light | Dark | Use as |
+| --- | --- | --- | --- | --- |
+| `--z-lift` |  | `1` | `1` |  |
+| `--z-sticky` |  | `10` | `10` |  |
+| `--z-shell` |  | `40` | `40` |  |
+| `--z-overlay` |  | `50` | `50` |  |
+| `--z-popover` |  | `60` | `60` |  |
+| `--z-toast` |  | `70` | `70` |  |
 
 ### motion
 
@@ -132,6 +163,10 @@ Every colour token has one or more scopes (`src/tokens/scopes.ts`). Tailwind wil
 | `--control-h-lg` |  | `44px` | `44px` |  |
 | `--control-px` |  | `14px` | `14px` |  |
 | `--row-h` |  | `40px` | `40px` |  |
+| `--icon-xs` |  | `12px` | `12px` |  |
+| `--icon-sm` |  | `14px` | `14px` |  |
+| `--icon` |  | `16px` | `16px` |  |
+| `--icon-lg` |  | `18px` | `18px` |  |
 
 ## Pairings
 
@@ -163,6 +198,15 @@ Every foreground and ground the system promises, with the contrast it owes: 4.5 
 | `--ink` | `--ink-soft` | 4.5 | both |
 | `--ink-2` | `--ink-soft` | 4.5 | both |
 | `--ink-muted` | `--ink-soft` | 4.5 | both |
+| `--ink` | `--danger-soft` | 4.5 | both |
+| `--ink-2` | `--danger-soft` | 4.5 | both |
+| `--ink-muted` | `--danger-soft` | 4.5 | both |
+| `--ink` | `--accent-soft` | 4.5 | both |
+| `--ink-2` | `--accent-soft` | 4.5 | both |
+| `--ink-muted` | `--accent-soft` | 4.5 | both |
+| `--ink` | `--selected` | 4.5 | both |
+| `--ink-2` | `--selected` | 4.5 | both |
+| `--ink-muted` | `--selected` | 4.5 | both |
 | `--rojo` | `--cloth` | 4.5 | both |
 | `--rojo-deep` | `--cloth` | 4.5 | both |
 | `--anil` | `--cloth` | 4.5 | both |
@@ -171,6 +215,7 @@ Every foreground and ground the system promises, with the contrast it owes: 4.5 
 | `--danger` | `--cloth` | 4.5 | both |
 | `--success` | `--cloth` | 4.5 | both |
 | `--info` | `--cloth` | 4.5 | both |
+| `--ink-danger` | `--cloth` | 4.5 | both |
 | `--rojo` | `--cloth-pale` | 4.5 | both |
 | `--rojo-deep` | `--cloth-pale` | 4.5 | both |
 | `--anil` | `--cloth-pale` | 4.5 | both |
@@ -179,12 +224,16 @@ Every foreground and ground the system promises, with the contrast it owes: 4.5 
 | `--danger` | `--cloth-pale` | 4.5 | both |
 | `--success` | `--cloth-pale` | 4.5 | both |
 | `--info` | `--cloth-pale` | 4.5 | both |
+| `--ink-danger` | `--cloth-pale` | 4.5 | both |
 | `--oro` | `--cloth` | 4.5 | dark |
 | `--on-layer` | `--rojo` | 4.5 | both |
 | `--on-layer` | `--rojo-deep` | 4.5 | both |
 | `--on-layer` | `--anil` | 4.5 | both |
 | `--on-layer` | `--verde` | 4.5 | both |
 | `--on-oro` | `--oro` | 4.5 | both |
+| `--on-accent` | `--accent` | 4.5 | both |
+| `--on-layer` | `--danger` | 4.5 | both |
+| `--on-layer` | `--danger-strong` | 4.5 | both |
 | `--on-ink` | `--ink` | 4.5 | both |
 | `--on-ink-muted` | `--ink` | 4.5 | both |
 | `--oro` | `--ink` | 4.5 | light |
@@ -195,6 +244,7 @@ Every foreground and ground the system promises, with the contrast it owes: 4.5 
 | `--anil` | `--anil-soft` | 4.5 | both |
 | `--verde` | `--verde-soft` | 4.5 | both |
 | `--rojo-deep` | `--rojo-soft` | 4.5 | both |
+| `--ink-danger` | `--danger-soft` | 4.5 | both |
 | `--ink-success` | `--ink-soft` | 4.5 | both |
 | `--ink-danger` | `--ink-soft` | 4.5 | both |
 | `--anil` | `--cloth-shade` | 3 | both |
@@ -203,6 +253,7 @@ Every foreground and ground the system promises, with the contrast it owes: 4.5 
 | `--rojo` | `--cloth-shade` | 3 | both |
 | `--warn` | `--oro-soft` | 3 | both |
 | `--rojo` | `--rojo-soft` | 3 | both |
+| `--danger` | `--danger-soft` | 3 | both |
 | `--on-scrim` | `--scrim` over any image (measured over white, black and every cloth) | 4.5 | both |
 | `--on-scrim-muted` | `--scrim` over any image (measured over white, black and every cloth) | 4.5 | both |
 
@@ -224,6 +275,10 @@ Density is an attribute, `data-density`, on `<html>` or any subtree. Comfortable
 - `--control-h-lg`: `36px`
 - `--control-px`: `10px`
 - `--row-h`: `30px`
+- `--icon-xs`: `11px`
+- `--icon-sm`: `12px`
+- `--icon`: `14px`
+- `--icon-lg`: `16px`
 
 ### `data-density="spacious"`
 
@@ -237,3 +292,7 @@ Density is an attribute, `data-density`, on `<html>` or any subtree. Comfortable
 - `--control-h-lg`: `56px`
 - `--control-px`: `22px`
 - `--row-h`: `52px`
+- `--icon-xs`: `13px`
+- `--icon-sm`: `15px`
+- `--icon`: `18px`
+- `--icon-lg`: `20px`

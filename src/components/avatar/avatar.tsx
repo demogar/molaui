@@ -13,11 +13,13 @@ import { type Variants } from '../../lib/variants'
  * Square because nothing in this system is round. Initials in Archivo at its
  * label width, because two letters on a tile are lettering, not text.
  *
- * The ground is one of the five layers, picked from the name by a stable hash:
+ * The ground is one of four layers, picked from the name by a stable hash:
  * the same person is the same colour on every screen, in every session,
  * without anyone storing a colour. Each pairing is the one tokens.css already
- * measured — cloth on rojo / añil / verde, ink on oro, cloth on ink — so no
- * initials ever fall under AA.
+ * measured — cloth on añil / verde, ink on oro, cloth on ink — so no initials
+ * ever fall under AA. Rojo was a fifth until 2026-10: one person in five wore
+ * the danger colour, beside the failed runs they owned
+ * (docs/adr/0008-the-rojo-register.md).
  *
  * The image goes through Base UI's Avatar, which only swaps the initials out
  * once the image has actually loaded: a broken URL leaves the initials in
@@ -25,14 +27,13 @@ import { type Variants } from '../../lib/variants'
  */
 
 const LAYERS = [
-  'bg-rojo text-on-layer',
   'bg-anil text-on-layer',
   'bg-verde text-on-layer',
   'bg-oro text-on-oro',
   'bg-ink text-on-ink',
 ] as const
 
-/** FNV-1a: tiny, stable across engines, and good enough to spread names over five colours. */
+/** FNV-1a: tiny, stable across engines, and good enough to spread names over four colours. */
 function hash(value: string): number {
   let h = 0x811c9dc5
   for (let i = 0; i < value.length; i++) {
@@ -98,7 +99,7 @@ export function Avatar({ name, src, icon, size, className, ...props }: AvatarPro
       {src ? <AvatarPrimitive.Image src={src} alt="" className="size-full object-cover" /> : null}
       <AvatarPrimitive.Fallback
         aria-hidden
-        className="font-ui leading-none font-semibold tracking-[0.04em] wdth-label [&_svg]:size-[55%]"
+        className="font-ui leading-none font-semibold tracking-figures wdth-label [&_svg]:size-[55%]"
       >
         {icon ?? initials(name)}
       </AvatarPrimitive.Fallback>
@@ -132,7 +133,7 @@ export function AvatarGroup({ label, max = 4, size = 'md', className, children, 
       data-slot="avatar-group"
       className={cn(
         'flex items-center -space-x-1',
-        '[&>[data-slot=avatar]]:shadow-[0_0_0_1.5px_var(--ink),0_0_0_3.5px_var(--cloth)]',
+        '[&>[data-slot=avatar]]:cut-gap',
         className,
       )}
       {...props}

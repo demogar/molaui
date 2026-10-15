@@ -4,7 +4,7 @@
 
 ## Rules
 
-1. Interactive edges use `shadow-cut` (or `shadow-floating` on overlays), never `border`. `border-keyline` is for decorative dividers only. A box-shadow edge can grow a revealed band on hover without moving its neighbours, and the named utilities keep an outline in forced-colours mode.
+1. Interactive edges use `shadow-cut` (`shadow-floating` on popups, `shadow-overlay` on dialogs and drawers), never `border`. `border-keyline` is for decorative dividers only. Every other edge is a named utility (`rule-b`, `cut-t`, `bar-start-ink`, `cut-anil`, `focus-ring`), never an arbitrary `shadow-[…]` or an `rtl:` twin. A box-shadow edge can grow a revealed band on hover without moving its neighbours; the named edges flip for right-to-left by themselves and keep an edge in forced-colours mode.
 2. Radius is zero. `rounded-full` only for something that is genuinely a dot. The system is cut cloth: nothing in it is rounded.
 3. State is never colour alone: glyph, word and colour, in that order of importance. It has to survive colour blindness, a greyscale screenshot and forced colours.
 4. Disabled is stated, not faded. No `opacity-*` on a disabled control. Opacity fades the keyline and the label to about 2:1, a failure axe does not report because disabled controls are exempt.
@@ -18,6 +18,7 @@
 12. Use the components for behaviour. Do not re-implement focus trapping, roving focus or typeahead; the components are built on Base UI. A maintained primitive gets keyboard and screen-reader behaviour right in more cases than a local copy.
 13. Check a component’s lifecycle phase before building on it. Stable is covered by semver, Experimental may change in a minor release, and Deprecated names its replacement: use that instead. A screen built on a component that is about to change or go is built twice.
 14. Do what each component’s accessibility section leaves to you, usually an accessible name or a label. The component handles roles, focus and announcements. Axe catches a missing name only on the screens it is run on; the component cannot know what its button is for.
+15. On a product screen, rojo means danger and is used only through the danger role (`bg-danger`, `bg-danger-soft`, `text-ink-danger`, `band-danger`). The accent is gold, by name (`band-accent`). A red label band or bullet beside a red FAILED mark makes the failure one red thing among several (ADR 0008).
 
 ## Lifecycle phases
 

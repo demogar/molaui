@@ -62,7 +62,7 @@ export function Divider({
           BAND[band],
           vertical
             ? // the slits run across a vertical seam, so the gradient turns with it
-              'w-[11px] self-stretch bg-(--band) bg-[repeating-linear-gradient(0deg,var(--ink)_0_2px,transparent_2px_9px)] shadow-[0_0_0_1.5px_var(--ink)]'
+              'w-[11px] self-stretch bg-(--band) bg-[repeating-linear-gradient(0deg,var(--ink)_0_2px,transparent_2px_9px)] cut-ink'
             : 'relleno w-full',
         ],
         variant === 'diente' && ['w-full text-ink', up ? 'diente-up' : 'diente'],

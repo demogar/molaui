@@ -14,7 +14,7 @@ import { cn } from '../../lib/cn'
 export function Lead({ className, ...props }: React.ComponentProps<'p'>) {
   return (
     <p
-      className={cn('m-0 max-w-reading font-text text-lg leading-[1.5] text-ink-2', className)}
+      className={cn('m-0 max-w-reading font-text text-lg leading-body text-ink-2', className)}
       {...props}
     />
   )

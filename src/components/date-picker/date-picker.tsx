@@ -88,7 +88,7 @@ const errorClasses = 'flex items-start gap-2 text-xs leading-snug font-medium te
 export function DateError({ id, children }: { id: string; children: React.ReactNode }) {
   return (
     <span id={id} role="alert" className={errorClasses}>
-      <span aria-hidden className="mt-[0.3em] size-2 shrink-0 bg-rojo shadow-cut" />
+      <span aria-hidden className="mt-[0.3em] size-2 shrink-0 bg-danger shadow-cut" />
       <span>{children}</span>
     </span>
   )
@@ -98,8 +98,8 @@ export function DateError({ id, children }: { id: string; children: React.ReactN
 export const calendarButtonClasses = cn(
   '-me-1 grid size-7 shrink-0 place-items-center text-ink-muted',
   'transition-colors hover:bg-ink-soft hover:text-ink',
-  'focus-visible:outline-none focus-visible:shadow-[var(--focus-ring)] data-popup-open:bg-ink-soft data-popup-open:text-ink',
-  'disabled:cursor-not-allowed disabled:hover:bg-transparent [&_svg]:size-4',
+  'focus-visible:outline-none focus-visible:focus-ring data-popup-open:bg-ink-soft data-popup-open:text-ink',
+  'disabled:cursor-not-allowed disabled:hover:bg-transparent [&_svg]:size-(--icon)',
 )
 
 export function DatePicker({
@@ -222,7 +222,7 @@ export function DatePicker({
           side="bottom"
           align="start"
           sideOffset={6}
-          className="z-50"
+          className="z-(--z-popover)"
         >
           <PopoverPrimitive.Popup
             data-slot="date-picker-popup"

@@ -28,14 +28,14 @@ describe('Heading', () => {
 describe('Display', () => {
   it('puts its leading back when a bare size override strips it', () => {
     render(<Display className="text-[40px]">Title</Display>)
-    expect(screen.getByRole('heading').className).toContain('leading-[1.02]')
+    expect(screen.getByRole('heading').className).toContain('leading-tight')
   })
 
   it('respects a leading the caller sets', () => {
     render(<Display className="text-[40px] leading-none">Title</Display>)
     const cls = screen.getByRole('heading').className
     expect(cls).toContain('leading-none')
-    expect(cls).not.toContain('leading-[1.02]')
+    expect(cls).not.toContain('leading-tight')
   })
 })
 

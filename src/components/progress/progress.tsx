@@ -59,7 +59,7 @@ export interface ProgressProps extends Omit<ProgressPrimitive.Root.Props, 'class
   tone?: 'ink' | 'success' | 'danger'
 }
 
-const FILL = { ink: 'bg-ink', success: 'bg-verde', danger: 'bg-rojo' } as const
+const FILL = { ink: 'bg-ink', success: 'bg-verde', danger: 'bg-danger' } as const
 
 export function Progress({
   className,
@@ -88,7 +88,7 @@ export function Progress({
       ) : null}
       <ProgressPrimitive.Track className={cn(trackClasses, sizeClasses[size])}>
         {indeterminate ? (
-          <span aria-hidden className="absolute inset-0 band-oro relleno-working" />
+          <span aria-hidden className="absolute inset-0 band-accent relleno-working" />
         ) : (
           <ProgressPrimitive.Indicator
             className={cn(fillClasses, 'transition-[scale] duration-(--motion-base)', FILL[tone])}
@@ -123,7 +123,7 @@ export function meterLevel(
   return 'normal'
 }
 
-const LEVEL_FILL = { normal: 'bg-ink', warn: 'bg-oro', danger: 'bg-rojo' } as const
+const LEVEL_FILL = { normal: 'bg-ink', warn: 'bg-oro', danger: 'bg-danger' } as const
 
 export function Meter({
   className,
@@ -168,7 +168,7 @@ export function Meter({
           <span
             key={t}
             aria-hidden
-            className="absolute inset-y-0 w-[1.5px] bg-ink forced-ink"
+            className="absolute inset-y-0 w-(--cut-w) bg-ink forced-ink"
             style={{ insetInlineStart: `calc(${t * 100}% - 0.75px)` }}
           />
         ))}

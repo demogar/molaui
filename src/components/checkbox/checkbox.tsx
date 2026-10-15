@@ -26,12 +26,12 @@ import { ChoiceField } from './choice-field'
  */
 export const checkboxBoxClasses = [
   'relative inline-grid size-4 shrink-0 place-items-center rounded-none',
-  'bg-cloth-pale shadow-cut band-oro [--cut-reveal:2px]',
+  'bg-cloth-pale shadow-cut band-accent [--cut-reveal:2px]',
   'transition-[background-color,box-shadow]',
   'hover:cut-band',
-  'focus-visible:shadow-[var(--focus-ring)]',
+  'focus-visible:focus-ring',
   'data-checked:bg-ink data-checked:text-on-ink data-indeterminate:bg-ink data-indeterminate:text-on-ink',
-  'data-invalid:band-rojo data-invalid:cut-band aria-invalid:band-rojo aria-invalid:cut-band',
+  'data-invalid:band-danger data-invalid:cut-band aria-invalid:band-danger aria-invalid:cut-band',
   'data-disabled:cursor-not-allowed data-disabled:bg-cloth-shade data-disabled:text-ink-muted data-disabled:hover:shadow-cut',
   // A disabled box that is still checked keeps a deeper ground than an
   // unchecked one, so the state survives. --ink-muted, the disabled ink
@@ -65,7 +65,7 @@ export function Checkbox({ className, label, description, ...props }: CheckboxPr
       aria-describedby={joinIds(descriptionId, props['aria-describedby'])}
     >
       <CheckboxPrimitive.Indicator
-        className="flex data-unchecked:hidden [&_svg]:size-3"
+        className="flex data-unchecked:hidden [&_svg]:size-(--icon-xs)"
         render={(indicatorProps, state) => (
           <span {...indicatorProps}>
             {state.indeterminate ? (

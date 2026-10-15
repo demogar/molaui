@@ -47,7 +47,7 @@ export interface ToastOptions {
 const MARK: Record<ToastTone, string> = {
   neutral: 'bg-ink',
   success: 'bg-verde',
-  danger: 'bg-rojo',
+  danger: 'bg-danger',
   info: 'bg-anil',
   running: 'bg-oro animate-mola-pulse',
 }
@@ -139,7 +139,7 @@ export function ToastProvider({ children, limit = 3, timeout = 5000 }: ToastProv
     <ToastPrimitive.Provider limit={limit} timeout={timeout}>
       {children}
       <ToastPrimitive.Portal>
-        <ToastPrimitive.Viewport className="fixed inset-e-4 bottom-4 z-[60] w-[calc(100vw-2rem)] outline-none sm:inset-e-6 sm:bottom-6 sm:w-[24rem]">
+        <ToastPrimitive.Viewport className="fixed inset-e-4 bottom-4 z-(--z-toast) w-[calc(100vw-2rem)] outline-none sm:inset-e-6 sm:bottom-6 sm:w-[24rem]">
           <ToastList />
         </ToastPrimitive.Viewport>
       </ToastPrimitive.Portal>
@@ -210,7 +210,7 @@ function ToastList() {
           />
         </ToastPrimitive.Content>
         {tone === 'running' ? (
-          <span aria-hidden className="absolute inset-x-0 bottom-0 h-[3px] band-oro relleno-working" />
+          <span aria-hidden className="absolute inset-x-0 bottom-0 h-(--bar-w) band-accent relleno-working" />
         ) : null}
       </ToastPrimitive.Root>
     )

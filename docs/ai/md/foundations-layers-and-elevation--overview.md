@@ -10,7 +10,7 @@ Most design systems say how far something is from the page with a shadow: a card
 one, a menu a larger one, a dialog the largest. Mola UI says it with **layers of cloth and the
 edges cut through them**, the method a mola is made with. A surface is a layer; its edge is a cut,
 drawn in ink; and when something is chosen or pointed at, the cut opens to show the layer beneath.
-There is exactly one blur in the system, and only for what genuinely floats.
+The only blur in the system is for what genuinely floats, at two depths.
 
 This page borrows the method, not the motifs. Nothing on it, or anywhere in the interface, copies a
 Guna design, symbol or pattern.
@@ -46,17 +46,42 @@ the reveal goes all the way round. `band-*` chooses the layer underneath.
 
 > Not included in the Markdown version: an interactive `Specimen` block. See it on the page: https://demogar.github.io/molaui/?path=/docs/foundations-layers-and-elevation--overview
 
-Gold is the default reveal: it is the band a hover shows on a button, a field, a checkbox or a
-chip. Red is revealed only on something already about danger, because a field that flashes red
-under the pointer reads, for a moment, as an error.
+Gold, the accent, is the default reveal: it is the band a hover shows on a button, a field, a
+checkbox or a chip, written `band-accent` so an app can re-accent it. Red is revealed only on
+something already about danger, as `band-danger`, because a field that flashes red under the
+pointer reads, for a moment, as an error.
 
-## Floating: the one blur
+## Three ways to say "selected"
 
-Menus, popovers, selects, the command palette, dialogs, drawers and toasts float above the page,
-and they are the only things with a blur. They wear `shadow-floating`, which is the keyline **and**
-`--elevation-raised` together, from one shared surface (`floatingSurface` in the popover). Tailwind
-keeps one `box-shadow` per element, so the two have to be declared as one utility; written as
-`shadow-cut shadow-raised`, one of them silently wins.
+Selection was drawn three ways, and the three mean different things. Each has one look.
+
+| What is chosen | Look | Utilities |
+| --- | --- | --- |
+| A **value**: the checked segment, today's page, the picked date | Ink fill | `bg-ink text-on-ink` |
+| An item **chosen for an action**: a selected table row, the bulk-action bar, a drop target | The selection wash, and a bar | `bg-selected bar-start-ink` |
+| The **current location**: the page you are on in the sidebar or a list | A shade, a bar and a heavier label | `bg-ink-soft bar-start-ink font-semibold` |
+
+`--selected` is the accent's wash (`--accent-soft`), so the whole ink ramp reads on it.
+
+## Floating: the only blur
+
+Menus, popovers, selects, tooltips, toasts, dialogs, drawers and the command palette float above
+the page, and they are the only things with a blur, at two depths:
+
+- **Raised**, `shadow-floating`: anchored to something on the page. Menus, popovers, selects,
+  tooltips, toasts. The keyline **and** `--elevation-raised`, from one shared surface
+  (`floatingSurface` in the popover).
+- **Overlay**, `shadow-overlay`: takes the page away. Dialogs, drawers, the command palette, the
+  application shell's sheet on a phone. The keyline and the deeper `--elevation-overlay`.
+
+One depth used to serve both, so a select opened inside a dialog cast the dialog's own shadow and
+the two read as one sheet. Tailwind keeps one `box-shadow` per element, so the keyline and the blur
+are declared as one utility; written as `shadow-cut shadow-raised`, one of them silently wins.
+
+What sits above what is the `--z-*` scale, written `z-(--z-popover)`: `lift` (one item over its
+neighbours), `sticky` (a sticky header or app bar), `shell` (the phone sheet), `overlay` (dialogs,
+drawers), `popover` (anything anchored, so a select inside a dialog is above it), `toast` (above
+everything). Every floating surface used to sit at `z-50`, and which one won was document order.
 
 The keyline is never optional on a floating surface, and the dark theme is the reason. A blur is a
 darker patch of the ground under the surface, and on a near-black ground there is almost nothing
@@ -99,8 +124,10 @@ Two more devices come from the same method, and neither is depth.
 | The page | Ground | `bg-cloth` |
 | Card, input, panel | Raised | `bg-cloth-pale shadow-cut` |
 | Table header, well, disabled field | One step down | `bg-cloth-shade` |
-| Hovered or selected control | Revealed | `cut-band band-oro` (or `band-anil`, `band-rojo`) |
-| Menu, popover, select, dialog, drawer, toast | Floating | `bg-cloth-pale shadow-floating` |
+| Hovered control | Revealed | `cut-band band-accent` (or `band-anil`, `band-danger`) |
+| Item chosen for an action | Selected | `bg-selected bar-start-ink` |
+| Menu, popover, select, tooltip, toast | Floating | `bg-cloth-pale shadow-floating` |
+| Dialog, drawer, command palette | Overlay | `bg-cloth-pale shadow-overlay` |
 | A whole region that belongs to a status | Wash | `bg-anil-soft`, `bg-verde-soft`… (see Color) |
 | The edge between the page and a filled panel | Seam | `diente` |
 
@@ -110,7 +137,7 @@ soft drop shadow is a different system's costume.
 ## In forced colours
 
 Windows High Contrast removes every `box-shadow`, so every keyline, band and blur goes at once.
-`shadow-cut`, `shadow-floating`, `cut` and `cut-band` each draw a 1px outline in the user's text
+`shadow-cut`, `shadow-floating`, `shadow-overlay`, `cut` and `cut-band` each draw a 1px outline in the user's text
 colour in that mode, so the layers keep their edges. The bands and the blur are decoration and go
 with the mode, which is the point of it. See
 [Accessibility](https://demogar.github.io/molaui/?path=/docs/foundations-accessibility--overview) for the rest.

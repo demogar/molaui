@@ -54,7 +54,7 @@ export const calloutVariants = cva('relative rounded-none text-ink', {
       info: 'bg-anil-soft band-anil',
       success: 'bg-verde-soft band-verde',
       warn: 'bg-oro-soft band-oro',
-      danger: 'bg-rojo-soft band-rojo',
+      danger: 'bg-danger-soft band-danger',
     },
     variant: {
       seam: 'shadow-cut',
@@ -85,7 +85,7 @@ const ICON_INK: Record<CalloutTone, string> = {
   info: 'text-anil',
   success: 'text-verde',
   warn: 'text-ink-warn',
-  danger: 'text-rojo-on-shade',
+  danger: 'text-ink-danger',
 }
 
 export interface CalloutProps
@@ -146,7 +146,7 @@ export function Callout({
             {icon ?? <Swatch tone={t} />}
           </span>
         ) : (
-          <span aria-hidden data-part="icon" className={cn('mt-px shrink-0 [&_svg]:size-[18px]', ICON_INK[t])}>
+          <span aria-hidden data-part="icon" className={cn('mt-px shrink-0 [&_svg]:size-(--icon-lg)', ICON_INK[t])}>
             {icon ?? <Icon />}
           </span>
         )}
@@ -157,7 +157,7 @@ export function Callout({
             </Heading>
           ) : null}
           {children ? (
-            <div data-part="body" className={cn('text-sm leading-body text-ink-2 [&_a]:text-rojo-on-shade [&_a]:underline', title && 'mt-1')}>
+            <div data-part="body" className={cn('text-sm leading-body text-ink-2 [&_a]:text-ink [&_a]:underline', title && 'mt-1')}>
               {children}
             </div>
           ) : null}

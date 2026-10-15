@@ -262,7 +262,7 @@ function StepRow({ step, last, nextStarted }: { step: AgentStep; last: boolean; 
     <li data-status={step.status} className="grid grid-cols-[16px_minmax(0,1fr)] gap-x-3">
       <span aria-hidden className="flex flex-col items-center">
         <RunStatusGlyph status={step.status} className="mt-[3px] size-[11px] text-[11px]" />
-        {!last ? <span className={cn('my-1 w-[1.5px] flex-1', done && nextStarted ? 'bg-ink' : 'bg-keyline')} /> : null}
+        {!last ? <span className={cn('my-1 w-(--cut-w) flex-1', done && nextStarted ? 'bg-ink' : 'bg-keyline')} /> : null}
       </span>
       <div className={cn('min-w-0', !last && 'pb-4')}>
         {hasDetail ? (
@@ -277,7 +277,7 @@ function StepRow({ step, last, nextStarted }: { step: AgentStep; last: boolean; 
               <Plus
                 aria-hidden
                 className={cn(
-                  'mt-[15px] size-3.5 shrink-0 text-ink-muted transition-transform duration-(--motion-base) group-data-[panel-open]/step:rotate-45',
+                  'mt-[15px] size-(--icon-sm) shrink-0 text-ink-muted transition-transform duration-(--motion-base) group-data-[panel-open]/step:rotate-45',
                   forcedOpen && 'invisible',
                 )}
               />
@@ -298,7 +298,7 @@ function StepRow({ step, last, nextStarted }: { step: AgentStep; last: boolean; 
 }
 
 function WorkingStrip() {
-  return <span aria-hidden className="mt-2 block h-[3px] w-full max-w-48 band-oro relleno-working" />
+  return <span aria-hidden className="mt-2 block h-(--bar-w) w-full max-w-48 band-accent relleno-working" />
 }
 
 /** The run id as a literal, with a copy action — run ids are pasted into tickets more than they are read. */

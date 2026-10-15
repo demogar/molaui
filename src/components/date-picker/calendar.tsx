@@ -216,7 +216,7 @@ export function Calendar({
           disabled={!canGoBack}
           onClick={() => setFocused(clampDay(addMonths(focused, -1), min, max))}
         >
-          <ChevronLeft className="rtl:-scale-x-100" />
+          <ChevronLeft className="flip-rtl" />
         </IconButton>
         {/* Polite, so paging through months is announced without stealing the
             day the person is on. */}
@@ -234,7 +234,7 @@ export function Calendar({
           disabled={!canGoForward}
           onClick={() => setFocused(clampDay(addMonths(focused, 1), min, max))}
         >
-          <ChevronRight className="rtl:-scale-x-100" />
+          <ChevronRight className="flip-rtl" />
         </IconButton>
       </div>
 
@@ -304,7 +304,7 @@ export function Calendar({
                       isEndpoint && 'bg-ink text-on-ink hover:bg-ink forced-selected',
                       isDisabled && 'cursor-not-allowed text-ink-muted line-through hover:bg-transparent',
                       // Focus sits above the neighbouring cells' fills.
-                      'focus-visible:z-10 focus-visible:shadow-[var(--focus-ring)]',
+                      'focus-visible:z-(--z-lift) focus-visible:focus-ring',
                     )}
                   >
                     <span aria-hidden>{formatDayNumber(date, locale)}</span>
@@ -319,10 +319,10 @@ export function Calendar({
                       />
                     ) : null}
                     {isRange && isStart ? (
-                      <span aria-hidden className="absolute inset-y-0 start-0 w-[3px] bg-oro forced-on-selected" />
+                      <span aria-hidden className="absolute inset-y-0 start-0 w-(--bar-w) bg-oro forced-on-selected" />
                     ) : null}
                     {isRange && isEnd ? (
-                      <span aria-hidden className="absolute inset-y-0 end-0 w-[3px] bg-oro forced-on-selected" />
+                      <span aria-hidden className="absolute inset-y-0 end-0 w-(--bar-w) bg-oro forced-on-selected" />
                     ) : null}
                   </td>
                 )

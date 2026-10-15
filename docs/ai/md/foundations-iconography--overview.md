@@ -21,13 +21,18 @@ learned that a counter-clockwise arrow means Retry should not meet it meaning Un
 ## Sizes
 
 An icon is sized by the control it sits in, not by the person placing it. Buttons size their own
-icons with `[&_svg]:size-*`, so an icon passed to a button needs no class at all.
+icons with `[&_svg]:size-(--icon)`, so an icon passed to a button needs no class at all.
 
-| Where | Size | Class |
-| --- | --- | --- |
-| Small button, a glyph inside a badge or a stat | 14px | `size-3.5` |
-| Default and large button, menu item, field adornment | 16px | `size-4` |
-| Empty state | larger, drawn by the component | — |
+The sizes are tokens, and each density moves them with its type, because an icon follows the text
+beside it. They used to be spacing steps (`size-4`), which compact shrank only by accident of the
+spacing unit and spacious left at the product size beside 17px text.
+
+| Where | Token | Compact | Comfortable | Spacious |
+| --- | --- | --- | --- | --- |
+| A check inside a 16px box, a sort arrow | `size-(--icon-xs)` | 11px | 12px | 13px |
+| Small button, a chip, a disclosure marker, a glyph in a stat | `size-(--icon-sm)` | 12px | 14px | 15px |
+| Default and large button, menu item, field adornment | `size-(--icon)` | 14px | 16px | 18px |
+| A callout, an empty state, the command palette's search | `size-(--icon-lg)` | 16px | 18px | 20px |
 
 Icons keep Lucide's 2px stroke at these sizes. Marks that must read at a glance at 14px, the check
 in a checkbox, select or menu and the plus and minus of a number input, are drawn heavier, at
@@ -58,7 +63,7 @@ whether a chevron will take them somewhere or open something here.
 
 ## Direction
 
-In a right-to-left page, icons that mean forward or back are mirrored with `rtl:-scale-x-100`:
+In a right-to-left page, icons that mean forward or back are mirrored with `flip-rtl`:
 pagination and submenu chevrons, the button arrow and the sidebar toggle. Icons that do not point
 along the reading direction stay as drawn: play, the up and down trend arrows on a stat, an
 external link.

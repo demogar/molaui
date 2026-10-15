@@ -94,7 +94,7 @@ export function StreamingText({
       data-status={status}
       aria-busy={streaming || undefined}
       className={cn(
-        'font-text text-lg leading-[1.55] [overflow-wrap:anywhere]',
+        'font-text text-lg leading-body [overflow-wrap:anywhere]',
         tone === 'muted' ? 'text-ink-muted' : 'text-ink',
         '[&>*+*]:mt-[0.75em]',
         className,
@@ -146,7 +146,7 @@ const BlockView = React.memo(function BlockView({
       )
     case 'ul':
       return (
-        <ul className="m-0 list-[square] ps-[1.25em] marker:text-rojo">
+        <ul className="m-0 list-[square] ps-[1.25em] marker:text-ink-muted">
           {block.items.map((item, j) => (
             <li key={j} className="ps-1 [&+li]:mt-1">
               <Inlines inlines={item} renderCitation={renderCitation} />
@@ -158,7 +158,7 @@ const BlockView = React.memo(function BlockView({
     case 'pre':
       return (
         <pre className="m-0 overflow-x-auto bg-cloth-shade px-3 py-2.5 text-ink shadow-cut scroll-cloth">
-          <code className="literal text-sm leading-[1.6]">
+          <code className="literal text-sm leading-reading">
             {block.text}
             {caret}
           </code>

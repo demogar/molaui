@@ -239,7 +239,7 @@ function AgentConfigForm() {
           </CheckboxGroup>
           {errors.tools ? (
             <span role="alert" className="flex items-start gap-2 text-xs font-medium text-ink-danger">
-              <span aria-hidden className="mt-[0.3em] size-2 shrink-0 bg-rojo shadow-cut" />
+              <span aria-hidden className="mt-[0.3em] size-2 shrink-0 bg-danger shadow-cut" />
               {errors.tools}
             </span>
           ) : null}
@@ -254,7 +254,7 @@ function AgentConfigForm() {
         </div>
       </div>
 
-      <footer className="flex flex-wrap items-center justify-end gap-3 bg-cloth-shade px-6 py-4 shadow-[inset_0_1.5px_0_var(--ink)]">
+      <footer className="flex flex-wrap items-center justify-end gap-3 bg-cloth-shade px-6 py-4 cut-t">
         <p role="status" className="m-0 me-auto text-sm text-ink-success">
           {saved ? 'Saved. New runs use this configuration.' : ''}
         </p>

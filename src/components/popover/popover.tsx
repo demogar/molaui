@@ -47,7 +47,7 @@ export function PopoverContent({
 }: PopoverContentProps) {
   return (
     <PopoverPrimitive.Portal>
-      <PopoverPrimitive.Positioner side={side} align={align} sideOffset={sideOffset} className="z-50">
+      <PopoverPrimitive.Positioner side={side} align={align} sideOffset={sideOffset} className="z-(--z-popover)">
         <PopoverPrimitive.Popup
           data-slot="popover"
           className={cn(floatingSurface, 'w-72 max-w-[calc(100vw-2rem)] p-4', className)}

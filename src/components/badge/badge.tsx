@@ -66,26 +66,26 @@ export const badgeVariants = cva(
       { variant: 'solid', tone: 'neutral', class: 'bg-ink text-on-ink' },
       { variant: 'solid', tone: 'info', class: 'bg-anil text-on-layer shadow-cut' },
       { variant: 'solid', tone: 'success', class: 'bg-verde text-on-layer shadow-cut' },
-      { variant: 'solid', tone: 'danger', class: 'bg-rojo text-on-layer shadow-cut' },
+      { variant: 'solid', tone: 'danger', class: 'bg-danger text-on-layer shadow-cut' },
       { variant: 'solid', tone: 'warn', class: 'bg-oro text-on-oro shadow-cut' },
-      { variant: 'solid', tone: 'accent', class: 'bg-oro text-on-oro shadow-cut' },
+      { variant: 'solid', tone: 'accent', class: 'bg-accent text-on-accent shadow-cut' },
       // soft — a wash, no keyline: it belongs to the row, it is not a control
       { variant: 'soft', tone: 'neutral', class: 'bg-ink-soft text-ink' },
       { variant: 'soft', tone: 'info', class: 'bg-anil-soft text-anil' },
       { variant: 'soft', tone: 'success', class: 'bg-verde-soft text-verde' },
-      { variant: 'soft', tone: 'danger', class: 'bg-rojo-soft text-rojo-deep' },
+      { variant: 'soft', tone: 'danger', class: 'bg-danger-soft text-ink-danger' },
       { variant: 'soft', tone: 'warn', class: 'bg-oro-soft text-ink-2' },
-      { variant: 'soft', tone: 'accent', class: 'bg-oro-soft text-ink' },
+      { variant: 'soft', tone: 'accent', class: 'bg-accent-soft text-ink' },
       // outline — the tone moves into the edge
-      { variant: 'outline', tone: 'neutral', class: 'text-ink-2 shadow-[0_0_0_1.5px_var(--ink-muted)]' },
-      { variant: 'outline', tone: 'info', class: 'text-anil shadow-[0_0_0_1.5px_var(--anil)]' },
-      { variant: 'outline', tone: 'success', class: 'text-verde shadow-[0_0_0_1.5px_var(--verde)]' },
-      { variant: 'outline', tone: 'danger', class: 'text-rojo-deep shadow-[0_0_0_1.5px_var(--rojo)]' },
-      { variant: 'outline', tone: 'warn', class: 'text-ink-warn shadow-[0_0_0_1.5px_var(--warn)]' },
+      { variant: 'outline', tone: 'neutral', class: 'text-ink-2 cut-ink-muted' },
+      { variant: 'outline', tone: 'info', class: 'text-anil cut-anil' },
+      { variant: 'outline', tone: 'success', class: 'text-verde cut-verde' },
+      { variant: 'outline', tone: 'danger', class: 'text-ink-danger cut-danger' },
+      { variant: 'outline', tone: 'warn', class: 'text-ink-warn cut-warn' },
       {
         variant: 'outline',
         tone: 'accent',
-        class: 'text-ink shadow-[0_0_0_1.5px_var(--ink),inset_0_-3px_0_var(--oro)]',
+        class: 'text-ink cut-ink bar-bottom-accent',
       },
     ],
     defaultVariants: { tone: 'neutral', variant: 'soft' },
@@ -125,8 +125,8 @@ const DOT_TONE: Record<BadgeTone, string> = {
   info: 'bg-anil',
   success: 'bg-verde',
   warn: 'bg-oro',
-  danger: 'bg-rojo',
-  accent: 'bg-oro',
+  danger: 'bg-danger',
+  accent: 'bg-accent',
 }
 
 export interface StatusDotProps extends React.ComponentProps<'span'> {
@@ -158,7 +158,7 @@ export function StatusDot({ tone = 'neutral', pulse = false, label, className, .
       className={cn(
         'inline-block size-[7px] shrink-0 rounded-none forced-ink',
         DOT_TONE[tone],
-        (tone === 'warn' || tone === 'accent') && 'shadow-[0_0_0_1px_var(--ink)]',
+        (tone === 'warn' || tone === 'accent') && 'cut-thin',
         pulse && 'animate-mola-pulse',
         className,
       )}

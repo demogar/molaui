@@ -55,9 +55,9 @@ export function TabsList({ className, children, ...props }: TabsListProps) {
       data-slot="tabs-list"
       data-part="list"
       className={cn(
-        'scroll-cloth relative z-[1] flex items-end overflow-x-auto overflow-y-hidden',
-        variant === 'underline' && 'gap-1 shadow-[inset_0_-1px_0_var(--keyline)]',
-        variant === 'panel' && 'gap-0.5 px-[1.5px] pt-[6.5px]',
+        'scroll-cloth relative z-(--z-lift) flex items-end overflow-x-auto overflow-y-hidden',
+        variant === 'underline' && 'gap-1 rule-b',
+        variant === 'panel' && 'gap-0.5 px-(--cut-w) pt-[6.5px]',
         className,
       )}
       {...props}
@@ -75,7 +75,7 @@ export function TabsList({ className, children, ...props }: TabsListProps) {
         <TabsPrimitive.Indicator
           data-part="indicator"
           className={cn(
-            'absolute bottom-0 left-0 h-[3px] w-px origin-left bg-ink forced-ink',
+            'absolute bottom-0 left-0 h-(--bar-w) w-px origin-left bg-ink forced-ink',
             'transition-[translate,scale] duration-(--motion-base)',
           )}
           style={({ activeTabPosition, activeTabSize }) =>
@@ -110,23 +110,25 @@ export function TabsTab({ className, count, icon, children, ...props }: TabsTabP
         // Disabled steps down to the floor of the text ramp, as in Segmented and
         // Menu; it was a 60% fade of that floor, which drops below 3:1.
         'data-disabled:pointer-events-none data-disabled:text-ink-muted',
-        '[&_svg]:size-4 [&_svg]:shrink-0',
+        '[&_svg]:size-(--icon) [&_svg]:shrink-0',
         // The focus ring sits inside the tab so the list's overflow clip does
         // not shave it off at either end of a scrolling row.
-        'focus-visible:shadow-[var(--focus-ring-inset)]',
+        'focus-visible:focus-ring-inset',
         variant === 'panel' && [
           // Resting tabs stop 3px short of the list's foot, clear of the
           // panel's keyline; the active one runs to the foot and its cloth
           // paints over that keyline (the panel is pulled up under the list,
           // and the list sits above it), so tab and panel are one shape.
-          'mb-[3px] bg-cloth-shade band-oro hover:bg-cloth-deep',
+          'mb-(--bar-w) bg-cloth-shade band-accent hover:bg-cloth-deep',
           'data-active:mb-0 data-active:bg-cloth-pale data-active:forced-selected',
-          'data-active:shadow-[-1.5px_0_0_0_var(--ink),1.5px_0_0_0_var(--ink),0_-1.5px_0_0_var(--ink)]',
+          'data-active:cut-tab',
           // The active tab's edges are a state variant, which comes after
-          // `focus-visible:` and used to replace the ring: a focused active
-          // tab looked exactly like an unfocused one. The pair carries both.
-          'data-active:focus-visible:shadow-[var(--focus-ring-inset),-1.5px_0_0_0_var(--ink),1.5px_0_0_0_var(--ink),0_-1.5px_0_0_var(--ink)]',
-          "data-active:before:absolute data-active:before:inset-x-0 data-active:before:-top-[6.5px] data-active:before:h-[5px] data-active:before:bg-(--band) data-active:before:shadow-[0_-1.5px_0_0_var(--ink),-1.5px_0_0_0_var(--ink),1.5px_0_0_0_var(--ink)] data-active:before:content-['']",
+          // `focus-visible:`; as one box-shadow string they replaced the ring,
+          // and a focused active tab looked exactly like an unfocused one. As
+          // edge slots they add up, but the variant order still means the
+          // ring has to be named under `data-active:` too.
+          'data-active:focus-visible:focus-ring-inset',
+          "data-active:before:absolute data-active:before:inset-x-0 data-active:before:-top-[6.5px] data-active:before:h-[5px] data-active:before:bg-(--band) data-active:before:cut-tab data-active:before:content-['']",
         ],
         className,
       )}
@@ -160,7 +162,7 @@ export function TabsPanel({ className, ...props }: TabsPanelProps) {
       className={cn(
         'outline-none',
         variant === 'underline' && 'pt-5',
-        variant === 'panel' && 'relative -mt-[1.5px] bg-cloth-pale p-5 shadow-cut',
+        variant === 'panel' && 'relative -mt-(--cut-w) bg-cloth-pale p-5 shadow-cut',
         className,
       )}
       {...props}

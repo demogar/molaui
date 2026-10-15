@@ -11,8 +11,8 @@ export interface Rule {
 
 export const RULES: Rule[] = [
   {
-    rule: 'Interactive edges use `shadow-cut` (or `shadow-floating` on overlays), never `border`. `border-keyline` is for decorative dividers only.',
-    why: 'A box-shadow edge can grow a revealed band on hover without moving its neighbours, and the named utilities keep an outline in forced-colours mode.',
+    rule: 'Interactive edges use `shadow-cut` (`shadow-floating` on popups, `shadow-overlay` on dialogs and drawers), never `border`. `border-keyline` is for decorative dividers only. Every other edge is a named utility (`rule-b`, `cut-t`, `bar-start-ink`, `cut-anil`, `focus-ring`), never an arbitrary `shadow-[…]` or an `rtl:` twin.',
+    why: 'A box-shadow edge can grow a revealed band on hover without moving its neighbours; the named edges flip for right-to-left by themselves and keep an edge in forced-colours mode.',
   },
   {
     rule: 'Radius is zero. `rounded-full` only for something that is genuinely a dot.',
@@ -65,5 +65,9 @@ export const RULES: Rule[] = [
   {
     rule: 'Do what each component’s accessibility section leaves to you, usually an accessible name or a label. The component handles roles, focus and announcements.',
     why: 'Axe catches a missing name only on the screens it is run on; the component cannot know what its button is for.',
+  },
+  {
+    rule: 'On a product screen, rojo means danger and is used only through the danger role (`bg-danger`, `bg-danger-soft`, `text-ink-danger`, `band-danger`). The accent is gold, by name (`band-accent`).',
+    why: 'A red label band or bullet beside a red FAILED mark makes the failure one red thing among several (ADR 0008).',
   },
 ]
