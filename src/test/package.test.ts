@@ -21,6 +21,7 @@ const pkg = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8')) as {
   dependencies?: Record<string, string>
   peerDependencies?: Record<string, string>
   devDependencies?: Record<string, string>
+  bin?: Record<string, string>
 }
 
 const version = (v: string) => v.replace(/^[\^~>=\s]+/, '').split('.').map(Number) as [number, number, number]
@@ -84,5 +85,17 @@ describe('package boundary', () => {
     expect(floor).toMatch(/^>=\d+\.\d+\.\d+$/)
     expect(floor).not.toBe(`>=${nvmrc}`)
     expect(atLeast(version(floor!), [22, 12, 0])).toBe(true)
+  })
+})
+
+describe('bin', () => {
+  // npm normalises a bin path on publish and logs the original as "invalid and
+  // removed" when it starts with "./" (0.7.1's publish log), though the bin
+  // still works. Written the way npm writes it, the publish log stays quiet,
+  // so a real warning there is not lost among false ones.
+  it('is written the way npm normalises it', () => {
+    const bins = Object.entries(pkg.bin ?? {})
+    expect(bins.length).toBeGreaterThan(0)
+    expect(bins.filter(([, path]) => path.startsWith('./'))).toEqual([])
   })
 })
