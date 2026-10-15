@@ -1,0 +1,76 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+import { ReleaseChanges, ReleaseStatus } from '../blocks/changes'
+
+<Meta title="Mola UI/What's new/0.7" />
+
+# What's new in 0.7
+
+<ReleaseStatus version="0.7.0" />
+
+0.7 is the release that closes the 2026-10-14 audit. It has breaking changes, each with a section
+in the [Migration](?path=/docs/mola-ui-migration--overview) guide, which is the place to start
+when you upgrade. It adds thirteen component pages, all marked experimental, and every finding from
+the audit now has a test that fails if it comes back. The full list is under *Everything in
+0.7.0* at the end of this page, and on the [Changelog](?path=/docs/mola-ui-changelog--overview).
+
+## What to change when you upgrade
+
+- `@base-ui/react` is a peer dependency. npm 7 and later install it for you; with yarn, or pnpm
+  set not to install peers, add it to the app.
+- One meaning for each prop name: `tone` is a status, `variant` how it looks, `kind` what sort of
+  thing it is, `size` the scale. The renamed props still work until 1.0 with a warning, and the
+  `prop-vocabulary` codemod rewrites them.
+- With a `label`, `className` styles the control you see, not a wrapper; the wrapper takes
+  `wrapperClassName`. NumberInput's `ref` and handlers reach the `<input>`.
+- Tailwind's default scales are closed in `tailwind.css`, so `bg-red-500` or `rounded-3xl` draw
+  nothing, and `max-w-prose` is now `max-w-reading`.
+
+## New components
+
+- Forms: [Form](?path=/docs/components-forms-form--overview), with an error summary that takes
+  focus after a failed submit and is announced once; [Listbox](?path=/docs/components-forms-listbox--overview);
+  [Tag group](?path=/docs/components-forms-tag-group--overview); and the
+  [Time picker](?path=/docs/components-forms-time-picker--overview) with a date-and-time picker.
+- Navigation: [Tree](?path=/docs/components-navigation-tree--overview),
+  [Stepper](?path=/docs/components-navigation-stepper--overview) and
+  [Link](?path=/docs/components-navigation-link--overview) with LinkButton, which take your
+  router's link through `render`.
+- Feedback and shell: [Banner](?path=/docs/components-feedback-banner--overview),
+  [Notification centre](?path=/docs/components-feedback-notification-centre--overview), and a
+  [Shortcuts dialog](?path=/docs/components-overlays-shortcuts-dialog--overview) fed by
+  `useHotkeys`, which uses ⌘ on a Mac and Ctrl elsewhere.
+- Data and AI: [Relative time](?path=/docs/components-data-display-relative-time--overview),
+  [Markdown](?path=/docs/ai-markdown--overview) for streamed model output that keeps citation
+  markers and never renders HTML, and a [Side-by-side diff](?path=/docs/ai-side-by-side-diff--overview).
+- DataTable gains virtual rows, column resizing from the keyboard, row expansion, a frozen first
+  column and a stacked layout for phones.
+
+## Every word can be translated
+
+Each component that writes words of its own reads them from a messages table. Pass a `messages`
+prop to one component, or wrap the app in `MessagesProvider` to change them all, portals
+included; without either, nothing changes. A test fails on English written into a component.
+[Internationalisation](?path=/docs/foundations-internationalisation--overview) lists every key.
+
+## Accessibility you can rely on
+
+Focus is visible on every control, including the cut and the current item. Every story reflows
+at 320px, at comfortable and at spacious density, every target is at least 24px at compact, and every interactive page has a
+story of its hard states: a long label, right to left, disabled and error. Badge tones each have
+their own shape, so state no longer rests on colour and a word. Each of these is checked by the
+browser audit on every pull request.
+
+## Tools around the library
+
+- `@demogar/mola-ui/eslint` carries the design rules into your editor, the same rules the MCP
+  server's `check_code` uses.
+- `@demogar/mola-ui/components.css` adds Mola to an app that already has its own styles, without
+  resetting the page.
+- VS Code snippets ship in the package, and a Figma plugin in the repository builds the variables
+  and the first components from the same tokens. See
+  [Getting started](?path=/docs/mola-ui-getting-started--overview).
+
+## Everything in 0.7.0
+
+<ReleaseChanges version="0.7.0" />

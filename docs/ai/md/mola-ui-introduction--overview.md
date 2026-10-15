@@ -101,7 +101,7 @@ Every component page has the same sections in the same order, so you always know
 5. **Related.** The components this page sends you to, and the ones that send readers here.
 6. **Changes.** What changed in the component, release by release, with the pull request and the
    commit. It is read from the changelog by each commit's scope, so it appears only on components
-   that have changed. [What's new](https://demogar.github.io/molaui/?path=/docs/mola-ui-what-s-new-0-6--overview) has the
+   that have changed. [What's new](https://demogar.github.io/molaui/?path=/docs/mola-ui-what-s-new-0-7--overview) has the
    highlights of each release.
 
 Usage comes before the examples on purpose. "Should I use this at all?" is the first question,
@@ -118,7 +118,7 @@ and fails a page that would leave a section empty. What the pages don't have yet
   they are: each decision, what it settled and what it costs.
 - **[Known gaps](https://demogar.github.io/molaui/?path=/docs/mola-ui-known-gaps--overview)** — what is not done or not tested yet,
   and where each gap stands.
-- **[What's new](https://demogar.github.io/molaui/?path=/docs/mola-ui-what-s-new-0-6--overview)** — the changes that matter in each
+- **[What's new](https://demogar.github.io/molaui/?path=/docs/mola-ui-what-s-new-0-7--overview)** — the changes that matter in each
   release, written for a reader. Every commit is on the [Changelog](https://demogar.github.io/molaui/?path=/docs/mola-ui-changelog--overview).
 - **[AI interface layer](https://demogar.github.io/molaui/?path=/docs/ai-principles--overview)** — how latency, streaming,
   uncertainty and failure surface.
