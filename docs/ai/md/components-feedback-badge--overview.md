@@ -146,3 +146,9 @@ Nothing in it takes focus, so there is no keyboard table.
 - [Empty states](https://demogar.github.io/molaui/md/patterns-empty-states--overview.md) (pattern)
 - [Filtered table](https://demogar.github.io/molaui/md/patterns-filtered-table--overview.md) (pattern)
 - [List and detail](https://demogar.github.io/molaui/md/patterns-list-and-detail--overview.md) (pattern)
+
+## Changes
+
+From CHANGELOG.md, newest first.
+
+- 0.7.0 (2026-10-15), fix: give every status tone its own shape and close the small accessibility defects [#133](https://github.com/demogar/molaui/issues/133)

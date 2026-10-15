@@ -146,3 +146,10 @@ Types: `HotkeysMessages`, `ShortcutsDialogMessages`, `HotkeyPlatform`, `Shortcut
 - [Command palette](https://demogar.github.io/molaui/md/components-overlays-command-palette--overview.md)
 - [Tooltip](https://demogar.github.io/molaui/md/components-overlays-tooltip--overview.md)
 - [Kbd](https://demogar.github.io/molaui/md/components-typography-kbd--overview.md)
+
+## Changes
+
+From CHANGELOG.md, newest first.
+
+- 0.7.0 (2026-10-15), feature: add a banner, a notification centre, and a shortcuts dialog with usehotkeys [#156](https://github.com/demogar/molaui/issues/156)
+- 0.7.0 (2026-10-15), fix: keep keyboard shortcuts left to right in a right-to-left page [#166](https://github.com/demogar/molaui/issues/166)

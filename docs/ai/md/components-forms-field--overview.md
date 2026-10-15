@@ -190,3 +190,9 @@ Types: `LabelMessages`, `SearchInputMessages`, `LabelProps`, `FieldControlProps`
 - [Filtered table](https://demogar.github.io/molaui/md/patterns-filtered-table--overview.md) (pattern)
 - [Form validation](https://demogar.github.io/molaui/md/patterns-form-validation--overview.md) (pattern)
 - [Settings page](https://demogar.github.io/molaui/md/patterns-settings-page--overview.md) (pattern)
+
+## Changes
+
+From CHANGELOG.md, newest first.
+
+- 0.7.0 (2026-10-15), fix: keep keyboard shortcuts left to right in a right-to-left page [#166](https://github.com/demogar/molaui/issues/166)

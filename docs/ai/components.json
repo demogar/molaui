@@ -2688,6 +2688,27 @@
           "id": "ai-markdown--untrusted-input",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-markdown--untrusted-input"
         }
+      ],
+      "changes": [
+        {
+          "version": "0.7.0",
+          "date": "2026-10-15",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "markdown",
+            "side-by-side-diff"
+          ],
+          "subject": "add a streaming markdown renderer that keeps citations, and a side-by-side diff",
+          "pr": {
+            "number": 158,
+            "url": "https://github.com/demogar/molaui/issues/158"
+          },
+          "commit": {
+            "sha": "6fe2922",
+            "url": "https://github.com/demogar/molaui/commit/6fe2922b08230eb4becac6db0ccf52495331c45a"
+          }
+        }
       ]
     },
     {
@@ -4314,6 +4335,27 @@
           "name": "NoChanges",
           "id": "ai-side-by-side-diff--no-changes",
           "url": "https://demogar.github.io/molaui/?path=/story/ai-side-by-side-diff--no-changes"
+        }
+      ],
+      "changes": [
+        {
+          "version": "0.7.0",
+          "date": "2026-10-15",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "markdown",
+            "side-by-side-diff"
+          ],
+          "subject": "add a streaming markdown renderer that keeps citations, and a side-by-side diff",
+          "pr": {
+            "number": 158,
+            "url": "https://github.com/demogar/molaui/issues/158"
+          },
+          "commit": {
+            "sha": "6fe2922",
+            "url": "https://github.com/demogar/molaui/commit/6fe2922b08230eb4becac6db0ccf52495331c45a"
+          }
         }
       ]
     },
@@ -7658,6 +7700,42 @@
       ],
       "changes": [
         {
+          "version": "0.7.0",
+          "date": "2026-10-15",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "data-table"
+          ],
+          "subject": "add virtual rows, column resize, row expansion, a frozen first column and rows on a phone",
+          "pr": {
+            "number": 161,
+            "url": "https://github.com/demogar/molaui/issues/161"
+          },
+          "commit": {
+            "sha": "387bb5b",
+            "url": "https://github.com/demogar/molaui/commit/387bb5b35b64544f14bef0ef4fcc07875f459b81"
+          }
+        },
+        {
+          "version": "0.7.0",
+          "date": "2026-10-15",
+          "type": "fix",
+          "breaking": false,
+          "scopes": [
+            "table"
+          ],
+          "subject": "stop the bulk bar clipping its actions' cut and focus ring",
+          "pr": {
+            "number": 131,
+            "url": "https://github.com/demogar/molaui/issues/131"
+          },
+          "commit": {
+            "sha": "0f0e5a3",
+            "url": "https://github.com/demogar/molaui/commit/0f0e5a3edc36e52a56cf84610e4e8c459050de0c"
+          }
+        },
+        {
           "version": "0.5.0",
           "date": "2026-10-14",
           "type": "fix",
@@ -8190,6 +8268,26 @@
         "Patterns/Empty states",
         "Patterns/Filtered table",
         "Patterns/List and detail"
+      ],
+      "changes": [
+        {
+          "version": "0.7.0",
+          "date": "2026-10-15",
+          "type": "fix",
+          "breaking": false,
+          "scopes": [
+            "badge"
+          ],
+          "subject": "give every status tone its own shape and close the small accessibility defects",
+          "pr": {
+            "number": 133,
+            "url": "https://github.com/demogar/molaui/issues/133"
+          },
+          "commit": {
+            "sha": "b43be94",
+            "url": "https://github.com/demogar/molaui/commit/b43be942c8ad35a2a382a11c96340082ac5dda20"
+          }
+        }
       ]
     },
     {
@@ -8432,6 +8530,26 @@
           "name": "WithAction",
           "id": "components-feedback-banner--with-action",
           "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-banner--with-action"
+        }
+      ],
+      "changes": [
+        {
+          "version": "0.7.0",
+          "date": "2026-10-15",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "shell"
+          ],
+          "subject": "add a banner, a notification centre, and a shortcuts dialog with usehotkeys",
+          "pr": {
+            "number": 156,
+            "url": "https://github.com/demogar/molaui/issues/156"
+          },
+          "commit": {
+            "sha": "f262538",
+            "url": "https://github.com/demogar/molaui/commit/f2625389d01e97336bd344dc6d9f7f1f20668e3b"
+          }
         }
       ]
     },
@@ -9284,6 +9402,26 @@
           "name": "WithToasts",
           "id": "components-feedback-notification-centre--with-toasts",
           "url": "https://demogar.github.io/molaui/?path=/story/components-feedback-notification-centre--with-toasts"
+        }
+      ],
+      "changes": [
+        {
+          "version": "0.7.0",
+          "date": "2026-10-15",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "shell"
+          ],
+          "subject": "add a banner, a notification centre, and a shortcuts dialog with usehotkeys",
+          "pr": {
+            "number": 156,
+            "url": "https://github.com/demogar/molaui/issues/156"
+          },
+          "commit": {
+            "sha": "f262538",
+            "url": "https://github.com/demogar/molaui/commit/f2625389d01e97336bd344dc6d9f7f1f20668e3b"
+          }
         }
       ]
     },
@@ -11984,6 +12122,31 @@
         "Patterns/Filtered table",
         "Patterns/Form validation",
         "Patterns/Settings page"
+      ],
+      "changes": [
+        {
+          "version": "0.7.0",
+          "date": "2026-10-15",
+          "type": "fix",
+          "breaking": false,
+          "scopes": [
+            "shortcuts",
+            "kbd",
+            "command",
+            "tooltip",
+            "menu",
+            "field"
+          ],
+          "subject": "keep keyboard shortcuts left to right in a right-to-left page",
+          "pr": {
+            "number": 166,
+            "url": "https://github.com/demogar/molaui/issues/166"
+          },
+          "commit": {
+            "sha": "f0c5ef2",
+            "url": "https://github.com/demogar/molaui/commit/f0c5ef2502d4e5bda0878ebcc87b436dd1a56a35"
+          }
+        }
       ]
     },
     {
@@ -15370,6 +15533,26 @@
       ],
       "usedIn": [
         "Patterns/Settings page"
+      ],
+      "changes": [
+        {
+          "version": "0.7.0",
+          "date": "2026-10-15",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "shell"
+          ],
+          "subject": "add a banner, a notification centre, and a shortcuts dialog with usehotkeys",
+          "pr": {
+            "number": 156,
+            "url": "https://github.com/demogar/molaui/issues/156"
+          },
+          "commit": {
+            "sha": "f262538",
+            "url": "https://github.com/demogar/molaui/commit/f2625389d01e97336bd344dc6d9f7f1f20668e3b"
+          }
+        }
       ]
     },
     {
@@ -15559,6 +15742,26 @@
           "id": "components-layout-container--wide",
           "url": "https://demogar.github.io/molaui/?path=/story/components-layout-container--wide"
         }
+      ],
+      "changes": [
+        {
+          "version": "0.7.0",
+          "date": "2026-10-15",
+          "type": "fix",
+          "breaking": false,
+          "scopes": [
+            "layout"
+          ],
+          "subject": "reflow at 320px and spacious density, with a scroll-edge cue and an audit gate",
+          "pr": {
+            "number": 129,
+            "url": "https://github.com/demogar/molaui/issues/129"
+          },
+          "commit": {
+            "sha": "feec088",
+            "url": "https://github.com/demogar/molaui/commit/feec0889c00e8e77c2a2aab43f41d78fe7ea03a1"
+          }
+        }
       ]
     },
     {
@@ -15685,6 +15888,26 @@
           "id": "components-layout-divider--vertical",
           "url": "https://demogar.github.io/molaui/?path=/story/components-layout-divider--vertical"
         }
+      ],
+      "changes": [
+        {
+          "version": "0.7.0",
+          "date": "2026-10-15",
+          "type": "fix",
+          "breaking": false,
+          "scopes": [
+            "layout"
+          ],
+          "subject": "reflow at 320px and spacious density, with a scroll-edge cue and an audit gate",
+          "pr": {
+            "number": 129,
+            "url": "https://github.com/demogar/molaui/issues/129"
+          },
+          "commit": {
+            "sha": "feec088",
+            "url": "https://github.com/demogar/molaui/commit/feec0889c00e8e77c2a2aab43f41d78fe7ea03a1"
+          }
+        }
       ]
     },
     {
@@ -15802,6 +16025,26 @@
           "name": "Seamless",
           "id": "components-layout-grid--seamless",
           "url": "https://demogar.github.io/molaui/?path=/story/components-layout-grid--seamless"
+        }
+      ],
+      "changes": [
+        {
+          "version": "0.7.0",
+          "date": "2026-10-15",
+          "type": "fix",
+          "breaking": false,
+          "scopes": [
+            "layout"
+          ],
+          "subject": "reflow at 320px and spacious density, with a scroll-edge cue and an audit gate",
+          "pr": {
+            "number": 129,
+            "url": "https://github.com/demogar/molaui/issues/129"
+          },
+          "commit": {
+            "sha": "feec088",
+            "url": "https://github.com/demogar/molaui/commit/feec0889c00e8e77c2a2aab43f41d78fe7ea03a1"
+          }
         }
       ]
     },
@@ -16154,6 +16397,26 @@
           "id": "components-layout-panel--the-one-panel",
           "url": "https://demogar.github.io/molaui/?path=/story/components-layout-panel--the-one-panel"
         }
+      ],
+      "changes": [
+        {
+          "version": "0.7.0",
+          "date": "2026-10-15",
+          "type": "fix",
+          "breaking": false,
+          "scopes": [
+            "layout"
+          ],
+          "subject": "reflow at 320px and spacious density, with a scroll-edge cue and an audit gate",
+          "pr": {
+            "number": 129,
+            "url": "https://github.com/demogar/molaui/issues/129"
+          },
+          "commit": {
+            "sha": "feec088",
+            "url": "https://github.com/demogar/molaui/commit/feec0889c00e8e77c2a2aab43f41d78fe7ea03a1"
+          }
+        }
       ]
     },
     {
@@ -16382,6 +16645,26 @@
           "name": "PanelHeader",
           "id": "components-layout-stack--panel-header",
           "url": "https://demogar.github.io/molaui/?path=/story/components-layout-stack--panel-header"
+        }
+      ],
+      "changes": [
+        {
+          "version": "0.7.0",
+          "date": "2026-10-15",
+          "type": "fix",
+          "breaking": false,
+          "scopes": [
+            "layout"
+          ],
+          "subject": "reflow at 320px and spacious density, with a scroll-edge cue and an audit gate",
+          "pr": {
+            "number": 129,
+            "url": "https://github.com/demogar/molaui/issues/129"
+          },
+          "commit": {
+            "sha": "feec088",
+            "url": "https://github.com/demogar/molaui/commit/feec0889c00e8e77c2a2aab43f41d78fe7ea03a1"
+          }
         }
       ]
     },
@@ -18659,6 +18942,49 @@
           "id": "components-overlays-command-palette--open-with-cmd-k",
           "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-command-palette--open-with-cmd-k"
         }
+      ],
+      "changes": [
+        {
+          "version": "0.7.0",
+          "date": "2026-10-15",
+          "type": "fix",
+          "breaking": false,
+          "scopes": [
+            "command"
+          ],
+          "subject": "name groups by index-based ids and announce result counts",
+          "pr": {
+            "number": 120,
+            "url": "https://github.com/demogar/molaui/issues/120"
+          },
+          "commit": {
+            "sha": "5a92ac1",
+            "url": "https://github.com/demogar/molaui/commit/5a92ac1285260530f5ae777de4ed644ad1c271bf"
+          }
+        },
+        {
+          "version": "0.7.0",
+          "date": "2026-10-15",
+          "type": "fix",
+          "breaking": false,
+          "scopes": [
+            "shortcuts",
+            "kbd",
+            "command",
+            "tooltip",
+            "menu",
+            "field"
+          ],
+          "subject": "keep keyboard shortcuts left to right in a right-to-left page",
+          "pr": {
+            "number": 166,
+            "url": "https://github.com/demogar/molaui/issues/166"
+          },
+          "commit": {
+            "sha": "f0c5ef2",
+            "url": "https://github.com/demogar/molaui/commit/f0c5ef2502d4e5bda0878ebcc87b436dd1a56a35"
+          }
+        }
       ]
     },
     {
@@ -19759,6 +20085,31 @@
           "id": "components-overlays-menu--row-actions",
           "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-menu--row-actions"
         }
+      ],
+      "changes": [
+        {
+          "version": "0.7.0",
+          "date": "2026-10-15",
+          "type": "fix",
+          "breaking": false,
+          "scopes": [
+            "shortcuts",
+            "kbd",
+            "command",
+            "tooltip",
+            "menu",
+            "field"
+          ],
+          "subject": "keep keyboard shortcuts left to right in a right-to-left page",
+          "pr": {
+            "number": 166,
+            "url": "https://github.com/demogar/molaui/issues/166"
+          },
+          "commit": {
+            "sha": "f0c5ef2",
+            "url": "https://github.com/demogar/molaui/commit/f0c5ef2502d4e5bda0878ebcc87b436dd1a56a35"
+          }
+        }
       ]
     },
     {
@@ -20276,6 +20627,49 @@
           "id": "components-overlays-shortcuts-dialog--typing-is-safe",
           "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-shortcuts-dialog--typing-is-safe"
         }
+      ],
+      "changes": [
+        {
+          "version": "0.7.0",
+          "date": "2026-10-15",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "shell"
+          ],
+          "subject": "add a banner, a notification centre, and a shortcuts dialog with usehotkeys",
+          "pr": {
+            "number": 156,
+            "url": "https://github.com/demogar/molaui/issues/156"
+          },
+          "commit": {
+            "sha": "f262538",
+            "url": "https://github.com/demogar/molaui/commit/f2625389d01e97336bd344dc6d9f7f1f20668e3b"
+          }
+        },
+        {
+          "version": "0.7.0",
+          "date": "2026-10-15",
+          "type": "fix",
+          "breaking": false,
+          "scopes": [
+            "shortcuts",
+            "kbd",
+            "command",
+            "tooltip",
+            "menu",
+            "field"
+          ],
+          "subject": "keep keyboard shortcuts left to right in a right-to-left page",
+          "pr": {
+            "number": 166,
+            "url": "https://github.com/demogar/molaui/issues/166"
+          },
+          "commit": {
+            "sha": "f0c5ef2",
+            "url": "https://github.com/demogar/molaui/commit/f0c5ef2502d4e5bda0878ebcc87b436dd1a56a35"
+          }
+        }
       ]
     },
     {
@@ -20482,6 +20876,31 @@
           "name": "WithShortcut",
           "id": "components-overlays-tooltip--with-shortcut",
           "url": "https://demogar.github.io/molaui/?path=/story/components-overlays-tooltip--with-shortcut"
+        }
+      ],
+      "changes": [
+        {
+          "version": "0.7.0",
+          "date": "2026-10-15",
+          "type": "fix",
+          "breaking": false,
+          "scopes": [
+            "shortcuts",
+            "kbd",
+            "command",
+            "tooltip",
+            "menu",
+            "field"
+          ],
+          "subject": "keep keyboard shortcuts left to right in a right-to-left page",
+          "pr": {
+            "number": 166,
+            "url": "https://github.com/demogar/molaui/issues/166"
+          },
+          "commit": {
+            "sha": "f0c5ef2",
+            "url": "https://github.com/demogar/molaui/commit/f0c5ef2502d4e5bda0878ebcc87b436dd1a56a35"
+          }
         }
       ]
     },
@@ -20785,6 +21204,31 @@
           "name": "Default",
           "id": "components-typography-kbd--default",
           "url": "https://demogar.github.io/molaui/?path=/story/components-typography-kbd--default"
+        }
+      ],
+      "changes": [
+        {
+          "version": "0.7.0",
+          "date": "2026-10-15",
+          "type": "fix",
+          "breaking": false,
+          "scopes": [
+            "shortcuts",
+            "kbd",
+            "command",
+            "tooltip",
+            "menu",
+            "field"
+          ],
+          "subject": "keep keyboard shortcuts left to right in a right-to-left page",
+          "pr": {
+            "number": 166,
+            "url": "https://github.com/demogar/molaui/issues/166"
+          },
+          "commit": {
+            "sha": "f0c5ef2",
+            "url": "https://github.com/demogar/molaui/commit/f0c5ef2502d4e5bda0878ebcc87b436dd1a56a35"
+          }
         }
       ]
     },
