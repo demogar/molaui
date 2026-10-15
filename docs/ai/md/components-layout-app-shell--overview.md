@@ -156,6 +156,7 @@ Types: `AppShellProps`, `SidebarContextValue`, `SidebarToggleProps`, `TopbarProp
 
 - [Container](https://demogar.github.io/molaui/md/components-layout-container--overview.md)
 - [Breadcrumb](https://demogar.github.io/molaui/md/components-navigation-breadcrumb--overview.md)
+- [Tree](https://demogar.github.io/molaui/md/components-navigation-tree--overview.md)
 
 ### Used in
 

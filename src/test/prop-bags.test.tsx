@@ -237,6 +237,8 @@ const FIXTURES: Record<string, Fixture | LabelFixture> = {
   },
   RadioGroup: (p) => <mola.RadioGroup {...p} label="Plan" />,
   SegmentedControl: (p) => <mola.SegmentedControl {...p} aria-label="View" options={options} />,
+  Listbox: (p) => <mola.Listbox {...p} aria-label="Region" options={options} />,
+  TagGroup: (p) => <mola.TagGroup {...p} aria-label="Labels" items={options} />,
   Select: {
     plain: (p) => <mola.Select {...p} aria-label="Region" items={options} />,
     labelled: (p) => <mola.Select {...p} label="Region" items={options} />,
@@ -428,6 +430,7 @@ const FIXTURES: Record<string, Fixture | LabelFixture> = {
   Breadcrumb: (p) => <mola.Breadcrumb {...p} items={[{ label: 'Home', href: '/' }, { label: 'Here' }]} />,
   Pagination: (p) => <mola.Pagination {...p} page={1} pageCount={3} onPageChange={noop} />,
   Tabs: (p) => <mola.Tabs {...p} />,
+  Tree: (p) => <mola.Tree {...p} aria-label="Files" items={options} />,
   TabsList: (p) => (
     <mola.Tabs defaultValue="a">
       <mola.TabsList {...p}>

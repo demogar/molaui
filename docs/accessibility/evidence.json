@@ -331,6 +331,16 @@
       "pressesKeys": true,
       "screenReadersByHand": false
     },
+    "Components/Forms/Listbox": {
+      "stories": 6,
+      "unitTests": [
+        "src/components/listbox/listbox.test.tsx"
+      ],
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
+      "screenReadersByHand": false
+    },
     "Components/Forms/Number input": {
       "stories": 6,
       "unitTests": [
@@ -385,6 +395,16 @@
       "stories": 3,
       "unitTests": [
         "src/components/switch/switch.test.tsx"
+      ],
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
+      "screenReadersByHand": false
+    },
+    "Components/Forms/Tag group": {
+      "stories": 6,
+      "unitTests": [
+        "src/components/tag-group/tag-group.test.tsx"
       ],
       "keyboardInUnitTests": true,
       "keysUntested": [],
@@ -505,6 +525,16 @@
       "stories": 3,
       "unitTests": [
         "src/components/tabs/tabs.test.tsx"
+      ],
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
+      "screenReadersByHand": false
+    },
+    "Components/Navigation/Tree": {
+      "stories": 3,
+      "unitTests": [
+        "src/components/tree/tree.test.tsx"
       ],
       "keyboardInUnitTests": true,
       "keysUntested": [],

@@ -545,6 +545,34 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
       'Pass `messages` to translate every announcement and button name.',
     ],
   },
+  'Components/Forms/Listbox': {
+    keyboard: [
+      { keys: ['Tab'], action: 'Moves focus to the chosen option, or the first, and Tab again leaves the list.' },
+      { keys: ['ArrowDown', 'ArrowUp'], action: 'Moves focus to the next or previous option; in a single list, also chooses it.' },
+      { keys: ['Home', 'End'], action: 'Moves focus to the first or last option; in a single list, also chooses it.' },
+      { keys: ['Space'], action: 'Chooses the focused option; in a multiple list, toggles it.' },
+      { keys: ['Shift+ArrowDown', 'Shift+ArrowUp'], action: 'In a multiple list, moves focus and toggles the option it lands on.' },
+      { keys: ['Shift+Space'], action: 'In a multiple list, chooses every option from the last one chosen to the focused one.' },
+      {
+        keys: ['Control+Shift+Home', 'Control+Shift+End'],
+        action: 'In a multiple list, chooses every option from the focused one to the first or last, and moves there.',
+      },
+      { keys: ['Control+A', 'Meta+A'], action: 'In a multiple list, chooses every option, or clears them all when all are chosen.' },
+    ],
+    handles: [
+      'Renders `role="listbox"` with `aria-multiselectable` when several can be chosen, and `option`s with `aria-selected`.',
+      'One tab stop with roving focus on the options themselves, so the focus ring and scrolling into view are the browser’s own.',
+      'Typing a letter moves to the next option that starts with it; letters typed together match a word.',
+      'Each option is named by its label and described by its second line, so the name stays short.',
+      'A disabled option is focusable, `aria-disabled` and never chosen, so a keyboard user learns it exists.',
+      'A chosen option is an ink fill with a check or a filled square, never the colour alone.',
+    ],
+    you: [
+      'Name it: pass `aria-labelledby` pointing at a visible label, or `aria-label`.',
+      'Say why an option is disabled, in its description or next to the list.',
+      'Announce the consequence of a choice yourself if it changes the page, such as a count in a live region.',
+    ],
+  },
   'Components/Forms/Number input': {
     keyboard: [
       { keys: ['Tab'], action: 'Moves focus to the input. The − and + buttons are not tab stops.' },
@@ -648,6 +676,28 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
     you: [
       'Give every switch a `label`, or an `aria-label` when it stands alone.',
       'Use a switch only for a setting that takes effect at once; a choice that waits for Save is a checkbox.',
+    ],
+  },
+  'Components/Forms/Tag group': {
+    keyboard: [
+      { keys: ['Tab'], action: 'Moves focus to the tag last focused, the first at the start, and Tab again leaves the group.' },
+      { keys: ['ArrowRight', 'ArrowDown'], action: 'Moves focus to the next tag, stopping at the last; ArrowLeft in right-to-left.' },
+      { keys: ['ArrowLeft', 'ArrowUp'], action: 'Moves focus to the previous tag, stopping at the first.' },
+      { keys: ['Home', 'End'], action: 'Moves focus to the first or last tag.' },
+      { keys: ['Delete', 'Backspace'], action: 'Removes the focused tag when the group is removable, and focuses the tag that took its place.' },
+      { keys: ['Space', 'Enter'], action: 'Selects or deselects the focused tag when the group is selectable.' },
+    ],
+    handles: [
+      'Renders a `grid` of `row`s, one per tag, each named by its label, so the whole set is one tab stop.',
+      'A removable tag says so with `aria-keyshortcuts`, and its × is a real button named “Remove <label>”, kept out of the tab order because the row answers Delete.',
+      'After a removal, focus moves to the next tag, the previous one at the end, or the group once it is empty, never to the page body.',
+      'A selectable group sets `aria-selected` on every tag and `aria-multiselectable` when several can be chosen; a selected tag is an ink fill with a check.',
+      'An empty group says so in words, in a cell, rather than leaving a blank gap.',
+    ],
+    you: [
+      'Name it with `aria-label` or `aria-labelledby`: “Dataset labels”.',
+      'Remove the item from your own list in `onRemove`; the group does not own it.',
+      'Translate `removeLabel` and `empty`.',
     ],
   },
   'Components/Layout/App shell': {
@@ -805,6 +855,30 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
     you: [
       'Give every tab a text label, even when it has an icon.',
       'Set `activateOnFocus` only when every panel is cheap to show.',
+    ],
+  },
+  'Components/Navigation/Tree': {
+    keyboard: [
+      { keys: ['Tab'], action: 'Moves focus to the item last focused, else the selected one, else the first, and Tab again leaves the tree.' },
+      { keys: ['ArrowDown', 'ArrowUp'], action: 'Moves focus to the next or previous visible item, without selecting it.' },
+      { keys: ['ArrowRight'], action: 'Opens a closed branch; on an open branch, moves to its first child. ArrowLeft in right-to-left.' },
+      { keys: ['ArrowLeft'], action: 'Closes an open branch; otherwise moves to the parent. ArrowRight in right-to-left.' },
+      { keys: ['Home', 'End'], action: 'Moves focus to the first or last visible item.' },
+      { keys: ['Enter', 'Space'], action: 'Selects the focused item, and opens or closes it if it is a branch.' },
+      { keys: ['*'], action: 'Opens every branch at the level of the focused item.' },
+    ],
+    handles: [
+      'Renders `role="tree"` and one `treeitem` per visible item with `aria-level`, `aria-setsize` and `aria-posinset`, and `aria-expanded` on branches.',
+      'Items are a flat run rather than nested groups, so each is named by its own label, not by everything inside it.',
+      'One tab stop with roving focus; a hidden item hands the stop to the nearest open branch above it.',
+      'Typing a letter moves to the next visible item that starts with it.',
+      'The selected item has `aria-selected` and is a shade with an ink bar, the mark of the current location, never the colour alone.',
+      'A disabled item is focusable, `aria-disabled` and never selected.',
+    ],
+    you: [
+      'Name it: `aria-labelledby` pointing at the heading above it, or `aria-label`.',
+      'Open the branches down to the selected item, so it is visible on load.',
+      'Load content on `onValueChange`, which only Enter, Space and a click send, and move focus to it yourself only when the person asks.',
     ],
   },
   'Components/Overlays/Command palette': {

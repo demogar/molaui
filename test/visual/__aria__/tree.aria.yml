@@ -1,0 +1,9 @@
+- tree "Files changed":
+  - treeitem "src" [expanded] [level=1]
+  - treeitem "retention" [expanded] [level=2]
+  - treeitem "policy.ts" [level=3] [selected]
+  - treeitem "schedule.ts" [level=3]
+  - treeitem "billing" [level=2]
+  - treeitem "index.ts" [level=2]
+  - treeitem "docs" [level=1]
+  - treeitem "CHANGES.md" [level=1]

@@ -24,6 +24,7 @@ The trigger is cut like an input; the popup floats, so it takes the one blurred 
 - Two to five options that should all be visible. Use [Radio](https://demogar.github.io/molaui/md/components-forms-radio--overview.md).
 - Switching views instantly. Use [Segmented control](https://demogar.github.io/molaui/md/components-forms-segmented-control--overview.md).
 - A list of actions rather than a value. Use [Menu](https://demogar.github.io/molaui/md/components-overlays-menu--overview.md).
+- Several values, or a list the page has room to keep in view. Use [Listbox](https://demogar.github.io/molaui/md/components-forms-listbox--overview.md).
 
 ### Do and don’t
 
@@ -169,6 +170,7 @@ Types: `SelectContentProps`, `SelectItemProps`, `SelectOption`, `SelectOptionGro
 - [Radio](https://demogar.github.io/molaui/md/components-forms-radio--overview.md)
 - [Segmented control](https://demogar.github.io/molaui/md/components-forms-segmented-control--overview.md)
 - [Menu](https://demogar.github.io/molaui/md/components-overlays-menu--overview.md)
+- [Listbox](https://demogar.github.io/molaui/md/components-forms-listbox--overview.md)
 
 ### Pages that send readers here
 

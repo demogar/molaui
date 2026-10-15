@@ -2,7 +2,7 @@
 
 > A design system cut like a mola: flat layers, hard keylines, revealed bands. React components for dense internal tools and AI-native interfaces. Published as `@demogar/mola-ui`: React 19, Base UI for behaviour, Tailwind v4 for styling, design tokens as CSS custom properties.
 
-54 components and 12 AI components (66 documented pages).
+57 components and 12 AI components (69 documented pages).
 
 Install and set up:
 
@@ -122,12 +122,14 @@ An MCP server with the same data ships in the package: `npx -y --package @demoga
 - [Date picker](https://demogar.github.io/molaui/?path=/docs/components-forms-date-picker--overview) ([Markdown](https://demogar.github.io/molaui/md/components-forms-date-picker--overview.md)): DatePicker for one date, typed or picked from a calendar; DateRangePicker for a period, with presets and two typed ends.
 - [Field](https://demogar.github.io/molaui/?path=/docs/components-forms-field--overview) ([Markdown](https://demogar.github.io/molaui/md/components-forms-field--overview.md)): A label, a control and a hint or error wired together; the page also covers Input, Textarea, SearchInput and Label.
 - [File upload](https://demogar.github.io/molaui/?path=/docs/components-forms-file-upload--overview) ([Markdown](https://demogar.github.io/molaui/md/components-forms-file-upload--overview.md)): A dropzone with a real Browse button, and a list of the files put there with their status and progress.
+- [Listbox](https://demogar.github.io/molaui/?path=/docs/components-forms-listbox--overview) ([Markdown](https://demogar.github.io/molaui/md/components-forms-listbox--overview.md)) (Experimental): A list of options that stays on the page, for choosing one or several without opening anything.
 - [Number input](https://demogar.github.io/molaui/?path=/docs/components-forms-number-input--overview) ([Markdown](https://demogar.github.io/molaui/md/components-forms-number-input--overview.md)): A number you can type and step, formatted for a locale, with bounds, a unit and steppers inside the field.
 - [Radio](https://demogar.github.io/molaui/?path=/docs/components-forms-radio--overview) ([Markdown](https://demogar.github.io/molaui/md/components-forms-radio--overview.md)): One choice from a small set, all visible, in a named RadioGroup; square, and told from a checkbox by its mark.
 - [Segmented control](https://demogar.github.io/molaui/?path=/docs/components-forms-segmented-control--overview) ([Markdown](https://demogar.github.io/molaui/md/components-forms-segmented-control--overview.md)): One choice from a few views or settings, all visible and switched instantly, cut from one piece.
 - [Select](https://demogar.github.io/molaui/?path=/docs/components-forms-select--overview) ([Markdown](https://demogar.github.io/molaui/md/components-forms-select--overview.md)): A choice from a list in a popup, with an optional second line per option and labelled groups.
 - [Slider](https://demogar.github.io/molaui/?path=/docs/components-forms-slider--overview) ([Markdown](https://demogar.github.io/molaui/md/components-forms-slider--overview.md)): A value or a range on a continuous scale, with the value always printed in tabular figures.
 - [Switch](https://demogar.github.io/molaui/?path=/docs/components-forms-switch--overview) ([Markdown](https://demogar.github.io/molaui/md/components-forms-switch--overview.md)): A setting that takes effect the moment it is switched; on is verde, the colour of live.
+- [Tag group](https://demogar.github.io/molaui/?path=/docs/components-forms-tag-group--overview) ([Markdown](https://demogar.github.io/molaui/md/components-forms-tag-group--overview.md)) (Experimental): A set of short values shown as tags, which can be removed, and selected when the set is also a choice.
 
 ## Layout
 
@@ -146,6 +148,7 @@ An MCP server with the same data ships in the package: `npx -y --package @demoga
 - [Breadcrumb](https://demogar.github.io/molaui/?path=/docs/components-navigation-breadcrumb--overview) ([Markdown](https://demogar.github.io/molaui/md/components-navigation-breadcrumb--overview.md)): Where a page sits, as links back up the path, with the current page as plain text.
 - [Pagination](https://demogar.github.io/molaui/?path=/docs/components-navigation-pagination--overview) ([Markdown](https://demogar.github.io/molaui/md/components-navigation-pagination--overview.md)): Moving through a long ordered result, as numbered pages or as a compact range with two arrows.
 - [Tabs](https://demogar.github.io/molaui/?path=/docs/components-navigation-tabs--overview) ([Markdown](https://demogar.github.io/molaui/md/components-navigation-tabs--overview.md)): Switching between views of one thing: underline for views, panel for tabs that are containers.
+- [Tree](https://demogar.github.io/molaui/?path=/docs/components-navigation-tree--overview) ([Markdown](https://demogar.github.io/molaui/md/components-navigation-tree--overview.md)) (Experimental): A hierarchy you move through and pick from, with branches that open and close and one selected item.
 
 ## Overlays
 

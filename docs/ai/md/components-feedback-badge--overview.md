@@ -134,6 +134,7 @@ Nothing in it takes focus, so there is no keyboard table.
 
 - [Avatar](https://demogar.github.io/molaui/md/components-data-display-avatar--overview.md)
 - [Swatch](https://demogar.github.io/molaui/md/components-data-display-swatch--overview.md)
+- [Tag group](https://demogar.github.io/molaui/md/components-forms-tag-group--overview.md)
 - [Rotulo](https://demogar.github.io/molaui/md/components-typography-rotulo--overview.md)
 
 ### Used in

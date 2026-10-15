@@ -782,6 +782,7 @@ export const USAGE: Record<string, Usage> = {
       { when: 'Switching between views of the same data.', use: 'Components/Forms/Segmented control' },
       { when: 'Options in a form that is saved later.', use: 'Components/Forms/Checkbox' },
       { when: 'Values picked from a long list into a field; Combobox shows them as chips inside it.', use: 'Components/Forms/Combobox' },
+      { when: 'A set of values someone reads and removes, such as the labels on a record.', use: 'Components/Forms/Tag group' },
     ],
     practices: [
       {
@@ -904,6 +905,35 @@ export const USAGE: Record<string, Usage> = {
       'Pass messages to translate the copy, and keep each rule stated with its figure.',
     ],
   },
+  'Components/Forms/Listbox': {
+    summary: 'A list of options that stays on the page, for choosing one or several without opening anything.',
+    use: [
+      'Choosing several values from a short set that should stay in view, such as the models an evaluation compares.',
+      'One value from a list the screen has room to show, where seeing every option is the point, such as a data region.',
+      'Options that need a second line, such as a region’s code or a model’s context window.',
+    ],
+    avoid: [
+      { when: 'One value from a list in a form where space is tight.', use: 'Components/Forms/Select' },
+      { when: 'A list long enough that people would rather type.', use: 'Components/Forms/Combobox' },
+      { when: 'Two to five options that each need a sentence.', use: 'Components/Forms/Radio' },
+      { when: 'Filters over a table or a list.', use: 'Components/Forms/Chip' },
+      { when: 'Values a person adds and removes, shown as tags.', use: 'Components/Forms/Tag group' },
+    ],
+    practices: [
+      {
+        do: 'Name it with aria-labelledby pointing at the visible label above it.',
+        dont: 'Put buttons, links or inputs inside an option; an option is one thing to choose.',
+      },
+      {
+        do: 'Keep an unavailable option in the list and say why in its description.',
+        dont: 'Remove options that cannot be chosen today; people look for them and conclude they do not exist.',
+      },
+    ],
+    content: [
+      'Options are names, in sentence case: “Panama City”, not “PANAMA CITY” or “Region: Panama City”.',
+      'Put codes and figures in the description, not the label, so type-ahead matches what people read first.',
+    ],
+  },
   'Components/Forms/Number input': {
     summary: 'A number you can type and step, formatted for a locale, with bounds, a unit and steppers inside the field.',
     use: [
@@ -990,6 +1020,7 @@ export const USAGE: Record<string, Usage> = {
       { when: 'Two to five options that should all be visible.', use: 'Components/Forms/Radio' },
       { when: 'Switching views instantly.', use: 'Components/Forms/Segmented control' },
       { when: 'A list of actions rather than a value.', use: 'Components/Overlays/Menu' },
+      { when: 'Several values, or a list the page has room to keep in view.', use: 'Components/Forms/Listbox' },
     ],
     practices: [
       {
@@ -1042,6 +1073,35 @@ export const USAGE: Record<string, Usage> = {
     content: [
       'Label the capability, not the action: “Stream responses”, not “Turn on streaming”.',
       'The description states the effect or the cost: “Stored for 30 days; may contain user text.”',
+    ],
+  },
+  'Components/Forms/Tag group': {
+    summary: 'A set of short values shown as tags, which can be removed, and selected when the set is also a choice.',
+    use: [
+      'The labels on a record, the recipients of a report, the tools an agent may call: a set someone reads and trims.',
+      'A short set that is also a choice, such as which label a report groups by, with selectionMode.',
+      'Showing what a search or a form added, with a way to take each one back.',
+    ],
+    avoid: [
+      { when: 'Filters that narrow a table or a list.', use: 'Components/Forms/Chip' },
+      { when: 'Picking values from a long list while typing.', use: 'Components/Forms/Combobox' },
+      { when: 'A status on a record that nobody edits.', use: 'Components/Feedback/Badge' },
+      { when: 'Choosing from options that should stay in view, with descriptions.', use: 'Components/Forms/Listbox' },
+    ],
+    practices: [
+      {
+        do: 'Remove the item in your own state from onRemove, and let focus move to the next tag.',
+        dont: 'Ask for confirmation on every removal; offer a way to restore instead.',
+      },
+      {
+        do: 'Keep a locked tag in the set with its name, so people see why it stays.',
+        dont: 'Use a tag group as a row of buttons that act; a tag is a value.',
+      },
+    ],
+    content: [
+      'Tags are one to three words, in sentence case: “Contains PII”, “Q3 review”.',
+      'Name the group for what the tags are: “Dataset labels”, “Recipients”.',
+      'Say what an empty group means in empty: “No labels. This dataset is not grouped anywhere.”',
     ],
   },
   'Components/Layout/App shell': {
@@ -1229,6 +1289,7 @@ export const USAGE: Record<string, Usage> = {
       { when: 'Content most readers need on every visit. Leave it open on the page.', use: null },
       { when: 'The model’s thinking behind an answer.', use: 'AI/Reasoning' },
       { when: 'Ordered steps to follow.', use: 'Components/Data display/Timeline', label: 'StepList' },
+      { when: 'A hierarchy people move through and pick from, such as files or pages.', use: 'Components/Navigation/Tree' },
     ],
     practices: [
       {
@@ -1303,6 +1364,34 @@ export const USAGE: Record<string, Usage> = {
     content: [
       'Labels are one or two nouns: “Trace”, “Output”, “Cost”.',
       'Let a long list scroll rather than shortening labels until they stop meaning anything.',
+    ],
+  },
+  'Components/Navigation/Tree': {
+    summary: 'A hierarchy you move through and pick from, with branches that open and close and one selected item.',
+    use: [
+      'The files of a change an agent proposes, beside the diff of the selected file.',
+      'The sections and pages of a knowledge base or documentation, as navigation.',
+      'Folders of a dataset or a workspace, where the depth is real and people move up and down it.',
+    ],
+    avoid: [
+      { when: 'Two levels of navigation for a whole product.', use: 'Components/Layout/App shell' },
+      { when: 'Sections of one page that open and close.', use: 'Components/Navigation/Accordion' },
+      { when: 'A flat list of options to choose from.', use: 'Components/Forms/Listbox' },
+      { when: 'Where the current page sits in a hierarchy, shown in one line.', use: 'Components/Navigation/Breadcrumb' },
+    ],
+    practices: [
+      {
+        do: 'Open the branches down to the selected item, so it can be seen when the page loads.',
+        dont: 'Nest deeper than four or five levels; the indent eats the label.',
+      },
+      {
+        do: 'Load the selected item’s content on onValueChange, which only Enter, Space and a click send.',
+        dont: 'Load content as focus moves; the arrows are for moving.',
+      },
+    ],
+    content: [
+      'Labels are names, as the person knows them: file names as written, page titles in sentence case.',
+      'Name the tree for what it holds: “Files changed”, “Knowledge base”.',
     ],
   },
   'Components/Overlays/Command palette': {

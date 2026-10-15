@@ -125,7 +125,7 @@ Storybook docs pages (introduction, principles, foundations, migration, changelo
 - Radius is zero; `rounded-full` only for genuine dots.
 - State is never color alone: glyph + word + color.
 - Disabled is stated, not faded — no `opacity-*` on disabled controls.
-- Use Base UI primitives for behaviour (focus trapping, roving focus) rather than re-implementing.
+- Use Base UI primitives for behaviour (focus trapping, roving focus) rather than re-implementing. Where Base UI has no public primitive (Listbox, Tag group, Tree), write the WAI-ARIA APG pattern out and hold it to the keyboard-coverage and ARIA-snapshot gates; never import `@base-ui/react/internals/*` (ADR 0012).
 - Typefaces have roles: Archivo for system UI, Alegreya for prose from a person or model, Martian Mono only for machine literals.
 - Doc comments explain *why* (including what was tried first and why it failed); the code says what. Story docs descriptions state the decisions.
 - TypeScript: strict with `noUncheckedIndexedAccess`; ESLint requires inline `type` imports and allows unused vars only with a `_` prefix.

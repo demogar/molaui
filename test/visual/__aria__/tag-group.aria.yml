@@ -1,0 +1,17 @@
+- grid "Dataset labels":
+  - row "Billing":
+    - gridcell "Billing"
+    - gridcell "Remove Billing":
+      - button "Remove Billing"
+  - row "Retention" [selected]:
+    - gridcell "Retention"
+    - gridcell "Remove Retention":
+      - button "Remove Retention"
+  - row "Contains PII":
+    - gridcell "Contains PII"
+    - gridcell "Remove Contains PII":
+      - button "Remove Contains PII"
+  - row "Q3 review":
+    - gridcell "Q3 review"
+    - gridcell "Remove Q3 review":
+      - button "Remove Q3 review"

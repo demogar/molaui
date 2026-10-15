@@ -85,6 +85,11 @@ const CASES: Case[] = [
   },
   { name: 'toolbar', story: 'components-layout-toolbar--run-actions' },
   { name: 'segmented-control', story: 'components-forms-segmented-control--default' },
+  // The composites Mola writes out itself (ADR 0012): nothing but this and
+  // the keyboard tests holds their roles, levels and states in place.
+  { name: 'listbox', story: 'components-forms-listbox--multiple' },
+  { name: 'tag-group', story: 'components-forms-tag-group--select-and-remove' },
+  { name: 'tree', story: 'components-navigation-tree--default' },
   // The agent console's transcript, once a suggested question has been asked
   // and the scripted run has finished.
   {

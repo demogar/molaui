@@ -93,13 +93,13 @@
     }
   },
   "counts": {
-    "components": 54,
-    "parts": 145,
+    "components": 57,
+    "parts": 148,
     "aiComponents": 12,
     "aiParts": 23,
-    "pages": 66,
-    "stories": 303,
-    "summary": "54 components and 12 AI components (66 documented pages)"
+    "pages": 69,
+    "stories": 318,
+    "summary": "57 components and 12 AI components (69 documented pages)"
   },
   "tokens": {
     "source": "src/styles/tokens.css",
@@ -8466,6 +8466,10 @@
           {
             "when": "Values picked from a long list into a field; Combobox shows them as chips inside it.",
             "use": "Components/Forms/Combobox"
+          },
+          {
+            "when": "A set of values someone reads and removes, such as the labels on a record.",
+            "use": "Components/Forms/Tag group"
           }
         ],
         "practices": [
@@ -10384,6 +10388,272 @@
       ]
     },
     {
+      "title": "Components/Forms/Listbox",
+      "name": "Listbox",
+      "layer": "components",
+      "category": "Forms",
+      "docs": "https://demogar.github.io/molaui/?path=/docs/components-forms-listbox--overview",
+      "phase": "experimental",
+      "summary": "A list of options that stays on the page, for choosing one or several without opening anything.",
+      "description": "A list of options that **stays on the page**: choose one, or several, without opening anything. Base UI has no standalone listbox, so this is the WAI-ARIA APG pattern written out: one tab stop, roving focus, type-ahead. In a single list **selection follows focus**, as in a radio group; in a multiple list the arrows only move and **Space** toggles, so moving never loses a choice. A chosen option is a value, so it takes the **ink fill** and a mark (a check, or a filled square when several can be chosen), and a multiple list shows its empty squares before anything is chosen. Disabled options stay focusable, so a keyboard user learns they exist.",
+      "usage": {
+        "use": [
+          "Choosing several values from a short set that should stay in view, such as the models an evaluation compares.",
+          "One value from a list the screen has room to show, where seeing every option is the point, such as a data region.",
+          "Options that need a second line, such as a region’s code or a model’s context window."
+        ],
+        "avoid": [
+          {
+            "when": "One value from a list in a form where space is tight.",
+            "use": "Components/Forms/Select"
+          },
+          {
+            "when": "A list long enough that people would rather type.",
+            "use": "Components/Forms/Combobox"
+          },
+          {
+            "when": "Two to five options that each need a sentence.",
+            "use": "Components/Forms/Radio"
+          },
+          {
+            "when": "Filters over a table or a list.",
+            "use": "Components/Forms/Chip"
+          },
+          {
+            "when": "Values a person adds and removes, shown as tags.",
+            "use": "Components/Forms/Tag group"
+          }
+        ],
+        "practices": [
+          {
+            "do": "Name it with aria-labelledby pointing at the visible label above it.",
+            "dont": "Put buttons, links or inputs inside an option; an option is one thing to choose."
+          },
+          {
+            "do": "Keep an unavailable option in the list and say why in its description.",
+            "dont": "Remove options that cannot be chosen today; people look for them and conclude they do not exist."
+          }
+        ],
+        "content": [
+          "Options are names, in sentence case: “Panama City”, not “PANAMA CITY” or “Region: Panama City”.",
+          "Put codes and figures in the description, not the label, so type-ahead matches what people read first."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus to the chosen option, or the first, and Tab again leaves the list."
+          },
+          {
+            "keys": [
+              "ArrowDown",
+              "ArrowUp"
+            ],
+            "action": "Moves focus to the next or previous option; in a single list, also chooses it."
+          },
+          {
+            "keys": [
+              "Home",
+              "End"
+            ],
+            "action": "Moves focus to the first or last option; in a single list, also chooses it."
+          },
+          {
+            "keys": [
+              "Space"
+            ],
+            "action": "Chooses the focused option; in a multiple list, toggles it."
+          },
+          {
+            "keys": [
+              "Shift+ArrowDown",
+              "Shift+ArrowUp"
+            ],
+            "action": "In a multiple list, moves focus and toggles the option it lands on."
+          },
+          {
+            "keys": [
+              "Shift+Space"
+            ],
+            "action": "In a multiple list, chooses every option from the last one chosen to the focused one."
+          },
+          {
+            "keys": [
+              "Control+Shift+Home",
+              "Control+Shift+End"
+            ],
+            "action": "In a multiple list, chooses every option from the focused one to the first or last, and moves there."
+          },
+          {
+            "keys": [
+              "Control+A",
+              "Meta+A"
+            ],
+            "action": "In a multiple list, chooses every option, or clears them all when all are chosen."
+          }
+        ],
+        "handles": [
+          "Renders `role=\"listbox\"` with `aria-multiselectable` when several can be chosen, and `option`s with `aria-selected`.",
+          "One tab stop with roving focus on the options themselves, so the focus ring and scrolling into view are the browser’s own.",
+          "Typing a letter moves to the next option that starts with it; letters typed together match a word.",
+          "Each option is named by its label and described by its second line, so the name stays short.",
+          "A disabled option is focusable, `aria-disabled` and never chosen, so a keyboard user learns it exists.",
+          "A chosen option is an ink fill with a check or a filled square, never the colour alone."
+        ],
+        "you": [
+          "Name it: pass `aria-labelledby` pointing at a visible label, or `aria-label`.",
+          "Say why an option is disabled, in its description or next to the list.",
+          "Announce the consequence of a choice yourself if it changes the page, such as a count in a live region."
+        ]
+      },
+      "anatomy": {
+        "slot": "listbox",
+        "parts": [
+          {
+            "part": "root",
+            "name": "List",
+            "does": "The cut box the options sit in. It scrolls when given a height, and holds one tab stop.",
+            "selector": "[data-slot=\"listbox\"]"
+          },
+          {
+            "part": "option",
+            "name": "Option",
+            "does": "One choice. A chosen one takes the ink fill; focus is a ring drawn inside it.",
+            "selector": "[data-part=\"option\"]"
+          },
+          {
+            "part": "mark",
+            "name": "Mark",
+            "does": "In a multiple list, a square that fills when chosen, so the state is never the colour alone.",
+            "selector": "[data-part=\"mark\"]"
+          },
+          {
+            "part": "label",
+            "name": "Label",
+            "does": "The option’s name, and what type-ahead matches.",
+            "selector": "[data-part=\"label\"]"
+          },
+          {
+            "part": "description",
+            "name": "Description",
+            "does": "An optional second line, read as the option’s description.",
+            "selector": "[data-part=\"description\"]"
+          }
+        ]
+      },
+      "exports": [
+        {
+          "name": "Listbox",
+          "kind": "component",
+          "source": "src/components/listbox/listbox.tsx",
+          "description": "`className`, `ref` and the rest of the DOM props go to the list, which wears the cut.",
+          "props": [
+            {
+              "name": "options",
+              "type": "ListboxOption<V>[]",
+              "required": true,
+              "description": "The options, in the order they are shown and reported."
+            },
+            {
+              "name": "defaultValue",
+              "type": "string | V[] | null",
+              "required": false,
+              "description": "The option chosen at first, when the list keeps its own value. The options chosen at first, when the list keeps its own value."
+            },
+            {
+              "name": "disabled",
+              "type": "boolean",
+              "required": false,
+              "description": "Every option is shown and none can be chosen or focused, as a disabled native list."
+            },
+            {
+              "name": "multiple",
+              "type": "boolean",
+              "required": false,
+              "description": "Leave unset (or `false`) for one choice, where moving with the arrows chooses. Several choices: the arrows only move, and Space toggles the focused option."
+            },
+            {
+              "name": "onValueChange",
+              "type": "((value: V | null) => void) | ((value: V[]) => void)",
+              "required": false,
+              "description": "Called with the newly chosen option, only when it changes. Called with every chosen option, in the order of `options`, when the set changes."
+            },
+            {
+              "name": "value",
+              "type": "string | V[] | null",
+              "required": false,
+              "description": "The chosen option, when you control it; `null` is \"nothing chosen yet\". The chosen options, in the order of `options`, when you control them."
+            }
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"listbox\">"
+          }
+        },
+        {
+          "name": "ListboxCommonProps",
+          "kind": "type",
+          "source": "src/components/listbox/listbox.tsx"
+        },
+        {
+          "name": "ListboxMultipleProps",
+          "kind": "type",
+          "source": "src/components/listbox/listbox.tsx"
+        },
+        {
+          "name": "ListboxOption",
+          "kind": "type",
+          "source": "src/components/listbox/listbox.tsx",
+          "description": "A list of options that stays on the page: choose one, or several, without opening anything. Combobox `multiple` was the only multi-select, and it hides the options until you type; when the set is short and the choices are the content (the regions a Cayuco workspace stores data in, the models an evaluation compares), the options belong in view."
+        },
+        {
+          "name": "ListboxProps",
+          "kind": "type",
+          "source": "src/components/listbox/listbox.tsx",
+          "description": "A name is required: a list of regions is only \"Data regions\" once something says so. An `aria-labelledby` pointing at a visible heading or label is better than a second, invisible name."
+        },
+        {
+          "name": "ListboxSingleProps",
+          "kind": "type",
+          "source": "src/components/listbox/listbox.tsx"
+        }
+      ],
+      "stories": [
+        {
+          "name": "Default",
+          "id": "components-forms-listbox--default",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-listbox--default"
+        },
+        {
+          "name": "Disabled",
+          "id": "components-forms-listbox--disabled",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-listbox--disabled"
+        },
+        {
+          "name": "Labelled",
+          "id": "components-forms-listbox--labelled",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-listbox--labelled"
+        },
+        {
+          "name": "Multiple",
+          "id": "components-forms-listbox--multiple",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-listbox--multiple"
+        },
+        {
+          "name": "Scrolling",
+          "id": "components-forms-listbox--scrolling",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-listbox--scrolling"
+        },
+        {
+          "name": "WithDescriptions",
+          "id": "components-forms-listbox--with-descriptions",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-listbox--with-descriptions"
+        }
+      ]
+    },
+    {
       "title": "Components/Forms/Number input",
       "name": "Number input",
       "layer": "components",
@@ -11088,6 +11358,10 @@
           {
             "when": "A list of actions rather than a value.",
             "use": "Components/Overlays/Menu"
+          },
+          {
+            "when": "Several values, or a list the page has room to keep in view.",
+            "use": "Components/Forms/Listbox"
           }
         ],
         "practices": [
@@ -11765,6 +12039,268 @@
       "usedIn": [
         "Components/Forms/Form example",
         "Patterns/Settings page"
+      ]
+    },
+    {
+      "title": "Components/Forms/Tag group",
+      "name": "Tag group",
+      "layer": "components",
+      "category": "Forms",
+      "docs": "https://demogar.github.io/molaui/?path=/docs/components-forms-tag-group--overview",
+      "phase": "experimental",
+      "summary": "A set of short values shown as tags, which can be removed, and selected when the set is also a choice.",
+      "description": "A set of short values shown as tags, which can be **removed**, and **selected** when the set is also a choice. It is one tab stop: the group is a WAI-ARIA `grid` and each tag a focusable `row`, so the arrows move between tags and Tab leaves, instead of two tab stops per tag. **Delete** or **Backspace** removes the focused tag and focus moves to the one that took its place; the × is a real button named “Remove <label>”, for a pointer and a screen reader’s browse mode. A selected tag is a chosen value: the ink fill and a check, as on a checked chip.",
+      "usage": {
+        "use": [
+          "The labels on a record, the recipients of a report, the tools an agent may call: a set someone reads and trims.",
+          "A short set that is also a choice, such as which label a report groups by, with selectionMode.",
+          "Showing what a search or a form added, with a way to take each one back."
+        ],
+        "avoid": [
+          {
+            "when": "Filters that narrow a table or a list.",
+            "use": "Components/Forms/Chip"
+          },
+          {
+            "when": "Picking values from a long list while typing.",
+            "use": "Components/Forms/Combobox"
+          },
+          {
+            "when": "A status on a record that nobody edits.",
+            "use": "Components/Feedback/Badge"
+          },
+          {
+            "when": "Choosing from options that should stay in view, with descriptions.",
+            "use": "Components/Forms/Listbox"
+          }
+        ],
+        "practices": [
+          {
+            "do": "Remove the item in your own state from onRemove, and let focus move to the next tag.",
+            "dont": "Ask for confirmation on every removal; offer a way to restore instead."
+          },
+          {
+            "do": "Keep a locked tag in the set with its name, so people see why it stays.",
+            "dont": "Use a tag group as a row of buttons that act; a tag is a value."
+          }
+        ],
+        "content": [
+          "Tags are one to three words, in sentence case: “Contains PII”, “Q3 review”.",
+          "Name the group for what the tags are: “Dataset labels”, “Recipients”.",
+          "Say what an empty group means in empty: “No labels. This dataset is not grouped anywhere.”"
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus to the tag last focused, the first at the start, and Tab again leaves the group."
+          },
+          {
+            "keys": [
+              "ArrowRight",
+              "ArrowDown"
+            ],
+            "action": "Moves focus to the next tag, stopping at the last; ArrowLeft in right-to-left."
+          },
+          {
+            "keys": [
+              "ArrowLeft",
+              "ArrowUp"
+            ],
+            "action": "Moves focus to the previous tag, stopping at the first."
+          },
+          {
+            "keys": [
+              "Home",
+              "End"
+            ],
+            "action": "Moves focus to the first or last tag."
+          },
+          {
+            "keys": [
+              "Delete",
+              "Backspace"
+            ],
+            "action": "Removes the focused tag when the group is removable, and focuses the tag that took its place."
+          },
+          {
+            "keys": [
+              "Space",
+              "Enter"
+            ],
+            "action": "Selects or deselects the focused tag when the group is selectable."
+          }
+        ],
+        "handles": [
+          "Renders a `grid` of `row`s, one per tag, each named by its label, so the whole set is one tab stop.",
+          "A removable tag says so with `aria-keyshortcuts`, and its × is a real button named “Remove <label>”, kept out of the tab order because the row answers Delete.",
+          "After a removal, focus moves to the next tag, the previous one at the end, or the group once it is empty, never to the page body.",
+          "A selectable group sets `aria-selected` on every tag and `aria-multiselectable` when several can be chosen; a selected tag is an ink fill with a check.",
+          "An empty group says so in words, in a cell, rather than leaving a blank gap."
+        ],
+        "you": [
+          "Name it with `aria-label` or `aria-labelledby`: “Dataset labels”.",
+          "Remove the item from your own list in `onRemove`; the group does not own it.",
+          "Translate `removeLabel` and `empty`."
+        ]
+      },
+      "anatomy": {
+        "slot": "tag-group",
+        "parts": [
+          {
+            "part": "tag",
+            "name": "Tag",
+            "does": "One value: a focusable row, cut like a chip. Selected, it takes the ink fill.",
+            "selector": "[data-part=\"tag\"]"
+          },
+          {
+            "part": "check",
+            "name": "Check",
+            "does": "Marks a selected tag, beside the ink fill.",
+            "selector": "[data-part=\"check\"]"
+          },
+          {
+            "part": "label",
+            "name": "Label",
+            "does": "The tag’s text, and its accessible name.",
+            "selector": "[data-part=\"label\"]"
+          },
+          {
+            "part": "remove",
+            "name": "Remove",
+            "does": "The ×: a button named “Remove <label>”, out of the tab order because the tag answers Delete.",
+            "selector": "[data-part=\"remove\"]"
+          },
+          {
+            "part": "empty",
+            "name": "Empty text",
+            "does": "What the group says when it has no tags.",
+            "selector": "[data-part=\"empty\"]"
+          }
+        ]
+      },
+      "exports": [
+        {
+          "name": "TagGroup",
+          "kind": "component",
+          "source": "src/components/tag-group/tag-group.tsx",
+          "description": "`className`, `ref` and the rest of the DOM props go to the grid.",
+          "props": [
+            {
+              "name": "items",
+              "type": "TagGroupItem[]",
+              "required": true,
+              "description": "The tags, in order. The group shows them; your state owns them."
+            },
+            {
+              "name": "defaultValue",
+              "type": "string[]",
+              "required": false,
+              "description": "The tags selected at first, when the group keeps its own selection."
+            },
+            {
+              "name": "disabled",
+              "type": "boolean",
+              "required": false,
+              "default": "false",
+              "description": "No tag can be removed or selected; they stay readable."
+            },
+            {
+              "name": "empty",
+              "type": "ReactNode",
+              "required": false,
+              "default": "None",
+              "description": "What the group says when it has no tags. Kept as text, so an empty group is never a blank gap."
+            },
+            {
+              "name": "onRemove",
+              "type": "((value: string) => void)",
+              "required": false,
+              "description": "Makes the tags removable: an × on each, and Delete or Backspace on the focused one. The group does not own the list; remove the item in your state and focus moves to its neighbour."
+            },
+            {
+              "name": "onValueChange",
+              "type": "((value: string[]) => void)",
+              "required": false,
+              "description": "Called with every selected tag, in the order of `items`, when the selection changes."
+            },
+            {
+              "name": "removeLabel",
+              "type": "((label: string) => string)",
+              "required": false,
+              "default": "(label) => `Remove ${label}`",
+              "description": "Accessible name of each remove button."
+            },
+            {
+              "name": "selectionMode",
+              "type": "\"none\" | \"multiple\" | \"single\"",
+              "required": false,
+              "default": "none",
+              "description": "`none` (the default) for a set you only read or edit, `single` or `multiple` for a choice."
+            },
+            {
+              "name": "value",
+              "type": "string[]",
+              "required": false,
+              "description": "The selected tags. With `single`, at most one."
+            }
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"tag-group\">"
+          }
+        },
+        {
+          "name": "TagGroupBaseProps",
+          "kind": "type",
+          "source": "src/components/tag-group/tag-group.tsx"
+        },
+        {
+          "name": "TagGroupItem",
+          "kind": "type",
+          "source": "src/components/tag-group/tag-group.tsx",
+          "description": "A set of short values shown as tags: the labels on a Cayuco dataset, the recipients of a report, the tools an agent may call. Tags can be removed, and can be selected, one or several, when the set is also a choice."
+        },
+        {
+          "name": "TagGroupProps",
+          "kind": "type",
+          "source": "src/components/tag-group/tag-group.tsx",
+          "description": "A name is required: \"Billing, Retention\" are tags of something, and a screen reader hears that something before the first tag."
+        }
+      ],
+      "stories": [
+        {
+          "name": "Default",
+          "id": "components-forms-tag-group--default",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-tag-group--default"
+        },
+        {
+          "name": "Disabled",
+          "id": "components-forms-tag-group--disabled",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-tag-group--disabled"
+        },
+        {
+          "name": "Empty",
+          "id": "components-forms-tag-group--empty",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-tag-group--empty"
+        },
+        {
+          "name": "Removable",
+          "id": "components-forms-tag-group--removable",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-tag-group--removable"
+        },
+        {
+          "name": "SelectAndRemove",
+          "id": "components-forms-tag-group--select-and-remove",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-tag-group--select-and-remove"
+        },
+        {
+          "name": "Selectable",
+          "id": "components-forms-tag-group--selectable",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-tag-group--selectable"
+        }
       ]
     },
     {
@@ -13580,6 +14116,10 @@
             "when": "Ordered steps to follow.",
             "use": "Components/Data display/Timeline",
             "label": "StepList"
+          },
+          {
+            "when": "A hierarchy people move through and pick from, such as files or pages.",
+            "use": "Components/Navigation/Tree"
           }
         ],
         "practices": [
@@ -14359,6 +14899,235 @@
           "name": "Underline",
           "id": "components-navigation-tabs--underline",
           "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-tabs--underline"
+        }
+      ]
+    },
+    {
+      "title": "Components/Navigation/Tree",
+      "name": "Tree",
+      "layer": "components",
+      "category": "Navigation",
+      "docs": "https://demogar.github.io/molaui/?path=/docs/components-navigation-tree--overview",
+      "phase": "experimental",
+      "summary": "A hierarchy you move through and pick from, with branches that open and close and one selected item.",
+      "description": "A hierarchy you move through and pick from: the files of a proposed change, the sections of a knowledge base. Base UI has no tree, so this is the WAI-ARIA APG tree view written out: one tab stop; ArrowUp and ArrowDown through the visible items; **ArrowRight opens a branch, then enters it; ArrowLeft closes it, then climbs to its parent** (mirrored in right-to-left); Home, End, `*` and type-ahead. **Selection does not follow focus**: choosing an item usually loads something, so the arrows only move and Enter, Space or a click selects. The selected item is the current location, a shade with an ink bar, as in the sidebar; branches use the one disclosure marker, the plus that turns into a cross.",
+      "usage": {
+        "use": [
+          "The files of a change an agent proposes, beside the diff of the selected file.",
+          "The sections and pages of a knowledge base or documentation, as navigation.",
+          "Folders of a dataset or a workspace, where the depth is real and people move up and down it."
+        ],
+        "avoid": [
+          {
+            "when": "Two levels of navigation for a whole product.",
+            "use": "Components/Layout/App shell"
+          },
+          {
+            "when": "Sections of one page that open and close.",
+            "use": "Components/Navigation/Accordion"
+          },
+          {
+            "when": "A flat list of options to choose from.",
+            "use": "Components/Forms/Listbox"
+          },
+          {
+            "when": "Where the current page sits in a hierarchy, shown in one line.",
+            "use": "Components/Navigation/Breadcrumb"
+          }
+        ],
+        "practices": [
+          {
+            "do": "Open the branches down to the selected item, so it can be seen when the page loads.",
+            "dont": "Nest deeper than four or five levels; the indent eats the label."
+          },
+          {
+            "do": "Load the selected item’s content on onValueChange, which only Enter, Space and a click send.",
+            "dont": "Load content as focus moves; the arrows are for moving."
+          }
+        ],
+        "content": [
+          "Labels are names, as the person knows them: file names as written, page titles in sentence case.",
+          "Name the tree for what it holds: “Files changed”, “Knowledge base”."
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves focus to the item last focused, else the selected one, else the first, and Tab again leaves the tree."
+          },
+          {
+            "keys": [
+              "ArrowDown",
+              "ArrowUp"
+            ],
+            "action": "Moves focus to the next or previous visible item, without selecting it."
+          },
+          {
+            "keys": [
+              "ArrowRight"
+            ],
+            "action": "Opens a closed branch; on an open branch, moves to its first child. ArrowLeft in right-to-left."
+          },
+          {
+            "keys": [
+              "ArrowLeft"
+            ],
+            "action": "Closes an open branch; otherwise moves to the parent. ArrowRight in right-to-left."
+          },
+          {
+            "keys": [
+              "Home",
+              "End"
+            ],
+            "action": "Moves focus to the first or last visible item."
+          },
+          {
+            "keys": [
+              "Enter",
+              "Space"
+            ],
+            "action": "Selects the focused item, and opens or closes it if it is a branch."
+          },
+          {
+            "keys": [
+              "*"
+            ],
+            "action": "Opens every branch at the level of the focused item."
+          }
+        ],
+        "handles": [
+          "Renders `role=\"tree\"` and one `treeitem` per visible item with `aria-level`, `aria-setsize` and `aria-posinset`, and `aria-expanded` on branches.",
+          "Items are a flat run rather than nested groups, so each is named by its own label, not by everything inside it.",
+          "One tab stop with roving focus; a hidden item hands the stop to the nearest open branch above it.",
+          "Typing a letter moves to the next visible item that starts with it.",
+          "The selected item has `aria-selected` and is a shade with an ink bar, the mark of the current location, never the colour alone.",
+          "A disabled item is focusable, `aria-disabled` and never selected."
+        ],
+        "you": [
+          "Name it: `aria-labelledby` pointing at the heading above it, or `aria-label`.",
+          "Open the branches down to the selected item, so it is visible on load.",
+          "Load content on `onValueChange`, which only Enter, Space and a click send, and move focus to it yourself only when the person asks."
+        ]
+      },
+      "anatomy": {
+        "slot": "tree",
+        "parts": [
+          {
+            "part": "item",
+            "name": "Item",
+            "does": "One treeitem, indented by its level. The selected one is a shade with an ink bar.",
+            "selector": "[data-part=\"item\"]"
+          },
+          {
+            "part": "marker",
+            "name": "Marker",
+            "does": "The plus on a branch, which turns into a cross when it is open.",
+            "selector": "[data-part=\"marker\"]"
+          },
+          {
+            "part": "icon",
+            "name": "Icon",
+            "does": "An optional leading icon, hidden from assistive technology.",
+            "selector": "[data-part=\"icon\"]"
+          },
+          {
+            "part": "label",
+            "name": "Label",
+            "does": "The item’s name, and what type-ahead matches.",
+            "selector": "[data-part=\"label\"]"
+          }
+        ]
+      },
+      "exports": [
+        {
+          "name": "Tree",
+          "kind": "component",
+          "source": "src/components/tree/tree.tsx",
+          "description": "`className`, `ref` and the rest of the DOM props go to the tree.",
+          "props": [
+            {
+              "name": "items",
+              "type": "TreeNode[]",
+              "required": true,
+              "description": "The top level of the tree; branches carry their own `children`."
+            },
+            {
+              "name": "defaultExpanded",
+              "type": "string[]",
+              "required": false,
+              "description": "The branches open at first: open the ones down to the selected item."
+            },
+            {
+              "name": "defaultValue",
+              "type": "string | null",
+              "required": false,
+              "description": "The item selected at first, when the tree keeps its own selection."
+            },
+            {
+              "name": "expanded",
+              "type": "string[]",
+              "required": false,
+              "description": "The open branches, by `value`, when you control them."
+            },
+            {
+              "name": "onExpandedChange",
+              "type": "((expanded: string[]) => void)",
+              "required": false,
+              "description": "Called with every open branch when one opens or closes."
+            },
+            {
+              "name": "onValueChange",
+              "type": "((value: string | null) => void)",
+              "required": false,
+              "description": "Called when Enter, Space or a click selects a different item. Never called as focus moves."
+            },
+            {
+              "name": "value",
+              "type": "string | null",
+              "required": false,
+              "description": "The selected item, when you control it; `null` is none."
+            }
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"tree\">"
+          }
+        },
+        {
+          "name": "TreeBaseProps",
+          "kind": "type",
+          "source": "src/components/tree/tree.tsx"
+        },
+        {
+          "name": "TreeNode",
+          "kind": "type",
+          "source": "src/components/tree/tree.tsx",
+          "description": "A hierarchy you move through and pick from: the files of a change an agent proposes, the sections of a Cayuco knowledge base, the folders of a dataset. One item is selected, the place you are, and the branches above it open and close."
+        },
+        {
+          "name": "TreeProps",
+          "kind": "type",
+          "source": "src/components/tree/tree.tsx",
+          "description": "A name is required: \"Files changed\", \"Knowledge base\". An `aria-labelledby` pointing at the visible heading above the tree is better than a second, invisible name."
+        }
+      ],
+      "stories": [
+        {
+          "name": "Collapsed",
+          "id": "components-navigation-tree--collapsed",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-tree--collapsed"
+        },
+        {
+          "name": "Default",
+          "id": "components-navigation-tree--default",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-tree--default"
+        },
+        {
+          "name": "KnowledgeBase",
+          "id": "components-navigation-tree--knowledge-base",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-navigation-tree--knowledge-base"
         }
       ]
     },

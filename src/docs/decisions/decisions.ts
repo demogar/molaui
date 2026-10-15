@@ -136,6 +136,15 @@ const NOTES: Record<string, Notes> = {
       'Mola UI/Getting started': 'The lint rules are a subpath of the package, so they always know the exports and tokens of the version you installed.',
     },
   },
+  '0012': {
+    name: 'Composites Base UI lacks',
+    decided:
+      'Listbox, Tag group and Tree, which Base UI has no public primitive for, follow the WAI-ARIA APG pattern written out, never Base UI internals, and are held to the keyboard-coverage and ARIA-snapshot gates.',
+    governs: {
+      'Foundations/Accessibility':
+        'Where Base UI has no primitive (Listbox, Tag group, Tree), the APG pattern is written out, every key in its table is pressed by a test, and its accessibility tree is pinned from Chromium.',
+    },
+  },
 }
 
 export interface Decision extends Notes {

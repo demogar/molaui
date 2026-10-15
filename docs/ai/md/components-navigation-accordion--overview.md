@@ -24,6 +24,7 @@ Sections of one document, opened one or several at a time. Ink rules close the l
 - Content most readers need on every visit. Leave it open on the page.
 - The model’s thinking behind an answer. Use [Reasoning](https://demogar.github.io/molaui/md/ai-reasoning--overview.md).
 - Ordered steps to follow. Use [StepList](https://demogar.github.io/molaui/md/components-data-display-timeline--overview.md).
+- A hierarchy people move through and pick from, such as files or pages. Use [Tree](https://demogar.github.io/molaui/md/components-navigation-tree--overview.md).
 
 ### Do and don’t
 
@@ -153,3 +154,4 @@ Types: `AccordionItemProps`, `AccordionPanelProps`, `AccordionProps`, `Accordion
 - [Tabs](https://demogar.github.io/molaui/md/components-navigation-tabs--overview.md)
 - [Reasoning](https://demogar.github.io/molaui/md/ai-reasoning--overview.md)
 - [Timeline](https://demogar.github.io/molaui/md/components-data-display-timeline--overview.md)
+- [Tree](https://demogar.github.io/molaui/md/components-navigation-tree--overview.md)

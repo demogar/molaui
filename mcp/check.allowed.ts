@@ -45,6 +45,20 @@ export const ALLOWED: Record<string, Allowed[]> = {
       why: 'This file is CommandPalette: the input stays focused and the highlight moves by aria-activedescendant, a pattern Combobox does not have (see its doc comment).',
     },
   ],
+  'src/components/listbox/listbox.tsx': [
+    {
+      rule: 12,
+      match: /role="(?:listbox|option)"/,
+      why: 'This file is Listbox: the list is the component, and Base UI has no standalone listbox primitive to build it on (ADR 0012).',
+    },
+  ],
+  'src/components/tag-group/tag-group.tsx': [
+    {
+      rule: 12,
+      match: /role="(?:grid|row|gridcell)"/,
+      why: 'This file is TagGroup: the grid of tags is the component, and Base UI has no grid primitive to build it on (ADR 0012).',
+    },
+  ],
   'src/components/tabs/tabs.tsx': [
     { rule: 7, match: /`left-0` is a physical/, why: "The indicator is translated by Base UI's measured offset, which is physical: from the list's left edge, in either direction." },
   ],

@@ -333,6 +333,19 @@
       "<FileUpload />$0"
     ]
   },
+  "Listbox": {
+    "scope": "typescriptreact,javascriptreact",
+    "prefix": "mola-listbox",
+    "description": "A list of options that stays on the page, for choosing one or several without opening anything. import { Listbox } from '@demogar/mola-ui'",
+    "body": [
+      "<Listbox aria-label=\"${1:Models to compare}\" options={[",
+      "      { value: 'swift', label: 'Cayuco Swift', description: '32k context · fastest' },",
+      "      { value: 'steady', label: 'Cayuco Steady', description: '128k context' },",
+      "      { value: 'deep', label: 'Cayuco Deep', description: '200k context · slowest' },",
+      "      { value: 'classic', label: 'Cayuco Classic', description: 'Retired for new evaluations', disabled: true },",
+      "    ]} defaultValue={['swift', 'deep']} className=\"w-full max-w-72\" multiple />$0"
+    ]
+  },
   "Number input": {
     "scope": "typescriptreact,javascriptreact",
     "prefix": "mola-number-input",
@@ -435,6 +448,19 @@
     "description": "A setting that takes effect the moment it is switched; on is verde, the colour of live. import { Switch } from '@demogar/mola-ui'",
     "body": [
       "<Switch label=\"${1:Stream responses}\" defaultChecked />$0"
+    ]
+  },
+  "Tag group": {
+    "scope": "typescriptreact,javascriptreact",
+    "prefix": "mola-tag-group",
+    "description": "A set of short values shown as tags, which can be removed, and selected when the set is also a choice. import { TagGroup } from '@demogar/mola-ui'",
+    "body": [
+      "<TagGroup aria-label=\"${1:Tools the agent may call}\" items={[",
+      "      { value: 'search', label: 'Search documents' },",
+      "      { value: 'sql', label: 'Query warehouse' },",
+      "      { value: 'email', label: 'Send email' },",
+      "      { value: 'refund', label: 'Issue refund', disabled: true },",
+      "    ]} selectionMode=\"multiple\" defaultValue={['search', 'sql']} />$0"
     ]
   },
   "App shell": {
@@ -610,6 +636,14 @@
       "    </TabsList>",
       "  </Tabs>",
       "</div>$0"
+    ]
+  },
+  "Tree": {
+    "scope": "typescriptreact,javascriptreact",
+    "prefix": "mola-tree",
+    "description": "A hierarchy you move through and pick from, with branches that open and close and one selected item. import { Tree } from '@demogar/mola-ui'",
+    "body": [
+      "<Tree items={${1:items}} />$0"
     ]
   },
   "Command palette": {

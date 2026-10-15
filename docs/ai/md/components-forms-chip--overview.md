@@ -24,6 +24,7 @@ A filter whose state you can see. A real `<input>` sits inside the styled `<labe
 - Switching between views of the same data. Use [Segmented control](https://demogar.github.io/molaui/md/components-forms-segmented-control--overview.md).
 - Options in a form that is saved later. Use [Checkbox](https://demogar.github.io/molaui/md/components-forms-checkbox--overview.md).
 - Values picked from a long list into a field; Combobox shows them as chips inside it. Use [Combobox](https://demogar.github.io/molaui/md/components-forms-combobox--overview.md).
+- A set of values someone reads and removes, such as the labels on a record. Use [Tag group](https://demogar.github.io/molaui/md/components-forms-tag-group--overview.md).
 
 ### Do and don’t
 
@@ -116,7 +117,9 @@ Types: `ChipGroupProps`, `ChipProps`
 - [Segmented control](https://demogar.github.io/molaui/md/components-forms-segmented-control--overview.md)
 - [Checkbox](https://demogar.github.io/molaui/md/components-forms-checkbox--overview.md)
 - [Combobox](https://demogar.github.io/molaui/md/components-forms-combobox--overview.md)
+- [Tag group](https://demogar.github.io/molaui/md/components-forms-tag-group--overview.md)
 
 ### Pages that send readers here
 
 - [Date picker](https://demogar.github.io/molaui/md/components-forms-date-picker--overview.md)
+- [Listbox](https://demogar.github.io/molaui/md/components-forms-listbox--overview.md)
