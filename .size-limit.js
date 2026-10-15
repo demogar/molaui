@@ -31,4 +31,10 @@ export default [
     rolldown: false,
     limit: '17.5 kB',
   },
+  {
+    name: 'components.css',
+    path: 'dist/mola-ui-components.css',
+    rolldown: false,
+    limit: '17.5 kB',
+  },
 ]

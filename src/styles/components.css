@@ -1,0 +1,39 @@
+/* src/styles/components.css — `@demogar/mola-ui/components.css`.
+ *
+ * The compiled stylesheet for an app that already has its own page styles.
+ * The same tokens, theme bridge, cloth utilities and component utilities as
+ * styles.css (index.css), with two differences:
+ *
+ *   - no Tailwind preflight and no base.css on the document. The reset and
+ *     the base rules the components need are in scoped-base.css and apply
+ *     only inside elements with a `data-slot`.
+ *   - the document is not switched to `color-scheme: light dark`. tokens.css
+ *     puts that on :root so a page with no data-theme follows the operating
+ *     system; in an app that never asked for a dark mode it would turn the
+ *     app's own form controls, scrollbars and unstyled canvas dark for anyone
+ *     whose system is dark. Here an unthemed root stays light, and an app that
+ *     wants dark sets data-theme, on <html> or on a subtree, as it would with
+ *     styles.css. The rule is stated as `light` rather than removed because
+ *     Lightning CSS lowers `light-dark()` into custom properties it switches
+ *     beside each color-scheme, and only an explicit value overrides the dark
+ *     media query it emits for :root.
+ *
+ * Built by vite.css.config.ts into dist/mola-ui-components.css. */
+@layer theme, base, components, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities) source(none);
+@import './tokens.css';
+@import './theme.css';
+@import './cloth.css';
+@import './scoped-base.css';
+
+@source '../components';
+@source '../patterns';
+@source not '../**/*.stories.tsx';
+@source not '../**/*.test.tsx';
+@source not '../**/*.mdx';
+
+:root:not([data-theme]) {
+  color-scheme: light;
+}

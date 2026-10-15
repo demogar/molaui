@@ -194,6 +194,10 @@ export function rulesMarkdown(data: Data) {
       .map(([attr, values]) => `\`${attr}\` (${values.join(', ')})`)
       .join(', ')}.`,
     '',
+    `In an existing app, import \`${m.name}/components.css\` instead of \`styles.css\`: it scopes the reset to the components and leaves the page's own styles alone.`,
+    '',
+    `Mount \`DirectionProvider\`, \`ToastProvider\` and (optionally) \`TooltipProvider\` once around the app. \`useToast()\` throws without \`ToastProvider\`.`,
+    '',
     '## Lifecycle phases',
     '',
     list(Object.values(m.phases).map((p) => `${p.label}: ${p.promise}`)),

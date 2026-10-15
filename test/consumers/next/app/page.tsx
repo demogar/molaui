@@ -10,13 +10,17 @@
 // a component that reads context, which only works as a client component.
 import * as mola from '@demogar/mola-ui'
 
-import { AgentNameField } from './agent-name-field'
+// Both are Getting started's own code blocks, written here by
+// scripts/consumers.mjs, and so is the root layout around this page.
+import { AgentNameField } from '../snippets/agent-name-field'
+import { ThemeSwitcher } from '../snippets/theme-switcher'
 
 const { Badge, Button, Dialog, DialogContent, Stat } = mola
 
 export default function Page() {
   return (
     <main data-exports={Object.keys(mola).length}>
+      <ThemeSwitcher />
       <Badge tone="success">Running</Badge>
       <Stat label="Runs today" value="128" />
       <AgentNameField />

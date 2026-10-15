@@ -155,7 +155,11 @@ export function createServer(data: Data) {
         groups.set(group, [...(groups.get(group) ?? []), c])
       }
       const body = [...groups].map(([group, items]) => `## ${group}\n\n${items.map((c) => componentLine(c, data)).join('\n')}`).join('\n\n')
-      return text(`# ${pages.length} components in ${manifest.name} ${data.version}\n\nCall get_component with a name for props, usage and accessibility.\n\n${body}\n`)
+      // The heading says what the README and llms.txt say, from the same
+      // generated counts: it used to print 66 "components" where the README
+      // said 54, because it counted the AI layer and gave no breakdown.
+      const size = layer === 'ai' ? `${pages.length} AI components` : layer === 'components' ? `${pages.length} components` : manifest.counts.summary
+      return text(`# ${size} in ${manifest.name} ${data.version}\n\nCall get_component with a name for props, usage and accessibility.\n\n${body}\n`)
     },
   )
 

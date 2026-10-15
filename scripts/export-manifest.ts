@@ -36,6 +36,7 @@ import { withCompilerOptions, type ComponentDoc, type PropItem } from 'react-doc
 import { isExportStory } from 'storybook/internal/csf'
 import ts from 'typescript'
 
+import evidenceFile from '../docs/accessibility/evidence.json' with { type: 'json' }
 import pkg from '../package.json' with { type: 'json' }
 import { changeLine, colorInfo, componentTwin, mdxPages, mdxTwin, screenTwin, SERVED_AS_IS, TOKEN_ROWS, tokensJson, tokensText, twinPath, twinUrl } from './agent-docs'
 import { ACCESSIBILITY } from '../src/docs/usage/accessibility'
@@ -433,12 +434,37 @@ const showcases = stories.filter((s) => !entries.has(s.title)).map((s) => ({
  */
 const parts = (layer: Entry['layer']) =>
   sorted.filter((e) => e.layer === layer).reduce((n, e) => n + e.exports.filter((x) => x.kind === 'component').length, 0)
+const componentCount = sorted.filter((e) => e.layer === 'components').length
+const aiCount = sorted.filter((e) => e.layer === 'ai').length
 const counts = {
-  components: sorted.filter((e) => e.layer === 'components').length,
+  components: componentCount,
   parts: parts('components'),
-  aiComponents: sorted.filter((e) => e.layer === 'ai').length,
+  aiComponents: aiCount,
   aiParts: parts('ai'),
+  pages: componentCount + aiCount,
   stories: stories.reduce((n, s) => n + s.stories.length, 0),
+  /**
+   * The one sentence every surface uses for the size of the system: the
+   * README, llms.txt and the MCP server's list_components. Before, the README
+   * said 54 and the MCP banner 66, because one counted the AI layer and the
+   * other did not, and a reader could not tell which was right.
+   */
+  summary: `${componentCount} components and ${aiCount} AI components (${componentCount + aiCount} documented pages)`,
+}
+
+/**
+ * The testing figures Known gaps quotes, read from the evidence file the
+ * component pages render. "Some components have no keyboard test" read as a
+ * handful when it was a third of the interactive pages, so the page states
+ * the number and this checks it. A page is interactive when it has a
+ * keyboard table, the same test its testing status uses.
+ */
+const evidence: Record<string, { keyboardInUnitTests: boolean; screenReadersByHand: boolean }> = evidenceFile.components
+const interactive = sorted.filter((e) => ACCESSIBILITY[e.title]?.keyboard?.length)
+const testing = {
+  interactive: interactive.length,
+  noKeyboardTest: interactive.filter((e) => !evidence[e.title]?.keyboardInUnitTests).length,
+  screenReaders: sorted.filter((e) => evidence[e.title]?.screenReadersByHand).length,
 }
 
 /**
@@ -495,6 +521,8 @@ const header = `# Mola UI
 
 > ${pkg.description} Published as \`${pkg.name}\`: React 19, Base UI for behaviour, Tailwind v4 for styling, design tokens as CSS custom properties.
 
+${counts.summary}.
+
 Install and set up:
 
 \`\`\`bash
@@ -511,7 +539,23 @@ import '${pkg.name}/styles.css'
 import { Button } from '${pkg.name}'
 \`\`\`
 
-Theme and density are attributes, not props: \`<html data-theme="dark" data-density="compact">\`. Already on Tailwind v4? Import \`${pkg.name}/tailwind.css\` into your own build instead of \`styles.css\`. For right-to-left, set \`dir="rtl"\` on \`<html>\` and wrap the app in \`DirectionProvider\`.
+Mount the providers once, at the app root (in Next.js, \`app/layout.tsx\`):
+
+\`\`\`tsx
+import { DirectionProvider, ToastProvider, TooltipProvider } from '${pkg.name}'
+
+<DirectionProvider direction="ltr">
+  <ToastProvider>
+    <TooltipProvider>
+      <App />
+    </TooltipProvider>
+  </ToastProvider>
+</DirectionProvider>
+\`\`\`
+
+\`ToastProvider\` is required: \`useToast()\` throws without it. \`DirectionProvider\` gives Base UI the keyboard direction; for right-to-left, set \`dir="rtl"\` on \`<html>\` and \`direction="rtl"\` on the provider. \`TooltipProvider\` is optional.
+
+Theme and density are attributes, not props: \`<html data-theme="dark" data-density="compact">\`. Leave \`data-theme\` off to follow the OS; a stored choice is set by an inline \`<head>\` script before the first paint. \`styles.css\` includes Tailwind's preflight and styles \`body\`; in an existing app, import \`${pkg.name}/components.css\` instead, which scopes the reset to the components. Already on Tailwind v4? Import \`${pkg.name}/tailwind.css\` into your own build instead of \`styles.css\`.
 
 ## Rules
 
@@ -528,7 +572,7 @@ const llms = `${header}
 ## Docs
 
 - [Choosing a component](${SITE}?path=/docs/mola-ui-choosing-a-component--overview): which component for which job, and what to use instead
-- [Getting started](${SITE}?path=/docs/mola-ui-getting-started--overview): install, theme, density, right-to-left, Tailwind
+- [Getting started](${SITE}?path=/docs/mola-ui-getting-started--overview): install, the app root and its providers, existing apps, theme switching without a flash, density, right-to-left, Tailwind, Next.js
 - [Principles](${SITE}?path=/docs/mola-ui-principles--overview): the six rules every component obeys
 - [AI interface principles](${SITE}?path=/docs/ai-principles--overview): streaming, latency, approval, uncertainty, failure
 - [Decisions](${SITE}?path=/docs/decisions-all-decisions--overview): the architecture decision records behind colour roles, themes, density and typography
@@ -707,8 +751,15 @@ const outputs: [string, string][] = [
  * rather than remembered.
  */
 const CLAIMS: [string, string[]][] = [
-  ['README.md', [`**${counts.components} components.**`, `${counts.parts} exported parts`, `all ${counts.stories} stories`]],
-  ['src/docs/introduction.mdx', [`**${counts.components} documented components** (${counts.parts} exported parts)`]],
+  ['README.md', [`**${counts.components} components.**`, `${counts.parts} exported parts`, `all ${counts.stories} stories`, `**An AI interface layer: ${counts.aiComponents} more components.**`]],
+  ['src/docs/introduction.mdx', [`**${counts.components} documented components** (${counts.parts} exported parts)`, `**An AI interface layer** of ${counts.aiComponents} more components`]],
+  [
+    'src/docs/known-gaps.mdx',
+    [
+      `**${testing.noKeyboardTest} of the ${testing.interactive} interactive component pages**`,
+      testing.screenReaders === 0 ? `None of the ${counts.pages} component pages` : `${testing.screenReaders} of the ${counts.pages} component pages`,
+    ],
+  ],
 ]
 const wrong = CLAIMS.flatMap(([file, phrases]) => {
   const text = readFileSync(resolve(root, file), 'utf8')

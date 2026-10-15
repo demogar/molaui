@@ -88,6 +88,8 @@ export interface Manifest {
   install: string
   rules: { rule: string; why: string }[]
   phases: Record<string, { label: string; promise: string }>
+  /** Generated with the manifest; `summary` is the sentence every surface uses for the size of the system. */
+  counts: { components: number; aiComponents: number; pages: number; summary: string }
   tokens: { scopes: Record<string, Scope>; colors: ({ token: string } & ColorInfo)[]; attributes: Record<string, string[]> }
   components: Component[]
   patterns: Pattern[]

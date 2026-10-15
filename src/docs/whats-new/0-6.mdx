@@ -1,0 +1,44 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+import { ReleaseChanges, ReleaseStatus } from '../blocks/changes'
+
+<Meta title="Mola UI/What's new/0.6" />
+
+# What's new in 0.6
+
+<ReleaseStatus version="0.6.0" />
+
+0.6 makes the colour rules something a tool can check. Every colour token now says what it may be
+used for, the MCP server can review code against the design rules, and the contrast test measures
+every surface that carries text, which found and fixed disabled states that were too faint. The
+full list is under *Everything in 0.6.0* at the end of this page, and on the
+[Changelog](?path=/docs/mola-ui-changelog--overview).
+
+## Colour tokens have scopes
+
+Each colour token now has one or more scopes from a closed set: surface, text, edge, mark and
+overlay. A surface token is a fill, a text token is for words, and each scope allows only its own
+utilities (`bg-` for a surface, `text-` for text). A pairing is measured only between a text and
+the surface it sits on, so a token used outside its scope was never measured. A test now fails
+when a component does that; it found three, fixed in this release. The scopes are on the
+[Color](?path=/docs/foundations-color--overview) page, in the agent docs and in the Figma export.
+
+## check_code reviews generated code
+
+The MCP server gains `check_code`. It takes code an agent wrote (TSX, JSX or CSS) and returns each
+finding with its line, the rule it breaks and the fix: a border on a control, a radius,
+`opacity-*` on a disabled control, colours that are not tokens, a token outside its scope, physical
+`pl-` or `left-` classes, spinners, hand-rolled dialogs and menus, other UI libraries. The library's
+own source, every story and these pages are checked by the same code in CI.
+
+## Every surface with text is measured
+
+The contrast test used to measure only the pairings someone had listed. It now reads them from the
+components themselves, state by state, and fails on a text and surface pair that is not measured
+at 4.5:1 in both themes. That found disabled states where two styles competed and the result fell
+below 4.5:1, in Menu, Select, Command, Segmented control, Checkbox and Number input. Each now names
+the pair it draws with. No token value changed.
+
+## Everything in 0.6.0
+
+<ReleaseChanges version="0.6.0" />

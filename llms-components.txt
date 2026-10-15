@@ -2,6 +2,8 @@
 
 > A design system cut like a mola: flat layers, hard keylines, revealed bands. React components for dense internal tools and AI-native interfaces. Published as `@demogar/mola-ui`: React 19, Base UI for behaviour, Tailwind v4 for styling, design tokens as CSS custom properties.
 
+54 components and 12 AI components (66 documented pages).
+
 Install and set up:
 
 ```bash
@@ -18,7 +20,23 @@ import '@demogar/mola-ui/styles.css'
 import { Button } from '@demogar/mola-ui'
 ```
 
-Theme and density are attributes, not props: `<html data-theme="dark" data-density="compact">`. Already on Tailwind v4? Import `@demogar/mola-ui/tailwind.css` into your own build instead of `styles.css`. For right-to-left, set `dir="rtl"` on `<html>` and wrap the app in `DirectionProvider`.
+Mount the providers once, at the app root (in Next.js, `app/layout.tsx`):
+
+```tsx
+import { DirectionProvider, ToastProvider, TooltipProvider } from '@demogar/mola-ui'
+
+<DirectionProvider direction="ltr">
+  <ToastProvider>
+    <TooltipProvider>
+      <App />
+    </TooltipProvider>
+  </ToastProvider>
+</DirectionProvider>
+```
+
+`ToastProvider` is required: `useToast()` throws without it. `DirectionProvider` gives Base UI the keyboard direction; for right-to-left, set `dir="rtl"` on `<html>` and `direction="rtl"` on the provider. `TooltipProvider` is optional.
+
+Theme and density are attributes, not props: `<html data-theme="dark" data-density="compact">`. Leave `data-theme` off to follow the OS; a stored choice is set by an inline `<head>` script before the first paint. `styles.css` includes Tailwind's preflight and styles `body`; in an existing app, import `@demogar/mola-ui/components.css` instead, which scopes the reset to the components. Already on Tailwind v4? Import `@demogar/mola-ui/tailwind.css` into your own build instead of `styles.css`.
 
 ## Rules
 

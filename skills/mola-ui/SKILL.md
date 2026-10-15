@@ -42,6 +42,28 @@ import '@fontsource-variable/martian-mono/wdth.css'
 import '@demogar/mola-ui/styles.css' // or @demogar/mola-ui/tailwind.css inside your own Tailwind v4 build
 ```
 
+`styles.css` carries Tailwind's preflight and styles `body`: right for a new app. In an **existing
+app**, import `@demogar/mola-ui/components.css` instead, which scopes the reset to the components
+(elements with `data-slot`) and leaves the host page's styles alone.
+
+Mount the providers once, at the app root (in Next.js, in `app/layout.tsx`):
+
+```tsx
+import { DirectionProvider, ToastProvider, TooltipProvider } from '@demogar/mola-ui'
+
+<DirectionProvider direction="ltr">
+  <ToastProvider>
+    <TooltipProvider>
+      <App />
+    </TooltipProvider>
+  </ToastProvider>
+</DirectionProvider>
+```
+
+`ToastProvider` is required for `useToast()`, which throws without it. `DirectionProvider` gives
+Base UI the keyboard direction; give it the same value as `dir`. `TooltipProvider` is optional and
+shares the tooltip delay across a toolbar.
+
 Theme, density and direction are **attributes**, not props or context, so portaled menus and
 dialogs inherit them:
 
@@ -49,7 +71,9 @@ dialogs inherit them:
 <html data-theme="dark" data-density="compact" dir="ltr">
 ```
 
-`data-theme` is `light` or `dark`; leave it off to follow the OS. `data-density` is `compact`
+`data-theme` is `light` or `dark`; leave it off to follow the OS. To let people choose, store only
+an explicit Light or Dark, and set it from an inline `<head>` script before the first paint (React
+setting it after hydration flashes the system theme first); Getting started has the recipe. `data-density` is `compact`
 (tables, logs), `comfortable` (default) or `spacious` (forms, onboarding). Both work on any
 subtree. No component takes a size-for-density prop. For right-to-left, set `dir="rtl"` on
 `<html>` **and** wrap the app in `<DirectionProvider direction="rtl">` from `@demogar/mola-ui`,

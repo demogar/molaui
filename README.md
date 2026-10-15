@@ -18,7 +18,7 @@ admin consoles, knowledge bases, agent run monitors — documented in a standalo
   accessibility, and styled with Tailwind v4. Every one has a docs page in the same order: what it
   is for and its lifecycle phase, when to use it and what to use instead, examples, the keys it
   answers to and how it is tested, and related components.
-- **An AI interface layer.** Streaming text, message threads, a composer whose send button becomes
+- **An AI interface layer: 12 more components.** Streaming text, message threads, a composer whose send button becomes
   stop, tool-call cards with human approval, change review with diffs and a decision that needs a
   reason to say no, long-running agent run timelines with live elapsed time, run failure and
   recovery that keeps partial output, reasoning disclosure, citations that preview their source on
@@ -151,6 +151,15 @@ import { ToolCall } from '@demogar/mola-ui'
 Mola share one copy (Mola re-exports Base UI's `DirectionProvider`, which only works with one).
 The package is ESM only; `require()` works too, on Node 22.12 or later.
 
+Mount the providers once, at the root: `DirectionProvider` (keyboard direction for right-to-left),
+`ToastProvider` (`useToast()` throws without it) and, optionally, `TooltipProvider`. Getting
+started has the app root, a theme switcher with no flash on load, and the Next.js layout; each of
+those code blocks is compiled against the packed package in CI.
+
+`styles.css` includes Tailwind's preflight and styles `body`, which is what a new app wants. Adding
+Mola to an existing app? Import `@demogar/mola-ui/components.css` instead: the same components,
+with the reset scoped to them, so your page keeps its own styles.
+
 Already on Tailwind v4? Import `@demogar/mola-ui/tailwind.css` into your own build instead. It closes
 Tailwind's default palette, radii, shadows, easings and other scales Mola replaces (see Getting started). Not on React?
 `@demogar/mola-ui/tokens.css` is plain custom properties — both themes and all densities work anywhere.
@@ -240,14 +249,16 @@ run takes about three minutes.
   story in compact density, right-to-left and forced colours, against baselines rendered on Linux
   with the bundled fonts, frozen time and animations off.
 - **Bundle budgets.** [size-limit](https://github.com/ai/size-limit) holds the whole library to
-  170 kB, a tree-shaken `Button` + `Field` import to 15 kB, and `styles.css` to 17.5 kB (minified
+  170 kB, a tree-shaken `Button` + `Field` import to 15 kB, and `styles.css` and `components.css` to 17.5 kB each (minified
   and brotli-compressed, dependencies included, React excluded).
 - **The public API is reviewed.** [API Extractor](https://api-extractor.com/) writes every export
   and its type signature to [`etc/mola-ui.api.md`](etc/mola-ui.api.md); a change to the API that
   is not in that file fails CI, so every API change shows up in review as a diff.
 - **Consumers are tested, not assumed.** The packed tarball is installed into a Vite app on
-  `styles.css`, a Vite app running its own Tailwind v4 on `tailwind.css`, and a Next.js App Router
-  app rendering the components from a server component. Each is built and checked in a browser.
+  `styles.css`, a Vite app running its own Tailwind v4 on `tailwind.css`, an existing app on
+  `components.css` whose own page must stay unstyled, and a Next.js App Router app rendering the
+  components from a server component, inside the root layout Getting started documents. Each is
+  built and checked in a browser.
 - **Docs can't drift from the code.** The design-token JSON and the agent manifest are generated
   and checked in CI; the component counts in this README are checked against the source; and a
   test resolves every link into Storybook, so a renamed story fails the build instead of a reader.

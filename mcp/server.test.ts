@@ -57,6 +57,19 @@ describe('mola-ui MCP server', () => {
     expect(ai.text).not.toContain('**Button**')
   })
 
+  it('list_components states the same counts as the README and llms.txt', async () => {
+    const { counts, components } = data.manifest
+    const core = components.filter((c) => c.layer === 'components').length
+    const ai = components.filter((c) => c.layer === 'ai').length
+    expect(counts).toMatchObject({ components: core, aiComponents: ai, pages: core + ai })
+    expect(counts.summary).toBe(`${core} components and ${ai} AI components (${core + ai} documented pages)`)
+    const heading = async (args: Record<string, unknown> = {}) => (await call('list_components', args)).text.split('\n')[0]
+    const tail = ` in ${data.manifest.name} ${data.version}`
+    expect(await heading()).toBe(`# ${counts.summary}${tail}`)
+    expect(await heading({ layer: 'components' })).toBe(`# ${core} components${tail}`)
+    expect(await heading({ layer: 'ai' })).toBe(`# ${ai} AI components${tail}`)
+  })
+
   it('get_component returns props, usage, accessibility, anatomy, used in and examples', async () => {
     const { text, isError } = await call('get_component', { name: 'Field' })
     expect(isError).toBe(false)

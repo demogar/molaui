@@ -194,6 +194,31 @@ describe("What's new", () => {
     expect(missing).toEqual([])
   })
 
+  /**
+   * The readable layer once fell a release behind (it stopped at 0.4 while
+   * 0.5 shipped), so every released minor needs a page, except the newest.
+   * release-please writes the new minor into CHANGELOG.md on the release
+   * branch itself, and the owner merges that pull request: requiring its page
+   * there would turn our own release tooling's PR red until someone wrote it
+   * by hand. So the newest minor may lack a page, and every older one must
+   * have one. Write the page in the pull request right after the release
+   * (CONTRIBUTING.md, "Releases"). The test cannot tell that PR from the
+   * release itself (both carry the new version), so what it enforces is the
+   * deadline: a minor without a page fails the NEXT release's PR, the moment
+   * it stops being the newest.
+   *
+   * 0.1.0 is exempt: it is the first release, with nothing before it to be
+   * new against.
+   */
+  it('has a page for every minor release in CHANGELOG.md except the newest', () => {
+    const order = (m: string) => m.split('.').map(Number) as [number, number]
+    const minors = [...new Set(releases.map((r) => minorOf(r.version)))]
+      .filter((m) => m !== '0.1')
+      .sort((a, b) => order(b)[0] - order(a)[0] || order(b)[1] - order(a)[1])
+    const missing = minors.slice(1).filter((m) => !WHATS_NEW.some((v) => minorOf(v) === m))
+    expect(missing, 'Write src/docs/whats-new/<minor>.mdx and list it in WHATS_NEW').toEqual([])
+  })
+
   it('reads released from the version, so a draft flips when the release lands', () => {
     expect(isReleased('0.4.0', '0.3.0')).toBe(false)
     expect(isReleased('0.4.0', '0.4.0')).toBe(true)
