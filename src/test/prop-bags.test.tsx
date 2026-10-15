@@ -178,6 +178,7 @@ const FIXTURES: Record<string, Fixture | LabelFixture> = {
   DataTableColumnMenu: (p) => <mola.DataTableColumnMenu {...p} columns={columns} hidden={new Set()} onToggle={noop} />,
   StepList: (p) => <mola.StepList {...p} items={[{ title: 'One' }]} />,
   Timeline: (p) => <mola.Timeline {...p} label="Log" items={[{ title: 'One' }]} />,
+  RelativeTime: (p) => <mola.RelativeTime {...p} date={today} now={today} />,
 
   // Feedback
   Badge: (p) => <mola.Badge {...p}>New</mola.Badge>,
@@ -211,6 +212,8 @@ const FIXTURES: Record<string, Fixture | LabelFixture> = {
   Calendar: (p) => <mola.Calendar {...p} today={today} />,
   DatePicker: (p) => <mola.DatePicker {...p} aria-label="Due" today={today} />,
   DateRangePicker: (p) => <mola.DateRangePicker {...p} aria-label="Period" today={today} />,
+  TimePicker: (p) => <mola.TimePicker {...p} aria-label="Run at" />,
+  DateTimePicker: (p) => <mola.DateTimePicker {...p} aria-label="Deploy at" today={today} />,
   Label: (p) => <mola.Label {...p}>Name</mola.Label>,
   Input: {
     plain: (p) => <mola.Input {...p} aria-label="Name" />,

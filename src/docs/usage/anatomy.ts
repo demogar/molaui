@@ -67,6 +67,17 @@ export const ANATOMY: Record<string, Anatomy> = {
       { part: 'error', name: 'Error', does: 'Says how this value broke the rule. Announced on insertion, and marked with a cut square so it is not colour alone.' },
     ],
   },
+  'Components/Forms/Time picker': {
+    story: 'SupportHours',
+    slot: 'time-picker-field',
+    parts: [
+      { part: 'root', name: 'Field', does: 'The cut shape of every text control: a `group` named by the label, with the focus ring around all of its segments.' },
+      { part: 'hour', name: 'Hour', does: 'A spinbutton, 1–12 or 0–23 as the locale counts hours.' },
+      { part: 'minute', name: 'Minute', does: 'A spinbutton, 0–59; Up and Down move by `minuteStep`.' },
+      { part: 'day-period', name: 'Day period', does: 'AM or PM in the locale’s own words; only where the locale keeps a 12-hour clock.' },
+      { part: 'icon', name: 'Icon', does: 'A clock, hidden from assistive technology; the label says what the field is.' },
+    ],
+  },
   'Components/Feedback/Callout': {
     story: 'WithActions',
     slot: 'callout',

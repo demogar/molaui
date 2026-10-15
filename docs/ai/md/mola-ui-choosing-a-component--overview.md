@@ -46,6 +46,8 @@ at once or on Save.
 | An exact number, typed or stepped, with bounds and a unit | [Number input](https://demogar.github.io/molaui/?path=/docs/components-forms-number-input--overview) | Slider: nobody drags to 40,000 |
 | One date | [DatePicker](https://demogar.github.io/molaui/?path=/docs/components-forms-date-picker--overview) | DateRangePicker |
 | A period between two dates | [DateRangePicker](https://demogar.github.io/molaui/?path=/docs/components-forms-date-picker--overview) | two single date pickers |
+| A time of day | [TimePicker](https://demogar.github.io/molaui/?path=/docs/components-forms-time-picker--overview) | a select of times: it fixes the granularity |
+| A moment, a date and a time together | [DateTimePicker](https://demogar.github.io/molaui/?path=/docs/components-forms-time-picker--overview) | a date picker and a separate time field read by hand |
 
 ## Showing something on top
 

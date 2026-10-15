@@ -7,6 +7,7 @@ import { Breadcrumb } from '../../components/breadcrumb'
 import { Button } from '../../components/button'
 import { EmptyState } from '../../components/empty-state'
 import { Field, SearchInput } from '../../components/field'
+import { RelativeTime } from '../../components/relative-time'
 import {
   Table,
   TableBody,
@@ -85,11 +86,23 @@ const SYNC: Record<SyncState, { tone: BadgeTone; label: string }> = {
 
 const integer = new Intl.NumberFormat('en-US')
 
+// The moment the fixture was taken: every "3m ago" on this screen is measured
+// from it, through RelativeTime with a fixed `now`, so it reads the same on
+// the server, in the browser and in every screenshot.
+const FIXTURE_NOW = Date.parse('2026-10-14T09:12:00Z')
+
 function ago(minutes: number | null) {
   if (minutes === null) return 'First sync running'
-  if (minutes < 60) return `${minutes}m ago`
-  if (minutes < 24 * 60) return `${Math.floor(minutes / 60)}h ago`
-  return `${Math.floor(minutes / (24 * 60))}d ago`
+  return (
+    <RelativeTime
+      date={FIXTURE_NOW - minutes * 60_000}
+      now={FIXTURE_NOW}
+      locale="en-US"
+      format="narrow"
+      numeric="always"
+      timeZone="UTC"
+    />
+  )
 }
 
 const COLUMNS = 5

@@ -503,6 +503,8 @@ const HAND_STYLED: Record<string, string[]> = {
   'input:range': ['Slider'],
   'input:file': ['FileUpload'],
   'input:date': ['DatePicker'],
+  'input:time': ['TimePicker'],
+  'input:datetime-local': ['DateTimePicker'],
   select: ['Select'],
   textarea: ['Textarea'],
   table: ['Table'],

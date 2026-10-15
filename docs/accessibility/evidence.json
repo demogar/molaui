@@ -161,6 +161,16 @@
       "pressesKeys": false,
       "screenReadersByHand": false
     },
+    "Components/Data display/Relative time": {
+      "stories": 4,
+      "unitTests": [
+        "src/components/relative-time/relative-time.test.tsx"
+      ],
+      "keyboardInUnitTests": false,
+      "keysUntested": [],
+      "pressesKeys": false,
+      "screenReadersByHand": false
+    },
     "Components/Data display/Stat": {
       "stories": 3,
       "unitTests": [
@@ -405,6 +415,16 @@
       "stories": 6,
       "unitTests": [
         "src/components/tag-group/tag-group.test.tsx"
+      ],
+      "keyboardInUnitTests": true,
+      "keysUntested": [],
+      "pressesKeys": true,
+      "screenReadersByHand": false
+    },
+    "Components/Forms/Time picker": {
+      "stories": 5,
+      "unitTests": [
+        "src/components/time-picker/time-picker.test.tsx"
       ],
       "keyboardInUnitTests": true,
       "keysUntested": [],

@@ -118,6 +118,7 @@ export const PATTERNS: Record<string, PatternUsage> = {
     parts: {
       'Components/Actions/Button': 'Revoke on each active key’s row, gone once the key is revoked; Create key.',
       'Components/Data display/Code': 'The key’s hint, a machine literal, in the table and in the question.',
+      'Components/Data display/Relative time': 'When each key was last used, “3m ago”, with the exact moment in its title.',
       'Components/Data display/Table': 'The keys, with who made them, when each was last used and its state.',
       'Components/Feedback/Badge': 'Live or Test, and Active or Revoked, in words as well as tone.',
       'Components/Feedback/Callout': 'Who can revoke, for a member who cannot.',
@@ -164,6 +165,7 @@ export const PATTERNS: Record<string, PatternUsage> = {
     ],
     parts: {
       'Components/Actions/Button': 'Connect source, Show all sources, Retry and Ask for access: one way forward per condition.',
+      'Components/Data display/Relative time': 'When each source last synced, “14m ago”.',
       'Components/Data display/Table':
         'The list, which keeps its headers while it loads, over TableSkeletonRows, and when a search matches nothing, over a TableEmpty row.',
       'Components/Feedback/Badge': 'Each source’s sync state, as a dot, a word and a tone.',
@@ -258,6 +260,7 @@ export const PATTERNS: Record<string, PatternUsage> = {
     parts: {
       'Components/Actions/Button': 'Each agent in the list, Back to agents, Create agent, and pause or start.',
       'Components/Data display/Description list': 'The chosen agent’s model, tools and owner.',
+      'Components/Data display/Relative time': 'When each recent run started, and the words of each agent’s “Last run”.',
       'Components/Data display/Stat': 'Runs, success rate and cost for the chosen agent, as a StatGroup.',
       'Components/Data display/Table': 'The chosen agent’s recent runs.',
       'Components/Feedback/Badge': 'Each agent’s state and each run’s status, as a dot, a word and a tone.',

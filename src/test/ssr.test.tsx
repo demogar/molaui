@@ -10,6 +10,8 @@ import { RunError } from '../components/ai/run-error'
 import { RunStatus } from '../components/ai/run-status'
 import { SourceList } from '../components/ai/sources'
 import { Calendar } from '../components/date-picker'
+import { RelativeTime } from '../components/relative-time'
+import { DateTimePicker, TimePicker } from '../components/time-picker'
 
 /**
  * Server rendering, then hydration, of every component that shows a clock or
@@ -119,6 +121,22 @@ describe('server rendering and hydration', () => {
     // grid in the server HTML, so under SSR it takes `today` from the server
     // (see the prop's doc comment). With it, it must hydrate cleanly.
     ['Calendar, with today', () => <Calendar today={new Date(Date.UTC(2026, 4, 4, 12))} />],
+    // Without `now` it writes the exact moment in UTC until hydrated; with
+    // it, the relative text on both sides.
+    ['RelativeTime, live', () => <RelativeTime date={STARTED} locale="en-US" />],
+    ['RelativeTime, with now', () => <RelativeTime date={STARTED} now={SERVER_NOW} locale="en-US" />],
+    ['TimePicker', () => <TimePicker aria-label="Run at" locale="en-US" defaultValue="21:30" />],
+    [
+      'DateTimePicker',
+      () => (
+        <DateTimePicker
+          aria-label="Deploy at"
+          locale="en-GB"
+          today={new Date(Date.UTC(2026, 4, 4, 12))}
+          defaultValue={new Date(2026, 4, 4, 9, 30)}
+        />
+      ),
+    ],
   ]
 
   it.each(cases)('%s hydrates without a mismatch', async (_name, ui) => {
@@ -130,6 +148,12 @@ describe('server rendering and hydration', () => {
     const { html, hydrated } = await hydrateAgainstServer(() => <RunStatus status="running" startedAt={STARTED} />)
     expect(html).not.toMatch(/\d+\.\ds/)
     expect(hydrated).toMatch(/1[34]\.\ds/)
+  })
+
+  it('writes the exact moment on the server and the distance after hydration', async () => {
+    const { html, hydrated } = await hydrateAgainstServer(() => <RelativeTime date={STARTED} locale="en-US" />)
+    expect(html).toContain('May 4, 2026, 11:59 PM UTC')
+    expect(hydrated).toContain('13 seconds ago')
   })
 
   it('writes a message time into the server HTML when given a zone', async () => {

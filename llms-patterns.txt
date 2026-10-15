@@ -64,6 +64,7 @@ When not to:
 Built from (read from its imports):
 - Button: Revoke on each active key’s row, gone once the key is revoked; Create key.
 - Code: The key’s hint, a machine literal, in the table and in the question.
+- Relative time: When each key was last used, “3m ago”, with the exact moment in its title.
 - Table: The keys, with who made them, when each was last used and its state.
 - Badge: Live or Test, and Active or Revoked, in words as well as tone.
 - Callout: Who can revoke, for a member who cannot.
@@ -103,6 +104,7 @@ When not to:
 
 Built from (read from its imports):
 - Button: Connect source, Show all sources, Retry and Ask for access: one way forward per condition.
+- Relative time: When each source last synced, “14m ago”.
 - Table: The list, which keeps its headers while it loads, over TableSkeletonRows, and when a search matches nothing, over a TableEmpty row.
 - Badge: Each source’s sync state, as a dot, a word and a tone.
 - Empty state: First run, no results, error and no permission, each its own variant with its own action.
@@ -181,6 +183,7 @@ When not to:
 Built from (read from its imports):
 - Button: Each agent in the list, Back to agents, Create agent, and pause or start.
 - Description list: The chosen agent’s model, tools and owner.
+- Relative time: When each recent run started, and the words of each agent’s “Last run”.
 - Stat: Runs, success rate and cost for the chosen agent, as a StatGroup.
 - Table: The chosen agent’s recent runs.
 - Badge: Each agent’s state and each run’s status, as a dot, a word and a tone.

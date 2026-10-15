@@ -13,7 +13,7 @@ in the same pull request. What is planned beyond them is on the
 
 ### Screen readers have not been tested by hand
 
-**Status: open.** None of the 69 component pages has been run with VoiceOver, NVDA or JAWS and
+**Status: open.** None of the 71 component pages has been run with VoiceOver, NVDA or JAWS and
 the result written down. Roles, names and live regions are checked by axe on every pull request,
 but axe can't tell you how a page sounds. Every component page says this in its testing status, so
 the claim can't outlive the gap.

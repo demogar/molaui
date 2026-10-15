@@ -9,6 +9,7 @@ import { Callout } from '../../components/callout'
 import { Code } from '../../components/code'
 import { AlertDialog } from '../../components/dialog'
 import { EmptyState } from '../../components/empty-state'
+import { RelativeTime } from '../../components/relative-time'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../components/table'
 import { useToast } from '../../components/toast'
 import { ADMINS, API_KEYS, type ApiKey } from './_data'
@@ -69,11 +70,23 @@ export interface ApiKeysScreenProps {
 
 const ENV_LABEL = { live: 'Live', test: 'Test' } as const
 
+// The moment the fixture was taken: every "3m ago" on this screen is measured
+// from it, through RelativeTime with a fixed `now`, so it reads the same on
+// the server, in the browser and in every screenshot.
+const FIXTURE_NOW = Date.parse('2026-10-14T09:12:00Z')
+
 function ago(minutes: number | null) {
   if (minutes === null) return 'Never'
-  if (minutes < 60) return `${minutes}m ago`
-  if (minutes < 24 * 60) return `${Math.floor(minutes / 60)}h ago`
-  return `${Math.floor(minutes / (24 * 60))}d ago`
+  return (
+    <RelativeTime
+      date={FIXTURE_NOW - minutes * 60_000}
+      now={FIXTURE_NOW}
+      locale="en-US"
+      format="narrow"
+      numeric="always"
+      timeZone="UTC"
+    />
+  )
 }
 
 const wait = (ms: number) => new Promise<void>((resolve) => window.setTimeout(resolve, ms))

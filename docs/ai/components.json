@@ -93,13 +93,13 @@
     }
   },
   "counts": {
-    "components": 57,
-    "parts": 148,
+    "components": 59,
+    "parts": 151,
     "aiComponents": 12,
     "aiParts": 23,
-    "pages": 69,
-    "stories": 318,
-    "summary": "57 components and 12 AI components (69 documented pages)"
+    "pages": 71,
+    "stories": 327,
+    "summary": "59 components and 12 AI components (71 documented pages)"
   },
   "tokens": {
     "source": "src/styles/tokens.css",
@@ -5336,6 +5336,158 @@
       ],
       "usedIn": [
         "Patterns/Filtered table",
+        "Patterns/List and detail"
+      ]
+    },
+    {
+      "title": "Components/Data display/Relative time",
+      "name": "Relative time",
+      "layer": "components",
+      "category": "Data display",
+      "docs": "https://demogar.github.io/molaui/?path=/docs/components-data-display-relative-time--overview",
+      "phase": "experimental",
+      "summary": "A moment as its distance from now, “3 minutes ago” or “in 2 days”, in a time element that keeps the exact moment.",
+      "description": "A moment as its distance from now — \"3 minutes ago\", \"in 2 days\", \"yesterday\" — in a `<time>` whose `dateTime` holds the exact moment and whose `title` shows it to a pointer. The words come from `Intl.RelativeTimeFormat` for the `locale`, truncated so it never claims more time has passed than has.\n\nPass `now` to render on the server and keep the text still (the page owns time); omit it and the server writes the exact moment in UTC, and the browser takes over after hydration and keeps the text current. A live time sets one timer for the moment its text next changes, and none while the tab is hidden. It is not a live region: a screen reader hears the current text when it reaches it, never a minute-by-minute announcement.",
+      "usage": {
+        "use": [
+          "When something last happened, where recency is the point: the last run, the last sync, an edit.",
+          "A countdown to something scheduled within days, such as the next evaluation, written “in 2 days”.",
+          "Columns and meta lines that need a short form, with format narrow."
+        ],
+        "avoid": [
+          {
+            "when": "An exact moment people compare or act on, such as an audit entry or a deploy window.",
+            "use": null
+          },
+          {
+            "when": "How long something has been running, counting up to the second.",
+            "use": "AI/Run status"
+          },
+          {
+            "when": "Events in order, each with its own time.",
+            "use": "Components/Data display/Timeline"
+          }
+        ],
+        "practices": [
+          {
+            "do": "Pass now when server rendering, or let it render after hydration; both keep the server HTML.",
+            "dont": "Compute “3 minutes ago” on the server and again in the browser; the two disagree and React discards the page."
+          },
+          {
+            "do": "Pass timeZone when the exact moment in the title must be in the product’s zone, such as UTC for run logs.",
+            "dont": "Rely on the title alone for a moment that matters; it is not reachable by keyboard or touch."
+          }
+        ],
+        "content": [
+          "Lead with the event and let the time follow: “Last sync 3 minutes ago”.",
+          "Use one format down a column; mixing “3m ago” and “3 minutes ago” reads as two kinds of data."
+        ]
+      },
+      "accessibility": {
+        "handles": [
+          "Renders a `<time>` whose `dateTime` is the exact moment in ISO 8601, and whose `title` shows it to a pointer.",
+          "Is not a live region, so a time that moves on every minute is never announced; the current text is read when it is reached.",
+          "Takes the words from `Intl.RelativeTimeFormat` for the `locale`, so a screen reader hears them in the page’s language."
+        ],
+        "you": [
+          "Show the exact moment in text, not only in `title`, wherever someone must act on it; a title is not reachable by keyboard or touch.",
+          "Say what happened beside it: “Last sync 3 minutes ago”, not “3 minutes ago” alone."
+        ]
+      },
+      "exports": [
+        {
+          "name": "RelativeTime",
+          "kind": "component",
+          "source": "src/components/relative-time/relative-time.tsx",
+          "props": [
+            {
+              "name": "date",
+              "type": "string | number | Date",
+              "required": true,
+              "description": "The moment: a `Date`, epoch milliseconds, or an ISO 8601 string."
+            },
+            {
+              "name": "format",
+              "type": "\"long\" | \"short\" | \"narrow\"",
+              "required": false,
+              "default": "long",
+              "description": "`long` \"3 minutes ago\", `short` \"3 min. ago\", `narrow` \"3m ago\" (in English)."
+            },
+            {
+              "name": "live",
+              "type": "boolean",
+              "required": false,
+              "default": "true",
+              "description": "Keep the text current while the tab is visible. Ignored when `now` is given."
+            },
+            {
+              "name": "locale",
+              "type": "LocalesArgument",
+              "required": false,
+              "description": "BCP 47 tag for the words and digits. `undefined` uses the runtime's locale."
+            },
+            {
+              "name": "now",
+              "type": "number | Date",
+              "required": false,
+              "description": "The moment to measure from. Given, the text renders on the server and does not tick; omitted, it uses the browser's clock from hydration on."
+            },
+            {
+              "name": "numeric",
+              "type": "\"auto\" | \"always\"",
+              "required": false,
+              "default": "auto",
+              "description": "`auto` writes \"yesterday\" and \"now\" where the locale has them; `always` writes \"1 day ago\"."
+            },
+            {
+              "name": "timeZone",
+              "type": "string",
+              "required": false,
+              "description": "The zone for the exact moment in `title`, and in the server text when `now` is omitted."
+            }
+          ],
+          "forwards": {
+            "element": "<time data-slot=\"relative-time\">"
+          }
+        },
+        {
+          "name": "formatRelativeTime",
+          "kind": "function",
+          "source": "src/components/relative-time/relative-time.tsx",
+          "description": "\"3 minutes ago\" for `date` seen from `now`. Exported for tables and other places that need the words without the element."
+        },
+        {
+          "name": "RelativeTimeProps",
+          "kind": "type",
+          "source": "src/components/relative-time/relative-time.tsx",
+          "description": "A moment as its distance from now: \"3 minutes ago\", \"in 2 days\", \"yesterday\". A `<time>` element, so the exact moment is in `dateTime` for machines, and in `title` for a pointer."
+        }
+      ],
+      "stories": [
+        {
+          "name": "Formats",
+          "id": "components-data-display-relative-time--formats",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-relative-time--formats"
+        },
+        {
+          "name": "Live",
+          "id": "components-data-display-relative-time--live",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-relative-time--live"
+        },
+        {
+          "name": "Locales",
+          "id": "components-data-display-relative-time--locales",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-relative-time--locales"
+        },
+        {
+          "name": "RunList",
+          "id": "components-data-display-relative-time--run-list",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-data-display-relative-time--run-list"
+        }
+      ],
+      "usedIn": [
+        "Patterns/Confirmation",
+        "Patterns/Empty states",
         "Patterns/List and detail"
       ]
     },
@@ -12304,6 +12456,440 @@
       ]
     },
     {
+      "title": "Components/Forms/Time picker",
+      "name": "Time picker",
+      "layer": "components",
+      "category": "Forms",
+      "docs": "https://demogar.github.io/molaui/?path=/docs/components-forms-time-picker--overview",
+      "phase": "experimental",
+      "summary": "TimePicker for a time of day as hour and minute spinbuttons; DateTimePicker for a moment, a DatePicker and a TimePicker read as one Date.",
+      "description": "A time of day as segments — hour, minute and, where the locale keeps a 12-hour clock, the day period — each one a WAI-ARIA **spinbutton**. Up and Down step (the minute by `minuteStep`), Home and End jump to the ends, digits type and move on as soon as no further digit could fit, a separator moves on, Backspace empties. A list of times was rejected: it fixes a granularity the field may not have and reads 1,440 options at one-minute steps.\n\nThe clock, the segment order, the separator and the day-period words come from `Intl` for the `locale` you pass. The value is `HH:mm`, 24-hour, as `<input type=\"time\">` writes it, and commits on blur or Enter like DatePicker; a draft that is not a time is a sentence that says why. **DateTimePicker** puts a DatePicker and a TimePicker side by side as one `Date`.",
+      "usage": {
+        "use": [
+          "A time of day with no date, such as when a nightly evaluation runs, with TimePicker.",
+          "A moment, such as when a deploy starts, with DateTimePicker.",
+          "Times with bounds, such as staffed hours, through min and max."
+        ],
+        "avoid": [
+          {
+            "when": "A date with no time.",
+            "use": "Components/Forms/Date picker"
+          },
+          {
+            "when": "A duration, such as a timeout in minutes.",
+            "use": "Components/Forms/Number input"
+          },
+          {
+            "when": "A handful of fixed slots, such as 09:00, 13:00 and 17:00.",
+            "use": "Components/Forms/Segmented control"
+          }
+        ],
+        "practices": [
+          {
+            "do": "Pass locale, so the clock, the day-period words and the separator follow it.",
+            "dont": "Force hourCycle to 24 for people whose locale writes a 12-hour clock, unless the product always shows one."
+          },
+          {
+            "do": "Say the time zone in the hint when it is not the reader’s own: “Evaluation workers run in UTC.”",
+            "dont": "Leave people to guess whose 09:00 it is."
+          }
+        ],
+        "content": [
+          "Label the field by what the time is for: “Run the nightly evaluation at”, “Deploy the new model at”.",
+          "Rules the picker cannot know, such as required, go to Field as an instruction: “Choose a time for the pause.”"
+        ]
+      },
+      "accessibility": {
+        "keyboard": [
+          {
+            "keys": [
+              "Tab"
+            ],
+            "action": "Moves through the segments in order: hour, minute and day period, then the date input and calendar button in DateTimePicker."
+          },
+          {
+            "keys": [
+              "Shift+Tab"
+            ],
+            "action": "Moves back through the same stops."
+          },
+          {
+            "keys": [
+              "ArrowUp",
+              "ArrowDown"
+            ],
+            "action": "Steps the focused segment, wrapping at the ends; the minute moves by `minuteStep`."
+          },
+          {
+            "keys": [
+              "Home",
+              "End"
+            ],
+            "action": "Sets the focused segment to its first or last value."
+          },
+          {
+            "keys": [
+              "ArrowLeft",
+              "ArrowRight"
+            ],
+            "action": "Moves to the previous or next segment."
+          },
+          {
+            "keys": [
+              "Backspace",
+              "Delete"
+            ],
+            "action": "Empties the focused segment; Backspace in an empty one moves back."
+          },
+          {
+            "keys": [
+              "Enter"
+            ],
+            "action": "Reads the time and states why if it is refused."
+          }
+        ],
+        "handles": [
+          "The field is a `group` named by its label, and each segment a `spinbutton` named by the label and its word, “Deploy at Hour”, with `aria-valuetext` (“9”, “PM”, “Empty”).",
+          "Digits type into a segment and move on when no further digit fits; a separator moves on, and the day period takes the first letter of the locale’s word.",
+          "An incomplete or out-of-range time is a sentence in a `role=\"alert\"` with a mark, not colour alone, and the value is kept until the time is valid.",
+          "In DateTimePicker, the calendar keeps every key of the Date picker page, and a moment outside `min` or `max` is stated under both halves."
+        ],
+        "you": [
+          "Name it: put it in a `Field`, or pass `aria-label`.",
+          "Translate the segment words and sentences through `messages`.",
+          "Say whose time zone a time is in when it is not the reader’s."
+        ]
+      },
+      "anatomy": {
+        "slot": "time-picker-field",
+        "parts": [
+          {
+            "part": "root",
+            "name": "Field",
+            "does": "The cut shape of every text control: a `group` named by the label, with the focus ring around all of its segments.",
+            "selector": "[data-slot=\"time-picker-field\"]"
+          },
+          {
+            "part": "hour",
+            "name": "Hour",
+            "does": "A spinbutton, 1–12 or 0–23 as the locale counts hours.",
+            "selector": "[data-part=\"hour\"]"
+          },
+          {
+            "part": "minute",
+            "name": "Minute",
+            "does": "A spinbutton, 0–59; Up and Down move by `minuteStep`.",
+            "selector": "[data-part=\"minute\"]"
+          },
+          {
+            "part": "day-period",
+            "name": "Day period",
+            "does": "AM or PM in the locale’s own words; only where the locale keeps a 12-hour clock.",
+            "selector": "[data-part=\"day-period\"]"
+          },
+          {
+            "part": "icon",
+            "name": "Icon",
+            "does": "A clock, hidden from assistive technology; the label says what the field is.",
+            "selector": "[data-part=\"icon\"]"
+          }
+        ]
+      },
+      "exports": [
+        {
+          "name": "DateTimePicker",
+          "kind": "component",
+          "source": "src/components/time-picker/date-time-picker.tsx",
+          "props": [
+            {
+              "name": "defaultOpen",
+              "type": "boolean",
+              "required": false
+            },
+            {
+              "name": "defaultValue",
+              "type": "Date | null",
+              "required": false,
+              "default": "null"
+            },
+            {
+              "name": "disabled",
+              "type": "boolean",
+              "required": false
+            },
+            {
+              "name": "hourCycle",
+              "type": "12 | 24",
+              "required": false,
+              "description": "Overrides the locale's clock."
+            },
+            {
+              "name": "id",
+              "type": "string",
+              "required": false,
+              "description": "Given to the date input, so a `<label for>` focuses it."
+            },
+            {
+              "name": "isDateDisabled",
+              "type": "((date: Date) => boolean)",
+              "required": false
+            },
+            {
+              "name": "locale",
+              "type": "LocalesArgument",
+              "required": false,
+              "description": "BCP 47 tag for names, digits, the typed date order, the clock and the week start."
+            },
+            {
+              "name": "max",
+              "type": "Date | null",
+              "required": false
+            },
+            {
+              "name": "messages",
+              "type": "Partial<DateTimePickerMessages>",
+              "required": false
+            },
+            {
+              "name": "min",
+              "type": "Date | null",
+              "required": false
+            },
+            {
+              "name": "minuteStep",
+              "type": "number",
+              "required": false,
+              "description": "Minutes per Up or Down press in the minute segment."
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "required": false,
+              "description": "Submitted as `yyyy-mm-ddThh:mm`, local time, as `<input type=\"datetime-local\">` writes it."
+            },
+            {
+              "name": "onOpenChange",
+              "type": "((open: boolean) => void)",
+              "required": false
+            },
+            {
+              "name": "onValueChange",
+              "type": "((value: Date | null) => void)",
+              "required": false,
+              "description": "Called with the combined moment once both halves hold an allowed value, and with `null` when either is emptied."
+            },
+            {
+              "name": "open",
+              "type": "boolean",
+              "required": false,
+              "description": "Whether the calendar is open, when the page owns that."
+            },
+            {
+              "name": "required",
+              "type": "boolean",
+              "required": false
+            },
+            {
+              "name": "size",
+              "type": "\"sm\" | \"md\" | \"lg\"",
+              "required": false,
+              "default": "md"
+            },
+            {
+              "name": "today",
+              "type": "Date",
+              "required": false,
+              "description": "As on DatePicker: inject \"now\" for stable stories, and pass the server's date when server rendering."
+            },
+            {
+              "name": "value",
+              "type": "Date | null",
+              "required": false
+            },
+            {
+              "name": "weekStartsOn",
+              "type": "number",
+              "required": false,
+              "description": "0 = Sunday … 6 = Saturday."
+            }
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"date-time-picker\">"
+          }
+        },
+        {
+          "name": "TimePicker",
+          "kind": "component",
+          "source": "src/components/time-picker/time-picker.tsx",
+          "props": [
+            {
+              "name": "defaultValue",
+              "type": "string | null",
+              "required": false,
+              "default": "null"
+            },
+            {
+              "name": "disabled",
+              "type": "boolean",
+              "required": false
+            },
+            {
+              "name": "hourCycle",
+              "type": "12 | 24",
+              "required": false,
+              "description": "Overrides the locale's clock, for a product that always shows one."
+            },
+            {
+              "name": "id",
+              "type": "string",
+              "required": false,
+              "description": "Given to the first segment, so a `<label for>` (as `Field` writes it) focuses it."
+            },
+            {
+              "name": "locale",
+              "type": "LocalesArgument",
+              "required": false,
+              "description": "BCP 47 tag for the clock (12- or 24-hour), the day-period words and the digits. `undefined` uses the runtime's locale."
+            },
+            {
+              "name": "max",
+              "type": "string | null",
+              "required": false,
+              "description": "The latest allowed time, `HH:mm`."
+            },
+            {
+              "name": "messages",
+              "type": "Partial<TimePickerMessages>",
+              "required": false,
+              "description": "The segment names and the sentences, for translation."
+            },
+            {
+              "name": "min",
+              "type": "string | null",
+              "required": false,
+              "description": "The earliest allowed time, `HH:mm`."
+            },
+            {
+              "name": "minuteStep",
+              "type": "number",
+              "required": false,
+              "default": "1",
+              "description": "Minutes per Up or Down press in the minute segment; typing still takes any minute."
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "required": false,
+              "description": "Submitted as `HH:mm`, whatever the display locale."
+            },
+            {
+              "name": "onValueChange",
+              "type": "((value: string | null) => void)",
+              "required": false,
+              "description": "Called on blur or Enter with a complete, allowed time, or `null` when emptied."
+            },
+            {
+              "name": "required",
+              "type": "boolean",
+              "required": false
+            },
+            {
+              "name": "size",
+              "type": "\"sm\" | \"md\" | \"lg\"",
+              "required": false,
+              "default": "md"
+            },
+            {
+              "name": "value",
+              "type": "string | null",
+              "required": false,
+              "description": "`HH:mm`, 24-hour, as `<input type=\"time\">` writes it; `null` for none."
+            },
+            {
+              "name": "wrapperClassName",
+              "type": "string",
+              "required": false,
+              "description": "Classes for the outer element that holds the field and its error."
+            }
+          ],
+          "forwards": {
+            "element": "<div data-slot=\"time-picker-field\">"
+          }
+        },
+        {
+          "name": "DateTimePickerMessages",
+          "kind": "type",
+          "source": "src/components/time-picker/date-time-picker.tsx",
+          "description": "A moment: a DatePicker and a TimePicker side by side, read as one value."
+        },
+        {
+          "name": "DateTimePickerProps",
+          "kind": "type",
+          "source": "src/components/time-picker/date-time-picker.tsx"
+        },
+        {
+          "name": "TimePickerMessages",
+          "kind": "type",
+          "source": "src/components/time-picker/time-picker.tsx",
+          "description": "A time of day, entered as segments: an hour, a minute and, where the locale keeps a 12-hour clock, a day period. Each segment is a `spinbutton`."
+        },
+        {
+          "name": "TimePickerProps",
+          "kind": "type",
+          "source": "src/components/time-picker/time-picker.tsx"
+        },
+        {
+          "name": "getTimeLayout",
+          "kind": "function",
+          "source": "src/components/time-picker/time-utils.ts",
+          "description": "Everything locale-specific about writing a time, read from `Intl` rather than from a table: whether the clock is 12- or 24-hour (es-PA writes `9:05 p. m.`, es-ES `21:05`), where the day period goes, and what separates the hour from the minute (`21.05` in Finnish)."
+        },
+        {
+          "name": "TimeLayout",
+          "kind": "type",
+          "source": "src/components/time-picker/time-utils.ts"
+        },
+        {
+          "name": "TimeSegment",
+          "kind": "type",
+          "source": "src/components/time-picker/time-utils.ts"
+        },
+        {
+          "name": "TimeString",
+          "kind": "type",
+          "source": "src/components/time-picker/time-utils.ts",
+          "description": "A time of day as `HH:mm`, 24-hour, zero-padded: the value of a native `<input type=\"time\">`. A string rather than a `Date` because a time of day has no date and no zone, and a `Date` would carry both and invite one of them to leak into the other."
+        }
+      ],
+      "stories": [
+        {
+          "name": "DateAndTime",
+          "id": "components-forms-time-picker--date-and-time",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-time-picker--date-and-time"
+        },
+        {
+          "name": "Locales",
+          "id": "components-forms-time-picker--locales",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-time-picker--locales"
+        },
+        {
+          "name": "NightlyRun",
+          "id": "components-forms-time-picker--nightly-run",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-time-picker--nightly-run"
+        },
+        {
+          "name": "States",
+          "id": "components-forms-time-picker--states",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-time-picker--states"
+        },
+        {
+          "name": "SupportHours",
+          "id": "components-forms-time-picker--support-hours",
+          "url": "https://demogar.github.io/molaui/?path=/story/components-forms-time-picker--support-hours"
+        }
+      ]
+    },
+    {
       "title": "Components/Layout/App shell",
       "name": "App shell",
       "layer": "components",
@@ -17872,6 +18458,7 @@
       "builtFrom": [
         "Components/Actions/Button",
         "Components/Data display/Code",
+        "Components/Data display/Relative time",
         "Components/Data display/Table",
         "Components/Feedback/Badge",
         "Components/Feedback/Callout",
@@ -17910,6 +18497,10 @@
           {
             "title": "Components/Data display/Code",
             "role": "The key’s hint, a machine literal, in the table and in the question."
+          },
+          {
+            "title": "Components/Data display/Relative time",
+            "role": "When each key was last used, “3m ago”, with the exact moment in its title."
           },
           {
             "title": "Components/Data display/Table",
@@ -18004,6 +18595,7 @@
       "description": "The knowledge sources of a Cayuco workspace: a header, a search field and a table. Composed from `PageHeader`, `Breadcrumb`, `Field`, `SearchInput`, `Table` and `EmptyState`, with nothing written for it. The screen is ordinary on purpose; what it demonstrates is every condition in which there is no list to show.\n\n**Decisions.** *First run* takes the whole body and its action connects the first source; the search field is not drawn, because a search over nothing can only fail. *No results* keeps the count, the search field and the table’s headers, puts the empty state in a `TableEmpty` row under them, and offers **Show all sources**, which clears the search and returns focus to the field. (Not “Clear search”: the field’s own clear button already has that name, and two controls with one name are one too many to a screen reader.) It never says “connect your first source” to someone who has five. *Error* says what is still true (the sources are still connected) and offers **Retry**; once the rows are back, focus moves to their heading. *No permission* names the two people who can grant access, and the header drops **Connect source**, because offering an action the reader cannot take is a second refusal. *Loading* is the table’s own shape with skeleton rows, `aria-busy`, and one polite “Loading knowledge sources”.",
       "builtFrom": [
         "Components/Actions/Button",
+        "Components/Data display/Relative time",
         "Components/Data display/Table",
         "Components/Feedback/Badge",
         "Components/Feedback/Empty state",
@@ -18036,6 +18628,10 @@
           {
             "title": "Components/Actions/Button",
             "role": "Connect source, Show all sources, Retry and Ask for access: one way forward per condition."
+          },
+          {
+            "title": "Components/Data display/Relative time",
+            "role": "When each source last synced, “14m ago”."
           },
           {
             "title": "Components/Data display/Table",
@@ -18239,6 +18835,7 @@
       "builtFrom": [
         "Components/Actions/Button",
         "Components/Data display/Description list",
+        "Components/Data display/Relative time",
         "Components/Data display/Stat",
         "Components/Data display/Table",
         "Components/Feedback/Badge",
@@ -18276,6 +18873,10 @@
           {
             "title": "Components/Data display/Description list",
             "role": "The chosen agent’s model, tools and owner."
+          },
+          {
+            "title": "Components/Data display/Relative time",
+            "role": "When each recent run started, and the words of each agent’s “Last run”."
           },
           {
             "title": "Components/Data display/Stat",

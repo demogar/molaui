@@ -24,6 +24,7 @@ Read from its imports.
 
 - [Button](https://demogar.github.io/molaui/md/components-actions-button--overview.md): Revoke on each active key’s row, gone once the key is revoked; Create key.
 - [Code](https://demogar.github.io/molaui/md/components-data-display-code--overview.md): The key’s hint, a machine literal, in the table and in the question.
+- [Relative time](https://demogar.github.io/molaui/md/components-data-display-relative-time--overview.md): When each key was last used, “3m ago”, with the exact moment in its title.
 - [Table](https://demogar.github.io/molaui/md/components-data-display-table--overview.md): The keys, with who made them, when each was last used and its state.
 - [Badge](https://demogar.github.io/molaui/md/components-feedback-badge--overview.md): Live or Test, and Active or Revoked, in words as well as tone.
 - [Callout](https://demogar.github.io/molaui/md/components-feedback-callout--overview.md): Who can revoke, for a member who cannot.
