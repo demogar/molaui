@@ -271,10 +271,13 @@ async function check(browser, url, name) {
           width: dialog.getBoundingClientRect().width,
           transparentBackground: transparent(style(dialog).backgroundColor),
         },
+        // The cut is on the Input's box, the element around the <input> that
+        // takes `className` (docs/adr/0009-prop-vocabulary.md), not on the
+        // <input> inside it.
         input: input && {
           label: input.labels?.[0]?.textContent ?? '',
           value: input.value,
-          shadow: style(input).boxShadow,
+          shadow: style(input.closest('[data-slot="input-group"]') ?? input).boxShadow,
         },
         badge: badge && { shadow: style(badge).boxShadow, background: style(badge).backgroundColor },
         buttonTransparent: button ? transparent(style(button).backgroundColor) : true,
@@ -299,7 +302,7 @@ async function check(browser, url, name) {
     if (!facts.input) errors.push('no input[name="name"] rendered')
     else {
       if (facts.input.label !== 'Agent name') errors.push(`input is labelled "${facts.input.label}", expected "Agent name"`)
-      if (facts.input.shadow === 'none') errors.push('input has no box-shadow: the field is unstyled')
+      if (facts.input.shadow === 'none') errors.push("input's box has no box-shadow: the field is unstyled")
     }
     if (!facts.badge) errors.push('no "Running" badge rendered')
     else if (facts.badgeUnstyled) errors.push('badge has neither a background nor a box-shadow: it is unstyled')
