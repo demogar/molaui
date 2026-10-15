@@ -5,6 +5,7 @@ import { Check, Copy, Plus, RotateCcw, Square } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../../lib/cn'
+import { useControllable } from '../../../lib/use-controllable'
 import { Button, IconButton } from '../../button'
 import {
   RUN_STATUS_LABEL,
@@ -239,7 +240,7 @@ function StepRow({ step, last, nextStarted }: { step: AgentStep; last: boolean; 
   // Always controlled: a live step goes from running (opens on demand) to
   // failed (forced open), and handing Base UI `open` only in the second state
   // switched it from uncontrolled to controlled mid-life, which it rejects.
-  const [openState, setOpenState] = React.useState(step.defaultOpen ?? false)
+  const [openState, setOpenState] = useControllable({ value: undefined, defaultValue: step.defaultOpen ?? false })
 
   // The status wraps under the title rather than squeezing it. Side by side
   // at any width, a 320px phone left the kind label narrower than its word,

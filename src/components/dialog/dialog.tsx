@@ -7,6 +7,7 @@ import { X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { useControllable } from '../../lib/use-controllable'
 import { type Variants } from '../../lib/variants'
 import { Button, IconButton } from '../button'
 import { fieldControlClasses, fieldControlSizes } from '../field/field-control'
@@ -271,8 +272,7 @@ export function AlertDialog({
   error,
   finalFocus,
 }: AlertDialogProps) {
-  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen ?? false)
-  const isOpen = open ?? uncontrolledOpen
+  const [isOpen, setOpenState] = useControllable({ value: open, defaultValue: defaultOpen ?? false, onChange: onOpenChange })
   const [typed, setTyped] = React.useState('')
   const [pending, setPending] = React.useState(false)
   const cancelRef = React.useRef<HTMLButtonElement>(null)
@@ -281,8 +281,7 @@ export function AlertDialog({
   const showError = error !== undefined && error !== null && error !== false && !pending
 
   const setOpen = (next: boolean) => {
-    if (open === undefined) setUncontrolledOpen(next)
-    onOpenChange?.(next)
+    setOpenState(next)
     if (!next) setTyped('')
   }
 

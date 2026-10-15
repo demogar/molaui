@@ -5,6 +5,7 @@ import { Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { useControllable } from '../../lib/use-controllable'
 import { IconButton } from '../button'
 
 /**
@@ -71,17 +72,17 @@ export function AppShell({
   className,
   ...props
 }: AppShellProps) {
-  const [ownCollapsed, setOwnCollapsed] = React.useState(defaultSidebarCollapsed)
+  const [collapsed, setCollapsed] = useControllable({
+    value: sidebarCollapsed,
+    defaultValue: defaultSidebarCollapsed,
+    onChange: onSidebarCollapsedChange,
+  })
   const [mobileOpen, setMobileOpen] = React.useState(false)
-  const collapsed = sidebarCollapsed ?? ownCollapsed
   const uid = React.useId()
 
   const shell: ShellState = {
     collapsed,
-    setCollapsed: (next) => {
-      if (sidebarCollapsed === undefined) setOwnCollapsed(next)
-      onSidebarCollapsedChange?.(next)
-    },
+    setCollapsed,
     setMobileOpen,
     sidebarId: `${uid}-sidebar`,
     mainId: `${uid}-main`,

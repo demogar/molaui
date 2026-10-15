@@ -4,6 +4,7 @@ import { Columns3, X } from 'lucide-react'
 import * as React from 'react'
 
 import { useScrollEdge } from '../../lib/scroll-edge'
+import { useControllable } from '../../lib/use-controllable'
 import { Button } from '../button'
 import type { EmptyStateProps } from '../empty-state'
 import { Menu, MenuCheckboxItem, MenuContent, MenuGroup, MenuGroupLabel, MenuTrigger } from '../menu'
@@ -136,17 +137,6 @@ function compare(a: SortValue, b: SortValue): number {
   return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: 'base' })
 }
 
-/** Controlled when `value` is defined, otherwise owned here — the one pattern every prop pair uses. */
-function useControllable<T>(value: T | undefined, initial: () => T, onChange?: (next: T) => void) {
-  const [own, setOwn] = React.useState<T>(initial)
-  const current = value !== undefined ? value : own
-  const set = (next: T) => {
-    if (value === undefined) setOwn(next)
-    onChange?.(next)
-  }
-  return [current, set] as const
-}
-
 function isEmptyData(empty: unknown): empty is DataTableEmpty {
   return typeof empty === 'object' && empty !== null && !React.isValidElement(empty) && 'title' in empty
 }
@@ -188,18 +178,22 @@ export function DataTable<Row>({
   className,
 }: DataTableProps<Row>) {
   const bulkEdge = useScrollEdge<HTMLDivElement>()
-  const [sort, setSortState] = useControllable<DataTableSort | null>(controlledSort, () => defaultSort ?? null, onSortChange)
-  const [page, setPage] = useControllable<number>(controlledPage, () => defaultPage, onPageChange)
-  const [selection, setSelection] = useControllable<ReadonlySet<string>>(
-    controlledSelection,
-    () => new Set(defaultSelection ?? []),
-    onSelectionChange as ((next: ReadonlySet<string>) => void) | undefined,
-  )
-  const [hidden, setHidden] = useControllable<ReadonlySet<string>>(
-    controlledHidden,
-    () => new Set(defaultHiddenColumns ?? []),
-    onHiddenColumnsChange as ((next: ReadonlySet<string>) => void) | undefined,
-  )
+  const [sort, setSortState] = useControllable<DataTableSort | null>({
+    value: controlledSort,
+    defaultValue: () => defaultSort ?? null,
+    onChange: onSortChange,
+  })
+  const [page, setPage] = useControllable<number>({ value: controlledPage, defaultValue: defaultPage, onChange: onPageChange })
+  const [selection, setSelection] = useControllable<ReadonlySet<string>>({
+    value: controlledSelection,
+    defaultValue: () => new Set(defaultSelection ?? []),
+    onChange: onSelectionChange as ((next: ReadonlySet<string>) => void) | undefined,
+  })
+  const [hidden, setHidden] = useControllable<ReadonlySet<string>>({
+    value: controlledHidden,
+    defaultValue: () => new Set(defaultHiddenColumns ?? []),
+    onChange: onHiddenColumnsChange as ((next: ReadonlySet<string>) => void) | undefined,
+  })
 
   const visibleColumns = columns.filter((c) => !hidden.has(c.key))
 

@@ -6,6 +6,7 @@ import * as React from 'react'
 
 import { cn } from '../../lib/cn'
 import { mergeProps } from '../../lib/merge-props'
+import { useControllable } from '../../lib/use-controllable'
 import { type FieldControlSize, fieldControlClasses, fieldControlSizes } from '../field/field-control'
 import { Label } from '../field/label'
 
@@ -177,14 +178,11 @@ export function NumberInput({
 
   // Held here as well as in Base UI so PageUp/PageDown can step from the
   // current value; Base UI gets it back as a controlled `value`.
-  const isControlled = value !== undefined
-  const [inner, setInner] = React.useState<number | null>(defaultValue ?? null)
-  const current = isControlled ? value : inner
-
-  function commit(next: number | null) {
-    if (!isControlled) setInner(next)
-    onValueChange?.(next)
-  }
+  const [current, commit] = useControllable<number | null>({
+    value,
+    defaultValue: defaultValue ?? null,
+    onChange: onValueChange,
+  })
 
   function onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key !== 'PageUp' && event.key !== 'PageDown') return

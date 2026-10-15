@@ -5,6 +5,7 @@ import { CalendarDays, Check } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '../../lib/cn'
+import { useControllable } from '../../lib/use-controllable'
 import { type FieldControlSize, fieldControlClasses, fieldControlSizes } from '../field/field-control'
 import { Input } from '../field/input'
 import { Label } from '../field/label'
@@ -100,8 +101,11 @@ export interface DateRangePickerProps {
    * has it. Turn it off only where presets and the grid cover every case.
    */
   typedEntry?: boolean
+  /** Whether the calendar is open, when the page owns that. */
+  open?: boolean
   /** Open the calendar on first render. */
   defaultOpen?: boolean
+  onOpenChange?: (open: boolean) => void
   /** Submitted as `<name>-start` and `<name>-end`, `yyyy-mm-dd`. */
   name?: string
   size?: FieldControlSize
@@ -140,7 +144,9 @@ export function DateRangePicker({
   isDateDisabled,
   today: todayProp,
   typedEntry = true,
+  open: openProp,
   defaultOpen = false,
+  onOpenChange,
   name,
   size = 'md',
   disabled,
@@ -155,13 +161,16 @@ export function DateRangePicker({
   const uid = React.useId()
   const valueId = `${uid}-value`
   const formatId = `${uid}-format`
-  const isControlled = valueProp !== undefined
-  const [inner, setInner] = React.useState<DateRange>(defaultValue)
-  const value = isControlled ? valueProp : inner
-  const [open, setOpen] = React.useState(defaultOpen)
+  const [value, setValue] = useControllable<DateRange>({ value: valueProp, defaultValue, onChange: onValueChange })
+  const [open, setOpen] = useControllable({ value: openProp, defaultValue: defaultOpen, onChange: onOpenChange })
   // Read by the inputs' blur handler: closing with Escape returns focus to
   // the trigger, and the blur that causes must not commit what was typed.
+  // Set at once by `setOpenState`, and kept in step with an `open` the page
+  // changes itself.
   const openRef = React.useRef(open)
+  React.useLayoutEffect(() => {
+    openRef.current = open
+  }, [open])
   // The half-chosen range lives only while the popup is open; closing it
   // without completing it leaves the committed value untouched.
   const [draft, setDraft] = React.useState<DateRange | null>(null)
@@ -188,8 +197,7 @@ export function DateRangePicker({
 
   /** Make `next` the value, keeping the popup as it is. */
   function apply(next: DateRange) {
-    if (!isControlled) setInner(next)
-    onValueChange?.(next)
+    setValue(next)
     setDraft(null)
   }
 
