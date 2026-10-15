@@ -9,6 +9,7 @@ import themeCss from '../../styles/theme.css?raw'
 import { type Anatomy, anatomyRoot, partElement, pinnedParts, ROOT_PART } from '../usage/anatomy'
 import { storyId } from '../usage/links'
 import type { PageData } from '../usage/contract'
+import { type Box, GUTTER, leader, PIN, placePin } from './anatomy-place'
 import { utilityReader } from './anatomy-utilities'
 
 const { partUtilities } = utilityReader(clothCss, themeCss)
@@ -41,6 +42,18 @@ const { partUtilities } = utilityReader(clothCss, themeCss)
  * them the pins would stay light-theme ink on a dark example. It also sets
  * `bg-transparent`, because base.css paints every `[data-theme]` element with
  * cloth, which would cover the example it is meant to annotate.
+ *
+ * ── room for the pins ──
+ * The example's frame is given a wider padding here than elsewhere on the
+ * page (GUTTER), on the frame itself so the gutter is painted in the
+ * example's theme. A full-bleed component (a banner) otherwise left the pins
+ * nowhere to sit but on it. A pin that has to sit away from its part draws a
+ * leader to the part's corner, in ink, so it reads in either theme.
+ *
+ * The example is always rendered inline, even when its page renders stories
+ * in iframes (the notification centre does, for its open popover): the pins
+ * are measured from this document, and an iframe's content is not in it. That
+ * diagram drew no pins at all until this was forced.
  */
 
 interface Pin {
@@ -50,7 +63,9 @@ interface Pin {
   x: number
   y: number
   /** The part's own box, for its outline. */
-  box: { left: number; top: number; width: number; height: number }
+  box: Box
+  /** A line from a pin that had to move away from its part to the part's corner. */
+  leader: { x1: number; y1: number; x2: number; y2: number } | null
 }
 
 interface Layout {
@@ -63,12 +78,6 @@ interface Layout {
   density?: string
 }
 
-const PIN = 22
-/** How far a pin overlaps the corner it marks. */
-const TUCK = 5
-/** The width of the gold reveal and keyline around a pin. */
-const RING = 5
-
 /** `display: contents` has no box of its own; use its children's. */
 function rectOf(el: Element): DOMRect {
   const own = el.getBoundingClientRect()
@@ -78,66 +87,6 @@ function rectOf(el: Element): DOMRect {
   const left = Math.min(...kids.map((r) => r.left))
   const top = Math.min(...kids.map((r) => r.top))
   return new DOMRect(left, top, Math.max(...kids.map((r) => r.right)) - left, Math.max(...kids.map((r) => r.bottom)) - top)
-}
-
-interface Box {
-  left: number
-  top: number
-  width: number
-  height: number
-}
-
-function overlap(a: Box, b: Box) {
-  const w = Math.min(a.left + a.width, b.left + b.width) - Math.max(a.left, b.left)
-  const h = Math.min(a.top + a.height, b.top + b.height) - Math.max(a.top, b.top)
-  return w > 0 && h > 0 ? w * h : 0
-}
-
-/**
- * Where a pin goes. A pin covers something wherever it sits, so the question
- * is what it covers. Centred on the part's corner, it covered the first
- * letters of every label it named; always outside the corner, it covered the
- * icon or the line before. So each pin tries a few spots around its part's
- * leading top corner (diagonally outside, beside it, above or below it, just
- * inside) and takes the one that covers the least: pins already placed count
- * most, then text and icons, then the other parts. Text is measured per line,
- * so a pin may sit in the white space beside a short label but not on it. A
- * part's ancestors do not count, because every pin sits inside the root.
- */
-interface Avoid {
-  /** What a reader came to see: text, icons, controls. */
-  ink: Box[]
-  /** The other parts, and this one. */
-  parts: Box[]
-  pins: Box[]
-}
-
-function placePin(r: Box, avoid: Avoid, bounds: { width: number; height: number }, rtl: boolean) {
-  const lead = rtl ? r.left + r.width : r.left
-  // Offsets along the reading direction, from the leading edge.
-  const at = (dx: number) => (rtl ? lead - dx - PIN : lead + dx)
-  const step = PIN + 4
-  const above = r.top - PIN - 2
-  const below = r.top + r.height + 2
-  const candidates = [
-    { x: at(TUCK - PIN), y: r.top - PIN + TUCK },
-    { x: at(-PIN - 2), y: r.top },
-    { x: at(0), y: above },
-    { x: at(step), y: above },
-    { x: at(2), y: r.top + 2 },
-    { x: at(2 * step), y: above },
-    // Below only a short part: under a tall one the pin is nowhere near the corner it names.
-    ...(r.height <= 2 * PIN ? [{ x: at(0), y: below }, { x: at(step), y: below }] : []),
-  ].map(({ x, y }) => ({
-    // The gold reveal draws outside the square, so keep a few pixels clear of the clipped edge.
-    left: Math.min(Math.max(x, RING), bounds.width - PIN - RING),
-    top: Math.min(Math.max(y, RING), bounds.height - PIN - RING),
-    width: PIN,
-    height: PIN,
-  }))
-  const sum = (boxes: Box[], c: Box) => boxes.reduce((total, b) => total + overlap(c, b), 0)
-  const cost = (c: Box) => sum(avoid.ink, c) * 4 + sum(avoid.pins, c) * 20 + sum(avoid.parts, c) + overlap(c, r)
-  return candidates.reduce((best, c) => (cost(c) < cost(best) ? c : best))
 }
 
 /** The boxes of every line of text and every icon or control in the example. */
@@ -185,9 +134,10 @@ function measure(box: HTMLElement, stage: HTMLElement, anatomy: Anatomy): Layout
   const pins: Pin[] = []
   for (const f of found) {
     const parts = found.filter((o) => o !== f && !o.el.contains(f.el)).map((o) => o.box)
+    const around = found.filter((o) => o !== f && o.el.contains(f.el)).map((o) => o.box)
     const placed = pins.map((p) => ({ left: p.x, top: p.y, width: PIN, height: PIN }))
-    const spot = placePin(f.box, { ink, parts, pins: placed }, origin, rtl)
-    pins.push({ n: f.n, part: f.part, x: spot.left, y: spot.top, box: f.box })
+    const spot = placePin(f.box, { ink, parts, pins: placed, around }, origin, rtl)
+    pins.push({ n: f.n, part: f.part, x: spot.left, y: spot.top, box: f.box, leader: leader(spot, f.box, rtl) })
   }
   return { pins, utilities, hidden, theme: themed?.dataset.theme, density: themed?.dataset.density }
 }
@@ -267,8 +217,10 @@ function AnatomyContent({ anatomy, story, title }: { anatomy: Anatomy; story: un
         moves when the component does. The classes under each part are read from the same elements.
       </p>
       <div ref={boxRef} className="relative min-w-0">
-        <div ref={stageRef}>
-          <Story of={story as never} />
+        {/* The decorator's frame is the one [data-density] in the example. `isolate`
+            keeps the example's own z-index (a banner is sticky-layered) under the pins. */}
+        <div ref={stageRef} style={{ '--anatomy-gutter': `${GUTTER}px` } as React.CSSProperties} className="isolate [&_[data-density]]:p-(--anatomy-gutter)">
+          <Story of={story as never} inline />
         </div>
         {layout ? <Pins layout={layout} /> : null}
       </div>
@@ -295,6 +247,13 @@ function Pins({ layout }: { layout: Layout }) {
             style={{ left: pin.box.left, top: pin.box.top, width: pin.box.width, height: pin.box.height }}
           />
         ))}
+      <svg className="absolute inset-0 size-full overflow-visible text-ink">
+        {layout.pins.map((pin) =>
+          pin.leader ? (
+            <line key={`leader-${pin.part}`} {...pin.leader} stroke="currentColor" strokeWidth={1.5} />
+          ) : null,
+        )}
+      </svg>
       {/* Physical left: x and y were measured in viewport pixels, in either direction. */}
       {layout.pins.map((pin) => (
         <span key={pin.part} className="absolute" style={{ left: pin.x, top: pin.y }}>
