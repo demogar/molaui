@@ -218,7 +218,11 @@ not in the legend.
   <type>(<optional scope>): <lowercase subject>
   ```
 
-  `feat(button):`, `fix(tokens):`, `docs(adr):`, `chore(ci):`.
+  `feat(button):`, `fix(tokens):`, `docs(adr):`, `chore(ci):`. The scope is optional, but one
+  you use must be declared in `src/docs/usage/changes.ts`: in `SCOPE_PAGES` if it names component
+  pages (its changelog entries appear on them), or in `NON_COMPONENT_SCOPES` with what it covers.
+  The `Conventional PR title` check fails a title with an undeclared scope and says so; declare
+  it in the same pull request.
 
   | Type | Use it for | Release effect |
   |---|---|---|
