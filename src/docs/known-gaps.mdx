@@ -19,7 +19,7 @@ the claim can't outlive the gap.
 
 ### Not every interactive component has a keyboard unit test
 
-**Status: open.** **13 of the 37 interactive component pages** have unit tests that only click; the
+**Status: open.** **12 of the 37 interactive component pages** have unit tests that only click; the
 testing status on each of those pages says "Keyboard in unit tests: not yet". The remaining pages
 have nothing that takes focus, so there is no key to press. The keyboard table on every page comes from the source and the Base UI
 primitive behind it, and the testing status on each page says whether its tests press keys. Both
