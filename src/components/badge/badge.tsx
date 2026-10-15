@@ -118,29 +118,46 @@ export interface BadgeProps
 
 export function Badge({ className, tone, variant, dot = false, pulse = false, children, ...props }: BadgeProps) {
   return (
-    <span data-slot="badge" className={cn(badgeVariants({ tone, variant }), className)} {...props}>
-      {dot ? (
-        <StatusDot
-          tone={tone ?? 'neutral'}
-          pulse={pulse}
-          // On a solid ground the dot would be the ground's own colour and
-          // vanish, so it takes the label's ink instead.
-          className={variant === 'solid' ? 'bg-current' : undefined}
-        />
-      ) : null}
+    <span
+      data-slot="badge"
+      data-variant={variant ?? 'soft'}
+      className={cn('group/badge', badgeVariants({ tone, variant }), className)}
+      {...props}
+    >
+      {dot ? <StatusDot tone={tone ?? 'neutral'} pulse={pulse} /> : null}
       {children}
     </span>
   )
 }
 
-const DOT_TONE: Record<BadgeTone, string> = {
-  neutral: 'bg-ink-muted',
-  info: 'bg-anil',
-  success: 'bg-verde',
-  warn: 'bg-oro',
-  danger: 'bg-danger',
-  accent: 'bg-accent',
-}
+/**
+ * The shape each tone is cut as. Every tone has its own, so the six survive
+ * greyscale, a colour-blind reader and a screenshot pasted into a monochrome
+ * ticket. The set is RunStatus's, keyed by tone, so a run's "Failed" in the
+ * runs table and in the run's own header are the same mark:
+ *
+ *   neutral  hollow    cut, nothing revealed yet       (RunStatus: queued)
+ *   info     striped   slits: work is under way         (running, streaming)
+ *   success  filled    the layer fully revealed         (succeeded)
+ *   warn     half      holding, half revealed           (waiting)
+ *   danger   crossed   filled and struck through        (failed)
+ *   accent   diamond   the one tone that is not a state
+ *
+ * Every badge used to draw the same filled square, so the only difference
+ * between "Failed" and "Succeeded" was hue, and warn and accent, both gold,
+ * were the same mark in solid and soft. Accent is a diamond rather than a
+ * second filled square because a filled square already means "succeeded".
+ */
+export const STATUS_GLYPH = {
+  neutral: 'hollow',
+  info: 'striped',
+  success: 'filled',
+  warn: 'half',
+  danger: 'crossed',
+  accent: 'diamond',
+} as const satisfies Record<BadgeTone, string>
+
+export type StatusGlyph = (typeof STATUS_GLYPH)[BadgeTone]
 
 export interface StatusDotProps extends React.ComponentProps<'span'> {
   /** The status, in the same tones as Badge. Defaults to `neutral`. */
@@ -154,30 +171,76 @@ export interface StatusDotProps extends React.ComponentProps<'span'> {
   label?: string
 }
 
+// Inside a solid badge the ground is the tone itself, so a mark in the tone
+// would vanish into it. There every part of the glyph takes the label's ink
+// (`currentColor`) and the shape alone says which state it is.
+const ON_SOLID_STROKE = 'group-data-[variant=solid]/badge:stroke-current'
+const ON_SOLID_FILL = 'group-data-[variant=solid]/badge:fill-current'
+const ON_SOLID_EMPTY = 'group-data-[variant=solid]/badge:fill-none'
+// Forced colours leave SVG paint alone, so a gold mark could sit on a black
+// Canvas with a black keyline. The shape is repainted in the user's palette.
+const FORCED_STROKE = 'forced-colors:stroke-[CanvasText]'
+const FORCED_FILL = 'forced-colors:fill-[CanvasText]'
+const FORCED_KNOCK = 'forced-colors:stroke-[Canvas]'
+
 /**
  * A square, not a circle. It is a scrap of cut cloth, and a round dot is the
- * one shape a blade cannot make. Gold dots carry an ink keyline because gold
- * on light cloth is 1.66:1 — under the 3:1 a graphic mark needs to be seen.
+ * one shape a blade cannot make. Each tone is cut as its own shape (see
+ * STATUS_GLYPH), and every shape carries an ink keyline, because gold on light
+ * cloth is 1.66:1 — under the 3:1 a graphic mark needs to be seen.
+ *
+ * The fills are the status roles (--success, --warn, --danger, --info), not
+ * the layers: the roles are what the scopes give to marks, and --warn is the
+ * gold darkened until it clears 3:1 on cloth. Accent is not a state, so it
+ * keeps the gold layer.
  *
  * A dot is never the only carrier of a state: colour alone fails SC 1.4.1, so
- * either a label sits beside it or `label` names it.
+ * either a label sits beside it or `label` names it. The shape is the second
+ * carrier, not a replacement for the word.
  */
 export function StatusDot({ tone = 'neutral', pulse = false, label, className, ...props }: StatusDotProps) {
+  const glyph = STATUS_GLYPH[tone]
+  const keyline = cn('stroke-ink', ON_SOLID_STROKE, FORCED_STROKE)
   return (
     <span
       data-slot="status-dot"
+      data-glyph={glyph}
       role={label ? 'img' : undefined}
       aria-label={label}
       aria-hidden={label ? undefined : true}
-      className={cn(
-        'inline-block size-[7px] shrink-0 rounded-none forced-ink',
-        DOT_TONE[tone],
-        (tone === 'warn' || tone === 'accent') && 'cut-thin',
-        pulse && 'animate-mola-pulse',
-        className,
-      )}
+      className={cn('inline-flex size-[9px] shrink-0 rounded-none', pulse && 'animate-mola-pulse', className)}
       {...props}
-    />
+    >
+      <svg viewBox="0 0 10 10" className="size-full overflow-visible" strokeWidth={1.5}>
+        {glyph === 'hollow' ? (
+          <rect x="0.75" y="0.75" width="8.5" height="8.5" className={cn('fill-none', keyline)} />
+        ) : null}
+        {glyph === 'filled' ? (
+          <rect x="0.75" y="0.75" width="8.5" height="8.5" className={cn('fill-success', ON_SOLID_FILL, FORCED_FILL, keyline)} />
+        ) : null}
+        {glyph === 'striped' ? (
+          <>
+            <rect x="0.75" y="0.75" width="8.5" height="8.5" className={cn('fill-info', ON_SOLID_EMPTY, FORCED_FILL, keyline)} />
+            <path d="M3.75 1.5v7M6.25 1.5v7" strokeWidth={1.2} className={cn('stroke-on-layer', ON_SOLID_STROKE, FORCED_KNOCK)} />
+          </>
+        ) : null}
+        {glyph === 'half' ? (
+          <>
+            <rect x="0.75" y="5" width="8.5" height="4.25" className={cn('fill-warn stroke-none', ON_SOLID_FILL, FORCED_FILL)} />
+            <rect x="0.75" y="0.75" width="8.5" height="8.5" className={cn('fill-none', keyline)} />
+          </>
+        ) : null}
+        {glyph === 'crossed' ? (
+          <>
+            <rect x="0.75" y="0.75" width="8.5" height="8.5" className={cn('fill-danger', ON_SOLID_EMPTY, FORCED_FILL, keyline)} />
+            <path d="M3 3l4 4M7 3l-4 4" strokeWidth={1.4} className={cn('stroke-on-layer', ON_SOLID_STROKE, FORCED_KNOCK)} />
+          </>
+        ) : null}
+        {glyph === 'diamond' ? (
+          <path d="M5 0.6L9.4 5L5 9.4L0.6 5Z" className={cn('fill-accent', ON_SOLID_FILL, FORCED_FILL, keyline)} />
+        ) : null}
+      </svg>
+    </span>
   )
 }
 

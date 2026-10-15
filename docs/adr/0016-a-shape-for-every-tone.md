@@ -1,0 +1,43 @@
+# 0016 — A shape for every status tone
+
+**Date:** 2026-10-15 · **Status:** accepted
+
+## Context
+
+The design rules say state is never colour alone: glyph, word and colour. `RunStatus` followed
+them, with a different shape for each status. `Badge` did not. Its `StatusDot` was the same filled
+square in every tone, so in the runs table "Failed" and "Succeeded" were told apart by hue and by
+the word, and `warn` and `accent`, both gold, were the same mark in the solid and soft variants.
+On a solid badge the dot took the label's colour, so all six tones were the same white square.
+
+## Decision
+
+`StatusDot` cuts each tone as its own shape, taken from the `RunStatus` set so the two agree:
+
+| Tone | Shape | RunStatus with the same mark |
+|---|---|---|
+| neutral | hollow square | queued |
+| info | striped square | running, streaming |
+| success | filled square | succeeded |
+| warn | half-filled square | waiting |
+| danger | filled square, crossed | failed |
+| accent | diamond | none: accent is not a state |
+
+Accent becomes a diamond because a filled square already means success. Every shape keeps an ink
+keyline. On a solid badge the shape is drawn in the label's colour, so the shape still carries the
+state when the hue is the badge's ground.
+
+The marks fill with the status roles (`--success`, `--warn`, `--danger`, `--info`), which the
+scopes already allow as marks. `--warn` is the gold darkened until it clears 3:1 on cloth.
+Accent fills with `--accent`.
+
+The audit also proposed `--*-soft` aliases for the washes. `--danger-soft` arrived with ADR 0008
+(the rojo register); the others are not added here. Badge's soft washes are a surface concern and
+this record is about the mark, so they stay as they are.
+
+## Consequences
+
+- A badge with `dot` reads the same in greyscale, to a colour-blind reader, and in a monochrome
+  screenshot. `badge.test.tsx` fails if two tones ever share a shape.
+- The dot grows from 7px to 9px so the cross, the stripes and the half fill can be seen.
+- A badge without `dot` still has only a word and a colour. For a state, pass `dot`.
