@@ -1062,6 +1062,7 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
     handles: [
       'Lists only the shortcuts bound under the `HotkeysProvider`, so the list cannot drift from the keys.',
       'Prints each key for the platform, ⌘ on a Mac and Ctrl elsewhere, and hides the keycaps behind the same keys in words: “Control K”, “G, then E”.',
+      'Keeps every key sequence left to right in a right-to-left page, as macOS and Windows do: G then E is typed G first, so it never reads E then G.',
       '`useHotkeys` ignores plain keys typed in a text field, every key during IME composition, key repeat and keys a component has already handled.',
       'It is a modal Base UI Dialog, titled “Keyboard shortcuts”, with a Close button.',
     ],
@@ -1201,6 +1202,7 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
   'Components/Typography/Kbd': {
     handles: [
       'Renders a `<kbd>`, and nests a chord\'s keys inside one outer `<kbd>`, as the HTML spec describes.',
+      'Keeps keys left to right in a right-to-left page, isolated from the text around them: a shortcut is typed in a fixed order, so ⌘K never reads K⌘ and Ctrl K never reads K Ctrl.',
     ],
     you: [
       'Write key names a screen reader can say, or add the spoken name nearby: Command K for ⌘K.',

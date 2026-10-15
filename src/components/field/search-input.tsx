@@ -99,6 +99,8 @@ export function SearchInput({
         ) : shortcut ? (
           <kbd
             aria-hidden
+            // Left to right in every direction (see Kbd): `⌘K` must not read K⌘.
+            dir="ltr"
             className="inline-flex h-5 min-w-5 items-center justify-center px-1.5 font-ui text-2xs font-semibold text-ink-2 bg-cloth-shade rule-ring wdth-label"
           >
             {shortcut}

@@ -101,16 +101,22 @@ function ShortcutList({ empty }: { empty: string }) {
                 <dt className="min-w-0 text-sm text-ink">{row.label}</dt>
                 <dd className="m-0 flex shrink-0 items-center gap-1.5 text-xs text-ink-muted">
                   <span className="sr-only">{describeHotkey(row.keys, platform, words)}</span>
-                  {formatHotkey(row.keys, platform, words).map((step, i) => (
-                    <React.Fragment key={i}>
-                      {i > 0 ? <span aria-hidden>{words.thenShort}</span> : null}
-                      <kbd aria-hidden className="inline-flex items-center gap-1 font-ui">
-                        {step.map((key, k) => (
-                          <Kbd key={k}>{key}</Kbd>
-                        ))}
-                      </kbd>
-                    </React.Fragment>
-                  ))}
+                  {/* Left to right in every direction (see Kbd): G then E is
+                      typed G first, so a right-to-left page must not show it
+                      as E then G. The steps are a row of their own because the
+                      dd's flex order follows the page. */}
+                  <span dir="ltr" aria-hidden className="flex items-center gap-1.5">
+                    {formatHotkey(row.keys, platform, words).map((step, i) => (
+                      <React.Fragment key={i}>
+                        {i > 0 ? <span>{words.thenShort}</span> : null}
+                        <kbd dir="ltr" className="inline-flex items-center gap-1 font-ui">
+                          {step.map((key, k) => (
+                            <Kbd key={k}>{key}</Kbd>
+                          ))}
+                        </kbd>
+                      </React.Fragment>
+                    ))}
+                  </span>
                 </dd>
               </div>
             ))}

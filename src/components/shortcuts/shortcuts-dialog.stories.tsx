@@ -193,7 +193,7 @@ export const HardStates: Story = {
     docs: {
       description: {
         story:
-          'Only one dialog can be open, so the right-to-left one is: the keycaps sit at the start of each row and the labels at the end, and a sentence-length label wraps beside its keys instead of pushing them off the sheet. The long-label trigger wraps in its slot; the disabled trigger says why beside it. The dialog has no error state: it lists bindings that exist, and a binding that failed to register is not listed.',
+          'Only one dialog can be open, so the right-to-left one is: the keycaps sit at the start of each row and the labels at the end, but each sequence still reads left to right (G then E, Ctrl then K), because a shortcut is typed in a fixed order in every direction, and a sentence-length label wraps beside its keys instead of pushing them off the sheet. The long-label trigger wraps in its slot; the disabled trigger says why beside it. The dialog has no error state: it lists bindings that exist, and a binding that failed to register is not listed.',
       },
     },
   },

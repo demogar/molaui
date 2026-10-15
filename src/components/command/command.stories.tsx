@@ -188,7 +188,7 @@ export const HardStates: Story = {
       story: { inline: false, height: '560px' },
       description: {
         story:
-          'Only one modal can be open, so the right-to-left palette is the one shown open: the search icon, the shortcuts and the descriptions mirror, and a disabled command (“Owners only”) is shown, muted and stated, never hidden. A long agent name breaks anywhere rather than widening the palette; a trigger that cannot open yet is disabled and says why. The palette has no error state: a command that fails reports where its result would have appeared, and “no matches” is the empty state, not an error.',
+          'Only one modal can be open, so the right-to-left palette is the one shown open: the search icon, the shortcuts and the descriptions mirror, though each shortcut keeps its typing order (G then R) left to right, and a disabled command (“Owners only”) is shown, muted and stated, never hidden. A long agent name breaks anywhere rather than widening the palette; a trigger that cannot open yet is disabled and says why. The palette has no error state: a command that fails reports where its result would have appeared, and “no matches” is the empty state, not an error.',
       },
     },
   },

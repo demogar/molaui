@@ -12,11 +12,22 @@ import { cn } from '../../lib/cn'
  *
  * For a chord, nest them inside one outer `<kbd>` — that is what the HTML
  * spec means by keyboard input made of several keys — and use `KbdChord`.
+ *
+ * Left to right in every direction, `dir="ltr"` on both: a shortcut is typed
+ * in a fixed order, so an Arabic or Hebrew page shows it the way macOS and
+ * Windows do in those locales. Without it a right-to-left page reversed the
+ * chord's flex row (Ctrl K read as K Ctrl) and, inside one key, reordered a
+ * neutral glyph against a letter (`⌘K` rendered as K⌘). The `dir` attribute
+ * also isolates the key from the text around it (the HTML default
+ * `unicode-bidi: isolate`), so a key in a sentence does not drag its
+ * neighbours' order with it. A logical margin set on a key therefore
+ * resolves left to right; space keys with the parent's `gap` instead.
  */
 export function Kbd({ className, ...props }: React.ComponentProps<'kbd'>) {
   return (
     <kbd
       data-slot="kbd"
+      dir="ltr"
       className={cn(
         'inline-flex h-[1.6em] min-w-[1.6em] items-center justify-center rounded-none px-[0.4em]',
         'bg-cloth-pale font-ui text-[0.78em] font-semibold leading-none text-ink-2 tabular',
@@ -35,7 +46,7 @@ export interface KbdChordProps extends React.ComponentProps<'kbd'> {
 
 export function KbdChord({ keys, className, ...props }: KbdChordProps) {
   return (
-    <kbd data-slot="kbd-chord" className={cn('inline-flex items-center gap-1 font-ui', className)} {...props}>
+    <kbd data-slot="kbd-chord" dir="ltr" className={cn('inline-flex items-center gap-1 font-ui', className)} {...props}>
       {keys.map((key, i) => (
         <Kbd key={`${key}-${i}`}>{key}</Kbd>
       ))}
