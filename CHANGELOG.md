@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.8.0](https://github.com/demogar/molaui/compare/v0.7.1...v0.8.0) (2026-10-21)
+
+
+### Features
+
+* **toast,number-input:** translate the words base ui says on its own ([#184](https://github.com/demogar/molaui/issues/184)) ([6df35cc](https://github.com/demogar/molaui/commit/6df35ccc1bae86c5863c8875c78dcb1f0deef494)), closes [#182](https://github.com/demogar/molaui/issues/182) [#183](https://github.com/demogar/molaui/issues/183)
+
+
+### Bug Fixes
+
+* **patterns:** keep the api key name and its badge on one line ([#177](https://github.com/demogar/molaui/issues/177)) ([ed1298b](https://github.com/demogar/molaui/commit/ed1298bcb774991a2b60b4c8186181d86066d413))
+* **storybook:** make every docs contents entry scroll to its section ([#179](https://github.com/demogar/molaui/issues/179)) ([ba5e094](https://github.com/demogar/molaui/commit/ba5e0946e790ef0a3893b7effcec99bf64183833))
+
+
+### Documentation
+
+* **whats-new:** add the 0.8 page and fail the pr that starts a minor without one ([#185](https://github.com/demogar/molaui/issues/185)) ([bc1a466](https://github.com/demogar/molaui/commit/bc1a466508bbe7383a17d645fff902cb85056783))
+
 ## [0.7.1](https://github.com/demogar/molaui/compare/v0.7.0...v0.7.1) (2026-10-15)
 
 
