@@ -2235,6 +2235,7 @@ export function NumberInput(input: NumberInputProps): React_2.JSX.Element;
 export interface NumberInputMessages {
     decrease: string;
     increase: string;
+    roleDescription: string;
 }
 
 // @public
@@ -3523,6 +3524,7 @@ export interface ToastMessages {
     danger: string;
     dismiss: string;
     focusShortcut: string;
+    region: string;
     running: string;
     success: string;
     warn: string;

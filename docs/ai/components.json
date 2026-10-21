@@ -10119,7 +10119,7 @@
               "name": "messages",
               "type": "MessagesOverride<ToastMessages>",
               "required": false,
-              "description": "Words for translation: the close button and the tone words read before a title. Keys left out come from `MessagesProvider`, then English. The toasts render here, so a `MessagesProvider` must sit above this one, not inside it."
+              "description": "Words for translation: the close button, the tone words read before a title and the region's name. Keys left out come from `MessagesProvider`, then English. The toasts render here, so a `MessagesProvider` must sit above this one, not inside it."
             },
             {
               "name": "timeout",
@@ -13187,7 +13187,7 @@
               "name": "messages",
               "type": "MessagesOverride<NumberInputMessages>",
               "required": false,
-              "description": "Words for translation: the steppers' default names. Keys left out come from `MessagesProvider`, then English."
+              "description": "Words for translation: the steppers' default names and the field's role description. Keys left out come from `MessagesProvider`, then English."
             },
             {
               "name": "min",

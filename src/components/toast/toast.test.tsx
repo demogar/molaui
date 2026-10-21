@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { useEffect } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
+import { MessagesProvider } from '../../lib/messages'
 import { ToastProvider, useToast } from './toast'
 
 type Api = ReturnType<typeof useToast>
@@ -291,5 +292,32 @@ describe('Toast', () => {
         screen.getByText(`Run ${n} finished`).closest('[data-slot="toast"]')!.hasAttribute('data-limited')
       expect([1, 2, 3, 4].map(limited)).toEqual([true, false, false, false])
     })
+  })
+})
+
+// Base UI names the viewport "Notifications" in its own defaults, out of the
+// messages gate's sight, so the precedence is held here (#182).
+describe('Toast region name', () => {
+  it('is "Notifications" with no provider', () => {
+    render(<ToastProvider>{null}</ToastProvider>)
+    expect(screen.getByRole('region')).toHaveAccessibleName('Notifications')
+  })
+
+  it('takes the name from a MessagesProvider above it', () => {
+    render(
+      <MessagesProvider messages={{ toast: { region: 'Notificaciones' } }}>
+        <ToastProvider>{null}</ToastProvider>
+      </MessagesProvider>,
+    )
+    expect(screen.getByRole('region')).toHaveAccessibleName('Notificaciones')
+  })
+
+  it('lets the messages prop beat the provider', () => {
+    render(
+      <MessagesProvider messages={{ toast: { region: 'Notificaciones' } }}>
+        <ToastProvider messages={{ region: 'Avisos' }}>{null}</ToastProvider>
+      </MessagesProvider>,
+    )
+    expect(screen.getByRole('region')).toHaveAccessibleName('Avisos')
   })
 })

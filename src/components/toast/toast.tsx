@@ -147,10 +147,10 @@ export interface ToastProviderProps {
   /** Default auto-dismiss, ms. Also the timeout a running toast starts when `update()` turns it into a result. */
   timeout?: number
   /**
-   * Words for translation: the close button and the tone words read before a
-   * title. Keys left out come from `MessagesProvider`, then English. The
-   * toasts render here, so a `MessagesProvider` must sit above this one, not
-   * inside it.
+   * Words for translation: the close button, the tone words read before a
+   * title and the region's name. Keys left out come from `MessagesProvider`,
+   * then English. The toasts render here, so a `MessagesProvider` must sit
+   * above this one, not inside it.
    */
   messages?: MessagesOverride<ToastMessages>
 }
@@ -170,7 +170,11 @@ export function ToastProvider({ children, limit = 3, timeout = 5000, messages }:
     <ToastPrimitive.Provider limit={limit} timeout={timeout}>
       {children}
       <ToastPrimitive.Portal>
-        <ToastPrimitive.Viewport className="fixed inset-e-4 bottom-4 z-(--z-toast) w-[calc(100vw-2rem)] outline-none sm:inset-e-6 sm:bottom-6 sm:w-[24rem]">
+        {/* Named here, or Base UI's English "Notifications" stands in every locale. */}
+        <ToastPrimitive.Viewport
+          aria-label={t.region}
+          className="fixed inset-e-4 bottom-4 z-(--z-toast) w-[calc(100vw-2rem)] outline-none sm:inset-e-6 sm:bottom-6 sm:w-[24rem]"
+        >
           <ToastList messages={messages} />
         </ToastPrimitive.Viewport>
       </ToastPrimitive.Portal>

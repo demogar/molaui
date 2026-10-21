@@ -12,6 +12,11 @@ export interface ToastMessages {
   running: string
   /** The F6 entry in the shortcuts dialog, inside a `HotkeysProvider`. */
   focusShortcut: string
+  /**
+   * The toast stack's region name, the landmark F6 moves focus to. Base UI
+   * names the viewport "Notifications" in English when nothing is passed.
+   */
+  region: string
 }
 
 export const toastMessages: ToastMessages = {
@@ -21,4 +26,5 @@ export const toastMessages: ToastMessages = {
   warn: 'Warning:',
   running: 'In progress:',
   focusShortcut: 'Move focus to new notifications',
+  region: 'Notifications',
 }
