@@ -133,4 +133,5 @@ Types: `NumberInputMessages`, `NumberInputProps`
 
 From CHANGELOG.md, newest first.
 
+- 0.8.0 (2026-10-21), feature: translate the words base ui says on its own  , closes [#182](https://github.com/demogar/molaui/issues/182) [#183](https://github.com/demogar/molaui/issues/183) [#184](https://github.com/demogar/molaui/issues/184)
 - 0.2.0 (2026-10-06), feature: add combobox, date pickers, number input, file upload, skeleton, drawer, toolbar and data table features [#11](https://github.com/demogar/molaui/issues/11)

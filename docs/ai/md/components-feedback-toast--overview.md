@@ -113,3 +113,9 @@ Types: `ToastMessages`, `ToastOptions`, `ToastProviderProps`, `ToastTone`
 
 - [Confirmation](https://demogar.github.io/molaui/md/patterns-confirmation--overview.md) (pattern)
 - [Settings page](https://demogar.github.io/molaui/md/patterns-settings-page--overview.md) (pattern)
+
+## Changes
+
+From CHANGELOG.md, newest first.
+
+- 0.8.0 (2026-10-21), feature: translate the words base ui says on its own  , closes [#182](https://github.com/demogar/molaui/issues/182) [#183](https://github.com/demogar/molaui/issues/183) [#184](https://github.com/demogar/molaui/issues/184)

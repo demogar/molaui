@@ -10187,6 +10187,27 @@
       "usedIn": [
         "Patterns/Confirmation",
         "Patterns/Settings page"
+      ],
+      "changes": [
+        {
+          "version": "0.8.0",
+          "date": "2026-10-21",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "toast",
+            "number-input"
+          ],
+          "subject": "translate the words base ui says on its own  , closes [#182](https://github.com/demogar/molaui/issues/182) [#183](https://github.com/demogar/molaui/issues/183)",
+          "pr": {
+            "number": 184,
+            "url": "https://github.com/demogar/molaui/issues/184"
+          },
+          "commit": {
+            "sha": "6df35cc",
+            "url": "https://github.com/demogar/molaui/commit/6df35ccc1bae86c5863c8875c78dcb1f0deef494"
+          }
+        }
       ]
     },
     {
@@ -13311,6 +13332,25 @@
         "Patterns/Settings page"
       ],
       "changes": [
+        {
+          "version": "0.8.0",
+          "date": "2026-10-21",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "toast",
+            "number-input"
+          ],
+          "subject": "translate the words base ui says on its own  , closes [#182](https://github.com/demogar/molaui/issues/182) [#183](https://github.com/demogar/molaui/issues/183)",
+          "pr": {
+            "number": 184,
+            "url": "https://github.com/demogar/molaui/issues/184"
+          },
+          "commit": {
+            "sha": "6df35cc",
+            "url": "https://github.com/demogar/molaui/commit/6df35ccc1bae86c5863c8875c78dcb1f0deef494"
+          }
+        },
         {
           "version": "0.2.0",
           "date": "2026-10-06",
