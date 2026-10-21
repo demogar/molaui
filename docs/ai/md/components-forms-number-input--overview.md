@@ -66,7 +66,7 @@ Each story is a live example in Storybook.
 | `largeStep` | `number` | `10` | Shift+Arrow and PageUp/PageDown step. |
 | `locale` | `LocalesArgument` |  | BCP 47 tag for parsing and formatting. `undefined` uses the runtime's locale. |
 | `max` | `number` |  | The highest value. Stepping and committed values clamp to it, and the increase stepper is disabled there; End jumps to it. |
-| `messages` | `MessagesOverride<NumberInputMessages>` |  | Words for translation: the steppers' default names. Keys left out come from `MessagesProvider`, then English. |
+| `messages` | `MessagesOverride<NumberInputMessages>` |  | Words for translation: the steppers' default names and the field's role description. Keys left out come from `MessagesProvider`, then English. |
 | `min` | `number` |  | The lowest value. Stepping and committed values clamp to it, and the decrease stepper is disabled there; Home jumps to it. |
 | `onValueChange` | `((value: number \| null) => void)` |  | Called as the number changes, typed or stepped, with `null` when the field is emptied. For a save or a request, use `onValueCommitted`, which does not fire per keystroke. |
 | `onValueCommitted` | `((value: number \| null, eventDetails: NumberFieldRootCommitEventDetails) => void)` |  | Called when the value is committed: on blur, Enter or a stepper press, not per keystroke. |

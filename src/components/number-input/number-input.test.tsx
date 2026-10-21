@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { createRef } from 'react'
 import { describe, expect, it, vi } from 'vitest'
 
+import { MessagesProvider } from '../../lib/messages'
 import { Field } from '../field/field'
 import { NumberInput } from './number-input'
 
@@ -163,5 +164,45 @@ describe('NumberInput input props', () => {
     await userEvent.tab()
     expect(onBlur).toHaveBeenCalled()
     expect(onBlur.mock.calls[0]?.[0].target).toBe(input)
+  })
+})
+
+// Base UI sets aria-roledescription="Number field" in its own defaults, out of
+// the messages gate's sight, so the precedence is held here (#183).
+describe('NumberInput role description', () => {
+  const field = () => screen.getByRole('textbox', { name: 'Cantidad' })
+
+  it('is "Number field" with no provider', () => {
+    render(<NumberInput aria-label="Cantidad" defaultValue={3} />)
+    expect(field()).toHaveAttribute('aria-roledescription', 'Number field')
+  })
+
+  it('takes the word from a MessagesProvider above it', () => {
+    render(
+      <MessagesProvider messages={{ numberInput: { roleDescription: 'Campo numérico' } }}>
+        <NumberInput aria-label="Cantidad" defaultValue={3} />
+      </MessagesProvider>,
+    )
+    expect(field()).toHaveAttribute('aria-roledescription', 'Campo numérico')
+  })
+
+  it('lets the messages prop beat the provider, and the consumer attribute beat both', () => {
+    const { rerender } = render(
+      <MessagesProvider messages={{ numberInput: { roleDescription: 'Campo numérico' } }}>
+        <NumberInput aria-label="Cantidad" defaultValue={3} messages={{ roleDescription: 'Número' }} />
+      </MessagesProvider>,
+    )
+    expect(field()).toHaveAttribute('aria-roledescription', 'Número')
+    rerender(
+      <MessagesProvider messages={{ numberInput: { roleDescription: 'Campo numérico' } }}>
+        <NumberInput
+          aria-label="Cantidad"
+          aria-roledescription="Cantidad de artículos"
+          defaultValue={3}
+          messages={{ roleDescription: 'Número' }}
+        />
+      </MessagesProvider>,
+    )
+    expect(field()).toHaveAttribute('aria-roledescription', 'Cantidad de artículos')
   })
 })

@@ -56,7 +56,7 @@ Mount once near the root, inside `MessagesProvider` if the app has one. Renders 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `limit` | `number` | `3` | Toasts kept visible at once; older ones fold away. |
-| `messages` | `MessagesOverride<ToastMessages>` |  | Words for translation: the close button and the tone words read before a title. Keys left out come from `MessagesProvider`, then English. The toasts render here, so a `MessagesProvider` must sit above this one, not inside it. |
+| `messages` | `MessagesOverride<ToastMessages>` |  | Words for translation: the close button, the tone words read before a title and the region's name. Keys left out come from `MessagesProvider`, then English. The toasts render here, so a `MessagesProvider` must sit above this one, not inside it. |
 | `timeout` | `number` | `5000` | Default auto-dismiss, ms. Also the timeout a running toast starts when `update()` turns it into a result. |
 
 Renders no element of its own, so it takes no `className` or `ref`.

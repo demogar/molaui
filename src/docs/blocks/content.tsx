@@ -104,7 +104,7 @@ export const WORDS: { group: string; words: Word[] }[] = [
         when: 'An event the system reports. It is said once in a toast and kept in the notification centre, so both use the word.',
         where: [
           { label: '“Notifications, 2 unread” on the bell', title: 'Components/Feedback/Notification centre' },
-          { label: 'The toast region, and its F6 shortcut', title: 'Components/Feedback/Toast' },
+          { label: 'The toast region, and its F6 shortcut', title: 'Components/Feedback/Toast', key: 'toast.region' },
         ],
         not: 'Not for a condition that is still true (Announcement).',
       },

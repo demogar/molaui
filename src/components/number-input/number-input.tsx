@@ -124,7 +124,7 @@ export interface NumberInputProps
   incrementLabel?: string
   /** Accessible name of the − stepper. Defaults to "Decrease"; translate it with the page. */
   decrementLabel?: string
-  /** Words for translation: the steppers' default names. Keys left out come from `MessagesProvider`, then English. */
+  /** Words for translation: the steppers' default names and the field's role description. Keys left out come from `MessagesProvider`, then English. */
   messages?: MessagesOverride<NumberInputMessages>
 }
 
@@ -241,6 +241,9 @@ export function NumberInput({
       )}
     >
       <NumberFieldPrimitive.Input
+        // Base UI's default is "Number field" in English; set from the table
+        // first, so a consumer's own aria-roledescription still wins.
+        aria-roledescription={t.roleDescription}
         // The consumer's handlers sit to the right, so they run first and
         // can call event.preventBaseUIHandler() to stop PageUp/PageDown.
         {...mergeProps<'input'>({ onKeyDown }, inputProps)}
