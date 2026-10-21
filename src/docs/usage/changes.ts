@@ -379,7 +379,60 @@ export function isReleased(version: string, current: string) {
 /** The minor line a version belongs to: "0.4.2" → "0.4". */
 export const minorOf = (version: string) => version.split('.').slice(0, 2).join('.')
 
+/**
+ * The curated What's new pages, one per minor release, newest first. Each is
+ * hand-written in src/docs/whats-new/ and gives the few changes that matter to
+ * a reader; the full list stays on the Changelog page. A page can be written
+ * before its release: it says "Unreleased" until package.json reaches its
+ * version (see isReleased).
+ *
+ * It lives here rather than in whats-new.ts (which re-exports it) because
+ * pr-scope.mjs loads this file on plain Node, whose type stripping cannot
+ * follow whats-new.ts's extensionless import.
+ *
+ * changes.test.ts checks that every version here has a page with the matching
+ * title, that the sidebar lists them in this order, and that every released
+ * one is in CHANGELOG.md. It also fails when any minor in CHANGELOG.md, the
+ * newest included, has no page here. That alone left the release PR as the
+ * first place a missing page showed (0.8.0, #178), so titleWhatsNewError
+ * fails the pull request that starts the minor instead.
+ */
+export const WHATS_NEW = ['0.8.0', '0.7.0', '0.6.0', '0.5.0', '0.4.0', '0.3.0', '0.2.0'] as const
+
 const TITLE = /^\w+(?:\(([^)]*)\))?!?: /
+const BUMP = /^(\w+)(?:\([^)]*\))?(!)?: /
+
+/**
+ * The version release-please cuts once a title lands on main, given the
+ * version in package.json: release-please-config.json's rules, restated.
+ * `bump-minor-pre-major` makes a breaking change a minor before 1.0;
+ * `bump-patch-for-minor-pre-major` is off, so `feat` is a minor there too.
+ * Every other type, or a title that is not conventional, is a patch.
+ */
+export function nextVersion(title: string, current: string): string {
+  const [major = 0, minor = 0, patch = 0] = parts(current)
+  const [, type, breaking] = BUMP.exec(title) ?? []
+  if (breaking && major >= 1) return `${major + 1}.0.0`
+  if (breaking || type === 'feat') return `${major}.${minor + 1}.0`
+  return `${major}.${minor}.${patch + 1}`
+}
+
+/**
+ * Why a pull request title would leave the next release without its What's
+ * new page, or undefined when it does not start a new minor or the page is
+ * listed. Pass the PR's own WHATS_NEW (the page can come in the same PR).
+ */
+export function titleWhatsNewError(title: string, current: string, pages: readonly string[]): string | undefined {
+  const next = nextVersion(title, current)
+  if (!next.endsWith('.0') || pages.some((v) => minorOf(v) === minorOf(next))) return undefined
+  const minor = minorOf(next)
+  return (
+    `This title releases ${next}, a new minor, and ${minor} has no What's new page. Write ` +
+    `src/docs/whats-new/${minor.replace('.', '-')}.mdx, add "${next}" to WHATS_NEW in src/docs/usage/changes.ts ` +
+    `and "${minor}" to the What's new order in .storybook/preview.tsx, in this pull request. Without it, ` +
+    `the release PR fails changes.test.ts.`
+  )
+}
 
 /**
  * The scopes of a conventional-commit title (`feat(a,b): …` gives a and b),

@@ -39,7 +39,11 @@ jobs:
       # The scope must be declared in src/docs/usage/changes.ts. That file's
       # test only sees a scope once release-please writes it into the release
       # PR, so an undeclared one used to fail the release instead of the PR
-      # that introduced it (#141, #143). A title with no scope passes.
+      # that introduced it (#141, #143). A title with no scope passes. The same
+      # script fails a title that starts a new minor (feat, or a breaking change)
+      # when that minor has no What's new page, which used to fail only the
+      # release PR (#178). It reads package.json, which sparse checkout's cone
+      # mode always includes with the other root files.
       - uses: actions/checkout@v7
         with:
           sparse-checkout: |

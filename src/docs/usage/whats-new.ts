@@ -1,19 +1,7 @@
-import { minorOf } from './changes'
+import { minorOf, WHATS_NEW } from './changes'
 
-/**
- * The curated What's new pages, one per minor release, newest first. Each is
- * hand-written in src/docs/whats-new/ and gives the few changes that matter to
- * a reader; the full list stays on the Changelog page. A page can be written
- * before its release: it says "Unreleased" until package.json reaches its
- * version (see isReleased in changes.ts).
- *
- * changes.test.ts checks that every version here has a page with the matching
- * title, that the sidebar lists them in this order, and that every released
- * one is in CHANGELOG.md. It also fails when any minor in CHANGELOG.md, the
- * newest included, has no page here: a release PR that starts a new minor is
- * red until its page is on main, so the version that goes out has its page.
- */
-export const WHATS_NEW = ['0.7.0', '0.6.0', '0.5.0', '0.4.0', '0.3.0', '0.2.0'] as const
+// The list itself is in changes.ts, with why it lives there.
+export { WHATS_NEW }
 
 /** The stories title of a What's new page. MDX needs it as a literal, so the test compares the two. */
 export const whatsNewTitle = (version: string) => `Mola UI/What's new/${minorOf(version)}`

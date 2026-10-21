@@ -12,12 +12,14 @@ import {
   COMMIT_PAGES,
   isReleased,
   minorOf,
+  nextVersion,
   NON_COMPONENT_SCOPES,
   pagesFor,
   parseChangelog,
   SCOPE_PAGES,
   titleScopeError,
   titleScopes,
+  titleWhatsNewError,
   unknownScopes,
   unknownSections,
 } from './changes'
@@ -215,6 +217,47 @@ describe('pull request title scopes', () => {
     expect(error).toMatch(/src\/docs\/usage\/changes\.ts/)
     expect(error).toMatch(/SCOPE_PAGES/)
     expect(error).toMatch(/NON_COMPONENT_SCOPES/)
+  })
+})
+
+/**
+ * The second half of pr-scope.mjs: a title that starts a new minor must bring
+ * that minor's What's new page, or the release PR fails the test below (#178).
+ * The versions are fixed here, so these hold whatever package.json says.
+ */
+describe("pull request titles that start a minor", () => {
+  it('works out the version as release-please-config.json does', () => {
+    expect(nextVersion('feat(button): add a size', '0.7.1')).toBe('0.8.0')
+    expect(nextVersion('fix(tokens)!: hold rojo to danger', '0.7.1')).toBe('0.8.0')
+    expect(nextVersion('feat!: drop a prop', '1.2.3')).toBe('2.0.0')
+    expect(nextVersion('feat: add a thing', '1.2.3')).toBe('1.3.0')
+    expect(nextVersion('fix(button): keep focus', '0.7.1')).toBe('0.7.2')
+    expect(nextVersion('docs: fix a typo', '0.7.1')).toBe('0.7.2')
+    expect(nextVersion('chore(main): release 0.8.0', '0.7.1')).toBe('0.7.2')
+    expect(nextVersion('build(deps): Bump @base-ui/react', '0.7.1')).toBe('0.7.2')
+  })
+
+  it('fails a feat or a breaking change whose minor has no page, and says what to write', () => {
+    const error = titleWhatsNewError('feat(button): add a size', '0.8.0', ['0.8.0', '0.7.0'])
+    expect(error).toMatch(/releases 0\.9\.0/)
+    expect(error).toMatch(/src\/docs\/whats-new\/0-9\.mdx/)
+    expect(error).toMatch(/WHATS_NEW/)
+    expect(error).toMatch(/\.storybook\/preview\.tsx/)
+    expect(titleWhatsNewError('fix(tokens)!: hold rojo to danger', '0.8.0', ['0.8.0'])).toMatch(/0\.9\.0/)
+    expect(titleWhatsNewError('feat!: drop a prop', '1.4.2', ['1.4.0'])).toMatch(/2\.0\.0/)
+  })
+
+  it('passes a feat whose page is listed, and anything that is a patch', () => {
+    expect(titleWhatsNewError('feat(button): add a size', '0.8.0', ['0.9.0', '0.8.0'])).toBeUndefined()
+    expect(titleWhatsNewError('fix(button): keep focus', '0.8.0', ['0.8.0'])).toBeUndefined()
+    expect(titleWhatsNewError('chore(main): release 0.9.0', '0.8.0', ['0.8.0'])).toBeUndefined()
+    expect(titleWhatsNewError('Not conventional at all', '0.8.0', ['0.8.0'])).toBeUndefined()
+  })
+
+  it('holds the next feat against the real list: the page for the next minor is listed or the error names it', () => {
+    const next = nextVersion('feat: next', pkg.version)
+    const error = titleWhatsNewError('feat: next', pkg.version, WHATS_NEW)
+    expect(error === undefined).toBe(WHATS_NEW.some((v) => minorOf(v) === minorOf(next)))
   })
 })
 
