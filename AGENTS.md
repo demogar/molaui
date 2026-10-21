@@ -19,6 +19,11 @@ changelog. CI runs a `Conventional PR title` check and fails the PR otherwise.
 - A scope must be declared in `src/docs/usage/changes.ts` (`SCOPE_PAGES` for
   component pages, `NON_COMPONENT_SCOPES` otherwise); the check fails an
   undeclared one. Declare a new scope in the same PR, or leave the scope out.
+- A `feat` or breaking title starts a new minor, and that minor needs its What's
+  new page: `src/docs/whats-new/<major>-<minor>.mdx`, its version in `WHATS_NEW`
+  (`src/docs/usage/changes.ts`) and in the sidebar order in
+  `.storybook/preview.tsx`. The same check fails the PR without it; a later
+  `feat` in the same minor finds the page already there.
 - The subject must start with a lowercase letter.
 - Add `!` after the type (`feat(tokens)!: …`) for breaking changes — a renamed
   token or removed prop is breaking.

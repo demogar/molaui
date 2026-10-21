@@ -90,7 +90,7 @@ const preview: Preview = {
             'References',
             // Newest first, as WHATS_NEW in src/docs/usage/whats-new.ts; changes.test.ts holds the two together.
             "What's new",
-            ['0.7', '0.6', '0.5', '0.4', '0.3', '0.2'],
+            ['0.8', '0.7', '0.6', '0.5', '0.4', '0.3', '0.2'],
             'Changelog',
           ],
           'Foundations',

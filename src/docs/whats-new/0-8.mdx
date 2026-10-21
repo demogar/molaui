@@ -1,0 +1,34 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+import { ReleaseChanges, ReleaseStatus } from '../blocks/changes'
+
+<Meta title="Mola UI/What's new/0.8" />
+
+# What's new in 0.8
+
+<ReleaseStatus version="0.8.0" />
+
+0.8 is a small release with no breaking changes. It finishes the translation work from 0.7: two
+words that Base UI wrote in English by default now come from the messages table too. It also has
+two fixes to these docs. The full list is under *Everything in 0.8.0* at the end of this page, and
+on the [Changelog](?path=/docs/mola-ui-changelog--overview).
+
+## The last two English words can be translated
+
+Base UI names the toast stack "Notifications" and announces a number field as "Number field". It
+did that through its own default props, so the words never reached Mola's messages table and the
+test for hard-coded English could not see them. They are now two new keys, `toast.region` and
+`numberInput.roleDescription`. Pass them through a component's `messages` prop or through
+`MessagesProvider`, like any other key. English output is unchanged.
+[Internationalisation](?path=/docs/foundations-internationalisation--overview) lists every key.
+
+## Fixes
+
+- Every entry in a docs page's table of contents now scrolls to its section, including headings
+  written by doc blocks.
+- In the [Confirmation](?path=/docs/patterns-confirmation--overview) pattern, an API key's name
+  and its badge stay on one line.
+
+## Everything in 0.8.0
+
+<ReleaseChanges version="0.8.0" />
