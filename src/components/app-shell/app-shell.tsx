@@ -28,7 +28,7 @@ import { type AppShellMessages, appShellMessages } from './messages'
  * renders in a modal sheet instead. It is the same element tree in both
  * places, so the navigation cannot drift between desktop and mobile.
  *
- * The collapse is a width transition on the aside, not a remount, so focus
+ * The collapse changes the aside's width in one step, not a remount, so focus
  * survives it and the labels stay in the DOM as screen-reader text.
  */
 
@@ -155,15 +155,21 @@ export function AppShell({
             className={cn(
               'hidden shrink-0 flex-col overflow-hidden bg-cloth-pale nav:flex',
               'rule-e',
-              // A layout transition kept on purpose: the content takes the
-              // room the rail gives up, and that is what collapsing means.
-              // Measured, it lays out in about a millisecond a frame; the
-              // 57 ms of style work the collapse used to cost was a table
-              // beside it restyling every cell on each frame (see Table).
-              // `contain: layout` on the rail, the audit's suggestion,
-              // changed nothing measurable, because the cost is <main>
-              // reflowing, which containment on the rail cannot stop.
-              'w-60 transition-[width] duration-(--motion-base) data-collapsed:w-14',
+              // The rail snaps between its two widths. It used to ease
+              // `width` over --motion-base, kept on purpose because the
+              // content takes the room the rail gives up. But <main> beside
+              // it is usually a data table with measured columns and
+              // container queries, so every frame of the ease laid the
+              // whole work area out again, each column and query answering
+              // a width nobody would stop at. The table's restyle was cut to
+              // one cell (see Table) and the reflow was still there;
+              // `contain: layout` on the rail cannot stop it, because the
+              // cost is <main>. Motion here says what changed, and a
+              // collapse is a change of layout, not a state to watch: one
+              // layout, then done. Fading the labels was not needed either,
+              // since they already turn into screen-reader text at once.
+              // src/components/motion.test.ts fails a width transition here.
+              'w-60 data-collapsed:w-14',
             )}
           >
             <SidebarContext.Provider value={{ collapsed, onNavigate: () => {} }}>{sidebar}</SidebarContext.Provider>

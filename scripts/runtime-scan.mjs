@@ -17,31 +17,37 @@
 
 /**
  * Layout properties: a transition on any of them lays the page out on every
- * frame. `all` is included because it reaches them.
+ * frame. `all` is included because it reaches them. src/components/motion.test.ts
+ * holds the source to the same list, so a layout transition fails in the unit
+ * tests before it reaches a browser.
  */
-const LAYOUT =
+export const LAYOUT =
   /^(all|width|height|(min|max)-(width|height)|inline-size|block-size|left|right|top|bottom|inset(-.+)?|margin(-.+)?|padding(-.+)?|flex-basis|grid-template-(columns|rows)|font-size|line-height|border(-(top|right|bottom|left|inline|block)(-(start|end))?)?-width)$/
 
 /**
  * The layout transitions kept on purpose, each with its reason. Anything else
- * is a finding: move it to `translate`, `scale` or `opacity`, or add it here
- * with the reason it cannot move.
+ * is a finding: move it to `translate`, `scale` or `opacity`, snap it, or add
+ * it here with the reason it cannot move. `selector` is what this browser scan
+ * matches; `files` (under src/) is what motion.test.ts matches in the source,
+ * and an entry no listed file still needs fails there, so the list cannot go
+ * stale.
+ *
+ * The app shell's rail used to be here, easing `width` so the content took
+ * the room it gave up. It snaps now: the content beside it is usually a data
+ * table, and every frame of the ease laid the whole work area out again.
  */
 export const LAYOUT_TRANSITIONS_ALLOWED = [
   {
-    selector: '[data-slot="app-shell"] > div > aside',
-    property: 'width',
-    why: 'The content takes the room the rail gives up, and that is the meaning of the collapse. A transform would either slide the content under the rail or snap it at one end. Its per-frame layout is about a millisecond once the table stopped restyling itself on every resize.',
-  },
-  {
     selector: '[data-slot="accordion-panel"], [data-slot="collapsible-panel"]',
+    files: ['components/accordion/accordion.tsx'],
     property: 'height',
-    why: "What is below the panel has to move as it opens; Base UI measures the height for exactly this. Scaling the panel would squash its text and leave the content below to jump.",
+    why: "What is below the panel has to move as it opens; Base UI measures the height for exactly this (--accordion-panel-height, --collapsible-panel-height). Scaling the panel would squash its text and leave the content below to jump. It is a disclosure the reader asked for and watches open, not the frame around the work changing size.",
   },
   {
     selector: '[data-slot="toast"]',
+    files: ['components/toast/toast.tsx'],
     property: 'height',
-    why: "Base UI's stack: a toast takes the frontmost toast's height while collapsed and its own when the stack expands, and the toasts behind move by it.",
+    why: "Base UI's stack: a toast takes the frontmost toast's height while collapsed and its own when the stack expands, and the toasts behind move by it. The stack is fixed and out of flow, so its layout never reaches the page.",
   },
 ]
 

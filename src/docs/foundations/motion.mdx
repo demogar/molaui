@@ -20,7 +20,7 @@ The durations are tokens in `tokens.css`; the easing is `--ease-cut` in `theme.c
 | Token | Value | Used by |
 | --- | --- | --- |
 | `--motion-cut` | 120ms | Hover and press on every control: a button's colour and band, a field's edge, a checkbox, a tab's colour. Also every **exit**. |
-| `--motion-base` | 220ms | Things that enter or move: menus, popovers, dialogs, drawers and the mobile sidebar coming in, the sidebar collapsing, a switch thumb, the tabs indicator, an accordion panel, a disclosure marker turning, a progress bar filling. |
+| `--motion-base` | 220ms | Things that enter or move: menus, popovers, dialogs, drawers and the mobile sidebar coming in, a switch thumb, the tabs indicator, an accordion panel, a disclosure marker turning, a progress bar filling. |
 | `--motion-slow` | 420ms | One place today: a toast sliding as the stack reflows. |
 | `ease-cut` | `cubic-bezier(0.2, 0, 0, 1)` | Everything that eases. Fast out of the start, settles without passing its mark. |
 
@@ -30,6 +30,24 @@ who opened a menu wants to see where it came from; someone who closed it has alr
 A menu, popover or dialog that enters fades in and grows from 98% of its size, from the origin
 Base UI computes, so a menu grows out of its trigger rather than out of its own centre. Only a drawer
 travels, because it belongs to an edge of the screen; nothing bounces or overshoots.
+
+## Layout snaps
+
+Motion moves with `opacity`, `translate` and `scale`, which the compositor draws without laying
+the page out again. Nothing transitions `width`, `height`, the insets, margin or padding, and
+nothing transitions `all`, which reaches them. Each frame of a layout transition lays out
+everything that depends on it, and in this system that is usually a data table with measured
+columns and container queries.
+
+So the app shell's sidebar **snaps** between its full width and the rail: the work area changes
+width once, not on every frame of a 220ms ease. It used to ease, on the grounds that the content
+takes the room the rail gives up; the reflow cost more than the motion said. A collapse is a change
+of layout, not a state to watch.
+
+Two layout transitions are kept, each with its reason: an accordion or collapsible panel opening
+to the height Base UI measures, because what is below it has to move and scaling would squash the
+text; and the toast stack, which is fixed and out of the page's flow. `motion.test.ts` fails any
+other in the source, and the browser audit fails any other it finds running.
 
 ## Motion that carries meaning
 

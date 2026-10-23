@@ -103,6 +103,12 @@ export function AccordionTrigger({ className, meta, children, ...props }: Accord
   )
 }
 
+// The one layout transition the components keep (with the toast stack's):
+// what is below a panel has to move as it opens, and Base UI measures the
+// height for exactly this. Scaling instead would squash the text and make the
+// content below jump. The exemption, with its reason, is
+// LAYOUT_TRANSITIONS_ALLOWED in scripts/runtime-scan.mjs; motion.test.ts and
+// the browser audit both fail any other. CollapsiblePanel below is the same.
 const panelClasses = [
   'h-(--accordion-panel-height) overflow-hidden text-sm text-ink-2',
   'transition-[height] duration-(--motion-base)',
