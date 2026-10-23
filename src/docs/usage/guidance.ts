@@ -1973,7 +1973,7 @@ export const USAGE: Record<string, Usage> = {
     content: ['Quote exactly, and give cite as who said it and where: “Evaluation lead, research interview 7”.'],
   },
   'Components/Typography/Rotulo': {
-    summary: 'The label register, cut short by a band, set under the block it belongs to.',
+    summary: 'The category register, cut short by a band, set under the block it belongs to.',
     use: [
       'Saying what kind of thing a block is, or who it is from, under its heading.',
       'A label inside a dense header, with plain, which drops the band.',
@@ -1982,8 +1982,13 @@ export const USAGE: Record<string, Usage> = {
       { when: 'An eyebrow above a heading; the heading says it better.', use: 'Components/Typography/Heading' },
       { when: 'A status.', use: 'Components/Feedback/Badge' },
       { when: 'The label of a form field.', use: 'Components/Forms/Field', label: 'Label' },
+      { when: 'A button, a column header or any word a person acts on or reads; those are in sentence case (ADR 0017).', use: 'Components/Actions/Button' },
     ],
     practices: [
+      {
+        do: 'Name a category with it: a section, a group, the kind of a step.',
+        dont: 'Set a button, a status or a column header in it. Capitals on every control leave nothing to lead.',
+      },
       {
         do: 'Put the rótulo under the heading.',
         dont: 'Put it above the heading as an eyebrow.',

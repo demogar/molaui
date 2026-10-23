@@ -141,6 +141,7 @@ Types: `ButtonArrowProps`, `ButtonProps`, `IconButtonProps`
 ### Pages that send readers here
 
 - [Skeleton](https://demogar.github.io/molaui/md/components-feedback-skeleton--overview.md)
+- [Rotulo](https://demogar.github.io/molaui/md/components-typography-rotulo--overview.md)
 
 ### Used in
 

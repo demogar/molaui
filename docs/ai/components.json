@@ -21589,7 +21589,7 @@
       "category": "Typography",
       "docs": "https://demogar.github.io/molaui/?path=/docs/components-typography-rotulo--overview",
       "phase": "stable",
-      "summary": "The label register, cut short by a band, set under the block it belongs to.",
+      "summary": "The category register, cut short by a band, set under the block it belongs to.",
       "description": "The label register: Archivo at `wdth` 116, in caps, cut short by a band of the layer beneath. It replaces the eyebrow, and it goes **under** the block it belongs to — read as attribution, not as a pre-announcement of what the heading is about to say better.",
       "usage": {
         "use": [
@@ -21609,9 +21609,17 @@
             "when": "The label of a form field.",
             "use": "Components/Forms/Field",
             "label": "Label"
+          },
+          {
+            "when": "A button, a column header or any word a person acts on or reads; those are in sentence case (ADR 0017).",
+            "use": "Components/Actions/Button"
           }
         ],
         "practices": [
+          {
+            "do": "Name a category with it: a section, a group, the kind of a step.",
+            "dont": "Set a button, a status or a column header in it. Capitals on every control leave nothing to lead."
+          },
           {
             "do": "Put the rótulo under the heading.",
             "dont": "Put it above the heading as an eyebrow."
@@ -21638,7 +21646,7 @@
           "name": "Rotulo",
           "kind": "component",
           "source": "src/components/typography/rotulo.tsx",
-          "description": "The label register — Archivo pushed out along its width axis, cut short by a band of the layer beneath.",
+          "description": "The category register — Archivo pushed out along its width axis, cut short by a band of the layer beneath.",
           "props": [
             {
               "name": "band",

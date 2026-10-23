@@ -178,7 +178,7 @@ An MCP server with the same data ships in the package: `npx -y --package @demoga
 - [Meta](https://demogar.github.io/molaui/?path=/docs/components-typography-meta--overview) ([Markdown](https://demogar.github.io/molaui/md/components-typography-meta--overview.md)): Small facts compared down a column, such as duration, cost, count and time, in tabular figures.
 - [Prose](https://demogar.github.io/molaui/?path=/docs/components-typography-prose--overview) ([Markdown](https://demogar.github.io/molaui/md/components-typography-prose--overview.md)): The reading voice for long-form markup, such as a document, a run summary or a model’s answer.
 - [Pullquote](https://demogar.github.io/molaui/?path=/docs/components-typography-pullquote--overview) ([Markdown](https://demogar.github.io/molaui/md/components-typography-pullquote--overview.md)): A voice interrupting the prose: a quotation in the reading face, under a relleno band, with its source.
-- [Rotulo](https://demogar.github.io/molaui/?path=/docs/components-typography-rotulo--overview) ([Markdown](https://demogar.github.io/molaui/md/components-typography-rotulo--overview.md)): The label register, cut short by a band, set under the block it belongs to.
+- [Rotulo](https://demogar.github.io/molaui/?path=/docs/components-typography-rotulo--overview) ([Markdown](https://demogar.github.io/molaui/md/components-typography-rotulo--overview.md)): The category register, cut short by a band, set under the block it belongs to.
 - [Text](https://demogar.github.io/molaui/?path=/docs/components-typography-text--overview) ([Markdown](https://demogar.github.io/molaui/md/components-typography-text--overview.md)): Running interface text in the system voice, in three inks: ink, ink-2 and muted.
 
 ## AI interface

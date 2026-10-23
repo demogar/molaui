@@ -885,7 +885,7 @@
   "Rotulo": {
     "scope": "typescriptreact,javascriptreact",
     "prefix": "mola-rotulo",
-    "description": "The label register, cut short by a band, set under the block it belongs to. import { Rotulo } from '@demogar/mola-ui'",
+    "description": "The category register, cut short by a band, set under the block it belongs to. import { Rotulo } from '@demogar/mola-ui'",
     "body": [
       "<Rotulo band=\"rojo\">${1:Support platform}</Rotulo>$0"
     ]
