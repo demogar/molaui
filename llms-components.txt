@@ -58,6 +58,7 @@ Theme and density are attributes, not props: `<html data-theme="dark" data-densi
 - A screen reflows at 320px: only a region meant to scroll sideways (a table, code, a tab or chip row) may, and it carries the `scroll-edge` utility with `useScrollEdge()` as its ref. Table, Tabs and CodeBlock already do. WCAG 1.4.10 is measured at 320px, and a region that scrolls with no cue reads as complete: a table hid its Status column and its only action that way.
 - Props share one vocabulary: `tone` is a status (`neutral`, `info`, `success`, `warn`, `danger`, `accent`), `variant` a presentation (`solid`, `outline`, `seam`), `kind` a category (`EmptyState kind="no-results"`), and `size` the t-shirt scale (`xs` to `xl`). A word that means one thing on every component can be guessed instead of looked up, by a person or an agent.
 - Every component takes `ref`, `id`, `data-*` and the other DOM props of the element it documents. `className` and `style` style the box you see (the element with the cut); `ref` and the rest go to the control you focus. A wrapper around a label has `wrapperClassName`. A `className` that moved to another element when a `label` was added changed meaning silently.
+- One cut per nesting level. A container you frame yourself (a card, a section, a group of results) uses `cut-frame`, not `shadow-cut`: inside another framed container (a Panel, an AgentRun, a framed table) it draws the decorative keyline instead of a second ink cut, and `nested:bg-cloth` steps its ground down to the page. Controls keep their cut wherever they sit. Three identical ink frames nested inside each other (a run, a tool call, a code block) cannot be told apart: the eye cannot say which edge belongs to which object. The cut marks what a pointer can touch, and the outer container already is the cut region.
 
 ## Lifecycle phases
 
@@ -3362,6 +3363,8 @@ When not to:
 - Don’t: Add a background class to a div; secondary text inside it renders dark on dark.
 - Do: Keep edge band to one panel per screen.
 - Don’t: Band every card on the page.
+- Do: Let a panel inside another framed container draw the keyline: one cut per nesting level, which edge cut does by itself.
+- Don’t: Frame a box inside a panel with shadow-cut; two identical ink frames, nested, cannot be told apart.
 
 Content:
 - Title a panel by what it holds, “Weekly digest agent”, not “Details” or “Info”.
@@ -3385,7 +3388,7 @@ You handle:
 | --- | --- | --- | --- |
 | `as` | `"article" \| "aside" \| "div" \| "section"` | `div` | Render as a landmark-free `section` (named by its heading) instead of a `div`. |
 | `band` | `"oro" \| "rojo" \| "anil" \| "verde" \| "cloth"` |  | The colour revealed by `edge="band"`, gold by default. Has no effect on the other edges. |
-| `edge` | `"cut" \| "band" \| "none"` |  | `cut` (default) is the ink keyline; `band` reveals a band of `band`'s colour between two keylines, for the one panel that is the point of the screen; `none` for a ground inside another. |
+| `edge` | `"cut" \| "band" \| "none"` |  | `cut` (default) is the ink keyline, or the decorative keyline when the panel sits inside another framed container; `band` reveals a band of `band`'s colour between two keylines, for the one panel that is the point of the screen; `none` for a ground inside another. |
 | `layer` | `"pale" \| "cloth" \| "shade" \| "ink" \| "rojo" \| "anil" \| "verde" \| "oro"` |  | The ground the panel is cut from, `pale` by default. A filled layer (`rojo`, `anil`, `verde`, `ink`) re-inks everything inside it, so pick it here rather than with a background class. |
 | `padding` | `"none" \| "sm" \| "md" \| "lg"` |  | Inner padding on the spacing scale, so it moves with density; `md` by default, `none` for a table or a list that runs edge to edge. |
 | `tone` (deprecated) | `PanelLayer` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `layer`, which takes the same values. `codemods/prop-vocabulary.ts` rewrites call sites. |

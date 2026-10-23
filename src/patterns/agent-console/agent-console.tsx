@@ -411,7 +411,7 @@ export function AgentConsoleScreen({ canAsk = true, defaultQuestion, failFirstRu
               </p>
             </div>
           )}
-          <section aria-labelledby="usage-heading" className="flex flex-col gap-3 bg-cloth-pale p-4 shadow-cut">
+          <section aria-labelledby="usage-heading" className="flex flex-col gap-3 bg-cloth-pale p-4 cut-frame">
             <h2 id="usage-heading" className="m-0 font-display text-base font-bold tracking-display wdth-display">
               Session usage
             </h2>

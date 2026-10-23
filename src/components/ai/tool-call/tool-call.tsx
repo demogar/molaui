@@ -128,7 +128,7 @@ export function ToolCall({
     <div
       data-slot="tool-call"
       data-status={status}
-      className={cn('relative bg-cloth-pale shadow-cut', waiting && 'band-accent cut-band [--cut-reveal:3px]', className)}
+      className={cn('relative bg-cloth-pale cut-frame nested:bg-cloth', waiting && 'band-accent cut-band [--cut-reveal:3px]', className)}
       {...props}
     >
       {working ? <span aria-hidden data-part="progress" className="absolute inset-x-0 top-0 h-(--bar-w) band-accent relleno-working" /> : null}

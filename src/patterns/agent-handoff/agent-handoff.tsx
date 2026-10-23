@@ -172,7 +172,7 @@ function HandoffSkeleton() {
   return (
     <div className="grid grid-cols-1 gap-6 @4xl/handoff:grid-cols-[minmax(0,1fr)_minmax(20rem,26rem)]">
       <div className="grid min-w-0 grid-cols-1 content-start gap-6">
-        <div className="grid gap-4 bg-cloth-pale p-4 shadow-cut sm:p-5">
+        <div className="grid gap-4 bg-cloth-pale p-4 cut-frame sm:p-5">
           <Skeleton shape="text" className="h-6 w-2/3" />
           <SkeletonText lines={3} />
           <Skeleton className="h-28" />
@@ -289,7 +289,7 @@ export function AgentHandoffScreen({
       <div className="@container/handoff p-4 sm:p-6">
         <div className="grid grid-cols-1 gap-6 @4xl/handoff:grid-cols-[minmax(0,1fr)_minmax(20rem,26rem)]">
           <div className="grid min-w-0 grid-cols-1 content-start gap-6">
-            <section aria-labelledby={headingId} className="grid min-w-0 grid-cols-1 gap-4 bg-cloth-pale p-4 shadow-cut sm:p-5">
+            <section aria-labelledby={headingId} className="grid min-w-0 grid-cols-1 gap-4 bg-cloth-pale p-4 cut-frame sm:p-5">
               <h2
                 id={headingId}
                 ref={headingRef}
@@ -384,7 +384,7 @@ export function AgentHandoffScreen({
               <h2 id={`${uid}-conversation`} className="m-0 font-ui text-base font-bold text-ink">
                 Conversation
               </h2>
-              <div className="bg-cloth-pale px-4 shadow-cut">
+              <div className="bg-cloth-pale px-4 cut-frame">
                 <Message role="user" author={h.customer} timestamp={at(h, -120)}>
                   <p className="m-0">{h.customerMessage}</p>
                 </Message>

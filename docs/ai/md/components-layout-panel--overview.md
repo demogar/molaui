@@ -30,6 +30,8 @@ The cut surface. **Tone is a ground, and the ground decides the ink**: a layer p
 - Don’t: Add a background class to a div; secondary text inside it renders dark on dark.
 - Do: Keep edge band to one panel per screen.
 - Don’t: Band every card on the page.
+- Do: Let a panel inside another framed container draw the keyline: one cut per nesting level, which edge cut does by itself.
+- Don’t: Frame a box inside a panel with shadow-cut; two identical ink frames, nested, cannot be told apart.
 
 ### Content
 
@@ -56,7 +58,7 @@ Each story is a live example in Storybook.
 | --- | --- | --- | --- |
 | `as` | `"article" \| "aside" \| "div" \| "section"` | `div` | Render as a landmark-free `section` (named by its heading) instead of a `div`. |
 | `band` | `"oro" \| "rojo" \| "anil" \| "verde" \| "cloth"` |  | The colour revealed by `edge="band"`, gold by default. Has no effect on the other edges. |
-| `edge` | `"cut" \| "band" \| "none"` |  | `cut` (default) is the ink keyline; `band` reveals a band of `band`'s colour between two keylines, for the one panel that is the point of the screen; `none` for a ground inside another. |
+| `edge` | `"cut" \| "band" \| "none"` |  | `cut` (default) is the ink keyline, or the decorative keyline when the panel sits inside another framed container; `band` reveals a band of `band`'s colour between two keylines, for the one panel that is the point of the screen; `none` for a ground inside another. |
 | `layer` | `"pale" \| "cloth" \| "shade" \| "ink" \| "rojo" \| "anil" \| "verde" \| "oro"` |  | The ground the panel is cut from, `pale` by default. A filled layer (`rojo`, `anil`, `verde`, `ink`) re-inks everything inside it, so pick it here rather than with a background class. |
 | `padding` | `"none" \| "sm" \| "md" \| "lg"` |  | Inner padding on the spacing scale, so it moves with density; `md` by default, `none` for a table or a list that runs edge to edge. |
 | `tone` (deprecated) | `PanelLayer` |  | Deprecated: Since 0.7.0; removed in 1.0.0. Use `layer`, which takes the same values. `codemods/prop-vocabulary.ts` rewrites call sites. |

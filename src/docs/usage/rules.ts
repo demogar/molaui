@@ -82,4 +82,8 @@ export const RULES: Rule[] = [
     rule: 'Every component takes `ref`, `id`, `data-*` and the other DOM props of the element it documents. `className` and `style` style the box you see (the element with the cut); `ref` and the rest go to the control you focus. A wrapper around a label has `wrapperClassName`.',
     why: 'A `className` that moved to another element when a `label` was added changed meaning silently.',
   },
+  {
+    rule: 'One cut per nesting level. A container you frame yourself (a card, a section, a group of results) uses `cut-frame`, not `shadow-cut`: inside another framed container (a Panel, an AgentRun, a framed table) it draws the decorative keyline instead of a second ink cut, and `nested:bg-cloth` steps its ground down to the page. Controls keep their cut wherever they sit.',
+    why: 'Three identical ink frames nested inside each other (a run, a tool call, a code block) cannot be told apart: the eye cannot say which edge belongs to which object. The cut marks what a pointer can touch, and the outer container already is the cut region.',
+  },
 ]

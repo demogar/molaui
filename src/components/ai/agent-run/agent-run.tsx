@@ -201,7 +201,7 @@ export function AgentRun({
         data-slot="agent-run"
         data-status={status}
         aria-labelledby={headingId}
-        className={cn('flex flex-col bg-cloth-pale shadow-cut', className)}
+        className={cn('flex flex-col bg-cloth-pale cut-frame nested:bg-cloth', className)}
         {...props}
       >
         <header className="flex flex-col gap-3 border-b border-keyline p-4">

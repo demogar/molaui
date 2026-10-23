@@ -19,7 +19,9 @@ import { type Variants } from '../../lib/variants'
  * Gold takes dark type (9.34:1), so `oro` sets --on-oro and leaves the ramp.
  *
  * `edge`:
- *   cut   the ink keyline. The default; a region in a working tool.
+ *   cut   the ink keyline. The default; a region in a working tool. Inside
+ *         another frame (a Panel, an agent run) it draws the decorative
+ *         keyline instead: one cut per nesting level (`cut-frame`, cloth.css).
  *   band  keyline, revealed band, keyline — the signature, for the ONE panel
  *         on a screen that is the point of the screen.
  *   none  a ground with no edge, for a region that sits inside another.
@@ -47,12 +49,13 @@ export const panelVariants = cva('relative min-w-0 rounded-none', {
       oro: 'bg-oro text-on-oro [--ink-2:var(--on-oro)] [--ink-muted:var(--on-oro)]',
     },
     /**
-     * `cut` (default) is the ink keyline; `band` reveals a band of `band`'s
+     * `cut` (default) is the ink keyline, or the decorative keyline when the
+     * panel sits inside another framed container; `band` reveals a band of `band`'s
      * colour between two keylines, for the one panel that is the point of the
      * screen; `none` for a ground inside another.
      */
     edge: {
-      cut: 'shadow-cut',
+      cut: 'cut-frame',
       band: 'cut-band',
       none: '',
     },
@@ -103,6 +106,9 @@ export function Panel({ as: Tag = 'div', className, layer: layerProp, tone, edge
     <Tag
       data-slot="panel"
       data-layer={layer}
+      // Read by `cut-frame` (cloth.css): a frame inside an edged Panel is
+      // nested and draws a keyline, one inside an edgeless one is not.
+      data-edge={edge ?? 'cut'}
       // Kept beside data-layer until the `tone` prop goes, for selectors
       // written against it.
       data-tone={layer}

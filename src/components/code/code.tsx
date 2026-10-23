@@ -135,7 +135,7 @@ export function CodeBlock({
   return (
     <figure
       data-slot="code-block"
-      className={cn('m-0 min-w-0 rounded-none bg-cloth-pale shadow-cut', className)}
+      className={cn('m-0 min-w-0 rounded-none bg-cloth-pale cut-frame nested:bg-cloth', className)}
       {...props}
     >
       <figcaption className="flex min-h-(--control-h-sm) items-center gap-3 bg-cloth-shade py-1 pe-1 ps-3 rule-b">
@@ -172,13 +172,13 @@ export function CodeBlock({
       <div
         ref={edgeRef}
         dir="ltr"
-        className="flex overflow-auto scroll-cloth scroll-edge [--code-lh:calc(var(--text-xs)*1.7)]"
+        className="flex overflow-auto bg-inherit scroll-cloth scroll-edge [--code-lh:calc(var(--text-xs)*1.7)]"
         style={maxHeight ? { maxHeight } : undefined}
       >
         {lineNumbers ? (
           <div
             aria-hidden
-            className="sticky inset-s-0 shrink-0 bg-cloth-pale px-3 py-3 text-end font-ui text-xs leading-(--code-lh) text-ink-muted tabular select-none rule-e-soft"
+            className="sticky inset-s-0 shrink-0 bg-inherit px-3 py-3 text-end font-ui text-xs leading-(--code-lh) text-ink-muted tabular select-none rule-e-soft"
           >
             {lines.map((_, i) => (
               <div key={i}>{i + 1}</div>

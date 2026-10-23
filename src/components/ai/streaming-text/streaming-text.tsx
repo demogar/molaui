@@ -177,7 +177,7 @@ const BlockView = React.memo(function BlockView({
       )
     case 'pre':
       return (
-        <pre ref={edgeRef} className="m-0 overflow-x-auto bg-cloth-shade px-3 py-2.5 text-ink shadow-cut scroll-cloth scroll-edge">
+        <pre ref={edgeRef} className="m-0 overflow-x-auto bg-cloth-shade px-3 py-2.5 text-ink cut-frame scroll-cloth scroll-edge">
           <code className="literal text-sm leading-reading">
             {block.text}
             {caret}

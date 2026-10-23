@@ -88,7 +88,10 @@ because keyboard direction is read from context.
    `shadow-overlay`), never `border`. `border-keyline` is only for decorative dividers. Don't use
    arbitrary `shadow-[…]` or an `rtl:` twin: one-sided edges have names (`rule-b`, `cut-t`,
    `bar-start-ink`, `cut-anil`, `focus-ring`) that flip for right-to-left and keep an edge in
-   forced-colours mode.
+   forced-colours mode. **One cut per nesting level:** a container you frame yourself (a card,
+   a section) takes `cut-frame`, not `shadow-cut`, so inside another framed container (a
+   `Panel`, an `AgentRun`, a framed table) it draws the decorative keyline instead of a second
+   ink cut; add `nested:bg-cloth` to step its ground down to the page. Controls keep their cut.
 2. **No radius.** No `rounded-*` except `rounded-full` on something that really is a dot.
 3. **State is glyph + word + colour**, never colour alone. Use `Badge`, `StatusDot`, `RunStatus`
    or `Callout`, which already do this, rather than a coloured `<span>`.
@@ -211,6 +214,9 @@ Mola utilities:
 
 - `shadow-cut` is a keyline edge; `shadow-floating` is the keyline plus a popup's elevation, and
   `shadow-overlay` the keyline plus a dialog's.
+- `cut-frame` is a container's frame: the ink cut on its own, the decorative keyline inside
+  another frame. `nested:` applies a class only to a frame that sits inside another
+  (`bg-cloth-pale cut-frame nested:bg-cloth`).
 - `cut-band band-accent` is a revealed band on hover; `band-danger` on something destructive.
 - `rule-t`/`rule-b`/`rule-s`/`rule-e` draw a decorative keyline on one side, `cut-t`… the ink cut
   on one side, `bar-start-<colour>` the current item's bar. Sides add up: `cut-t cut-b`.

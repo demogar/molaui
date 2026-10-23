@@ -79,7 +79,7 @@ export function Table({
         aria-labelledby={overflows ? props['aria-labelledby'] : undefined}
         className={cn(
           'relative w-full overflow-auto scroll-cloth scroll-edge',
-          framed && 'bg-cloth-pale shadow-cut',
+          framed && 'bg-cloth-pale cut-frame',
           'focus-visible:focus-ring',
           frameClassName,
         )}

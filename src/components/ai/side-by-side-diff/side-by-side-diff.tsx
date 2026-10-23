@@ -116,7 +116,7 @@ export function SideBySideDiff({
       aria-labelledby={headingId}
       // `@container` so the panes follow the space the diff has, not the
       // viewport: a diff in a side panel on a wide screen is still narrow.
-      className={cn('@container bg-cloth-pale shadow-cut forced-colors:p-px', className)}
+      className={cn('@container bg-cloth-pale cut-frame forced-colors:p-px', className)}
       {...props}
     >
       <header className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-keyline px-3 py-2.5">

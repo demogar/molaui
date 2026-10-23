@@ -74,7 +74,7 @@ export function Stat({ label, value, unit, delta, trend, hint, messages, classNa
       data-slot="stat"
       className={cn(
         'flex min-w-0 flex-col gap-2 p-4',
-        !inGroup && 'bg-cloth-pale shadow-cut',
+        !inGroup && 'bg-cloth-pale cut-frame nested:bg-cloth',
         className,
       )}
       {...props}

@@ -190,7 +190,7 @@ export function AgentFormScreen({ loading = false, canEdit = true, defaultValida
     }, saveDelay)
   }
 
-  const card = 'grid max-w-2xl grid-cols-1 gap-0 bg-cloth-pale shadow-cut'
+  const card = 'grid max-w-2xl grid-cols-1 gap-0 bg-cloth-pale cut-frame'
 
   if (loading || !canEdit) {
     return (

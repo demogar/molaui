@@ -1438,6 +1438,10 @@ export const USAGE: Record<string, Usage> = {
         do: 'Keep edge band to one panel per screen.',
         dont: 'Band every card on the page.',
       },
+      {
+        do: 'Let a panel inside another framed container draw the keyline: one cut per nesting level, which edge cut does by itself.',
+        dont: 'Frame a box inside a panel with shadow-cut; two identical ink frames, nested, cannot be told apart.',
+      },
     ],
     content: ['Title a panel by what it holds, “Weekly digest agent”, not “Details” or “Info”.'],
   },
