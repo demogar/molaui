@@ -2704,7 +2704,7 @@
         "value": 11,
         "unit": "px"
       },
-      "$description": "type scale: label caps, set expanded and tracked."
+      "$description": "type scale: the rótulo's category caps, set expanded and tracked."
     },
     "xs": {
       "$type": "dimension",
@@ -3230,7 +3230,7 @@
           "value": 11,
           "unit": "px"
         },
-        "$description": "type scale: label caps, set expanded and tracked."
+        "$description": "type scale: the rótulo's category caps, set expanded and tracked."
       },
       "text-xs": {
         "$type": "dimension",
@@ -3360,7 +3360,7 @@
           "value": 11,
           "unit": "px"
         },
-        "$description": "type scale: label caps, set expanded and tracked."
+        "$description": "type scale: the rótulo's category caps, set expanded and tracked."
       },
       "text-xs": {
         "$type": "dimension",
@@ -3490,7 +3490,7 @@
           "value": 11,
           "unit": "px"
         },
-        "$description": "type scale: label caps, set expanded and tracked."
+        "$description": "type scale: the rótulo's category caps, set expanded and tracked."
       },
       "text-xs": {
         "$type": "dimension",

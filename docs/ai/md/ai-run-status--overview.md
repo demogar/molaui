@@ -67,7 +67,7 @@ Glyph + word + colour, always all three. State is never carried by colour alone:
 | `endedAt` | `number \| Date` |  | When it ended. Freezes the clock; omit while the work is open. |
 | `label` | `string` |  | Override the word — e.g. "Thinking" for a running reasoning step. The glyph stays. |
 | `messages` | `MessagesOverride<RunStatusMessages>` |  | Words for translation: the word for each status. Keys left out come from `MessagesProvider`, then English. |
-| `register` | `"inline" \| "label"` | `label` | `label`: the rótulo register, for headers. `inline`: sentence case, for rows and running text. |
+| `register` | `"inline" \| "label"` | `label` | `label`: the compact header form, semibold at the small size, for a step or a panel header. `inline`: regular weight at the text size, for rows and running text. Both are sentence case: a status is a word a person reads. |
 | `startedAt` | `number \| Date` |  | When the work started. With it, an elapsed clock follows the label. |
 
 `className`, `ref`, `id` and the other DOM props go to `<span data-slot="run-status">`.

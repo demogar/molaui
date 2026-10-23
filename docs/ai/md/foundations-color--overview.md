@@ -65,7 +65,7 @@ ink ramp stays legal on every wash**.
 A layer says what a thing is made of; a role says what it means. Components use the role, so the
 meaning is in the code and an app can re-dye a role without repainting a layer. **On a product
 screen rojo is used only through the danger role**: a red rótulo band, list marker or agent name
-beside a red FAILED mark made the failure one red thing among several
+beside a red Failed mark made the failure one red thing among several
 ([ADR 0008](https://demogar.github.io/molaui/?path=/docs/decisions-0008-the-rojo-register--overview)). The
 editorial accent (rojo links and list markers in `Prose`) is the one exception, and a test holds
 the components to it.
