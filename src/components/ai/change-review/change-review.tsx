@@ -134,7 +134,7 @@ export function ChangeReview({
       data-slot="change-review"
       data-decision={decision?.status ?? 'pending'}
       aria-labelledby={headingId}
-      className={cn('flex flex-col bg-cloth-pale shadow-cut forced-colors:p-px', className)}
+      className={cn('flex flex-col bg-cloth-pale cut-frame nested:bg-cloth forced-colors:p-px', className)}
       {...props}
     >
       <header className="flex flex-col gap-2 border-b border-keyline p-4">
@@ -296,7 +296,7 @@ export function FieldChanges({ title, changes, headingLevel = 4, messages, class
     <section
       data-slot="field-changes"
       aria-labelledby={headingId}
-      className={cn('bg-cloth-pale shadow-cut forced-colors:p-px', className)}
+      className={cn('bg-cloth-pale cut-frame nested:bg-cloth forced-colors:p-px', className)}
       {...props}
     >
       <header className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-b border-keyline px-3 py-2.5">

@@ -176,6 +176,8 @@
  *                                     decorative ring
  *   cut-tab                           the active tab: three sides, open
  *                                     toward its panel
+ *   cut-frame                         a container's frame: the cut, or a
+ *                                     keyline inside another frame
  *   cut-gap                           a cut with a cloth gap outside it, for
  *                                     shapes that overlap (an avatar stack)
  *   keycap                            a key's edge and its foot
@@ -394,6 +396,51 @@
 @utility cut-press {
   --edge-ring: inset 0 0 0 var(--cut-w) var(--ink);
   box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  @media (forced-colors: active) {
+    outline: 1px solid CanvasText !important;
+    outline-offset: -1px !important;
+  }
+}
+/* ── one cut per nesting level ────────────────────────────────────────
+ * A container's frame: the ink cut where it stands on the page, a decorative
+ * keyline where it sits inside another framed container.
+ *
+ * An agent run held a tool call, which held two code blocks, and all three
+ * drew the same 1.5px ink cut on the same raised ground. Three identical
+ * frames, nested, and the eye could not tell which edge belonged to which
+ * object; the code being inspected, innermost, had the weakest claim to its
+ * own edge. The cut is the edge of something a pointer can touch, and a
+ * panel inside a panel is not a control: the outer one already is the cut
+ * region. So the outermost frame keeps the cut, and every frame inside it
+ * draws `--keyline` (decorative, ~1.5:1) instead. A container whose ground
+ * would equal its parent's also steps down to the page's ground with the
+ * `nested:` variant (`bg-cloth-pale nested:bg-cloth`), so the inner object
+ * reads as set into the outer one, not stacked on it.
+ *
+ * It needs nothing from the caller: the outer container is recognised by its
+ * own class (or a Panel with an edge), not by a prop or a context, so a code
+ * block a consumer drops into their own Panel follows the rule, and a dialog
+ * portaled out of a run does not inherit it (DOM ancestry, not React's).
+ * A React context was the other candidate; it follows the component tree, so
+ * a portaled popup would have counted as nested. Floating surfaces (dialog,
+ * popover, drawer) are not frames here: their elevation already separates
+ * them from what they hold.
+ *
+ * Interactive edges are not frames and keep the cut wherever they are:
+ * buttons, inputs, a tool call's own trigger, a source card. Not focusable,
+ * so no focused form; a focusable frame (a scrolling table) adds
+ * `focus-visible:focus-ring`, which has its own slot. */
+@custom-variant nested {
+  :where(.cut-frame, [data-slot='panel']:not([data-edge='none'])) & {
+    @slot;
+  }
+}
+@utility cut-frame {
+  --edge-ring: 0 0 0 var(--cut-w) var(--ink);
+  box-shadow: var(--edge-focus), var(--edge-ring), var(--edge-s), var(--edge-e), var(--edge-t), var(--edge-b);
+  :where(.cut-frame, [data-slot='panel']:not([data-edge='none'])) & {
+    --edge-ring: 0 0 0 var(--rule-w) var(--keyline);
+  }
   @media (forced-colors: active) {
     outline: 1px solid CanvasText !important;
     outline-offset: -1px !important;

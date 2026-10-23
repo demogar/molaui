@@ -76,6 +76,10 @@
     {
       "rule": "Every component takes `ref`, `id`, `data-*` and the other DOM props of the element it documents. `className` and `style` style the box you see (the element with the cut); `ref` and the rest go to the control you focus. A wrapper around a label has `wrapperClassName`.",
       "why": "A `className` that moved to another element when a `label` was added changed meaning silently."
+    },
+    {
+      "rule": "One cut per nesting level. A container you frame yourself (a card, a section, a group of results) uses `cut-frame`, not `shadow-cut`: inside another framed container (a Panel, an AgentRun, a framed table) it draws the decorative keyline instead of a second ink cut, and `nested:bg-cloth` steps its ground down to the page. Controls keep their cut wherever they sit.",
+      "why": "Three identical ink frames nested inside each other (a run, a tool call, a code block) cannot be told apart: the eye cannot say which edge belongs to which object. The cut marks what a pointer can touch, and the outer container already is the cut region."
     }
   ],
   "phases": {
@@ -16301,6 +16305,10 @@
           {
             "do": "Keep edge band to one panel per screen.",
             "dont": "Band every card on the page."
+          },
+          {
+            "do": "Let a panel inside another framed container draw the keyline: one cut per nesting level, which edge cut does by itself.",
+            "dont": "Frame a box inside a panel with shadow-cut; two identical ink frames, nested, cannot be told apart."
           }
         ],
         "content": [
@@ -16382,7 +16390,7 @@
               "name": "edge",
               "type": "\"cut\" | \"band\" | \"none\"",
               "required": false,
-              "description": "`cut` (default) is the ink keyline; `band` reveals a band of `band`'s colour between two keylines, for the one panel that is the point of the screen; `none` for a ground inside another."
+              "description": "`cut` (default) is the ink keyline, or the decorative keyline when the panel sits inside another framed container; `band` reveals a band of `band`'s colour between two keylines, for the one panel that is the point of the screen; `none` for a ground inside another."
             },
             {
               "name": "layer",

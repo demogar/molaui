@@ -38,6 +38,7 @@ saw. The named edges carry their own right-to-left form.
 | `cut-t` `cut-b` `cut-s` `cut-e` | The blade edge on one side: a table header's foot, an app bar, segments | `--cut-w`, 1.5px |
 | `bar-start-<colour>` `bar-bottom-<colour>` | The current item, or a region a status owns | `--bar-w`, 3px |
 | `cut-<colour>` | A keyline all the way round in a colour: an outline badge, a thumb | `--cut-w` |
+| `cut-frame` | A container's frame: the cut on its own, the decorative keyline inside another frame (see below) | `--cut-w`, or `--rule-w` nested |
 | `cut-thin` `rule-ring` | A 1px ink ring for a mark too small for the cut; a 1px decorative ring | `--rule-w` |
 | `focus-ring` `focus-ring-inset` | The focus ring, as an edge, so it adds to the others | |
 
@@ -45,6 +46,29 @@ saw. The named edges carry their own right-to-left form.
 different sides add up (`cut-t cut-b`, `bar-start-ink rule-b-soft`) and a focused current item keeps
 its bar while the ring is drawn. In forced colours a ring comes back as an outline and a one-sided
 edge as a border on the same side.
+
+> Not included in the Markdown version: an interactive `Specimen` block. See it on the page: https://demogar.github.io/molaui/?path=/docs/foundations-the-cut--overview
+
+## One cut per nesting level
+
+The cut is the edge of something a pointer can touch, and a container is the region that edge
+bounds. Put a framed container inside another and draw both with the cut, and the screen gets
+frames inside frames of the same ink and weight: an agent run holding a tool call holding a
+code block was three identical 1.5px edges, and the eye could not tell which belonged to which.
+The code being inspected, innermost, had the weakest claim to its own edge.
+
+So the outermost container keeps the cut, and every container inside it draws the decorative
+keyline instead. A container whose ground would equal its parent's steps down to the page's
+ground as well, so it reads as set into the outer one rather than stacked on it. `cut-frame` does
+this by itself: it recognises the frame around it (another `cut-frame`, or a `Panel` with an
+edge) from the page, so nothing has to be passed down, and a dialog portaled out of a run is not
+nested. `nested:` applies a class only to a frame inside another, which is how the ground steps
+down: `bg-cloth-pale cut-frame nested:bg-cloth`.
+
+`AgentRun`, `ToolCall`, `CodeBlock`, `ChangeReview`, `FileDiff`, `SideBySideDiff`, a standalone
+`Stat`, a framed `Table` and `Panel` frame themselves this way. Controls are not containers: a
+button, a field, a tool call's own header and a source card keep the cut wherever they sit.
+Popups keep it too, since their elevation already separates them from what they cover.
 
 > Not included in the Markdown version: an interactive `Specimen` block. See it on the page: https://demogar.github.io/molaui/?path=/docs/foundations-the-cut--overview
 

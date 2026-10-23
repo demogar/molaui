@@ -134,8 +134,10 @@ function RunsPage() {
           <Stat label="Spend today" value="$142.08" hint="Budget $400 / day" />
         </StatGroup>
 
-        <div className="flex flex-col gap-2">
-          <Toolbar aria-label="Filter runs" variant="panel">
+        {/* The filters belong to the table, so they are its toolbar, inside
+            its frame, not a second framed box above it: one cut per object. */}
+        <div className="bg-cloth-pale cut-frame">
+          <Toolbar aria-label="Filter runs" className="p-1 rule-b">
             <ToolbarGroup>
               <ToolbarButton icon={<SlidersHorizontal />}>Status: any</ToolbarButton>
               <ToolbarButton>Agent: any</ToolbarButton>
@@ -155,7 +157,6 @@ function RunsPage() {
             rowLabel={(r) => `Select ${r.id}`}
             selectable
             defaultSort={{ key: 'startedAt', direction: 'descending' }}
-            framed
             className="min-w-[48rem]"
           />
         </div>

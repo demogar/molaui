@@ -539,7 +539,7 @@ function SettingsSkeleton() {
             <Skeleton shape="text" className="h-5 w-2/3" />
             <SkeletonText lines={2} className="text-sm" />
           </div>
-          <div className="flex flex-col gap-5 bg-cloth-pale p-5 shadow-cut">
+          <div className="flex flex-col gap-5 bg-cloth-pale p-5 cut-frame">
             {Array.from({ length: rows }, (_, j) => (
               <div key={j} className="flex flex-col gap-2">
                 <Skeleton shape="text" className="w-1/4 text-sm" />
@@ -651,7 +651,7 @@ function SettingsSection({
         </Heading>
         <p className="mt-1.5 mb-0 text-sm text-ink-2">{description}</p>
       </div>
-      <div className="min-w-0 bg-cloth-pale shadow-cut">
+      <div className="min-w-0 bg-cloth-pale cut-frame">
         {danger ? <div aria-hidden className="relleno h-2 band-danger" /> : null}
         <div className="flex flex-col gap-5 p-5">{children}</div>
       </div>

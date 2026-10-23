@@ -121,7 +121,7 @@ export function FileDiff({
       aria-labelledby={headingId}
       // `@container` so the split layout follows the space the diff has, not
       // the viewport: a diff in a 400px side panel on a wide screen is still narrow.
-      className={cn('@container bg-cloth-pale shadow-cut forced-colors:p-px', className)}
+      className={cn('@container bg-cloth-pale cut-frame nested:bg-cloth forced-colors:p-px', className)}
       {...props}
     >
       <header className="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-b border-keyline px-3 py-2.5">

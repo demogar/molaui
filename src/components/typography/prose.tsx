@@ -58,7 +58,7 @@ export function Prose({ size = 'md', fluid = false, className, ...props }: Prose
         '[&_ol>li]:marker:font-ui [&_ol>li]:marker:tabular [&_ol>li]:marker:text-[0.85em]',
         '[&_blockquote]:border-s-(length:--bar-w) [&_blockquote]:border-oro [&_blockquote]:ps-4 [&_blockquote]:italic [&_blockquote]:text-ink-2',
         '[&_:not(pre)>code]:literal [&_:not(pre)>code]:text-[0.78em] [&_:not(pre)>code]:bg-ink-soft [&_:not(pre)>code]:px-[0.3em] [&_:not(pre)>code]:py-[0.1em]',
-        '[&_pre]:literal [&_pre]:overflow-x-auto [&_pre]:bg-cloth-shade [&_pre]:p-3 [&_pre]:text-[0.8em] [&_pre]:leading-reading [&_pre]:shadow-cut',
+        '[&_pre]:literal [&_pre]:overflow-x-auto [&_pre]:bg-cloth-shade [&_pre]:p-3 [&_pre]:text-[0.8em] [&_pre]:leading-reading [&_pre]:cut-frame',
         '[&_hr]:my-[1.5em] [&_hr]:h-px [&_hr]:border-0 [&_hr]:bg-keyline',
         className,
       )}

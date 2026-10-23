@@ -287,7 +287,7 @@ export function RunsAdminScreen({
             You can search, select and export. Ask {ADMINS.join(' or ')} if a run needs cancelling.
           </Callout>
         )}
-        <section aria-label="Filter runs" className="bg-cloth-pale shadow-cut">
+        <section aria-label="Filter runs" className="bg-cloth-pale cut-frame">
           <div role="search" aria-label="Runs" className="grid gap-3 p-3 sm:grid-cols-2 lg:grid-cols-[minmax(14rem,1fr)_14rem_17rem]">
             <Field label="Search">
               {(control) => (

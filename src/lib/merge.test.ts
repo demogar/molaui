@@ -41,7 +41,7 @@ const COLORS = [...theme.matchAll(/--color-([a-z0-9-]+):/g)].map((m) => m[1]!)
 /** The edge slots of cloth.css, one group per side; an edge and a shadow replace each other. */
 const EDGES = {
   'edge-focus': ['focus-ring', 'focus-ring-inset'],
-  'edge-ring': [{ cut: [...COLORS, 'current', 'thin', 'press', 'tab', 'gap'] }, 'rule-ring', 'keycap'],
+  'edge-ring': [{ cut: [...COLORS, 'current', 'thin', 'press', 'tab', 'gap', 'frame'] }, 'rule-ring', 'keycap'],
   'edge-s': [{ 'bar-start': COLORS }, 'rule-s', 'rule-s-soft', 'cut-s'],
   'edge-e': ['rule-e', 'rule-e-soft', 'cut-e'],
   'edge-t': ['rule-t', 'rule-t-soft', 'cut-t'],
