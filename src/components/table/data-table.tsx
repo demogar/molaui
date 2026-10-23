@@ -344,7 +344,7 @@ const STACK = {
   row: '@max-xl/data-table:grid @max-xl/data-table:grid-cols-[auto_minmax(0,1fr)] @max-xl/data-table:grid-flow-row-dense @max-xl/data-table:py-1.5 @max-xl/data-table:rule-b-soft @max-xl/data-table:[&>td]:[--edge-b:0_0_transparent] @max-xl/data-table:data-selected:bg-selected @max-xl/data-table:data-selected:bar-start-ink',
   lead: '@max-xl/data-table:col-start-1 @max-xl/data-table:h-auto @max-xl/data-table:py-1',
   cell: '@max-xl/data-table:col-start-2 @max-xl/data-table:flex @max-xl/data-table:h-auto @max-xl/data-table:max-w-none @max-xl/data-table:items-center @max-xl/data-table:justify-between @max-xl/data-table:gap-4 @max-xl/data-table:py-1',
-  label: 'hidden shrink-0 rotulo text-start text-ink-2 @max-xl/data-table:block',
+  label: 'hidden shrink-0 etiqueta text-xs text-start text-ink-2 @max-xl/data-table:block',
   detail: '@max-xl/data-table:block',
   unfreeze: '@max-xl/data-table:static @max-xl/data-table:[--edge-e:0_0_transparent]',
   hidden: '@max-xl/data-table:hidden',

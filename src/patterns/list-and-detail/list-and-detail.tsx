@@ -86,6 +86,14 @@ const RUN_TONE: Record<RecentRunStatus, BadgeTone> = {
   cancelled: 'neutral',
 }
 
+/** The status word as a person reads it. The badge shows it as written, so it is written in sentence case here. */
+const RUN_LABEL: Record<RecentRunStatus, string> = {
+  succeeded: 'Succeeded',
+  running: 'Running',
+  failed: 'Failed',
+  cancelled: 'Cancelled',
+}
+
 const integer = new Intl.NumberFormat('en-US')
 const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
 const day = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeZone: 'UTC' })
@@ -489,7 +497,7 @@ function AgentDetail({
                   <TableCell className="literal text-ink-2">{run.id}</TableCell>
                   <TableCell>
                     <Badge tone={RUN_TONE[run.status]} dot pulse={run.status === 'running'}>
-                      {run.status}
+                      {RUN_LABEL[run.status]}
                     </Badge>
                   </TableCell>
                   <TableCell numeric className="@max-sm/detail:hidden">

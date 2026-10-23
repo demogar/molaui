@@ -42,10 +42,10 @@ export function BreakpointTable() {
         <caption className="sr-only">Viewport breakpoints, read from theme.css</caption>
         <thead>
           <tr className="bg-cloth-shade">
-            <th scope="col" className="rotulo p-3 text-start">Variant</th>
-            <th scope="col" className="rotulo p-3 text-end">From</th>
-            <th scope="col" className="rotulo p-3 text-start">What changes there</th>
-            <th scope="col" className="rotulo p-3 text-start">Components that use it</th>
+            <th scope="col" className="etiqueta text-xs p-3 text-start">Variant</th>
+            <th scope="col" className="etiqueta text-xs p-3 text-end">From</th>
+            <th scope="col" className="etiqueta text-xs p-3 text-start">What changes there</th>
+            <th scope="col" className="etiqueta text-xs p-3 text-start">Components that use it</th>
           </tr>
         </thead>
         <tbody>
@@ -79,9 +79,9 @@ export function ContainerTable() {
         <caption className="sr-only">Container steps, read from theme.css: the widths and the container queries</caption>
         <thead>
           <tr className="bg-cloth-shade">
-            <th scope="col" className="rotulo p-3 text-start">Step</th>
-            <th scope="col" className="rotulo p-3 text-end">Width</th>
-            <th scope="col" className="rotulo p-3 text-start">Utilities</th>
+            <th scope="col" className="etiqueta text-xs p-3 text-start">Step</th>
+            <th scope="col" className="etiqueta text-xs p-3 text-end">Width</th>
+            <th scope="col" className="etiqueta text-xs p-3 text-start">Utilities</th>
           </tr>
         </thead>
         <tbody>

@@ -119,7 +119,7 @@ export function RadioGroup({
   const descriptionId = description ? `${uid}-description` : undefined
   return (
     <div data-slot="radio-group-field" className={cn('flex flex-col', className)}>
-      <span id={labelId} className="mb-3 rotulo text-ink-2">
+      <span id={labelId} className="mb-3 etiqueta text-sm text-ink-2">
         {label}
       </span>
       {description ? (

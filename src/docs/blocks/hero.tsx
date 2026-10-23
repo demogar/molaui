@@ -26,7 +26,7 @@ export function Hero() {
             <div key={label} className="m-0">
               <dt className="sr-only">{label}</dt>
               <dd className="m-0 font-display text-3xl font-bold wdth-display text-on-ink-accent tabular">{value}</dd>
-              <dd className="m-0 mt-1 rotulo text-on-ink-muted">{label}</dd>
+              <dd className="m-0 mt-1 etiqueta text-sm text-on-ink-muted">{label}</dd>
             </div>
           ))}
         </dl>

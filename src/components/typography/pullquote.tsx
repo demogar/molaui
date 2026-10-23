@@ -25,7 +25,7 @@ export function Pullquote({ children, cite, className, ...props }: PullquoteProp
       <blockquote className="m-0">
         <p className="m-0 pt-5 font-text text-[clamp(20px,2.2vw,28px)]/snug italic text-ink">{children}</p>
       </blockquote>
-      {cite ? <figcaption className="mt-4 rotulo text-ink-muted">{cite}</figcaption> : null}
+      {cite ? <figcaption className="mt-4 etiqueta text-sm text-ink-muted">{cite}</figcaption> : null}
     </figure>
   )
 }

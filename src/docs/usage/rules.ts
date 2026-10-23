@@ -47,6 +47,10 @@ export const RULES: Rule[] = [
     why: 'A button that names its consequence can be chosen without reading the surrounding text.',
   },
   {
+    rule: 'Capitals (`rotulo`, `Rotulo`) name a category: a section, a group, a step’s kind. A word a person acts on or reads (a button, a status, a column header, a form label) is `etiqueta`, in sentence case. Never type `uppercase` or `tracking-label` yourself.',
+    why: 'When every control is in capitals nothing leads, translators lose control of case, and a button label in wide tracked capitals is 1.6 to 1.7 times as wide, with no room to wrap (ADR 0017).',
+  },
+  {
     rule: 'Unknown duration is the relleno working state, never a spinner; elapsed time counts up instead of a progress bar inventing a percentage.',
     why: 'Model work has no knowable total, and a bar that stalls at 90% is a lie.',
   },
@@ -68,7 +72,7 @@ export const RULES: Rule[] = [
   },
   {
     rule: 'On a product screen, rojo means danger and is used only through the danger role (`bg-danger`, `bg-danger-soft`, `text-ink-danger`, `band-danger`). The accent is gold, by name (`band-accent`).',
-    why: 'A red label band or bullet beside a red FAILED mark makes the failure one red thing among several (ADR 0008).',
+    why: 'A red label band or bullet beside a red Failed mark makes the failure one red thing among several (ADR 0008).',
   },
   {
     rule: 'A screen reflows at 320px: only a region meant to scroll sideways (a table, code, a tab or chip row) may, and it carries the `scroll-edge` utility with `useScrollEdge()` as its ref. Table, Tabs and CodeBlock already do.',

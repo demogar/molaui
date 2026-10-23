@@ -83,7 +83,7 @@
    * density that re-scales a size keeps its rhythm. `2xs` has none on
    * purpose: it is the label size, and the `rotulo` utility sets the label's
    * line height itself. */
-  --text-2xs: 11px; /* label caps, set expanded and tracked */
+  --text-2xs: 11px; /* the rótulo's category caps, set expanded and tracked */
   --text-xs: 12px;
   --text-xs--line-height: calc(1 / 0.75);
   --text-sm: 13px;

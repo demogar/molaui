@@ -15,7 +15,7 @@ const METRICS: { name: string; label: string }[] = [
   { name: '--control-px', label: 'Control padding, inline' },
   { name: '--row-h', label: 'Table row height' },
   { name: '--icon', label: 'Default icon' },
-  { name: '--text-2xs', label: 'Label text' },
+  { name: '--text-2xs', label: 'Category label text' },
   { name: '--text-xs', label: 'Small text' },
   { name: '--text-sm', label: 'Secondary text' },
   { name: '--text-base', label: 'Body text' },
@@ -40,9 +40,9 @@ export function DensityMetrics({ only }: { only?: string[] } = {}) {
         <caption className="sr-only">What each density sets, read from tokens.css</caption>
         <thead>
           <tr className="bg-cloth-shade">
-            <th scope="col" className="rotulo p-3 text-start">Metric</th>
+            <th scope="col" className="etiqueta text-xs p-3 text-start">Metric</th>
             {DENSITIES.map((d) => (
-              <th key={d} scope="col" className="rotulo p-3 text-start">
+              <th key={d} scope="col" className="etiqueta text-xs p-3 text-start">
                 {d}
                 {d === 'comfortable' ? ' (default)' : ''}
               </th>

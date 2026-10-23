@@ -35,26 +35,54 @@ model** speaks to you in Alegreya, and the **machine's literals** are Martian Mo
 | --- | --- | --- | --- |
 | The system | Archivo at the drawn width | `font-ui` (the default) | Labels, controls, navigation, table cells, figures |
 | Headings | Archivo, set wide | `Heading`, or `font-display wdth-display` | Page and section titles, stat values |
-| Labels | Archivo at 116, caps, tracked | `rotulo`, or `Rotulo` | The label above a block, a column header, a status word |
+| Names | Archivo at the drawn width, semibold, as written | `etiqueta` with a `text-*` size | What a person acts on or reads: a button, a status, a column header, a form label, a stat's name |
+| Categories | Archivo at 116, capitals, tracked | `rotulo`, or `Rotulo` | What kind of block, group or step follows: a section label, a menu group, a step's kind |
 | The reader | Alegreya | `Prose`, `Lead`, or `font-text` | Prose a person or a model says to the reader: an answer, a description, a help text |
 | The machine | Martian Mono, narrowed | `literal`, or `Code` | Ids, hashes, code, JSON, tool arguments. Never a label, never a number in a table |
 
 The face says who is speaking. A transcript can be scanned for what the agent said (Alegreya)
 against what it did (Martian Mono) from the type alone.
 
+## Names and categories
+
+Two small registers, and the rule between them is the point: **capitals name a category; they
+never carry a word a person acts on or reads as content.**
+
+The rótulo (`rotulo`) is lettering: wide, tracked capitals that say what kind of thing follows. A
+navigation group, a menu group, a section label, the kind of an agent's step. It is quiet because
+it is rare. When it was also every button, badge and column header, a screen was all lettering
+and nothing on it led.
+
+The name register (`etiqueta`) is everything a person presses or reads: a button's label, a
+status, a column header, a form label, a stat's name, an author. Archivo at its drawn width,
+semibold, untracked, in the case it was written in. It sets no size, because it takes the size of
+what it names. Sentence case also leaves case to the translator and keeps a button no wider than
+its words ([ADR 0017](?path=/docs/decisions-0017-capitals-name-categories--overview)).
+
+<Specimen label="The two registers">
+  <div className="grid gap-4">
+    <p className="m-0 rotulo text-ink-muted">Agents</p>
+    <div className="flex flex-wrap items-center gap-4">
+      <span className="etiqueta text-sm">New run</span>
+      <span className="etiqueta text-xs text-ink-2">Status</span>
+      <span className="etiqueta text-sm text-ink-2">Workspace name</span>
+    </div>
+  </div>
+</Specimen>
+
 ## The width axis
 
 Archivo was chosen for its `wdth` axis, and it is used at three registers. Running text stays at
 the drawn width (100). Display goes wide (118): a heading here is a shape cut to fill its panel,
 and a bold grotesque set tight at normal width is the most common display register of the last
-five years. Labels sit at 116 — at 11px, width is what makes caps read as lettering rather than a
-tracked-out caption.
+five years. Category labels sit at 116 — at 11px, width is what makes capitals read as lettering
+rather than a tracked-out caption. Names stay at 100, because they are read, not lettered.
 
 <Specimen>
   <div className="grid gap-3">
     <p className="m-0 font-display text-2xl font-bold" style={{ fontVariationSettings: "'wdth' 100" }}>wdth 100 — Agent runs</p>
     <p className="m-0 font-display text-2xl font-bold wdth-display">wdth 118 — Agent runs</p>
-    <p className="m-0 rotulo">wdth 116 — label register</p>
+    <p className="m-0 rotulo">wdth 116 — category register</p>
   </div>
 </Specimen>
 
@@ -66,9 +94,9 @@ small end moves with density; the display end does not — a dense tool is dense
 page titles. The line heights are ratios, so a density that changes a size keeps the rhythm.
 
 <Specimen ground="pale">
-  <ScaleRow token="text-2xs" sample="LABEL REGISTER — 11px" className="rotulo" />
-  <ScaleRow token="text-xs" sample="Metadata, captions, table footers" className="text-xs" />
-  <ScaleRow token="text-sm" sample="Table cells, secondary controls" className="text-sm" />
+  <ScaleRow token="text-2xs" sample="Category register — 11px" className="rotulo" />
+  <ScaleRow token="text-xs" sample="Metadata, captions, column headers, badges" className="text-xs" />
+  <ScaleRow token="text-sm" sample="Table cells, buttons, form labels" className="text-sm" />
   <ScaleRow token="text-base" sample="Body copy in the product" className="text-base" />
   <ScaleRow token="text-lg" sample="Lead paragraphs, dialog titles" className="text-lg" />
   <ScaleRow token="text-xl" sample="Section headings" className="text-xl font-semibold wdth-display" />

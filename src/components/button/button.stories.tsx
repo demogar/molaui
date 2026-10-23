@@ -197,7 +197,7 @@ export const States: Story = {
       <TableBody>
         {VARIANTS.map(({ variant, label }) => (
           <TableRow key={variant}>
-            <TableCell className="rotulo text-ink-2">{variant}</TableCell>
+            <TableCell className="etiqueta text-ink-2">{variant}</TableCell>
             {STATES.map((state) => {
               const button = (
                 <Button variant={variant} {...state.props}>

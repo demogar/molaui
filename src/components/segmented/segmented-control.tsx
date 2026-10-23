@@ -109,10 +109,11 @@ export function SegmentedControl<V extends string = string>({
           aria-label={iconOnly && typeof option.label === 'string' ? option.label : undefined}
           title={iconOnly && typeof option.label === 'string' ? option.label : undefined}
           className={cn(
-            'relative inline-flex items-center justify-center gap-2 font-ui font-semibold uppercase leading-none tracking-label wdth-label text-ink-2',
+            // Set like a button (ADR 0017): a segment is a choice a person makes.
+            'relative inline-flex items-center justify-center gap-2 etiqueta leading-none text-ink-2',
             size === 'sm'
-              ? 'px-[calc(var(--control-px)*0.75)] text-2xs'
-              : 'px-(--control-px) text-xs',
+              ? 'px-[calc(var(--control-px)*0.75)] text-xs'
+              : 'px-(--control-px) text-sm',
             iconOnly && 'aspect-square px-0',
             // Segments give way before the page does: a long label truncates
             // rather than pushing the control past a phone's edge. Filled

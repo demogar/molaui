@@ -52,7 +52,7 @@ export function Label({
     <label
       data-slot="label"
       className={cn(
-        'block rotulo text-ink-2',
+        'block etiqueta text-sm leading-snug text-ink-2',
         required && "after:ms-0.5 after:text-ink after:content-['*'_/_'']",
         className,
       )}
@@ -62,7 +62,7 @@ export function Label({
       {optional ? (
         <>
           {' '}
-          <span className="ms-1.5 rotulo font-medium tracking-figures text-ink-muted normal-case">
+          <span className="ms-1.5 font-normal text-ink-muted">
             {t.optional}
           </span>
         </>

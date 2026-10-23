@@ -47,9 +47,9 @@ export const AllStatuses: Story = {
       <table className="border-collapse text-start">
         <thead>
           <tr className="border-b border-ink">
-            <th className="rotulo py-2 pe-8 font-semibold text-ink-2">Status</th>
-            <th className="rotulo py-2 pe-8 font-semibold text-ink-2">Label register</th>
-            <th className="rotulo py-2 font-semibold text-ink-2">Inline register</th>
+            <th className="etiqueta text-xs py-2 pe-8 font-semibold text-ink-2">Status</th>
+            <th className="etiqueta text-xs py-2 pe-8 font-semibold text-ink-2">Label register</th>
+            <th className="etiqueta text-xs py-2 font-semibold text-ink-2">Inline register</th>
           </tr>
         </thead>
         <tbody>

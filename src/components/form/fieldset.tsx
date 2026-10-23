@@ -71,7 +71,7 @@ export function Fieldset({
       data-slot="fieldset"
       className={cn('m-0 flex min-w-0 flex-col gap-3 border-0 p-0', className)}
     >
-      <FieldsetPrimitive.Legend className={cn('p-0 rotulo', disabled ? 'text-ink-muted' : 'text-ink-2')}>
+      <FieldsetPrimitive.Legend className={cn('p-0 etiqueta text-sm', disabled ? 'text-ink-muted' : 'text-ink-2')}>
         {legend}
       </FieldsetPrimitive.Legend>
       {description ? (

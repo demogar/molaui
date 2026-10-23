@@ -89,10 +89,10 @@ export function PatternGuide({ title }: { title: string }) {
         <table className="w-full border-collapse">
           <thead>
             <tr>
-              <th scope="col" className={`${cell} w-1/4 rotulo text-ink-muted`}>
+              <th scope="col" className={`${cell} w-1/4 etiqueta text-xs text-ink-muted`}>
                 Component
               </th>
-              <th scope="col" className={`${cell} rotulo text-ink-muted`}>
+              <th scope="col" className={`${cell} etiqueta text-xs text-ink-muted`}>
                 Its job here
               </th>
             </tr>
@@ -117,13 +117,13 @@ export function PatternGuide({ title }: { title: string }) {
         <table className="w-full border-collapse">
           <thead>
             <tr>
-              <th scope="col" className={`${cell} w-1/4 rotulo text-ink-muted`}>
+              <th scope="col" className={`${cell} w-1/4 etiqueta text-xs text-ink-muted`}>
                 State
               </th>
-              <th scope="col" className={`${cell} w-1/5 rotulo text-ink-muted`}>
+              <th scope="col" className={`${cell} w-1/5 etiqueta text-xs text-ink-muted`}>
                 Where
               </th>
-              <th scope="col" className={`${cell} rotulo text-ink-muted`}>
+              <th scope="col" className={`${cell} etiqueta text-xs text-ink-muted`}>
                 What the screen does
               </th>
             </tr>

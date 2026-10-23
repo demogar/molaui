@@ -25,10 +25,10 @@ export function SeriesTable() {
         </caption>
         <thead>
           <tr className="bg-cloth-shade">
-            <th scope="col" className="rotulo p-3 text-start">Series</th>
-            <th scope="col" className="rotulo p-3 text-end">Light</th>
-            <th scope="col" className="rotulo p-3 text-end">Dark</th>
-            <th scope="col" className="rotulo p-3 text-start">When</th>
+            <th scope="col" className="etiqueta text-xs p-3 text-start">Series</th>
+            <th scope="col" className="etiqueta text-xs p-3 text-end">Light</th>
+            <th scope="col" className="etiqueta text-xs p-3 text-end">Dark</th>
+            <th scope="col" className="etiqueta text-xs p-3 text-start">When</th>
           </tr>
         </thead>
         <tbody>

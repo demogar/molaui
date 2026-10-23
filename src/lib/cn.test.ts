@@ -48,7 +48,6 @@ describe('Mola’s own utilities', () => {
 
   /** The utilities that set something no other class sets, so there is nothing for them to replace. */
   const STANDS_ALONE: Record<string, string> = {
-    rotulo: 'the whole label register at once: family, size, weight, width, tracking, case',
     'display-cut': 'a text-shadow; nothing else in the system sets one',
     'forced-focus': 'an outline under forced colours only',
     'scroll-cloth': 'the scrollbar colours; nothing else sets them',
@@ -72,6 +71,7 @@ describe('Mola’s own utilities', () => {
     expect(cn('relleno', 'relleno-working')).toBe('relleno-working')
     expect(cn('forced-ink', 'forced-selected')).toBe('forced-selected')
     expect(cn('wdth-display', 'wdth-label')).toBe('wdth-label')
+    expect(cn('rotulo', 'etiqueta')).toBe('etiqueta')
   })
 
   it('adds edges on different sides and replaces one on the same side', () => {

@@ -70,7 +70,7 @@ export function SummaryStatus({ page }: { page: PageData }) {
     <section data-summary className="sb-unstyled not-prose my-6 grid gap-3 font-ui text-sm text-ink">
       <p className="m-0 font-text text-lg leading-snug text-ink">{page.usage.summary}</p>
       <p className="m-0 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-ink-2">
-        <span className="rotulo text-ink-muted">Status</span>
+        <span className="etiqueta text-ink-muted">Status</span>
         <PhaseBadge phase={phase} />
         <span>
           {PHASES[phase].promise}{' '}
@@ -180,10 +180,10 @@ export function AccessibilitySection({ page }: { page: PageData }) {
           <table className="w-full border-collapse">
             <thead>
               <tr>
-                <th scope="col" className={`${cell} w-2/5 rotulo text-ink-muted`}>
+                <th scope="col" className={`${cell} w-2/5 etiqueta text-xs text-ink-muted`}>
                   Key
                 </th>
-                <th scope="col" className={`${cell} rotulo text-ink-muted`}>
+                <th scope="col" className={`${cell} etiqueta text-xs text-ink-muted`}>
                   What happens
                 </th>
               </tr>

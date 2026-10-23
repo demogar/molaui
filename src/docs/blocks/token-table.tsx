@@ -77,11 +77,11 @@ export function TokenTable({ rows = ROWS }: { rows?: TokenRow[] }) {
           <caption className="sr-only">Design tokens in tokens.css, with role and the value in each theme</caption>
           <thead>
             <tr className="bg-cloth-shade">
-              <th scope="col" className="rotulo p-3 text-start">Token</th>
-              <th scope="col" className="rotulo p-3 text-start">Role</th>
-              <th scope="col" className="rotulo p-3 text-start">Light</th>
-              <th scope="col" className="rotulo p-3 text-start">Dark</th>
-              <th scope="col" className="rotulo p-3 text-start">
+              <th scope="col" className="etiqueta text-xs p-3 text-start">Token</th>
+              <th scope="col" className="etiqueta text-xs p-3 text-start">Role</th>
+              <th scope="col" className="etiqueta text-xs p-3 text-start">Light</th>
+              <th scope="col" className="etiqueta text-xs p-3 text-start">Dark</th>
+              <th scope="col" className="etiqueta text-xs p-3 text-start">
                 <span className="sr-only">Copy</span>
               </th>
             </tr>

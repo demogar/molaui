@@ -67,8 +67,8 @@ const termVariants = cva('m-0', {
   variants: {
     layout: {
       inline: 'shrink-0 text-sm text-ink-2',
-      stacked: 'rotulo pt-[0.3em] text-ink-muted',
-      grid: 'rotulo text-ink-muted',
+      stacked: 'etiqueta text-sm text-ink-muted',
+      grid: 'etiqueta text-sm text-ink-muted',
     },
   },
 })

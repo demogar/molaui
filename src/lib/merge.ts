@@ -33,7 +33,10 @@
  * Mola's own utilities (cloth.css) are at the end of the table, each in the
  * group of what it sets: `cn('band-oro', 'band-danger')`, `cn('cut',
  * 'cut-band')` and `cn('on-ink', 'on-layer')` used to keep both classes and
- * leave the winner to the order of the stylesheet. The edge utilities are one
+ * leave the winner to the order of the stylesheet. The two text registers,
+ * `rotulo` and `etiqueta`, are one group, so `className="rotulo"` on a badge
+ * replaces its register instead of racing it (both set case and tracking).
+ * The edge utilities are one
  * group per side, a slot each (see "edges" in cloth.css): `cut-t cut-b` adds
  * up, `rule-b cut-b` keeps the second, and since every edge writes the whole
  * `box-shadow`, an edge and a `shadow-*` replace each other.
@@ -271,6 +274,7 @@ band: oro|rojo|anil|verde|ink|cloth|accent|danger|ink-accent
 =relleno: relleno relleno-field relleno-working
 =diente: diente diente-up
 =wdth: wdth-display wdth-label
+=register: rotulo etiqueta
 =forced-role: forced-ink forced-selected forced-on-selected
 =edge-focus: focus-ring focus-ring-inset
 =edge-ring: cut-current cut-thin cut-press cut-tab cut-gap rule-ring keycap

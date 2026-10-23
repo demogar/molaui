@@ -140,7 +140,11 @@ export interface RunStatusProps extends Omit<React.ComponentProps<'span'>, 'chil
   endedAt?: number | Date
   /** A known duration, for a finished step that has no timestamps. */
   durationMs?: number
-  /** `label`: the rótulo register, for headers. `inline`: sentence case, for rows and running text. */
+  /**
+   * `label`: the compact header form, semibold at the small size, for a step
+   * or a panel header. `inline`: regular weight at the text size, for rows and
+   * running text. Both are sentence case: a status is a word a person reads.
+   */
   register?: 'label' | 'inline'
   /** Words for translation: the word for each status. Keys left out come from `MessagesProvider`, then English. */
   messages?: MessagesOverride<RunStatusMessages>
@@ -180,7 +184,7 @@ export function RunStatus({
       data-status={status}
       className={cn(
         'inline-flex items-center gap-2 whitespace-nowrap',
-        register === 'label' ? 'rotulo' : 'font-ui text-sm',
+        register === 'label' ? 'etiqueta text-xs' : 'font-ui text-sm',
         className,
       )}
       {...props}
@@ -188,7 +192,7 @@ export function RunStatus({
       <RunStatusGlyph status={status} className={register === 'label' ? 'size-[11px]' : undefined} />
       <span data-part="label" className={labelVariants({ status })}>{label ?? t.statuses[status]}</span>
       {shown !== undefined ? (
-        <span data-part="duration" className="tabular text-ink-muted normal-case tracking-normal">{formatDuration(shown)}</span>
+        <span data-part="duration" className="tabular font-normal text-ink-muted">{formatDuration(shown)}</span>
       ) : null}
     </span>
   )

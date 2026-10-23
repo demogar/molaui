@@ -156,7 +156,7 @@ export function CheckboxGroup({
       aria-describedby={joinIds(description ? descriptionId : undefined, error ? errorId : undefined)}
       className={cn('m-0 min-w-0 border-0 p-0', className)}
     >
-      <legend className="mb-3 p-0 rotulo text-ink-2">{legend}</legend>
+      <legend className="mb-3 p-0 etiqueta text-sm text-ink-2">{legend}</legend>
       {description ? <p id={descriptionId} className="-mt-1.5 mb-3 text-xs text-ink-muted">{description}</p> : null}
       {error ? (
         <ErrorMessage id={errorId} announce={announce} className="mb-3">
