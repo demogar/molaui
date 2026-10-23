@@ -17,91 +17,91 @@
       - columnheader "Started":
         - button "Started"
   - rowgroup:
-    - row /run_5a4ea1 Release-notes drafter queued — — — [\d,.]+[bkmBKM]+ ago/:
+    - row /run_5a4ea1 Release-notes drafter Queued — — — [\d,.]+[bkmBKM]+ ago/:
       - cell "run_5a4ea1"
       - cell "Release-notes drafter"
-      - cell "queued"
+      - cell "Queued"
       - cell "—"
       - cell "—"
       - cell "—"
       - cell /[\d,.]+[bkmBKM]+ ago/:
         - time: /[\d,.]+[bkmBKM]+ ago/
-    - row /run_5a61c5 Abuse-report reviewer running \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ [\d,.]+[bkmBKM]+ ago/:
+    - row /run_5a61c5 Abuse-report reviewer Running \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ [\d,.]+[bkmBKM]+ ago/:
       - cell "run_5a61c5"
       - cell "Abuse-report reviewer"
-      - cell "running"
+      - cell "Running"
       - cell /\d+,\d+/
       - cell /\$\d+\.\d+/
       - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
       - cell /[\d,.]+[bkmBKM]+ ago/:
         - time: /[\d,.]+[bkmBKM]+ ago/
-    - row /run_5a8529 Invoice checker running \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ [\d,.]+[bkmBKM]+ ago/:
+    - row /run_5a8529 Invoice checker Running \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ [\d,.]+[bkmBKM]+ ago/:
       - cell "run_5a8529"
       - cell "Invoice checker"
-      - cell "running"
+      - cell "Running"
       - cell /\d+,\d+/
       - cell /\$\d+\.\d+/
       - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
       - cell /[\d,.]+[bkmBKM]+ ago/:
         - time: /[\d,.]+[bkmBKM]+ ago/
-    - row /run_5aab72 Invoice checker running \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+    - row /run_5aab72 Invoice checker Running \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
       - cell "run_5aab72"
       - cell "Invoice checker"
-      - cell "running"
+      - cell "Running"
       - cell /\d+,\d+/
       - cell /\$\d+\.\d+/
       - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
       - cell /\d+[hmsp]+ ago/:
         - time: /\d+[hmsp]+ ago/
-    - row /run_5ac380 Refund reviewer succeeded \d+,\d+ \$\d+\.\d+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+    - row /run_5ac380 Refund reviewer Succeeded \d+,\d+ \$\d+\.\d+ \d+[hmsp]+ \d+[hmsp]+ ago/:
       - cell "run_5ac380"
       - cell "Refund reviewer"
-      - cell "succeeded"
+      - cell "Succeeded"
       - cell /\d+,\d+/
       - cell /\$\d+\.\d+/
       - cell /\d+[hmsp]+/
       - cell /\d+[hmsp]+ ago/:
         - time: /\d+[hmsp]+ ago/
-    - row /run_5ae91f Abuse-report reviewer cancelled \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+    - row /run_5ae91f Abuse-report reviewer Cancelled \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
       - cell "run_5ae91f"
       - cell "Abuse-report reviewer"
-      - cell "cancelled"
+      - cell "Cancelled"
       - cell /\d+,\d+/
       - cell /\$\d+\.\d+/
       - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
       - cell /\d+[hmsp]+ ago/:
         - time: /\d+[hmsp]+ ago/
-    - row /run_5aff68 Docs answerer failed \d+,\d+ \$\d+\.\d+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+    - row /run_5aff68 Docs answerer Failed \d+,\d+ \$\d+\.\d+ \d+[hmsp]+ \d+[hmsp]+ ago/:
       - cell "run_5aff68"
       - cell "Docs answerer"
-      - cell "failed"
+      - cell "Failed"
       - cell /\d+,\d+/
       - cell /\$\d+\.\d+/
       - cell /\d+[hmsp]+/
       - cell /\d+[hmsp]+ ago/:
         - time: /\d+[hmsp]+ ago/
-    - row /run_5b26ac Release-notes drafter failed \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+    - row /run_5b26ac Release-notes drafter Failed \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
       - cell "run_5b26ac"
       - cell "Release-notes drafter"
-      - cell "failed"
+      - cell "Failed"
       - cell /\d+,\d+/
       - cell /\$\d+\.\d+/
       - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
       - cell /\d+[hmsp]+ ago/:
         - time: /\d+[hmsp]+ ago/
-    - row /run_5b4513 Support triage succeeded \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+    - row /run_5b4513 Support triage Succeeded \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
       - cell "run_5b4513"
       - cell "Support triage"
-      - cell "succeeded"
+      - cell "Succeeded"
       - cell /\d+,\d+/
       - cell /\$\d+\.\d+/
       - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
       - cell /\d+[hmsp]+ ago/:
         - time: /\d+[hmsp]+ ago/
-    - row /run_5b6424 Abuse-report reviewer succeeded \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+    - row /run_5b6424 Abuse-report reviewer Succeeded \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
       - cell "run_5b6424"
       - cell "Abuse-report reviewer"
-      - cell "succeeded"
+      - cell "Succeeded"
       - cell /\d+,\d+/
       - cell /\$\d+\.\d+/
       - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
