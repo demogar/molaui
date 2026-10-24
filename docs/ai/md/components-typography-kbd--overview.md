@@ -87,4 +87,5 @@ Nothing in it takes focus, so there is no keyboard table.
 
 From CHANGELOG.md, newest first.
 
+- 0.9.0 (2026-10-24), feature: keep capitals for categories and set every name in sentence case [#190](https://github.com/demogar/molaui/issues/190)
 - 0.7.0 (2026-10-15), fix: keep keyboard shortcuts left to right in a right-to-left page [#166](https://github.com/demogar/molaui/issues/166)

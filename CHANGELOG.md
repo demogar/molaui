@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.9.0](https://github.com/demogar/molaui/compare/v0.8.0...v0.9.0) (2026-10-24)
+
+
+### Features
+
+* **typography:** keep capitals for categories and set every name in sentence case ([#190](https://github.com/demogar/molaui/issues/190)) ([193a254](https://github.com/demogar/molaui/commit/193a2546c65a22be40c6a013db43eb8e61adff10))
+
+
+### Bug Fixes
+
+* **app-shell:** snap the sidebar instead of animating its width ([#187](https://github.com/demogar/molaui/issues/187)) ([a6de14f](https://github.com/demogar/molaui/commit/a6de14fb823f5ed9207497a87b6376d928b72e97))
+* **components:** draw one cut per nesting level ([#188](https://github.com/demogar/molaui/issues/188)) ([ed5cce0](https://github.com/demogar/molaui/commit/ed5cce0b9816d2e8f28dc8e2fc1adc6dea9972bf))
+* **deps:** update body-parser past the high advisory shipped through the mcp sdk ([#186](https://github.com/demogar/molaui/issues/186)) ([c3b8b16](https://github.com/demogar/molaui/commit/c3b8b16ce0fa0bcb1f9951b467430ae4fdd31a9c))
+
 ## [0.8.0](https://github.com/demogar/molaui/compare/v0.7.1...v0.8.0) (2026-10-21)
 
 

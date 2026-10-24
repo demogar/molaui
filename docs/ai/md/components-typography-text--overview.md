@@ -105,3 +105,9 @@ Nothing in it takes focus, so there is no keyboard table.
 - [Streaming text](https://demogar.github.io/molaui/md/ai-streaming-text--overview.md)
 - [Lead](https://demogar.github.io/molaui/md/components-typography-lead--overview.md)
 - [Meta](https://demogar.github.io/molaui/md/components-typography-meta--overview.md)
+
+## Changes
+
+From CHANGELOG.md, newest first.
+
+- 0.9.0 (2026-10-24), feature: keep capitals for categories and set every name in sentence case [#190](https://github.com/demogar/molaui/issues/190)

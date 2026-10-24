@@ -3112,6 +3112,7 @@ Types: `AppShellMessages`, `AppShellProps`, `SidebarContextValue`, `SidebarToggl
 Used in: Settings page
 
 Changes:
+- 0.9.0 (2026-10-24), fix: snap the sidebar instead of animating its width [#187](https://github.com/demogar/molaui/issues/187)
 - 0.7.0 (2026-10-15), feature: add a banner, a notification centre, and a shortcuts dialog with usehotkeys [#156](https://github.com/demogar/molaui/issues/156)
 
 ### Container
@@ -4917,6 +4918,9 @@ You handle:
 
 Types: `DisplayProps`
 
+Changes:
+- 0.9.0 (2026-10-24), feature: keep capitals for categories and set every name in sentence case [#190](https://github.com/demogar/molaui/issues/190)
+
 ### Heading
 
 https://demogar.github.io/molaui/?path=/docs/components-typography-heading--overview
@@ -4968,6 +4972,9 @@ Types: `HeadingLevel`, `HeadingProps`
 
 Used in: List and detail, Settings page
 
+Changes:
+- 0.9.0 (2026-10-24), feature: keep capitals for categories and set every name in sentence case [#190](https://github.com/demogar/molaui/issues/190)
+
 ### Kbd
 
 https://demogar.github.io/molaui/?path=/docs/components-typography-kbd--overview
@@ -5012,6 +5019,7 @@ A key, as a cut shape: raised cloth, ink keyline, and a heavier foot where the k
 Types: `KbdChordProps`
 
 Changes:
+- 0.9.0 (2026-10-24), feature: keep capitals for categories and set every name in sentence case [#190](https://github.com/demogar/molaui/issues/190)
 - 0.7.0 (2026-10-15), fix: keep keyboard shortcuts left to right in a right-to-left page [#166](https://github.com/demogar/molaui/issues/166)
 
 ### Lead
@@ -5045,6 +5053,9 @@ The first thing someone says, so it is set in the reading voice rather than the 
 
 `className`, `ref`, `id` and the other DOM props go to `<p data-slot="lead">`.
 
+Changes:
+- 0.9.0 (2026-10-24), feature: keep capitals for categories and set every name in sentence case [#190](https://github.com/demogar/molaui/issues/190)
+
 ### Meta
 
 https://demogar.github.io/molaui/?path=/docs/components-typography-meta--overview
@@ -5077,6 +5088,9 @@ You handle:
 Duration, cost, count, timestamp — facts that are compared down a column, so they carry tabular figures. This is the role a monospace usually plays in tool UIs, minus the costume: Archivo's tabular figures line up exactly as well and keep the row in one voice.
 
 `className`, `ref`, `id` and the other DOM props go to `<p data-slot="meta">`.
+
+Changes:
+- 0.9.0 (2026-10-24), feature: keep capitals for categories and set every name in sentence case [#190](https://github.com/demogar/molaui/issues/190)
 
 ### Prose
 
@@ -5121,6 +5135,9 @@ You handle:
 
 Types: `ProseProps`
 
+Changes:
+- 0.9.0 (2026-10-24), feature: keep capitals for categories and set every name in sentence case [#190](https://github.com/demogar/molaui/issues/190)
+
 ### Pullquote
 
 https://demogar.github.io/molaui/?path=/docs/components-typography-pullquote--overview
@@ -5158,6 +5175,9 @@ A voice interrupting the prose, so it keeps the reading face and takes a relleno
 `className`, `ref`, `id` and the other DOM props go to `<figure data-slot="pullquote">`.
 
 Types: `PullquoteProps`
+
+Changes:
+- 0.9.0 (2026-10-24), feature: keep capitals for categories and set every name in sentence case [#190](https://github.com/demogar/molaui/issues/190)
 
 ### Rotulo
 
@@ -5205,6 +5225,9 @@ The category register — Archivo pushed out along its width axis, cut short by 
 `className`, `ref`, `id` and the other DOM props go to `<p data-slot="rotulo">`.
 
 Types: `RotuloBand`, `RotuloProps`
+
+Changes:
+- 0.9.0 (2026-10-24), feature: keep capitals for categories and set every name in sentence case [#190](https://github.com/demogar/molaui/issues/190)
 
 ### Text
 
@@ -5265,6 +5288,9 @@ You handle:
 Running UI text in the system voice. Three inks and no more: ink for what the reader came for, ink-2 for what explains it, muted for what they can skip. A fourth grey would be a grey nobody can tell from its neighbours — and muted is already the floor, at 4.83:1 on the shaded ground.
 
 Types: `TextProps`
+
+Changes:
+- 0.9.0 (2026-10-24), feature: keep capitals for categories and set every name in sentence case [#190](https://github.com/demogar/molaui/issues/190)
 
 ## AI interface
 
