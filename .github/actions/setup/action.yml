@@ -34,12 +34,31 @@ runs:
       shell: bash
 
     # The browser download is cached per Playwright version; the system
-    # libraries it needs come from apt and are installed every time, which is
-    # quick on a fresh runner.
+    # libraries it needs come from apt and are installed every time.
     - if: inputs.playwright == 'true'
       id: pw
-      run: echo "version=$(node -p "require('playwright/package.json').version")" >> "$GITHUB_OUTPUT"
+      run: |
+        echo "version=$(node -p "require('playwright/package.json').version")" >> "$GITHUB_OUTPUT"
+        echo "image=$ImageVersion" >> "$GITHUB_OUTPUT"
       shell: bash
+    # Installing them was quick until the Ubuntu mirror slowed: on 2026-10-23
+    # one job in every run spent 150 to 500 seconds fetching the same 26 MB of
+    # packages at about 120 kB/s, and pushed CI past its budget. apt now keeps
+    # what it downloads in a folder the runner owns, cached per runner image
+    # (the image decides which versions apt wants) and Playwright version, so
+    # a hit leaves apt nothing to fetch. A stale package is never used: apt
+    # checks each one against its index and downloads the newer one.
+    - if: inputs.playwright == 'true'
+      run: |
+        mkdir -p ~/apt-archives/partial
+        printf 'Dir::Cache::Archives "%s";\nBinary::apt::APT::Keep-Downloaded-Packages "true";\n' ~/apt-archives \
+          | sudo tee /etc/apt/apt.conf.d/99mola-archives > /dev/null
+      shell: bash
+    - if: inputs.playwright == 'true'
+      uses: actions/cache@v6
+      with:
+        path: ~/apt-archives/*.deb
+        key: apt-${{ runner.os }}-${{ steps.pw.outputs.image }}-${{ steps.pw.outputs.version }}
     - if: inputs.playwright == 'true'
       id: pw-cache
       uses: actions/cache@v6
@@ -51,4 +70,8 @@ runs:
       shell: bash
     - if: inputs.playwright == 'true' && steps.pw-cache.outputs.cache-hit == 'true'
       run: npx playwright install-deps chromium
+      shell: bash
+    # apt writes the packages as root; the cache saves them as the runner.
+    - if: inputs.playwright == 'true'
+      run: sudo chown -R "$(id -u):$(id -g)" ~/apt-archives
       shell: bash
