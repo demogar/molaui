@@ -173,4 +173,5 @@ Types: `AppShellMessages`, `AppShellProps`, `SidebarContextValue`, `SidebarToggl
 
 From CHANGELOG.md, newest first.
 
+- 0.9.0 (2026-10-24), fix: snap the sidebar instead of animating its width [#187](https://github.com/demogar/molaui/issues/187)
 - 0.7.0 (2026-10-15), feature: add a banner, a notification centre, and a shortcuts dialog with usehotkeys [#156](https://github.com/demogar/molaui/issues/156)

@@ -86,3 +86,9 @@ Nothing in it takes focus, so there is no keyboard table.
 
 - [Markdown](https://demogar.github.io/molaui/md/ai-markdown--overview.md)
 - [Sources](https://demogar.github.io/molaui/md/ai-sources--overview.md)
+
+## Changes
+
+From CHANGELOG.md, newest first.
+
+- 0.9.0 (2026-10-24), feature: keep capitals for categories and set every name in sentence case [#190](https://github.com/demogar/molaui/issues/190)

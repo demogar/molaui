@@ -15602,6 +15602,24 @@
       ],
       "changes": [
         {
+          "version": "0.9.0",
+          "date": "2026-10-24",
+          "type": "fix",
+          "breaking": false,
+          "scopes": [
+            "app-shell"
+          ],
+          "subject": "snap the sidebar instead of animating its width",
+          "pr": {
+            "number": 187,
+            "url": "https://github.com/demogar/molaui/issues/187"
+          },
+          "commit": {
+            "sha": "a6de14f",
+            "url": "https://github.com/demogar/molaui/commit/a6de14fb823f5ed9207497a87b6376d928b72e97"
+          }
+        },
+        {
           "version": "0.7.0",
           "date": "2026-10-15",
           "type": "feature",
@@ -21052,6 +21070,26 @@
           "id": "components-typography-display--on-ink-panel-with-cut",
           "url": "https://demogar.github.io/molaui/?path=/story/components-typography-display--on-ink-panel-with-cut"
         }
+      ],
+      "changes": [
+        {
+          "version": "0.9.0",
+          "date": "2026-10-24",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "typography"
+          ],
+          "subject": "keep capitals for categories and set every name in sentence case",
+          "pr": {
+            "number": 190,
+            "url": "https://github.com/demogar/molaui/issues/190"
+          },
+          "commit": {
+            "sha": "193a254",
+            "url": "https://github.com/demogar/molaui/commit/193a2546c65a22be40c6a013db43eb8e61adff10"
+          }
+        }
       ]
     },
     {
@@ -21191,6 +21229,26 @@
       "usedIn": [
         "Patterns/List and detail",
         "Patterns/Settings page"
+      ],
+      "changes": [
+        {
+          "version": "0.9.0",
+          "date": "2026-10-24",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "typography"
+          ],
+          "subject": "keep capitals for categories and set every name in sentence case",
+          "pr": {
+            "number": 190,
+            "url": "https://github.com/demogar/molaui/issues/190"
+          },
+          "commit": {
+            "sha": "193a254",
+            "url": "https://github.com/demogar/molaui/commit/193a2546c65a22be40c6a013db43eb8e61adff10"
+          }
+        }
       ]
     },
     {
@@ -21278,6 +21336,24 @@
       ],
       "changes": [
         {
+          "version": "0.9.0",
+          "date": "2026-10-24",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "typography"
+          ],
+          "subject": "keep capitals for categories and set every name in sentence case",
+          "pr": {
+            "number": 190,
+            "url": "https://github.com/demogar/molaui/issues/190"
+          },
+          "commit": {
+            "sha": "193a254",
+            "url": "https://github.com/demogar/molaui/commit/193a2546c65a22be40c6a013db43eb8e61adff10"
+          }
+        },
+        {
           "version": "0.7.0",
           "date": "2026-10-15",
           "type": "fix",
@@ -21356,6 +21432,26 @@
           "id": "components-typography-lead--default",
           "url": "https://demogar.github.io/molaui/?path=/story/components-typography-lead--default"
         }
+      ],
+      "changes": [
+        {
+          "version": "0.9.0",
+          "date": "2026-10-24",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "typography"
+          ],
+          "subject": "keep capitals for categories and set every name in sentence case",
+          "pr": {
+            "number": 190,
+            "url": "https://github.com/demogar/molaui/issues/190"
+          },
+          "commit": {
+            "sha": "193a254",
+            "url": "https://github.com/demogar/molaui/commit/193a2546c65a22be40c6a013db43eb8e61adff10"
+          }
+        }
       ]
     },
     {
@@ -21416,6 +21512,26 @@
           "name": "Default",
           "id": "components-typography-meta--default",
           "url": "https://demogar.github.io/molaui/?path=/story/components-typography-meta--default"
+        }
+      ],
+      "changes": [
+        {
+          "version": "0.9.0",
+          "date": "2026-10-24",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "typography"
+          ],
+          "subject": "keep capitals for categories and set every name in sentence case",
+          "pr": {
+            "number": 190,
+            "url": "https://github.com/demogar/molaui/issues/190"
+          },
+          "commit": {
+            "sha": "193a254",
+            "url": "https://github.com/demogar/molaui/commit/193a2546c65a22be40c6a013db43eb8e61adff10"
+          }
         }
       ]
     },
@@ -21511,6 +21627,26 @@
           "id": "components-typography-prose--document",
           "url": "https://demogar.github.io/molaui/?path=/story/components-typography-prose--document"
         }
+      ],
+      "changes": [
+        {
+          "version": "0.9.0",
+          "date": "2026-10-24",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "typography"
+          ],
+          "subject": "keep capitals for categories and set every name in sentence case",
+          "pr": {
+            "number": 190,
+            "url": "https://github.com/demogar/molaui/issues/190"
+          },
+          "commit": {
+            "sha": "193a254",
+            "url": "https://github.com/demogar/molaui/commit/193a2546c65a22be40c6a013db43eb8e61adff10"
+          }
+        }
       ]
     },
     {
@@ -21579,6 +21715,26 @@
           "name": "Default",
           "id": "components-typography-pullquote--default",
           "url": "https://demogar.github.io/molaui/?path=/story/components-typography-pullquote--default"
+        }
+      ],
+      "changes": [
+        {
+          "version": "0.9.0",
+          "date": "2026-10-24",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "typography"
+          ],
+          "subject": "keep capitals for categories and set every name in sentence case",
+          "pr": {
+            "number": 190,
+            "url": "https://github.com/demogar/molaui/issues/190"
+          },
+          "commit": {
+            "sha": "193a254",
+            "url": "https://github.com/demogar/molaui/commit/193a2546c65a22be40c6a013db43eb8e61adff10"
+          }
         }
       ]
     },
@@ -21701,6 +21857,26 @@
           "name": "UnderABlock",
           "id": "components-typography-rotulo--under-a-block",
           "url": "https://demogar.github.io/molaui/?path=/story/components-typography-rotulo--under-a-block"
+        }
+      ],
+      "changes": [
+        {
+          "version": "0.9.0",
+          "date": "2026-10-24",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "typography"
+          ],
+          "subject": "keep capitals for categories and set every name in sentence case",
+          "pr": {
+            "number": 190,
+            "url": "https://github.com/demogar/molaui/issues/190"
+          },
+          "commit": {
+            "sha": "193a254",
+            "url": "https://github.com/demogar/molaui/commit/193a2546c65a22be40c6a013db43eb8e61adff10"
+          }
         }
       ]
     },
@@ -21893,6 +22069,26 @@
           "name": "Tabular",
           "id": "components-typography-text--tabular",
           "url": "https://demogar.github.io/molaui/?path=/story/components-typography-text--tabular"
+        }
+      ],
+      "changes": [
+        {
+          "version": "0.9.0",
+          "date": "2026-10-24",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "typography"
+          ],
+          "subject": "keep capitals for categories and set every name in sentence case",
+          "pr": {
+            "number": 190,
+            "url": "https://github.com/demogar/molaui/issues/190"
+          },
+          "commit": {
+            "sha": "193a254",
+            "url": "https://github.com/demogar/molaui/commit/193a2546c65a22be40c6a013db43eb8e61adff10"
+          }
         }
       ]
     }

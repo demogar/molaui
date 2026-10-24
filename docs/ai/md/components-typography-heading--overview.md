@@ -92,3 +92,9 @@ Nothing in it takes focus, so there is no keyboard table.
 
 - [List and detail](https://demogar.github.io/molaui/md/patterns-list-and-detail--overview.md) (pattern)
 - [Settings page](https://demogar.github.io/molaui/md/patterns-settings-page--overview.md) (pattern)
+
+## Changes
+
+From CHANGELOG.md, newest first.
+
+- 0.9.0 (2026-10-24), feature: keep capitals for categories and set every name in sentence case [#190](https://github.com/demogar/molaui/issues/190)
