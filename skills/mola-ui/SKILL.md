@@ -204,7 +204,7 @@ Status colours:
   `oro` is never text on light cloth.
 - **Rojo is danger.** On a product screen use it only through the danger role: `bg-danger`,
   `hover:bg-danger-strong`, `bg-danger-soft`, `text-ink-danger`, `band-danger`. A red label band,
-  bullet or name beside a red FAILED mark makes the failure one red thing among several. Rojo as
+  bullet or name beside a red Failed mark makes the failure one red thing among several. Rojo as
   an accent belongs to long-form `Prose`.
 - **Accent and selection:** `accent` (gold, by name: `band-accent`, `bg-accent`), `accent-soft`,
   and `bg-selected` for an item chosen for an action.
@@ -223,8 +223,11 @@ Mola utilities:
 - Stack with `z-(--z-overlay)`, `z-(--z-popover)`, `z-(--z-toast)`; size icons with
   `size-(--icon)` (`-xs`, `-sm`, `-lg`); mirror a directional icon with `flip-rtl`.
 - `relleno` is the divider and empty texture.
-- `rotulo` is a small label in capitals. Write its text in sentence case; the utility sets the
-  capitals.
+- `rotulo` is a small category label in capitals: a section, a group, a step's kind. Write its
+  text in sentence case; the utility sets the capitals. Never use it for a button, a status, a
+  column header or a form label.
+- `etiqueta` is the name register: semibold, sentence case, untracked, for words a person acts on
+  or reads. It sets no size, so pair it with `text-xs` or `text-sm`. The components already use it.
 - `literal` is the mono face for machine text.
 - `tabular` gives aligned figures.
 

@@ -183,6 +183,17 @@ const NOTES: Record<string, Notes> = {
       'Foundations/Iconography': 'Status marks differ in shape, not only in colour: the RunStatus set, shared by StatusDot.',
     },
   },
+  '0017': {
+    name: 'Capitals name categories',
+    decided:
+      'The rótulo (wide, tracked capitals) only names a category: a group, a section, a step’s kind. Buttons, badges, column heads, form labels and stat names are `etiqueta`: semibold, sentence case, untracked.',
+    governs: {
+      'Foundations/Typography':
+        'Capitals name a category; a word a person acts on or reads is in sentence case, so one register leads and translators own the case.',
+      'Foundations/Internationalisation':
+        'The interface never sets a button, status or label in capitals, so every word a person acts on is shown in the case its translator wrote.',
+    },
+  },
 }
 
 export interface Decision extends Notes {

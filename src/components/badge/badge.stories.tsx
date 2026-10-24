@@ -53,10 +53,10 @@ export const Matrix: Story = {
       <table className="border-separate border-spacing-x-4 border-spacing-y-3">
         <thead>
           <tr>
-            <th className="rotulo text-start text-ink-muted">Tone</th>
-            <th className="rotulo text-start text-ink-muted">Solid</th>
-            <th className="rotulo text-start text-ink-muted">Soft</th>
-            <th className="rotulo text-start text-ink-muted">Outline</th>
+            <th className="etiqueta text-xs text-start text-ink-muted">Tone</th>
+            <th className="etiqueta text-xs text-start text-ink-muted">Solid</th>
+            <th className="etiqueta text-xs text-start text-ink-muted">Soft</th>
+            <th className="etiqueta text-xs text-start text-ink-muted">Outline</th>
           </tr>
         </thead>
         <tbody>

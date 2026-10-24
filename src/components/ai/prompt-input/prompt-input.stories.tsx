@@ -38,7 +38,7 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 const ModelPicker = () => (
-  <Button size="sm" variant="ghost" className="normal-case tracking-normal">
+  <Button size="sm" variant="ghost">
     <span className="literal text-xs">cayuco-deep-3</span>
     <ChevronDown />
   </Button>

@@ -231,7 +231,9 @@ export function TableHead({
       aria-sort={sortable && sort !== 'none' ? sort : undefined}
       className={cn(
         'h-(--row-h) bg-cloth-pale px-3 align-middle',
-        'rotulo whitespace-nowrap text-ink-2',
+        // A column head names the values under it, in the name register
+        // (ADR 0017): read beside them, not lettered over them.
+        'etiqueta text-xs whitespace-nowrap text-ink-2',
         'cut-b',
         numeric ? 'text-end' : 'text-start',
         stickyHeader && 'sticky top-0 z-(--z-sticky)',
@@ -246,7 +248,7 @@ export function TableHead({
           className={cn(
             // At least 24px tall (WCAG 2.5.8): `py-1` around 11px caps came to
             // 18px at compact density.
-            'group/sort -mx-1.5 inline-flex min-h-[24px] items-center gap-1.5 px-1.5 py-1 uppercase',
+            'group/sort -mx-1.5 inline-flex min-h-[24px] items-center gap-1.5 px-1.5 py-1',
             'tracking-[inherit] [font:inherit]',
             'hover:text-ink',
             numeric && 'flex-row-reverse',

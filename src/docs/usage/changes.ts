@@ -397,7 +397,7 @@ export const minorOf = (version: string) => version.split('.').slice(0, 2).join(
  * first place a missing page showed (0.8.0, #178), so titleWhatsNewError
  * fails the pull request that starts the minor instead.
  */
-export const WHATS_NEW = ['0.8.0', '0.7.0', '0.6.0', '0.5.0', '0.4.0', '0.3.0', '0.2.0'] as const
+export const WHATS_NEW = ['0.9.0', '0.8.0', '0.7.0', '0.6.0', '0.5.0', '0.4.0', '0.3.0', '0.2.0'] as const
 
 const TITLE = /^\w+(?:\(([^)]*)\))?!?: /
 const BUMP = /^(\w+)(?:\([^)]*\))?(!)?: /

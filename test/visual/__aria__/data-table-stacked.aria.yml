@@ -13,39 +13,39 @@
       - columnheader "Started":
         - button "Started"
   - rowgroup:
-    - row /Select run_5a4ea1 run_5a4ea1 Release-notes drafter queued — [\d,.]+[bkmBKM]+ ago/:
+    - row /Select run_5a4ea1 run_5a4ea1 Release-notes drafter Queued — [\d,.]+[bkmBKM]+ ago/:
       - cell "Select run_5a4ea1":
         - checkbox "Select run_5a4ea1"
       - cell "run_5a4ea1"
       - cell "Release-notes drafter"
-      - cell "queued"
+      - cell "Queued"
       - cell "—"
       - cell /[\d,.]+[bkmBKM]+ ago/:
         - time: /[\d,.]+[bkmBKM]+ ago/
-    - row /Select run_5a61c5 run_5a61c5 Abuse-report reviewer running \$\d+\.\d+ [\d,.]+[bkmBKM]+ ago/:
+    - row /Select run_5a61c5 run_5a61c5 Abuse-report reviewer Running \$\d+\.\d+ [\d,.]+[bkmBKM]+ ago/:
       - cell "Select run_5a61c5":
         - checkbox "Select run_5a61c5"
       - cell "run_5a61c5"
       - cell "Abuse-report reviewer"
-      - cell "running"
+      - cell "Running"
       - cell /\$\d+\.\d+/
       - cell /[\d,.]+[bkmBKM]+ ago/:
         - time: /[\d,.]+[bkmBKM]+ ago/
-    - row /Select run_5a8529 run_5a8529 Invoice checker running \$\d+\.\d+ [\d,.]+[bkmBKM]+ ago/ [selected]:
+    - row /Select run_5a8529 run_5a8529 Invoice checker Running \$\d+\.\d+ [\d,.]+[bkmBKM]+ ago/ [selected]:
       - cell "Select run_5a8529":
         - checkbox "Select run_5a8529" [checked]
       - cell "run_5a8529"
       - cell "Invoice checker"
-      - cell "running"
+      - cell "Running"
       - cell /\$\d+\.\d+/
       - cell /[\d,.]+[bkmBKM]+ ago/:
         - time: /[\d,.]+[bkmBKM]+ ago/
-    - row /Select run_5aab72 run_5aab72 Invoice checker running \$\d+\.\d+ \d+[hmsp]+ ago/:
+    - row /Select run_5aab72 run_5aab72 Invoice checker Running \$\d+\.\d+ \d+[hmsp]+ ago/:
       - cell "Select run_5aab72":
         - checkbox "Select run_5aab72"
       - cell "run_5aab72"
       - cell "Invoice checker"
-      - cell "running"
+      - cell "Running"
       - cell /\$\d+\.\d+/
       - cell /\d+[hmsp]+ ago/:
         - time: /\d+[hmsp]+ ago/

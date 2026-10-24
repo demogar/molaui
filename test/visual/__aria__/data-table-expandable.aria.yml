@@ -18,26 +18,26 @@
       - columnheader "Started":
         - button "Started"
   - rowgroup:
-    - row /Select run_5a4ea1 run_5a4ea1 Release-notes drafter queued — — — [\d,.]+[bkmBKM]+ ago/:
+    - row /Select run_5a4ea1 run_5a4ea1 Release-notes drafter Queued — — — [\d,.]+[bkmBKM]+ ago/:
       - cell "Select run_5a4ea1":
         - checkbox "Select run_5a4ea1"
       - cell
       - cell "run_5a4ea1"
       - cell "Release-notes drafter"
-      - cell "queued"
+      - cell "Queued"
       - cell "—"
       - cell "—"
       - cell "—"
       - cell /[\d,.]+[bkmBKM]+ ago/:
         - time: /[\d,.]+[bkmBKM]+ ago/
-    - row /Select run_5a61c5 Details of run_5a61c5 run_5a61c5 Abuse-report reviewer running \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ [\d,.]+[bkmBKM]+ ago/:
+    - row /Select run_5a61c5 Details of run_5a61c5 run_5a61c5 Abuse-report reviewer Running \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ [\d,.]+[bkmBKM]+ ago/:
       - cell "Select run_5a61c5":
         - checkbox "Select run_5a61c5"
       - cell "Details of run_5a61c5":
         - button "Details of run_5a61c5" [expanded]
       - cell "run_5a61c5"
       - cell "Abuse-report reviewer"
-      - cell "running"
+      - cell "Running"
       - cell /\d+,\d+/
       - cell /\$\d+\.\d+/
       - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
@@ -53,53 +53,53 @@
         - definition: /\d+,\d+/
         - term: Started
         - definition: /Mon, \d+ Oct \d+ \d+:\d+:\d+ GMT/
-    - row /Select run_5a8529 Details of run_5a8529 run_5a8529 Invoice checker running \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ [\d,.]+[bkmBKM]+ ago/:
+    - row /Select run_5a8529 Details of run_5a8529 run_5a8529 Invoice checker Running \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ [\d,.]+[bkmBKM]+ ago/:
       - cell "Select run_5a8529":
         - checkbox "Select run_5a8529"
       - cell "Details of run_5a8529":
         - button "Details of run_5a8529"
       - cell "run_5a8529"
       - cell "Invoice checker"
-      - cell "running"
+      - cell "Running"
       - cell /\d+,\d+/
       - cell /\$\d+\.\d+/
       - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
       - cell /[\d,.]+[bkmBKM]+ ago/:
         - time: /[\d,.]+[bkmBKM]+ ago/
-    - row /Select run_5aab72 Details of run_5aab72 run_5aab72 Invoice checker running \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+    - row /Select run_5aab72 Details of run_5aab72 run_5aab72 Invoice checker Running \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
       - cell "Select run_5aab72":
         - checkbox "Select run_5aab72"
       - cell "Details of run_5aab72":
         - button "Details of run_5aab72"
       - cell "run_5aab72"
       - cell "Invoice checker"
-      - cell "running"
+      - cell "Running"
       - cell /\d+,\d+/
       - cell /\$\d+\.\d+/
       - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
       - cell /\d+[hmsp]+ ago/:
         - time: /\d+[hmsp]+ ago/
-    - row /Select run_5ac380 Details of run_5ac380 run_5ac380 Refund reviewer succeeded \d+,\d+ \$\d+\.\d+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+    - row /Select run_5ac380 Details of run_5ac380 run_5ac380 Refund reviewer Succeeded \d+,\d+ \$\d+\.\d+ \d+[hmsp]+ \d+[hmsp]+ ago/:
       - cell "Select run_5ac380":
         - checkbox "Select run_5ac380"
       - cell "Details of run_5ac380":
         - button "Details of run_5ac380"
       - cell "run_5ac380"
       - cell "Refund reviewer"
-      - cell "succeeded"
+      - cell "Succeeded"
       - cell /\d+,\d+/
       - cell /\$\d+\.\d+/
       - cell /\d+[hmsp]+/
       - cell /\d+[hmsp]+ ago/:
         - time: /\d+[hmsp]+ ago/
-    - row /Select run_5ae91f Details of run_5ae91f run_5ae91f Abuse-report reviewer cancelled \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+    - row /Select run_5ae91f Details of run_5ae91f run_5ae91f Abuse-report reviewer Cancelled \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
       - cell "Select run_5ae91f":
         - checkbox "Select run_5ae91f"
       - cell "Details of run_5ae91f":
         - button "Details of run_5ae91f"
       - cell "run_5ae91f"
       - cell "Abuse-report reviewer"
-      - cell "cancelled"
+      - cell "Cancelled"
       - cell /\d+,\d+/
       - cell /\$\d+\.\d+/
       - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/

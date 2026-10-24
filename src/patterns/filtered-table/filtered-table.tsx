@@ -68,6 +68,15 @@ const STATUS_TONE: Record<RunStatus, BadgeTone> = {
   cancelled: 'neutral',
 }
 
+/** The status word as a person reads it. The badge shows it as written, so it is written in sentence case here. */
+const STATUS_LABEL: Record<RunStatus, string> = {
+  succeeded: 'Succeeded',
+  running: 'Running',
+  failed: 'Failed',
+  queued: 'Queued',
+  cancelled: 'Cancelled',
+}
+
 const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 4 })
 const integer = new Intl.NumberFormat('en-US')
 const timestamp = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' })
@@ -75,7 +84,7 @@ const timestamp = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeSt
 function RunStatusBadge({ status }: { status: RunStatus }) {
   return (
     <Badge tone={STATUS_TONE[status]} dot pulse={status === 'running'}>
-      {status}
+      {STATUS_LABEL[status]}
     </Badge>
   )
 }

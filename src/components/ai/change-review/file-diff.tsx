@@ -125,7 +125,7 @@ export function FileDiff({
       {...props}
     >
       <header className="flex flex-wrap items-center gap-x-3 gap-y-1.5 border-b border-keyline px-3 py-2.5">
-        <span className="inline-flex shrink-0 items-center gap-1.5 rotulo text-ink-2">
+        <span className="inline-flex shrink-0 items-center gap-1.5 etiqueta text-xs text-ink-2">
           <span aria-hidden className={cn('relative inline-block size-[11px] overflow-hidden shadow-cut', KIND_MARK[kind])} />
           {t.kinds[kind]}
         </span>

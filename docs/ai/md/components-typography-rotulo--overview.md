@@ -4,7 +4,7 @@ Markdown version of https://demogar.github.io/molaui/?path=/docs/components-typo
 
 # Rotulo
 
-The label register, cut short by a band, set under the block it belongs to.
+The category register, cut short by a band, set under the block it belongs to.
 
 Status: Stable. Semantic versioning applies: nothing breaks without a deprecation first.
 
@@ -22,9 +22,12 @@ The label register: Archivo at `wdth` 116, in caps, cut short by a band of the l
 - An eyebrow above a heading; the heading says it better. Use [Heading](https://demogar.github.io/molaui/md/components-typography-heading--overview.md).
 - A status. Use [Badge](https://demogar.github.io/molaui/md/components-feedback-badge--overview.md).
 - The label of a form field. Use [Label](https://demogar.github.io/molaui/md/components-forms-field--overview.md).
+- A button, a column header or any word a person acts on or reads; those are in sentence case (ADR 0017). Use [Button](https://demogar.github.io/molaui/md/components-actions-button--overview.md).
 
 ### Do and don’t
 
+- Do: Name a category with it: a section, a group, the kind of a step.
+- Don’t: Set a button, a status or a column header in it. Capitals on every control leave nothing to lead.
 - Do: Put the rótulo under the heading.
 - Don’t: Put it above the heading as an eyebrow.
 - Do: Keep the oro band for ink grounds.
@@ -46,7 +49,7 @@ Each story is a live example in Storybook.
 
 ### `Rotulo` (component)
 
-The label register — Archivo pushed out along its width axis, cut short by a band of the layer beneath.
+The category register — Archivo pushed out along its width axis, cut short by a band of the layer beneath.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -83,6 +86,7 @@ Nothing in it takes focus, so there is no keyboard table.
 - [Heading](https://demogar.github.io/molaui/md/components-typography-heading--overview.md)
 - [Badge](https://demogar.github.io/molaui/md/components-feedback-badge--overview.md)
 - [Field](https://demogar.github.io/molaui/md/components-forms-field--overview.md)
+- [Button](https://demogar.github.io/molaui/md/components-actions-button--overview.md)
 
 ### Pages that send readers here
 

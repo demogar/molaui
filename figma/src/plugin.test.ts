@@ -104,9 +104,9 @@ describe('a first run', () => {
     expect(name(md.bound.height)).toBe('control-h')
     expect(name(md.effects[0]!.boundVariables?.spread?.id)).toBe('cut-w')
     const label = md.findAll((n) => n.type === 'TEXT')[0]!
-    expect(name(label.bound.fontSize)).toBe('text-xs')
+    expect(name(label.bound.fontSize)).toBe('text-sm')
     expect(name(label.bound.fontFamily)).toBe('font-ui')
-    expect(label.fontName).toEqual({ family: 'Archivo', style: 'SemiBold', variationSettings: { wdth: 116 } })
+    expect(label.fontName).toEqual({ family: 'Archivo', style: 'SemiBold', variationSettings: { wdth: 100 } })
   })
 
   it('exposes props as component properties and wires every reference', () => {
@@ -229,7 +229,7 @@ describe('fonts', () => {
     const fake = new FakeFigma(undefined, [])
     const { report } = await run(fake.api(), kit.data)
     expect(report.errors).toEqual([])
-    const label = kitPage(fake).findAll((n) => n.type === 'TEXT' && n.textCase === 'UPPER')[0]!
+    const label = kitPage(fake).children.find((n) => n.name === 'Button')!.findAll((n) => n.type === 'TEXT')[0]!
     expect(label.fontName).toEqual({ family: 'Archivo', style: 'SemiBold' })
   }, 60_000)
 })

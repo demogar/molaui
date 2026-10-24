@@ -27,7 +27,7 @@ import { type RecommendationBadgeMessages, recommendationBadgeMessages } from '.
  *            than urgent.
  *
  * Text contrast, measured with src/tokens/color.ts (light / dark), all at
- * the 11px label size, so every pairing must clear 4.5:1:
+ * the 12px badge size, so every pairing must clear 4.5:1:
  *
  *   solid    on-ink on ink 16.82 / 13.79 · on-layer on añil 7.96 / 6.80 ·
  *            on verde 6.06 / 7.40 · on rojo 5.46 / 5.31 · on-oro on oro 9.34 / 9.19
@@ -47,7 +47,9 @@ import { type RecommendationBadgeMessages, recommendationBadgeMessages } from '.
 export const badgeVariants = cva(
   [
     'inline-flex max-w-full items-center gap-1.5 whitespace-nowrap rounded-none',
-    'rotulo px-2 py-[5px]',
+    // The name register (ADR 0017): a status is a word a person reads, in
+    // the case it was written in.
+    'etiqueta text-xs leading-none px-2 py-[5px]',
   ],
   {
     variants: {
@@ -250,7 +252,7 @@ export function StatusDot({ tone = 'neutral', pulse = false, label, className, .
  * this" is a scale a support or knowledge tool also has. Gold is the layer a
  * mola reveals last and least, so gold is `essential`.
  */
-export const recommendationVariants = cva('inline-flex items-center rotulo px-2.5 py-[6px] rounded-none shadow-cut', {
+export const recommendationVariants = cva('inline-flex items-center etiqueta text-xs leading-none px-2.5 py-[6px] rounded-none shadow-cut', {
   variants: {
     /**
      * How strongly the recommendation is made, from `essential` (gold) down to

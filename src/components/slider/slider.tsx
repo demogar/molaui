@@ -55,7 +55,7 @@ export function Slider({
     <SliderPrimitive.Root data-slot="slider" className={cn('flex w-full flex-col gap-2.5', className)} {...props}>
       {label || showValue ? (
         <div className="flex items-baseline justify-between gap-4">
-          {label ? <SliderPrimitive.Label className="rotulo text-ink-2">{label}</SliderPrimitive.Label> : <span />}
+          {label ? <SliderPrimitive.Label className="etiqueta text-sm text-ink-2">{label}</SliderPrimitive.Label> : <span />}
           {showValue ? (
             <SliderPrimitive.Value className="font-ui text-sm font-semibold text-ink tabular">
               {(formatted, values) =>

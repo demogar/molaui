@@ -76,6 +76,16 @@ Direction is separate: set `dir="rtl"` on `<html>` and wrap the app in `Directio
 [Getting started](https://demogar.github.io/molaui/?path=/docs/mola-ui-getting-started--overview) shows. The layout mirrors through
 logical properties, and code and ids stay left to right.
 
+## Case and spacing
+
+A translation is shown in the case it was written in. Buttons, statuses, column headers and form
+labels are never set in capitals by the stylesheet, so a German noun keeps its capital, a Turkish
+i is not turned into the wrong capital, and a button is no wider than its words. The one register
+that is set in capitals, the rótulo, names a category (a menu group, a navigation group). In
+Arabic it has no capitals to set, and its letter-spacing widens only the gaps between words: the
+browser keeps the letters of a word joined. Set `lang` on the page or the subtree, so a
+translation is announced and capitalised by its own language's rules.
+
 ## What is not covered
 
 - **Words you pass in.** A `title`, a `label`, a column header or an `aria-label` you give a

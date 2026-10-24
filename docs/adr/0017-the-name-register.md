@@ -1,0 +1,73 @@
+# 0017 — Capitals name categories; everything else is sentence case
+
+**Date:** 2026-10-23 · **Status:** accepted
+
+## Context
+
+The rótulo is the system's label register: Archivo at 11px, semibold, set wide on its width axis
+(116), tracked +0.14em and in capitals. It was cut for the editorial site, where it sat over a
+block and named what kind of block it was.
+
+The product system made it the default voice of nearly every control. On the Runs screen the
+navigation groups, the workspace switcher, the stat names, the filter buttons ("STATUS: ANY"),
+every column head, every status badge and both page actions were all in it. When everything on a
+screen is lettering, nothing leads: the eye cannot tell the label of a group from the thing a
+person is about to press. ADR 0003 calls small tracked labels the costume the system shed, and
+the rótulo had become a version of that costume.
+
+It also works against translation (ADR 0014):
+
+- **Case belongs to the language.** `text-transform: uppercase` takes case away from the
+  translator. A German noun keeps its capital in sentence case and loses the distinction in
+  capitals; Turkish needs the language set to capitalise i as İ; ß has no single capital and
+  becomes SS, changing the word's length.
+- **Wide, tracked capitals are long.** Measured in Chromium, a button label in the rótulo (12px)
+  is 1.6 to 1.7 times as wide as the same words in sentence case one size up (13px): "New run"
+  80px against 49px, "Neuen Lauf starten" 190px against 113px. A button does not wrap, and most
+  languages are already longer than English.
+
+A third worry was that tracking pulls the letters of a joined script apart. It was checked
+rather than assumed: Chromium keeps an Arabic word joined under letter-spacing and widens only the
+gaps between words, as the CSS Text spec asks. So the rótulo needs no exception for Arabic. The
+right-to-left hard state had been forcing `lang="en"` on its own rótulo caption, so no Arabic
+rótulo was in front of the visual tests either; now one is.
+
+## Decision
+
+The rule: **the rótulo names a category; it never carries a word a person acts on or reads as
+content.**
+
+It stays where it names a kind of thing: the `Rotulo` component and section labels, navigation
+group headings, the mobile navigation title, group labels in menus, selects, comboboxes and the
+command palette, shortcut groups, an agent step's kind (Reasoning, Tool call), the section names
+inside AI composites (a code block's label and language, a tool call's Arguments and Error, a run
+error's label, "Proposed change", a diff's pane labels), a Prose or Markdown `h4`, and a list
+heading.
+
+Everything else moves to a second register, `etiqueta` (the tag sewn on a thing, against the
+rótulo painted over a door): Archivo at its drawn width, semibold, no tracking, no transform, in
+the case it was written in. It sets no size, because it is read and takes the size of what it
+names: a button's label follows the button (`sm` 12px, `md` 13px, `lg` 14px, a step up from the
+capitals, which read larger than their size), and a column head, a badge or a form label each
+name their own. It moves buttons, segmented controls, badge words, column heads, stat names,
+form labels and legends, description and token-usage terms, a message's author, a step's status,
+a stepper's position, a timeline's label, a placeholder's label, a pullquote's citation and the
+notification centre's unread marker.
+
+This refines one line of ADR 0003 ("labels stay in the Archivo rótulo register"): category labels
+do; names and statuses are `etiqueta`.
+
+## Consequences
+
+- A screen has one register that leads. On the Runs screen the capitals are the navigation
+  groups and nothing else.
+- Translators own the case of every word a person acts on, and button labels are about 40% narrower.
+- Words that relied on the stylesheet for their capitals now show as written, so a status passed
+  as `run.status` ("failed") must be given its word ("Failed"). The stories and patterns do.
+- `rotulo` and `etiqueta` are one group in `cn()`, so a consumer who wants capitals on a badge
+  passes `className="rotulo"` and replaces the register instead of racing it.
+- `src/components/register.test.ts` lists every file allowed to use the rótulo, with the category
+  it names, fails if capitals or label tracking are typed by hand, and fails if a button, badge,
+  column head, stat, label or legend leaves the name register.
+- The menu's right-to-left hard state holds an Arabic group label in the rótulo.
+- Pixels move on almost every component page. It is not an API change: no prop or token changes.

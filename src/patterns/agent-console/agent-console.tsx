@@ -212,7 +212,7 @@ function AssistantTurn({
             renderCitation={cite}
           />
         ) : null}
-        {stopped && !done ? <p className="m-0 rotulo text-ink-muted">Stopped by you</p> : null}
+        {stopped && !done ? <p className="m-0 etiqueta text-sm text-ink-muted">Stopped by you</p> : null}
         {done ? (
           <>
             <UncertaintyNote title="Unverified figure">
@@ -376,7 +376,7 @@ export function AgentConsoleScreen({ canAsk = true, defaultQuestion, failFirstRu
                 onSubmit={ask}
                 onStop={stop}
                 toolbar={
-                  <Button size="sm" variant="ghost" className="normal-case tracking-normal">
+                  <Button size="sm" variant="ghost">
                     <span className="literal text-xs">cayuco-deep-3</span>
                     <ChevronDown />
                   </Button>

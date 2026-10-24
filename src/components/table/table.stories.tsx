@@ -50,10 +50,18 @@ const STATUS_TONE: Record<RunStatus, BadgeTone> = {
   cancelled: 'neutral',
 }
 
+const STATUS_LABEL: Record<RunStatus, string> = {
+  succeeded: 'Succeeded',
+  running: 'Running',
+  failed: 'Failed',
+  queued: 'Queued',
+  cancelled: 'Cancelled',
+}
+
 function RunStatusBadge({ status }: { status: RunStatus }) {
   return (
     <Badge tone={STATUS_TONE[status]} dot pulse={status === 'running'}>
-      {status}
+      {STATUS_LABEL[status]}
     </Badge>
   )
 }

@@ -169,11 +169,17 @@ export const HardStates: Story = {
               }
             />
             <MenuContent dir="rtl" lang="ar" align="start">
-              <MenuItem icon={<Pencil />} shortcut="E">
-                إعادة التسمية
-              </MenuItem>
-              <MenuItem icon={<Copy />}>تكرار</MenuItem>
-              <MenuItem icon={<Archive />}>أرشفة</MenuItem>
+              {/* An Arabic group label in the rótulo register, so the visual
+                  tests show whether its tracking ever pulls a joined word
+                  apart (cloth.css, ADR 0017). */}
+              <MenuGroup>
+                <MenuGroupLabel>التشغيل الحالي</MenuGroupLabel>
+                <MenuItem icon={<Pencil />} shortcut="E">
+                  إعادة التسمية
+                </MenuItem>
+                <MenuItem icon={<Copy />}>تكرار</MenuItem>
+                <MenuItem icon={<Archive />}>أرشفة</MenuItem>
+              </MenuGroup>
               <MenuSeparator />
               <MenuItem icon={<Trash2 />} tone="danger">
                 حذف التشغيل

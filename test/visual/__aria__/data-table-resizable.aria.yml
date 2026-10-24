@@ -25,80 +25,80 @@
       - columnheader "Started":
         - button "Started"
   - rowgroup:
-    - row /run_5a4ea1 Release-notes drafter queued cayuco-deep-3 — — — [\d,.]+[bkmBKM]+ ago/:
+    - row /run_5a4ea1 Release-notes drafter Queued cayuco-deep-3 — — — [\d,.]+[bkmBKM]+ ago/:
       - cell "run_5a4ea1"
       - cell "Release-notes drafter"
-      - cell "queued"
+      - cell "Queued"
       - cell "cayuco-deep-3"
       - cell "—"
       - cell "—"
       - cell "—"
       - cell /[\d,.]+[bkmBKM]+ ago/:
         - time: /[\d,.]+[bkmBKM]+ ago/
-    - row /run_5a61c5 Abuse-report reviewer running cayuco-steady-3 \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ [\d,.]+[bkmBKM]+ ago/:
+    - row /run_5a61c5 Abuse-report reviewer Running cayuco-steady-3 \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ [\d,.]+[bkmBKM]+ ago/:
       - cell "run_5a61c5"
       - cell "Abuse-report reviewer"
-      - cell "running"
+      - cell "Running"
       - cell "cayuco-steady-3"
       - cell /\d+,\d+/
       - cell /\$\d+\.\d+/
       - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
       - cell /[\d,.]+[bkmBKM]+ ago/:
         - time: /[\d,.]+[bkmBKM]+ ago/
-    - row /run_5a8529 Invoice checker running cayuco-deep-3 \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ [\d,.]+[bkmBKM]+ ago/:
+    - row /run_5a8529 Invoice checker Running cayuco-deep-3 \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ [\d,.]+[bkmBKM]+ ago/:
       - cell "run_5a8529"
       - cell "Invoice checker"
-      - cell "running"
+      - cell "Running"
       - cell "cayuco-deep-3"
       - cell /\d+,\d+/
       - cell /\$\d+\.\d+/
       - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
       - cell /[\d,.]+[bkmBKM]+ ago/:
         - time: /[\d,.]+[bkmBKM]+ ago/
-    - row /run_5aab72 Invoice checker running cayuco-deep-3 \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+    - row /run_5aab72 Invoice checker Running cayuco-deep-3 \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
       - cell "run_5aab72"
       - cell "Invoice checker"
-      - cell "running"
+      - cell "Running"
       - cell "cayuco-deep-3"
       - cell /\d+,\d+/
       - cell /\$\d+\.\d+/
       - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
       - cell /\d+[hmsp]+ ago/:
         - time: /\d+[hmsp]+ ago/
-    - row /run_5ac380 Refund reviewer succeeded cayuco-deep-3 \d+,\d+ \$\d+\.\d+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+    - row /run_5ac380 Refund reviewer Succeeded cayuco-deep-3 \d+,\d+ \$\d+\.\d+ \d+[hmsp]+ \d+[hmsp]+ ago/:
       - cell "run_5ac380"
       - cell "Refund reviewer"
-      - cell "succeeded"
+      - cell "Succeeded"
       - cell "cayuco-deep-3"
       - cell /\d+,\d+/
       - cell /\$\d+\.\d+/
       - cell /\d+[hmsp]+/
       - cell /\d+[hmsp]+ ago/:
         - time: /\d+[hmsp]+ ago/
-    - row /run_5ae91f Abuse-report reviewer cancelled cayuco-steady-3 \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+    - row /run_5ae91f Abuse-report reviewer Cancelled cayuco-steady-3 \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
       - cell "run_5ae91f"
       - cell "Abuse-report reviewer"
-      - cell "cancelled"
+      - cell "Cancelled"
       - cell "cayuco-steady-3"
       - cell /\d+,\d+/
       - cell /\$\d+\.\d+/
       - cell /[\d,.]+[bkmBKM]+ \d+[hmsp]+/
       - cell /\d+[hmsp]+ ago/:
         - time: /\d+[hmsp]+ ago/
-    - row /run_5aff68 Docs answerer failed cayuco-deep-3 \d+,\d+ \$\d+\.\d+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+    - row /run_5aff68 Docs answerer Failed cayuco-deep-3 \d+,\d+ \$\d+\.\d+ \d+[hmsp]+ \d+[hmsp]+ ago/:
       - cell "run_5aff68"
       - cell "Docs answerer"
-      - cell "failed"
+      - cell "Failed"
       - cell "cayuco-deep-3"
       - cell /\d+,\d+/
       - cell /\$\d+\.\d+/
       - cell /\d+[hmsp]+/
       - cell /\d+[hmsp]+ ago/:
         - time: /\d+[hmsp]+ ago/
-    - row /run_5b26ac Release-notes drafter failed cayuco-steady-3 \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
+    - row /run_5b26ac Release-notes drafter Failed cayuco-steady-3 \d+,\d+ \$\d+\.\d+ [\d,.]+[bkmBKM]+ \d+[hmsp]+ \d+[hmsp]+ ago/:
       - cell "run_5b26ac"
       - cell "Release-notes drafter"
-      - cell "failed"
+      - cell "Failed"
       - cell "cayuco-steady-3"
       - cell /\d+,\d+/
       - cell /\$\d+\.\d+/

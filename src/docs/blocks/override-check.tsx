@@ -52,12 +52,12 @@ export function OverrideCheck({
             </caption>
             <thead>
               <tr className="bg-cloth-shade">
-                <th scope="col" className="rotulo p-3 text-start">Text or mark</th>
-                <th scope="col" className="rotulo p-3 text-start">On</th>
-                <th scope="col" className="rotulo p-3 text-start">Theme</th>
-                <th scope="col" className="rotulo p-3 text-end">Shipped</th>
-                <th scope="col" className="rotulo p-3 text-end">Yours</th>
-                <th scope="col" className="rotulo p-3 text-start">Result</th>
+                <th scope="col" className="etiqueta text-xs p-3 text-start">Text or mark</th>
+                <th scope="col" className="etiqueta text-xs p-3 text-start">On</th>
+                <th scope="col" className="etiqueta text-xs p-3 text-start">Theme</th>
+                <th scope="col" className="etiqueta text-xs p-3 text-end">Shipped</th>
+                <th scope="col" className="etiqueta text-xs p-3 text-end">Yours</th>
+                <th scope="col" className="etiqueta text-xs p-3 text-start">Result</th>
               </tr>
             </thead>
             <tbody>

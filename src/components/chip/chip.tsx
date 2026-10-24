@@ -128,7 +128,7 @@ export interface ChipGroupProps extends React.ComponentProps<'fieldset'> {
 export function ChipGroup({ legend, hideLegend = false, className, children, ...props }: ChipGroupProps) {
   return (
     <fieldset data-slot="chip-group" className={cn('m-0 min-w-0 border-0 p-0', className)} {...props}>
-      <legend className={cn('mb-3 p-0 rotulo text-ink-2', hideLegend && 'sr-only')}>{legend}</legend>
+      <legend className={cn('mb-3 p-0 etiqueta text-sm text-ink-2', hideLegend && 'sr-only')}>{legend}</legend>
       <div className="flex flex-wrap gap-2">{children}</div>
     </fieldset>
   )

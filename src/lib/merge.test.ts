@@ -50,7 +50,7 @@ const EDGES = {
 const EDGE_IDS = Object.keys(EDGES) as (keyof typeof EDGES)[]
 
 /** `cn()` as tailwind-merge would configure it: before merge.ts, plus Mola's own utilities. */
-const reference = extendTailwindMerge<keyof typeof EDGES | 'band' | 'panel' | 'relleno' | 'diente' | 'wdth' | 'forced-role'>({
+const reference = extendTailwindMerge<keyof typeof EDGES | 'band' | 'panel' | 'relleno' | 'diente' | 'wdth' | 'register' | 'forced-role'>({
   extend: {
     classGroups: {
       'font-size': [{ text: ['2xs', '5xl'] }],
@@ -74,6 +74,7 @@ const reference = extendTailwindMerge<keyof typeof EDGES | 'band' | 'panel' | 'r
       relleno: ['relleno', 'relleno-field', 'relleno-working'],
       diente: ['diente', 'diente-up'],
       wdth: ['wdth-display', 'wdth-label'],
+      register: ['rotulo', 'etiqueta'],
       'forced-role': ['forced-ink', 'forced-selected', 'forced-on-selected'],
     },
     conflictingClassGroups: {
@@ -105,7 +106,7 @@ const FORMS = [
   'w-xs', 'min-w-xs', 'columns-xs', 'inline-full', 'block-full',
   'hover:p-2', 'focus:hover:p-3', 'hover:focus:p-4', 'md:hover:p-1', 'before:hover:p-1', 'hover:before:p-1',
   '[&>*]:p-1', '[&>*]:hover:p-2', 'hover:[&>*]:p-3', 'group-hover/item:p-2', 'dark:md:text-sm', 'md:dark:text-xs',
-  'data-[x]:p-2', 'cut', 'relleno', 'rotulo', 'forced-ink', 'not-a-utility',
+  'data-[x]:p-2', 'cut', 'relleno', 'rotulo', 'etiqueta', 'forced-ink', 'not-a-utility',
   'cut-band', 'cut-ink', 'cut-t', 'rule-b', 'bar-start-danger', 'bar-bottom-accent', 'focus-ring', 'band-accent', 'on-layer', 'wdth-label', 'tabular',
 ]
 
@@ -206,7 +207,7 @@ describe('merge agrees with tailwind-merge', () => {
 
 describe('merge', () => {
   it('keeps what is not a utility, in place', () => {
-    expect(merge('rotulo p-2 group p-4 rotulo')).toBe('rotulo group p-4 rotulo')
+    expect(merge('display-cut p-2 group p-4 display-cut')).toBe('display-cut group p-4 display-cut')
   })
 
   it('scopes a group by its variants, in any order, and by !', () => {

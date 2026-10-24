@@ -45,6 +45,7 @@ const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: '
 const integer = new Intl.NumberFormat('en-US')
 
 const TONE = { succeeded: 'success', running: 'info', failed: 'danger', queued: 'neutral', cancelled: 'neutral' } as const
+const LABEL = { succeeded: 'Succeeded', running: 'Running', failed: 'Failed', queued: 'Queued', cancelled: 'Cancelled' } as const
 
 const columns: DataTableColumn<AgentRun>[] = [
   { key: 'id', header: 'Run', width: '9.5rem', cell: (r) => <span className="literal text-ink-2">{r.id}</span> },
@@ -56,7 +57,7 @@ const columns: DataTableColumn<AgentRun>[] = [
     width: '8.5rem',
     cell: (r) => (
       <Badge tone={TONE[r.status]} dot pulse={r.status === 'running'}>
-        {r.status}
+        {LABEL[r.status]}
       </Badge>
     ),
   },

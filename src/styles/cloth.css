@@ -740,9 +740,21 @@
 }
 
 /* ── rótulo ───────────────────────────────────────────────────────────
- * The label register. Archivo pushed out along its width axis rather than a
- * normal-width face pulled apart with letter-spacing, which is what makes it
- * read as lettering cut to fill a panel instead of as a tracked-out caption. */
+ * The category register: what kind of block, group or step this is. Archivo
+ * pushed out along its width axis rather than a normal-width face pulled
+ * apart with letter-spacing, which is what makes it read as lettering cut to
+ * fill a panel instead of as a tracked-out caption.
+ *
+ * It names a category; it never carries a word a person acts on or reads as
+ * content (ADR 0017). It used to be the voice of every button, badge, column
+ * head and form label, and a screen where everything is lettering has no
+ * lettering that leads. Those words are `etiqueta`, below.
+ *
+ * Arabic was checked before adding a `:lang(ar)` exception: Chromium does
+ * not space the letters of a joined script apart, as the CSS Text spec asks,
+ * so the tracking only widens the gaps between words and the word stays
+ * whole. The menu's right-to-left hard state holds an Arabic group label in
+ * this register, so the visual tests would show it if that changed. */
 @utility rotulo {
   font-family: var(--font-ui);
   font-size: var(--text-2xs);
@@ -751,6 +763,34 @@
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
   line-height: 1;
+}
+
+/* ── etiqueta ─────────────────────────────────────────────────────────
+ * The name register: the word on a thing a person acts on or reads. A button,
+ * a status, a column head, a form label, a stat's name, an author. The tag
+ * sewn on a piece of cloth, as against the rótulo painted over a doorway.
+ *
+ * Archivo at its drawn width, semibold, sentence case, no tracking. What it
+ * sets is mostly what it undoes: width, spacing and case are inherited, so a
+ * badge inside a rótulo row or a button in a group heading would otherwise
+ * come out in capitals. The weight is what sets it apart from the text
+ * around it.
+ *
+ * No size, on purpose. A button's label follows the button's size, a column
+ * head the table's text, a form label the field's; each names its own
+ * `text-*`. The rótulo could fix its size because it is always small. This
+ * register is read, so it is set at the size of what it names.
+ *
+ * Why not capitals: a translator cannot set case once the stylesheet owns it
+ * (a German noun keeps its capital, Turkish dotted İ needs the language, ß has
+ * no single capital), and a button label in wide tracked capitals measured
+ * 1.6 to 1.7 times the width of the same words here, a size larger. ADR 0017. */
+@utility etiqueta {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-variation-settings: 'wdth' var(--wdth-body);
+  letter-spacing: var(--tracking-normal);
+  text-transform: none;
 }
 
 /* ── display, cut ─────────────────────────────────────────────────────

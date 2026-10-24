@@ -16,10 +16,10 @@ export function ScopeTable() {
         <caption className="sr-only">Colour scopes: what each is for, its Tailwind utilities, its Figma scopes and its tokens</caption>
         <thead>
           <tr className="bg-cloth-shade">
-            <th scope="col" className="rotulo p-3 text-start">Scope</th>
-            <th scope="col" className="rotulo p-3 text-start">What it is</th>
-            <th scope="col" className="rotulo p-3 text-start">Utilities</th>
-            <th scope="col" className="rotulo p-3 text-start">Tokens</th>
+            <th scope="col" className="etiqueta text-xs p-3 text-start">Scope</th>
+            <th scope="col" className="etiqueta text-xs p-3 text-start">What it is</th>
+            <th scope="col" className="etiqueta text-xs p-3 text-start">Utilities</th>
+            <th scope="col" className="etiqueta text-xs p-3 text-start">Tokens</th>
           </tr>
         </thead>
         <tbody>

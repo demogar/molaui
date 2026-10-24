@@ -228,7 +228,7 @@ export function Stepper({
 
       <Form data-part="panel" aria-labelledby={headingId} onSubmit={submit} className="flex min-w-0 flex-col gap-5">
         <div className="flex flex-col gap-1">
-          <span data-part="position" className="rotulo text-ink-muted">
+          <span data-part="position" className="etiqueta text-xs text-ink-muted">
             {f.format(t.stepOf, { position: index + 1, total: steps.length })}
           </span>
           <Heading

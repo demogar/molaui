@@ -68,7 +68,7 @@ export function Placeholder({
       {...props}
     >
       <span aria-hidden className="flex flex-col items-center gap-2 p-5 text-center">
-        <span className="rotulo text-ink-2">{label}</span>
+        <span className="etiqueta text-xs text-ink-2">{label}</span>
         <span className="font-display text-lg font-semibold text-ink-2 wdth-display">{name}</span>
       </span>
     </div>

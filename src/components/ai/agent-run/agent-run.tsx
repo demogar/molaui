@@ -298,7 +298,7 @@ function StepRow({ step, kindLabel, last, nextStarted }: { step: AgentStep; kind
         </span>
       </span>
       <span className="ms-auto flex shrink-0 flex-col items-end gap-0.5 pt-[1px]">
-        <span className={cn('rotulo', active ? 'text-ink' : 'text-ink-muted')}>
+        <span className={cn('etiqueta text-xs', active ? 'text-ink' : 'text-ink-muted')}>
           {step.status === 'succeeded' ? <span className="sr-only">{statuses[step.status]}</span> : statuses[step.status]}
         </span>
         {ms !== undefined ? <span className="font-ui text-xs tabular text-ink-2">{formatDuration(ms)}</span> : null}

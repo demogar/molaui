@@ -79,7 +79,7 @@ export function Stat({ label, value, unit, delta, trend, hint, messages, classNa
       )}
       {...props}
     >
-      <dt data-part="label" className="rotulo text-ink-muted">{label}</dt>
+      <dt data-part="label" className="etiqueta text-sm text-ink-muted">{label}</dt>
       <dd className="m-0 flex flex-col gap-2">
         <span className="flex items-end justify-between gap-4">
           {/* A figure and its unit are one literal: `dir="auto"` keeps "97.8 %"

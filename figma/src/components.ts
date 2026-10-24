@@ -181,16 +181,30 @@ export function buildComponents(manifest: Manifest, collections: CollectionSpec[
     size: (size: string) => (values.has(`Scale/text-${size}--line-height`) ? ratio(`text-${size}--line-height`) : 100),
   }
 
-  /** Archivo at a size; `label` is the rótulo register: semibold caps, tracked, expanded. */
-  const ui = (size: string, fill: Paint, o: { weight?: string; line?: number; label?: boolean } = {}): TextStyle => ({
+  /**
+   * Archivo at a size. No drawn component uses the rótulo since ADR 0017
+   * moved buttons, badges and form labels out of it; when Rotulo or a group
+   * label is drawn, it is semibold caps, tracked (`tracking-label`), at
+   * `wdth-label`.
+   */
+  const ui = (size: string, fill: Paint, o: { weight?: string; line?: number } = {}): TextStyle => ({
     family: family('ui'),
-    style: o.weight ?? (o.label ? 'SemiBold' : 'Regular'),
+    style: o.weight ?? 'Regular',
     size: D(`text-${size}`),
-    lineHeight: o.line ?? (o.label ? LINE.none : LINE.size(size)),
-    letterSpacing: o.label ? ratio('tracking-label') : 0,
-    upper: Boolean(o.label),
-    ...(o.label ? { wdth: values.get('Scale/wdth-label') as number } : {}),
+    lineHeight: o.line ?? LINE.size(size),
+    letterSpacing: 0,
+    upper: false,
     fill,
+  })
+  /**
+   * The name register (`etiqueta`, ADR 0017): Archivo semibold at the drawn
+   * width, in the case it was written in. What a person presses or reads: a
+   * button, a badge, a form label. The width is set, not left out, because
+   * the CSS sets it too (a name inside a rótulo row must not inherit 116).
+   */
+  const etiqueta = (size: string, fill: Paint, line: number = LINE.size(size)): TextStyle => ({
+    ...ui(size, fill, { weight: 'SemiBold', line }),
+    wdth: values.get('Scale/wdth-body') as number,
   })
 
   const pad = (y: Num, x: Num) => ({ top: y, right: x, bottom: y, left: x })
@@ -323,7 +337,7 @@ export function buildComponents(manifest: Manifest, collections: CollectionSpec[
   /* ── Button and IconButton ────────────────────────────────────────── */
   const BUTTON_FILL: Record<string, string> = { primary: 'ink', secondary: 'cloth-pale', danger: 'danger', ghost: 'cloth-pale' }
   const BUTTON_INK: Record<string, string> = { primary: 'on-ink', secondary: 'ink', danger: 'on-layer', ghost: 'ink' }
-  const BUTTON_TEXT: Record<string, string> = { sm: '2xs', md: 'xs', lg: 'sm' }
+  const BUTTON_TEXT: Record<string, string> = { sm: 'xs', md: 'sm', lg: 'base' }
   const BUTTON_H: Record<string, string> = { sm: 'control-h-sm', md: 'control-h', lg: 'control-h-lg' }
   const buttonSurface = (variant: string, state: State): Pick<FrameNodeSpec, 'fill' | 'effects'> => {
     if (state === 'disabled') {
@@ -378,7 +392,7 @@ export function buildComponents(manifest: Manifest, collections: CollectionSpec[
             ...buttonSurface(p.variant!, state),
           }, [
             icon('Plus', iconSize, ink, { visible: 'has icon', swap: 'icon' }),
-            text('children', 'Start run', ui(BUTTON_TEXT[size]!, ink, { label: true }), { characters: 'children' }),
+            text('children', 'Start run', etiqueta(BUTTON_TEXT[size]!, ink, LINE.none), { characters: 'children' }),
             { ...icon('ArrowRight', iconSize, ink, { visible: 'withArrow' }), name: 'arrow' },
           ]),
         }
@@ -515,7 +529,7 @@ export function buildComponents(manifest: Manifest, collections: CollectionSpec[
   )
 
   /* ── Field ────────────────────────────────────────────────────────── */
-  const rotulo = (fill: Paint) => ui('2xs', fill, { label: true })
+  const fieldLabel = (fill: Paint) => etiqueta('sm', fill, LINE.snug)
   add(
     {
       name: 'Field',
@@ -535,9 +549,9 @@ export function buildComponents(manifest: Manifest, collections: CollectionSpec[
           props: {},
           root: frame('Field', { layout: 'VERTICAL', width: 280, sizing: { h: 'FIXED', v: 'HUG' }, gap: space(2) }, [
             frame('header', { gap: space(0.5), sizing: { h: 'HUG', v: 'HUG' }, align: { main: 'MIN', cross: 'BASELINE' } }, [
-              text('label', 'Run name', rotulo(C('ink-2')), { characters: 'label' }),
-              text('required', '*', rotulo(C('ink')), { visible: 'required' }),
-              text('optional', 'Optional', { ...rotulo(C('ink-muted')), style: 'Medium', upper: false, letterSpacing: ratio('tracking-figures') }, { visible: 'optional' }),
+              text('label', 'Run name', fieldLabel(C('ink-2')), { characters: 'label' }),
+              text('required', '*', fieldLabel(C('ink')), { visible: 'required' }),
+              text('optional', 'Optional', { ...fieldLabel(C('ink-muted')), style: 'Regular' }, { visible: 'optional' }),
             ]),
             { kind: 'instance', name: 'control', of: 'Input', variant: { size: 'md', 'aria-invalid': 'false', disabled: 'false', state: 'rest' }, fill: true, prop: { swap: 'children' } },
             text('hint', 'Shown on the runs list.', ui('xs', C('ink-muted'), { line: LINE.snug }), { characters: 'hint', visible: 'has hint' }),
@@ -765,7 +779,7 @@ export function buildComponents(manifest: Manifest, collections: CollectionSpec[
             align: { main: 'MIN', cross: 'CENTER' },
             fill: C(look.fill!),
             ...(effects.length ? { effects } : {}),
-          }, [dot, text('children', 'Running', rotulo(C(look.ink)), { characters: 'children' })]),
+          }, [dot, text('children', 'Running', etiqueta('xs', C(look.ink), LINE.none), { characters: 'children' })]),
         }
       }),
     },

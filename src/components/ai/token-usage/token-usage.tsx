@@ -99,7 +99,7 @@ export function TokenUsage({
       <dl className="m-0 grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-4">
         {rows.map(([term, detail]) => (
           <div key={term} className="m-0">
-            <dt className="rotulo text-ink-muted">{term}</dt>
+            <dt className="etiqueta text-sm text-ink-muted">{term}</dt>
             <dd className="m-0 mt-1 font-ui text-lg font-semibold tabular text-ink">{detail}</dd>
           </div>
         ))}
@@ -107,7 +107,7 @@ export function TokenUsage({
       {ratio !== undefined && contextWindow ? (
         <div className="flex flex-col gap-1.5">
           <div className="flex items-baseline justify-between gap-3 font-ui text-xs">
-            <span className="rotulo text-ink-muted">
+            <span className="etiqueta text-ink-muted">
               {t.context}
             </span>
             <span className="tabular text-ink-2">

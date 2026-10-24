@@ -136,13 +136,14 @@ export function Message({
           <span
             data-part="author"
             className={cn(
-              'flex min-w-0 items-center gap-2 rotulo text-ink-2',
+              'flex min-w-0 items-center gap-2 text-ink-2',
               'before:h-(--bar-w) before:w-4 before:shrink-0 before:bg-[var(--band)] before:content-[""]',
               roleBand({ role }),
-              // A tool's name is a machine literal, not a label: set in mono,
-              // in its own case, and allowed to break — `query_rollout` in
-              // expanded caps overran the 8.5rem column into the message.
-              role === 'tool' && 'literal text-xs normal-case tracking-normal',
+              // A name is read, so it is in the name register (ADR 0017). A
+              // tool's name is a machine literal instead: set in mono, in its
+              // own case, and allowed to break — `query_rollout` in expanded
+              // caps overran the 8.5rem column into the message.
+              role === 'tool' ? 'literal text-xs' : 'etiqueta text-sm',
             )}
           >
             {/* Break a tool name only at its own seams: a zero-width space after

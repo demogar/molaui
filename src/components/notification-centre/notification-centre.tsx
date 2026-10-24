@@ -143,7 +143,7 @@ export function NotificationList({
                   {item.description ? <div className="mt-0.5 text-sm text-ink-2">{item.description}</div> : null}
                   <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1.5">
                     {unread ? (
-                      <span aria-hidden data-part="unread" className="rotulo text-ink">
+                      <span aria-hidden data-part="unread" className="etiqueta text-xs text-ink">
                         {t.new}
                       </span>
                     ) : null}

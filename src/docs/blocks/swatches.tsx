@@ -96,9 +96,9 @@ export function PairingTable({ pairs }: { pairs: [fg: string, bg: string][] }) {
       <table className="w-full border-collapse text-sm">
         <thead>
           <tr className="bg-cloth-shade text-start">
-            <th className="rotulo p-3 font-semibold">Pairing</th>
-            <th className="rotulo p-3 font-semibold">Light</th>
-            <th className="rotulo p-3 font-semibold">Dark</th>
+            <th className="etiqueta text-xs p-3 font-semibold">Pairing</th>
+            <th className="etiqueta text-xs p-3 font-semibold">Light</th>
+            <th className="etiqueta text-xs p-3 font-semibold">Dark</th>
           </tr>
         </thead>
         <tbody>

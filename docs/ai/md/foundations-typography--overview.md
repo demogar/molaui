@@ -17,20 +17,39 @@ model** speaks to you in Alegreya, and the **machine's literals** are Martian Mo
 | --- | --- | --- | --- |
 | The system | Archivo at the drawn width | `font-ui` (the default) | Labels, controls, navigation, table cells, figures |
 | Headings | Archivo, set wide | `Heading`, or `font-display wdth-display` | Page and section titles, stat values |
-| Labels | Archivo at 116, caps, tracked | `rotulo`, or `Rotulo` | The label above a block, a column header, a status word |
+| Names | Archivo at the drawn width, semibold, as written | `etiqueta` with a `text-*` size | What a person acts on or reads: a button, a status, a column header, a form label, a stat's name |
+| Categories | Archivo at 116, capitals, tracked | `rotulo`, or `Rotulo` | What kind of block, group or step follows: a section label, a menu group, a step's kind |
 | The reader | Alegreya | `Prose`, `Lead`, or `font-text` | Prose a person or a model says to the reader: an answer, a description, a help text |
 | The machine | Martian Mono, narrowed | `literal`, or `Code` | Ids, hashes, code, JSON, tool arguments. Never a label, never a number in a table |
 
 The face says who is speaking. A transcript can be scanned for what the agent said (Alegreya)
 against what it did (Martian Mono) from the type alone.
 
+## Names and categories
+
+Two small registers, and the rule between them is the point: **capitals name a category; they
+never carry a word a person acts on or reads as content.**
+
+The rótulo (`rotulo`) is lettering: wide, tracked capitals that say what kind of thing follows. A
+navigation group, a menu group, a section label, the kind of an agent's step. It is quiet because
+it is rare. When it was also every button, badge and column header, a screen was all lettering
+and nothing on it led.
+
+The name register (`etiqueta`) is everything a person presses or reads: a button's label, a
+status, a column header, a form label, a stat's name, an author. Archivo at its drawn width,
+semibold, untracked, in the case it was written in. It sets no size, because it takes the size of
+what it names. Sentence case also leaves case to the translator and keeps a button no wider than
+its words ([ADR 0017](https://demogar.github.io/molaui/?path=/docs/decisions-0017-capitals-name-categories--overview)).
+
+> Not included in the Markdown version: an interactive `Specimen` block. See it on the page: https://demogar.github.io/molaui/?path=/docs/foundations-typography--overview
+
 ## The width axis
 
 Archivo was chosen for its `wdth` axis, and it is used at three registers. Running text stays at
 the drawn width (100). Display goes wide (118): a heading here is a shape cut to fill its panel,
 and a bold grotesque set tight at normal width is the most common display register of the last
-five years. Labels sit at 116 — at 11px, width is what makes caps read as lettering rather than a
-tracked-out caption.
+five years. Category labels sit at 116 — at 11px, width is what makes capitals read as lettering
+rather than a tracked-out caption. Names stay at 100, because they are read, not lettered.
 
 > Not included in the Markdown version: an interactive `Specimen` block. See it on the page: https://demogar.github.io/molaui/?path=/docs/foundations-typography--overview
 

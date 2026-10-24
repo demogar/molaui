@@ -199,7 +199,7 @@ export function StepList({ items, inverse: inverseProp, tone, titleAs: TitleTag 
               // bleached cotton, where gold measures 1.49:1. Full --on-ink is
               // the only ink measured on the inverse ground in both themes.
               inverse ? 'text-on-ink' : 'text-ink',
-              item.label !== undefined && 'pt-1 text-xs uppercase tracking-label wdth-label',
+              item.label !== undefined && 'pt-1 text-xs tracking-normal',
             )}
           >
             {item.label ?? String(i + 1).padStart(2, '0')}

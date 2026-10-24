@@ -81,14 +81,14 @@ export function DecisionRecord({ number }: { number: string }) {
       <Markdown>{`# ${d.number} — ${d.title}`}</Markdown>
       <div className="sb-unstyled not-prose my-6 grid gap-3 bg-cloth-pale p-4 font-ui text-sm text-ink shadow-cut">
         <p className="m-0 flex flex-wrap items-center gap-x-3 gap-y-1.5">
-          <span className="rotulo text-ink-muted">Status</span>
+          <span className="etiqueta text-ink-muted">Status</span>
           <DecisionStatusBadge status={d.status} />
           <span className="text-ink-2">
             Decided <time dateTime={d.date}>{d.date}</time>
           </span>
         </p>
         <p className="m-0 text-ink-2">
-          <span className="rotulo me-3 text-ink-muted">Governs</span>
+          <span className="etiqueta me-3 text-ink-muted">Governs</span>
           <Foundations d={d} />
         </p>
         <p className="m-0 text-ink-2">
@@ -116,10 +116,10 @@ export function DecisionIndex() {
         <caption className="sr-only">Architecture decisions, with status and what each decided</caption>
         <thead>
           <tr className="bg-cloth-shade">
-            <th scope="col" className="rotulo p-3 text-start">Decision</th>
-            <th scope="col" className="rotulo p-3 text-start">Status</th>
-            <th scope="col" className="rotulo p-3 text-start">What it decided</th>
-            <th scope="col" className="rotulo p-3 text-start">Governs</th>
+            <th scope="col" className="etiqueta text-xs p-3 text-start">Decision</th>
+            <th scope="col" className="etiqueta text-xs p-3 text-start">Status</th>
+            <th scope="col" className="etiqueta text-xs p-3 text-start">What it decided</th>
+            <th scope="col" className="etiqueta text-xs p-3 text-start">Governs</th>
           </tr>
         </thead>
         <tbody>

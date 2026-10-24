@@ -27,7 +27,7 @@ export interface RotuloProps extends React.ComponentProps<'p'> {
 }
 
 /**
- * The label register — Archivo pushed out along its width axis, cut short by a
+ * The category register — Archivo pushed out along its width axis, cut short by a
  * band of the layer beneath.
  *
  * This replaces the eyebrow, and the difference is not cosmetic: an eyebrow
@@ -36,6 +36,9 @@ export interface RotuloProps extends React.ComponentProps<'p'> {
  * UNDER the block it belongs to and reads as attribution: who says this, what
  * kind of thing it is. Placing one above a heading puts the old element back
  * under a new name.
+ *
+ * It names a category, never a word a person acts on or reads as content:
+ * those are the `etiqueta` register, in sentence case (ADR 0017).
  */
 export function Rotulo({ className, band = 'ink', plain = false, ...props }: RotuloProps) {
   return (
