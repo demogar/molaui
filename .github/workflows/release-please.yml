@@ -91,7 +91,7 @@ jobs:
   # npmjs.com publishing uses trusted publishing: npm exchanges this job's
   # OIDC token for a short-lived publish token, so no long-lived secret is
   # needed and provenance is recorded automatically. It needs npm 11.5.1 or
-  # later (Node 22 ships npm 10) and a trusted publisher configured on
+  # later (the Node 24 in .nvmrc ships npm 11) and a trusted publisher configured on
   # npmjs.com for this repository and workflow file (CONTRIBUTING.md,
   # "Releases"). Until that is configured, npm falls back to the NPM_TOKEN
   # secret through NODE_AUTH_TOKEN; once it is, the secret can be deleted.
@@ -129,7 +129,6 @@ jobs:
         with:
           node-version-file: .nvmrc
           registry-url: https://registry.npmjs.org
-      - run: npm install -g npm@11.21.0
       - run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
