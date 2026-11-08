@@ -52,6 +52,10 @@ beside Approve and Deny, at the same weight:
 
 Nothing changes for calls that do not pass `approval.edit` or `decision`.
 
+The [Agent hand-off](https://demogar.github.io/molaui/?path=/docs/patterns-agent-hand-off--overview) pattern uses it: the person can
+lower the refund with **Edit amount and approve**, and the result, the run and the reply the agent
+sends all name the amount refunded and the one proposed.
+
 ## Everything in 0.10.0
 
 > Not included in the Markdown version: an interactive `ReleaseChanges` block. See it on the page: https://demogar.github.io/molaui/?path=/docs/mola-ui-what-s-new-0-10--overview

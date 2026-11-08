@@ -45,6 +45,32 @@ describe('AgentHandoffScreen', () => {
     expect(screen.getByText('Sent')).toBeInTheDocument()
   })
 
+  it('approve a smaller refund: recorded as approved with edits, and the reply names the amount refunded', async () => {
+    const user = userEvent.setup()
+    let finish = () => {}
+    const refund = vi.fn(() => new Promise<void>((resolve) => (finish = resolve)))
+    render(<AgentHandoffScreen refund={refund} />)
+    await user.click(screen.getByRole('button', { name: 'Edit amount and approve' }))
+    const amount = screen.getByRole('textbox', { name: 'Amount to refund' })
+    expect(amount).toHaveFocus()
+    await user.clear(amount)
+    await user.type(amount, '300')
+    expect(screen.getByRole('button', { name: 'Approve with edits' })).toHaveAccessibleDescription(
+      'Can’t approve yet: The refund can be at most $240.00, the duplicate charge.',
+    )
+    await user.clear(amount)
+    await user.type(amount, '120')
+    await user.click(screen.getByRole('button', { name: 'Approve with edits' }))
+    expect(refund).toHaveBeenCalledOnce()
+    expect(handoffHeading()).toHaveFocus()
+    expect(screen.getByText('Approved with edits: refunding $120.00 instead of $240.00.', { selector: '[role="status"]' })).toBeInTheDocument()
+
+    finish()
+    await waitFor(() => expect(handoffHeading()).toHaveTextContent('Refund issued and reply sent'))
+    expect(screen.getByText(/Approved with your edit: the agent proposed \$240\.00\./)).toBeInTheDocument()
+    expect(screen.getByText(/I have refunded \$120\.00 of the second charge/)).toBeInTheDocument()
+  })
+
   it('a failed refund says so verbatim, sends nothing, and Retry call tries again', async () => {
     const user = userEvent.setup()
     const refund = vi

@@ -79,6 +79,19 @@ export const Approved: Story = {
   },
 }
 
+export const ApprovedWithEdits: Story = {
+  name: 'Approved with edits',
+  args: { defaultOutcome: 'refunded', defaultRefundUsd: 120 },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The person lowered the refund to $120.00 with Edit amount and approve. It is recorded as approved with edits, not as approved: the result says the agent proposed $240.00, the refund call in the run shows the amount before and after, and the reply the agent sent names the amount refunded. It is not a take-over, because the agent’s plan stood.',
+      },
+    },
+  },
+}
+
 export const TakenOver: Story = {
   name: 'Taken over',
   args: { defaultOutcome: 'taken-over' },

@@ -6,7 +6,7 @@ import { AgentRun, type AgentStep } from '../../components/ai/agent-run'
 import { Confidence } from '../../components/ai/confidence'
 import { Message } from '../../components/ai/message'
 import { RunStatus, type RunStatusValue } from '../../components/ai/run-status'
-import { ToolCall } from '../../components/ai/tool-call'
+import { ToolCall, type ToolCallDecision } from '../../components/ai/tool-call'
 import { PageHeader } from '../../components/app-shell/page-header'
 import { Badge } from '../../components/badge'
 import { Breadcrumb } from '../../components/breadcrumb'
@@ -14,6 +14,7 @@ import { Button } from '../../components/button'
 import { Callout } from '../../components/callout'
 import { EmptyState } from '../../components/empty-state'
 import { Field, Textarea } from '../../components/field'
+import { NumberInput } from '../../components/number-input'
 import { Skeleton, SkeletonGroup, SkeletonText } from '../../components/skeleton'
 import { HANDOFF, type Handoff, usd } from './_data'
 
@@ -37,6 +38,13 @@ import { HANDOFF, type Handoff, usd } from './_data'
  * send as themselves. Deny is a take-over too: the agent's plan was refused,
  * so it has nothing left to do, and the ticket is the person's. Nothing is
  * sent to the customer until one of these happens.
+ *
+ * ── approving a smaller refund ──
+ * The person may lower the amount before approving, with Edit and approve on
+ * the call. That is recorded as approved with edits, not as approved: the
+ * refund that runs is not the one the agent proposed, and the run's record
+ * shows both amounts. It is not a take-over either, because the agent's plan
+ * stands and it still sends the reply, rewritten for the amount refunded.
  *
  * ── when the person may not approve ──
  * A refund this size needs a billing lead. A support operator still sees the
@@ -73,6 +81,8 @@ export interface AgentHandoffScreenProps {
   refund?: () => Promise<void>
   /** Open in this state, for stories and screenshots. */
   defaultOutcome?: Outcome
+  /** With `defaultOutcome`: the amount the person approved, when they lowered it. */
+  defaultRefundUsd?: number
   defaultRefundError?: string
   onReassign?: () => void
   onSendReply?: (text: string) => void
@@ -96,9 +106,11 @@ const RUN_STATUS: Record<Outcome, RunStatusValue> = {
   'taken-over': 'cancelled',
 }
 
+const refundArgs = (amountUsd: number) => ({ charge: 'ch_31b0', amount_usd: amountUsd, reason: 'duplicate_charge' })
+
 const wait = (ms: number) => new Promise<void>((resolve) => window.setTimeout(resolve, ms))
 
-function steps(h: Handoff, outcome: Outcome): AgentStep[] {
+function steps(h: Handoff, outcome: Outcome, decision: ToolCallDecision | null): AgentStep[] {
   const approved = outcome === 'refunding' || outcome === 'refunded' || outcome === 'refund-failed'
   const done: AgentStep[] = [
     { id: 'read', kind: 'message', title: 'Read the ticket', status: 'succeeded', startedAt: at(h, 0), endedAt: at(h, 2) },
@@ -155,7 +167,11 @@ function steps(h: Handoff, outcome: Outcome): AgentStep[] {
       // would announce one failure two or three times.
       ...(outcome === 'refund-failed'
         ? {}
-        : { detail: <ToolCall name="billing.issue_refund" status={refundStatus} args={{ charge: 'ch_31b0', amount_usd: h.amountUsd }} /> }),
+        : {
+            detail: (
+              <ToolCall name="billing.issue_refund" status={refundStatus} args={refundArgs(h.amountUsd)} decision={decision} />
+            ),
+          }),
     },
     {
       id: 'reply',
@@ -190,6 +206,7 @@ export function AgentHandoffScreen({
   canApprove = true,
   refund = () => wait(1_200),
   defaultOutcome = 'waiting',
+  defaultRefundUsd,
   defaultRefundError,
   onReassign,
   onSendReply,
@@ -197,7 +214,10 @@ export function AgentHandoffScreen({
   const [outcome, setOutcome] = React.useState<Outcome>(defaultOutcome)
   const [error, setError] = React.useState<string | undefined>(defaultRefundError)
   const [announcement, setAnnouncement] = React.useState('')
-  const [reply, setReply] = React.useState(handoff?.draftReply ?? '')
+  const proposedUsd = handoff?.amountUsd ?? 0
+  const [refundUsd, setRefundUsd] = React.useState(defaultRefundUsd ?? proposedUsd)
+  const [reply, setReply] = React.useState(handoff ? handoff.draftReply(proposedUsd) : '')
+
   const headingRef = React.useRef<HTMLHeadingElement>(null)
   const uid = React.useId()
 
@@ -234,6 +254,14 @@ export function AgentHandoffScreen({
   }
 
   const h = handoff
+  // The decision on the refund, kept for the record once the call has moved
+  // on: on the refund call in the run, and on a failed call with Retry.
+  const approved = outcome === 'refunding' || outcome === 'refunded' || outcome === 'refund-failed'
+  const decision: ToolCallDecision | null = !approved
+    ? null
+    : refundUsd === h.amountUsd
+      ? { status: 'approved', by: 'You' }
+      : { status: 'approved_with_edits', by: 'You', editedArgs: refundArgs(refundUsd) }
   // Focus moves after the render that shows the new heading text: the button
   // that was pressed has just gone.
   const decide = (next: Outcome, said: string) => {
@@ -244,9 +272,16 @@ export function AgentHandoffScreen({
     headingRef.current?.focus()
   }
 
-  const runRefund = async () => {
+  const runRefund = async (amountUsd: number) => {
     setError(undefined)
-    decide('refunding', 'Approved. Issuing the refund.')
+    setRefundUsd(amountUsd)
+    setReply(h.draftReply(amountUsd))
+    decide(
+      'refunding',
+      amountUsd === h.amountUsd
+        ? 'Approved. Issuing the refund.'
+        : `Approved with edits: refunding ${usd.format(amountUsd)} instead of ${usd.format(h.amountUsd)}.`,
+    )
     try {
       await refund()
       setOutcome('refunded')
@@ -322,13 +357,37 @@ export function AgentHandoffScreen({
                       name="billing.issue_refund"
                       title={`Refund ${usd.format(h.amountUsd)}`}
                       status="waiting"
-                      args={{ charge: 'ch_31b0', amount_usd: h.amountUsd, reason: 'duplicate_charge' }}
+                      args={refundArgs(h.amountUsd)}
                       approval={{
                         reason: `Refunds over ${usd.format(h.agentLimitUsd)} need a person. Approving issues the refund and sends the reply below.`,
                         approveLabel: 'Approve refund',
                         denyLabel: 'Deny',
-                        onApprove: () => void runRefund(),
+                        onApprove: () => void runRefund(h.amountUsd),
                         onDeny: () => takeOver('Refund denied. You have this ticket; nothing was sent.'),
+                        edit: {
+                          label: 'Edit amount and approve',
+                          validate: (draft) => {
+                            const amount = draft.amount_usd
+                            if (typeof amount !== 'number') return 'Enter the amount to refund.'
+                            if (amount <= 0) return 'The refund must be more than $0.00.'
+                            if (amount > h.amountUsd) return `The refund can be at most ${usd.format(h.amountUsd)}, the duplicate charge.`
+                            return null
+                          },
+                          render: (draft, setDraft) => (
+                            <Field label="Amount to refund" hint={`Up to ${usd.format(h.amountUsd)}, the duplicate charge.`}>
+                              {(control) => (
+                                <NumberInput
+                                  {...control}
+                                  locale="en-US"
+                                  unit="USD"
+                                  value={typeof draft.amount_usd === 'number' ? draft.amount_usd : null}
+                                  onValueChange={(value) => setDraft({ ...draft, amount_usd: value })}
+                                />
+                              )}
+                            </Field>
+                          ),
+                          onApprove: (edited) => void runRefund(Number(edited.amount_usd)),
+                        },
                       }}
                     />
                   ) : (
@@ -337,7 +396,7 @@ export function AgentHandoffScreen({
                         name="billing.issue_refund"
                         title={`Refund ${usd.format(h.amountUsd)}`}
                         status="waiting"
-                        args={{ charge: 'ch_31b0', amount_usd: h.amountUsd, reason: 'duplicate_charge' }}
+                        args={refundArgs(h.amountUsd)}
                       />
                       <Callout
                         tone="warn"
@@ -356,22 +415,25 @@ export function AgentHandoffScreen({
                 </>
               ) : outcome === 'refunding' ? (
                 <p className="m-0 text-sm text-ink-2">
-                  The agent is refunding {usd.format(h.amountUsd)} to the card on {h.invoice}. The reply goes once the refund
+                  The agent is refunding {usd.format(refundUsd)} to the card on {h.invoice}. The reply goes once the refund
                   is confirmed.
                 </p>
               ) : outcome === 'refunded' ? (
                 <Callout tone="success" variant="flat">
-                  {usd.format(h.amountUsd)} refunded to the card on {h.invoice}, and the reply below sent to {h.customer}.
-                  Approved by you.
+                  {usd.format(refundUsd)} refunded to the card on {h.invoice}, and the reply below sent to {h.customer}.{' '}
+                  {refundUsd === h.amountUsd
+                    ? 'Approved by you.'
+                    : `Approved with your edit: the agent proposed ${usd.format(h.amountUsd)}.`}
                 </Callout>
               ) : outcome === 'refund-failed' ? (
                 <ToolCall
                   name="billing.issue_refund"
                   title={`Refund ${usd.format(h.amountUsd)}`}
                   status="failed"
-                  args={{ charge: 'ch_31b0', amount_usd: h.amountUsd, reason: 'duplicate_charge' }}
+                  args={refundArgs(h.amountUsd)}
                   {...(error ? { error } : {})}
-                  onRetry={() => void runRefund()}
+                  decision={decision}
+                  onRetry={() => void runRefund(refundUsd)}
                 />
               ) : (
                 <p className="m-0 text-sm text-ink-2">
@@ -401,7 +463,7 @@ export function AgentHandoffScreen({
                         </Badge>
                       )}
                     </p>
-                    <p className="m-0 font-text text-base leading-body text-ink">{h.draftReply}</p>
+                    <p className="m-0 font-text text-base leading-body text-ink">{h.draftReply(refundUsd)}</p>
                   </Message>
                 )}
               </div>
@@ -437,9 +499,9 @@ export function AgentHandoffScreen({
               ? { endedAt: at(h, outcome === 'taken-over' ? 300 : 303) }
               : {})}
             model={h.model}
-            steps={steps(h, outcome)}
+            steps={steps(h, outcome, decision)}
             {...(outcome === 'refunded'
-              ? { summary: `Refunded ${usd.format(h.amountUsd)} and replied, after your approval.` }
+              ? { summary: `Refunded ${usd.format(refundUsd)} and replied, after your approval.` }
               : outcome === 'taken-over'
                 ? { summary: 'Stopped: you took the ticket over. Nothing was sent.' }
                 : {})}
