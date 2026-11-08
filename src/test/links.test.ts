@@ -19,6 +19,7 @@ import { knownIds, mdxTitles, repoRoot, storyTitles, walk } from './story-index'
 const SOURCES = [
   'README.md',
   'CONTRIBUTING.md',
+  'ACCESSIBILITY.md',
   'llms.txt',
   'llms-full.txt',
   'llms-components.txt',

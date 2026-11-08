@@ -12,6 +12,7 @@ One tool invocation: what the model asked a system to do, with what, and what ca
 
 - **Collapsed by default, except when it needs you.** A run can make forty calls; forty open payloads is a wall. A failed call and a call waiting for approval open themselves — hiding them would hide the only thing that matters.
 - **Human in the loop.** Approval says *why* in words and gives Approve and Deny the same size and variant, as Change review does for its three decisions. A consent control that nudges is not consent; for a tool that writes to production it is a bug.
+- **Approved with edits is its own decision.** A person who changes an argument before approving gets a third outcome with its own glyph, word and ink, and the record keeps the proposed arguments beside the ones that ran, each change before → after. Calling it “approved” would claim the agent’s call ran as proposed.
 - **Working** is a strip of relleno along the top edge and a ticking clock — no spinner, no percentage.
 
 ## Usage
@@ -20,6 +21,7 @@ One tool invocation: what the model asked a system to do, with what, and what ca
 
 - Showing what the model asked a system to do, with what, and what came back.
 - Holding a call that writes, spends or sends until a person approves or denies it.
+- Letting the person change an argument before approving, recorded as approved with edits.
 - Calls the model made at the same time, grouped with ToolCallGroup.
 
 ### When not to
@@ -32,6 +34,8 @@ One tool invocation: what the model asked a system to do, with what, and what ca
 
 - Do: Say in the approval reason what the call changes and whether the agent can undo it.
 - Don’t: Ask for approval with no reason, or make Approve the primary button and Deny a link.
+- Do: Offer `approval.edit` with fields for only the arguments a person may change, and pass a `validate` that says why a draft is refused.
+- Don’t: Record an edited call as approved, or send it through Take over; what ran is not what was proposed, and the agent’s plan still stands.
 - Do: Pass args and result as objects, so they render as formatted JSON.
 - Don’t: Rewrite payloads as prose; operators inspect them and paste them into tickets.
 
@@ -51,14 +55,19 @@ The root carries `data-slot="tool-call"`; each part carries its `data-part`.
 4. Title (`[data-part="title"]`): What the call is for, in words.
 5. Status (`[data-part="status"]`): A Run status: glyph, word and colour, and the elapsed time when known.
 6. Body (`[data-part="body"]`): The approval or the error first, then the arguments and the result.
-7. Approval (`[data-part="approval"]`): Why a person has to decide, and two buttons of equal weight.
+7. Approval (`[data-part="approval"]`): Why a person has to decide, and Approve, Edit and approve and Deny at equal weight.
 8. Progress (`[data-part="progress"]`): Working relleno along the top edge while the call runs.
 9. Error (`[data-part="error"]`): What failed, the error verbatim, and Retry. A failed call is held open.
+10. Decision (`[data-part="decision"]`): What the person decided and who, outside the details so a collapsed call keeps it; approved with edits lists each changed argument before → after.
+11. Decision mark (`[data-part="glyph"]`): The run-status mark that means the same as the decision: done for Approved, stopped for Denied. Approved with edits has its own pencil, because it is neither.
 
 ## Examples
 
 Each story is a live example in Storybook.
 
+- [ApprovedWithEdits](https://demogar.github.io/molaui/?path=/story/ai-tool-call--approved-with-edits)
+- [Decisions](https://demogar.github.io/molaui/?path=/story/ai-tool-call--decisions)
+- [EditBeforeApproving](https://demogar.github.io/molaui/?path=/story/ai-tool-call--edit-before-approving)
 - [Failed](https://demogar.github.io/molaui/?path=/story/ai-tool-call--failed)
 - [HardStates](https://demogar.github.io/molaui/?path=/story/ai-tool-call--hard-states)
 - [NeedsApproval](https://demogar.github.io/molaui/?path=/story/ai-tool-call--needs-approval)
@@ -80,11 +89,12 @@ One tool invocation: what the model asked a system to do, with what, and what ca
 | `status` (required) | `RunStatusValue` |  | The call's state. `waiting` and `failed` keep the details open, because the decision or the error is the content. |
 | `approval` | `ToolCallApproval` |  | Present when `status` is `waiting`: the call is held for a person. |
 | `args` | `unknown` |  | The arguments the model sent. Objects are shown as formatted JSON. |
+| `decision` | `ToolCallDecision \| null` |  | What the person decided, once they have. Shown under the header as the record — glyph, word and who — and, for `approved_with_edits`, each argument that changed. Pass it back from your `approval` handlers. |
 | `defaultOpen` | `boolean` | `false` | Start expanded. Waiting and failed calls are always expanded. |
 | `durationMs` | `number` |  | A known duration, for a finished call that has no timestamps. |
 | `endedAt` | `number \| Date` |  | When the call ended. Freezes the clock; omit while the call is open. |
 | `error` | `string` |  | The error, verbatim. |
-| `messages` | `MessagesOverride<ToolCallMessages>` |  | Words for translation: the payload labels, the error and approval sentences and their buttons. Keys left out come from `MessagesProvider`, then English. |
+| `messages` | `MessagesOverride<ToolCallMessages>` |  | Words for translation: the payload labels, the error and approval sentences, their buttons and the decisions. Keys left out come from `MessagesProvider`, then English. |
 | `onOpenChange` | `((open: boolean) => void)` |  | Called when the reader opens or closes the details. |
 | `onRetry` | `(() => void)` |  | Calls the tool again. Shows Retry beside the error once the call has failed; omit when the run, not the call, owns retrying. |
 | `open` | `boolean` |  | Whether the details are expanded, when the page owns that. Waiting and failed calls are always expanded. |
@@ -106,7 +116,7 @@ Calls the model made at the same time. Drawn as a bracket on the left — one in
 
 `className`, `ref`, `id` and the other DOM props go to `<div data-slot="tool-call-group">`.
 
-Types: `ToolCallGroupMessages`, `ToolCallMessages`, `ToolCallApproval`, `ToolCallGroupProps`, `ToolCallProps`
+Types: `ToolCallGroupMessages`, `ToolCallMessages`, `ToolCallApproval`, `ToolCallApprovalEdit`, `ToolCallArgs`, `ToolCallDecision`, `ToolCallDecisionStatus`, `ToolCallGroupProps`, `ToolCallProps`
 
 ## Accessibility
 
@@ -114,7 +124,7 @@ Types: `ToolCallGroupMessages`, `ToolCallMessages`, `ToolCallApproval`, `ToolCal
 
 | Key | What happens |
 | --- | --- |
-| Tab | Moves to the call’s header, then to Approve, Deny, Retry call and the payload’s buttons when open; the header is a stop even while the call is held open. |
+| Tab | Moves to the call’s header, then to Approve, Edit and approve, Deny, Retry call and the payload’s buttons when open; the header is a stop even while the call is held open. |
 | Enter or Space | Opens or closes the call from its header, or activates the focused button. |
 | ArrowUp or ArrowDown or ArrowLeft or ArrowRight | Scrolls a focused arguments or result block. |
 
@@ -122,17 +132,21 @@ Types: `ToolCallGroupMessages`, `ToolCallMessages`, `ToolCallApproval`, `ToolCal
 
 - The header is a button with `aria-expanded`, and a failed call or one waiting for approval opens itself; held open, the header stays focusable and is `aria-disabled`, so its name and status are still a stop.
 - A failure is an alert with the error verbatim, except inside an `AgentRun` that has already raised it.
-- Status is a glyph, a word and a colour, and Approve and Deny are buttons of the same weight.
+- Status is a glyph, a word and a colour, and Approve, Edit and approve and Deny are buttons of the same weight.
+- Edit and approve moves focus into the first field, and Cancel edits returns it; Approve with edits is disabled until an argument changes and `validate` accepts it, with the reason as its description, announced politely when it changes.
+- After a decision made on the call, focus moves to the decision, a group named as one sentence: “Approved with edits by M. Herrera: amount_usd changed from 240 to 120.” A call that loads already decided does not take focus.
 - `ToolCallGroup` is a group named “N tools in parallel”, or by its `label`.
 
 ### You handle
 
 - State in `approval.reason` why a person must approve, in words.
+- Label every field you render in `approval.edit.render`, and return a reason in words from `validate`.
+- Pass the decision back as `decision`, with `by`, so the record says who decided.
 - Pass a `title` in words when the tool’s name alone does not say what the call is for.
 
 ### Testing status
 
-- Automated, jsdom: each of its 8 stories is rendered and checked with axe on every pull request.
+- Automated, jsdom: each of its 11 stories is rendered and checked with axe on every pull request.
 - Automated, browser: every story is checked in Chromium with axe, colour contrast included, in both themes, and for overflow at 390px.
 - Keyboard in unit tests: yes, every key in the table is pressed.
 - Screen readers: not yet tested by hand.

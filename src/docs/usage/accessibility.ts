@@ -254,18 +254,22 @@ export const ACCESSIBILITY: Record<string, Accessibility> = {
   },
   'AI/Tool call': {
     keyboard: [
-      { keys: ['Tab'], action: 'Moves to the call’s header, then to Approve, Deny, Retry call and the payload’s buttons when open; the header is a stop even while the call is held open.' },
+      { keys: ['Tab'], action: 'Moves to the call’s header, then to Approve, Edit and approve, Deny, Retry call and the payload’s buttons when open; the header is a stop even while the call is held open.' },
       { keys: ['Enter', 'Space'], action: 'Opens or closes the call from its header, or activates the focused button.' },
       { keys: ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'], action: 'Scrolls a focused arguments or result block.' },
     ],
     handles: [
       'The header is a button with `aria-expanded`, and a failed call or one waiting for approval opens itself; held open, the header stays focusable and is `aria-disabled`, so its name and status are still a stop.',
       'A failure is an alert with the error verbatim, except inside an `AgentRun` that has already raised it.',
-      'Status is a glyph, a word and a colour, and Approve and Deny are buttons of the same weight.',
+      'Status is a glyph, a word and a colour, and Approve, Edit and approve and Deny are buttons of the same weight.',
+      'Edit and approve moves focus into the first field, and Cancel edits returns it; Approve with edits is disabled until an argument changes and `validate` accepts it, with the reason as its description, announced politely when it changes.',
+      'After a decision made on the call, focus moves to the decision, a group named as one sentence: “Approved with edits by M. Herrera: amount_usd changed from 240 to 120.” A call that loads already decided does not take focus.',
       '`ToolCallGroup` is a group named “N tools in parallel”, or by its `label`.',
     ],
     you: [
       'State in `approval.reason` why a person must approve, in words.',
+      'Label every field you render in `approval.edit.render`, and return a reason in words from `validate`.',
+      'Pass the decision back as `decision`, with `by`, so the record says who decided.',
       'Pass a `title` in words when the tool’s name alone does not say what the call is for.',
     ],
   },

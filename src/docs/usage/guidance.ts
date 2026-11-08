@@ -388,6 +388,7 @@ export const USAGE: Record<string, Usage> = {
     use: [
       'Showing what the model asked a system to do, with what, and what came back.',
       'Holding a call that writes, spends or sends until a person approves or denies it.',
+      'Letting the person change an argument before approving, recorded as approved with edits.',
       'Calls the model made at the same time, grouped with ToolCallGroup.',
     ],
     avoid: [
@@ -399,6 +400,10 @@ export const USAGE: Record<string, Usage> = {
       {
         do: 'Say in the approval reason what the call changes and whether the agent can undo it.',
         dont: 'Ask for approval with no reason, or make Approve the primary button and Deny a link.',
+      },
+      {
+        do: 'Offer `approval.edit` with fields for only the arguments a person may change, and pass a `validate` that says why a draft is refused.',
+        dont: 'Record an edited call as approved, or send it through Take over; what ran is not what was proposed, and the agent’s plan still stands.',
       },
       {
         do: 'Pass args and result as objects, so they render as formatted JSON.',

@@ -106,7 +106,7 @@
     "aiComponents": 14,
     "aiParts": 25,
     "pages": 79,
-    "stories": 437,
+    "stories": 440,
     "summary": "65 components and 14 AI components (79 documented pages)"
   },
   "tokens": {
@@ -4988,11 +4988,12 @@
       "docs": "https://demogar.github.io/molaui/?path=/docs/ai-tool-call--overview",
       "phase": "stable",
       "summary": "One tool invocation: the tool’s literal name, its arguments, the result or error, and an approval when a person must decide.",
-      "description": "One tool invocation: what the model asked a system to do, with what, and what came back. Everything the machine did is a **literal** — operators inspect these and paste them into tickets.\n\n- **Collapsed by default, except when it needs you.** A run can make forty calls; forty open payloads is a wall. A failed call and a call waiting for approval open themselves — hiding them would hide the only thing that matters.\n- **Human in the loop.** Approval says *why* in words and gives Approve and Deny the same size and variant, as Change review does for its three decisions. A consent control that nudges is not consent; for a tool that writes to production it is a bug.\n- **Working** is a strip of relleno along the top edge and a ticking clock — no spinner, no percentage.",
+      "description": "One tool invocation: what the model asked a system to do, with what, and what came back. Everything the machine did is a **literal** — operators inspect these and paste them into tickets.\n\n- **Collapsed by default, except when it needs you.** A run can make forty calls; forty open payloads is a wall. A failed call and a call waiting for approval open themselves — hiding them would hide the only thing that matters.\n- **Human in the loop.** Approval says *why* in words and gives Approve and Deny the same size and variant, as Change review does for its three decisions. A consent control that nudges is not consent; for a tool that writes to production it is a bug.\n- **Approved with edits is its own decision.** A person who changes an argument before approving gets a third outcome with its own glyph, word and ink, and the record keeps the proposed arguments beside the ones that ran, each change before → after. Calling it “approved” would claim the agent’s call ran as proposed.\n- **Working** is a strip of relleno along the top edge and a ticking clock — no spinner, no percentage.",
       "usage": {
         "use": [
           "Showing what the model asked a system to do, with what, and what came back.",
           "Holding a call that writes, spends or sends until a person approves or denies it.",
+          "Letting the person change an argument before approving, recorded as approved with edits.",
           "Calls the model made at the same time, grouped with ToolCallGroup."
         ],
         "avoid": [
@@ -5016,6 +5017,10 @@
             "dont": "Ask for approval with no reason, or make Approve the primary button and Deny a link."
           },
           {
+            "do": "Offer `approval.edit` with fields for only the arguments a person may change, and pass a `validate` that says why a draft is refused.",
+            "dont": "Record an edited call as approved, or send it through Take over; what ran is not what was proposed, and the agent’s plan still stands."
+          },
+          {
             "do": "Pass args and result as objects, so they render as formatted JSON.",
             "dont": "Rewrite payloads as prose; operators inspect them and paste them into tickets."
           }
@@ -5032,7 +5037,7 @@
             "keys": [
               "Tab"
             ],
-            "action": "Moves to the call’s header, then to Approve, Deny, Retry call and the payload’s buttons when open; the header is a stop even while the call is held open."
+            "action": "Moves to the call’s header, then to Approve, Edit and approve, Deny, Retry call and the payload’s buttons when open; the header is a stop even while the call is held open."
           },
           {
             "keys": [
@@ -5054,11 +5059,15 @@
         "handles": [
           "The header is a button with `aria-expanded`, and a failed call or one waiting for approval opens itself; held open, the header stays focusable and is `aria-disabled`, so its name and status are still a stop.",
           "A failure is an alert with the error verbatim, except inside an `AgentRun` that has already raised it.",
-          "Status is a glyph, a word and a colour, and Approve and Deny are buttons of the same weight.",
+          "Status is a glyph, a word and a colour, and Approve, Edit and approve and Deny are buttons of the same weight.",
+          "Edit and approve moves focus into the first field, and Cancel edits returns it; Approve with edits is disabled until an argument changes and `validate` accepts it, with the reason as its description, announced politely when it changes.",
+          "After a decision made on the call, focus moves to the decision, a group named as one sentence: “Approved with edits by M. Herrera: amount_usd changed from 240 to 120.” A call that loads already decided does not take focus.",
           "`ToolCallGroup` is a group named “N tools in parallel”, or by its `label`."
         ],
         "you": [
           "State in `approval.reason` why a person must approve, in words.",
+          "Label every field you render in `approval.edit.render`, and return a reason in words from `validate`.",
+          "Pass the decision back as `decision`, with `by`, so the record says who decided.",
           "Pass a `title` in words when the tool’s name alone does not say what the call is for."
         ]
       },
@@ -5104,7 +5113,7 @@
           {
             "part": "approval",
             "name": "Approval",
-            "does": "Why a person has to decide, and two buttons of equal weight.",
+            "does": "Why a person has to decide, and Approve, Edit and approve and Deny at equal weight.",
             "selector": "[data-part=\"approval\"]"
           },
           {
@@ -5118,6 +5127,18 @@
             "name": "Error",
             "does": "What failed, the error verbatim, and Retry. A failed call is held open.",
             "selector": "[data-part=\"error\"]"
+          },
+          {
+            "part": "decision",
+            "name": "Decision",
+            "does": "What the person decided and who, outside the details so a collapsed call keeps it; approved with edits lists each changed argument before → after.",
+            "selector": "[data-part=\"decision\"]"
+          },
+          {
+            "part": "glyph",
+            "name": "Decision mark",
+            "does": "The run-status mark that means the same as the decision: done for Approved, stopped for Denied. Approved with edits has its own pencil, because it is neither.",
+            "selector": "[data-part=\"glyph\"]"
           }
         ]
       },
@@ -5163,6 +5184,12 @@
               "description": "The arguments the model sent. Objects are shown as formatted JSON."
             },
             {
+              "name": "decision",
+              "type": "ToolCallDecision | null",
+              "required": false,
+              "description": "What the person decided, once they have. Shown under the header as the record — glyph, word and who — and, for `approved_with_edits`, each argument that changed. Pass it back from your `approval` handlers."
+            },
+            {
               "name": "defaultOpen",
               "type": "boolean",
               "required": false,
@@ -5191,7 +5218,7 @@
               "name": "messages",
               "type": "MessagesOverride<ToolCallMessages>",
               "required": false,
-              "description": "Words for translation: the payload labels, the error and approval sentences and their buttons. Keys left out come from `MessagesProvider`, then English."
+              "description": "Words for translation: the payload labels, the error and approval sentences, their buttons and the decisions. Keys left out come from `MessagesProvider`, then English."
             },
             {
               "name": "onOpenChange",
@@ -5281,6 +5308,28 @@
           "source": "src/components/ai/tool-call/tool-call.tsx"
         },
         {
+          "name": "ToolCallApprovalEdit",
+          "kind": "type",
+          "source": "src/components/ai/tool-call/tool-call.tsx"
+        },
+        {
+          "name": "ToolCallArgs",
+          "kind": "type",
+          "source": "src/components/ai/tool-call/tool-call.tsx",
+          "description": "The arguments of a tool call, as a person edits them: one value per argument name."
+        },
+        {
+          "name": "ToolCallDecision",
+          "kind": "type",
+          "source": "src/components/ai/tool-call/tool-call.tsx"
+        },
+        {
+          "name": "ToolCallDecisionStatus",
+          "kind": "type",
+          "source": "src/components/ai/tool-call/tool-call.tsx",
+          "description": "What the person decided about a held call. Separate from `status`, which is about execution: an approved call can still fail."
+        },
+        {
           "name": "ToolCallGroupProps",
           "kind": "type",
           "source": "src/components/ai/tool-call/tool-call.tsx"
@@ -5292,6 +5341,21 @@
         }
       ],
       "stories": [
+        {
+          "name": "ApprovedWithEdits",
+          "id": "ai-tool-call--approved-with-edits",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-tool-call--approved-with-edits"
+        },
+        {
+          "name": "Decisions",
+          "id": "ai-tool-call--decisions",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-tool-call--decisions"
+        },
+        {
+          "name": "EditBeforeApproving",
+          "id": "ai-tool-call--edit-before-approving",
+          "url": "https://demogar.github.io/molaui/?path=/story/ai-tool-call--edit-before-approving"
+        },
         {
           "name": "Failed",
           "id": "ai-tool-call--failed",

@@ -1,0 +1,30 @@
+name: Accessibility barrier
+description: Something in a component or on the documentation site is hard or impossible to use
+labels: [accessibility]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for telling us. You don't need to say anything about yourself or about a
+        disability, and you don't need a screenshot or a reproduction: where you were and what
+        went wrong is enough. How reports are handled is in
+        [ACCESSIBILITY.md](https://github.com/demogar/molaui/blob/main/ACCESSIBILITY.md).
+  - type: textarea
+    id: what
+    attributes:
+      label: What got in your way
+      description: What you were trying to do, and what made it hard or impossible.
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Where it happened
+      description: A component name, a Storybook page or story link, or your own app. Optional.
+  - type: textarea
+    id: setup
+    attributes:
+      label: What you were using
+      description: |
+        Optional. Anything that helps us reproduce it: browser, operating system, screen reader
+        or other assistive technology, keyboard only, zoom level, forced colours, theme.
