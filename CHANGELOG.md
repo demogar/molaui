@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.10.0](https://github.com/demogar/molaui/compare/v0.9.0...v0.10.0) (2026-11-08)
+
+
+### Features
+
+* **patterns:** let the agent hand-off approve a smaller refund ([#200](https://github.com/demogar/molaui/issues/200)) ([472c99b](https://github.com/demogar/molaui/commit/472c99b0c0010a8461a6e3de495f5a542c7cd3fc))
+* **tool-call:** approve a held call with edits as its own decision ([#198](https://github.com/demogar/molaui/issues/198)) ([a5c1273](https://github.com/demogar/molaui/commit/a5c12731ac2cf2c215d716bc0a084c1bc657cdf5))
+
+
+### Documentation
+
+* add an accessibility statement and a barrier report template ([#196](https://github.com/demogar/molaui/issues/196)) ([7102dbd](https://github.com/demogar/molaui/commit/7102dbd8687c7beec3de679afa07361907487524))
+
 ## [0.9.0](https://github.com/demogar/molaui/compare/v0.8.0...v0.9.0) (2026-10-24)
 
 
