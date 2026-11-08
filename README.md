@@ -350,7 +350,8 @@ WCAG 2.2, the W3C Design Tokens format and Conventional Commits.
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md) for the gates, the rules a review holds you to, and how
 releases are cut. Everyone taking part follows the [Code of Conduct](CODE_OF_CONDUCT.md). Report
-security issues privately, as described in [SECURITY.md](SECURITY.md). Changes are listed in the
+security issues privately, as described in [SECURITY.md](SECURITY.md). What we aim for in accessibility, what
+is tested and how to report a barrier is in [ACCESSIBILITY.md](ACCESSIBILITY.md). Changes are listed in the
 [changelog](CHANGELOG.md). What is planned, what is under consideration and what is not planned is
 on the [Roadmap](https://demogar.github.io/molaui/?path=/docs/mola-ui-roadmap--overview); propose
 something new with the [proposal template](https://github.com/demogar/molaui/issues/new?template=proposal.yml).
