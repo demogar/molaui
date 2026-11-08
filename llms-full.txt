@@ -6423,6 +6423,9 @@ Types: `ToolCallGroupMessages`, `ToolCallMessages`, `ToolCallApproval`, `ToolCal
 
 Used in: Agent console, Agent hand-off
 
+Changes:
+- 0.10.0 (2026-11-08), feature: approve a held call with edits as its own decision [#198](https://github.com/demogar/molaui/issues/198)
+
 ## Patterns
 
 Whole Cayuco screens composed from the components above, with nothing written for them. They live in `src/patterns/` and are not part of the package: copy one and adapt it.

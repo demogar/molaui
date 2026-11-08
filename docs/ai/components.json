@@ -5400,6 +5400,26 @@
       "usedIn": [
         "Patterns/Agent console",
         "Patterns/Agent hand-off"
+      ],
+      "changes": [
+        {
+          "version": "0.10.0",
+          "date": "2026-11-08",
+          "type": "feature",
+          "breaking": false,
+          "scopes": [
+            "tool-call"
+          ],
+          "subject": "approve a held call with edits as its own decision",
+          "pr": {
+            "number": 198,
+            "url": "https://github.com/demogar/molaui/issues/198"
+          },
+          "commit": {
+            "sha": "a5c1273",
+            "url": "https://github.com/demogar/molaui/commit/a5c12731ac2cf2c215d716bc0a084c1bc657cdf5"
+          }
+        }
       ]
     },
     {
