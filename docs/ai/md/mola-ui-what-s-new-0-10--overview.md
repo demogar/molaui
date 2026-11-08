@@ -24,7 +24,7 @@ beside Approve and Deny, at the same weight:
 <ToolCall
   name="billing.issue_refund"
   status={decision ? 'running' : 'waiting'}
-  args={{ charge: 'ch_31b0', amount_usd: 240 }}
+  args={refund}
   decision={decision}
   approval={{
     reason: 'It moves money back to the customer’s card.',
@@ -32,7 +32,7 @@ beside Approve and Deny, at the same weight:
     onDeny: () => setDecision({ status: 'denied', by: 'M. Herrera' }),
     edit: {
       render: (draft, setDraft) => <AmountField draft={draft} setDraft={setDraft} />,
-      validate: (draft) => (Number(draft.amount_usd) > 240 ? 'The refund can be at most 240.' : null),
+      validate: (draft) => (draft.amount_usd > refund.amount_usd ? 'The refund can be at most the charge.' : null),
       onApprove: (edited) => setDecision({ status: 'approved_with_edits', by: 'M. Herrera', editedArgs: edited }),
     },
   }}
