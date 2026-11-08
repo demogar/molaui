@@ -8,7 +8,7 @@ The system was ported from the Mola styles of the `mustdopanama` project (read-o
 
 ## Commands
 
-Node is pinned in `.nvmrc` (22.23.1).
+Node is pinned in `.nvmrc` (24.22.2).
 
 ```bash
 npm run dev              # Storybook on :6006 (alias: npm run storybook)

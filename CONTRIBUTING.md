@@ -32,7 +32,7 @@ product, the "expanded universe", until it proves itself. These rules come from 
 ## Setup
 
 ```bash
-nvm use            # Node 22.23.1, pinned in .nvmrc
+nvm use            # Node 24.22.2, pinned in .nvmrc
 npm ci
 npm run dev        # Storybook on :6006
 ```
