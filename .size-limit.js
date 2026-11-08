@@ -19,12 +19,15 @@ export default [
   // small entries below are what a consumer pays and the real guard on bloat;
   // they do not move with this one. 182 kB (#133): the shape glyphs of six
   // status tones, the tooltip's spoken key names and the held-open headers
-  // took the library from under 180 kB to 180.36 kB.
+  // took the library from under 180 kB to 180.36 kB. 190 kB: ToolCall's
+  // approved-with-edits decision (#198) measured 181.72 kB, 0.28 kB under 182,
+  // so the next component of any size would have had to raise it in its own
+  // PR; 190 leaves room for two or three, and crossing it is still a decision.
   {
     name: 'Everything (import *)',
     path: 'dist/index.js',
     import: '*',
-    limit: '182 kB',
+    limit: '190 kB',
     modifyRolldownConfig: reactOnly,
   },
   {
