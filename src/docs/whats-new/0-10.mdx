@@ -1,0 +1,59 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+import { ReleaseChanges, ReleaseStatus } from '../blocks/changes'
+
+<Meta title="Mola UI/What's new/0.10" />
+
+# What's new in 0.10
+
+<ReleaseStatus version="0.10.0" />
+
+The full list is under *Everything in 0.10.0* at the end of this page, and on the
+[Changelog](?path=/docs/mola-ui-changelog--overview).
+
+## Approved with edits: a held tool call's third decision
+
+A person often approves a tool call after changing one of its arguments: half the refund, the
+rollout at 10% instead of 50%. Until now `ToolCall` could only be approved or denied, so an edited
+call was recorded as approved, which claims the agent's call ran as proposed, and the record lost
+what the person changed.
+
+[Tool call](?path=/docs/ai-tool-call--overview) now has a third decision, `approved_with_edits`,
+with its own glyph, word and ink. Pass `approval.edit` and the call offers **Edit and approve**
+beside Approve and Deny, at the same weight:
+
+```tsx
+<ToolCall
+  name="billing.issue_refund"
+  status={decision ? 'running' : 'waiting'}
+  args={refund}
+  decision={decision}
+  approval={{
+    reason: 'It moves money back to the customer’s card.',
+    onApprove: () => setDecision({ status: 'approved', by: 'M. Herrera' }),
+    onDeny: () => setDecision({ status: 'denied', by: 'M. Herrera' }),
+    edit: {
+      render: (draft, setDraft) => <AmountField draft={draft} setDraft={setDraft} />,
+      validate: (draft) => (draft.amount_usd > refund.amount_usd ? 'The refund can be at most the charge.' : null),
+      onApprove: (edited) => setDecision({ status: 'approved_with_edits', by: 'M. Herrera', editedArgs: edited }),
+    },
+  }}
+/>
+```
+
+- **The fields are yours.** Only the app knows which arguments a person may change and in what
+  control, so `edit.render` draws them with your own `Field`s. Approve with edits is not offered
+  until an argument has changed and `validate` accepts the draft; the reason is said beside it.
+- **The decision is the record.** The new `decision` prop shows what was decided and who, under the
+  header, so a collapsed call still says it, and for an edited call lists each changed argument
+  before → after, as `FieldChanges` shows a field. The details keep the arguments as proposed and
+  as approved. The decision is separate from `status`: one is about the person, the other about
+  execution.
+- **It is said as one sentence.** After deciding, focus moves to the decision: "Approved with edits
+  by M. Herrera: amount_usd changed from 240 to 120."
+
+Nothing changes for calls that do not pass `approval.edit` or `decision`.
+
+## Everything in 0.10.0
+
+<ReleaseChanges version="0.10.0" />

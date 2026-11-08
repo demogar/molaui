@@ -210,9 +210,11 @@ export const ANATOMY: Record<string, Anatomy> = {
       { part: 'title', name: 'Title', does: 'What the call is for, in words.' },
       { part: 'status', name: 'Status', does: 'A Run status: glyph, word and colour, and the elapsed time when known.' },
       { part: 'body', name: 'Body', does: 'The approval or the error first, then the arguments and the result.' },
-      { part: 'approval', name: 'Approval', does: 'Why a person has to decide, and two buttons of equal weight.' },
+      { part: 'approval', name: 'Approval', does: 'Why a person has to decide, and Approve, Edit and approve and Deny at equal weight.' },
       { part: 'progress', name: 'Progress', does: 'Working relleno along the top edge while the call runs.', story: 'Running' },
       { part: 'error', name: 'Error', does: 'What failed, the error verbatim, and Retry. A failed call is held open.', story: 'Failed' },
+      { part: 'decision', name: 'Decision', does: 'What the person decided and who, outside the details so a collapsed call keeps it; approved with edits lists each changed argument before → after.', story: 'ApprovedWithEdits' },
+      { part: 'glyph', name: 'Decision mark', does: 'The run-status mark that means the same as the decision: done for Approved, stopped for Denied. Approved with edits has its own pencil, because it is neither.', story: 'Decisions' },
     ],
   },
   'AI/Side-by-side diff': {

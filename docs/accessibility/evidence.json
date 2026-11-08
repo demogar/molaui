@@ -132,7 +132,7 @@
       "screenReadersByHand": false
     },
     "AI/Tool call": {
-      "stories": 8,
+      "stories": 11,
       "unitTests": [
         "src/components/ai/tool-call/tool-call.test.tsx"
       ],

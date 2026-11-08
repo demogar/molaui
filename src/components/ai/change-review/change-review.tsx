@@ -307,29 +307,49 @@ export function FieldChanges({ title, changes, headingLevel = 4, messages, class
           {f.plural(t.fieldsChanged, changes.length)}
         </span>
       </header>
-      <dl className="m-0 flex flex-col">
-        {changes.map((change, i) => (
-          <div
-            key={change.field}
-            className={cn(
-              'grid grid-cols-1 gap-x-4 gap-y-1.5 px-3 py-2.5 sm:grid-cols-[minmax(8rem,14rem)_minmax(0,1fr)]',
-              i > 0 && 'border-t border-keyline',
-            )}
-          >
-            <dt dir="ltr" className="literal self-center text-start text-xs font-medium text-ink-2 [overflow-wrap:anywhere]">
-              {change.field}
-            </dt>
-            <dd className="m-0 flex flex-wrap items-center gap-2">
-              <Value side="before" value={change.before} t={t} />
-              <span aria-hidden className="font-ui text-sm text-ink-muted flip-rtl">
-                →
-              </span>
-              <Value side="after" value={change.after} t={t} />
-            </dd>
-          </div>
-        ))}
-      </dl>
+      <FieldChangeList changes={changes} t={t} />
     </section>
+  )
+}
+
+/**
+ * The rows of a record change, each field before → after. Shared by
+ * `FieldChanges` and a `ToolCall` approved with edits, so an edited argument
+ * reads exactly like an edited field: the same literal, wash and hidden
+ * "Before:"/"After:" words. Internal: the public surface is `FieldChanges`.
+ */
+export function FieldChangeList({
+  changes,
+  t,
+  className,
+}: {
+  changes: readonly FieldChange[]
+  t: FieldChangesMessages
+  className?: string
+}) {
+  return (
+    <dl className={cn('m-0 flex flex-col', className)}>
+      {changes.map((change, i) => (
+        <div
+          key={change.field}
+          className={cn(
+            'grid grid-cols-1 gap-x-4 gap-y-1.5 px-3 py-2.5 sm:grid-cols-[minmax(8rem,14rem)_minmax(0,1fr)]',
+            i > 0 && 'border-t border-keyline',
+          )}
+        >
+          <dt dir="ltr" className="literal self-center text-start text-xs font-medium text-ink-2 [overflow-wrap:anywhere]">
+            {change.field}
+          </dt>
+          <dd className="m-0 flex flex-wrap items-center gap-2">
+            <Value side="before" value={change.before} t={t} />
+            <span aria-hidden className="font-ui text-sm text-ink-muted flip-rtl">
+              →
+            </span>
+            <Value side="after" value={change.after} t={t} />
+          </dd>
+        </div>
+      ))}
+    </dl>
   )
 }
 
