@@ -2,7 +2,9 @@ import { render, screen } from '@/test/render'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 
-import { ToolCall } from './tool-call'
+import * as React from 'react'
+
+import { ToolCall, type ToolCallArgs, type ToolCallDecision } from './tool-call'
 
 describe('ToolCall', () => {
   it('shows the tool name as a literal and its status in words', () => {
@@ -113,5 +115,113 @@ describe('ToolCall', () => {
     expect(screen.getByRole('button', { name: 'Deny' })).toHaveFocus()
     await userEvent.keyboard(' ')
     expect(onDeny).toHaveBeenCalledOnce()
+  })
+
+  describe('approved with edits', () => {
+    const ARGS = { charge: 'ch_31b0', amount_usd: 240 }
+
+    // The page owns the decision, as it would in an app: the handlers record
+    // it and move the call on.
+    function Refund({ validate }: { validate?: (draft: ToolCallArgs) => string | null }) {
+      const [decision, setDecision] = React.useState<ToolCallDecision | null>(null)
+      return (
+        <ToolCall
+          name="billing.issue_refund"
+          status={decision ? 'running' : 'waiting'}
+          args={ARGS}
+          decision={decision}
+          approval={{
+            reason: 'It moves money.',
+            onApprove: () => setDecision({ status: 'approved', by: 'M. Herrera' }),
+            onDeny: () => setDecision({ status: 'denied', by: 'M. Herrera' }),
+            edit: {
+              ...(validate ? { validate } : {}),
+              render: (draft, setDraft) => (
+                <label>
+                  Amount
+                  <input
+                    type="number"
+                    value={String(draft.amount_usd)}
+                    onChange={(event) => setDraft({ ...draft, amount_usd: Number(event.target.value) })}
+                  />
+                </label>
+              ),
+              onApprove: (edited) => setDecision({ status: 'approved_with_edits', by: 'M. Herrera', editedArgs: edited }),
+            },
+          }}
+        />
+      )
+    }
+
+    it('offers Edit and approve beside Approve and Deny, moves focus into the fields and back on cancel', async () => {
+      const user = userEvent.setup()
+      render(<Refund />)
+      const edit = screen.getByRole('button', { name: 'Edit and approve' })
+      await user.click(edit)
+      expect(screen.getByRole('spinbutton', { name: 'Amount' })).toHaveFocus()
+      await user.click(screen.getByRole('button', { name: 'Cancel edits' }))
+      expect(screen.getByRole('button', { name: 'Edit and approve' })).toHaveFocus()
+    })
+
+    it('does not offer Approve with edits until an argument changes, and says why', async () => {
+      const user = userEvent.setup()
+      render(<Refund />)
+      await user.click(screen.getByRole('button', { name: 'Edit and approve' }))
+      const approve = screen.getByRole('button', { name: 'Approve with edits' })
+      expect(approve).toBeDisabled()
+      expect(approve).toHaveAccessibleDescription(/Nothing has changed yet/)
+    })
+
+    it('holds an invalid edit back with the schema’s reason in words', async () => {
+      const user = userEvent.setup()
+      render(<Refund validate={(draft) => (Number(draft.amount_usd) > 240 ? 'The refund can be at most 240.' : null)} />)
+      await user.click(screen.getByRole('button', { name: 'Edit and approve' }))
+      const amount = screen.getByRole('spinbutton', { name: 'Amount' })
+      await user.clear(amount)
+      await user.type(amount, '500')
+      const approve = screen.getByRole('button', { name: 'Approve with edits' })
+      expect(approve).toBeDisabled()
+      expect(approve).toHaveAccessibleDescription('Can’t approve yet: The refund can be at most 240.')
+      await user.clear(amount)
+      await user.type(amount, '120')
+      expect(approve).toBeEnabled()
+    })
+
+    it('records its own decision with each change, and says it as one sentence where focus lands', async () => {
+      const user = userEvent.setup()
+      render(<Refund />)
+      await user.click(screen.getByRole('button', { name: 'Edit and approve' }))
+      const amount = screen.getByRole('spinbutton', { name: 'Amount' })
+      await user.clear(amount)
+      await user.type(amount, '120')
+      await user.click(screen.getByRole('button', { name: 'Approve with edits' }))
+      const outcome = screen.getByRole('group', {
+        name: 'Approved with edits by M. Herrera: amount_usd changed from 240 to 120.',
+      })
+      expect(outcome).toHaveFocus()
+      expect(outcome).toHaveTextContent('Approved with edits')
+      expect(outcome).toHaveTextContent('amount_usd')
+      expect(screen.queryByRole('button', { name: 'Approve with edits' })).not.toBeInTheDocument()
+    })
+
+    it('keeps a plain approval distinct from an edited one', async () => {
+      const user = userEvent.setup()
+      render(<Refund />)
+      await user.click(screen.getByRole('button', { name: 'Approve' }))
+      expect(screen.getByRole('group', { name: 'Approved by M. Herrera' })).toHaveFocus()
+      expect(screen.queryByText('Approved with edits')).not.toBeInTheDocument()
+    })
+
+    it('does not take focus for a call that loads already decided', () => {
+      render(
+        <ToolCall
+          name="billing.issue_refund"
+          status="succeeded"
+          args={ARGS}
+          decision={{ status: 'approved_with_edits', editedArgs: { ...ARGS, amount_usd: 120 } }}
+        />,
+      )
+      expect(screen.getByRole('group', { name: 'Approved with edits: amount_usd changed from 240 to 120.' })).not.toHaveFocus()
+    })
   })
 })

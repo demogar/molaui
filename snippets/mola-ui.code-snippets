@@ -120,7 +120,7 @@
     "prefix": "mola-tool-call",
     "description": "One tool invocation: the tool’s literal name, its arguments, the result or error, and an approval when a person must decide. import { ToolCall } from '@demogar/mola-ui'",
     "body": [
-      "<ToolCall name=\"${1:name}\" status={${2:status}} />$0"
+      "<ToolCall name=\"rollout\" title=\"${1:Roll out the help panel}\" status=\"succeeded\" durationMs={2_310} args={{ flag: 'help_panel_v2', audience: 'plan_starter', percent: 50 }} result={undefined} decision={{ status: 'approved_with_edits', by: 'R. Pinzón', editedArgs: { flag: 'help_panel_v2', audience: 'plan_starter', percent: 10 } }} />$0"
     ]
   },
   "Button": {

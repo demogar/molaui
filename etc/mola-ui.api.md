@@ -3708,12 +3708,35 @@ export interface ToolCallApproval {
     approveLabel?: string;
     // (undocumented)
     denyLabel?: string;
+    edit?: ToolCallApprovalEdit;
     // (undocumented)
     onApprove: () => void;
     // (undocumented)
     onDeny: () => void;
     reason: React_2.ReactNode;
 }
+
+// @public (undocumented)
+export interface ToolCallApprovalEdit {
+    label?: string;
+    onApprove: (edited: ToolCallArgs) => void;
+    render: (draft: ToolCallArgs, setDraft: (next: ToolCallArgs) => void) => React_2.ReactNode;
+    validate?: (draft: ToolCallArgs) => string | null | undefined;
+}
+
+// @public
+export type ToolCallArgs = Record<string, unknown>;
+
+// @public (undocumented)
+export interface ToolCallDecision {
+    by?: string;
+    editedArgs?: ToolCallArgs;
+    // (undocumented)
+    status: ToolCallDecisionStatus;
+}
+
+// @public
+export type ToolCallDecisionStatus = 'approved' | 'approved_with_edits' | 'denied';
 
 // @public
 export function ToolCallGroup(input: ToolCallGroupProps): React_2.JSX.Element;
@@ -3733,11 +3756,25 @@ export interface ToolCallGroupProps extends React_2.ComponentProps<'div'> {
 // @public
 export interface ToolCallMessages {
     approve: string;
+    approveWithEdits: string;
+    argumentAdded: string;
+    argumentChanged: string;
+    argumentRemoved: string;
     arguments: string;
+    cancelEdits: string;
+    decidedBy: string;
+    decidedWithChanges: string;
+    decisions: Record<ToolCallDecisionStatus, string>;
     deny: string;
+    editAndApprove: string;
+    editedArguments: string;
+    editing: string;
+    editInvalid: string;
+    editUnchanged: string;
     error: string;
     failed: string;
     needsApproval: string;
+    proposedArguments: string;
     result: string;
     retry: string;
     timedOut: string;
@@ -3747,6 +3784,7 @@ export interface ToolCallMessages {
 export interface ToolCallProps extends Omit<React_2.ComponentProps<'div'>, 'children'> {
     approval?: ToolCallApproval;
     args?: unknown;
+    decision?: ToolCallDecision | null;
     defaultOpen?: boolean;
     durationMs?: number;
     endedAt?: number | Date;
