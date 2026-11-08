@@ -126,6 +126,7 @@ Types: `NumberInputMessages`, `NumberInputProps`
 
 ### Used in
 
+- [Agent hand-off](https://demogar.github.io/molaui/md/patterns-agent-hand-off--overview.md) (pattern)
 - [Form validation](https://demogar.github.io/molaui/md/patterns-form-validation--overview.md) (pattern)
 - [Settings page](https://demogar.github.io/molaui/md/patterns-settings-page--overview.md) (pattern)
 

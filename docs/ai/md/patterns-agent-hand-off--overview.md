@@ -27,13 +27,14 @@ Read from its imports.
 - [Confidence](https://demogar.github.io/molaui/md/ai-confidence--overview.md): How sure the agent is that the charge is a duplicate, as a level and a basis a person can check.
 - [Message](https://demogar.github.io/molaui/md/ai-message--overview.md): The agent’s reason for stopping in its own words, and the conversation with the customer, draft included.
 - [Run status](https://demogar.github.io/molaui/md/ai-run-status--overview.md): The hand-off’s state in the header: Needs approval, Running, Succeeded, Failed or Taken over.
-- [Tool call](https://demogar.github.io/molaui/md/ai-tool-call--overview.md): The exact action proposed, with Approve refund and Deny of equal weight; later its failure, verbatim, with Retry call.
+- [Tool call](https://demogar.github.io/molaui/md/ai-tool-call--overview.md): The exact action proposed, with Approve refund, Edit amount and approve and Deny of equal weight; a lowered amount is recorded as approved with edits; later its failure, verbatim, with Retry call.
 - [Button](https://demogar.github.io/molaui/md/components-actions-button--overview.md): Take over in the header, Reassign to billing, and Send reply.
 - [Badge](https://demogar.github.io/molaui/md/components-feedback-badge--overview.md): Whether the reply is a draft or sent, as a dot, a word and a tone.
 - [Callout](https://demogar.github.io/molaui/md/components-feedback-callout--overview.md): Who can approve, when the person cannot; and the result, once the refund is issued.
 - [Empty state](https://demogar.github.io/molaui/md/components-feedback-empty-state--overview.md): The queue with nothing waiting.
 - [Skeleton](https://demogar.github.io/molaui/md/components-feedback-skeleton--overview.md): The decision panel, the conversation and the run, in their columns, while the hand-off loads.
-- [Field](https://demogar.github.io/molaui/md/components-forms-field--overview.md): The person’s reply after taking over, a labelled Textarea that starts from the agent’s draft.
+- [Field](https://demogar.github.io/molaui/md/components-forms-field--overview.md): The amount to refund while editing the call, and the person’s reply after taking over, a labelled Textarea that starts from the agent’s draft.
+- [Number input](https://demogar.github.io/molaui/md/components-forms-number-input--overview.md): The amount to refund, when the person lowers it before approving.
 - [Page header](https://demogar.github.io/molaui/md/components-layout-page-header--overview.md): The ticket’s subject, who handed it off, the status and Take over.
 - [Breadcrumb](https://demogar.github.io/molaui/md/components-navigation-breadcrumb--overview.md): Where the ticket sits: Support, Escalations, the ticket id.
 
@@ -49,7 +50,8 @@ Read from its imports.
 - Approve, Deny and Take over each remove the button that was pressed, so focus moves to the hand-off’s heading, which says what happened.
 - Outcomes that land later, such as the refund finishing, go to one polite status; a failed refund is the tool call’s own alert, not a second one.
 - The agent’s words are in Alegreya, the action is in Martian Mono and the controls are in Archivo, so the voice can be told apart without colour.
-- Approve and Deny are the same size and variant, so neither is nudged.
+- Approve, Edit amount and approve and Deny are the same size and variant, so none is nudged.
+- A lowered refund is announced with both amounts, “Approved with edits: refunding $120.00 instead of $240.00.”, and the run’s refund call keeps the decision as its record.
 
 A Cayuco support agent has found a duplicate charge, drafted the refund and the reply, and stopped: the refund is over what it may do alone. Composed from the AI layer (`Message`, `Confidence`, `ToolCall` with `approval`, `RunStatus`, `AgentRun`) and the core (`PageHeader`, `Breadcrumb`, `Badge`, `Callout`, `Field`, `Textarea`, `EmptyState`), with nothing written for it.
 
@@ -60,6 +62,7 @@ Someone who may not approve a refund this size still sees the proposal, without 
 ## Examples
 
 - [Approved](https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--approved)
+- [ApprovedWithEdits](https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--approved-with-edits)
 - [Default](https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--default)
 - [Loading](https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--loading)
 - [NoPermission](https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--no-permission)

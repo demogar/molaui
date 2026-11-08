@@ -106,7 +106,7 @@
     "aiComponents": 14,
     "aiParts": 25,
     "pages": 79,
-    "stories": 440,
+    "stories": 441,
     "summary": "65 components and 14 AI components (79 documented pages)"
   },
   "tokens": {
@@ -13400,6 +13400,7 @@
         }
       ],
       "usedIn": [
+        "Patterns/Agent hand-off",
         "Patterns/Form validation",
         "Patterns/Settings page"
       ],
@@ -22310,6 +22311,7 @@
         "Components/Feedback/Empty state",
         "Components/Feedback/Skeleton",
         "Components/Forms/Field",
+        "Components/Forms/Number input",
         "Components/Layout/Page header",
         "Components/Navigation/Breadcrumb"
       ],
@@ -22357,7 +22359,7 @@
           },
           {
             "title": "AI/Tool call",
-            "role": "The exact action proposed, with Approve refund and Deny of equal weight; later its failure, verbatim, with Retry call."
+            "role": "The exact action proposed, with Approve refund, Edit amount and approve and Deny of equal weight; a lowered amount is recorded as approved with edits; later its failure, verbatim, with Retry call."
           },
           {
             "title": "Components/Actions/Button",
@@ -22381,7 +22383,11 @@
           },
           {
             "title": "Components/Forms/Field",
-            "role": "The person’s reply after taking over, a labelled Textarea that starts from the agent’s draft."
+            "role": "The amount to refund while editing the call, and the person’s reply after taking over, a labelled Textarea that starts from the agent’s draft."
+          },
+          {
+            "title": "Components/Forms/Number input",
+            "role": "The amount to refund, when the person lowers it before approving."
           },
           {
             "title": "Components/Layout/Page header",
@@ -22414,7 +22420,8 @@
           "Approve, Deny and Take over each remove the button that was pressed, so focus moves to the hand-off’s heading, which says what happened.",
           "Outcomes that land later, such as the refund finishing, go to one polite status; a failed refund is the tool call’s own alert, not a second one.",
           "The agent’s words are in Alegreya, the action is in Martian Mono and the controls are in Archivo, so the voice can be told apart without colour.",
-          "Approve and Deny are the same size and variant, so neither is nudged."
+          "Approve, Edit amount and approve and Deny are the same size and variant, so none is nudged.",
+          "A lowered refund is announced with both amounts, “Approved with edits: refunding $120.00 instead of $240.00.”, and the run’s refund call keeps the decision as its record."
         ]
       },
       "stories": [
@@ -22422,6 +22429,11 @@
           "name": "Approved",
           "id": "patterns-agent-hand-off--approved",
           "url": "https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--approved"
+        },
+        {
+          "name": "ApprovedWithEdits",
+          "id": "patterns-agent-hand-off--approved-with-edits",
+          "url": "https://demogar.github.io/molaui/?path=/story/patterns-agent-hand-off--approved-with-edits"
         },
         {
           "name": "Default",
