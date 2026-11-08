@@ -168,3 +168,9 @@ Types: `ToolCallGroupMessages`, `ToolCallMessages`, `ToolCallApproval`, `ToolCal
 
 - [Agent console](https://demogar.github.io/molaui/md/patterns-agent-console--overview.md) (pattern)
 - [Agent hand-off](https://demogar.github.io/molaui/md/patterns-agent-hand-off--overview.md) (pattern)
+
+## Changes
+
+From CHANGELOG.md, newest first.
+
+- 0.10.0 (2026-11-08), feature: approve a held call with edits as its own decision [#198](https://github.com/demogar/molaui/issues/198)

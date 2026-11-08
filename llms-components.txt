@@ -6422,3 +6422,6 @@ Calls the model made at the same time. Drawn as a bracket on the left — one in
 Types: `ToolCallGroupMessages`, `ToolCallMessages`, `ToolCallApproval`, `ToolCallApprovalEdit`, `ToolCallArgs`, `ToolCallDecision`, `ToolCallDecisionStatus`, `ToolCallGroupProps`, `ToolCallProps`
 
 Used in: Agent console, Agent hand-off
+
+Changes:
+- 0.10.0 (2026-11-08), feature: approve a held call with edits as its own decision [#198](https://github.com/demogar/molaui/issues/198)
