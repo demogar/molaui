@@ -7,6 +7,8 @@ branch to a release.
 
 - Be kind. Everyone taking part is expected to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 - Report security problems privately. See [SECURITY.md](SECURITY.md) and never open a public issue for them.
+- Accessibility barriers are bugs. [ACCESSIBILITY.md](ACCESSIBILITY.md) says what is tested, what is not yet,
+  and what a change must keep green.
 - For a new component, a new token or anything that changes how the system looks, open a
   [proposal](https://github.com/demogar/molaui/issues/new?template=proposal.yml) first so the
   design can be agreed before you write code. Check the
