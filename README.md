@@ -288,7 +288,7 @@ run takes about three minutes.
   story in compact density, right-to-left and forced colours (each pattern at spacious density too), against baselines rendered on Linux
   with the bundled fonts, frozen time and animations off.
 - **Bundle budgets.** [size-limit](https://github.com/ai/size-limit) holds the whole library to
-  170 kB, a tree-shaken `Button` + `Field` import to 15 kB, and `styles.css` and `components.css` to 17.5 kB each (minified
+  190 kB, a tree-shaken `Button` + `Field` import to 10.25 kB, the class merger `cn` to 4.5 kB, and `styles.css` and `components.css` to 19.5 kB each (minified
   and brotli-compressed, dependencies included, React excluded).
 - **The public API is reviewed.** [API Extractor](https://api-extractor.com/) writes every export
   and its type signature to [`etc/mola-ui.api.md`](etc/mola-ui.api.md); a change to the API that
